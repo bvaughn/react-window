@@ -7,9 +7,10 @@
   "dependencies": {
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
+    "react-codemirror": "^1.0.0",
     "react-dom": "^16.2.0",
-    "react-virtualized": "link:..",
-    "react-scripts": "^1.1.1"
+    "react-scripts": "^1.1.1",
+    "react-virtualized": "link:.."
   },
   "scripts": {
     "start": "react-scripts start",

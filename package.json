@@ -1,10 +1,10 @@
 {
-  "name": "react-virtualized",
+  "name": "react-virtualized-v10",
   "version": "1.0.0",
   "description": "React components for efficiently rendering large lists and tabular data",
   "author": "bvaughn",
   "license": "MIT",
-  "repository": "bvaughn/react-virtualized",
+  "repository": "bvaughn/react-virtualized-v10",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",

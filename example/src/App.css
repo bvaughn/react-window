@@ -1,0 +1,56 @@
+.App {
+  height: 100%;
+  padding: 1rem;
+}
+
+.Block {
+  display: flex;
+  flex-direction: column;
+}
+.BlockHeader {
+  font-weight: bold;
+  margin: 1rem 0;
+}
+.BlockBody {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.BlockDemo {
+  margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
+}
+.BlockCode {
+  margin-bottom: 0.5rem;
+  border: 1px solid #ddd;
+}
+
+.CodeMirror {
+  height: auto;
+  background-color: #f7f7f7;
+}
+
+.ScrollToLabel {
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.List {
+  border: 1px solid #ddd;
+}
+
+.ListItemEven,
+.ListItemOdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ListItemOdd {
+  background-color: #f7f7f7;
+}
+
+.ListItemRernCount {
+  color: #ccc;
+  margin-left: 0.5rem;
+}
