@@ -1,16 +1,16 @@
 // @flow
 
-import React from "react";
+import React from 'react';
 
-export type ScrollToAlign = "auto" | "center" | "start" | "end";
+export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type CellSize = number | ((index: number) => number);
-type Direction = "horizontal" | "vertical";
+type Direction = 'horizontal' | 'vertical';
 
 type RenderFunction = ({
   index: number,
   key: string,
-  style: Object
+  style: Object,
 }) => React$Node;
 
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
@@ -25,13 +25,13 @@ export type Props = {|
   overscanCount: number,
   style?: Object,
   useIsScrolling: boolean,
-  width: number | string
+  width: number | string,
 |};
 
 type State = {|
   isScrolling: boolean,
-  scrollDirection: "forward" | "backward",
-  scrollOffset: number
+  scrollDirection: 'forward' | 'backward',
+  scrollOffset: number,
 |};
 
 type getCellSize = (props: Props, index: number) => number;
@@ -54,14 +54,14 @@ export default function createListComponent({
   getOffsetForIndex,
   getStartIndexForOffset,
   getStopIndexForStartIndex,
-  validateProps
+  validateProps,
 }: {
   getCellSize: getCellSize,
   getEstimatedTotalSize: getEstimatedTotalSize,
   getOffsetForIndex: getOffsetForIndex,
   getStartIndexForOffset: getStartIndexForOffset,
   getStopIndexForStartIndex: getStopIndexForStartIndex,
-  validateProps: validateProps
+  validateProps: validateProps,
 }) {
   return class List extends React.Component<Props, State> {
     _cellStyleCache: { [index: number]: Object } = {};
@@ -69,15 +69,15 @@ export default function createListComponent({
     _scrollingContainer: ?HTMLDivElement;
 
     static defaultProps = {
-      direction: "vertical",
+      direction: 'vertical',
       overscanCount: 2,
-      useIsScrolling: false
+      useIsScrolling: false,
     };
 
     state: State = {
       isScrolling: false,
-      scrollDirection: "forward",
-      scrollOffset: 0
+      scrollDirection: 'forward',
+      scrollOffset: 0,
     };
 
     static getDerivedStateFromProps(
@@ -93,7 +93,7 @@ export default function createListComponent({
       if (this._scrollingContainer != null) {
         const { direction } = this.props;
 
-        if (direction === "horizontal") {
+        if (direction === 'horizontal') {
           ((this
             ._scrollingContainer: any): HTMLDivElement).scrollLeft = scrollOffset;
         } else {
@@ -103,7 +103,7 @@ export default function createListComponent({
       }
     }
 
-    scrollToRow(index: number, align: ScrollToAlign = "auto"): void {
+    scrollToRow(index: number, align: ScrollToAlign = 'auto'): void {
       if (this._scrollingContainer != null) {
         const { scrollOffset } = this.state;
         this.scrollTo(
@@ -123,7 +123,7 @@ export default function createListComponent({
       const { isScrolling } = this.state;
 
       const onScroll =
-        direction === "vertical"
+        direction === 'vertical'
           ? this.onScrollVertical
           : this.onScrollHorizontal;
 
@@ -134,20 +134,20 @@ export default function createListComponent({
           className={className}
           ref={this.scrollingContainerRef}
           style={{
-            position: "relative",
+            position: 'relative',
             height,
             width,
-            overflow: "auto",
-            ...style
+            overflow: 'auto',
+            ...style,
           }}
           onScroll={onScroll}
         >
           <div
             style={{
-              height: direction === "horizontal" ? height : estimatedTotalSize,
-              overflow: "hidden",
-              pointerEvents: isScrolling ? "none" : "",
-              width: direction === "horizontal" ? estimatedTotalSize : width
+              height: direction === 'horizontal' ? height : estimatedTotalSize,
+              overflow: 'hidden',
+              pointerEvents: isScrolling ? 'none' : '',
+              width: direction === 'horizontal' ? estimatedTotalSize : width,
             }}
           >
             {this.renderCells()}
@@ -165,7 +165,7 @@ export default function createListComponent({
       const cells = [];
 
       for (let index = startIndex; index <= stopIndex; index++) {
-        const key = "" + index;
+        const key = '' + index;
 
         // Cache cell styles while scrolling,
         // So that pure component sCU will prevent re-renders.
@@ -175,23 +175,23 @@ export default function createListComponent({
         } else {
           // TODO Get position of cell using helper, not hard-coded number type
           this._cellStyleCache[index] = style = {
-            position: "absolute",
+            position: 'absolute',
             left:
-              direction === "horizontal"
+              direction === 'horizontal'
                 ? index * getCellSize(this.props, index)
                 : 0,
             top:
-              direction === "vertical"
+              direction === 'vertical'
                 ? index * getCellSize(this.props, index)
                 : 0,
             height:
-              direction === "vertical"
+              direction === 'vertical'
                 ? getCellSize(this.props, index)
-                : "100%",
+                : '100%',
             width:
-              direction === "horizontal"
+              direction === 'horizontal'
                 ? getCellSize(this.props, index)
-                : "100%"
+                : '100%',
           };
         }
 
@@ -200,7 +200,7 @@ export default function createListComponent({
             key,
             index,
             isScrolling: useIsScrolling ? isScrolling : undefined,
-            style
+            style,
           })
         );
       }
@@ -218,13 +218,13 @@ export default function createListComponent({
       // Overscan by one cell in each direction so that tab/focus works.
       // If there isn't at least one extra cell, tab loops back around.
       const overscanBackward =
-        scrollDirection === "backward" ? Math.max(1, overscanCount) : 1;
+        scrollDirection === 'backward' ? Math.max(1, overscanCount) : 1;
       const overscanForward =
-        scrollDirection === "forward" ? Math.max(1, overscanCount) : 1;
+        scrollDirection === 'forward' ? Math.max(1, overscanCount) : 1;
 
       return [
         Math.max(0, startIndex - overscanBackward),
-        Math.min(count - 1, stopIndex + overscanForward)
+        Math.min(count - 1, stopIndex + overscanForward),
       ];
     }
 
@@ -234,8 +234,8 @@ export default function createListComponent({
         prevState => ({
           isScrolling: true,
           scrollDirection:
-            prevState.scrollOffset < scrollLeft ? "forward" : "backward",
-          scrollOffset: scrollLeft
+            prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
+          scrollOffset: scrollLeft,
         }),
         this.resetIsScrollingDebounced
       );
@@ -247,8 +247,8 @@ export default function createListComponent({
         prevState => ({
           isScrolling: true,
           scrollDirection:
-            prevState.scrollOffset < scrollTop ? "forward" : "backward",
-          scrollOffset: scrollTop
+            prevState.scrollOffset < scrollTop ? 'forward' : 'backward',
+          scrollOffset: scrollTop,
         }),
         this.resetIsScrollingDebounced
       );
@@ -285,35 +285,37 @@ const validateSharedProps = ({
   children,
   direction,
   height,
-  width
+  width,
 }: Props): void => {
-  if (direction !== "horizontal" && direction !== "vertical") {
-    throw Error(
-      'An invalid "direction" prop has been specified. ' +
-        'Value should be either "horizontal" or "vertical". ' +
-        `"${direction}" was specified.`
-    );
-  }
+  if (process.NODE_ENV !== 'production') {
+    if (direction !== 'horizontal' && direction !== 'vertical') {
+      throw Error(
+        'An invalid "direction" prop has been specified. ' +
+          'Value should be either "horizontal" or "vertical". ' +
+          `"${direction}" was specified.`
+      );
+    }
 
-  if (typeof children !== "function") {
-    throw Error(
-      'An invalid "children" prop has been specified. ' +
-        "Value should be a function that creates a React element. " +
-        `"${children === null ? "null" : typeof children}" was specified.`
-    );
-  }
+    if (typeof children !== 'function') {
+      throw Error(
+        'An invalid "children" prop has been specified. ' +
+          'Value should be a function that creates a React element. ' +
+          `"${children === null ? 'null' : typeof children}" was specified.`
+      );
+    }
 
-  if (direction === "horizontal" && typeof width !== "number") {
-    throw Error(
-      'An invalid "width" prop has been specified. ' +
-        "Horizontal lists must specify a number for width. " +
-        `"${width === null ? "null" : typeof width}" was specified.`
-    );
-  } else if (direction === "vertical" && typeof height !== "number") {
-    throw Error(
-      'An invalid "height" prop has been specified. ' +
-        "Vertical lists must specify a number for height. " +
-        `"${height === null ? "null" : typeof height}" was specified.`
-    );
+    if (direction === 'horizontal' && typeof width !== 'number') {
+      throw Error(
+        'An invalid "width" prop has been specified. ' +
+          'Horizontal lists must specify a number for width. ' +
+          `"${width === null ? 'null' : typeof width}" was specified.`
+      );
+    } else if (direction === 'vertical' && typeof height !== 'number') {
+      throw Error(
+        'An invalid "height" prop has been specified. ' +
+          'Vertical lists must specify a number for height. ' +
+          `"${height === null ? 'null' : typeof height}" was specified.`
+      );
+    }
   }
 };

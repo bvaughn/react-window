@@ -1,8 +1,8 @@
 // @flow
 
-import createListComponent from "./createListComponent";
+import createListComponent from './createListComponent';
 
-import type { Props, ScrollToAlign } from "./createListComponent";
+import type { Props, ScrollToAlign } from './createListComponent';
 
 const FixedSizeList = createListComponent({
   getCellSize: ({ cellSize, size }: Props, index: number): number =>
@@ -18,17 +18,17 @@ const FixedSizeList = createListComponent({
     const maxOffset = index * ((cellSize: any): number);
     const minOffset =
       index * ((cellSize: any): number) -
-      (((direction === "horizontal" ? width : height): any): number) +
+      (((direction === 'horizontal' ? width : height): any): number) +
       ((cellSize: any): number);
 
     switch (align) {
-      case "start":
+      case 'start':
         return maxOffset;
-      case "end":
+      case 'end':
         return minOffset;
-      case "center":
+      case 'center':
         return Math.round(minOffset + (maxOffset - minOffset) / 2);
-      case "auto":
+      case 'auto':
       default:
         if (scrollOffset >= minOffset && scrollOffset <= maxOffset) {
           return scrollOffset;
@@ -48,21 +48,23 @@ const FixedSizeList = createListComponent({
     { cellSize, count, direction, height, width }: Props,
     startIndex: number
   ): number => {
-    const size = (((direction === "horizontal" ? width : height): any): number);
+    const size = (((direction === 'horizontal' ? width : height): any): number);
     return Math.min(
       count - 1,
       Math.round(startIndex + size / ((cellSize: any): number))
     );
   },
   validateProps: ({ cellSize }: Props): void => {
-    if (typeof cellSize !== "number") {
-      throw Error(
-        'An invalid "cellSize" prop has been specified. ' +
-          "Value should be a number. " +
-          `"${cellSize === null ? "null" : typeof cellSize}" was specified.`
-      );
+    if (process.NODE_ENV !== 'production') {
+      if (typeof cellSize !== 'number') {
+        throw Error(
+          'An invalid "cellSize" prop has been specified. ' +
+            'Value should be a number. ' +
+            `"${cellSize === null ? 'null' : typeof cellSize}" was specified.`
+        );
+      }
     }
-  }
+  },
 });
 
 export default FixedSizeList;

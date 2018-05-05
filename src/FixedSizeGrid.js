@@ -1,8 +1,8 @@
 // @flow
 
-import createGridComponent from "./createGridComponent";
+import createGridComponent from './createGridComponent';
 
-import type { Props, ScrollToAlign } from "./createGridComponent";
+import type { Props, ScrollToAlign } from './createGridComponent';
 
 const FixedSizeGrid = createGridComponent({
   getColumnWidth: ({ columnWidth }: Props, index: number): number =>
@@ -26,13 +26,13 @@ const FixedSizeGrid = createGridComponent({
       ((columnWidth: any): number);
 
     switch (align) {
-      case "start":
+      case 'start':
         return maxOffset;
-      case "end":
+      case 'end':
         return minOffset;
-      case "center":
+      case 'center':
         return Math.round(minOffset + (maxOffset - minOffset) / 2);
-      case "auto":
+      case 'auto':
       default:
         if (scrollLeft >= minOffset && scrollLeft <= maxOffset) {
           return scrollLeft;
@@ -56,13 +56,13 @@ const FixedSizeGrid = createGridComponent({
       ((rowHeight: any): number);
 
     switch (align) {
-      case "start":
+      case 'start':
         return maxOffset;
-      case "end":
+      case 'end':
         return minOffset;
-      case "center":
+      case 'center':
         return Math.round(minOffset + (maxOffset - minOffset) / 2);
-      case "auto":
+      case 'auto':
       default:
         if (scrollTop >= minOffset && scrollTop <= maxOffset) {
           return scrollTop;
@@ -105,24 +105,26 @@ const FixedSizeGrid = createGridComponent({
     );
   },
   validateProps: ({ columnWidth, rowHeight }: Props): void => {
-    if (typeof columnWidth !== "number") {
-      throw Error(
-        'An invalid "columnWidth" prop has been specified. ' +
-          "Value should be a number. " +
-          `"${
-            columnWidth === null ? "null" : typeof columnWidth
-          }" was specified.`
-      );
-    }
+    if (process.NODE_ENV !== 'production') {
+      if (typeof columnWidth !== 'number') {
+        throw Error(
+          'An invalid "columnWidth" prop has been specified. ' +
+            'Value should be a number. ' +
+            `"${
+              columnWidth === null ? 'null' : typeof columnWidth
+            }" was specified.`
+        );
+      }
 
-    if (typeof rowHeight !== "number") {
-      throw Error(
-        'An invalid "rowHeight" prop has been specified. ' +
-          "Value should be a number. " +
-          `"${rowHeight === null ? "null" : typeof rowHeight}" was specified.`
-      );
+      if (typeof rowHeight !== 'number') {
+        throw Error(
+          'An invalid "rowHeight" prop has been specified. ' +
+            'Value should be a number. ' +
+            `"${rowHeight === null ? 'null' : typeof rowHeight}" was specified.`
+        );
+      }
     }
-  }
+  },
 });
 
 export default FixedSizeGrid;

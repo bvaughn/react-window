@@ -1,7 +1,8 @@
 {
   "name": "react-virtualized-v10",
   "version": "1.0.0",
-  "description": "React components for efficiently rendering large lists and tabular data",
+  "description":
+    "React components for efficiently rendering large lists and tabular data",
   "author": "bvaughn",
   "license": "MIT",
   "repository": "bvaughn/react-virtualized-v10",
@@ -9,6 +10,8 @@
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
   "scripts": {
+    "precommit": "lint-staged",
+    "linc": "lint-staged",
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "build": "rollup -c",
@@ -16,6 +19,9 @@
     "prepare": "yarn run build",
     "predeploy": "cd example && yarn install && yarn run build",
     "deploy": "gh-pages -d example/build"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,json,css}": ["prettier --write", "git add"]
   },
   "dependencies": {},
   "peerDependencies": {
@@ -40,6 +46,8 @@
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "gh-pages": "^1.1.0",
+    "lint-staged": "^7.0.5",
+    "prettier": "^1.12.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "^1.1.1",
@@ -51,7 +59,5 @@
     "rollup-plugin-postcss": "^1.1.0",
     "rollup-plugin-url": "^1.3.0"
   },
-  "files": [
-    "dist"
-  ]
+  "files": ["dist"]
 }

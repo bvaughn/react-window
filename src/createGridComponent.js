@@ -1,8 +1,8 @@
 // @flow
 
-import React from "react";
+import React from 'react';
 
-export type ScrollToAlign = "auto" | "center" | "start" | "end";
+export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type CellSize = number | ((index: number) => number);
 
@@ -10,7 +10,7 @@ export type RenderFunction = ({
   columnIndex: number,
   key: string,
   rowIndex: number,
-  style: Object
+  style: Object,
 }) => React$Node;
 
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
@@ -26,15 +26,15 @@ export type Props = {|
   rowHeight: CellSize,
   style?: Object,
   useIsScrolling: boolean,
-  width: number
+  width: number,
 |};
 
 type State = {|
   isScrolling: boolean,
-  horizontalScrollDirection: "forward" | "backward",
+  horizontalScrollDirection: 'forward' | 'backward',
   scrollLeft: number,
   scrollTop: number,
-  verticalScrollDirection: "forward" | "backward"
+  verticalScrollDirection: 'forward' | 'backward',
 |};
 
 type getCellSize = (props: Props, index: number) => number;
@@ -62,7 +62,7 @@ export default function createGridComponent({
   getRowHeight,
   getRowStartIndexForOffset,
   getRowStopIndexForStartIndex,
-  validateProps
+  validateProps,
 }: {
   getColumnStartIndexForOffset: getStartIndexForOffset,
   getColumnStopIndexForStartIndex: getStopIndexForStartIndex,
@@ -74,7 +74,7 @@ export default function createGridComponent({
   getRowHeight: getCellSize,
   getRowStartIndexForOffset: getStartIndexForOffset,
   getRowStopIndexForStartIndex: getStopIndexForStartIndex,
-  validateProps: validateProps
+  validateProps: validateProps,
 }) {
   return class List extends React.Component<Props, State> {
     _cellStyleCache: { [key: string]: Object } = {};
@@ -83,15 +83,15 @@ export default function createGridComponent({
 
     static defaultProps = {
       overscanCount: 1,
-      useIsScrolling: false
+      useIsScrolling: false,
     };
 
     state: State = {
       isScrolling: false,
-      horizontalScrollDirection: "forward",
+      horizontalScrollDirection: 'forward',
       scrollLeft: 0,
       scrollTop: 0,
-      verticalScrollDirection: "forward"
+      verticalScrollDirection: 'forward',
     };
 
     static getDerivedStateFromProps(
@@ -105,10 +105,10 @@ export default function createGridComponent({
 
     scrollTo({
       scrollLeft,
-      scrollTop
+      scrollTop,
     }: {
       scrollLeft: number,
-      scrollTop: number
+      scrollTop: number,
     }): void {
       if (this._scrollingContainer != null) {
         ((this
@@ -118,13 +118,13 @@ export default function createGridComponent({
     }
 
     scrollToCell({
-      align = "auto",
+      align = 'auto',
       columnIndex,
-      rowIndex
+      rowIndex,
     }: {
       align: ScrollToAlign,
       columnIndex: number,
-      rowIndex: number
+      rowIndex: number,
     }): void {
       const { scrollLeft, scrollTop } = this.state;
 
@@ -135,7 +135,7 @@ export default function createGridComponent({
           align,
           scrollLeft
         ),
-        scrollTop: getOffsetForRow(this.props, rowIndex, align, scrollTop)
+        scrollTop: getOffsetForRow(this.props, rowIndex, align, scrollTop),
       });
     }
 
@@ -157,20 +157,20 @@ export default function createGridComponent({
           className={className}
           ref={this.scrollingContainerRef}
           style={{
-            position: "relative",
+            position: 'relative',
             height,
             width,
-            overflow: "auto",
-            ...style
+            overflow: 'auto',
+            ...style,
           }}
           onScroll={this.onScroll}
         >
           <div
             style={{
               height: estimatedTotalHeight,
-              overflow: "hidden",
-              pointerEvents: isScrolling ? "none" : "",
-              width: estimatedTotalWidth
+              overflow: 'hidden',
+              pointerEvents: isScrolling ? 'none' : '',
+              width: estimatedTotalWidth,
             }}
           >
             {this.renderCells()}
@@ -185,7 +185,7 @@ export default function createGridComponent({
 
       const [
         columnStartIndex,
-        columnStopIndex
+        columnStopIndex,
       ] = this.getHorizontalRangeToRender();
       const [rowStartIndex, rowStopIndex] = this.getVerticalRangeToRender();
 
@@ -207,11 +207,11 @@ export default function createGridComponent({
           } else {
             // TODO Get position of cell using helper, not hard-coded number type
             this._cellStyleCache[key] = style = {
-              position: "absolute",
+              position: 'absolute',
               left: columnIndex * getColumnWidth(this.props, columnIndex),
               top: rowIndex * getRowHeight(this.props, rowIndex),
               height: getRowHeight(this.props, rowIndex),
-              width: getColumnWidth(this.props, columnIndex)
+              width: getColumnWidth(this.props, columnIndex),
             };
           }
 
@@ -221,7 +221,7 @@ export default function createGridComponent({
               key,
               isScrolling: useIsScrolling ? isScrolling : undefined,
               rowIndex,
-              style
+              style,
             })
           );
         }
@@ -240,17 +240,17 @@ export default function createGridComponent({
       // Overscan by one cell in each direction so that tab/focus works.
       // If there isn't at least one extra cell, tab loops back around.
       const overscanBackward =
-        horizontalScrollDirection === "backward"
+        horizontalScrollDirection === 'backward'
           ? Math.max(1, overscanCount)
           : 1;
       const overscanForward =
-        horizontalScrollDirection === "forward"
+        horizontalScrollDirection === 'forward'
           ? Math.max(1, overscanCount)
           : 1;
 
       return [
         Math.max(0, startIndex - overscanBackward),
-        Math.min(columnCount - 1, stopIndex + overscanForward)
+        Math.min(columnCount - 1, stopIndex + overscanForward),
       ];
     }
 
@@ -264,13 +264,13 @@ export default function createGridComponent({
       // Overscan by one cell in each direction so that tab/focus works.
       // If there isn't at least one extra cell, tab loops back around.
       const overscanBackward =
-        verticalScrollDirection === "backward" ? Math.max(1, overscanCount) : 1;
+        verticalScrollDirection === 'backward' ? Math.max(1, overscanCount) : 1;
       const overscanForward =
-        verticalScrollDirection === "forward" ? Math.max(1, overscanCount) : 1;
+        verticalScrollDirection === 'forward' ? Math.max(1, overscanCount) : 1;
 
       return [
         Math.max(0, startIndex - overscanBackward),
-        Math.min(columnCount - 1, stopIndex + overscanForward)
+        Math.min(columnCount - 1, stopIndex + overscanForward),
       ];
     }
 
@@ -280,11 +280,11 @@ export default function createGridComponent({
         prevState => ({
           isScrolling: true,
           horizontalScrollDirection:
-            prevState.scrollLeft < scrollLeft ? "forward" : "backward",
+            prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
           scrollLeft,
           scrollTop,
           verticalScrollDirection:
-            prevState.scrollTop < scrollTop ? "forward" : "backward"
+            prevState.scrollTop < scrollTop ? 'forward' : 'backward',
         }),
         this.resetIsScrollingDebounced
       );
@@ -318,27 +318,29 @@ export default function createGridComponent({
 }
 
 const validateSharedProps = ({ children, height, width }: Props): void => {
-  if (typeof children !== "function") {
-    throw Error(
-      'An invalid "children" prop has been specified. ' +
-        "Value should be a function that creates a React element. " +
-        `"${children === null ? "null" : typeof children}" was specified.`
-    );
-  }
+  if (process.NODE_ENV !== 'production') {
+    if (typeof children !== 'function') {
+      throw Error(
+        'An invalid "children" prop has been specified. ' +
+          'Value should be a function that creates a React element. ' +
+          `"${children === null ? 'null' : typeof children}" was specified.`
+      );
+    }
 
-  if (typeof width !== "number") {
-    throw Error(
-      'An invalid "width" prop has been specified. ' +
-        "Grids must specify a number for width. " +
-        `"${width === null ? "null" : typeof width}" was specified.`
-    );
-  }
+    if (typeof width !== 'number') {
+      throw Error(
+        'An invalid "width" prop has been specified. ' +
+          'Grids must specify a number for width. ' +
+          `"${width === null ? 'null' : typeof width}" was specified.`
+      );
+    }
 
-  if (typeof height !== "number") {
-    throw Error(
-      'An invalid "height" prop has been specified. ' +
-        "Grids must specify a number for height. " +
-        `"${height === null ? "null" : typeof height}" was specified.`
-    );
+    if (typeof height !== 'number') {
+      throw Error(
+        'An invalid "height" prop has been specified. ' +
+          'Grids must specify a number for height. ' +
+          `"${height === null ? 'null' : typeof height}" was specified.`
+      );
+    }
   }
 };
