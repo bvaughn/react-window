@@ -5,6 +5,7 @@
   padding: 2rem 2rem 0;
   overflow: auto;
   background: #263238; /* Codemirror theme */
+  box-sizing: border-box;
 }
 
 .Example {
