@@ -69,4 +69,5 @@
 
 .Main {
   flex: 1;
+  overflow: auto;
 }

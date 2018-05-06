@@ -43,6 +43,8 @@ export default function() {
 }
 
 const SNIPPET = `
+import { FixedSizeGrid } from 'react-virtualized';
+
 <FixedSizeGrid
   className="Grid"
   columnCount={1000}

@@ -24,7 +24,7 @@ export default function() {
               key={key}
               style={style}
             >
-              {isScrolling ? `Scrolling ${index}` : `Row ${index}`}
+              {isScrolling ? 'Scrolling' : `Row ${index}`}
             </div>
           )}
         </FixedSizeList>
@@ -42,7 +42,9 @@ export default function() {
 }
 
 const SNIPPET = `
-// If your component's cells are expensive to render,
+import { FixedSizeList } from 'react-virtualized';
+
+// If your component's items are expensive to render,
 // You can boost performance by rendering a placeholder while the user is scrolling.
 // To do this, add the \`useIsScrolling\` property to your List or Grid.
 // Now an additional parameter, \`isScrolling\`, will be passed to your render method:
@@ -53,7 +55,7 @@ const SNIPPET = `
       key={key}
       style={style}
     >
-      {isScrolling ? \`Scrolling \${index}\` : \`Row \${index}\`}
+      {isScrolling ? 'Scrolling' : \`Row \${index}\`}
     </div>
   )}
 </FixedSizeList>

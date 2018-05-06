@@ -70,6 +70,8 @@ export default function() {
 }
 
 const SNIPPET_VERTICAL = `
+import { FixedSizeList } from 'react-virtualized';
+
 <FixedSizeList
   cellSize={35}
   className="List"
@@ -79,7 +81,7 @@ const SNIPPET_VERTICAL = `
 >
   {({ key, index, style }) => (
     <div
-      className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
+      className={index % 2 ? 'ItemOdd' : 'ItemEven'}
       key={key}
       style={style}
     >
@@ -90,6 +92,8 @@ const SNIPPET_VERTICAL = `
 `;
 
 const SNIPPET_HORIZONTAL = `
+import { FixedSizeList } from 'react-virtualized';
+
 <FixedSizeList
   cellSize={100}
   className="List"
@@ -100,7 +104,7 @@ const SNIPPET_HORIZONTAL = `
 >
   {({ key, index, style }) => (
     <div
-      className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
+      className={index % 2 ? 'ItemOdd' : 'ItemEven'}
       key={key}
       style={style}
     >
