@@ -1,56 +1,72 @@
 .App {
-  height: 100%;
-  padding: 1rem;
-}
-
-.Block {
-  display: flex;
-  flex-direction: column;
-}
-.BlockHeader {
-  font-weight: bold;
-  margin: 1rem 0;
-}
-.BlockBody {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  flex-wrap: wrap;
-}
-.BlockDemo {
-  margin-bottom: 0.5rem;
-  margin-right: 0.5rem;
-}
-.BlockCode {
-  margin-bottom: 0.5rem;
-  border: 1px solid #ddd;
+  height: 100%;
 }
 
-.CodeMirror {
-  height: auto;
-  background-color: #f7f7f7;
+.SideNav {
+  display: inline-block;
+  width: 16rem;
+  padding: 0 1rem 1rem;
+  background-color: #e9eded;
 }
 
-.ScrollToLabel {
-  font-weight: bold;
-  margin-right: 1rem;
+.SideNavHeader {
+  font-weight: lighter;
+  font-size: 2rem;
+  margin: 1.5rem 0 0.5rem;
 }
 
-.List {
-  border: 1px solid #ddd;
+.SideNavSectionHeader {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: #537f7e;
 }
 
-.ListItemEven,
-.ListItemOdd {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.ListItemOdd {
-  background-color: #f7f7f7;
+.SideNavLinkList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
-.ListItemRernCount {
-  color: #ccc;
-  margin-left: 0.5rem;
+.SideNavLinkListItem {
+  padding-left: 1rem;
+  line-height: 2rem;
+}
+
+.SideNavLink {
+  text-decoration: none;
+  color: #000;
+}
+.SideNavLink:hover {
+  text-decoration: underline;
+}
+
+.SideNavLinkActiveLight,
+.SideNavLinkActiveDark {
+  display: block;
+  position: relative;
+  color: #ff5370;
+}
+.SideNavLinkActiveLight:after,
+.SideNavLinkActiveDark:after {
+  display: inline-block;
+  content: ' ';
+  height: 0px;
+  position: absolute;
+  right: -1rem;
+  width: 0px;
+  border-bottom: 0.75rem solid transparent;
+  border-top: 0.75rem solid transparent;
+}
+.SideNavLinkActiveLight:after {
+  border-right: 0.75rem solid #fff;
+}
+.SideNavLinkActiveDark:after {
+  border-right: 0.75rem solid #263238;
+}
+
+.Main {
+  flex: 1;
 }

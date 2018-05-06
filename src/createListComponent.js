@@ -103,7 +103,7 @@ export default function createListComponent({
       }
     }
 
-    scrollToRow(index: number, align: ScrollToAlign = 'auto'): void {
+    scrollToItem(index: number, align: ScrollToAlign = 'auto'): void {
       if (this._scrollingContainer != null) {
         const { scrollOffset } = this.state;
         this.scrollTo(

@@ -1,0 +1,55 @@
+.ExampleWrapper {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: #263238; /* Codemirror theme */
+}
+
+.Example {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 2rem;
+  flex: 1;
+}
+
+.ExampleDemo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  margin: 0 1rem 1rem 0;
+  border-radius: 0.25rem;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 0.5rem 1.5rem;
+}
+
+.ExampleButton {
+  margin-bottom: 0.5rem;
+}
+
+.ExampleCode {
+}
+
+.Grid,
+.List {
+  border: 1px solid #d9dddd;
+}
+
+.GridItem,
+.ListItemEven,
+.ListItemOdd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ListItemEven {
+  background-color: #f8f8f0;
+}
+
+.TryItOutLink {
+  margin-top: 1rem;
+}

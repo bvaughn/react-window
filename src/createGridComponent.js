@@ -117,7 +117,7 @@ export default function createGridComponent({
       }
     }
 
-    scrollToCell({
+    scrollToItem({
       align = 'auto',
       columnIndex,
       rowIndex,

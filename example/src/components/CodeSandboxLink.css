@@ -1,0 +1,19 @@
+.CodeSandboxLink {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.CodeSandboxSvg {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+}
+
+.CodeSandboxSvgBackground {
+  fill: #222;
+}
+.CodeSandboxSvgForeground {
+  fill: none;
+  stroke: #222;
+}
