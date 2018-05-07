@@ -37,13 +37,6 @@
   color: #ff5370;
 }
 
-@media (min-width: 25rem) {
-  .SidebarNavContent {
-    flex-direction: row;
-    transition: none;
-  }
-}
-
 @media (min-width: 37.5rem) {
   .App {
     flex-direction: row;

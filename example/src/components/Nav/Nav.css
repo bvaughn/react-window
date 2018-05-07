@@ -53,7 +53,6 @@
 @media (min-width: 25rem) {
   .SidebarNavContent {
     flex-direction: row;
-    transition: none;
   }
 }
 
@@ -71,5 +70,6 @@
     max-height: 100vh;
     flex-direction: column;
     overflow: inherit;
+    transition: none;
   }
 }
