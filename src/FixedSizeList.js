@@ -55,7 +55,7 @@ const FixedSizeList = createListComponent({
     );
   },
   validateProps: ({ cellSize }: Props): void => {
-    if (process.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       if (typeof cellSize !== 'number') {
         throw Error(
           'An invalid "cellSize" prop has been specified. ' +

@@ -318,7 +318,7 @@ export default function createGridComponent({
 }
 
 const validateSharedProps = ({ children, height, width }: Props): void => {
-  if (process.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     if (typeof children !== 'function') {
       throw Error(
         'An invalid "children" prop has been specified. ' +

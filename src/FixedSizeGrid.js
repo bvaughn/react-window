@@ -105,7 +105,7 @@ const FixedSizeGrid = createGridComponent({
     );
   },
   validateProps: ({ columnWidth, rowHeight }: Props): void => {
-    if (process.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       if (typeof columnWidth !== 'number') {
         throw Error(
           'An invalid "columnWidth" prop has been specified. ' +

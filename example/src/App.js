@@ -2,6 +2,7 @@ import React from "react";
 import { HashRouter as Router, Route, NavLink as Link, Redirect } from "react-router-dom";
 
 // Routes
+import DyanmicListExample from "./routes/examples/DynamicList";
 import FixedSizeGridApi from "./routes/api/FixedSizeGrid";
 import FixedSizeListApi from "./routes/api/FixedSizeList";
 import FixedSizeGridExample from "./routes/examples/FixedSizeGrid";
@@ -22,6 +23,11 @@ export default function App() {
             <li className="SideNavLinkListItem">
               <Link activeClassName="SideNavLinkActiveDark" className="SideNavLink" to="/examples/list/fixed-size">
                 Basic List
+              </Link>
+            </li>
+            <li className="SideNavLinkListItem">
+              <Link activeClassName="SideNavLinkActiveDark" className="SideNavLink" to="/examples/list/dyanmic">
+                Dynamic List
               </Link>
             </li>
             <li className="SideNavLinkListItem">
@@ -58,6 +64,7 @@ export default function App() {
           <Route exact path="/" render={() => <Redirect to="/examples/list/fixed-size"/>} />
 
           <Route path="/examples/list/fixed-size" component={FixedSizeListExample} />
+          <Route path="/examples/list/dyanmic" component={DyanmicListExample} />
           <Route path="/examples/grid/fixed-size" component={FixedSizeGridExample} />
           <Route path="/examples/list/scrolling-indicators" component={FixedSizeListWithScrollingIndicatorExample} />
           <Route path="/examples/list/scroll-to-cell" component={ScrollToItemExample} />

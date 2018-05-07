@@ -9,7 +9,7 @@ export default class ScrollToItem extends Component {
 
   render() {
     return (
-      <div class="ExampleWrapper">
+      <div className="ExampleWrapper">
         <div className="Example">
           <div className="ExampleDemo">
             <button className="ExampleButton" onClick={this.scrollToRow200Auto}>

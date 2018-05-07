@@ -7,7 +7,7 @@ import "./shared.css";
 
 export default function() {
   return (
-    <div class="ExampleWrapper">
+    <div className="ExampleWrapper">
     <div className="Example">
       <div className="ExampleDemo">
         <FixedSizeGrid

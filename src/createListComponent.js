@@ -287,7 +287,7 @@ const validateSharedProps = ({
   height,
   width,
 }: Props): void => {
-  if (process.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     if (direction !== 'horizontal' && direction !== 'vertical') {
       throw Error(
         'An invalid "direction" prop has been specified. ' +
