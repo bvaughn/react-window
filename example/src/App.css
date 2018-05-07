@@ -1,24 +1,11 @@
 .App {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   height: 100%;
 }
 
-.SideNav {
-  display: inline-block;
-  width: 16rem;
-  padding: 0 1rem 1rem;
-  background-color: #e9eded;
-}
-
-.SideNavHeader {
-  font-weight: lighter;
-  font-size: 2rem;
-  margin: 1.5rem 0 0.5rem;
-}
-
 .SideNavSectionHeader {
-  margin: 1.5rem 0 0.5rem;
+  margin: 1rem 0 0.5rem;
   font-size: 1rem;
   text-transform: uppercase;
   color: #537f7e;
@@ -49,22 +36,36 @@
   position: relative;
   color: #ff5370;
 }
-.SideNavLinkActiveLight:after,
-.SideNavLinkActiveDark:after {
-  display: inline-block;
-  content: ' ';
-  height: 0px;
-  position: absolute;
-  right: -1rem;
-  width: 0px;
-  border-bottom: 0.75rem solid transparent;
-  border-top: 0.75rem solid transparent;
+
+@media (min-width: 25rem) {
+  .SidebarNavContent {
+    flex-direction: row;
+    transition: none;
+  }
 }
-.SideNavLinkActiveLight:after {
-  border-right: 0.75rem solid #fff;
-}
-.SideNavLinkActiveDark:after {
-  border-right: 0.75rem solid #263238;
+
+@media (min-width: 37.5rem) {
+  .App {
+    flex-direction: row;
+  }
+
+  .SideNavLinkActiveLight:after,
+  .SideNavLinkActiveDark:after {
+    display: inline-block;
+    content: ' ';
+    height: 0px;
+    position: absolute;
+    right: -1rem;
+    width: 0px;
+    border-bottom: 0.75rem solid transparent;
+    border-top: 0.75rem solid transparent;
+  }
+  .SideNavLinkActiveLight:after {
+    border-right: 0.75rem solid #fff;
+  }
+  .SideNavLinkActiveDark:after {
+    border-right: 0.75rem solid #263238;
+  }
 }
 
 .Main {

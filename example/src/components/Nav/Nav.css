@@ -1,0 +1,75 @@
+.SideNav {
+  display: block;
+  padding: 0 1rem 1rem;
+  background-color: #e9eded;
+}
+
+.SideNavHeader {
+  font-weight: lighter;
+  font-size: 2rem;
+  margin: 1.5rem 0 0.5rem;
+  display: flex;
+}
+
+.SideNavHeader span,
+.SideNavHeader i {
+  flex: 1;
+}
+
+.SideNavHeader a:hover,
+.SideNavHeader a:focus,
+.SideNavHeader a:active,
+.SideNavHeader a:visited,
+.SideNavHeader a:link {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+
+.SideNavHeader i {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.SidebarNavContent {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: 0px;
+  transition-property: max-height;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.SidebarNavContent.full {
+  transition: max-height 1s ease-in-out;
+  max-height: 100vh;
+}
+
+.SidebarNavContent > div {
+  flex: 1;
+}
+
+@media (min-width: 25rem) {
+  .SidebarNavContent {
+    flex-direction: row;
+    transition: none;
+  }
+}
+
+@media (min-width: 37.5rem) {
+  .SideNavHeader a {
+    display: none;
+  }
+
+  .SideNav {
+    display: inline-block;
+    width: 16rem;
+  }
+
+  .App .SidebarNavContent {
+    max-height: 100vh;
+    flex-direction: column;
+    overflow: inherit;
+  }
+}
