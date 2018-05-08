@@ -22,10 +22,11 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  margin: 0 1rem 1rem 0;
+  margin: 1rem 0 1rem 0;
   border-radius: 0.25rem;
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.5) 0px 0.5rem 1.5rem;
+  width: 100%;
 }
 
 .ExampleButton {
@@ -59,5 +60,10 @@
 @media (min-width: 37.5rem) {
   .ExampleWrapper {
     padding: 2rem 2rem 0;
+  }
+
+  .ExampleDemo {
+    width: auto;
+    margin: 0 1rem 0rem 0;
   }
 }
