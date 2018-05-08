@@ -1,4 +1,3 @@
-import 'font-awesome/css/font-awesome.css';
 import React from 'react';
 import {
   HashRouter as Router,
@@ -7,6 +6,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 import { Nav } from './components/Nav';
+import { SubMenu } from './components/SubMenu';
 
 // Routes
 import DyanmicListExample from './routes/examples/DynamicList';
@@ -19,84 +19,39 @@ import ScrollToItemExample from './routes/examples/ScrollToItem';
 
 import './App.css';
 
+const NavExamples = [
+  { to: '/examples/list/fixed-size', content: 'Basic List' },
+  { to: '/examples/list/dyanmic', content: 'Dynamic List' },
+  { to: '/examples/grid/fixed-size', content: 'Basic Grid' },
+  {
+    to: '/examples/list/scrolling-indicators',
+    content: 'Scrolling indicators',
+  },
+  { to: '/examples/list/scroll-to-cell', content: 'Scrolling to an item' },
+];
+
+const ApiExamples = [
+  { to: '/api/FixedSizeList', content: <code>&lt;FixedSizeList&gt;</code> },
+  { to: '/api/FixedSizeGrid', content: <code>&lt;FixedSizeGrid&gt;</code> },
+];
+
 export default function App() {
   return (
     <Router>
       <div className="App">
         <Nav title="react-virtualized">
-          <div className="NavExamples">
-            <h2 className="SideNavSectionHeader">Examples</h2>
-            <ul className="SideNavLinkList">
-              <li className="SideNavLinkListItem">
-                <Link
-                  activeClassName="SideNavLinkActiveDark"
-                  className="SideNavLink"
-                  to="/examples/list/fixed-size"
-                >
-                  Basic List
-                </Link>
-              </li>
-              <li className="SideNavLinkListItem">
-                <Link
-                  activeClassName="SideNavLinkActiveDark"
-                  className="SideNavLink"
-                  to="/examples/list/dyanmic"
-                >
-                  Dynamic List
-                </Link>
-              </li>
-              <li className="SideNavLinkListItem">
-                <Link
-                  activeClassName="SideNavLinkActiveDark"
-                  className="SideNavLink"
-                  to="/examples/grid/fixed-size"
-                >
-                  Basic Grid
-                </Link>
-              </li>
-              <li className="SideNavLinkListItem">
-                <Link
-                  activeClassName="SideNavLinkActiveDark"
-                  className="SideNavLink"
-                  to="/examples/list/scrolling-indicators"
-                >
-                  Scrolling indicators
-                </Link>
-              </li>
-              <li className="SideNavLinkListItem">
-                <Link
-                  activeClassName="SideNavLinkActiveDark"
-                  className="SideNavLink"
-                  to="/examples/list/scroll-to-cell"
-                >
-                  Scrolling to an item
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="NavApi">
-            <h2 className="SideNavSectionHeader">API</h2>
-            <ul className="SideNavLinkList">
-              <li className="SideNavLinkListItem">
-                <Link
-                  activeClassName="SideNavLinkActiveLight"
-                  className="SideNavLink"
-                  to="/api/FixedSizeList"
-                >
-                  <code>&lt;FixedSizeList&gt;</code>
-                </Link>
-              </li>
-              <li className="SideNavLinkListItem">
-                <Link
-                  activeClassName="SideNavLinkActiveLight"
-                  className="SideNavLink"
-                  to="/api/FixedSizeGrid"
-                >
-                  <code>&lt;FixedSizeGrid&gt;</code>
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <SubMenu
+            title="Examples"
+            activeClassName="SideNavLinkActiveDark"
+            items={NavExamples}
+            className="NavExamples"
+          />
+          <SubMenu
+            title="API"
+            activeClassName="SideNavLinkActiveLight"
+            items={ApiExamples}
+            className="NavApi"
+          />
         </Nav>
         <main className="Main">
           <Route

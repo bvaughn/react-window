@@ -11,8 +11,7 @@
   display: flex;
 }
 
-.SideNavHeader span,
-.SideNavHeader i {
+.SideNavHeader span {
   flex: 1;
 }
 
@@ -26,9 +25,13 @@
   cursor: pointer;
 }
 
-.SideNavHeader i {
+.SideNavHeader a {
   display: flex;
   justify-content: flex-end;
+}
+
+.SideNavHeader svg {
+  height: 100%;
 }
 
 .SidebarNavContent {

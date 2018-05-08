@@ -1,6 +1,7 @@
 import React from 'react';
 import './Nav.css';
 import cs from 'classnames';
+import { Hamburger } from '../svg/Hamburger';
 
 export class Nav extends React.Component {
   constructor(props) {
@@ -11,7 +12,7 @@ export class Nav extends React.Component {
     };
   }
 
-  openHandler = e => {
+  menuToggleHandler = e => {
     this.setState({ open: !this.state.open });
 
     return false;
@@ -26,23 +27,20 @@ export class Nav extends React.Component {
         <h1 className="SideNavHeader">
           <span>{title}</span>
           <a
-            onClick={this.openHandler}
+            onClick={this.menuToggleHandler}
             tabIndex={0}
             role="button"
             aria-expanded={open}
             aria-controls="expandable"
           >
-            <i
-              className={cs('fa', {
-                'fa-chevron-down': open === false,
-                'fa-chevron-up': open,
-              })}
-            />
+            <Hamburger />
           </a>
         </h1>
         <div
-          id="expandable  "
-          className={cs('SidebarNavContent', { full: open })}
+          id="expandable"
+          className={cs('SidebarNavContent', {
+            full: open,
+          })}
           aria-hidden={open}
           aria-live="polite"
         >
