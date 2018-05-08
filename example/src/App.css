@@ -4,12 +4,24 @@
   height: 100%;
 }
 
+@media (orientation: portrait) { 
+  .App{
+    flex-direction: column;
+  }
+ }
+
 .SideNav {
-  display: inline-block;
   width: 16rem;
   padding: 0 1rem 1rem;
   background-color: #e9eded;
 }
+
+@media screen and (orientation: portrait) { 
+  .SideNav{
+    width: auto;
+  }
+ }
+
 
 .SideNavHeader {
   font-weight: lighter;
