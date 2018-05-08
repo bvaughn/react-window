@@ -43,10 +43,9 @@ export default function() {
 }
 
 const SNIPPET = `
-import { FixedSizeGrid } from 'react-virtualized';
+import { FixedSizeGrid as Grid } from 'react-virtualized';
 
-<FixedSizeGrid
-  className="Grid"
+<Grid
   columnCount={1000}
   columnWidth={100}
   height={150}
@@ -55,13 +54,9 @@ import { FixedSizeGrid } from 'react-virtualized';
   width={300}
 >
   {({ columnIndex, key, rowIndex, style }) => (
-    <div
-      className="GridItem"
-      key={key}
-      style={style}
-    >
-      r{rowIndex}, c{columnIndex}
+    <div key={key} style={style}>
+      row {rowIndex}, column {columnIndex}
     </div>
   )}
-</FixedSizeGrid>
+</Grid>
 `;

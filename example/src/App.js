@@ -2,13 +2,13 @@ import React from "react";
 import { HashRouter as Router, Route, NavLink as Link, Redirect } from "react-router-dom";
 
 // Routes
-import DyanmicListExample from "./routes/examples/DynamicList";
-import FixedSizeGridApi from "./routes/api/FixedSizeGrid";
-import FixedSizeListApi from "./routes/api/FixedSizeList";
-import FixedSizeGridExample from "./routes/examples/FixedSizeGrid";
-import FixedSizeListExample from "./routes/examples/FixedSizeList";
-import FixedSizeListWithScrollingIndicatorExample from "./routes/examples/FixedSizeListWithScrollingIndicator";
-import ScrollToItemExample from "./routes/examples/ScrollToItem";
+import DyanmicListExample from './routes/examples/DynamicList';
+import FixedSizeGridApi from './routes/api/FixedSizeGrid';
+import FixedSizeListApi from './routes/api/FixedSizeList';
+import FixedSizeGridExample from './routes/examples/FixedSizeGrid';
+import FixedSizeListExample from './routes/examples/FixedSizeList';
+import ListWithScrollingIndicatorExample from './routes/examples/ListWithScrollingIndicator';
+import ScrollToItemExample from './routes/examples/ScrollToItem';
 
 import "./App.css";
 
@@ -66,7 +66,7 @@ export default function App() {
           <Route path="/examples/list/fixed-size" component={FixedSizeListExample} />
           <Route path="/examples/list/dyanmic" component={DyanmicListExample} />
           <Route path="/examples/grid/fixed-size" component={FixedSizeGridExample} />
-          <Route path="/examples/list/scrolling-indicators" component={FixedSizeListWithScrollingIndicatorExample} />
+          <Route path="/examples/list/scrolling-indicators" component={ListWithScrollingIndicatorExample} />
           <Route path="/examples/list/scroll-to-cell" component={ScrollToItemExample} />
 
           <Route path="/api/FixedSizeList" component={FixedSizeListApi} />

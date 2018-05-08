@@ -9,8 +9,15 @@ import "./CodeBlock.css";
 
 const CodeBlock = ({ value }) => (
   <div className="CodeBlock">
-    <CodeMirror options={{ mode: "jsx", readOnly: true, theme: "material" }} value={value.trim()} />
+    <CodeMirror options={OPTIONS} value={value.trim()} />
   </div>
 );
+
+const OPTIONS = {
+  lineWrapping: true,
+  mode: "jsx",
+  readOnly: true,
+  theme: "material"
+};
 
 export default CodeBlock;
