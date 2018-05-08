@@ -4,32 +4,6 @@
   height: 100%;
 }
 
-.SideNavSectionHeader {
-  margin: 1rem 0 0.5rem;
-  font-size: 1rem;
-  text-transform: uppercase;
-  color: #537f7e;
-}
-
-.SideNavLinkList {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.SideNavLinkListItem {
-  padding-left: 1rem;
-  line-height: 2rem;
-}
-
-.SideNavLink {
-  text-decoration: none;
-  color: #000;
-}
-.SideNavLink:hover {
-  text-decoration: underline;
-}
-
 .SideNavLinkActiveLight,
 .SideNavLinkActiveDark {
   display: block;

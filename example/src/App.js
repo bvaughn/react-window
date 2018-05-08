@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  HashRouter as Router,
-  Route,
-  NavLink as Link,
-  Redirect,
-} from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Nav } from './components/Nav';
 import { SubMenu } from './components/SubMenu';
 

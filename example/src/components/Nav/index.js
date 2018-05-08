@@ -1,7 +1,7 @@
 import React from 'react';
 import './Nav.css';
 import cs from 'classnames';
-import { Hamburger } from '../svg/Hamburger';
+import { HamburgerButton } from '../HamburgerButton';
 
 export class Nav extends React.Component {
   constructor(props) {
@@ -14,8 +14,6 @@ export class Nav extends React.Component {
 
   menuToggleHandler = e => {
     this.setState({ open: !this.state.open });
-
-    return false;
   };
 
   render() {
@@ -24,18 +22,10 @@ export class Nav extends React.Component {
 
     return (
       <nav className="SideNav">
-        <h1 className="SideNavHeader">
-          <span>{title}</span>
-          <a
-            onClick={this.menuToggleHandler}
-            tabIndex={0}
-            role="button"
-            aria-expanded={open}
-            aria-controls="expandable"
-          >
-            <Hamburger />
-          </a>
-        </h1>
+        <div className="SidebarNavHeaderContainer">
+          <HamburgerButton clickHandler={this.menuToggleHandler} />
+          <h1 className="SideNavHeader">{title}</h1>
+        </div>
         <div
           id="expandable"
           className={cs('SidebarNavContent', {
