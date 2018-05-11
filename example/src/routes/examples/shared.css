@@ -2,7 +2,7 @@
   display: block;
   width: 100%;
   height: 100%;
-  padding: 1rem 1rem 0;
+  padding: 0;
   overflow: auto;
   background: #263238; /* Codemirror theme */
   box-sizing: border-box;
@@ -21,8 +21,8 @@
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
-  margin: 1rem 0 1rem 0;
+  margin: 2rem 0.5rem 1rem 0.5rem;
+  padding: 3rem 0 2rem 0;
   border-radius: 0.25rem;
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.5) 0px 0.5rem 1.5rem;
@@ -34,6 +34,7 @@
 }
 
 .ExampleCode {
+  margin-left: 0.5rem;
 }
 
 .Grid,
@@ -55,6 +56,21 @@
 
 .TryItOutLink {
   margin-top: 1rem;
+}
+
+@media (min-width: 25rem) {
+  .ExampleWrapper {
+    padding: 1rem 1rem 0;
+  }
+
+  .ExampleDemo {
+    padding: 2rem;
+    margin: 1rem 0 1rem 0;
+  }
+
+  .ExampleCode {
+    margin-left: 0;
+  }
 }
 
 @media (min-width: 37.5rem) {
