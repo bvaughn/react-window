@@ -18,7 +18,9 @@
 }
 
 .ExampleDemo {
-  display: inline-flex;
+  flex: 0 0 auto;
+  max-width: 400px;
+  display: flex;
   flex-direction: column;
   align-items: center;
   margin: 2rem 0.5rem 1rem 0.5rem;
@@ -34,7 +36,7 @@
 }
 
 .ExampleCode {
-  margin-left: 0.5rem;
+  flex: 1 1 auto;
 }
 
 .Grid,

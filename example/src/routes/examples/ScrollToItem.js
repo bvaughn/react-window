@@ -110,27 +110,31 @@ export default class ScrollToItem extends Component {
 }
 
 const SNIPPET_LIST = `
-import { FixedSizeList } from 'react-virtualized';
+import { FixedSizeList as List } from 'react-virtualized';
+
+const listRef = React.createRef();
 
 // You can programatically scroll to a item within a List.
 // First, attach a ref to the List:
-<FixedSizeList ref={listRef} {...props} />
+<List ref={listRef} {...props} />
 
 // Then call the scrollToItem() API method with an item index:
-listRefRef.current.scrollToItem(200);
+listRe.current.scrollToItem(200);
 
 // The List will scroll as little as possible to ensure the item is visible.
 // You can also specify a custom alignment: center, start, or end.
 // For example:
-listRefRef.current.scrollToItem(300, "center");
+listRe.current.scrollToItem(300, "center");
 `;
 
 const SNIPPET_GRID = `
-import { FixedSizeGrid } from 'react-virtualized';
+import { FixedSizeGrid as Grid } from 'react-virtualized';
+
+const gridRef = React.createRef();
 
 // You can programatically scroll to a item within a Grid.
 // First, attach a ref to the Grid:
-<FixedSizeGrid ref={gridRef} {...props} />
+<Grid ref={gridRef} {...props} />
 
 // Then call the scrollToItem() API method with the item indices:
 gridRef.current.scrollToItem({

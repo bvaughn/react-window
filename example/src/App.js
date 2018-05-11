@@ -9,7 +9,7 @@ import FixedSizeGridApi from './routes/api/FixedSizeGrid';
 import FixedSizeListApi from './routes/api/FixedSizeList';
 import FixedSizeGridExample from './routes/examples/FixedSizeGrid';
 import FixedSizeListExample from './routes/examples/FixedSizeList';
-import FixedSizeListWithScrollingIndicatorExample from './routes/examples/FixedSizeListWithScrollingIndicator';
+import ListWithScrollingIndicatorExample from './routes/examples/ListWithScrollingIndicator';
 import ScrollToItemExample from './routes/examples/ScrollToItem';
 
 import './App.css';
@@ -66,7 +66,7 @@ export default function App() {
           />
           <Route
             path="/examples/list/scrolling-indicators"
-            component={FixedSizeListWithScrollingIndicatorExample}
+            component={ListWithScrollingIndicatorExample}
           />
           <Route
             path="/examples/list/scroll-to-cell"
