@@ -1,7 +1,7 @@
 import React from 'react';
 import './Nav.css';
 import cs from 'classnames';
-import { MobileNavButton } from '../MobileNavButton';
+import { MobileNavButton } from './MobileNavButton';
 
 export class Nav extends React.Component {
   state = {

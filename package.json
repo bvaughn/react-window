@@ -22,7 +22,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "lint-staged": {
-    "{example/src,src}/**/*.{js,jsx,json,css}": ["prettier --write", "git add"]
+    "{example,src}/**/*.{js,jsx,json,css}": ["prettier --write", "git add"]
   },
   "dependencies": {},
   "peerDependencies": {
