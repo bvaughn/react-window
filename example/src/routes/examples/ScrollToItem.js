@@ -65,7 +65,7 @@ export default class ScrollToItem extends Component {
             >
               {({ columnIndex, key, rowIndex, style }) => (
                 <div
-                  className="GridItem"
+                  className={columnIndex % 2 ? (rowIndex % 2 === 0 ? 'GridItemOdd' : 'GridItemEven') : (rowIndex % 2 ? 'GridItemOdd' : 'GridItemEven')}
                   key={key}
                   style={style}
                 >

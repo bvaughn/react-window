@@ -1,6 +1,4 @@
 import React from "react";
-import { NavLink as Link } from "react-router-dom";
-import CodeBlock from "../../components/CodeBlock";
 
 import "./shared.css";
 

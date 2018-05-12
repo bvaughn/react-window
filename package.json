@@ -1,8 +1,7 @@
 {
   "name": "react-virtualized-v10",
   "version": "1.0.0",
-  "description":
-    "React components for efficiently rendering large lists and tabular data",
+  "description": "React components for efficiently rendering large lists and tabular data",
   "author": "bvaughn",
   "license": "MIT",
   "repository": "bvaughn/react-virtualized-v10",
@@ -22,7 +21,10 @@
     "deploy": "gh-pages -d example/build"
   },
   "lint-staged": {
-    "{example,src}/**/*.{js,jsx,json,css}": ["prettier --write", "git add"]
+    "{example,src}/**/*.{js,jsx,json,css}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "dependencies": {},
   "peerDependencies": {
@@ -60,5 +62,7 @@
     "rollup-plugin-postcss": "^1.1.0",
     "rollup-plugin-url": "^1.3.0"
   },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ]
 }

@@ -9,10 +9,9 @@ const DEFAULT_ESTIMATED_HORIZONTAL_CELL_SIZE = 100;
 
 const DynamicList = createListComponent({
   getCellSize: ({ cellSize, size }: Props, index: number): number =>
-    cellSize(index),
+    ((cellSize: any): Function)(index),
   getEstimatedTotalSize: ({ cellSize, count }: Props) => {
     // TODO
-    console.log('getEstimatedTotalSize()', this);
     return 10000;
   },
   getOffsetForIndex: (

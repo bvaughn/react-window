@@ -5,9 +5,11 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
+    "classnames": "^2.2.5",
+    "codemirror": "^5.37.0",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
-    "react-codemirror": "^1.0.0",
+    "react-codemirror2": "^5.0.1",
     "react-dom": "^16.2.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",

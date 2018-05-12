@@ -1,5 +1,5 @@
 import React from 'react';
-import CodeMirror from 'react-codemirror';
+import {UnControlled as CodeMirror} from 'react-codemirror2';
 
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/jsx/jsx';
@@ -14,10 +14,12 @@ const CodeBlock = ({ value }) => (
 );
 
 const OPTIONS = {
+  height: 'auto',
   lineWrapping: true,
   mode: 'jsx',
   readOnly: true,
   theme: 'material',
+  viewportMargin: Infinity,
 };
 
 export default CodeBlock;
