@@ -1,0 +1,26 @@
+.MobileNavButton,
+.MobileNavButtonActive {
+  border-radius: 5px;
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+  outline: 0;
+  height: 2.5rem;
+  width: 2.5rem;
+  margin-right: 1rem;
+}
+.MobileNavButton {
+  color: #546e7a;
+}
+.MobileNavButtonActive {
+  color: #263238;
+}
+
+.MobileNavButtonIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.MobileNavButtonIconPath {
+  fill: currentColor;
+}

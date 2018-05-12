@@ -7,22 +7,14 @@
 .SidebarNavHeaderContainer {
   display: flex;
   flex: 1;
-  align-items: flex-end;
-}
-
-.SidebarNavHeaderContainer button {
-  margin-right: 1em;
-}
-
-.SidebarNavHeaderContainer > h1 {
-  flex: 1;
+  align-items: center;
+  margin: 1.5rem 0 0.5rem;
 }
 
 .SideNavHeader {
+  margin: 0;
   font-weight: lighter;
   font-size: 2rem;
-  margin: 1.5rem 0 0.5rem;
-  display: flex;
 }
 
 .SideNavHeader span {
@@ -67,9 +59,6 @@
 @media (min-width: 37.5rem) {
   .SidebarNavHeaderContainer button {
     display: none;
-  }
-
-  .SideNavHeader {
     margin: 1.5rem 0 0.5rem;
   }
 

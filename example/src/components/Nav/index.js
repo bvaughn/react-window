@@ -1,7 +1,7 @@
 import React from 'react';
 import './Nav.css';
 import cs from 'classnames';
-import { HamburgerButton } from '../HamburgerButton';
+import { MobileNavButton } from '../MobileNavButton';
 
 export class Nav extends React.Component {
   constructor(props) {
@@ -23,7 +23,7 @@ export class Nav extends React.Component {
     return (
       <nav className="SideNav">
         <div className="SidebarNavHeaderContainer">
-          <HamburgerButton clickHandler={this.menuToggleHandler} />
+          <MobileNavButton isActive={this.state.open} onClick={this.menuToggleHandler} />
           <h1 className="SideNavHeader">{title}</h1>
         </div>
         <div
