@@ -6,14 +6,14 @@ export const SubMenu = ({ items, title, activeClassName, className }) => (
   <div className={className}>
     <h2 className="SideNavSectionHeader">{title}</h2>
     <ul className="SideNavLinkList">
-      {items.map(({ to, content }) => (
-        <li className="SideNavLinkListItem" key={to}>
+      {items.map(({ path, title }) => (
+        <li className="SideNavLinkListItem" key={path}>
           <Link
             activeClassName={activeClassName}
             className="SideNavLink"
-            to={to}
+            to={path}
           >
-            {content}
+            {title}
           </Link>
         </li>
       ))}

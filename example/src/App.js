@@ -14,69 +14,81 @@ import ScrollToItemExample from './routes/examples/ScrollToItem';
 
 import './App.css';
 
-const NavExamples = [
-  { to: '/examples/list/fixed-size', content: 'Basic List' },
-  { to: '/examples/list/dyanmic', content: 'Dynamic List' },
-  { to: '/examples/grid/fixed-size', content: 'Basic Grid' },
-  {
-    to: '/examples/list/scrolling-indicators',
-    content: 'Scrolling indicators',
-  },
-  { to: '/examples/list/scroll-to-cell', content: 'Scrolling to an item' },
-];
-
-const ApiExamples = [
-  { to: '/api/FixedSizeList', content: <code>&lt;FixedSizeList&gt;</code> },
-  { to: '/api/FixedSizeGrid', content: <code>&lt;FixedSizeGrid&gt;</code> },
-];
-
 export default function App() {
   return (
     <Router>
       <div className="App">
         <Nav title="react-virtualized">
           <SubMenu
-            title="Examples"
             activeClassName="SideNavLinkActiveDark"
-            items={NavExamples}
             className="NavExamples"
+            items={EXAMPLE_ROUTES}
+            title="Examples"
           />
           <SubMenu
-            title="API"
             activeClassName="SideNavLinkActiveLight"
-            items={ApiExamples}
             className="NavApi"
+            items={API_ROUTES}
+            title="API"
           />
         </Nav>
         <main className="Main">
           <Route
             exact
             path="/"
-            render={() => <Redirect to="/examples/list/fixed-size" />}
+            render={() => <Redirect to={EXAMPLE_ROUTES[0].path} />}
           />
 
-          <Route
-            path="/examples/list/fixed-size"
-            component={FixedSizeListExample}
-          />
-          <Route path="/examples/list/dyanmic" component={DyanmicListExample} />
-          <Route
-            path="/examples/grid/fixed-size"
-            component={FixedSizeGridExample}
-          />
-          <Route
-            path="/examples/list/scrolling-indicators"
-            component={ListWithScrollingIndicatorExample}
-          />
-          <Route
-            path="/examples/list/scroll-to-cell"
-            component={ScrollToItemExample}
-          />
+          {EXAMPLE_ROUTES.map(({ component, path }) => (
+            <Route key={path} path={path} component={component} />
+          ))}
 
-          <Route path="/api/FixedSizeList" component={FixedSizeListApi} />
-          <Route path="/api/FixedSizeGrid" component={FixedSizeGridApi} />
+          {API_ROUTES.map(({ component, path }) => (
+            <Route key={path} path={path} component={component} />
+          ))}
         </main>
       </div>
     </Router>
   );
 }
+
+const EXAMPLE_ROUTES = [
+  {
+    path: '/examples/list/fixed-size',
+    title: 'Basic List',
+    component: FixedSizeListExample,
+  },
+  {
+    path: '/examples/list/dyanmic',
+    title: 'Dynamic List',
+    component: DyanmicListExample,
+  },
+  {
+    path: '/examples/grid/fixed-size',
+    title: 'Basic Grid',
+    component: FixedSizeGridExample,
+  },
+  {
+    path: '/examples/list/scrolling-indicators',
+    title: 'Scrolling indicators',
+    component: ListWithScrollingIndicatorExample,
+  },
+  {
+    path: '/examples/list/scroll-to-cell',
+    title: 'Scrolling to an item',
+    component: ScrollToItemExample,
+  },
+];
+
+const API_ROUTES = [
+  {
+    path: '/api/FixedSizeList',
+    title: <code>&lt;FixedSizeList&gt;</code>,
+    component: FixedSizeListApi,
+  },
+  {
+    path: '/api/FixedSizeGrid',
+    title: <code>&lt;FixedSizeGrid&gt;</code>,
+    component: FixedSizeGridApi,
+  },
+];

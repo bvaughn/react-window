@@ -4,16 +4,8 @@ import cs from 'classnames';
 import { MobileNavButton } from '../MobileNavButton';
 
 export class Nav extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isExpanded: false,
-    };
-  }
-
-  menuToggleHandler = e => {
-    this.setState({ isExpanded: !this.state.isExpanded });
+  state = {
+    isExpanded: false,
   };
 
   render() {
@@ -23,7 +15,7 @@ export class Nav extends React.Component {
     return (
       <nav className="SideNav">
         <div className="SidebarNavHeaderContainer">
-          <MobileNavButton isActive={this.state.isExpanded} onClick={this.menuToggleHandler} />
+          <MobileNavButton isActive={this.state.isExpanded} onClick={this.toggleIsExpanded} />
           <h1 className="SideNavHeader">{title}</h1>
         </div>
         <div
@@ -33,10 +25,19 @@ export class Nav extends React.Component {
           })}
           aria-hidden={isExpanded}
           aria-live="polite"
+          onClick={isExpanded ? this.collapse : null}
         >
           {children}
         </div>
       </nav>
     );
   }
+
+  collapse = () => {
+    this.setState({isExpanded: false});
+  };
+
+  toggleIsExpanded = () => {
+    this.setState(prevState => ({ isExpanded: !prevState.isExpanded }));
+  };
 }
