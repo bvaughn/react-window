@@ -11,6 +11,7 @@
   "jsnext:main": "dist/index.es.js",
   "scripts": {
     "precommit": "lint-staged",
+    "prettier": "prettier --write {example/src,src}/**/*.{js,jsx,json,css}",
     "linc": "lint-staged",
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
@@ -21,7 +22,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,json,css}": ["prettier --write", "git add"]
+    "{example/src,src}/**/*.{js,jsx,json,css}": ["prettier --write", "git add"]
   },
   "dependencies": {},
   "peerDependencies": {

@@ -12,7 +12,7 @@ const DynamicList = createListComponent({
     cellSize(index),
   getEstimatedTotalSize: ({ cellSize, count }: Props) => {
     // TODO
-    console.log('getEstimatedTotalSize()', this)
+    console.log('getEstimatedTotalSize()', this);
     return 10000;
   },
   getOffsetForIndex: (

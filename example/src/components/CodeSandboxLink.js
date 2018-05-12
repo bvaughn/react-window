@@ -1,13 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import "./CodeSandboxLink.css";
+import './CodeSandboxLink.css';
 
 const CodeSandboxLink = ({ to }) => (
   <a className="CodeSandboxLink" href={to}>
-    <svg
-      className="CodeSandboxSvg"
-      viewBox="0 0 1024 1024"
-    >
+    <svg className="CodeSandboxSvg" viewBox="0 0 1024 1024">
       <polyline
         className="CodeSandboxSvgBackground"
         points="719.001,851 719.001,639.848 902,533.802 902,745.267 719.001,851"
@@ -42,7 +39,6 @@ const CodeSandboxLink = ({ to }) => (
         points="121,739.083 510.917,963.042 901,738.333 901,288 511,62 121,289"
       />
     </svg>
-
     Try it on CodeSandbox
   </a>
 );
