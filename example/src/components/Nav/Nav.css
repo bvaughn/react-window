@@ -34,20 +34,10 @@
 .SidebarNavContent {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  max-height: 0px;
-  transition-property: max-height;
-  transition-duration: 0.5s;
-  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
 
 .SidebarNavContent > div {
   flex: 1;
-}
-
-.SidebarNavContent.full {
-  transition: max-height 1s ease-in-out;
-  max-height: 100vh;
 }
 
 @media (min-width: 25rem) {
@@ -72,5 +62,25 @@
     flex-direction: column;
     overflow: inherit;
     transition: none;
+  }
+}
+
+@media (max-width: 37.5rem) {
+  .SidebarNavContent {
+    display: none;
+  }
+
+  .SidebarNavContentExpanded {
+    display: flex;
+    position: absolute;
+    top: 4rem;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
+    background-color: #e9eded;
+    z-index: 10;
+    padding: 1rem;
+    display: block;
   }
 }

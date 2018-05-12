@@ -12,7 +12,6 @@
 }
 
 .SideNavLinkListItem {
-  padding-left: 1rem;
   line-height: 2rem;
 }
 
@@ -22,4 +21,10 @@
 }
 .SideNavLink:hover {
   text-decoration: underline;
+}
+
+@media (min-width: 37.5rem) {
+  .SideNavLinkListItem {
+    padding-left: 1rem;
+  }
 }

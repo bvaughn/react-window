@@ -8,30 +8,30 @@ export class Nav extends React.Component {
     super(props);
 
     this.state = {
-      open: false,
+      isExpanded: false,
     };
   }
 
   menuToggleHandler = e => {
-    this.setState({ open: !this.state.open });
+    this.setState({ isExpanded: !this.state.isExpanded });
   };
 
   render() {
     const { title, children } = this.props;
-    const { open } = this.state;
+    const { isExpanded } = this.state;
 
     return (
       <nav className="SideNav">
         <div className="SidebarNavHeaderContainer">
-          <MobileNavButton isActive={this.state.open} onClick={this.menuToggleHandler} />
+          <MobileNavButton isActive={this.state.isExpanded} onClick={this.menuToggleHandler} />
           <h1 className="SideNavHeader">{title}</h1>
         </div>
         <div
           id="expandable"
           className={cs('SidebarNavContent', {
-            full: open,
+            SidebarNavContentExpanded: isExpanded,
           })}
-          aria-hidden={open}
+          aria-hidden={isExpanded}
           aria-live="polite"
         >
           {children}
