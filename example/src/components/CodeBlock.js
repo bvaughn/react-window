@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './CodeBlock.css';
+import '../material-dark-atom-theme.css';
 
 const CodeBlock = ({ value }) => (
   <code dangerouslySetInnerHTML={{__html: value}} />
