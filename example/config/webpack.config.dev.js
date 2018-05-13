@@ -135,11 +135,10 @@ module.exports = {
             },
           },
 
-          // Custom marky-markdown loader.
-          // Uses Atom Highlights module to do syntax highlighting for examples.
+          // Custom Atom Highlights loader for syntax highlighting
           {
             test: /code/,
-            loader: require.resolve('../webpack/marky-markdown-loader'),
+            loader: require.resolve('../webpack/atom-highlights-loader'),
           },
 
           // Process JS with Babel.
