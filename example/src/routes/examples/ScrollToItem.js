@@ -3,6 +3,9 @@ import { FixedSizeGrid, FixedSizeList } from "react-virtualized-v10";
 import CodeBlock from "../../components/CodeBlock";
 import CodeSandboxLink from "../../components/CodeSandboxLink";
 
+import CODE_GRID from "../../code/ScrollToItemGrid.js";
+import CODE_LIST from "../../code/ScrollToItemList.js";
+
 export default class ScrollToItem extends Component {
   gridRef = React.createRef();
   listRef = React.createRef();
@@ -42,7 +45,7 @@ export default class ScrollToItem extends Component {
             </div>
           </div>
           <div className="ExampleCode">
-            <CodeBlock value={SNIPPET_LIST} />
+            <CodeBlock value={CODE_LIST} />
           </div>
         </div>
         <div className="Example">
@@ -79,7 +82,7 @@ export default class ScrollToItem extends Component {
             </div>
           </div>
           <div className="ExampleCode">
-            <CodeBlock value={SNIPPET_GRID} />
+            <CodeBlock value={CODE_GRID} />
           </div>
         </div>
       </div>
@@ -108,46 +111,3 @@ export default class ScrollToItem extends Component {
     });
   };
 }
-
-const SNIPPET_LIST = `
-import { FixedSizeList as List } from 'react-virtualized';
-
-const listRef = React.createRef();
-
-// You can programatically scroll to a item within a List.
-// First, attach a ref to the List:
-<List ref={listRef} {...props} />
-
-// Then call the scrollToItem() API method with an item index:
-listRe.current.scrollToItem(200);
-
-// The List will scroll as little as possible to ensure the item is visible.
-// You can also specify a custom alignment: center, start, or end.
-// For example:
-listRe.current.scrollToItem(300, "center");
-`;
-
-const SNIPPET_GRID = `
-import { FixedSizeGrid as Grid } from 'react-virtualized';
-
-const gridRef = React.createRef();
-
-// You can programatically scroll to a item within a Grid.
-// First, attach a ref to the Grid:
-<Grid ref={gridRef} {...props} />
-
-// Then call the scrollToItem() API method with the item indices:
-gridRef.current.scrollToItem({
-  columnIndex: 50,
-  rowIndex: 100
-});
-
-// The Grid will scroll as little as possible to ensure the item is visible.
-// You can also specify a custom alignment: center, start, or end.
-// For example:
-gridRef.current.scrollToItem({
-  align: "start",
-  columnIndex: 150,
-  rowIndex: 300
-});
-`;

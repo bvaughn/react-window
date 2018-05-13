@@ -3,6 +3,8 @@ import { FixedSizeList } from "react-virtualized-v10";
 import CodeBlock from "../../components/CodeBlock";
 import CodeSandboxLink from "../../components/CodeSandboxLink";
 
+import CODE from "../../code/ScrollingIndicatorList.js";
+
 import "./shared.css";
 
 export default function() {
@@ -34,25 +36,9 @@ export default function() {
         </div>
       </div>
       <div className="ExampleCode">
-        <CodeBlock value={SNIPPET} />
+        <CodeBlock value={CODE} />
       </div>
     </div>
     </div>
   );
 }
-
-const SNIPPET = `
-import { FixedSizeList as List } from 'react-virtualized';
-
-// If your component's items are expensive to render,
-// You can boost performance by rendering a placeholder while the user is scrolling.
-// To do this, add the \`useIsScrolling\` property to your List or Grid.
-// Now an additional parameter, \`isScrolling\`, will be passed to your render method:
-<List useIsScrolling {...props}>
-  {({ key, index, isScrolling, style }) => (
-    <div key={key} style={style}>
-      {isScrolling ? 'Scrolling' : \`Row \${index}\`}
-    </div>
-  )}
-</List>
-`;

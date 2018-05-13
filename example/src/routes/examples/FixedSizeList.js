@@ -3,6 +3,9 @@ import { FixedSizeList } from "react-virtualized-v10";
 import CodeBlock from "../../components/CodeBlock";
 import CodeSandboxLink from "../../components/CodeSandboxLink";
 
+import CODE_HORIZONTAL from "../../code/FixedSizeListHorizontal.js";
+import CODE_VERTICAL from "../../code/FixedSizeListVertical.js";
+
 import "./shared.css";
 
 export default function() {
@@ -33,7 +36,7 @@ export default function() {
         </div>
       </div>
       <div className="ExampleCode">
-        <CodeBlock value={SNIPPET_VERTICAL} />
+        <CodeBlock value={CODE_VERTICAL} />
       </div>
     </div>
     <div className="Example">
@@ -62,44 +65,9 @@ export default function() {
         </div>
       </div>
       <div className="ExampleCode">
-        <CodeBlock value={SNIPPET_HORIZONTAL} />
+        <CodeBlock value={CODE_HORIZONTAL} />
       </div>
     </div>
     </div>
   );
 }
-
-const SNIPPET_VERTICAL = `
-import { FixedSizeList as List } from 'react-virtualized';
-
-<List
-  cellSize={35}
-  count={1000}
-  height={150}
-  width={300}
->
-  {({ key, index, style }) => (
-    <div key={key} style={style}>
-      Row {index}
-    </div>
-  )}
-</List>
-`;
-
-const SNIPPET_HORIZONTAL = `
-import { FixedSizeList as List } from 'react-virtualized';
-
-<List
-  cellSize={100}
-  count={1000}
-  direction="horizontal"
-  height={75}
-  width={300}
->
-  {({ key, index, style }) => (
-    <div key={key} style={style}>
-      Column {index}
-    </div>
-  )}
-</List>
-`;

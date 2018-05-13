@@ -3,6 +3,8 @@ import { FixedSizeGrid } from "react-virtualized-v10";
 import CodeBlock from "../../components/CodeBlock";
 import CodeSandboxLink from "../../components/CodeSandboxLink";
 
+import CODE from "../../code/FixedSizeGrid.js";
+
 import "./shared.css";
 
 export default function() {
@@ -35,28 +37,9 @@ export default function() {
         </div>
       </div>
       <div className="ExampleCode">
-        <CodeBlock value={SNIPPET} />
+        <CodeBlock value={CODE} />
       </div>
     </div>
     </div>
   );
 }
-
-const SNIPPET = `
-import { FixedSizeGrid as Grid } from 'react-virtualized';
-
-<Grid
-  columnCount={1000}
-  columnWidth={100}
-  height={150}
-  rowCount={1000}
-  rowHeight={35}
-  width={300}
->
-  {({ columnIndex, key, rowIndex, style }) => (
-    <div key={key} style={style}>
-      row {rowIndex}, column {columnIndex}
-    </div>
-  )}
-</Grid>
-`;

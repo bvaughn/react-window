@@ -1,7 +1,235 @@
-.CodeMirror {
-  height: auto;
-}
+/* Material Dark theme */
 
-.CodeMirror-scroll {
-  height: auto;
+.highlight {
+  background-color: #263238;
+  color: #eeffff;
+}
+.comment {
+  color: #4f6875;
+}
+.keyword {
+  color: #c792ea;
+}
+.keyword.control {
+  color: #c792ea;
+}
+.keyword.control.elements {
+  color: #b2ccd6;
+}
+.keyword.operator {
+  color: #89ddf3;
+}
+.keyword.other.special-method {
+  color: #82aaff;
+}
+.keyword.other.unit {
+  color: #ffcb6b;
+}
+.storage {
+  color: #c792ea;
+}
+.constant {
+  color: #f07178;
+}
+.constant.character.escape {
+  color: #89ddf3;
+}
+.constant.numeric {
+  color: #f78c6a;
+}
+.constant.other.color {
+  color: #89ddf3;
+}
+.constant.other.symbol {
+  color: #c3e88d;
+}
+.constant.language.null {
+  color: #ff5370;
+}
+.variable {
+  color: #eeffff;
+}
+.variable.interpolation {
+  color: #eb434c;
+}
+.variable.parameter.function {
+  color: #f78c6a;
+}
+.variable.language {
+  color: #ff5370;
+}
+.variable.variable.object {
+  color: #ffcb6b;
+}
+.invalid.illegal {
+  background-color: #f07178;
+  color: #263238;
+}
+.string {
+  color: #c3e88d;
+}
+.string.regexp {
+  color: #89ddf3;
+}
+.string.regexp .source.ruby.embedded {
+  color: #ffcb6b;
+}
+.string.other.link {
+  color: #f07178;
+}
+.punctuation.definition.comment {
+  color: #4f6875;
+}
+.punctuation.definition.array,
+.punctuation.definition.parameters,
+.punctuation.definition.string,
+.punctuation.definition.variable {
+  color: #eeffff;
+}
+.punctuation.definition.array.begin,
+.punctuation.definition.parameters.begin,
+.punctuation.definition.string.begin,
+.punctuation.definition.variable.begin,
+.punctuation.definition.array.end,
+.punctuation.definition.parameters.end,
+.punctuation.definition.string.end,
+.punctuation.definition.variable.end {
+  color: #89ddf3;
+}
+.punctuation.definition.heading,
+.punctuation.definition.identity {
+  color: #82aaff;
+}
+.punctuation.definition.bold {
+  color: #ffe082;
+  font-weight: bold;
+}
+.punctuation.definition.italic {
+  color: #c792ea;
+  font-style: italic;
+}
+.punctuation.definition.entity {
+  color: #89ddf3;
+}
+.punctuation.section.array {
+  color: #89ddf3;
+}
+.punctuation.section.embedded {
+  color: #89ddf3;
+}
+.punctuation.separator.key-value {
+  color: #89ddf3;
+}
+.punctuation.terminator {
+  color: #89ddf3;
+}
+.support.class {
+  color: #ffcb6b;
+}
+.support.function {
+  color: #82aaff;
+}
+.support.function.any-method {
+  color: #82aaff;
+}
+.support.type {
+  color: #ffcb6b;
+}
+.support.variable.dom {
+  color: #ffcb6b;
+}
+.entity.name.function {
+  color: #82aaff;
+}
+.entity.name.type {
+  color: #eeffff;
+}
+.entity.other.inherited-class {
+  color: #c3e88d;
+}
+.entity.other.attribute-name.pseudo-element {
+  color: #c792ea;
+}
+.entity.other.attribute-name.attribute {
+  color: #c792ea;
+}
+.entity.name.class,
+.entity.name.type.class {
+  color: #ffcb6b;
+}
+.entity.name.section {
+  color: #82aaff;
+}
+.entity.name.tag {
+  color: #f07178;
+}
+.entity.other.attribute-name {
+  color: #ffcb6b;
+}
+.meta.class {
+  color: #ffe082;
+}
+.meta.delimiter.period {
+  color: #89ddf3;
+}
+.meta.link {
+  color: #ffcb6b;
+}
+.meta.require {
+  color: #82aaff;
+}
+.meta.selector {
+  color: #c792ea;
+}
+.meta.separator {
+  background-color: #373b41;
+  color: #eeffff;
+}
+.meta.brace.round,
+.meta.brace.square {
+  color: #89ddf3;
+}
+.none {
+  color: #eeffff;
+}
+.markup.bold {
+  color: #ffcb6b;
+  font-weight: bold;
+}
+.markup.changed {
+  color: #c792ea;
+}
+.markup.deleted {
+  color: #f07178;
+}
+.markup.italic {
+  color: #c792ea;
+  font-style: italic;
+}
+.markup.heading .punctuation.definition.heading {
+  color: #82aaff;
+}
+.markup.inserted {
+  color: #c3e88d;
+}
+.markup.list {
+  color: #f07178;
+}
+.markup.quote {
+  color: #ffcb6b;
+}
+.markup.raw.inline {
+  color: #c3e88d;
+}
+.source.gfm .markup {
+  -webkit-font-smoothing: auto;
+}
+.source.gfm .markup.heading {
+  color: #c3e88d;
+}
+.bracket-matcher .region {
+  border-bottom: 1px solid #009688;
+  box-sizing: border-box;
+  background-color: rgba(238, 255, 255, 0.1);
+  box-shadow: inset 0 -1px 0 #009688;
 }
