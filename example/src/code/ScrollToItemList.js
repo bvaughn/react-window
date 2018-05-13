@@ -7,9 +7,9 @@ const listRef = React.createRef();
 <List ref={listRef} {...props} />
 
 // Then call the scrollToItem() API method with an item index:
-listRe.current.scrollToItem(200);
+listRef.current.scrollToItem(200);
 
 // The List will scroll as little as possible to ensure the item is visible.
 // You can also specify a custom alignment: center, start, or end.
 // For example:
-listRe.current.scrollToItem(300, "center");
+listRef.current.scrollToItem(300, "center");

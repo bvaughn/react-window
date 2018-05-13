@@ -1,5 +1,3 @@
-/* Material Dark theme */
-
 .editor {
   background-color: #263238;
   color: #eeffff;
@@ -192,44 +190,74 @@
 .none {
   color: #eeffff;
 }
-.markup.bold {
-  color: #ffcb6b;
-  font-weight: bold;
-}
-.markup.changed {
-  color: #c792ea;
-}
-.markup.deleted {
-  color: #f07178;
-}
-.markup.italic {
-  color: #c792ea;
-  font-style: italic;
-}
-.markup.heading .punctuation.definition.heading {
-  color: #82aaff;
-}
-.markup.inserted {
-  color: #c3e88d;
-}
-.markup.list {
-  color: #f07178;
-}
-.markup.quote {
-  color: #ffcb6b;
-}
-.markup.raw.inline {
-  color: #c3e88d;
-}
-.source.gfm .markup {
-  -webkit-font-smoothing: auto;
-}
-.source.gfm .markup.heading {
-  color: #c3e88d;
+.editor .highlight .region.bracket-matcher {
+  z-index: inherit;
 }
 .bracket-matcher .region {
   border-bottom: 1px solid #009688;
   box-sizing: border-box;
   background-color: rgba(238, 255, 255, 0.1);
   box-shadow: inset 0 -1px 0 #009688;
+}
+.editor .spell-check-misspelling .region {
+  z-index: auto;
+}
+.jsx.component {
+  color: #f07178;
+}
+.editor .source.js.jsx .jsx .entity.other.attribute-name {
+  font-style: normal;
+}
+.html .meta.tag.doctype,
+.jsx .meta.tag.doctype {
+  color: #c792ea;
+}
+.html .punctuation.tag,
+.jsx .punctuation.tag {
+  color: #89ddf3;
+}
+.js.constant {
+  color: #eeffff;
+}
+.js.support.variable.property {
+  color: #eeffff;
+}
+.js.support.variable.property.dom {
+  color: #82aaff;
+}
+.js.entity.name.type {
+  color: #ffcb6b;
+}
+.js.variable.property {
+  color: #82aaff;
+}
+.js.variable.other.object {
+  color: #eeffff;
+}
+.js.variable.other.object.property {
+  color: #82aaff;
+}
+.js.string.quoted.template .other.object.property {
+  color: #c3e88d;
+}
+.js.constant.numeric {
+  color: #f78c6a;
+}
+.js.constant.boolean {
+  color: #f07178;
+}
+.js.punctuation.begin,
+.js.punctuation.end,
+.js.delimiter.object.comma,
+.js.brace.curly {
+  color: #89ddf3;
+}
+.comment .js.punctuation.begin,
+.comment .js.punctuation.end,
+.comment .js.delimiter.object.comma,
+.comment .js.brace.curly {
+  color: #4f6875;
+}
+.js.export .variable.default {
+  color: #c792ea;
 }

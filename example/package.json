@@ -102,5 +102,7 @@
     "extends": "react-app"
   },
   "eslintIgnore": "src/code",
-  "devDependencies": {}
+  "devDependencies": {
+    "language-babel": "https://github.com/gandm/language-babel"
+  }
 }
