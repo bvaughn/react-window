@@ -121,6 +121,12 @@ export default function () {
         <h2 className="ApiSubHeader">Methods</h2>
         <dl>
           <dt className="ApiPropType">
+            scrollTo(scrollOffset: number): void
+          </dt>
+          <dd className="ApiPropDefinition">
+            Scroll to the specified offset (<code>scrollTop</code> or <code>scrollLeft</code>, depending on the <code>direction</code> prop).
+          </dd>
+          <dt className="ApiPropType">
             scrollToItem(index: number, align: string = "auto"): void
           </dt>
           <dd className="ApiPropDefinition">
