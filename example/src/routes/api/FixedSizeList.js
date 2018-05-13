@@ -2,6 +2,8 @@ import React from "react";
 import { NavLink as Link } from "react-router-dom";
 import CodeBlock from "../../components/CodeBlock";
 
+import CODE from "../../code/FixedSizeListChildren.js";
+
 import "./shared.css";
 
 export default function () {
@@ -29,7 +31,7 @@ export default function () {
             This method also receives a <code>key</code> parameter (used by React for <a href="https://reactjs.org/docs/reconciliation.html">reconciliation</a>), and a <code>style</code> parameter (used for positioning).
             <br/><br/>
             <div className="CodeBlockWrapper">
-              <CodeBlock value={CHILDREN_PROP} />
+              <CodeBlock value={CODE} />
             </div>
           </dd>
           <dt className="ApiPropType">
@@ -142,13 +144,3 @@ export default function () {
     </div>
   );
 }
-
-const CHILDREN_PROP = `
-<FixedSizeList {...props}>
-  {({ key, index, style }) => (
-    <div key={key} style={style}>
-      Item {index}
-    </div>
-  )}
-</FixedSizeList>
-`;

@@ -3,6 +3,8 @@
 .editor {
   background-color: #263238;
   color: #eeffff;
+  margin: 0;
+  white-space: pre-wrap;
 }
 .comment {
   color: #4f6875;
