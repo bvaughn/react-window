@@ -5,7 +5,7 @@ import { SubMenu } from './components/SubMenu';
 
 // Routes
 //import DyanmicListExample from './routes/examples/DynamicList';
-import FixedSizeGridApi from './routes/api/FixedSizeGrid';
+//import FixedSizeGridApi from './routes/api/FixedSizeGrid';
 import FixedSizeListApi from './routes/api/FixedSizeList';
 import FixedSizeGridExample from './routes/examples/FixedSizeGrid';
 import FixedSizeListExample from './routes/examples/FixedSizeList';
@@ -86,9 +86,9 @@ const API_ROUTES = [
     title: <code>&lt;FixedSizeList&gt;</code>,
     component: FixedSizeListApi,
   },
-  {
-    path: '/api/FixedSizeGrid',
-    title: <code>&lt;FixedSizeGrid&gt;</code>,
-    component: FixedSizeGridApi,
-  },
+  //  {
+  //    path: '/api/FixedSizeGrid',
+  //    title: <code>&lt;FixedSizeGrid&gt;</code>,
+  //    component: FixedSizeGridApi,
+  //  },
 ];

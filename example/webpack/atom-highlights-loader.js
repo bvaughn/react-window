@@ -6,7 +6,7 @@ const getOrInitHighlighter = () => {
   if (highlighter === null) {
     highlighter = new Highlights();
     highlighter.requireGrammarsSync({
-      modulePath: require.resolve('language-babel/package.json')
+      modulePath: require.resolve('language-babel/package.json'),
     });
   }
   return highlighter;
