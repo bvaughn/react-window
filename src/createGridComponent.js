@@ -16,10 +16,10 @@ export type RenderFunction = ({
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 
 export type Props = {|
-  columnCount: number,
-  columnWidth: CellSize,
   children: RenderFunction,
   className?: string,
+  columnCount: number,
+  columnWidth: CellSize,
   height: number,
   overscanCount: number,
   rowCount: number,
