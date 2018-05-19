@@ -1,7 +1,9 @@
 .SideNav {
-  display: block;
+  display: inline-block;
+  width: 16rem;
   padding: 0 1rem 1rem;
   background-color: #e9eded;
+  box-sizing: border-box;
 }
 
 .SidebarNavHeaderContainer {
@@ -33,40 +35,30 @@
 
 .SidebarNavContent {
   display: flex;
+  max-height: 100vh;
   flex-direction: column;
+  overflow: inherit;
+  transition: none;
 }
 
 .SidebarNavContent > div {
   flex: 1;
 }
 
-@media (min-width: 25rem) {
+@media (max-width: 25rem) {
   .SidebarNavContent {
-    flex-direction: row;
-  }
-}
-
-@media (min-width: 37.5rem) {
-  .SidebarNavHeaderContainer button {
-    display: none;
-    margin: 1.5rem 0 0.5rem;
-  }
-
-  .SideNav {
-    display: inline-block;
-    width: 16rem;
-  }
-
-  .App .SidebarNavContent {
-    max-height: 100vh;
     flex-direction: column;
-    overflow: inherit;
-    transition: none;
   }
 }
 
 @media (max-width: 37.5rem) {
+  .SideNav {
+    display: block;
+    width: 100%;
+  }
+
   .SidebarNavContent {
+    flex-direction: row;
     display: none;
   }
 

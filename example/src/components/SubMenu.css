@@ -1,8 +1,9 @@
 .SideNavSectionHeader {
-  margin: 1rem 0 0.5rem;
+  margin: 1rem 0;
   font-size: 1rem;
+  font-weight: bold;
   text-transform: uppercase;
-  color: #537f7e;
+  color: #263238;
 }
 
 .SideNavLinkList {
@@ -13,18 +14,58 @@
 
 .SideNavLinkListItem {
   line-height: 2rem;
+  padding-left: 1rem;
 }
 
 .SideNavLink {
   text-decoration: none;
-  color: #000;
+  color: #546e7a;
 }
 .SideNavLink:hover {
   text-decoration: underline;
 }
 
-@media (min-width: 37.5rem) {
+.SideNavLinkActiveLight,
+.SideNavLinkActiveDark {
+  display: block;
+  position: relative;
+  color: #ec5f67;
+}
+
+.SideNavLinkActiveLight:after,
+.SideNavLinkActiveDark:after {
+  display: inline-block;
+  content: ' ';
+  height: 0px;
+  position: absolute;
+  right: -1rem;
+  width: 0px;
+  border-bottom: 0.75rem solid transparent;
+  border-top: 0.75rem solid transparent;
+}
+.SideNavLinkActiveLight:after {
+  border-right: 0.75rem solid #fff;
+}
+.SideNavLinkActiveDark:after {
+  border-right: 0.75rem solid #263238;
+}
+
+@media (max-width: 37.5rem) {
+  .SideNavSectionHeader {
+    font-size: 1.5rem;
+  }
+
   .SideNavLinkListItem {
-    padding-left: 1rem;
+    line-height: 3rem;
+  }
+
+  .SideNavLink {
+    font-size: 1.5rem;
+    font-weight: lighter;
+  }
+
+  .SideNavLinkActiveLight:after,
+  .SideNavLinkActiveDark:after {
+    display: none;
   }
 }

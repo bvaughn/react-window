@@ -20,14 +20,12 @@ export default function App() {
       <div className="App">
         <Nav title="react-virtualized">
           <SubMenu
-            activeClassName="SideNavLinkActiveDark"
-            className="NavExamples"
+            isActiveDark={true}
             items={EXAMPLE_ROUTES}
             title="Examples"
           />
           <SubMenu
-            activeClassName="SideNavLinkActiveLight"
-            className="NavApi"
+            isActiveDark={false}
             items={API_ROUTES}
             title="API"
           />
@@ -83,12 +81,12 @@ const EXAMPLE_ROUTES = [
 const API_ROUTES = [
   {
     path: '/api/FixedSizeList',
-    title: <code>&lt;FixedSizeList&gt;</code>,
+    title: 'FixedSizeList',
     component: FixedSizeListApi,
   },
   //  {
   //    path: '/api/FixedSizeGrid',
-  //    title: <code>&lt;FixedSizeGrid&gt;</code>,
+  //    title: 'FixedSizeGrid',
   //    component: FixedSizeGridApi,
   //  },
 ];

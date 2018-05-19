@@ -1,41 +1,16 @@
 .App {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: 100%;
-}
-
-.SideNavLinkActiveLight,
-.SideNavLinkActiveDark {
-  display: block;
-  position: relative;
-  color: #ff5370;
-}
-
-@media (min-width: 37.5rem) {
-  .App {
-    flex-direction: row;
-  }
-
-  .SideNavLinkActiveLight:after,
-  .SideNavLinkActiveDark:after {
-    display: inline-block;
-    content: ' ';
-    height: 0px;
-    position: absolute;
-    right: -1rem;
-    width: 0px;
-    border-bottom: 0.75rem solid transparent;
-    border-top: 0.75rem solid transparent;
-  }
-  .SideNavLinkActiveLight:after {
-    border-right: 0.75rem solid #fff;
-  }
-  .SideNavLinkActiveDark:after {
-    border-right: 0.75rem solid #263238;
-  }
 }
 
 .Main {
   flex: 1;
   overflow: auto;
+}
+
+@media (max-width: 37.5rem) {
+  .App {
+    flex-direction: column;
+  }
 }

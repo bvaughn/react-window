@@ -10,6 +10,7 @@
   margin-right: 1rem;
 }
 .MobileNavButton {
+  display: none;
   color: #546e7a;
 }
 .MobileNavButtonActive {
@@ -23,4 +24,10 @@
 
 .MobileNavButtonIconPath {
   fill: currentColor;
+}
+
+@media (max-width: 37.5rem) {
+  .MobileNavButton {
+    display: block;
+  }
 }

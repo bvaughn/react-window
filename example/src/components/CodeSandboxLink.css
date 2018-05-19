@@ -2,6 +2,7 @@
   display: inline-flex;
   flex-direction: row;
   align-items: center;
+  color: #8752aa;
 }
 
 .CodeSandboxSvg {
