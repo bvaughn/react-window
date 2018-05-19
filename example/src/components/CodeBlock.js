@@ -1,9 +1,13 @@
 import React from 'react';
 
-import '../material-dark-atom-theme.css';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/material.css';
+import './CodeBlock.css';
 
 const CodeBlock = ({ value }) => (
-  <code dangerouslySetInnerHTML={{__html: value}} />
+  <div className="CodeBlock">
+    <div className="CodeMirror CodeMirror-wrap cm-s-material" dangerouslySetInnerHTML={{__html: value}} />
+  </div>
 );
 
 export default CodeBlock;

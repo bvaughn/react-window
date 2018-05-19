@@ -135,10 +135,10 @@ module.exports = {
             },
           },
 
-          // Custom Atom Highlights loader for syntax highlighting
+          // Custom CodeMirror loader for syntax highlighting
           {
-            test: /code/,
-            loader: require.resolve('../webpack/atom-highlights-loader'),
+            test: /code\//,
+            loader: require.resolve('../webpack/codemirror-loader'),
           },
 
           // Process JS with Babel.

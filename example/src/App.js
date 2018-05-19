@@ -24,11 +24,7 @@ export default function App() {
             items={EXAMPLE_ROUTES}
             title="Examples"
           />
-          <SubMenu
-            isActiveDark={false}
-            items={API_ROUTES}
-            title="API"
-          />
+          <SubMenu isActiveDark={false} items={API_ROUTES} title="API" />
         </Nav>
         <main className="Main">
           <Route
