@@ -2,8 +2,8 @@ import React from 'react';
 
 import './CodeSandboxLink.css';
 
-const CodeSandboxLink = ({ to }) => (
-  <a className="CodeSandboxLink" href={to}>
+const CodeSandboxLink = ({ id }) => (
+  <a className="CodeSandboxLink" href={`https://codesandbox.io/s/${id}`} rel="nofollow" target="_blank">
     <svg className="CodeSandboxSvg" viewBox="0 0 1024 1024">
       <polyline
         className="CodeSandboxSvgBackground"

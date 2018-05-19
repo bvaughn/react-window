@@ -41,7 +41,7 @@ export default class ScrollToItem extends Component {
             </FixedSizeList>
 
             <div className="TryItOutLink">
-              <CodeSandboxLink to="#" />
+              <CodeSandboxLink id="mzy8pq360x" />
             </div>
           </div>
           <div className="ExampleCode">
@@ -78,7 +78,7 @@ export default class ScrollToItem extends Component {
             </FixedSizeGrid>
 
             <div className="TryItOutLink">
-              <CodeSandboxLink to="#" />
+              <CodeSandboxLink id="woy6mknj4w" />
             </div>
           </div>
           <div className="ExampleCode">

@@ -32,7 +32,7 @@ export default function() {
         </FixedSizeList>
 
         <div className="TryItOutLink">
-          <CodeSandboxLink to="#" />
+          <CodeSandboxLink id="3qw073y3x6" />
         </div>
       </div>
       <div className="ExampleCode">

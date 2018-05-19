@@ -33,7 +33,7 @@ export default function() {
         </FixedSizeGrid>
 
         <div className="TryItOutLink">
-          <CodeSandboxLink to="#" />
+          <CodeSandboxLink id="1rp83rw8wl" />
         </div>
       </div>
       <div className="ExampleCode">
