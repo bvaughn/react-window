@@ -5,15 +5,19 @@ import createGridComponent from './createGridComponent';
 import type { Props, ScrollToAlign } from './createGridComponent';
 
 const FixedSizeGrid = createGridComponent({
+  getColumnOffset: ({ columnWidth }: Props, index: number): number =>
+    index * ((columnWidth: any): number),
   getColumnWidth: ({ columnWidth }: Props, index: number): number =>
     ((columnWidth: any): number),
+  getRowOffset: ({ rowHeight }: Props, index: number): number =>
+    index * ((rowHeight: any): number),
   getRowHeight: ({ rowHeight }: Props, index: number): number =>
     ((rowHeight: any): number),
   getEstimatedTotalHeight: ({ rowCount, rowHeight }: Props) =>
     ((rowHeight: any): number) * rowCount,
   getEstimatedTotalWidth: ({ columnCount, columnWidth }: Props) =>
     ((columnWidth: any): number) * columnCount,
-  getOffsetForColumn: (
+  getOffsetForColumnAndAlignment: (
     { columnWidth, width }: Props,
     columnIndex: number,
     align: ScrollToAlign,
@@ -43,7 +47,7 @@ const FixedSizeGrid = createGridComponent({
         }
     }
   },
-  getOffsetForRow: (
+  getOffsetForRowAndAlignment: (
     { rowHeight, height }: Props,
     rowIndex: number,
     align: ScrollToAlign,

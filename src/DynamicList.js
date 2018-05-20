@@ -7,14 +7,25 @@ import type { Props, ScrollToAlign } from './createListComponent';
 const DEFAULT_ESTIMATED_VERTICAL_CELL_SIZE = 20;
 const DEFAULT_ESTIMATED_HORIZONTAL_CELL_SIZE = 100;
 
+type DynanmicProps = {|
+  estimatedCellSize: number,
+  ...Props
+|};
+
 const DynamicList = createListComponent({
+  getCellOffset: (props: Props, index: number): number => {
+    const { estimatedCellSize } = ((props: any): DynanmicProps);
+    // TODO Use cache
+    return index * estimatedCellSize;
+  },
   getCellSize: ({ cellSize, size }: Props, index: number): number =>
     ((cellSize: any): Function)(index),
-  getEstimatedTotalSize: ({ cellSize, count }: Props) => {
-    // TODO
-    return 10000;
+  getEstimatedTotalSize: (props: Props) => {
+    const { estimatedCellSize, count } = ((props: any): DynanmicProps);
+    // TODO Keep a rolling estimate
+    return count * estimatedCellSize;
   },
-  getOffsetForIndex: (
+  getOffsetForIndexAndAlignment: (
     { cellSize, direction, height, width }: Props,
     index: number,
     align: ScrollToAlign,
@@ -49,5 +60,10 @@ const DynamicList = createListComponent({
     }
   },
 });
+
+DynamicList.defaultProps = {
+  estimatedCellSize: 25,
+  ...DynamicList.defaultProps
+};
 
 export default DynamicList;

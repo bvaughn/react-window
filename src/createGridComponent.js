@@ -37,9 +37,10 @@ type State = {|
   verticalScrollDirection: 'forward' | 'backward',
 |};
 
+type getCellOffset = (props: Props, index: number) => number;
 type getCellSize = (props: Props, index: number) => number;
 type getEstimatedTotalSize = (props: Props) => number;
-type getOffsetForCell = (
+type getOffsetForCellAndAlignment = (
   props: Props,
   index: number,
   align: ScrollToAlign,
@@ -52,25 +53,29 @@ type validateProps = (props: Props) => void;
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
 export default function createGridComponent({
+  getColumnOffset,
   getColumnStartIndexForOffset,
   getColumnStopIndexForStartIndex,
   getColumnWidth,
   getEstimatedTotalHeight,
   getEstimatedTotalWidth,
-  getOffsetForColumn,
-  getOffsetForRow,
+  getOffsetForColumnAndAlignment,
+  getOffsetForRowAndAlignment,
   getRowHeight,
+  getRowOffset,
   getRowStartIndexForOffset,
   getRowStopIndexForStartIndex,
   validateProps,
 }: {
+  getColumnOffset: getCellOffset,
   getColumnStartIndexForOffset: getStartIndexForOffset,
   getColumnStopIndexForStartIndex: getStopIndexForStartIndex,
   getColumnWidth: getCellSize,
   getEstimatedTotalHeight: getEstimatedTotalSize,
   getEstimatedTotalWidth: getEstimatedTotalSize,
-  getOffsetForColumn: getOffsetForCell,
-  getOffsetForRow: getOffsetForCell,
+  getOffsetForColumnAndAlignment: getOffsetForCellAndAlignment,
+  getOffsetForRowAndAlignment: getOffsetForCellAndAlignment,
+  getRowOffset: getCellOffset,
   getRowHeight: getCellSize,
   getRowStartIndexForOffset: getStartIndexForOffset,
   getRowStopIndexForStartIndex: getStopIndexForStartIndex,
@@ -129,13 +134,13 @@ export default function createGridComponent({
       const { scrollLeft, scrollTop } = this.state;
 
       this.scrollTo({
-        scrollLeft: getOffsetForColumn(
+        scrollLeft: getOffsetForColumnAndAlignment(
           this.props,
           columnIndex,
           align,
           scrollLeft
         ),
-        scrollTop: getOffsetForRow(this.props, rowIndex, align, scrollTop),
+        scrollTop: getOffsetForRowAndAlignment(this.props, rowIndex, align, scrollTop),
       });
     }
 
@@ -205,11 +210,10 @@ export default function createGridComponent({
           if (this._cellStyleCache.hasOwnProperty(key)) {
             style = this._cellStyleCache[key];
           } else {
-            // TODO Get position of cell using helper, not hard-coded number type
             this._cellStyleCache[key] = style = {
               position: 'absolute',
-              left: columnIndex * getColumnWidth(this.props, columnIndex),
-              top: rowIndex * getRowHeight(this.props, rowIndex),
+              left: getColumnOffset(this.props, columnIndex),
+              top: getRowOffset(this.props, rowIndex),
               height: getRowHeight(this.props, rowIndex),
               width: getColumnWidth(this.props, columnIndex),
             };

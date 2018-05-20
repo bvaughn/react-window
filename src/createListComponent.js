@@ -34,9 +34,10 @@ type State = {|
   scrollOffset: number,
 |};
 
+type getCellOffset = (props: Props, index: number) => number;
 type getCellSize = (props: Props, index: number) => number;
 type getEstimatedTotalSize = (props: Props) => number;
-type getOffsetForIndex = (
+type getOffsetForIndexAndAlignment = (
   props: Props,
   index: number,
   align: ScrollToAlign,
@@ -49,16 +50,18 @@ type validateProps = (props: Props) => void;
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
 export default function createListComponent({
+  getCellOffset,
   getCellSize,
   getEstimatedTotalSize,
-  getOffsetForIndex,
+  getOffsetForIndexAndAlignment,
   getStartIndexForOffset,
   getStopIndexForStartIndex,
   validateProps,
 }: {
+  getCellOffset: getCellOffset,
   getCellSize: getCellSize,
   getEstimatedTotalSize: getEstimatedTotalSize,
-  getOffsetForIndex: getOffsetForIndex,
+  getOffsetForIndexAndAlignment: getOffsetForIndexAndAlignment,
   getStartIndexForOffset: getStartIndexForOffset,
   getStopIndexForStartIndex: getStopIndexForStartIndex,
   validateProps: validateProps,
@@ -107,7 +110,7 @@ export default function createListComponent({
       if (this._scrollingContainer != null) {
         const { scrollOffset } = this.state;
         this.scrollTo(
-          getOffsetForIndex(this.props, index, align, scrollOffset)
+          getOffsetForIndexAndAlignment(this.props, index, align, scrollOffset)
         );
       }
     }
@@ -178,11 +181,11 @@ export default function createListComponent({
             position: 'absolute',
             left:
               direction === 'horizontal'
-                ? index * getCellSize(this.props, index)
+                ? getCellOffset(this.props, index)
                 : 0,
             top:
               direction === 'vertical'
-                ? index * getCellSize(this.props, index)
+                ? getCellOffset(this.props, index)
                 : 0,
             height:
               direction === 'vertical'

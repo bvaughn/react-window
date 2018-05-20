@@ -5,11 +5,13 @@ import createListComponent from './createListComponent';
 import type { Props, ScrollToAlign } from './createListComponent';
 
 const FixedSizeList = createListComponent({
+  getCellOffset: ({ cellSize, size }: Props, index: number): number =>
+    index * ((cellSize: any): number),
   getCellSize: ({ cellSize, size }: Props, index: number): number =>
     ((cellSize: any): number),
   getEstimatedTotalSize: ({ cellSize, count }: Props) =>
     ((cellSize: any): number) * count,
-  getOffsetForIndex: (
+  getOffsetForIndexAndAlignment: (
     { cellSize, direction, height, width }: Props,
     index: number,
     align: ScrollToAlign,
