@@ -42,9 +42,7 @@ export default class ScrollToItem extends Component {
               )}
             </DynamicList>
 
-            <div className="TryItOutLink">
-              <CodeSandboxLink id="mzy8pq360x" />
-            </div>
+            <CodeSandboxLink className="TryItOutLink" id="mzy8pq360x" />
           </div>
           <div className="ExampleCode">
             <CodeBlock value={CODE_LIST} />
@@ -79,9 +77,7 @@ export default class ScrollToItem extends Component {
               )}
             </FixedSizeGrid>
 
-            <div className="TryItOutLink">
-              <CodeSandboxLink id="woy6mknj4w" />
-            </div>
+            <CodeSandboxLink className="TryItOutLink" id="woy6mknj4w" />
           </div>
           <div className="ExampleCode">
             <CodeBlock value={CODE_GRID} />

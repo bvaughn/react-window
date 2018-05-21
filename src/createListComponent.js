@@ -39,7 +39,7 @@ type getCellOffset = (
   index: number,
   instanceProps: any
 ) => number;
-type getCellSize = (props: Props, index: number) => number;
+type getCellSize = (props: Props, index: number, instanceProps: any) => number;
 type getEstimatedTotalSize = (props: Props, instanceProps: any) => number;
 type getOffsetForIndexAndAlignment = (
   props: Props,
@@ -58,7 +58,7 @@ type getStopIndexForStartIndex = (
   startIndex: number,
   instanceProps: any
 ) => number;
-type initInstanceProps = (props: Props) => any;
+type initInstanceProps = (props: Props, instance: any) => any;
 type validateProps = (props: Props) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
@@ -103,7 +103,7 @@ export default function createListComponent({
     constructor(props: Props) {
       super(props);
 
-      this._instanceProps = initInstanceProps(props);
+      this._instanceProps = initInstanceProps(props, this);
     }
 
     static getDerivedStateFromProps(
@@ -220,11 +220,11 @@ export default function createListComponent({
                 : 0,
             height:
               direction === 'vertical'
-                ? getCellSize(this.props, index)
+                ? getCellSize(this.props, index, this._instanceProps)
                 : '100%',
             width:
               direction === 'horizontal'
-                ? getCellSize(this.props, index)
+                ? getCellSize(this.props, index, this._instanceProps)
                 : '100%',
           };
         }

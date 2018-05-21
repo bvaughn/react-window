@@ -34,9 +34,7 @@ export default function() {
             )}
           </DynamicList>
 
-          <div className="TryItOutLink">
-            <CodeSandboxLink to="#" />
-          </div>
+          <CodeSandboxLink className="TryItOutLink" id="j3nw3nnnyy" />
         </div>
         <div className="ExampleCode">
           <CodeBlock value={CODE_VERTICAL} />
@@ -63,9 +61,7 @@ export default function() {
             )}
           </DynamicList>
 
-          <div className="TryItOutLink">
-            <CodeSandboxLink to="#" />
-          </div>
+          <CodeSandboxLink className="TryItOutLink" id="jnl8ljmnn5" />
         </div>
         <div className="ExampleCode">
           <CodeBlock value={CODE_HORIZONTAL} />

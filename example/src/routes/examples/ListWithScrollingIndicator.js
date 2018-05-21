@@ -31,9 +31,7 @@ export default function() {
           )}
         </FixedSizeList>
 
-        <div className="TryItOutLink">
-          <CodeSandboxLink id="3qw073y3x6" />
-        </div>
+        <CodeSandboxLink className="TryItOutLink" id="3qw073y3x6" />
       </div>
       <div className="ExampleCode">
         <CodeBlock value={CODE} />

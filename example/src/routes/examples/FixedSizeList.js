@@ -31,9 +31,7 @@ export default function() {
           )}
         </FixedSizeList>
 
-        <div className="TryItOutLink">
-          <CodeSandboxLink id="vjo8w37qw0" />
-        </div>
+        <CodeSandboxLink className="TryItOutLink" id="vjo8w37qw0" />
       </div>
       <div className="ExampleCode">
         <CodeBlock value={CODE_VERTICAL} />
@@ -60,9 +58,7 @@ export default function() {
           )}
         </FixedSizeList>
 
-        <div className="TryItOutLink">
-          <CodeSandboxLink id="n4wwlyn8rm" />
-        </div>
+        <CodeSandboxLink className="TryItOutLink" id="n4wwlyn8rm" />
       </div>
       <div className="ExampleCode">
         <CodeBlock value={CODE_HORIZONTAL} />

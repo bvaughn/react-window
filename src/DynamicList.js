@@ -151,9 +151,11 @@ const DynamicList = createListComponent({
     instanceProps: InstanceProps
   ): number => getCellMetadata(props, index, instanceProps).offset,
 
-  // TODO Should this read from the CellMetadata cache instead?
-  getCellSize: ({ cellSize, size }: Props, index: number): number =>
-    ((cellSize: any): Function)(index),
+  getCellSize: (
+    props: Props,
+    index: number,
+    instanceProps: InstanceProps
+  ): number => instanceProps.cellMetadataMap[index].size,
 
   getEstimatedTotalSize: (
     { count }: Props,
@@ -233,18 +235,20 @@ const DynamicList = createListComponent({
     return stopIndex;
   },
 
-  initInstanceProps(props: Props): InstanceProps {
+  initInstanceProps(props: Props, instance: any): InstanceProps {
     const { estimatedCellSize, direction } = ((props: any): DynanmicProps);
 
-    // TODO Add resetAfterIndex() method to the prototype
-    // Find a way for it to access instance properties
-    // Maybe this is a method "extend prototype"?
-
-    return {
+    const instanceProps = {
       cellMetadataMap: {},
       estimatedCellSize: estimatedCellSize || DEFAULT_ESTIMATED_CELL_SIZE,
       lastMeasuredIndex: -1,
     };
+
+    instance.resetAfterIndex = (index: number) => {
+      instanceProps.lastMeasuredIndex = index - 1;
+    };
+
+    return instanceProps;
   },
 
   validateProps: ({ cellSize }: Props): void => {
