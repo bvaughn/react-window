@@ -34,17 +34,31 @@ type State = {|
   scrollOffset: number,
 |};
 
-type getCellOffset = (props: Props, index: number) => number;
+type getCellOffset = (
+  props: Props,
+  index: number,
+  instanceProps: any
+) => number;
 type getCellSize = (props: Props, index: number) => number;
-type getEstimatedTotalSize = (props: Props) => number;
+type getEstimatedTotalSize = (props: Props, instanceProps: any) => number;
 type getOffsetForIndexAndAlignment = (
   props: Props,
   index: number,
   align: ScrollToAlign,
-  scrollOffset: number
+  scrollOffset: number,
+  instanceProps: any
 ) => number;
-type getStartIndexForOffset = (props: Props, offset: number) => number;
-type getStopIndexForStartIndex = (props: Props, startIndex: number) => number;
+type getStartIndexForOffset = (
+  props: Props,
+  offset: number,
+  instanceProps: any
+) => number;
+type getStopIndexForStartIndex = (
+  props: Props,
+  startIndex: number,
+  instanceProps: any
+) => number;
+type initInstanceProps = (props: Props) => any;
 type validateProps = (props: Props) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
@@ -56,18 +70,21 @@ export default function createListComponent({
   getOffsetForIndexAndAlignment,
   getStartIndexForOffset,
   getStopIndexForStartIndex,
+  initInstanceProps,
   validateProps,
-}: {
+}: {|
   getCellOffset: getCellOffset,
   getCellSize: getCellSize,
   getEstimatedTotalSize: getEstimatedTotalSize,
   getOffsetForIndexAndAlignment: getOffsetForIndexAndAlignment,
   getStartIndexForOffset: getStartIndexForOffset,
   getStopIndexForStartIndex: getStopIndexForStartIndex,
+  initInstanceProps: initInstanceProps,
   validateProps: validateProps,
-}) {
+|}) {
   return class List extends React.Component<Props, State> {
     _cellStyleCache: { [index: number]: Object } = {};
+    _instanceProps: any;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _scrollingContainer: ?HTMLDivElement;
 
@@ -82,6 +99,12 @@ export default function createListComponent({
       scrollDirection: 'forward',
       scrollOffset: 0,
     };
+
+    constructor(props: Props) {
+      super(props);
+
+      this._instanceProps = initInstanceProps(props);
+    }
 
     static getDerivedStateFromProps(
       nextProps: Props,
@@ -110,7 +133,13 @@ export default function createListComponent({
       if (this._scrollingContainer != null) {
         const { scrollOffset } = this.state;
         this.scrollTo(
-          getOffsetForIndexAndAlignment(this.props, index, align, scrollOffset)
+          getOffsetForIndexAndAlignment(
+            this.props,
+            index,
+            align,
+            scrollOffset,
+            this._instanceProps
+          )
         );
       }
     }
@@ -130,7 +159,10 @@ export default function createListComponent({
           ? this.onScrollVertical
           : this.onScrollHorizontal;
 
-      const estimatedTotalSize = getEstimatedTotalSize(this.props);
+      const estimatedTotalSize = getEstimatedTotalSize(
+        this.props,
+        this._instanceProps
+      );
 
       return (
         <div
@@ -176,16 +208,15 @@ export default function createListComponent({
         if (this._cellStyleCache.hasOwnProperty(index)) {
           style = this._cellStyleCache[index];
         } else {
-          // TODO Get position of cell using helper, not hard-coded number type
           this._cellStyleCache[index] = style = {
             position: 'absolute',
             left:
               direction === 'horizontal'
-                ? getCellOffset(this.props, index)
+                ? getCellOffset(this.props, index, this._instanceProps)
                 : 0,
             top:
               direction === 'vertical'
-                ? getCellOffset(this.props, index)
+                ? getCellOffset(this.props, index, this._instanceProps)
                 : 0,
             height:
               direction === 'vertical'
@@ -215,8 +246,16 @@ export default function createListComponent({
       const { count, overscanCount } = this.props;
       const { scrollDirection, scrollOffset } = this.state;
 
-      const startIndex = getStartIndexForOffset(this.props, scrollOffset);
-      const stopIndex = getStopIndexForStartIndex(this.props, startIndex);
+      const startIndex = getStartIndexForOffset(
+        this.props,
+        scrollOffset,
+        this._instanceProps
+      );
+      const stopIndex = getStopIndexForStartIndex(
+        this.props,
+        startIndex,
+        this._instanceProps
+      );
 
       // Overscan by one cell in each direction so that tab/focus works.
       // If there isn't at least one extra cell, tab loops back around.

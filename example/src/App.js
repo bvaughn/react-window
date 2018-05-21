@@ -4,7 +4,8 @@ import { Nav } from './components/Nav';
 import { SubMenu } from './components/SubMenu';
 
 // Routes
-//import DyanmicListExample from './routes/examples/DynamicList';
+import DyanmicListExample from './routes/examples/DynamicList';
+import DynamicListApi from './routes/api/DynamicList';
 import FixedSizeGridApi from './routes/api/FixedSizeGrid';
 import FixedSizeListApi from './routes/api/FixedSizeList';
 import FixedSizeGridExample from './routes/examples/FixedSizeGrid';
@@ -52,11 +53,11 @@ const EXAMPLE_ROUTES = [
     title: 'Basic List',
     component: FixedSizeListExample,
   },
-  //  {
-  //    path: '/examples/list/dyanmic',
-  //    title: 'Dynamic List',
-  //    component: DyanmicListExample,
-  //  },
+  {
+    path: '/examples/list/dyanmic',
+    title: 'Dynamic List',
+    component: DyanmicListExample,
+  },
   {
     path: '/examples/grid/fixed-size',
     title: 'Basic Grid',
@@ -79,6 +80,11 @@ const API_ROUTES = [
     path: '/api/FixedSizeList',
     title: 'FixedSizeList',
     component: FixedSizeListApi,
+  },
+  {
+    path: '/api/DynamicList',
+    title: 'DynamicList',
+    component: DynamicListApi,
   },
   {
     path: '/api/FixedSizeGrid',

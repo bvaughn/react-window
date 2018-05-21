@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import { FixedSizeGrid, FixedSizeList } from "react-virtualized-v10";
+import { DynamicList, FixedSizeGrid } from "react-virtualized-v10";
 import CodeBlock from "../../components/CodeBlock";
 import CodeSandboxLink from "../../components/CodeSandboxLink";
 
 import CODE_GRID from "../../code/ScrollToItemGrid.js";
 import CODE_LIST from "../../code/ScrollToItemList.js";
+
+const rowSizes = new Array(1000).fill(true).map(() => 25 + Math.round(Math.random() * 50));
 
 export default class ScrollToItem extends Component {
   gridRef = React.createRef();
@@ -21,8 +23,8 @@ export default class ScrollToItem extends Component {
             <button className="ExampleButton" onClick={this.scrollToRow300Center}>
               Scroll to row 300 (align: center)
             </button>
-            <FixedSizeList
-              cellSize={35}
+            <DynamicList
+              cellSize={index => rowSizes[index]}
               className="List"
               count={1000}
               height={150}
@@ -38,7 +40,7 @@ export default class ScrollToItem extends Component {
                   Row {index}
                 </div>
               )}
-            </FixedSizeList>
+            </DynamicList>
 
             <div className="TryItOutLink">
               <CodeSandboxLink id="mzy8pq360x" />

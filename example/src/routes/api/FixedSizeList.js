@@ -13,7 +13,7 @@ export default function () {
         <h1 className="ApiHeader">
           &lt;FixedSizeList&gt;
         </h1>
-        <h2 className="ApiSubHeader">Props</h2>
+        <h2 id="props" className="ApiSubHeader">Props</h2>
         <dl className="ApiPropList">
           <dt className="ApiPropType">
             cellSize: number
@@ -118,7 +118,7 @@ export default function () {
             For vertical lists, this can be a number or a string (e.g. "50%").
           </dd>
         </dl>
-        <h2 className="ApiSubHeader">Methods</h2>
+        <h2 id="methods" className="ApiSubHeader">Methods</h2>
         <dl>
           <dt className="ApiPropType">
             scrollTo(scrollOffset: number): void

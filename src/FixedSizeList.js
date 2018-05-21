@@ -7,10 +7,13 @@ import type { Props, ScrollToAlign } from './createListComponent';
 const FixedSizeList = createListComponent({
   getCellOffset: ({ cellSize, size }: Props, index: number): number =>
     index * ((cellSize: any): number),
+
   getCellSize: ({ cellSize, size }: Props, index: number): number =>
     ((cellSize: any): number),
+
   getEstimatedTotalSize: ({ cellSize, count }: Props) =>
     ((cellSize: any): number) * count,
+
   getOffsetForIndexAndAlignment: (
     { cellSize, direction, height, width }: Props,
     index: number,
@@ -41,11 +44,13 @@ const FixedSizeList = createListComponent({
         }
     }
   },
+
   getStartIndexForOffset: (
     { cellSize, count }: Props,
     offset: number
   ): number =>
     Math.min(count - 1, Math.floor(offset / ((cellSize: any): number))),
+
   getStopIndexForStartIndex: (
     { cellSize, count, direction, height, width }: Props,
     startIndex: number
@@ -56,6 +61,11 @@ const FixedSizeList = createListComponent({
       Math.round(startIndex + size / ((cellSize: any): number))
     );
   },
+
+  initInstanceProps(props: Props): any {
+    // Noop
+  },
+
   validateProps: ({ cellSize }: Props): void => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof cellSize !== 'number') {

@@ -66,7 +66,7 @@ export default function createGridComponent({
   getRowStartIndexForOffset,
   getRowStopIndexForStartIndex,
   validateProps,
-}: {
+}: {|
   getColumnOffset: getCellOffset,
   getColumnStartIndexForOffset: getStartIndexForOffset,
   getColumnStopIndexForStartIndex: getStopIndexForStartIndex,
@@ -80,7 +80,7 @@ export default function createGridComponent({
   getRowStartIndexForOffset: getStartIndexForOffset,
   getRowStopIndexForStartIndex: getStopIndexForStartIndex,
   validateProps: validateProps,
-}) {
+|}) {
   return class List extends React.Component<Props, State> {
     _cellStyleCache: { [key: string]: Object } = {};
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
@@ -140,7 +140,12 @@ export default function createGridComponent({
           align,
           scrollLeft
         ),
-        scrollTop: getOffsetForRowAndAlignment(this.props, rowIndex, align, scrollTop),
+        scrollTop: getOffsetForRowAndAlignment(
+          this.props,
+          rowIndex,
+          align,
+          scrollTop
+        ),
       });
     }
 
