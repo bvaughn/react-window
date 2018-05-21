@@ -3,7 +3,7 @@
   "homepage": "https://react-virtualized-v10",
   "scripts": {
     "build": "node scripts/build.js",
-    "deploy": "now deploy ./build",
+    "deploy": "now deploy ./build && now alias",
     "postbuild":
       "rm ./build/static/css/*.map && rm ./build/static/js/*.map && cp ./now.json ./build/",
     "predeploy": "yarn build",
