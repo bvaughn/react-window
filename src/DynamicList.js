@@ -38,7 +38,7 @@ const getCellMetadata = (
       offset = cellMetadata.offset + cellMetadata.size;
     }
 
-    for (var i = lastMeasuredIndex + 1; i <= index; i++) {
+    for (let i = lastMeasuredIndex + 1; i <= index; i++) {
       let size = ((cellSize: any): CelLSizeGetter)(i);
 
       cellMetadataMap[i] = {
@@ -47,9 +47,9 @@ const getCellMetadata = (
       };
 
       offset += size;
-
-      instanceProps.lastMeasuredIndex = index;
     }
+
+    instanceProps.lastMeasuredIndex = index;
   }
 
   return cellMetadataMap[index];

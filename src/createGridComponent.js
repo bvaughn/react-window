@@ -37,17 +37,31 @@ type State = {|
   verticalScrollDirection: 'forward' | 'backward',
 |};
 
-type getCellOffset = (props: Props, index: number) => number;
-type getCellSize = (props: Props, index: number) => number;
-type getEstimatedTotalSize = (props: Props) => number;
+type getCellOffset = (
+  props: Props,
+  index: number,
+  instanceProps: any
+) => number;
+type getCellSize = (props: Props, index: number, instanceProps: any) => number;
+type getEstimatedTotalSize = (props: Props, instanceProps: any) => number;
 type getOffsetForCellAndAlignment = (
   props: Props,
   index: number,
   align: ScrollToAlign,
-  scrollOffset: number
+  scrollOffset: number,
+  instanceProps: any
 ) => number;
-type getStartIndexForOffset = (props: Props, offset: number) => number;
-type getStopIndexForStartIndex = (props: Props, startIndex: number) => number;
+type getStartIndexForOffset = (
+  props: Props,
+  offset: number,
+  instanceProps: any
+) => number;
+type getStopIndexForStartIndex = (
+  props: Props,
+  startIndex: number,
+  instanceProps: any
+) => number;
+type initInstanceProps = (props: Props, instance: any) => any;
 type validateProps = (props: Props) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
@@ -65,6 +79,7 @@ export default function createGridComponent({
   getRowOffset,
   getRowStartIndexForOffset,
   getRowStopIndexForStartIndex,
+  initInstanceProps,
   validateProps,
 }: {|
   getColumnOffset: getCellOffset,
@@ -79,10 +94,12 @@ export default function createGridComponent({
   getRowHeight: getCellSize,
   getRowStartIndexForOffset: getStartIndexForOffset,
   getRowStopIndexForStartIndex: getStopIndexForStartIndex,
+  initInstanceProps: initInstanceProps,
   validateProps: validateProps,
 |}) {
   return class List extends React.Component<Props, State> {
     _cellStyleCache: { [key: string]: Object } = {};
+    _instanceProps: any;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _scrollingContainer: ?HTMLDivElement;
 
@@ -98,6 +115,12 @@ export default function createGridComponent({
       scrollTop: 0,
       verticalScrollDirection: 'forward',
     };
+
+    constructor(props: Props) {
+      super(props);
+
+      this._instanceProps = initInstanceProps(props, this);
+    }
 
     static getDerivedStateFromProps(
       nextProps: Props,
@@ -138,13 +161,15 @@ export default function createGridComponent({
           this.props,
           columnIndex,
           align,
-          scrollLeft
+          scrollLeft,
+          this._instanceProps
         ),
         scrollTop: getOffsetForRowAndAlignment(
           this.props,
           rowIndex,
           align,
-          scrollTop
+          scrollTop,
+          this._instanceProps
         ),
       });
     }
@@ -159,8 +184,14 @@ export default function createGridComponent({
       const { className, height, style, width } = this.props;
       const { isScrolling } = this.state;
 
-      const estimatedTotalHeight = getEstimatedTotalHeight(this.props);
-      const estimatedTotalWidth = getEstimatedTotalWidth(this.props);
+      const estimatedTotalHeight = getEstimatedTotalHeight(
+        this.props,
+        this._instanceProps
+      );
+      const estimatedTotalWidth = getEstimatedTotalWidth(
+        this.props,
+        this._instanceProps
+      );
 
       return (
         <div
@@ -217,10 +248,18 @@ export default function createGridComponent({
           } else {
             this._cellStyleCache[key] = style = {
               position: 'absolute',
-              left: getColumnOffset(this.props, columnIndex),
-              top: getRowOffset(this.props, rowIndex),
-              height: getRowHeight(this.props, rowIndex),
-              width: getColumnWidth(this.props, columnIndex),
+              left: getColumnOffset(
+                this.props,
+                columnIndex,
+                this._instanceProps
+              ),
+              top: getRowOffset(this.props, rowIndex, this._instanceProps),
+              height: getRowHeight(this.props, rowIndex, this._instanceProps),
+              width: getColumnWidth(
+                this.props,
+                columnIndex,
+                this._instanceProps
+              ),
             };
           }
 
@@ -243,8 +282,16 @@ export default function createGridComponent({
       const { columnCount, overscanCount } = this.props;
       const { horizontalScrollDirection, scrollLeft } = this.state;
 
-      const startIndex = getColumnStartIndexForOffset(this.props, scrollLeft);
-      const stopIndex = getColumnStopIndexForStartIndex(this.props, startIndex);
+      const startIndex = getColumnStartIndexForOffset(
+        this.props,
+        scrollLeft,
+        this._instanceProps
+      );
+      const stopIndex = getColumnStopIndexForStartIndex(
+        this.props,
+        startIndex,
+        this._instanceProps
+      );
 
       // Overscan by one cell in each direction so that tab/focus works.
       // If there isn't at least one extra cell, tab loops back around.
@@ -267,8 +314,16 @@ export default function createGridComponent({
       const { columnCount, overscanCount } = this.props;
       const { verticalScrollDirection, scrollTop } = this.state;
 
-      const startIndex = getRowStartIndexForOffset(this.props, scrollTop);
-      const stopIndex = getRowStopIndexForStartIndex(this.props, startIndex);
+      const startIndex = getRowStartIndexForOffset(
+        this.props,
+        scrollTop,
+        this._instanceProps
+      );
+      const stopIndex = getRowStopIndexForStartIndex(
+        this.props,
+        startIndex,
+        this._instanceProps
+      );
 
       // Overscan by one cell in each direction so that tab/focus works.
       // If there isn't at least one extra cell, tab loops back around.

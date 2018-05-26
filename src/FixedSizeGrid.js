@@ -7,16 +7,22 @@ import type { Props, ScrollToAlign } from './createGridComponent';
 const FixedSizeGrid = createGridComponent({
   getColumnOffset: ({ columnWidth }: Props, index: number): number =>
     index * ((columnWidth: any): number),
+
   getColumnWidth: ({ columnWidth }: Props, index: number): number =>
     ((columnWidth: any): number),
+
   getRowOffset: ({ rowHeight }: Props, index: number): number =>
     index * ((rowHeight: any): number),
+
   getRowHeight: ({ rowHeight }: Props, index: number): number =>
     ((rowHeight: any): number),
+
   getEstimatedTotalHeight: ({ rowCount, rowHeight }: Props) =>
     ((rowHeight: any): number) * rowCount,
+
   getEstimatedTotalWidth: ({ columnCount, columnWidth }: Props) =>
     ((columnWidth: any): number) * columnCount,
+
   getOffsetForColumnAndAlignment: (
     { columnWidth, width }: Props,
     columnIndex: number,
@@ -47,6 +53,7 @@ const FixedSizeGrid = createGridComponent({
         }
     }
   },
+
   getOffsetForRowAndAlignment: (
     { rowHeight, height }: Props,
     rowIndex: number,
@@ -77,6 +84,7 @@ const FixedSizeGrid = createGridComponent({
         }
     }
   },
+
   getColumnStartIndexForOffset: (
     { columnWidth, columnCount }: Props,
     offset: number
@@ -85,6 +93,7 @@ const FixedSizeGrid = createGridComponent({
       columnCount - 1,
       Math.floor(offset / ((columnWidth: any): number))
     ),
+
   getColumnStopIndexForStartIndex: (
     { columnWidth, columnCount, width }: Props,
     startIndex: number
@@ -94,11 +103,13 @@ const FixedSizeGrid = createGridComponent({
       Math.round(startIndex + width / ((columnWidth: any): number))
     );
   },
+
   getRowStartIndexForOffset: (
     { rowHeight, rowCount }: Props,
     offset: number
   ): number =>
     Math.min(rowCount - 1, Math.floor(offset / ((rowHeight: any): number))),
+
   getRowStopIndexForStartIndex: (
     { rowHeight, rowCount, height }: Props,
     startIndex: number
@@ -108,6 +119,11 @@ const FixedSizeGrid = createGridComponent({
       Math.round(startIndex + height / ((rowHeight: any): number))
     );
   },
+
+  initInstanceProps(props: Props): any {
+    // Noop
+  },
+
   validateProps: ({ columnWidth, rowHeight }: Props): void => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof columnWidth !== 'number') {

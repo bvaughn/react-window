@@ -4,6 +4,7 @@ import { Nav } from './components/Nav';
 import { SubMenu } from './components/SubMenu';
 
 // Routes
+import DyanmicGridExample from './routes/examples/DynamicGrid';
 import DyanmicListExample from './routes/examples/DynamicList';
 import DynamicListApi from './routes/api/DynamicList';
 import FixedSizeGridApi from './routes/api/FixedSizeGrid';
@@ -62,6 +63,11 @@ const EXAMPLE_ROUTES = [
     path: '/examples/grid/fixed-size',
     title: 'Basic Grid',
     component: FixedSizeGridExample,
+  },
+  {
+    path: '/examples/grid/dyanmic',
+    title: 'Dyanmic Grid',
+    component: DyanmicGridExample,
   },
   {
     path: '/examples/list/scrolling-indicators',
