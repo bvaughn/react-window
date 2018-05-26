@@ -7,8 +7,8 @@ import CODE from "../../code/DynamicGrid.js";
 
 import "./shared.css";
 
-const columnSizes = new Array(1000).fill(true).map(() => 75 + Math.round(Math.random() * 50));
-const rowSizes = new Array(1000).fill(true).map(() => 25 + Math.round(Math.random() * 50));
+const columnWidths = new Array(1000).fill(true).map(() => 75 + Math.round(Math.random() * 50));
+const rowHeights = new Array(1000).fill(true).map(() => 25 + Math.round(Math.random() * 50));
 
 export default function() {
   return (
@@ -18,10 +18,10 @@ export default function() {
         <DynamicGrid
           className="Grid"
           columnCount={1000}
-          columnWidth={index => columnSizes[index]}
+          columnWidth={index => columnWidths[index]}
           height={150}
           rowCount={1000}
-          rowHeight={index => rowSizes[index]}
+          rowHeight={index => rowHeights[index]}
           width={300}
         >
           {({ columnIndex, key, rowIndex, style }) => (
