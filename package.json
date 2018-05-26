@@ -44,7 +44,7 @@
     "lint": "eslint '**/*.js'",
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
-    "build": "del dist && rollup -c",
+    "build": "del dist && cross-env SNAPSHOT=build rollup -c",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
     "website:build": "cd website && yarn build",
@@ -98,6 +98,7 @@
     "rollup-plugin-node-resolve": "^3.0.2",
     "rollup-plugin-peer-deps-external": "^2.2.0",
     "rollup-plugin-postcss": "^1.1.0",
+    "rollup-plugin-size-snapshot": "^0.5.1",
     "rollup-plugin-url": "^1.3.0"
   }
 }

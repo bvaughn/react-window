@@ -4,6 +4,7 @@ import external from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
 import resolve from 'rollup-plugin-node-resolve';
 import url from 'rollup-plugin-url';
+import { sizeSnapshot } from 'rollup-plugin-size-snapshot';
 
 import pkg from './package.json';
 
@@ -30,5 +31,6 @@ export default {
     }),
     resolve(),
     commonjs(),
+    process.env.SNAPSHOT === 'build' ? sizeSnapshot() : {},
   ],
 };
