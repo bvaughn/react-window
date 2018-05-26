@@ -13,7 +13,7 @@ export default function () {
         <h1 className="ApiHeader">
           &lt;FixedSizeGrid&gt;
         </h1>
-        <h2 className="ApiSubHeader">Props</h2>
+        <h2 id="props" className="ApiSubHeader">Props</h2>
         <dl className="ApiPropList">
           <dt className="ApiPropType">
             children: function
@@ -109,7 +109,7 @@ export default function () {
             This affects the number of columns that will be rendered (and displayed) at any given time.
           </dd>
         </dl>
-        <h2 className="ApiSubHeader">Methods</h2>
+        <h2 id="methods" className="ApiSubHeader">Methods</h2>
         <dl>
           <dt className="ApiPropType">
             scrollTo({'{'} scrollLeft: number, scrollTop: number}): void

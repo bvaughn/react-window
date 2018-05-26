@@ -4,9 +4,10 @@ import { Nav } from './components/Nav';
 import { SubMenu } from './components/SubMenu';
 
 // Routes
+import DynamicGridApi from './routes/api/DynamicGrid';
 import DyanmicGridExample from './routes/examples/DynamicGrid';
-import DyanmicListExample from './routes/examples/DynamicList';
 import DynamicListApi from './routes/api/DynamicList';
+import DyanmicListExample from './routes/examples/DynamicList';
 import FixedSizeGridApi from './routes/api/FixedSizeGrid';
 import FixedSizeListApi from './routes/api/FixedSizeList';
 import FixedSizeGridExample from './routes/examples/FixedSizeGrid';
@@ -96,5 +97,10 @@ const API_ROUTES = [
     path: '/api/FixedSizeGrid',
     title: 'FixedSizeGrid',
     component: FixedSizeGridApi,
+  },
+  {
+    path: '/api/DynamicGrid',
+    title: 'DynamicGrid',
+    component: DynamicGridApi,
   },
 ];
