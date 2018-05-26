@@ -9,7 +9,9 @@ export const SubMenu = ({ isActiveDark, items, title }) => (
       {items.map(({ path, title }) => (
         <li className="SideNavLinkListItem" key={path}>
           <Link
-            activeClassName={isActiveDark ? "SideNavLinkActiveDark" : "SideNavLinkActiveLight"}
+            activeClassName={
+              isActiveDark ? 'SideNavLinkActiveDark' : 'SideNavLinkActiveLight'
+            }
             className="SideNavLink"
             to={path}
           >

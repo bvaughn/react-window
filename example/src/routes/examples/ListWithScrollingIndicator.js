@@ -1,11 +1,11 @@
-import React from "react";
-import { FixedSizeList } from "react-virtualized-v10";
-import CodeBlock from "../../components/CodeBlock";
-import CodeSandboxLink from "../../components/CodeSandboxLink";
+import React from 'react';
+import { FixedSizeList } from 'react-virtualized-v10';
+import CodeBlock from '../../components/CodeBlock';
+import CodeSandboxLink from '../../components/CodeSandboxLink';
 
-import CODE from "../../code/ScrollingIndicatorList.js";
+import CODE from '../../code/ScrollingIndicatorList.js';
 
-import "./shared.css";
+import './shared.css';
 
 export default function() {
   return (

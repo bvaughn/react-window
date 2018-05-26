@@ -1,12 +1,12 @@
-import React from "react";
-import { FixedSizeList } from "react-virtualized-v10";
-import CodeBlock from "../../components/CodeBlock";
-import CodeSandboxLink from "../../components/CodeSandboxLink";
+import React from 'react';
+import { FixedSizeList } from 'react-virtualized-v10';
+import CodeBlock from '../../components/CodeBlock';
+import CodeSandboxLink from '../../components/CodeSandboxLink';
 
-import CODE_HORIZONTAL from "../../code/FixedSizeListHorizontal.js";
-import CODE_VERTICAL from "../../code/FixedSizeListVertical.js";
+import CODE_HORIZONTAL from '../../code/FixedSizeListHorizontal.js';
+import CODE_VERTICAL from '../../code/FixedSizeListVertical.js';
 
-import "./shared.css";
+import './shared.css';
 
 export default function() {
   return (

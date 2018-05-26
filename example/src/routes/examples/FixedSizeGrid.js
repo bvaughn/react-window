@@ -1,11 +1,11 @@
-import React from "react";
-import { FixedSizeGrid } from "react-virtualized-v10";
-import CodeBlock from "../../components/CodeBlock";
-import CodeSandboxLink from "../../components/CodeSandboxLink";
+import React from 'react';
+import { FixedSizeGrid } from 'react-virtualized-v10';
+import CodeBlock from '../../components/CodeBlock';
+import CodeSandboxLink from '../../components/CodeSandboxLink';
 
-import CODE from "../../code/FixedSizeGrid.js";
+import CODE from '../../code/FixedSizeGrid.js';
 
-import "./shared.css";
+import './shared.css';
 
 export default function() {
   return (
@@ -24,7 +24,15 @@ export default function() {
           >
             {({ columnIndex, key, rowIndex, style }) => (
               <div
-                className={columnIndex % 2 ? (rowIndex % 2 === 0 ? 'GridItemOdd' : 'GridItemEven') : (rowIndex % 2 ? 'GridItemOdd' : 'GridItemEven')}
+                className={
+                  columnIndex % 2
+                    ? rowIndex % 2 === 0
+                      ? 'GridItemOdd'
+                      : 'GridItemEven'
+                    : rowIndex % 2
+                      ? 'GridItemOdd'
+                      : 'GridItemEven'
+                }
                 key={key}
                 style={style}
               >

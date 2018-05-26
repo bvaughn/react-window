@@ -1,13 +1,17 @@
-import React, { Component } from "react";
-import { DynamicGrid, DynamicList } from "react-virtualized-v10";
-import CodeBlock from "../../components/CodeBlock";
-import CodeSandboxLink from "../../components/CodeSandboxLink";
+import React, { Component } from 'react';
+import { DynamicGrid, DynamicList } from 'react-virtualized-v10';
+import CodeBlock from '../../components/CodeBlock';
+import CodeSandboxLink from '../../components/CodeSandboxLink';
 
-import CODE_GRID from "../../code/ScrollToItemGrid.js";
-import CODE_LIST from "../../code/ScrollToItemList.js";
+import CODE_GRID from '../../code/ScrollToItemGrid.js';
+import CODE_LIST from '../../code/ScrollToItemList.js';
 
-const columnWidths = new Array(1000).fill(true).map(() => 75 + Math.round(Math.random() * 50));
-const rowHeights = new Array(1000).fill(true).map(() => 25 + Math.round(Math.random() * 50));
+const columnWidths = new Array(1000)
+  .fill(true)
+  .map(() => 75 + Math.round(Math.random() * 50));
+const rowHeights = new Array(1000)
+  .fill(true)
+  .map(() => 25 + Math.round(Math.random() * 50));
 
 export default class ScrollToItem extends Component {
   gridRef = React.createRef();
@@ -22,7 +26,10 @@ export default class ScrollToItem extends Component {
             <button className="ExampleButton" onClick={this.scrollToRow200Auto}>
               Scroll to row 200 (align: auto)
             </button>
-            <button className="ExampleButton" onClick={this.scrollToRow300Center}>
+            <button
+              className="ExampleButton"
+              onClick={this.scrollToRow300Center}
+            >
               Scroll to row 300 (align: center)
             </button>
             <DynamicList
@@ -52,16 +59,28 @@ export default class ScrollToItem extends Component {
         </div>
         <div className="Example">
           <div className="ExampleDemo">
-            <button className="ExampleButton" onClick={this.scrollToRow100Column50Auto}>
+            <button
+              className="ExampleButton"
+              onClick={this.scrollToRow100Column50Auto}
+            >
               Scroll to row 100, column 50 (align: auto)
             </button>
-            <button className="ExampleButton" onClick={this.scrollToRow300Column150Start}>
+            <button
+              className="ExampleButton"
+              onClick={this.scrollToRow300Column150Start}
+            >
               Scroll to row 300, column 150 (align: start)
             </button>
-            <button className="ExampleButton" onClick={this.scrollToRow350Column200End}>
+            <button
+              className="ExampleButton"
+              onClick={this.scrollToRow350Column200End}
+            >
               Scroll to row 350, column 200 (align: end)
             </button>
-            <button className="ExampleButton" onClick={this.scrollToRow200Column100Center}>
+            <button
+              className="ExampleButton"
+              onClick={this.scrollToRow200Column100Center}
+            >
               Scroll to row 200, column 100 (align: center)
             </button>
             <DynamicGrid
@@ -76,7 +95,15 @@ export default class ScrollToItem extends Component {
             >
               {({ columnIndex, key, rowIndex, style }) => (
                 <div
-                  className={columnIndex % 2 ? (rowIndex % 2 === 0 ? 'GridItemOdd' : 'GridItemEven') : (rowIndex % 2 ? 'GridItemOdd' : 'GridItemEven')}
+                  className={
+                    columnIndex % 2
+                      ? rowIndex % 2 === 0
+                        ? 'GridItemOdd'
+                        : 'GridItemEven'
+                      : rowIndex % 2
+                        ? 'GridItemOdd'
+                        : 'GridItemEven'
+                  }
                   key={key}
                   style={style}
                 >
@@ -99,37 +126,37 @@ export default class ScrollToItem extends Component {
     this.listRef.current.scrollToItem(200);
   };
   scrollToRow300Center = () => {
-    this.listRef.current.scrollToItem(300, "center");
+    this.listRef.current.scrollToItem(300, 'center');
   };
 
   scrollToRow100Column50Auto = () => {
     this.gridRef.current.scrollToItem({
       columnIndex: 50,
-      rowIndex: 100
+      rowIndex: 100,
     });
   };
 
   scrollToRow300Column150Start = () => {
     this.gridRef.current.scrollToItem({
-      align: "start",
+      align: 'start',
       columnIndex: 150,
-      rowIndex: 300
+      rowIndex: 300,
     });
   };
 
   scrollToRow350Column200End = () => {
     this.gridRef.current.scrollToItem({
-      align: "end",
+      align: 'end',
       columnIndex: 350,
-      rowIndex: 200
+      rowIndex: 200,
     });
   };
 
   scrollToRow200Column100Center = () => {
     this.gridRef.current.scrollToItem({
-      align: "center",
+      align: 'center',
       columnIndex: 200,
-      rowIndex: 100
+      rowIndex: 100,
     });
   };
 }

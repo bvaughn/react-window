@@ -15,7 +15,10 @@ export class Nav extends React.Component {
     return (
       <nav className="SideNav">
         <div className="SidebarNavHeaderContainer">
-          <MobileNavButton isActive={this.state.isExpanded} onClick={this.toggleIsExpanded} />
+          <MobileNavButton
+            isActive={this.state.isExpanded}
+            onClick={this.toggleIsExpanded}
+          />
           <h1 className="SideNavHeader">{title}</h1>
         </div>
         <div
@@ -34,7 +37,7 @@ export class Nav extends React.Component {
   }
 
   collapse = () => {
-    this.setState({isExpanded: false});
+    this.setState({ isExpanded: false });
   };
 
   toggleIsExpanded = () => {

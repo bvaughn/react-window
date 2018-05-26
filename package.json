@@ -1,18 +1,17 @@
 {
   "name": "react-virtualized-v10",
   "version": "1.0.0",
-  "description": "React components for efficiently rendering large lists and tabular data",
+  "description":
+    "React components for efficiently rendering large lists and tabular data",
   "author": "bvaughn",
   "license": "MIT",
   "repository": "bvaughn/react-virtualized-v10",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "precommit": "lint-staged",
-    "prettier": "prettier --write {example,src}/**/*.{js,jsx,json,css}",
+    "prettier": "prettier --write '{example,src}/**/*.{js,jsx,json,css}'",
     "linc": "lint-staged",
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
@@ -23,10 +22,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "lint-staged": {
-    "{example,src}/**/*.{js,jsx,json,css}": [
-      "prettier --write",
-      "git add"
-    ]
+    "{example,src}/**/*.{js,jsx,json,css}": ["prettier --write", "git add"]
   },
   "dependencies": {},
   "peerDependencies": {

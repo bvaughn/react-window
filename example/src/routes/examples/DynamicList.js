@@ -1,15 +1,19 @@
-import React from "react";
-import { DynamicList } from "react-virtualized-v10";
-import CodeBlock from "../../components/CodeBlock";
-import CodeSandboxLink from "../../components/CodeSandboxLink";
+import React from 'react';
+import { DynamicList } from 'react-virtualized-v10';
+import CodeBlock from '../../components/CodeBlock';
+import CodeSandboxLink from '../../components/CodeSandboxLink';
 
-import CODE_HORIZONTAL from "../../code/DynamicListHorizontal.js";
-import CODE_VERTICAL from "../../code/DynamicListVertical.js";
+import CODE_HORIZONTAL from '../../code/DynamicListHorizontal.js';
+import CODE_VERTICAL from '../../code/DynamicListVertical.js';
 
-import "./shared.css";
+import './shared.css';
 
-const columnSizes = new Array(1000).fill(true).map(() => 75 + Math.round(Math.random() * 50));
-const rowSizes = new Array(1000).fill(true).map(() => 25 + Math.round(Math.random() * 50));
+const columnSizes = new Array(1000)
+  .fill(true)
+  .map(() => 75 + Math.round(Math.random() * 50));
+const rowSizes = new Array(1000)
+  .fill(true)
+  .map(() => 25 + Math.round(Math.random() * 50));
 
 export default function() {
   return (

@@ -8,7 +8,12 @@ const CodeSandboxLink = ({ className, id }) => {
   }
 
   return (
-    <a className={`CodeSandboxLink ${className || ''}`} href={`https://codesandbox.io/s/${id}`} rel="nofollow" target="_blank">
+    <a
+      className={`CodeSandboxLink ${className || ''}`}
+      href={`https://codesandbox.io/s/${id}`}
+      rel="nofollow"
+      target="_blank"
+    >
       <svg className="CodeSandboxSvg" viewBox="0 0 1024 1024">
         <polyline
           className="CodeSandboxSvgBackground"

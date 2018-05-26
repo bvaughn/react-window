@@ -1,14 +1,18 @@
-import React from "react";
-import { DynamicGrid } from "react-virtualized-v10";
-import CodeBlock from "../../components/CodeBlock";
-import CodeSandboxLink from "../../components/CodeSandboxLink";
+import React from 'react';
+import { DynamicGrid } from 'react-virtualized-v10';
+import CodeBlock from '../../components/CodeBlock';
+import CodeSandboxLink from '../../components/CodeSandboxLink';
 
-import CODE from "../../code/DynamicGrid.js";
+import CODE from '../../code/DynamicGrid.js';
 
-import "./shared.css";
+import './shared.css';
 
-const columnWidths = new Array(1000).fill(true).map(() => 75 + Math.round(Math.random() * 50));
-const rowHeights = new Array(1000).fill(true).map(() => 25 + Math.round(Math.random() * 50));
+const columnWidths = new Array(1000)
+  .fill(true)
+  .map(() => 75 + Math.round(Math.random() * 50));
+const rowHeights = new Array(1000)
+  .fill(true)
+  .map(() => 25 + Math.round(Math.random() * 50));
 
 export default function() {
   return (
@@ -27,7 +31,15 @@ export default function() {
           >
             {({ columnIndex, key, rowIndex, style }) => (
               <div
-                className={columnIndex % 2 ? (rowIndex % 2 === 0 ? 'GridItemOdd' : 'GridItemEven') : (rowIndex % 2 ? 'GridItemOdd' : 'GridItemEven')}
+                className={
+                  columnIndex % 2
+                    ? rowIndex % 2 === 0
+                      ? 'GridItemOdd'
+                      : 'GridItemEven'
+                    : rowIndex % 2
+                      ? 'GridItemOdd'
+                      : 'GridItemEven'
+                }
                 key={key}
                 style={style}
               >

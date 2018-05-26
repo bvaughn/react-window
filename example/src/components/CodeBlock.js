@@ -6,7 +6,10 @@ import './CodeBlock.css';
 
 const CodeBlock = ({ value }) => (
   <div className="CodeBlock">
-    <div className="CodeMirror CodeMirror-wrap cm-s-material" dangerouslySetInnerHTML={{__html: value}} />
+    <div
+      className="CodeMirror CodeMirror-wrap cm-s-material"
+      dangerouslySetInnerHTML={{ __html: value }}
+    />
   </div>
 );
 
