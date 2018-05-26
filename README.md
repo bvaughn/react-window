@@ -7,24 +7,12 @@
 ## Install
 
 ```bash
-npm install --save react-virtualized
+npm install --save react-virtualized@list-alpha
 ```
 
 ## Usage
 
-```jsx
-import React, { Component } from 'react'
-
-import MyComponent from 'react-virtualized'
-
-class Example extends Component {
-  render () {
-    return (
-      <MyComponent />
-    )
-  }
-}
-```
+Learn more at [react-virtualized-v10.now.sh](https://react-virtualized-v10.now.sh/).
 
 ## License
 
