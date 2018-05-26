@@ -5,9 +5,9 @@ import { SubMenu } from './components/SubMenu';
 
 // Routes
 import DynamicGridApi from './routes/api/DynamicGrid';
-import DyanmicGridExample from './routes/examples/DynamicGrid';
+import DynamicGridExample from './routes/examples/DynamicGrid';
 import DynamicListApi from './routes/api/DynamicList';
-import DyanmicListExample from './routes/examples/DynamicList';
+import DynamicListExample from './routes/examples/DynamicList';
 import FixedSizeGridApi from './routes/api/FixedSizeGrid';
 import FixedSizeListApi from './routes/api/FixedSizeList';
 import FixedSizeGridExample from './routes/examples/FixedSizeGrid';
@@ -56,9 +56,9 @@ const EXAMPLE_ROUTES = [
     component: FixedSizeListExample,
   },
   {
-    path: '/examples/list/dyanmic',
+    path: '/examples/list/dynamic',
     title: 'Dynamic List',
-    component: DyanmicListExample,
+    component: DynamicListExample,
   },
   {
     path: '/examples/grid/fixed-size',
@@ -66,9 +66,9 @@ const EXAMPLE_ROUTES = [
     component: FixedSizeGridExample,
   },
   {
-    path: '/examples/grid/dyanmic',
-    title: 'Dyanmic Grid',
-    component: DyanmicGridExample,
+    path: '/examples/grid/dynamic',
+    title: 'Dynamic Grid',
+    component: DynamicGridExample,
   },
   {
     path: '/examples/list/scrolling-indicators',
