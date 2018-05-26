@@ -35,7 +35,7 @@ export default function() {
           )}
         </DynamicGrid>
 
-        <CodeSandboxLink className="TryItOutLink" id="1rp83rw8wl" />
+        <CodeSandboxLink className="TryItOutLink" id="241m0vromp" />
       </div>
       <div className="ExampleCode">
         <CodeBlock value={CODE} />
