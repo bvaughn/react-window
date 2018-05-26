@@ -64,9 +64,23 @@
   margin-top: 1rem;
 }
 
+.ExampleHeader {
+  display: none;
+  flex: 0 0 auto;
+  background-color: #fff;
+  font-weight: lighter;
+  font-size: 2rem;
+  padding: 2rem 2rem 0 2rem;
+  margin: 0;
+}
+
 @media (max-width: 37.5rem) {
   .ExampleWrapper {
     padding: 0;
+  }
+
+  .ExampleHeader {
+    display: block;
   }
 
   .Example {

@@ -14,6 +14,7 @@ const rowSizes = new Array(1000).fill(true).map(() => 25 + Math.round(Math.rando
 export default function() {
   return (
     <div className="ExampleWrapper">
+      <h1 className="ExampleHeader">Dynamic List</h1>
       <div className="Example">
         <div className="ExampleDemo">
           <DynamicList

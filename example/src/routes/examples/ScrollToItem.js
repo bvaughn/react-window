@@ -16,6 +16,7 @@ export default class ScrollToItem extends Component {
   render() {
     return (
       <div className="ExampleWrapper">
+        <h1 className="ExampleHeader">Scrolling to an item</h1>
         <div className="Example">
           <div className="ExampleDemo">
             <button className="ExampleButton" onClick={this.scrollToRow200Auto}>
