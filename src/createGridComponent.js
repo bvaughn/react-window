@@ -202,6 +202,8 @@ export default function createGridComponent({
             height,
             width,
             overflow: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            willChange: 'transform',
             ...style,
           }}
           onScroll={this.onScroll}

@@ -173,6 +173,8 @@ export default function createListComponent({
             height,
             width,
             overflow: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            willChange: 'transform',
             ...style,
           }}
           onScroll={onScroll}
