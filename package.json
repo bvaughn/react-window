@@ -11,7 +11,7 @@
   "files": ["dist"],
   "scripts": {
     "precommit": "lint-staged",
-    "prettier": "prettier --write '{example,src}/**/*.{js,jsx,json,css}'",
+    "prettier": "prettier --write '**/*.{js,jsx,json,css}'",
     "linc": "lint-staged",
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",

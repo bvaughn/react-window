@@ -1,2 +1,5 @@
+dist/*
 example/build/*
 example/src/code/*
+package-lock.json
+yarn.lock
