@@ -1,0 +1,7 @@
+dist
+example/build
+example/node_modules
+example/src/code
+node_modules
+package-lock.json
+yarn.lock
