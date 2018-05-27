@@ -1,4 +1,4 @@
-.Api {
+.ComponentApi {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -9,36 +9,43 @@
   box-sizing: border-box;
 }
 
-.ApiContent {
+.ComponentApiContent {
 }
 
-.ApiHeader {
+.ComponentApiHeader {
   color: #ec5f67;
   font-family: monospace;
   font-size: 1.5rem;
   margin-top: 0;
 }
 
-.ApiSubHeader {
+.ComponentApiSubHeader {
   margin: 1.5rem 0 0.5rem;
   font-size: 1rem;
   text-transform: uppercase;
   color: #537f7e;
 }
 
-.ApiPropList {
+.ComponentApiRadioToggle {
+  margin-left: 0.5rem;
+  text-transform: none;
+  font-weight: normal;
+  font-size: 1rem;
 }
 
-.ApiPropType {
+.ComponentApiPropList {
+}
+
+.ComponentApiPropType {
   line-height: 2rem;
 }
 
-.ApiPropType {
+.ComponentApiPropType {
   font-family: monospace;
   font-weight: bold;
 }
 
-.ApiPropDefinition {
+.ComponentApiPropDefinition {
   margin-left: 1rem;
   margin-bottom: 1.5rem;
 }
