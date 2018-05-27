@@ -87,36 +87,42 @@ const FixedSizeGrid = createGridComponent({
 
   getColumnStartIndexForOffset: (
     { columnWidth, columnCount }: Props,
-    offset: number
+    scrollLeft: number
   ): number =>
     Math.min(
       columnCount - 1,
-      Math.floor(offset / ((columnWidth: any): number))
+      Math.floor(scrollLeft / ((columnWidth: any): number))
     ),
 
   getColumnStopIndexForStartIndex: (
     { columnWidth, columnCount, width }: Props,
-    startIndex: number
+    startIndex: number,
+    scrollLeft: number
   ): number => {
+    const left = startIndex * ((columnWidth: any): number);
     return Math.min(
       columnCount - 1,
-      Math.round(startIndex + width / ((columnWidth: any): number))
+      startIndex +
+        Math.floor((width + (scrollLeft - left)) / ((columnWidth: any): number))
     );
   },
 
   getRowStartIndexForOffset: (
     { rowHeight, rowCount }: Props,
-    offset: number
+    scrollTop: number
   ): number =>
-    Math.min(rowCount - 1, Math.floor(offset / ((rowHeight: any): number))),
+    Math.min(rowCount - 1, Math.floor(scrollTop / ((rowHeight: any): number))),
 
   getRowStopIndexForStartIndex: (
     { rowHeight, rowCount, height }: Props,
-    startIndex: number
+    startIndex: number,
+    scrollTop: number
   ): number => {
+    const left = startIndex * ((rowHeight: any): number);
     return Math.min(
       rowCount - 1,
-      Math.round(startIndex + height / ((rowHeight: any): number))
+      startIndex +
+        Math.floor((height + (scrollTop - left)) / ((rowHeight: any): number))
     );
   },
 

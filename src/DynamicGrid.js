@@ -222,13 +222,14 @@ const DynamicGrid = createGridComponent({
 
   getColumnStartIndexForOffset: (
     props: Props,
-    offset: number,
+    scrollLeft: number,
     instanceProps: InstanceProps
-  ): number => findNearestCell('column', props, instanceProps, offset),
+  ): number => findNearestCell('column', props, instanceProps, scrollLeft),
 
   getColumnStopIndexForStartIndex: (
     props: Props,
     startIndex: number,
+    scrollLeft: number,
     instanceProps: InstanceProps
   ): number => {
     const { columnCount, width } = props;
@@ -239,9 +240,9 @@ const DynamicGrid = createGridComponent({
       startIndex,
       instanceProps
     );
-    const maxOffset = cellMetadata.offset + width;
+    const maxOffset = scrollLeft + width;
 
-    let offset = cellMetadata.offset;
+    let offset = cellMetadata.offset + cellMetadata.size;
     let stopIndex = startIndex;
 
     while (stopIndex < columnCount - 1 && offset < maxOffset) {
@@ -343,13 +344,14 @@ const DynamicGrid = createGridComponent({
 
   getRowStartIndexForOffset: (
     props: Props,
-    offset: number,
+    scrollTop: number,
     instanceProps: InstanceProps
-  ): number => findNearestCell('row', props, instanceProps, offset),
+  ): number => findNearestCell('row', props, instanceProps, scrollTop),
 
   getRowStopIndexForStartIndex: (
     props: Props,
     startIndex: number,
+    scrollTop: number,
     instanceProps: InstanceProps
   ): number => {
     const { rowCount, height } = props;
@@ -360,9 +362,9 @@ const DynamicGrid = createGridComponent({
       startIndex,
       instanceProps
     );
-    const maxOffset = cellMetadata.offset + height;
+    const maxOffset = scrollTop + height;
 
-    let offset = cellMetadata.offset;
+    let offset = cellMetadata.offset + cellMetadata.size;
     let stopIndex = startIndex;
 
     while (stopIndex < rowCount - 1 && offset < maxOffset) {

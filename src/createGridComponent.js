@@ -81,6 +81,7 @@ type getStartIndexForOffset = (
 type getStopIndexForStartIndex = (
   props: Props,
   startIndex: number,
+  scrollOffset: number,
   instanceProps: any
 ) => number;
 type initInstanceProps = (props: Props, instance: any) => any;
@@ -418,6 +419,7 @@ export default function createGridComponent({
       const stopIndex = getColumnStopIndexForStartIndex(
         this.props,
         startIndex,
+        scrollLeft,
         this._instanceProps
       );
 
@@ -452,6 +454,7 @@ export default function createGridComponent({
       const stopIndex = getRowStopIndexForStartIndex(
         this.props,
         startIndex,
+        scrollTop,
         this._instanceProps
       );
 

@@ -216,15 +216,16 @@ const DynamicList = createListComponent({
   getStopIndexForStartIndex: (
     props: Props,
     startIndex: number,
+    scrollOffset: number,
     instanceProps: InstanceProps
   ): number => {
     const { count, direction, height, width } = props;
 
     const size = (((direction === 'horizontal' ? width : height): any): number);
     const cellMetadata = getCellMetadata(props, startIndex, instanceProps);
-    const maxOffset = cellMetadata.offset + size;
+    const maxOffset = scrollOffset + size;
 
-    let offset = cellMetadata.offset;
+    let offset = cellMetadata.offset + cellMetadata.size;
     let stopIndex = startIndex;
 
     while (stopIndex < count - 1 && offset < maxOffset) {

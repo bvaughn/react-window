@@ -72,6 +72,7 @@ type getStartIndexForOffset = (
 type getStopIndexForStartIndex = (
   props: Props,
   startIndex: number,
+  scrollOffset: number,
   instanceProps: any
 ) => number;
 type initInstanceProps = (props: Props, instance: any) => any;
@@ -335,6 +336,7 @@ export default function createListComponent({
       const stopIndex = getStopIndexForStartIndex(
         this.props,
         startIndex,
+        scrollOffset,
         this._instanceProps
       );
 

@@ -53,12 +53,15 @@ const FixedSizeList = createListComponent({
 
   getStopIndexForStartIndex: (
     { cellSize, count, direction, height, width }: Props,
-    startIndex: number
+    startIndex: number,
+    scrollOffset: number
   ): number => {
+    const offset = startIndex * ((cellSize: any): number);
     const size = (((direction === 'horizontal' ? width : height): any): number);
     return Math.min(
       count - 1,
-      Math.round(startIndex + size / ((cellSize: any): number))
+      startIndex +
+        Math.floor((size + (scrollOffset - offset)) / ((cellSize: any): number))
     );
   },
 
