@@ -23,7 +23,8 @@
     "deploy": "gh-pages -d example/build"
   },
   "lint-staged": {
-    "{example,src}/**/*.{js,json,css}": ["prettier --write", "git add"]
+    "{example,src}/**/*.{js,json,css}": ["prettier --write", "git add"],
+    "**/*.js": "eslint --max-warnings 0"
   },
   "dependencies": {
     "memoize-one": "^3.1.1"
