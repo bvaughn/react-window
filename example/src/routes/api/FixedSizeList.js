@@ -2,7 +2,9 @@ import React from 'react';
 import { NavLink as Link } from 'react-router-dom';
 import CodeBlock from '../../components/CodeBlock';
 
-import CODE from '../../code/FixedSizeListChildren.js';
+import CODE_CHILDREN from '../../code/FixedSizeListChildren.js';
+import CODE_ON_ITEMS_RENDERED from '../../code/FixedSizeListOnItemsRendered.js';
+import CODE_ON_SCROLL from '../../code/FixedSizeListOnScroll.js';
 
 import './shared.css';
 
@@ -32,7 +34,7 @@ export default function() {
             <br />
             <br />
             <div className="CodeBlockWrapper">
-              <CodeBlock value={CODE} />
+              <CodeBlock value={CODE_CHILDREN} />
             </div>
           </dd>
           <dt className="ApiPropType">className: string = ""</dt>
@@ -65,6 +67,25 @@ export default function() {
             <br />
             <br />
             For horizontal lists, this can be a number or a string (e.g. "50%").
+          </dd>
+          <dt className="ApiPropType">onItemsRendered: function</dt>
+          <dd className="ApiPropDefinition">
+            Called when the items rendered by the list change.
+            <br />
+            <br />
+            <div className="CodeBlockWrapper">
+              <CodeBlock value={CODE_ON_ITEMS_RENDERED} />
+            </div>
+          </dd>
+          <dt className="ApiPropType">onScroll: function</dt>
+          <dd className="ApiPropDefinition">
+            Called when the list scroll positions changes, as a result of user
+            scrolling or scroll-to method calls.
+            <br />
+            <br />
+            <div className="CodeBlockWrapper">
+              <CodeBlock value={CODE_ON_SCROLL} />
+            </div>
           </dd>
           <dt className="ApiPropType">overscanCount: number = 1</dt>
           <dd className="ApiPropDefinition">

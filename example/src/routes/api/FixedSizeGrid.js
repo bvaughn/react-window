@@ -2,7 +2,9 @@ import React from 'react';
 import { NavLink as Link } from 'react-router-dom';
 import CodeBlock from '../../components/CodeBlock';
 
-import CODE from '../../code/FixedSizeGridChildren.js';
+import CODE_CHILDREN from '../../code/FixedSizeGridChildren.js';
+import CODE_ON_ITEMS_RENDERED from '../../code/FixedSizeGridOnItemsRendered.js';
+import CODE_ON_SCROLL from '../../code/FixedSizeGridOnScroll.js';
 
 import './shared.css';
 
@@ -26,7 +28,7 @@ export default function() {
             <br />
             <br />
             <div className="CodeBlockWrapper">
-              <CodeBlock value={CODE} />
+              <CodeBlock value={CODE_CHILDREN} />
             </div>
           </dd>
           <dt className="ApiPropType">className: string = ""</dt>
@@ -47,6 +49,25 @@ export default function() {
           <dd className="ApiPropDefinition">
             Height of the grid. This affects the number of rows that will be
             rendered (and displayed) at any given time.
+          </dd>
+          <dt className="ApiPropType">onItemsRendered: function</dt>
+          <dd className="ApiPropDefinition">
+            Called when the items rendered by the grid change.
+            <br />
+            <br />
+            <div className="CodeBlockWrapper">
+              <CodeBlock value={CODE_ON_ITEMS_RENDERED} />
+            </div>
+          </dd>
+          <dt className="ApiPropType">onScroll: function</dt>
+          <dd className="ApiPropDefinition">
+            Called when the grid scroll positions changes, as a result of user
+            scrolling or scroll-to method calls.
+            <br />
+            <br />
+            <div className="CodeBlockWrapper">
+              <CodeBlock value={CODE_ON_SCROLL} />
+            </div>
           </dd>
           <dt className="ApiPropType">overscanCount: number = 1</dt>
           <dd className="ApiPropDefinition">

@@ -1,5 +1,6 @@
 // @flow
 
+import memoizeOne from 'memoize-one';
 import React from 'react';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
@@ -13,6 +14,19 @@ type RenderFunction = ({
   style: Object,
 }) => React$Node;
 
+type ScrollDirection = 'forward' | 'backward';
+
+type onItemsRenderedCallback = ({
+  overscanStartIndex: number,
+  overscanStopIndex: number,
+  visibleStartIndex: number,
+  visibleStopIndex: number,
+}) => void;
+type onScrollCallback = ({
+  scrollDirection: ScrollDirection,
+  scrollOffset: number,
+}) => void;
+
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 
 export type Props = {|
@@ -22,6 +36,8 @@ export type Props = {|
   count: number,
   direction: Direction,
   height: number | string,
+  onItemsRendered?: onItemsRenderedCallback,
+  onScroll?: onScrollCallback,
   overscanCount: number,
   style?: Object,
   useIsScrolling: boolean,
@@ -30,7 +46,7 @@ export type Props = {|
 
 type State = {|
   isScrolling: boolean,
-  scrollDirection: 'forward' | 'backward',
+  scrollDirection: ScrollDirection,
   scrollOffset: number,
 |};
 
@@ -144,7 +160,15 @@ export default function createListComponent({
       }
     }
 
-    componnetWillUnmount() {
+    componentDidMount() {
+      this.callPropsCallbacks();
+    }
+
+    componentDidUpdate() {
+      this.callPropsCallbacks();
+    }
+
+    componentWillUnmount() {
       if (this._resetIsScrollingTimeoutId !== null) {
         clearTimeout(this._resetIsScrollingTimeoutId);
       }
@@ -244,7 +268,62 @@ export default function createListComponent({
       return cells;
     }
 
-    getRangeToRender(): [number, number] {
+    callOnItemsRendered: (
+      overscanStartIndex: number,
+      overscanStopIndex: number,
+      visibleStartIndex: number,
+      visibleStopIndex: number
+    ) => void;
+    callOnItemsRendered = memoizeOne(
+      (
+        overscanStartIndex: number,
+        overscanStopIndex: number,
+        visibleStartIndex: number,
+        visibleStopIndex: number
+      ) =>
+        ((this.props.onItemsRendered: any): onItemsRenderedCallback)({
+          overscanStartIndex,
+          overscanStopIndex,
+          visibleStartIndex,
+          visibleStopIndex,
+        })
+    );
+
+    callOnScroll: (
+      scrollDirection: ScrollDirection,
+      scrollOffset: number
+    ) => void;
+    callOnScroll = memoizeOne(
+      (scrollDirection: ScrollDirection, scrollOffset: number) =>
+        ((this.props.onScroll: any): onScrollCallback)({
+          scrollDirection,
+          scrollOffset,
+        })
+    );
+
+    callPropsCallbacks() {
+      if (typeof this.props.onItemsRendered === 'function') {
+        const [
+          overscanStartIndex,
+          overscanStopIndex,
+          visibleStartIndex,
+          visibleStopIndex,
+        ] = this.getRangeToRender();
+        this.callOnItemsRendered(
+          overscanStartIndex,
+          overscanStopIndex,
+          visibleStartIndex,
+          visibleStopIndex
+        );
+      }
+
+      if (typeof this.props.onScroll === 'function') {
+        const { scrollDirection, scrollOffset } = this.state;
+        this.callOnScroll(scrollDirection, scrollOffset);
+      }
+    }
+
+    getRangeToRender(): [number, number, number, number] {
       const { count, overscanCount } = this.props;
       const { scrollDirection, scrollOffset } = this.state;
 
@@ -269,6 +348,8 @@ export default function createListComponent({
       return [
         Math.max(0, startIndex - overscanBackward),
         Math.min(count - 1, stopIndex + overscanForward),
+        startIndex,
+        stopIndex,
       ];
     }
 

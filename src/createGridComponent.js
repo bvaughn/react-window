@@ -1,5 +1,6 @@
 // @flow
 
+import memoizeOne from 'memoize-one';
 import React from 'react';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
@@ -13,6 +14,25 @@ export type RenderFunction = ({
   style: Object,
 }) => React$Node;
 
+type ScrollDirection = 'forward' | 'backward';
+
+type onItemsRenderedCallback = ({
+  overscanColumnStartIndex: number,
+  overscanColumnStopIndex: number,
+  overscanRowStartIndex: number,
+  overscanRowStopIndex: number,
+  visibleColumnStartIndex: number,
+  visibleColumnStopIndex: number,
+  visibleRowStartIndex: number,
+  visibleRowStopIndex: number,
+}) => void;
+type onScrollCallback = ({
+  horizontalScrollDirection: ScrollDirection,
+  scrollLeft: number,
+  scrollTop: number,
+  verticalScrollDirection: ScrollDirection,
+}) => void;
+
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 
 export type Props = {|
@@ -21,6 +41,8 @@ export type Props = {|
   columnCount: number,
   columnWidth: CellSize,
   height: number,
+  onItemsRendered?: onItemsRenderedCallback,
+  onScroll?: onScrollCallback,
   overscanCount: number,
   rowCount: number,
   rowHeight: CellSize,
@@ -31,10 +53,10 @@ export type Props = {|
 
 type State = {|
   isScrolling: boolean,
-  horizontalScrollDirection: 'forward' | 'backward',
+  horizontalScrollDirection: ScrollDirection,
   scrollLeft: number,
   scrollTop: number,
-  verticalScrollDirection: 'forward' | 'backward',
+  verticalScrollDirection: ScrollDirection,
 |};
 
 type getCellOffset = (
@@ -174,7 +196,15 @@ export default function createGridComponent({
       });
     }
 
-    componnetWillUnmount() {
+    componentDidMount() {
+      this.callPropsCallbacks();
+    }
+
+    componentDidUpdate() {
+      this.callPropsCallbacks();
+    }
+
+    componentWillUnmount() {
       if (this._resetIsScrollingTimeoutId !== null) {
         clearTimeout(this._resetIsScrollingTimeoutId);
       }
@@ -280,7 +310,103 @@ export default function createGridComponent({
       return cells;
     }
 
-    getHorizontalRangeToRender(): [number, number] {
+    callOnItemsRendered: (
+      overscanColumnStartIndex: number,
+      overscanColumnStopIndex: number,
+      overscanRowStartIndex: number,
+      overscanRowStopIndex: number,
+      visibleColumnStartIndex: number,
+      visibleColumnStopIndex: number,
+      visibleRowStartIndex: number,
+      visibleRowStopIndex: number
+    ) => void;
+    callOnItemsRendered = memoizeOne(
+      (
+        overscanColumnStartIndex: number,
+        overscanColumnStopIndex: number,
+        overscanRowStartIndex: number,
+        overscanRowStopIndex: number,
+        visibleColumnStartIndex: number,
+        visibleColumnStopIndex: number,
+        visibleRowStartIndex: number,
+        visibleRowStopIndex: number
+      ) =>
+        ((this.props.onItemsRendered: any): onItemsRenderedCallback)({
+          overscanColumnStartIndex,
+          overscanColumnStopIndex,
+          overscanRowStartIndex,
+          overscanRowStopIndex,
+          visibleColumnStartIndex,
+          visibleColumnStopIndex,
+          visibleRowStartIndex,
+          visibleRowStopIndex,
+        })
+    );
+
+    callOnScroll: (
+      scrollLeft: number,
+      scrollTop: number,
+      horizontalScrollDirection: ScrollDirection,
+      verticalScrollDirection: ScrollDirection
+    ) => void;
+    callOnScroll = memoizeOne(
+      (
+        scrollLeft: number,
+        scrollTop: number,
+        horizontalScrollDirection: ScrollDirection,
+        verticalScrollDirection: ScrollDirection
+      ) =>
+        ((this.props.onScroll: any): onScrollCallback)({
+          horizontalScrollDirection,
+          scrollLeft,
+          scrollTop,
+          verticalScrollDirection,
+        })
+    );
+
+    callPropsCallbacks() {
+      if (typeof this.props.onItemsRendered === 'function') {
+        const [
+          overscanColumnStartIndex,
+          overscanColumnStopIndex,
+          visibleColumnStartIndex,
+          visibleColumnStopIndex,
+        ] = this.getHorizontalRangeToRender();
+        const [
+          overscanRowStartIndex,
+          overscanRowStopIndex,
+          visibleRowStartIndex,
+          visibleRowStopIndex,
+        ] = this.getVerticalRangeToRender();
+        this.callOnItemsRendered(
+          overscanColumnStartIndex,
+          overscanColumnStopIndex,
+          overscanRowStartIndex,
+          overscanRowStopIndex,
+          visibleColumnStartIndex,
+          visibleColumnStopIndex,
+          visibleRowStartIndex,
+          visibleRowStopIndex
+        );
+      }
+
+      if (typeof this.props.onScroll === 'function') {
+        const {
+          horizontalScrollDirection,
+          scrollLeft,
+          scrollTop,
+          verticalScrollDirection,
+        } = this.state;
+        this.callOnScroll(
+          scrollLeft,
+          scrollTop,
+          horizontalScrollDirection,
+          verticalScrollDirection
+        );
+      }
+    }
+
+    getHorizontalRangeToRender(): [number, number, number, number] {
       const { columnCount, overscanCount } = this.props;
       const { horizontalScrollDirection, scrollLeft } = this.state;
 
@@ -309,10 +435,12 @@ export default function createGridComponent({
       return [
         Math.max(0, startIndex - overscanBackward),
         Math.min(columnCount - 1, stopIndex + overscanForward),
+        startIndex,
+        stopIndex,
       ];
     }
 
-    getVerticalRangeToRender(): [number, number] {
+    getVerticalRangeToRender(): [number, number, number, number] {
       const { columnCount, overscanCount } = this.props;
       const { verticalScrollDirection, scrollTop } = this.state;
 
@@ -337,6 +465,8 @@ export default function createGridComponent({
       return [
         Math.max(0, startIndex - overscanBackward),
         Math.min(columnCount - 1, stopIndex + overscanForward),
+        startIndex,
+        stopIndex,
       ];
     }
 
