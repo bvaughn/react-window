@@ -11,8 +11,9 @@
   "files": ["dist"],
   "scripts": {
     "precommit": "lint-staged",
-    "prettier": "prettier --write '**/*.{js,jsx,json,css}'",
+    "prettier": "prettier --write '**/*.{js,json,css}'",
     "linc": "lint-staged",
+    "lint": "eslint '**/*.js'",
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "build": "del dist && rollup -c",
@@ -22,7 +23,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "lint-staged": {
-    "{example,src}/**/*.{js,jsx,json,css}": ["prettier --write", "git add"]
+    "{example,src}/**/*.{js,json,css}": ["prettier --write", "git add"]
   },
   "dependencies": {
     "memoize-one": "^3.1.1"
@@ -42,10 +43,15 @@
     "cross-env": "^5.1.4",
     "del-cli": "^1.1.0",
     "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-react-app": "^2.1.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-config-standard-react": "^6.0.0",
+    "eslint-plugin-flowtype": "^2.47.1",
     "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-jsx-a11y": "^5",
     "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",

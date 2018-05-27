@@ -35,16 +35,14 @@ const getCellMetadata = (
   index: number,
   instanceProps: InstanceProps
 ): CellMetadata => {
-  let cellMetadataMap, cellSize, estimatedCellSize, lastMeasuredIndex;
+  let cellMetadataMap, cellSize, lastMeasuredIndex;
   if (cellType === 'column') {
     cellMetadataMap = instanceProps.columnMetadataMap;
     cellSize = ((props.columnWidth: any): cellSizeGetter);
-    estimatedCellSize = instanceProps.estimatedColumnWidth;
     lastMeasuredIndex = instanceProps.lastMeasuredColumnIndex;
   } else {
     cellMetadataMap = instanceProps.rowMetadataMap;
     cellSize = ((props.rowHeight: any): cellSizeGetter);
-    estimatedCellSize = instanceProps.estimatedRowHeight;
     lastMeasuredIndex = instanceProps.lastMeasuredRowIndex;
   }
 
@@ -82,14 +80,12 @@ const findNearestCell = (
   instanceProps: InstanceProps,
   offset: number
 ) => {
-  let cellMetadataMap, estimatedCellSize, lastMeasuredIndex;
+  let cellMetadataMap, lastMeasuredIndex;
   if (cellType === 'column') {
     cellMetadataMap = instanceProps.columnMetadataMap;
-    estimatedCellSize = instanceProps.estimatedColumnWidth;
     lastMeasuredIndex = instanceProps.lastMeasuredColumnIndex;
   } else {
     cellMetadataMap = instanceProps.rowMetadataMap;
-    estimatedCellSize = instanceProps.estimatedRowHeight;
     lastMeasuredIndex = instanceProps.lastMeasuredRowIndex;
   }
 

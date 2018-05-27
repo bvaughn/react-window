@@ -28,7 +28,7 @@ const getCellMetadata = (
   index: number,
   instanceProps: InstanceProps
 ): CellMetadata => {
-  const { cellSize, estimatedCellSize } = ((props: any): DynanmicProps);
+  const { cellSize } = ((props: any): DynanmicProps);
   const { cellMetadataMap, lastMeasuredIndex } = instanceProps;
 
   if (index > lastMeasuredIndex) {
@@ -60,11 +60,7 @@ const findNearestCell = (
   instanceProps: InstanceProps,
   offset: number
 ) => {
-  const {
-    cellMetadataMap,
-    estimatedCellSize,
-    lastMeasuredIndex,
-  } = instanceProps;
+  const { cellMetadataMap, lastMeasuredIndex } = instanceProps;
 
   const lastMeasuredCellOffset =
     lastMeasuredIndex > 0 ? cellMetadataMap[lastMeasuredIndex].offset : 0;
@@ -237,7 +233,7 @@ const DynamicList = createListComponent({
   },
 
   initInstanceProps(props: Props, instance: any): InstanceProps {
-    const { estimatedCellSize, direction } = ((props: any): DynanmicProps);
+    const { estimatedCellSize } = ((props: any): DynanmicProps);
 
     const instanceProps = {
       cellMetadataMap: {},

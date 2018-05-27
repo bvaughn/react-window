@@ -7,7 +7,7 @@ const LANGUAGE = 'jsx';
 const escapeStyle = style => style.replace(/(^|\s+)/g, '$1cm-');
 const escapeText = string =>
   string.replace(/[<&]/g, function(ch) {
-    return ch == '&' ? '&amp;' : '&lt;';
+    return ch === '&' ? '&amp;' : '&lt;';
   });
 
 module.exports = function loader(content) {
@@ -26,7 +26,7 @@ module.exports = function loader(content) {
   };
 
   CodeMirror.runMode(content, LANGUAGE, (text, style) => {
-    if (style != currentStyle) {
+    if (style !== currentStyle) {
       appendToLine();
       currentStyle = style;
       currentText = text;

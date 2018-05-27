@@ -50,33 +50,33 @@ type State = {|
   scrollOffset: number,
 |};
 
-type getCellOffset = (
+type GetCellOffset = (
   props: Props,
   index: number,
   instanceProps: any
 ) => number;
-type getCellSize = (props: Props, index: number, instanceProps: any) => number;
-type getEstimatedTotalSize = (props: Props, instanceProps: any) => number;
-type getOffsetForIndexAndAlignment = (
+type GetCellSize = (props: Props, index: number, instanceProps: any) => number;
+type GetEstimatedTotalSize = (props: Props, instanceProps: any) => number;
+type GetOffsetForIndexAndAlignment = (
   props: Props,
   index: number,
   align: ScrollToAlign,
   scrollOffset: number,
   instanceProps: any
 ) => number;
-type getStartIndexForOffset = (
+type GetStartIndexForOffset = (
   props: Props,
   offset: number,
   instanceProps: any
 ) => number;
-type getStopIndexForStartIndex = (
+type GetStopIndexForStartIndex = (
   props: Props,
   startIndex: number,
   scrollOffset: number,
   instanceProps: any
 ) => number;
-type initInstanceProps = (props: Props, instance: any) => any;
-type validateProps = (props: Props) => void;
+type InitInstanceProps = (props: Props, instance: any) => any;
+type ValidateProps = (props: Props) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
@@ -90,14 +90,14 @@ export default function createListComponent({
   initInstanceProps,
   validateProps,
 }: {|
-  getCellOffset: getCellOffset,
-  getCellSize: getCellSize,
-  getEstimatedTotalSize: getEstimatedTotalSize,
-  getOffsetForIndexAndAlignment: getOffsetForIndexAndAlignment,
-  getStartIndexForOffset: getStartIndexForOffset,
-  getStopIndexForStartIndex: getStopIndexForStartIndex,
-  initInstanceProps: initInstanceProps,
-  validateProps: validateProps,
+  getCellOffset: GetCellOffset,
+  getCellSize: GetCellSize,
+  getEstimatedTotalSize: GetEstimatedTotalSize,
+  getOffsetForIndexAndAlignment: GetOffsetForIndexAndAlignment,
+  getStartIndexForOffset: GetStartIndexForOffset,
+  getStopIndexForStartIndex: GetStopIndexForStartIndex,
+  initInstanceProps: InitInstanceProps,
+  validateProps: ValidateProps,
 |}) {
   return class List extends React.Component<Props, State> {
     _cellStyleCache: { [index: number]: Object } = {};

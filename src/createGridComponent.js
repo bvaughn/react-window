@@ -16,7 +16,7 @@ export type RenderFunction = ({
 
 type ScrollDirection = 'forward' | 'backward';
 
-type onItemsRenderedCallback = ({
+type OnItemsRenderedCallback = ({
   overscanColumnStartIndex: number,
   overscanColumnStopIndex: number,
   overscanRowStartIndex: number,
@@ -26,7 +26,7 @@ type onItemsRenderedCallback = ({
   visibleRowStartIndex: number,
   visibleRowStopIndex: number,
 }) => void;
-type onScrollCallback = ({
+type OnScrollCallback = ({
   horizontalScrollDirection: ScrollDirection,
   scrollLeft: number,
   scrollTop: number,
@@ -41,8 +41,8 @@ export type Props = {|
   columnCount: number,
   columnWidth: CellSize,
   height: number,
-  onItemsRendered?: onItemsRenderedCallback,
-  onScroll?: onScrollCallback,
+  onItemsRendered?: OnItemsRenderedCallback,
+  onScroll?: OnScrollCallback,
   overscanCount: number,
   rowCount: number,
   rowHeight: CellSize,
@@ -66,26 +66,26 @@ type getCellOffset = (
 ) => number;
 type getCellSize = (props: Props, index: number, instanceProps: any) => number;
 type getEstimatedTotalSize = (props: Props, instanceProps: any) => number;
-type getOffsetForCellAndAlignment = (
+type GetOffsetForCellAndAlignment = (
   props: Props,
   index: number,
   align: ScrollToAlign,
   scrollOffset: number,
   instanceProps: any
 ) => number;
-type getStartIndexForOffset = (
+type GetStartIndexForOffset = (
   props: Props,
   offset: number,
   instanceProps: any
 ) => number;
-type getStopIndexForStartIndex = (
+type GetStopIndexForStartIndex = (
   props: Props,
   startIndex: number,
   scrollOffset: number,
   instanceProps: any
 ) => number;
-type initInstanceProps = (props: Props, instance: any) => any;
-type validateProps = (props: Props) => void;
+type InitInstanceProps = (props: Props, instance: any) => any;
+type ValidateProps = (props: Props) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
@@ -106,19 +106,19 @@ export default function createGridComponent({
   validateProps,
 }: {|
   getColumnOffset: getCellOffset,
-  getColumnStartIndexForOffset: getStartIndexForOffset,
-  getColumnStopIndexForStartIndex: getStopIndexForStartIndex,
+  getColumnStartIndexForOffset: GetStartIndexForOffset,
+  getColumnStopIndexForStartIndex: GetStopIndexForStartIndex,
   getColumnWidth: getCellSize,
   getEstimatedTotalHeight: getEstimatedTotalSize,
   getEstimatedTotalWidth: getEstimatedTotalSize,
-  getOffsetForColumnAndAlignment: getOffsetForCellAndAlignment,
-  getOffsetForRowAndAlignment: getOffsetForCellAndAlignment,
+  getOffsetForColumnAndAlignment: GetOffsetForCellAndAlignment,
+  getOffsetForRowAndAlignment: GetOffsetForCellAndAlignment,
   getRowOffset: getCellOffset,
   getRowHeight: getCellSize,
-  getRowStartIndexForOffset: getStartIndexForOffset,
-  getRowStopIndexForStartIndex: getStopIndexForStartIndex,
-  initInstanceProps: initInstanceProps,
-  validateProps: validateProps,
+  getRowStartIndexForOffset: GetStartIndexForOffset,
+  getRowStopIndexForStartIndex: GetStopIndexForStartIndex,
+  initInstanceProps: InitInstanceProps,
+  validateProps: ValidateProps,
 |}) {
   return class List extends React.Component<Props, State> {
     _cellStyleCache: { [key: string]: Object } = {};
@@ -332,7 +332,7 @@ export default function createGridComponent({
         visibleRowStartIndex: number,
         visibleRowStopIndex: number
       ) =>
-        ((this.props.onItemsRendered: any): onItemsRenderedCallback)({
+        ((this.props.onItemsRendered: any): OnItemsRenderedCallback)({
           overscanColumnStartIndex,
           overscanColumnStopIndex,
           overscanRowStartIndex,
@@ -357,7 +357,7 @@ export default function createGridComponent({
         horizontalScrollDirection: ScrollDirection,
         verticalScrollDirection: ScrollDirection
       ) =>
-        ((this.props.onScroll: any): onScrollCallback)({
+        ((this.props.onScroll: any): OnScrollCallback)({
           horizontalScrollDirection,
           scrollLeft,
           scrollTop,

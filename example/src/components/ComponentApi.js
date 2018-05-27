@@ -1,6 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { NavLink as Link } from 'react-router-dom';
-import CodeBlock from './CodeBlock';
 
 import './ComponentApi.css';
 
