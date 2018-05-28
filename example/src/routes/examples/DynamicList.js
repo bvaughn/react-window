@@ -6,7 +6,7 @@ import CodeSandboxLink from '../../components/CodeSandboxLink';
 import CODE_HORIZONTAL from '../../code/DynamicListHorizontal.js';
 import CODE_VERTICAL from '../../code/DynamicListVertical.js';
 
-import './shared.css';
+import styles from './shared.module.css';
 
 const columnSizes = new Array(1000)
   .fill(true)
@@ -17,20 +17,20 @@ const rowSizes = new Array(1000)
 
 export default function() {
   return (
-    <div className="ExampleWrapper">
-      <h1 className="ExampleHeader">Dynamic List</h1>
-      <div className="Example">
-        <div className="ExampleDemo">
+    <div className={styles.ExampleWrapper}>
+      <h1 className={styles.ExampleHeader}>Dynamic List</h1>
+      <div className={styles.Example}>
+        <div className={styles.ExampleDemo}>
           <DynamicList
             cellSize={index => rowSizes[index]}
-            className="List"
+            className={styles.List}
             count={1000}
             height={150}
             width={300}
           >
             {({ key, index, style }) => (
               <div
-                className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
+                className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
                 key={key}
                 style={style}
               >
@@ -39,17 +39,17 @@ export default function() {
             )}
           </DynamicList>
 
-          <CodeSandboxLink className="TryItOutLink" id="j3nw3nnnyy" />
+          <CodeSandboxLink className={styles.TryItOutLink} id="j3nw3nnnyy" />
         </div>
-        <div className="ExampleCode">
+        <div className={styles.ExampleCode}>
           <CodeBlock value={CODE_VERTICAL} />
         </div>
       </div>
-      <div className="Example">
-        <div className="ExampleDemo">
+      <div className={styles.Example}>
+        <div className={styles.ExampleDemo}>
           <DynamicList
             cellSize={index => columnSizes[index]}
-            className="List"
+            className={styles.List}
             direction="horizontal"
             count={1000}
             height={75}
@@ -57,7 +57,7 @@ export default function() {
           >
             {({ key, index, style }) => (
               <div
-                className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
+                className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
                 key={key}
                 style={style}
               >
@@ -66,9 +66,9 @@ export default function() {
             )}
           </DynamicList>
 
-          <CodeSandboxLink className="TryItOutLink" id="jnl8ljmnn5" />
+          <CodeSandboxLink className={styles.TryItOutLink} id="jnl8ljmnn5" />
         </div>
-        <div className="ExampleCode">
+        <div className={styles.ExampleCode}>
           <CodeBlock value={CODE_HORIZONTAL} />
         </div>
       </div>

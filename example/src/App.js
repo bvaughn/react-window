@@ -15,12 +15,13 @@ import FixedSizeListExample from './routes/examples/FixedSizeList';
 import ListWithScrollingIndicatorExample from './routes/examples/ListWithScrollingIndicator';
 import ScrollToItemExample from './routes/examples/ScrollToItem';
 
-import './App.css';
+import styles from './App.module.css';
+console.log('styles:', styles);
 
 export default function App() {
   return (
     <Router>
-      <div className="App">
+      <div className={styles.App}>
         <Nav title="react-virtualized">
           <SubMenu
             isActiveDark={true}
@@ -29,7 +30,7 @@ export default function App() {
           />
           <SubMenu isActiveDark={false} items={API_ROUTES} title="API" />
         </Nav>
-        <main className="Main">
+        <main className={styles.Main}>
           <Route
             exact
             path="/"

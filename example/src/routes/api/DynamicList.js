@@ -3,6 +3,8 @@ import { NavHashLink as Link } from 'react-router-hash-link';
 import CodeBlock from '../../components/CodeBlock';
 import ComponentApi from '../../components/ComponentApi';
 
+import styles from './shared.module.css';
+
 import CODE from '../../code/DynamicListCellSize.js';
 
 export default () => (
@@ -38,7 +40,7 @@ const PROPS = [
         width.
         <br />
         <br />
-        <div className="CodeBlockWrapper">
+        <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE} />
         </div>
       </Fragment>

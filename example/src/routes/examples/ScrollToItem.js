@@ -6,6 +6,8 @@ import CodeSandboxLink from '../../components/CodeSandboxLink';
 import CODE_GRID from '../../code/ScrollToItemGrid.js';
 import CODE_LIST from '../../code/ScrollToItemList.js';
 
+import styles from './shared.module.css';
+
 const columnWidths = new Array(1000)
   .fill(true)
   .map(() => 75 + Math.round(Math.random() * 50));
@@ -19,22 +21,25 @@ export default class ScrollToItem extends Component {
 
   render() {
     return (
-      <div className="ExampleWrapper">
-        <h1 className="ExampleHeader">Scrolling to an item</h1>
-        <div className="Example">
-          <div className="ExampleDemo">
-            <button className="ExampleButton" onClick={this.scrollToRow200Auto}>
+      <div className={styles.ExampleWrapper}>
+        <h1 className={styles.ExampleHeader}>Scrolling to an item</h1>
+        <div className={styles.Example}>
+          <div className={styles.ExampleDemo}>
+            <button
+              className={styles.ExampleButton}
+              onClick={this.scrollToRow200Auto}
+            >
               Scroll to row 200 (align: auto)
             </button>
             <button
-              className="ExampleButton"
+              className={styles.ExampleButton}
               onClick={this.scrollToRow300Center}
             >
               Scroll to row 300 (align: center)
             </button>
             <DynamicList
               cellSize={index => rowHeights[index]}
-              className="List"
+              className={styles.List}
               count={1000}
               height={150}
               ref={this.listRef}
@@ -42,7 +47,7 @@ export default class ScrollToItem extends Component {
             >
               {({ key, index, style }) => (
                 <div
-                  className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
+                  className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
                   key={key}
                   style={style}
                 >
@@ -51,40 +56,40 @@ export default class ScrollToItem extends Component {
               )}
             </DynamicList>
 
-            <CodeSandboxLink className="TryItOutLink" id="mzy8pq360x" />
+            <CodeSandboxLink className={styles.TryItOutLink} id="mzy8pq360x" />
           </div>
-          <div className="ExampleCode">
+          <div className={styles.ExampleCode}>
             <CodeBlock value={CODE_LIST} />
           </div>
         </div>
-        <div className="Example">
-          <div className="ExampleDemo">
+        <div className={styles.Example}>
+          <div className={styles.ExampleDemo}>
             <button
-              className="ExampleButton"
+              className={styles.ExampleButton}
               onClick={this.scrollToRow100Column50Auto}
             >
               Scroll to row 100, column 50 (align: auto)
             </button>
             <button
-              className="ExampleButton"
+              className={styles.ExampleButton}
               onClick={this.scrollToRow300Column150Start}
             >
               Scroll to row 300, column 150 (align: start)
             </button>
             <button
-              className="ExampleButton"
+              className={styles.ExampleButton}
               onClick={this.scrollToRow350Column200End}
             >
               Scroll to row 350, column 200 (align: end)
             </button>
             <button
-              className="ExampleButton"
+              className={styles.ExampleButton}
               onClick={this.scrollToRow200Column100Center}
             >
               Scroll to row 200, column 100 (align: center)
             </button>
             <DynamicGrid
-              className="Grid"
+              className={styles.Grid}
               columnCount={1000}
               columnWidth={index => columnWidths[index]}
               height={150}
@@ -112,9 +117,9 @@ export default class ScrollToItem extends Component {
               )}
             </DynamicGrid>
 
-            <CodeSandboxLink className="TryItOutLink" id="woy6mknj4w" />
+            <CodeSandboxLink className={styles.TryItOutLink} id="woy6mknj4w" />
           </div>
-          <div className="ExampleCode">
+          <div className={styles.ExampleCode}>
             <CodeBlock value={CODE_GRID} />
           </div>
         </div>

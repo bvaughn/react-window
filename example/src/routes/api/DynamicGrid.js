@@ -3,6 +3,8 @@ import { NavHashLink as Link } from 'react-router-hash-link';
 import CodeBlock from '../../components/CodeBlock';
 import ComponentApi from '../../components/ComponentApi';
 
+import styles from './shared.module.css';
+
 import CODE_COLUMN_WIDTH from '../../code/DynamicGridColumnWidth.js';
 import CODE_ROW_HEIGHT from '../../code/DynamicGridRowHeight.js';
 
@@ -37,7 +39,7 @@ const PROPS = [
         Returns the width of the specified column.
         <br />
         <br />
-        <div className="CodeBlockWrapper">
+        <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_COLUMN_WIDTH} />
         </div>
       </Fragment>
@@ -84,7 +86,7 @@ const PROPS = [
         Returns the height of the specified row.
         <br />
         <br />
-        <div className="CodeBlockWrapper">
+        <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_ROW_HEIGHT} />
         </div>
       </Fragment>

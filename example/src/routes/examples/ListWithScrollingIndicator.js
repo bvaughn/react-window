@@ -5,17 +5,17 @@ import CodeSandboxLink from '../../components/CodeSandboxLink';
 
 import CODE from '../../code/ScrollingIndicatorList.js';
 
-import './shared.css';
+import styles from './shared.module.css';
 
 export default function() {
   return (
-    <div className="ExampleWrapper">
-      <h1 className="ExampleHeader">Scrolling indicators</h1>
-      <div className="Example">
-        <div className="ExampleDemo">
+    <div className={styles.ExampleWrapper}>
+      <h1 className={styles.ExampleHeader}>Scrolling indicators</h1>
+      <div className={styles.Example}>
+        <div className={styles.ExampleDemo}>
           <FixedSizeList
             cellSize={35}
-            className="List"
+            className={styles.List}
             count={1000}
             height={150}
             useIsScrolling
@@ -23,7 +23,7 @@ export default function() {
           >
             {({ key, index, isScrolling, style }) => (
               <div
-                className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
+                className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
                 key={key}
                 style={style}
               >
@@ -32,9 +32,9 @@ export default function() {
             )}
           </FixedSizeList>
 
-          <CodeSandboxLink className="TryItOutLink" id="3qw073y3x6" />
+          <CodeSandboxLink className={styles.TryItOutLink} id="3qw073y3x6" />
         </div>
-        <div className="ExampleCode">
+        <div className={styles.ExampleCode}>
           <CodeBlock value={CODE} />
         </div>
       </div>

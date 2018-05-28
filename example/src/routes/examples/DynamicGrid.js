@@ -5,7 +5,7 @@ import CodeSandboxLink from '../../components/CodeSandboxLink';
 
 import CODE from '../../code/DynamicGrid.js';
 
-import './shared.css';
+import styles from './shared.module.css';
 
 const columnWidths = new Array(1000)
   .fill(true)
@@ -16,12 +16,12 @@ const rowHeights = new Array(1000)
 
 export default function() {
   return (
-    <div className="ExampleWrapper">
-      <h1 className="ExampleHeader">Dynamic Grid</h1>
-      <div className="Example">
-        <div className="ExampleDemo">
+    <div className={styles.ExampleWrapper}>
+      <h1 className={styles.ExampleHeader}>Dynamic Grid</h1>
+      <div className={styles.Example}>
+        <div className={styles.ExampleDemo}>
           <DynamicGrid
-            className="Grid"
+            className={styles.Grid}
             columnCount={1000}
             columnWidth={index => columnWidths[index]}
             height={150}
@@ -34,11 +34,11 @@ export default function() {
                 className={
                   columnIndex % 2
                     ? rowIndex % 2 === 0
-                      ? 'GridItemOdd'
-                      : 'GridItemEven'
+                      ? styles.GridItemOdd
+                      : styles.GridItemEven
                     : rowIndex % 2
-                      ? 'GridItemOdd'
-                      : 'GridItemEven'
+                      ? styles.GridItemOdd
+                      : styles.GridItemEven
                 }
                 key={key}
                 style={style}
@@ -48,9 +48,9 @@ export default function() {
             )}
           </DynamicGrid>
 
-          <CodeSandboxLink className="TryItOutLink" id="241m0vromp" />
+          <CodeSandboxLink className={styles.TryItOutLink} id="241m0vromp" />
         </div>
-        <div className="ExampleCode">
+        <div className={styles.ExampleCode}>
           <CodeBlock value={CODE} />
         </div>
       </div>

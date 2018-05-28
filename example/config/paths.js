@@ -1,9 +1,12 @@
+'use strict';
+
 const path = require('path');
 const fs = require('fs');
 const url = require('url');
+const findMonorepo = require('react-dev-utils/workspaceUtils').findMonorepo;
 
 // Make sure any symlinks in the project folder are resolved:
-// https://github.com/facebookincubator/create-react-app/issues/637
+// https://github.com/facebook/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
@@ -39,15 +42,35 @@ function getServedPath(appPackageJson) {
 // config after eject: we're in ./config/
 module.exports = {
   dotenv: resolveApp('.env'),
+  appPath: resolveApp('.'),
   appBuild: resolveApp('build'),
   appPublic: resolveApp('public'),
   appHtml: resolveApp('public/index.html'),
   appIndexJs: resolveApp('src/index.js'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
-  yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveApp('src/setupTests.js'),
   appNodeModules: resolveApp('node_modules'),
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
 };
+
+let checkForMonorepo = true;
+
+
+
+module.exports.srcPaths = [module.exports.appSrc];
+
+module.exports.useYarn = fs.existsSync(
+  path.join(module.exports.appPath, 'yarn.lock')
+);
+
+if (checkForMonorepo) {
+  // if app is in a monorepo (lerna or yarn workspace), treat other packages in
+  // the monorepo as if they are app source
+  const mono = findMonorepo(appDirectory);
+  if (mono.isAppIncluded) {
+    Array.prototype.push.apply(module.exports.srcPaths, mono.pkgs);
+  }
+  module.exports.useYarn = module.exports.useYarn || mono.isYarnWs;
+}

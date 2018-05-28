@@ -6,24 +6,24 @@ import CodeSandboxLink from '../../components/CodeSandboxLink';
 import CODE_HORIZONTAL from '../../code/FixedSizeListHorizontal.js';
 import CODE_VERTICAL from '../../code/FixedSizeListVertical.js';
 
-import './shared.css';
+import styles from './shared.module.css';
 
 export default function() {
   return (
-    <div className="ExampleWrapper">
-      <h1 className="ExampleHeader">Basic List</h1>
-      <div className="Example">
-        <div className="ExampleDemo">
+    <div className={styles.ExampleWrapper}>
+      <h1 className={styles.ExampleHeader}>Basic List</h1>
+      <div className={styles.Example}>
+        <div className={styles.ExampleDemo}>
           <FixedSizeList
             cellSize={35}
-            className="List"
+            className={styles.List}
             count={1000}
             height={150}
             width={300}
           >
             {({ key, index, style }) => (
               <div
-                className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
+                className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
                 key={key}
                 style={style}
               >
@@ -32,17 +32,17 @@ export default function() {
             )}
           </FixedSizeList>
 
-          <CodeSandboxLink className="TryItOutLink" id="vjo8w37qw0" />
+          <CodeSandboxLink className={styles.TryItOutLink} id="vjo8w37qw0" />
         </div>
-        <div className="ExampleCode">
+        <div className={styles.ExampleCode}>
           <CodeBlock value={CODE_VERTICAL} />
         </div>
       </div>
-      <div className="Example">
-        <div className="ExampleDemo">
+      <div className={styles.Example}>
+        <div className={styles.ExampleDemo}>
           <FixedSizeList
             cellSize={100}
-            className="List"
+            className={styles.List}
             direction="horizontal"
             count={1000}
             height={75}
@@ -50,7 +50,7 @@ export default function() {
           >
             {({ key, index, style }) => (
               <div
-                className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
+                className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
                 key={key}
                 style={style}
               >
@@ -59,9 +59,9 @@ export default function() {
             )}
           </FixedSizeList>
 
-          <CodeSandboxLink className="TryItOutLink" id="n4wwlyn8rm" />
+          <CodeSandboxLink className={styles.TryItOutLink} id="n4wwlyn8rm" />
         </div>
-        <div className="ExampleCode">
+        <div className={styles.ExampleCode}>
           <CodeBlock value={CODE_HORIZONTAL} />
         </div>
       </div>

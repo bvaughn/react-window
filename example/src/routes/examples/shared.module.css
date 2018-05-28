@@ -41,6 +41,20 @@
   overflow: hidden;
 }
 
+.TryItOutLink {
+  margin-top: 1rem;
+}
+
+.ExampleHeader {
+  display: none;
+  flex: 0 0 auto;
+  background-color: #fff;
+  font-weight: lighter;
+  font-size: 2rem;
+  padding: 2rem 2rem 0 2rem;
+  margin: 0;
+}
+
 .Grid,
 .List {
   border: 1px solid #d9dddd;
@@ -58,20 +72,6 @@
 .GridItemEven,
 .ListItemEven {
   background-color: #f8f8f0;
-}
-
-.TryItOutLink {
-  margin-top: 1rem;
-}
-
-.ExampleHeader {
-  display: none;
-  flex: 0 0 auto;
-  background-color: #fff;
-  font-weight: lighter;
-  font-size: 2rem;
-  padding: 2rem 2rem 0 2rem;
-  margin: 0;
 }
 
 @media (max-width: 37.5rem) {

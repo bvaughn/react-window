@@ -1,0 +1,6 @@
+.CodeBlockWrapper {
+  display: inline-block;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  background: #263238; /* Codemirror theme */
+}

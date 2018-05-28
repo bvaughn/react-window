@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import './ComponentApi.css';
+import styles from './ComponentApi.module.css';
 
 type Method = {|
   description: string,
@@ -38,14 +38,14 @@ export default class ComponentApi extends Component<Props, State> {
     const hasOptionalProps = props.some(prop => !prop.isRequired);
 
     return (
-      <div className="ComponentApi">
-        <div className="ComponentApiContent">
-          <h1 className="ComponentApiHeader">&lt;{name}&gt;</h1>
-          <h2 id="props" className="ComponentApiSubHeader">
+      <div className={styles.ComponentApi}>
+        <div className={styles.ComponentApiContent}>
+          <h1 className={styles.ComponentApiHeader}>&lt;{name}&gt;</h1>
+          <h2 id="props" className={styles.ComponentApiSubHeader}>
             Props
             {hasOptionalProps && (
               <small>
-                <label className="ComponentApiRadioToggle">
+                <label className={styles.ComponentApiRadioToggle}>
                   <input
                     type="radio"
                     value={true}
@@ -54,7 +54,7 @@ export default class ComponentApi extends Component<Props, State> {
                   />{' '}
                   All
                 </label>
-                <label className="ComponentApiRadioToggle">
+                <label className={styles.ComponentApiRadioToggle}>
                   <input
                     type="radio"
                     value={false}
@@ -67,30 +67,32 @@ export default class ComponentApi extends Component<Props, State> {
             )}
           </h2>
           {propsIntro}
-          <dl className="ComponentApiPropList">
+          <dl className={styles.ComponentApiPropList}>
             {props.filter(prop => showAll || prop.isRequired).map(prop => (
               <Fragment key={prop.name}>
-                <dt className="ComponentApiPropType">
+                <dt className={styles.ComponentApiPropType}>
                   {prop.name}: {prop.type}{' '}
                   {prop.defaultValue !== undefined
                     ? ` = ${prop.defaultValue}`
                     : null}
                 </dt>
-                <dd className="ComponentApiPropDefinition">
+                <dd className={styles.ComponentApiPropDefinition}>
                   {prop.description}
                 </dd>
               </Fragment>
             ))}
           </dl>
-          <h2 id="methods" className="ComponentApiSubHeader">
+          <h2 id="methods" className={styles.ComponentApiSubHeader}>
             Methods
           </h2>
           {methodsIntro}
           <dl>
             {methods.map(method => (
               <Fragment key={method.signature}>
-                <dt className="ComponentApiPropType">{method.signature}</dt>
-                <dd className="ComponentApiPropDefinition">
+                <dt className={styles.ComponentApiPropType}>
+                  {method.signature}
+                </dt>
+                <dd className={styles.ComponentApiPropDefinition}>
                   {method.description}
                 </dd>
               </Fragment>

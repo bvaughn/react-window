@@ -1,7 +1,8 @@
 import React from 'react';
-import './Nav.css';
 import cs from 'classnames';
 import { MobileNavButton } from './MobileNavButton';
+
+import styles from './Nav.module.css';
 
 export class Nav extends React.Component {
   state = {
@@ -13,18 +14,18 @@ export class Nav extends React.Component {
     const { isExpanded } = this.state;
 
     return (
-      <nav className="SideNav">
-        <div className="SidebarNavHeaderContainer">
+      <nav className={styles.SideNav}>
+        <div className={styles.SidebarNavHeaderContainer}>
           <MobileNavButton
             isActive={this.state.isExpanded}
             onClick={this.toggleIsExpanded}
           />
-          <h1 className="SideNavHeader">{title}</h1>
+          <h1 className={styles.SideNavHeader}>{title}</h1>
         </div>
         <div
           id="expandable"
-          className={cs('SidebarNavContent', {
-            SidebarNavContentExpanded: isExpanded,
+          className={cs(styles.SidebarNavContent, {
+            [styles.SidebarNavContentExpanded]: isExpanded,
           })}
           aria-hidden={isExpanded}
           aria-live="polite"

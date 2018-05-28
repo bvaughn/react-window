@@ -5,16 +5,16 @@ import CodeSandboxLink from '../../components/CodeSandboxLink';
 
 import CODE from '../../code/FixedSizeGrid.js';
 
-import './shared.css';
+import styles from './shared.module.css';
 
 export default function() {
   return (
-    <div className="ExampleWrapper">
-      <h1 className="ExampleHeader">Basic Grid</h1>
-      <div className="Example">
-        <div className="ExampleDemo">
+    <div className={styles.ExampleWrapper}>
+      <h1 className={styles.ExampleHeader}>Basic Grid</h1>
+      <div className={styles.Example}>
+        <div className={styles.ExampleDemo}>
           <FixedSizeGrid
-            className="Grid"
+            className={styles.Grid}
             columnCount={1000}
             columnWidth={100}
             height={150}
@@ -27,11 +27,11 @@ export default function() {
                 className={
                   columnIndex % 2
                     ? rowIndex % 2 === 0
-                      ? 'GridItemOdd'
-                      : 'GridItemEven'
+                      ? styles.GridItemOdd
+                      : styles.GridItemEven
                     : rowIndex % 2
-                      ? 'GridItemOdd'
-                      : 'GridItemEven'
+                      ? styles.GridItemOdd
+                      : styles.GridItemEven
                 }
                 key={key}
                 style={style}
@@ -41,9 +41,9 @@ export default function() {
             )}
           </FixedSizeGrid>
 
-          <CodeSandboxLink className="TryItOutLink" id="1rp83rw8wl" />
+          <CodeSandboxLink className={styles.TryItOutLink} id="1rp83rw8wl" />
         </div>
-        <div className="ExampleCode">
+        <div className={styles.ExampleCode}>
           <CodeBlock value={CODE} />
         </div>
       </div>

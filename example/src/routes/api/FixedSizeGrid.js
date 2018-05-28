@@ -3,6 +3,8 @@ import { NavLink as Link } from 'react-router-dom';
 import CodeBlock from '../../components/CodeBlock';
 import ComponentApi from '../../components/ComponentApi';
 
+import styles from './shared.module.css';
+
 import CODE_CHILDREN from '../../code/FixedSizeGridChildren.js';
 import CODE_ON_ITEMS_RENDERED from '../../code/FixedSizeGridOnItemsRendered.js';
 import CODE_ON_SCROLL from '../../code/FixedSizeGridOnScroll.js';
@@ -22,7 +24,7 @@ const PROPS = [
         </a>), and a <code>style</code> parameter (used for positioning).
         <br />
         <br />
-        <div className="CodeBlockWrapper">
+        <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_CHILDREN} />
         </div>
       </Fragment>
@@ -78,7 +80,7 @@ const PROPS = [
         Called when the items rendered by the grid change.
         <br />
         <br />
-        <div className="CodeBlockWrapper">
+        <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_ON_ITEMS_RENDERED} />
         </div>
       </Fragment>
@@ -93,7 +95,7 @@ const PROPS = [
         scrolling or scroll-to method calls.
         <br />
         <br />
-        <div className="CodeBlockWrapper">
+        <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_ON_SCROLL} />
         </div>
       </Fragment>
