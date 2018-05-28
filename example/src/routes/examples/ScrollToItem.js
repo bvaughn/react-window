@@ -47,7 +47,9 @@ export default class ScrollToItem extends Component {
             >
               {({ key, index, style }) => (
                 <div
-                  className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
+                  className={
+                    index % 2 ? styles.ListItemOdd : styles.ListItemEven
+                  }
                   key={key}
                   style={style}
                 >

@@ -1,5 +1,3 @@
-'use strict';
-
 const path = require('path');
 const fs = require('fs');
 const url = require('url');
@@ -56,8 +54,6 @@ module.exports = {
 };
 
 let checkForMonorepo = true;
-
-
 
 module.exports.srcPaths = [module.exports.appSrc];
 

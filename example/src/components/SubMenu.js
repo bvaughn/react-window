@@ -11,7 +11,9 @@ export const SubMenu = ({ isActiveDark, items, title }) => (
         <li className={styles.SideNavLinkListItem} key={path}>
           <Link
             activeClassName={
-              isActiveDark ? styles.SideNavLinkActiveDark : styles.SideNavLinkActiveLight
+              isActiveDark
+                ? styles.SideNavLinkActiveDark
+                : styles.SideNavLinkActiveLight
             }
             className={styles.SideNavLink}
             to={path}

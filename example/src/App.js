@@ -16,7 +16,6 @@ import ListWithScrollingIndicatorExample from './routes/examples/ListWithScrolli
 import ScrollToItemExample from './routes/examples/ScrollToItem';
 
 import styles from './App.module.css';
-console.log('styles:', styles);
 
 export default function App() {
   return (
