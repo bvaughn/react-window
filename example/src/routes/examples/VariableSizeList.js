@@ -1,10 +1,10 @@
 import React from 'react';
-import { DynamicList } from 'react-virtualized-v10';
+import { VariableSizeList } from 'react-virtualized-v10';
 import CodeBlock from '../../components/CodeBlock';
 import CodeSandboxLink from '../../components/CodeSandboxLink';
 
-import CODE_HORIZONTAL from '../../code/DynamicListHorizontal.js';
-import CODE_VERTICAL from '../../code/DynamicListVertical.js';
+import CODE_HORIZONTAL from '../../code/VariableSizeListHorizontal.js';
+import CODE_VERTICAL from '../../code/VariableSizeListVertical.js';
 
 import styles from './shared.module.css';
 
@@ -18,10 +18,10 @@ const rowSizes = new Array(1000)
 export default function() {
   return (
     <div className={styles.ExampleWrapper}>
-      <h1 className={styles.ExampleHeader}>Dynamic List</h1>
+      <h1 className={styles.ExampleHeader}>Variable Size List</h1>
       <div className={styles.Example}>
         <div className={styles.ExampleDemo}>
-          <DynamicList
+          <VariableSizeList
             cellSize={index => rowSizes[index]}
             className={styles.List}
             count={1000}
@@ -37,7 +37,7 @@ export default function() {
                 Row {index}
               </div>
             )}
-          </DynamicList>
+          </VariableSizeList>
 
           <CodeSandboxLink className={styles.TryItOutLink} id="j3nw3nnnyy" />
         </div>
@@ -47,7 +47,7 @@ export default function() {
       </div>
       <div className={styles.Example}>
         <div className={styles.ExampleDemo}>
-          <DynamicList
+          <VariableSizeList
             cellSize={index => columnSizes[index]}
             className={styles.List}
             direction="horizontal"
@@ -64,7 +64,7 @@ export default function() {
                 Column {index}
               </div>
             )}
-          </DynamicList>
+          </VariableSizeList>
 
           <CodeSandboxLink className={styles.TryItOutLink} id="jnl8ljmnn5" />
         </div>

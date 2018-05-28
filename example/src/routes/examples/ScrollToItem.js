@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { DynamicGrid, DynamicList } from 'react-virtualized-v10';
+import { VariableSizeGrid, VariableSizeList } from 'react-virtualized-v10';
 import CodeBlock from '../../components/CodeBlock';
 import CodeSandboxLink from '../../components/CodeSandboxLink';
 
@@ -37,7 +37,7 @@ export default class ScrollToItem extends Component {
             >
               Scroll to row 300 (align: center)
             </button>
-            <DynamicList
+            <VariableSizeList
               cellSize={index => rowHeights[index]}
               className={styles.List}
               count={1000}
@@ -56,7 +56,7 @@ export default class ScrollToItem extends Component {
                   Row {index}
                 </div>
               )}
-            </DynamicList>
+            </VariableSizeList>
 
             <CodeSandboxLink className={styles.TryItOutLink} id="mzy8pq360x" />
           </div>
@@ -90,7 +90,7 @@ export default class ScrollToItem extends Component {
             >
               Scroll to row 200, column 100 (align: center)
             </button>
-            <DynamicGrid
+            <VariableSizeGrid
               className={styles.Grid}
               columnCount={1000}
               columnWidth={index => columnWidths[index]}
@@ -117,7 +117,7 @@ export default class ScrollToItem extends Component {
                   r{rowIndex}, c{columnIndex}
                 </div>
               )}
-            </DynamicGrid>
+            </VariableSizeGrid>
 
             <CodeSandboxLink className={styles.TryItOutLink} id="woy6mknj4w" />
           </div>

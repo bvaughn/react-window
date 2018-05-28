@@ -4,10 +4,10 @@ import { Nav } from './components/Nav';
 import { SubMenu } from './components/SubMenu';
 
 // Routes
-import DynamicGridApi from './routes/api/DynamicGrid';
-import DynamicGridExample from './routes/examples/DynamicGrid';
-import DynamicListApi from './routes/api/DynamicList';
-import DynamicListExample from './routes/examples/DynamicList';
+import VariableSizeGridApi from './routes/api/VariableSizeGrid';
+import VariableSizeGridExample from './routes/examples/VariableSizeGrid';
+import VariableSizeListApi from './routes/api/VariableSizeList';
+import VariableSizeListExample from './routes/examples/VariableSizeList';
 import FixedSizeGridApi from './routes/api/FixedSizeGrid';
 import FixedSizeListApi from './routes/api/FixedSizeList';
 import FixedSizeGridExample from './routes/examples/FixedSizeGrid';
@@ -52,23 +52,23 @@ export default function App() {
 const EXAMPLE_ROUTES = [
   {
     path: '/examples/list/fixed-size',
-    title: 'Basic List',
+    title: 'Fixed Size List',
     component: FixedSizeListExample,
   },
   {
-    path: '/examples/list/dynamic',
-    title: 'Dynamic List',
-    component: DynamicListExample,
+    path: '/examples/list/variable-size',
+    title: 'Variable Size List',
+    component: VariableSizeListExample,
   },
   {
     path: '/examples/grid/fixed-size',
-    title: 'Basic Grid',
+    title: 'Fixed Size Grid',
     component: FixedSizeGridExample,
   },
   {
-    path: '/examples/grid/dynamic',
-    title: 'Dynamic Grid',
-    component: DynamicGridExample,
+    path: '/examples/grid/variable-size',
+    title: 'Variable Size Grid',
+    component: VariableSizeGridExample,
   },
   {
     path: '/examples/list/scrolling-indicators',
@@ -89,9 +89,9 @@ const API_ROUTES = [
     component: FixedSizeListApi,
   },
   {
-    path: '/api/DynamicList',
-    title: 'DynamicList',
-    component: DynamicListApi,
+    path: '/api/VariableSizeList',
+    title: 'VariableSizeList',
+    component: VariableSizeListApi,
   },
   {
     path: '/api/FixedSizeGrid',
@@ -99,8 +99,8 @@ const API_ROUTES = [
     component: FixedSizeGridApi,
   },
   {
-    path: '/api/DynamicGrid',
-    title: 'DynamicGrid',
-    component: DynamicGridApi,
+    path: '/api/VariableSizeGrid',
+    title: 'VariableSizeGrid',
+    component: VariableSizeGridApi,
   },
 ];

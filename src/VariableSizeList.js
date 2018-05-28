@@ -140,7 +140,7 @@ const findNearestCellExponentialSearch = (
   );
 };
 
-const DynamicList = createListComponent({
+const VariableSizeList = createListComponent({
   getCellOffset: (
     props: Props,
     index: number,
@@ -261,4 +261,4 @@ const DynamicList = createListComponent({
   },
 });
 
-export default DynamicList;
+export default VariableSizeList;

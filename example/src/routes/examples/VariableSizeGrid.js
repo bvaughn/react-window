@@ -1,9 +1,9 @@
 import React from 'react';
-import { DynamicGrid } from 'react-virtualized-v10';
+import { VariableSizeGrid } from 'react-virtualized-v10';
 import CodeBlock from '../../components/CodeBlock';
 import CodeSandboxLink from '../../components/CodeSandboxLink';
 
-import CODE from '../../code/DynamicGrid.js';
+import CODE from '../../code/VariableSizeGrid.js';
 
 import styles from './shared.module.css';
 
@@ -17,10 +17,10 @@ const rowHeights = new Array(1000)
 export default function() {
   return (
     <div className={styles.ExampleWrapper}>
-      <h1 className={styles.ExampleHeader}>Dynamic Grid</h1>
+      <h1 className={styles.ExampleHeader}>Variable Size Grid</h1>
       <div className={styles.Example}>
         <div className={styles.ExampleDemo}>
-          <DynamicGrid
+          <VariableSizeGrid
             className={styles.Grid}
             columnCount={1000}
             columnWidth={index => columnWidths[index]}
@@ -46,7 +46,7 @@ export default function() {
                 r{rowIndex}, c{columnIndex}
               </div>
             )}
-          </DynamicGrid>
+          </VariableSizeGrid>
 
           <CodeSandboxLink className={styles.TryItOutLink} id="241m0vromp" />
         </div>

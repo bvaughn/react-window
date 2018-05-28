@@ -209,7 +209,7 @@ const getOffsetForIndexAndAlignment = (
   }
 };
 
-const DynamicGrid = createGridComponent({
+const VariableSizeGrid = createGridComponent({
   getColumnOffset: (
     props: Props,
     index: number,
@@ -418,4 +418,4 @@ const DynamicGrid = createGridComponent({
   },
 });
 
-export default DynamicGrid;
+export default VariableSizeGrid;

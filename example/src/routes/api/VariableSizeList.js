@@ -5,7 +5,7 @@ import ComponentApi from '../../components/ComponentApi';
 
 import styles from './shared.module.css';
 
-import CODE from '../../code/DynamicListCellSize.js';
+import CODE from '../../code/VariableSizeListCellSize.js';
 
 export default () => (
   <ComponentApi
@@ -18,7 +18,7 @@ export default () => (
         </Link>, but with the following additions:
       </p>
     }
-    name="DynamicList"
+    name="VariableSizeList"
     props={PROPS}
     propsIntro={
       <p>
@@ -73,7 +73,7 @@ const METHODS = [
   {
     description: (
       <Fragment>
-        <code>DynamicList</code> caches offsets and measurements for each index
+        <code>VariableSizeList</code> caches offsets and measurements for each index
         for performance purposes. This method clears that cached data for all
         cells after (and including) the specified index. It should be called
         whenever a cell's size changes. (Note that this is not a typical

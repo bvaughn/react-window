@@ -1,4 +1,4 @@
-import { DynamicList as List } from 'react-virtualized';
+import { VariableSizeList as List } from 'react-virtualized';
 
 // These row heights are arbitrary.
 // Yours should be based on the content of the row.

@@ -5,8 +5,8 @@ import ComponentApi from '../../components/ComponentApi';
 
 import styles from './shared.module.css';
 
-import CODE_COLUMN_WIDTH from '../../code/DynamicGridColumnWidth.js';
-import CODE_ROW_HEIGHT from '../../code/DynamicGridRowHeight.js';
+import CODE_COLUMN_WIDTH from '../../code/VariableSizeGridColumnWidth.js';
+import CODE_ROW_HEIGHT from '../../code/VariableSizeGridRowHeight.js';
 
 export default () => (
   <ComponentApi
@@ -19,7 +19,7 @@ export default () => (
         </Link>, but with the following additions:
       </p>
     }
-    name="DynamicGrid"
+    name="VariableSizeGrid"
     props={PROPS}
     propsIntro={
       <p>
@@ -101,7 +101,7 @@ const METHODS = [
   {
     description: (
       <Fragment>
-        <code>DynamicGrid</code> caches offsets and measurements for each column
+        <code>VariableSizeGrid</code> caches offsets and measurements for each column
         index for performance purposes. This method clears that cached data for
         all columns after (and including) the specified index. It should be
         called whenever a column's width changes. (Note that this is not a
@@ -113,7 +113,7 @@ const METHODS = [
   {
     description: (
       <Fragment>
-        <code>DynamicGrid</code> caches offsets and measurements for each row
+        <code>VariableSizeGrid</code> caches offsets and measurements for each row
         index for performance purposes. This method clears that cached data for
         all rows after (and including) the specified index. It should be called
         whenever a row's height changes. (Note that this is not a typical
