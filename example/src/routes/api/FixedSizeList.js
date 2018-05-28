@@ -68,6 +68,20 @@ const PROPS = [
     type: 'number',
   },
   {
+    defaultValue: 0,
+    description: (
+      <Fragment>
+        Scroll offset for initial render.
+        <br />
+        <br />
+        For vertical lists, this affects <code>scrollTop</code>. For horizontal
+        lists, this affects <code>scrollLeft</code>.
+      </Fragment>
+    ),
+    name: 'defaultScrollOffset',
+    type: 'number',
+  },
+  {
     defaultValue: '"vertical"',
     description: (
       <Fragment>

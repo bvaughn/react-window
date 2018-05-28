@@ -40,6 +40,8 @@ export type Props = {|
   className?: string,
   columnCount: number,
   columnWidth: CellSize,
+  defaultScrollLeft?: number,
+  defaultScrollTop?: number,
   height: number,
   onItemsRendered?: OnItemsRenderedCallback,
   onScroll?: OnScrollCallback,
@@ -134,8 +136,14 @@ export default function createGridComponent({
     state: State = {
       isScrolling: false,
       horizontalScrollDirection: 'forward',
-      scrollLeft: 0,
-      scrollTop: 0,
+      scrollLeft:
+        typeof this.props.defaultScrollLeft === 'number'
+          ? this.props.defaultScrollLeft
+          : 0,
+      scrollTop:
+        typeof this.props.defaultScrollTop === 'number'
+          ? this.props.defaultScrollTop
+          : 0,
       verticalScrollDirection: 'forward',
     };
 
@@ -205,6 +213,23 @@ export default function createGridComponent({
     }
 
     componentDidMount() {
+      const { defaultScrollLeft, defaultScrollTop } = this.props;
+
+      if (
+        typeof defaultScrollLeft === 'number' &&
+        this._scrollingContainer != null
+      ) {
+        ((this
+          ._scrollingContainer: any): HTMLDivElement).scrollLeft = defaultScrollLeft;
+      }
+      if (
+        typeof defaultScrollTop === 'number' &&
+        this._scrollingContainer != null
+      ) {
+        ((this
+          ._scrollingContainer: any): HTMLDivElement).scrollTop = defaultScrollTop;
+      }
+
       this.callPropsCallbacks();
     }
 

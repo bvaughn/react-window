@@ -64,6 +64,22 @@ const PROPS = [
     type: 'number',
   },
   {
+    defaultValue: 0,
+    description: (
+      <Fragment>Vertical scroll offset for initial render.</Fragment>
+    ),
+    name: 'defaultScrollLeft',
+    type: 'number',
+  },
+  {
+    defaultValue: 0,
+    description: (
+      <Fragment>Horizontal scroll offset for initial render.</Fragment>
+    ),
+    name: 'defaultScrollTop',
+    type: 'number',
+  },
+  {
     description: (
       <Fragment>
         Height of the grid. This affects the number of rows that will be

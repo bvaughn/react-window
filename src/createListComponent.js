@@ -181,6 +181,20 @@ export default function createListComponent({
     }
 
     componentDidMount() {
+      const { defaultScrollOffset, direction } = this.props;
+
+      if (typeof defaultScrollOffset === 'number') {
+        if (this._scrollingContainer != null) {
+          if (direction === 'horizontal') {
+            ((this
+              ._scrollingContainer: any): HTMLDivElement).scrollLeft = defaultScrollOffset;
+          } else {
+            ((this
+              ._scrollingContainer: any): HTMLDivElement).scrollTop = defaultScrollOffset;
+          }
+        }
+      }
+
       this.callPropsCallbacks();
     }
 
