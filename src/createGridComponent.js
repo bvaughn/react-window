@@ -166,6 +166,13 @@ export default function createGridComponent({
           ._scrollingContainer: any): HTMLDivElement).scrollLeft = scrollLeft;
         ((this._scrollingContainer: any): HTMLDivElement).scrollTop = scrollTop;
       }
+
+      if (process.env.NODE_ENV === 'test') {
+        // Setting scroll offset doesn't fire the onScroll callback for react-test-renderer.
+        // This test-only code makes it easier to test simualted scrolling behavior.
+        // It should be stripped out of any non-test code.
+        this.onScroll(({ currentTarget: { scrollLeft, scrollTop } }: any));
+      }
     }
 
     scrollToItem({

@@ -73,9 +73,9 @@ const METHODS = [
   {
     description: (
       <Fragment>
-        <code>VariableSizeList</code> caches offsets and measurements for each index
-        for performance purposes. This method clears that cached data for all
-        cells after (and including) the specified index. It should be called
+        <code>VariableSizeList</code> caches offsets and measurements for each
+        index for performance purposes. This method clears that cached data for
+        all cells after (and including) the specified index. It should be called
         whenever a cell's size changes. (Note that this is not a typical
         occurrance.)
       </Fragment>

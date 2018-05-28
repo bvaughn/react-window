@@ -4,6 +4,7 @@
     "mocha": true
   },
   "globals": {
-    "expect": true
+    "expect": true,
+    "spyOn": true
   }
 }

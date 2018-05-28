@@ -101,11 +101,11 @@ const METHODS = [
   {
     description: (
       <Fragment>
-        <code>VariableSizeGrid</code> caches offsets and measurements for each column
-        index for performance purposes. This method clears that cached data for
-        all columns after (and including) the specified index. It should be
-        called whenever a column's width changes. (Note that this is not a
-        typical occurrance.)
+        <code>VariableSizeGrid</code> caches offsets and measurements for each
+        column index for performance purposes. This method clears that cached
+        data for all columns after (and including) the specified index. It
+        should be called whenever a column's width changes. (Note that this is
+        not a typical occurrance.)
       </Fragment>
     ),
     signature: 'resetAfterColumnIndex(index: number): void',
@@ -113,10 +113,10 @@ const METHODS = [
   {
     description: (
       <Fragment>
-        <code>VariableSizeGrid</code> caches offsets and measurements for each row
-        index for performance purposes. This method clears that cached data for
-        all rows after (and including) the specified index. It should be called
-        whenever a row's height changes. (Note that this is not a typical
+        <code>VariableSizeGrid</code> caches offsets and measurements for each
+        row index for performance purposes. This method clears that cached data
+        for all rows after (and including) the specified index. It should be
+        called whenever a row's height changes. (Note that this is not a typical
         occurrance.)
       </Fragment>
     ),

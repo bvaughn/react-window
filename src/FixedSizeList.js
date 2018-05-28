@@ -15,16 +15,20 @@ const FixedSizeList = createListComponent({
     ((cellSize: any): number) * count,
 
   getOffsetForIndexAndAlignment: (
-    { cellSize, direction, height, width }: Props,
+    { cellSize, count, direction, height, width }: Props,
     index: number,
     align: ScrollToAlign,
     scrollOffset: number
   ): number => {
-    const maxOffset = index * ((cellSize: any): number);
-    const minOffset =
-      index * ((cellSize: any): number) -
-      (((direction === 'horizontal' ? width : height): any): number) +
-      ((cellSize: any): number);
+    const size = (((direction === 'horizontal' ? width : height): any): number);
+    const maxOffset = Math.min(
+      count * ((cellSize: any): number) - size,
+      index * ((cellSize: any): number)
+    );
+    const minOffset = Math.max(
+      0,
+      index * ((cellSize: any): number) - size + ((cellSize: any): number)
+    );
 
     switch (align) {
       case 'start':

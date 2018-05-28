@@ -34,6 +34,7 @@ export type Props = {|
   children: RenderFunction,
   className?: string,
   count: number,
+  defaultScrollOffset?: number,
   direction: Direction,
   height: number | string,
   onItemsRendered?: onItemsRenderedCallback,
@@ -114,7 +115,10 @@ export default function createListComponent({
     state: State = {
       isScrolling: false,
       scrollDirection: 'forward',
-      scrollOffset: 0,
+      scrollOffset:
+        typeof this.props.defaultScrollOffset === 'number'
+          ? this.props.defaultScrollOffset
+          : 0,
     };
 
     constructor(props: Props) {
@@ -144,10 +148,25 @@ export default function createListComponent({
             ._scrollingContainer: any): HTMLDivElement).scrollTop = scrollOffset;
         }
       }
+
+      if (process.env.NODE_ENV === 'test') {
+        // Setting scroll offset doesn't fire the onScroll callback for react-test-renderer.
+        // This test-only code makes it easier to test simualted scrolling behavior.
+        // It should be stripped out of any non-test code.
+        if (this.props.direction === 'horizontal') {
+          this.onScrollHorizontal(
+            ({ currentTarget: { scrollLeft: scrollOffset } }: any)
+          );
+        } else {
+          this.onScrollVertical(
+            ({ currentTarget: { scrollTop: scrollOffset } }: any)
+          );
+        }
+      }
     }
 
     scrollToItem(index: number, align: ScrollToAlign = 'auto'): void {
-      if (this._scrollingContainer != null) {
+      if (this._scrollingContainer != null || process.env.NODE_ENV === 'test') {
         const { scrollOffset } = this.state;
         this.scrollTo(
           getOffsetForIndexAndAlignment(
