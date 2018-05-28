@@ -105,11 +105,11 @@ export default class ScrollToItem extends Component {
                   className={
                     columnIndex % 2
                       ? rowIndex % 2 === 0
-                        ? 'GridItemOdd'
-                        : 'GridItemEven'
+                        ? styles.GridItemOdd
+                        : styles.GridItemEven
                       : rowIndex % 2
-                        ? 'GridItemOdd'
-                        : 'GridItemEven'
+                        ? styles.GridItemOdd
+                        : styles.GridItemEven
                   }
                   key={key}
                   style={style}
