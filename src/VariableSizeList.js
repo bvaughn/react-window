@@ -140,6 +140,23 @@ const findNearestCellExponentialSearch = (
   );
 };
 
+const getEstimatedTotalSize = (
+  { count }: Props,
+  { cellMetadataMap, estimatedCellSize, lastMeasuredIndex }: InstanceProps
+) => {
+  let totalSizeOfMeasuredCells = 0;
+
+  if (lastMeasuredIndex >= 0) {
+    const cellMetadata = cellMetadataMap[lastMeasuredIndex];
+    totalSizeOfMeasuredCells = cellMetadata.offset + cellMetadata.size;
+  }
+
+  const numUnmeasuredCells = count - lastMeasuredIndex - 1;
+  const totalSizeOfUnmeasuredCells = numUnmeasuredCells * estimatedCellSize;
+
+  return totalSizeOfMeasuredCells + totalSizeOfUnmeasuredCells;
+};
+
 const VariableSizeList = createListComponent({
   getCellOffset: (
     props: Props,
@@ -153,22 +170,7 @@ const VariableSizeList = createListComponent({
     instanceProps: InstanceProps
   ): number => instanceProps.cellMetadataMap[index].size,
 
-  getEstimatedTotalSize: (
-    { count }: Props,
-    { cellMetadataMap, estimatedCellSize, lastMeasuredIndex }: InstanceProps
-  ) => {
-    let totalSizeOfMeasuredCells = 0;
-
-    if (lastMeasuredIndex >= 0) {
-      const cellMetadata = cellMetadataMap[lastMeasuredIndex];
-      totalSizeOfMeasuredCells = cellMetadata.offset + cellMetadata.size;
-    }
-
-    const numUnmeasuredCells = count - lastMeasuredIndex - 1;
-    const totalSizeOfUnmeasuredCells = numUnmeasuredCells * estimatedCellSize;
-
-    return totalSizeOfMeasuredCells + totalSizeOfUnmeasuredCells;
-  },
+  getEstimatedTotalSize,
 
   getOffsetForIndexAndAlignment: (
     props: Props,
@@ -181,8 +183,16 @@ const VariableSizeList = createListComponent({
 
     const size = (((direction === 'horizontal' ? width : height): any): number);
     const cellMetadata = getCellMetadata(props, index, instanceProps);
-    const maxOffset = cellMetadata.offset;
-    const minOffset = cellMetadata.offset - size + cellMetadata.size;
+
+    // Get estimated total size after CellMetadata is computed,
+    // To ensure it reflects actual measurements instead of just estimates.
+    const estimatedTotalSize = getEstimatedTotalSize(props, instanceProps);
+
+    const maxOffset = Math.min(estimatedTotalSize - size, cellMetadata.offset);
+    const minOffset = Math.max(
+      0,
+      cellMetadata.offset - size + cellMetadata.size
+    );
 
     switch (align) {
       case 'start':

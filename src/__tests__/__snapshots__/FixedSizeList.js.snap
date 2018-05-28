@@ -23,6 +23,27 @@ Array [
 ]
 `;
 
+exports[`FixedSizeList changing cellSize updates the rendered items 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 6,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 4,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 4,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 2,
+    },
+  ],
+]
+`;
+
 exports[`FixedSizeList overscanCount should accommodate a custom overscan 1`] = `
 Array [
   Array [

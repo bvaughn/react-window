@@ -44,6 +44,21 @@ describe('FixedSizeList', () => {
     ).toMatchSnapshot();
   });
 
+  it('changing cellSize updates the rendered items', () => {
+    const onItemsRendered = jest.fn();
+    const rendered = ReactTestRenderer.create(
+      <FixedSizeList {...defaultProps} onItemsRendered={onItemsRendered} />
+    );
+    rendered.update(
+      <FixedSizeList
+        {...defaultProps}
+        cellSize={50}
+        onItemsRendered={onItemsRendered}
+      />
+    );
+    expect(onItemsRendered.mock.calls).toMatchSnapshot();
+  });
+
   it('should support momentum scrolling on iOS devices', () => {
     const rendered = ReactTestRenderer.create(
       <FixedSizeList {...defaultProps} style={{ backgroundColor: 'red' }} />

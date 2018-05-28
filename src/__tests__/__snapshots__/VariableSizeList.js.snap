@@ -1,0 +1,225 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VariableSizeList changing cellSize does not impact the rendered items 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 5,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 3,
+    },
+  ],
+]
+`;
+
+exports[`VariableSizeList estimatedCellSize should estimate an initial scrollable height based on this estimation 1`] = `
+Object {
+  "height": 1000,
+  "overflow": "hidden",
+  "pointerEvents": "",
+  "width": 50,
+}
+`;
+
+exports[`VariableSizeList estimatedCellSize should udpate the scrollable height as more cells are measured 1`] = `
+Object {
+  "height": 690,
+  "overflow": "hidden",
+  "pointerEvents": "none",
+  "width": 50,
+}
+`;
+
+exports[`VariableSizeList scrollToItem method should scroll to the correct item for align = "auto" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 5,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 7,
+      "overscanStopIndex": 12,
+      "visibleStartIndex": 8,
+      "visibleStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 6,
+      "overscanStopIndex": 11,
+      "visibleStartIndex": 8,
+      "visibleStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 6,
+      "visibleStartIndex": 2,
+      "visibleStopIndex": 5,
+    },
+  ],
+]
+`;
+
+exports[`VariableSizeList scrollToItem method should scroll to the correct item for align = "center" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 5,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 8,
+      "overscanStopIndex": 13,
+      "visibleStartIndex": 9,
+      "visibleStopIndex": 11,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 6,
+      "overscanStopIndex": 11,
+      "visibleStartIndex": 8,
+      "visibleStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 5,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 4,
+    },
+  ],
+]
+`;
+
+exports[`VariableSizeList scrollToItem method should scroll to the correct item for align = "center" 2`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 5,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 8,
+      "overscanStopIndex": 13,
+      "visibleStartIndex": 9,
+      "visibleStopIndex": 11,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 6,
+      "overscanStopIndex": 11,
+      "visibleStartIndex": 8,
+      "visibleStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 5,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 4,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 16,
+      "overscanStopIndex": 19,
+      "visibleStartIndex": 17,
+      "visibleStopIndex": 19,
+    },
+  ],
+]
+`;
+
+exports[`VariableSizeList scrollToItem method should scroll to the correct item for align = "end" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 5,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 7,
+      "overscanStopIndex": 12,
+      "visibleStartIndex": 8,
+      "visibleStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 4,
+      "overscanStopIndex": 10,
+      "visibleStartIndex": 6,
+      "visibleStopIndex": 9,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 4,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 3,
+    },
+  ],
+]
+`;
+
+exports[`VariableSizeList scrollToItem method should scroll to the correct item for align = "start" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 5,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 9,
+      "overscanStopIndex": 14,
+      "visibleStartIndex": 10,
+      "visibleStopIndex": 12,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 7,
+      "overscanStopIndex": 12,
+      "visibleStartIndex": 9,
+      "visibleStopIndex": 11,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 16,
+      "overscanStopIndex": 19,
+      "visibleStartIndex": 17,
+      "visibleStopIndex": 19,
+    },
+  ],
+]
+`;
