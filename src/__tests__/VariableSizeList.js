@@ -151,7 +151,8 @@ describe('VariableSizeList', () => {
           <VariableSizeList {...defaultProps} cellSize={123} />
         )
       ).toThrow(
-        'An invalid "cellSize" prop has been specified. Value should be a function. "number" was specified.'
+        'An invalid "cellSize" prop has been specified. ' +
+          'Value should be a function. "number" was specified.'
       );
     });
   });

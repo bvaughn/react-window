@@ -298,7 +298,9 @@ describe('FixedSizeList', () => {
           <FixedSizeList {...defaultProps} cellSize="abc" />
         )
       ).toThrow(
-        'An invalid "cellSize" prop has been specified. Value should be a number. "string" was specified.'
+        'An invalid "cellSize" prop has been specified. ' +
+          'Value should be a number. ' +
+          '"string" was specified.'
       );
     });
 
@@ -308,7 +310,9 @@ describe('FixedSizeList', () => {
           <FixedSizeList {...defaultProps} children={undefined} />
         )
       ).toThrow(
-        'An invalid "children" prop has been specified. Value should be a function that creates a React element. "undefined" was specified.'
+        'An invalid "children" prop has been specified. ' +
+          'Value should be a function that creates a React element. ' +
+          '"undefined" was specified.'
       );
     });
 
@@ -318,7 +322,9 @@ describe('FixedSizeList', () => {
           <FixedSizeList {...defaultProps} direction={null} />
         )
       ).toThrow(
-        'An invalid "direction" prop has been specified. Value should be either "horizontal" or "vertical". "null" was specified.'
+        'An invalid "direction" prop has been specified. ' +
+          'Value should be either "horizontal" or "vertical". ' +
+          '"null" was specified.'
       );
     });
 
@@ -328,7 +334,9 @@ describe('FixedSizeList', () => {
           <FixedSizeList {...defaultProps} direction="vertical" height="100%" />
         )
       ).toThrow(
-        'An invalid "height" prop has been specified. Vertical lists must specify a number for height. "string" was specified.'
+        'An invalid "height" prop has been specified. ' +
+          'Vertical lists must specify a number for height. ' +
+          '"string" was specified.'
       );
     });
 
@@ -342,7 +350,9 @@ describe('FixedSizeList', () => {
           />
         )
       ).toThrow(
-        'An invalid "width" prop has been specified. Horizontal lists must specify a number for width. "string" was specified.'
+        'An invalid "width" prop has been specified. ' +
+          'Horizontal lists must specify a number for width. ' +
+          '"string" was specified.'
       );
     });
   });
