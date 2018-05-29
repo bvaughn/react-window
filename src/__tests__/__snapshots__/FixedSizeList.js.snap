@@ -125,35 +125,6 @@ Array [
 ]
 `;
 
-exports[`FixedSizeList scrollTo method should scroll to the offset specified 1`] = `
-Array [
-  Array [
-    Object {
-      "overscanStartIndex": 0,
-      "overscanStopIndex": 6,
-      "visibleStartIndex": 0,
-      "visibleStopIndex": 4,
-    },
-  ],
-  Array [
-    Object {
-      "overscanStartIndex": 3,
-      "overscanStopIndex": 10,
-      "visibleStartIndex": 4,
-      "visibleStopIndex": 8,
-    },
-  ],
-  Array [
-    Object {
-      "overscanStartIndex": 0,
-      "overscanStopIndex": 5,
-      "visibleStartIndex": 0,
-      "visibleStopIndex": 4,
-    },
-  ],
-]
-`;
-
 exports[`FixedSizeList scrollToItem method should scroll to the correct item for align = "auto" 1`] = `
 Array [
   Array [
@@ -337,287 +308,56 @@ Object {
 }
 `;
 
-exports[`FixedSizeList should render a list of columns 1`] = `
-<div
-  className={undefined}
-  onScroll={[Function]}
-  style={
+exports[`FixedSizeList should render a list of columns 1`] = `5`;
+
+exports[`FixedSizeList should render a list of columns 2`] = `
+Array [
+  Array [
     Object {
-      "WebkitOverflowScrolling": "touch",
-      "height": 100,
-      "overflow": "auto",
-      "position": "relative",
-      "width": 50,
-      "willChange": "transform",
-    }
-  }
->
-  <div
-    style={
-      Object {
-        "height": 100,
-        "overflow": "hidden",
-        "pointerEvents": "",
-        "width": 2500,
-      }
-    }
-  >
-    <div
-      style={
-        Object {
-          "height": "100%",
-          "left": 0,
-          "position": "absolute",
-          "top": 0,
-          "width": 25,
-        }
-      }
-    >
-      {
-        "index": 0
-      }
-    </div>
-    <div
-      style={
-        Object {
-          "height": "100%",
-          "left": 25,
-          "position": "absolute",
-          "top": 0,
-          "width": 25,
-        }
-      }
-    >
-      {
-        "index": 1
-      }
-    </div>
-    <div
-      style={
-        Object {
-          "height": "100%",
-          "left": 50,
-          "position": "absolute",
-          "top": 0,
-          "width": 25,
-        }
-      }
-    >
-      {
-        "index": 2
-      }
-    </div>
-    <div
-      style={
-        Object {
-          "height": "100%",
-          "left": 75,
-          "position": "absolute",
-          "top": 0,
-          "width": 25,
-        }
-      }
-    >
-      {
-        "index": 3
-      }
-    </div>
-    <div
-      style={
-        Object {
-          "height": "100%",
-          "left": 100,
-          "position": "absolute",
-          "top": 0,
-          "width": 25,
-        }
-      }
-    >
-      {
-        "index": 4
-      }
-    </div>
-  </div>
-</div>
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 4,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 2,
+    },
+  ],
+]
 `;
 
-exports[`FixedSizeList should render a list of rows 1`] = `
-<div
-  className={undefined}
-  onScroll={[Function]}
-  style={
+exports[`FixedSizeList should render a list of rows 1`] = `7`;
+
+exports[`FixedSizeList should render a list of rows 2`] = `
+Array [
+  Array [
     Object {
-      "WebkitOverflowScrolling": "touch",
-      "height": 100,
-      "overflow": "auto",
-      "position": "relative",
-      "width": 50,
-      "willChange": "transform",
-    }
-  }
->
-  <div
-    style={
-      Object {
-        "height": 2500,
-        "overflow": "hidden",
-        "pointerEvents": "",
-        "width": 50,
-      }
-    }
-  >
-    <div
-      style={
-        Object {
-          "height": 25,
-          "left": 0,
-          "position": "absolute",
-          "top": 0,
-          "width": "100%",
-        }
-      }
-    >
-      {
-        "index": 0
-      }
-    </div>
-    <div
-      style={
-        Object {
-          "height": 25,
-          "left": 0,
-          "position": "absolute",
-          "top": 25,
-          "width": "100%",
-        }
-      }
-    >
-      {
-        "index": 1
-      }
-    </div>
-    <div
-      style={
-        Object {
-          "height": 25,
-          "left": 0,
-          "position": "absolute",
-          "top": 50,
-          "width": "100%",
-        }
-      }
-    >
-      {
-        "index": 2
-      }
-    </div>
-    <div
-      style={
-        Object {
-          "height": 25,
-          "left": 0,
-          "position": "absolute",
-          "top": 75,
-          "width": "100%",
-        }
-      }
-    >
-      {
-        "index": 3
-      }
-    </div>
-    <div
-      style={
-        Object {
-          "height": 25,
-          "left": 0,
-          "position": "absolute",
-          "top": 100,
-          "width": "100%",
-        }
-      }
-    >
-      {
-        "index": 4
-      }
-    </div>
-    <div
-      style={
-        Object {
-          "height": 25,
-          "left": 0,
-          "position": "absolute",
-          "top": 125,
-          "width": "100%",
-        }
-      }
-    >
-      {
-        "index": 5
-      }
-    </div>
-    <div
-      style={
-        Object {
-          "height": 25,
-          "left": 0,
-          "position": "absolute",
-          "top": 150,
-          "width": "100%",
-        }
-      }
-    >
-      {
-        "index": 6
-      }
-    </div>
-  </div>
-</div>
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 6,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 4,
+    },
+  ],
+]
 `;
 
-exports[`FixedSizeList should render an empty list 1`] = `
-<div
-  className={undefined}
-  onScroll={[Function]}
-  style={
+exports[`FixedSizeList should render an empty list 1`] = `0`;
+
+exports[`FixedSizeList should render an empty list 2`] = `
+Array [
+  Array [
     Object {
-      "WebkitOverflowScrolling": "touch",
-      "height": 100,
-      "overflow": "auto",
-      "position": "relative",
-      "width": 50,
-      "willChange": "transform",
-    }
-  }
->
-  <div
-    style={
-      Object {
-        "height": 0,
-        "overflow": "hidden",
-        "pointerEvents": "",
-        "width": 50,
-      }
-    }
-  />
-</div>
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 0,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 0,
+    },
+  ],
+]
 `;
 
 exports[`FixedSizeList should support momentum scrolling on iOS devices 1`] = `"touch"`;
 
 exports[`FixedSizeList style overrides should support className prop 1`] = `"custom"`;
 
-exports[`FixedSizeList style overrides should support style prop 1`] = `
-Object {
-  "WebkitOverflowScrolling": "touch",
-  "backgroundColor": "red",
-  "height": 100,
-  "overflow": "auto",
-  "position": "relative",
-  "width": 50,
-  "willChange": "transform",
-}
-`;
+exports[`FixedSizeList style overrides should support style prop 1`] = `"red"`;
 
 exports[`FixedSizeList useIsScrolling should not pass an isScrolling param to children unless requested 1`] = `
 Array [
@@ -653,24 +393,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeList useIsScrolling should update the isScrolling when scrolling starts and stops 1`] = `
-Array [
-  Object {
-    "index": 0,
-    "isScrolling": false,
-    "key": "0",
-    "style": Object {
-      "height": 25,
-      "left": 0,
-      "position": "absolute",
-      "top": 0,
-      "width": "100%",
-    },
-  },
-]
-`;
-
-exports[`FixedSizeList useIsScrolling should update the isScrolling when scrolling starts and stops 2`] = `
+exports[`FixedSizeList useIsScrolling should pass an isScrolling param to children if requested 2`] = `
 Array [
   Object {
     "index": 3,
@@ -687,7 +410,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeList useIsScrolling should update the isScrolling when scrolling starts and stops 3`] = `
+exports[`FixedSizeList useIsScrolling should pass an isScrolling param to children if requested 3`] = `
 Array [
   Object {
     "index": 3,

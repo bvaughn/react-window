@@ -53,7 +53,10 @@ const FixedSizeList = createListComponent({
     { cellSize, count }: Props,
     offset: number
   ): number =>
-    Math.min(count - 1, Math.floor(offset / ((cellSize: any): number))),
+    Math.max(
+      0,
+      Math.min(count - 1, Math.floor(offset / ((cellSize: any): number)))
+    ),
 
   getStopIndexForStartIndex: (
     { cellSize, count, direction, height, width }: Props,
@@ -62,10 +65,15 @@ const FixedSizeList = createListComponent({
   ): number => {
     const offset = startIndex * ((cellSize: any): number);
     const size = (((direction === 'horizontal' ? width : height): any): number);
-    return Math.min(
-      count - 1,
-      startIndex +
-        Math.floor((size + (scrollOffset - offset)) / ((cellSize: any): number))
+    return Math.max(
+      0,
+      Math.min(
+        count - 1,
+        startIndex +
+          Math.floor(
+            (size + (scrollOffset - offset)) / ((cellSize: any): number)
+          )
+      )
     );
   },
 

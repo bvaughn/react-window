@@ -49,6 +49,8 @@ export default function App() {
   );
 }
 
+// TODO Add a route showing how to use PureComponent for expensive cells.
+
 const EXAMPLE_ROUTES = [
   {
     path: '/examples/list/fixed-size',

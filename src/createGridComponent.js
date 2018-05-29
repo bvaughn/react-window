@@ -1,18 +1,19 @@
 // @flow
 
 import memoizeOne from 'memoize-one';
-import React from 'react';
+import React, { PureComponent } from 'react';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type CellSize = number | ((index: number) => number);
 
-export type RenderFunction = ({
+type RenderFunctionParams = {
   columnIndex: number,
   key: string,
   rowIndex: number,
   style: Object,
-}) => React$Node;
+};
+export type RenderFunction = (params: RenderFunctionParams) => React$Node;
 
 type ScrollDirection = 'forward' | 'backward';
 
@@ -122,7 +123,7 @@ export default function createGridComponent({
   initInstanceProps: InitInstanceProps,
   validateProps: ValidateProps,
 |}) {
-  return class List extends React.Component<Props, State> {
+  return class Grid extends PureComponent<Props, State> {
     _cellStyleCache: { [key: string]: Object } = {};
     _instanceProps: any;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
@@ -179,7 +180,7 @@ export default function createGridComponent({
         // Setting scroll offset doesn't fire the onScroll callback for react-test-renderer.
         // This test-only code makes it easier to test simualted scrolling behavior.
         // It should be stripped out of any non-test code.
-        this.onScroll(({ currentTarget: { scrollLeft, scrollTop } }: any));
+        this._onScroll(({ currentTarget: { scrollLeft, scrollTop } }: any));
       }
     }
 
@@ -230,11 +231,11 @@ export default function createGridComponent({
           ._scrollingContainer: any): HTMLDivElement).scrollTop = defaultScrollTop;
       }
 
-      this.callPropsCallbacks();
+      this._callPropsCallbacks();
     }
 
     componentDidUpdate() {
-      this.callPropsCallbacks();
+      this._callPropsCallbacks();
     }
 
     componentWillUnmount() {
@@ -244,7 +245,15 @@ export default function createGridComponent({
     }
 
     render() {
-      const { className, height, style, width } = this.props;
+      const {
+        className,
+        columnCount,
+        height,
+        rowCount,
+        style,
+        useIsScrolling,
+        width,
+      } = this.props;
       const { isScrolling } = this.state;
 
       const estimatedTotalHeight = getEstimatedTotalHeight(
@@ -256,10 +265,16 @@ export default function createGridComponent({
         this._instanceProps
       );
 
+      const [
+        columnStartIndex,
+        columnStopIndex,
+      ] = this._getHorizontalRangeToRender();
+      const [rowStartIndex, rowStopIndex] = this._getVerticalRangeToRender();
+
       return (
         <div
           className={className}
-          ref={this.scrollingContainerRef}
+          ref={this._scrollingContainerRef}
           style={{
             position: 'relative',
             height,
@@ -269,7 +284,7 @@ export default function createGridComponent({
             willChange: 'transform',
             ...style,
           }}
-          onScroll={this.onScroll}
+          onScroll={this._onScroll}
         >
           <div
             style={{
@@ -279,71 +294,24 @@ export default function createGridComponent({
               width: estimatedTotalWidth,
             }}
           >
-            {this.renderCells()}
+            {columnCount > 0 &&
+              rowCount > 0 && (
+                <GridItems
+                  columnStartIndex={columnStartIndex}
+                  columnStopIndex={columnStopIndex}
+                  getCellStyle={this._getCellStyle}
+                  isScrolling={useIsScrolling ? isScrolling : undefined}
+                  renderFunction={this._renderFunction}
+                  rowStartIndex={rowStartIndex}
+                  rowStopIndex={rowStopIndex}
+                />
+              )}
           </div>
         </div>
       );
     }
 
-    renderCells(): Array<React$Node> {
-      const { children, useIsScrolling } = this.props;
-      const { isScrolling } = this.state;
-
-      const [
-        columnStartIndex,
-        columnStopIndex,
-      ] = this.getHorizontalRangeToRender();
-      const [rowStartIndex, rowStopIndex] = this.getVerticalRangeToRender();
-
-      const cells = [];
-
-      for (let rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
-        for (
-          let columnIndex = columnStartIndex;
-          columnIndex <= columnStopIndex;
-          columnIndex++
-        ) {
-          const key = `${rowIndex}:${columnIndex}`;
-
-          // Cache cell styles while scrolling,
-          // So that pure component sCU will prevent re-renders.
-          let style;
-          if (this._cellStyleCache.hasOwnProperty(key)) {
-            style = this._cellStyleCache[key];
-          } else {
-            this._cellStyleCache[key] = style = {
-              position: 'absolute',
-              left: getColumnOffset(
-                this.props,
-                columnIndex,
-                this._instanceProps
-              ),
-              top: getRowOffset(this.props, rowIndex, this._instanceProps),
-              height: getRowHeight(this.props, rowIndex, this._instanceProps),
-              width: getColumnWidth(
-                this.props,
-                columnIndex,
-                this._instanceProps
-              ),
-            };
-          }
-
-          cells.push(
-            children({
-              columnIndex,
-              key,
-              isScrolling: useIsScrolling ? isScrolling : undefined,
-              rowIndex,
-              style,
-            })
-          );
-        }
-      }
-
-      return cells;
-    }
-
-    callOnItemsRendered: (
+    _callOnItemsRendered: (
       overscanColumnStartIndex: number,
       overscanColumnStopIndex: number,
       overscanRowStartIndex: number,
@@ -353,7 +321,7 @@ export default function createGridComponent({
       visibleRowStartIndex: number,
       visibleRowStopIndex: number
     ) => void;
-    callOnItemsRendered = memoizeOne(
+    _callOnItemsRendered = memoizeOne(
       (
         overscanColumnStartIndex: number,
         overscanColumnStopIndex: number,
@@ -376,13 +344,13 @@ export default function createGridComponent({
         })
     );
 
-    callOnScroll: (
+    _callOnScroll: (
       scrollLeft: number,
       scrollTop: number,
       horizontalScrollDirection: ScrollDirection,
       verticalScrollDirection: ScrollDirection
     ) => void;
-    callOnScroll = memoizeOne(
+    _callOnScroll = memoizeOne(
       (
         scrollLeft: number,
         scrollTop: number,
@@ -397,21 +365,21 @@ export default function createGridComponent({
         })
     );
 
-    callPropsCallbacks() {
+    _callPropsCallbacks() {
       if (typeof this.props.onItemsRendered === 'function') {
         const [
           overscanColumnStartIndex,
           overscanColumnStopIndex,
           visibleColumnStartIndex,
           visibleColumnStopIndex,
-        ] = this.getHorizontalRangeToRender();
+        ] = this._getHorizontalRangeToRender();
         const [
           overscanRowStartIndex,
           overscanRowStopIndex,
           visibleRowStartIndex,
           visibleRowStopIndex,
-        ] = this.getVerticalRangeToRender();
-        this.callOnItemsRendered(
+        ] = this._getVerticalRangeToRender();
+        this._callOnItemsRendered(
           overscanColumnStartIndex,
           overscanColumnStopIndex,
           overscanRowStartIndex,
@@ -430,7 +398,7 @@ export default function createGridComponent({
           scrollTop,
           verticalScrollDirection,
         } = this.state;
-        this.callOnScroll(
+        this._callOnScroll(
           scrollLeft,
           scrollTop,
           horizontalScrollDirection,
@@ -439,7 +407,29 @@ export default function createGridComponent({
       }
     }
 
-    getHorizontalRangeToRender(): [number, number, number, number] {
+    // Lazily create and cache cell styles while scrolling,
+    // So that pure component sCU will prevent re-renders.
+    _getCellStyle: (rowIndex: number, columnIndex: number) => Object;
+    _getCellStyle = (rowIndex: number, columnIndex: number): Object => {
+      const key = `${rowIndex}:${columnIndex}`;
+
+      let style;
+      if (this._cellStyleCache.hasOwnProperty(key)) {
+        style = this._cellStyleCache[key];
+      } else {
+        this._cellStyleCache[key] = style = {
+          position: 'absolute',
+          left: getColumnOffset(this.props, columnIndex, this._instanceProps),
+          top: getRowOffset(this.props, rowIndex, this._instanceProps),
+          height: getRowHeight(this.props, rowIndex, this._instanceProps),
+          width: getColumnWidth(this.props, columnIndex, this._instanceProps),
+        };
+      }
+
+      return style;
+    };
+
+    _getHorizontalRangeToRender(): [number, number, number, number] {
       const { columnCount, overscanCount } = this.props;
       const { horizontalScrollDirection, scrollLeft } = this.state;
 
@@ -468,14 +458,14 @@ export default function createGridComponent({
 
       return [
         Math.max(0, startIndex - overscanBackward),
-        Math.min(columnCount - 1, stopIndex + overscanForward),
+        Math.max(0, Math.min(columnCount - 1, stopIndex + overscanForward)),
         startIndex,
         stopIndex,
       ];
     }
 
-    getVerticalRangeToRender(): [number, number, number, number] {
-      const { columnCount, overscanCount } = this.props;
+    _getVerticalRangeToRender(): [number, number, number, number] {
+      const { rowCount, overscanCount } = this.props;
       const { verticalScrollDirection, scrollTop } = this.state;
 
       const startIndex = getRowStartIndexForOffset(
@@ -499,13 +489,13 @@ export default function createGridComponent({
 
       return [
         Math.max(0, startIndex - overscanBackward),
-        Math.min(columnCount - 1, stopIndex + overscanForward),
+        Math.max(0, Math.min(rowCount - 1, stopIndex + overscanForward)),
         startIndex,
         stopIndex,
       ];
     }
 
-    onScroll = (event: ScrollEvent): void => {
+    _onScroll = (event: ScrollEvent): void => {
       const { scrollLeft, scrollTop } = event.currentTarget;
       this.setState(
         prevState => ({
@@ -517,26 +507,45 @@ export default function createGridComponent({
           verticalScrollDirection:
             prevState.scrollTop < scrollTop ? 'forward' : 'backward',
         }),
-        this.resetIsScrollingDebounced
+        this._resetIsScrollingDebounced
       );
     };
 
-    scrollingContainerRef = (ref: any): void => {
+    _scrollingContainerRef = (ref: any): void => {
       this._scrollingContainer = ((ref: any): HTMLDivElement);
     };
 
-    resetIsScrollingDebounced = () => {
+    // Facade for the user-provided children function.
+    // This adds the overhead of an additional method call,
+    // But has hte benefit of not breaking pure sCU checks,
+    // Allowing List to avoid re-rendering cells until indices change.
+    _renderFunction: RenderFunction;
+    _renderFunction = (params: RenderFunctionParams) =>
+      this.props.children(params);
+
+    _resetIsScrollingDebounced = () => {
       if (this._resetIsScrollingTimeoutId !== null) {
         clearTimeout(this._resetIsScrollingTimeoutId);
       }
 
       this._resetIsScrollingTimeoutId = setTimeout(
-        this.resetIsScrolling,
+        this._resetIsScrolling,
         IS_SCROLLING_DEBOUNCE_INTERVAL
       );
     };
 
-    resetIsScrolling = () => {
+    _resetIsScrollingDebounced = () => {
+      if (this._resetIsScrollingTimeoutId !== null) {
+        clearTimeout(this._resetIsScrollingTimeoutId);
+      }
+
+      this._resetIsScrollingTimeoutId = setTimeout(
+        this._resetIsScrolling,
+        IS_SCROLLING_DEBOUNCE_INTERVAL
+      );
+    };
+
+    _resetIsScrolling = () => {
       this._resetIsScrollingTimeoutId = null;
 
       this.setState({ isScrolling: false }, () => {
@@ -546,6 +555,55 @@ export default function createGridComponent({
       });
     };
   };
+}
+
+type GridItemsProps = {
+  columnStartIndex: number,
+  columnStopIndex: number,
+  getCellStyle: (rowIndex: number, columnIndex: number) => Object,
+  isScrolling?: boolean,
+  renderFunction: RenderFunction,
+  rowStartIndex: number,
+  rowStopIndex: number,
+};
+
+class GridItems extends PureComponent<GridItemsProps, void> {
+  render() {
+    const {
+      columnStartIndex,
+      columnStopIndex,
+      getCellStyle,
+      isScrolling,
+      renderFunction,
+      rowStartIndex,
+      rowStopIndex,
+    } = this.props;
+
+    const cells = [];
+
+    for (let rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
+      for (
+        let columnIndex = columnStartIndex;
+        columnIndex <= columnStopIndex;
+        columnIndex++
+      ) {
+        const key = `${rowIndex}:${columnIndex}`;
+        const style = getCellStyle(rowIndex, columnIndex);
+
+        cells.push(
+          renderFunction({
+            columnIndex,
+            key,
+            isScrolling,
+            rowIndex,
+            style,
+          })
+        );
+      }
+    }
+
+    return cells;
+  }
 }
 
 const validateSharedProps = ({ children, height, width }: Props): void => {

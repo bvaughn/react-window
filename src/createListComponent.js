@@ -1,18 +1,19 @@
 // @flow
 
 import memoizeOne from 'memoize-one';
-import React from 'react';
+import React, { PureComponent } from 'react';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type CellSize = number | ((index: number) => number);
 type Direction = 'horizontal' | 'vertical';
 
-type RenderFunction = ({
+type RenderFunctionParams = {
   index: number,
   key: string,
   style: Object,
-}) => React$Node;
+};
+type RenderFunction = (params: RenderFunctionParams) => React$Node;
 
 type ScrollDirection = 'forward' | 'backward';
 
@@ -100,9 +101,9 @@ export default function createListComponent({
   initInstanceProps: InitInstanceProps,
   validateProps: ValidateProps,
 |}) {
-  return class List extends React.Component<Props, State> {
+  return class List extends PureComponent<Props, State> {
     _cellStyleCache: { [index: number]: Object } = {};
-    _instanceProps: any;
+    _instanceProps: any = initInstanceProps(this.props, this);
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _scrollingContainer: ?HTMLDivElement;
 
@@ -120,12 +121,6 @@ export default function createListComponent({
           ? this.props.defaultScrollOffset
           : 0,
     };
-
-    constructor(props: Props) {
-      super(props);
-
-      this._instanceProps = initInstanceProps(props, this);
-    }
 
     static getDerivedStateFromProps(
       nextProps: Props,
@@ -154,11 +149,11 @@ export default function createListComponent({
         // This test-only code makes it easier to test simualted scrolling behavior.
         // It should be stripped out of any non-test code.
         if (this.props.direction === 'horizontal') {
-          this.onScrollHorizontal(
+          this._onScrollHorizontal(
             ({ currentTarget: { scrollLeft: scrollOffset } }: any)
           );
         } else {
-          this.onScrollVertical(
+          this._onScrollVertical(
             ({ currentTarget: { scrollTop: scrollOffset } }: any)
           );
         }
@@ -166,18 +161,16 @@ export default function createListComponent({
     }
 
     scrollToItem(index: number, align: ScrollToAlign = 'auto'): void {
-      if (this._scrollingContainer != null || process.env.NODE_ENV === 'test') {
-        const { scrollOffset } = this.state;
-        this.scrollTo(
-          getOffsetForIndexAndAlignment(
-            this.props,
-            index,
-            align,
-            scrollOffset,
-            this._instanceProps
-          )
-        );
-      }
+      const { scrollOffset } = this.state;
+      this.scrollTo(
+        getOffsetForIndexAndAlignment(
+          this.props,
+          index,
+          align,
+          scrollOffset,
+          this._instanceProps
+        )
+      );
     }
 
     componentDidMount() {
@@ -195,11 +188,11 @@ export default function createListComponent({
         }
       }
 
-      this.callPropsCallbacks();
+      this._callPropsCallbacks();
     }
 
     componentDidUpdate() {
-      this.callPropsCallbacks();
+      this._callPropsCallbacks();
     }
 
     componentWillUnmount() {
@@ -209,23 +202,33 @@ export default function createListComponent({
     }
 
     render() {
-      const { className, direction, height, style, width } = this.props;
+      const {
+        className,
+        count,
+        direction,
+        height,
+        style,
+        useIsScrolling,
+        width,
+      } = this.props;
       const { isScrolling } = this.state;
 
       const onScroll =
         direction === 'vertical'
-          ? this.onScrollVertical
-          : this.onScrollHorizontal;
+          ? this._onScrollVertical
+          : this._onScrollHorizontal;
 
       const estimatedTotalSize = getEstimatedTotalSize(
         this.props,
         this._instanceProps
       );
 
+      const [startIndex, stopIndex] = this._getRangeToRender();
+
       return (
         <div
           className={className}
-          ref={this.scrollingContainerRef}
+          ref={this._scrollingContainerRef}
           style={{
             position: 'relative',
             height,
@@ -245,70 +248,27 @@ export default function createListComponent({
               width: direction === 'horizontal' ? estimatedTotalSize : width,
             }}
           >
-            {this.renderCells()}
+            {count > 0 && (
+              <ListItems
+                getCellStyle={this._getCellStyle}
+                isScrolling={useIsScrolling ? isScrolling : undefined}
+                renderFunction={this._renderFunction}
+                startIndex={startIndex}
+                stopIndex={stopIndex}
+              />
+            )}
           </div>
         </div>
       );
     }
 
-    renderCells(): Array<React$Node> {
-      const { children, direction, useIsScrolling } = this.props;
-      const { isScrolling } = this.state;
-
-      const [startIndex, stopIndex] = this.getRangeToRender();
-
-      const cells = [];
-
-      for (let index = startIndex; index <= stopIndex; index++) {
-        const key = '' + index;
-
-        // Cache cell styles while scrolling,
-        // So that pure component sCU will prevent re-renders.
-        let style;
-        if (this._cellStyleCache.hasOwnProperty(index)) {
-          style = this._cellStyleCache[index];
-        } else {
-          this._cellStyleCache[index] = style = {
-            position: 'absolute',
-            left:
-              direction === 'horizontal'
-                ? getCellOffset(this.props, index, this._instanceProps)
-                : 0,
-            top:
-              direction === 'vertical'
-                ? getCellOffset(this.props, index, this._instanceProps)
-                : 0,
-            height:
-              direction === 'vertical'
-                ? getCellSize(this.props, index, this._instanceProps)
-                : '100%',
-            width:
-              direction === 'horizontal'
-                ? getCellSize(this.props, index, this._instanceProps)
-                : '100%',
-          };
-        }
-
-        cells.push(
-          children({
-            key,
-            index,
-            isScrolling: useIsScrolling ? isScrolling : undefined,
-            style,
-          })
-        );
-      }
-
-      return cells;
-    }
-
-    callOnItemsRendered: (
+    _callOnItemsRendered: (
       overscanStartIndex: number,
       overscanStopIndex: number,
       visibleStartIndex: number,
       visibleStopIndex: number
     ) => void;
-    callOnItemsRendered = memoizeOne(
+    _callOnItemsRendered = memoizeOne(
       (
         overscanStartIndex: number,
         overscanStopIndex: number,
@@ -323,11 +283,11 @@ export default function createListComponent({
         })
     );
 
-    callOnScroll: (
+    _callOnScroll: (
       scrollDirection: ScrollDirection,
       scrollOffset: number
     ) => void;
-    callOnScroll = memoizeOne(
+    _callOnScroll = memoizeOne(
       (scrollDirection: ScrollDirection, scrollOffset: number) =>
         ((this.props.onScroll: any): onScrollCallback)({
           scrollDirection,
@@ -335,15 +295,15 @@ export default function createListComponent({
         })
     );
 
-    callPropsCallbacks() {
+    _callPropsCallbacks() {
       if (typeof this.props.onItemsRendered === 'function') {
         const [
           overscanStartIndex,
           overscanStopIndex,
           visibleStartIndex,
           visibleStopIndex,
-        ] = this.getRangeToRender();
-        this.callOnItemsRendered(
+        ] = this._getRangeToRender();
+        this._callOnItemsRendered(
           overscanStartIndex,
           overscanStopIndex,
           visibleStartIndex,
@@ -353,11 +313,45 @@ export default function createListComponent({
 
       if (typeof this.props.onScroll === 'function') {
         const { scrollDirection, scrollOffset } = this.state;
-        this.callOnScroll(scrollDirection, scrollOffset);
+        this._callOnScroll(scrollDirection, scrollOffset);
       }
     }
 
-    getRangeToRender(): [number, number, number, number] {
+    // Lazily create and cache cell styles while scrolling,
+    // So that pure component sCU will prevent re-renders.
+    _getCellStyle: (index: number) => Object;
+    _getCellStyle = (index: number): Object => {
+      const { direction } = this.props;
+
+      let style;
+      if (this._cellStyleCache.hasOwnProperty(index)) {
+        style = this._cellStyleCache[index];
+      } else {
+        this._cellStyleCache[index] = style = {
+          position: 'absolute',
+          left:
+            direction === 'horizontal'
+              ? getCellOffset(this.props, index, this._instanceProps)
+              : 0,
+          top:
+            direction === 'vertical'
+              ? getCellOffset(this.props, index, this._instanceProps)
+              : 0,
+          height:
+            direction === 'vertical'
+              ? getCellSize(this.props, index, this._instanceProps)
+              : '100%',
+          width:
+            direction === 'horizontal'
+              ? getCellSize(this.props, index, this._instanceProps)
+              : '100%',
+        };
+      }
+
+      return style;
+    };
+
+    _getRangeToRender(): [number, number, number, number] {
       const { count, overscanCount } = this.props;
       const { scrollDirection, scrollOffset } = this.state;
 
@@ -382,13 +376,13 @@ export default function createListComponent({
 
       return [
         Math.max(0, startIndex - overscanBackward),
-        Math.min(count - 1, stopIndex + overscanForward),
+        Math.max(0, Math.min(count - 1, stopIndex + overscanForward)),
         startIndex,
         stopIndex,
       ];
     }
 
-    onScrollHorizontal = (event: ScrollEvent): void => {
+    _onScrollHorizontal = (event: ScrollEvent): void => {
       const { scrollLeft } = event.currentTarget;
       this.setState(
         prevState => ({
@@ -397,11 +391,11 @@ export default function createListComponent({
             prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
           scrollOffset: scrollLeft,
         }),
-        this.resetIsScrollingDebounced
+        this._resetIsScrollingDebounced
       );
     };
 
-    onScrollVertical = (event: ScrollEvent): void => {
+    _onScrollVertical = (event: ScrollEvent): void => {
       const { scrollTop } = event.currentTarget;
       this.setState(
         prevState => ({
@@ -410,26 +404,34 @@ export default function createListComponent({
             prevState.scrollOffset < scrollTop ? 'forward' : 'backward',
           scrollOffset: scrollTop,
         }),
-        this.resetIsScrollingDebounced
+        this._resetIsScrollingDebounced
       );
     };
 
-    scrollingContainerRef = (ref: any): void => {
+    _scrollingContainerRef = (ref: any): void => {
       this._scrollingContainer = ((ref: any): HTMLDivElement);
     };
 
-    resetIsScrollingDebounced = () => {
+    // Facade for the user-provided children function.
+    // This adds the overhead of an additional method call,
+    // But has hte benefit of not breaking pure sCU checks,
+    // Allowing List to avoid re-rendering cells until indices change.
+    _renderFunction: RenderFunction;
+    _renderFunction = (params: RenderFunctionParams) =>
+      this.props.children(params);
+
+    _resetIsScrollingDebounced = () => {
       if (this._resetIsScrollingTimeoutId !== null) {
         clearTimeout(this._resetIsScrollingTimeoutId);
       }
 
       this._resetIsScrollingTimeoutId = setTimeout(
-        this.resetIsScrolling,
+        this._resetIsScrolling,
         IS_SCROLLING_DEBOUNCE_INTERVAL
       );
     };
 
-    resetIsScrolling = () => {
+    _resetIsScrolling = () => {
       this._resetIsScrollingTimeoutId = null;
 
       this.setState({ isScrolling: false }, () => {
@@ -440,6 +442,50 @@ export default function createListComponent({
     };
   };
 }
+
+type ListItemsProps = {
+  getCellStyle: (index: number) => Object,
+  isScrolling?: boolean,
+  renderFunction: RenderFunction,
+  startIndex: number,
+  stopIndex: number,
+};
+
+class ListItems extends PureComponent<ListItemsProps, void> {
+  render() {
+    const {
+      getCellStyle,
+      isScrolling,
+      renderFunction,
+      startIndex,
+      stopIndex,
+    } = this.props;
+
+    const cells = [];
+
+    for (let index = startIndex; index <= stopIndex; index++) {
+      const key = '' + index;
+      const style = getCellStyle(index);
+
+      cells.push(
+        renderFunction({
+          key,
+          index,
+          isScrolling,
+          style,
+        })
+      );
+    }
+
+    return cells;
+  }
+}
+
+// NOTE: I considered further wrapping individual items with a pure ListItem component.
+// This would avoid ever calling the render function for the same index more than once,
+// But it would also add the overhead of a lot of components/fibers.
+// I assume people already do this (render function returning a class component),
+// So my doing it would just unnecessarily double the wrappers.
 
 const validateSharedProps = ({
   children,
