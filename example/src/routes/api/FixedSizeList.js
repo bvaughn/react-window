@@ -78,7 +78,7 @@ const PROPS = [
         lists, this affects <code>scrollLeft</code>.
       </Fragment>
     ),
-    name: 'defaultScrollOffset',
+    name: 'initialScrollOffset',
     type: 'number',
   },
   {

@@ -35,7 +35,7 @@ export type Props = {|
   children: RenderFunction,
   className?: string,
   count: number,
-  defaultScrollOffset?: number,
+  initialScrollOffset?: number,
   direction: Direction,
   height: number | string,
   onItemsRendered?: onItemsRenderedCallback,
@@ -117,8 +117,8 @@ export default function createListComponent({
       isScrolling: false,
       scrollDirection: 'forward',
       scrollOffset:
-        typeof this.props.defaultScrollOffset === 'number'
-          ? this.props.defaultScrollOffset
+        typeof this.props.initialScrollOffset === 'number'
+          ? this.props.initialScrollOffset
           : 0,
     };
 
@@ -174,16 +174,16 @@ export default function createListComponent({
     }
 
     componentDidMount() {
-      const { defaultScrollOffset, direction } = this.props;
+      const { initialScrollOffset, direction } = this.props;
 
-      if (typeof defaultScrollOffset === 'number') {
+      if (typeof initialScrollOffset === 'number') {
         if (this._scrollingContainer != null) {
           if (direction === 'horizontal') {
             ((this
-              ._scrollingContainer: any): HTMLDivElement).scrollLeft = defaultScrollOffset;
+              ._scrollingContainer: any): HTMLDivElement).scrollLeft = initialScrollOffset;
           } else {
             ((this
-              ._scrollingContainer: any): HTMLDivElement).scrollTop = defaultScrollOffset;
+              ._scrollingContainer: any): HTMLDivElement).scrollTop = initialScrollOffset;
           }
         }
       }

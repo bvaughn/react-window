@@ -140,7 +140,7 @@ describe('FixedSizeList', () => {
       ReactTestRenderer.create(
         <FixedSizeList
           {...defaultProps}
-          defaultScrollOffset={50}
+          initialScrollOffset={50}
           overscanCount={0}
         />
       );
@@ -151,7 +151,7 @@ describe('FixedSizeList', () => {
       ReactTestRenderer.create(
         <FixedSizeList
           {...defaultProps}
-          defaultScrollOffset={50}
+          initialScrollOffset={50}
           overscanCount={2}
         />
       );
@@ -162,7 +162,7 @@ describe('FixedSizeList', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeList
           {...defaultProps}
-          defaultScrollOffset={50}
+          initialScrollOffset={50}
           overscanCount={2}
         />
       );
@@ -173,14 +173,14 @@ describe('FixedSizeList', () => {
 
     it('should not scan past the beginning of the list', () => {
       ReactTestRenderer.create(
-        <FixedSizeList {...defaultProps} defaultScrollOffset={0} />
+        <FixedSizeList {...defaultProps} initialScrollOffset={0} />
       );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
     it('should not scan past the end of the list', () => {
       ReactTestRenderer.create(
-        <FixedSizeList {...defaultProps} count={10} defaultScrollOffset={150} />
+        <FixedSizeList {...defaultProps} count={10} initialScrollOffset={150} />
       );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });

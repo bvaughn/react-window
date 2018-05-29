@@ -41,8 +41,8 @@ export type Props = {|
   className?: string,
   columnCount: number,
   columnWidth: CellSize,
-  defaultScrollLeft?: number,
-  defaultScrollTop?: number,
+  initialScrollLeft?: number,
+  initialScrollTop?: number,
   height: number,
   onItemsRendered?: OnItemsRenderedCallback,
   onScroll?: OnScrollCallback,
@@ -138,12 +138,12 @@ export default function createGridComponent({
       isScrolling: false,
       horizontalScrollDirection: 'forward',
       scrollLeft:
-        typeof this.props.defaultScrollLeft === 'number'
-          ? this.props.defaultScrollLeft
+        typeof this.props.initialScrollLeft === 'number'
+          ? this.props.initialScrollLeft
           : 0,
       scrollTop:
-        typeof this.props.defaultScrollTop === 'number'
-          ? this.props.defaultScrollTop
+        typeof this.props.initialScrollTop === 'number'
+          ? this.props.initialScrollTop
           : 0,
       verticalScrollDirection: 'forward',
     };
@@ -214,21 +214,21 @@ export default function createGridComponent({
     }
 
     componentDidMount() {
-      const { defaultScrollLeft, defaultScrollTop } = this.props;
+      const { initialScrollLeft, initialScrollTop } = this.props;
 
       if (
-        typeof defaultScrollLeft === 'number' &&
+        typeof initialScrollLeft === 'number' &&
         this._scrollingContainer != null
       ) {
         ((this
-          ._scrollingContainer: any): HTMLDivElement).scrollLeft = defaultScrollLeft;
+          ._scrollingContainer: any): HTMLDivElement).scrollLeft = initialScrollLeft;
       }
       if (
-        typeof defaultScrollTop === 'number' &&
+        typeof initialScrollTop === 'number' &&
         this._scrollingContainer != null
       ) {
         ((this
-          ._scrollingContainer: any): HTMLDivElement).scrollTop = defaultScrollTop;
+          ._scrollingContainer: any): HTMLDivElement).scrollTop = initialScrollTop;
       }
 
       this._callPropsCallbacks();

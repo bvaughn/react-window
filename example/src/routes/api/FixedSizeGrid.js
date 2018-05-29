@@ -68,7 +68,7 @@ const PROPS = [
     description: (
       <Fragment>Vertical scroll offset for initial render.</Fragment>
     ),
-    name: 'defaultScrollLeft',
+    name: 'initialScrollLeft',
     type: 'number',
   },
   {
@@ -76,7 +76,7 @@ const PROPS = [
     description: (
       <Fragment>Horizontal scroll offset for initial render.</Fragment>
     ),
-    name: 'defaultScrollTop',
+    name: 'initialScrollTop',
     type: 'number',
   },
   {

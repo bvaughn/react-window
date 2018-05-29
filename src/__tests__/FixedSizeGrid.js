@@ -151,8 +151,8 @@ describe('FixedSizeGrid', () => {
       ReactTestRenderer.create(
         <FixedSizeGrid
           {...defaultProps}
-          defaultScrollLeft={250}
-          defaultScrollTop={250}
+          initialScrollLeft={250}
+          initialScrollTop={250}
           overscanCount={0}
         />
       );
@@ -163,8 +163,8 @@ describe('FixedSizeGrid', () => {
       ReactTestRenderer.create(
         <FixedSizeGrid
           {...defaultProps}
-          defaultScrollLeft={250}
-          defaultScrollTop={250}
+          initialScrollLeft={250}
+          initialScrollTop={250}
           overscanCount={2}
         />
       );
@@ -175,8 +175,8 @@ describe('FixedSizeGrid', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeGrid
           {...defaultProps}
-          defaultScrollLeft={250}
-          defaultScrollTop={250}
+          initialScrollLeft={250}
+          initialScrollTop={250}
           overscanCount={2}
         />
       );
@@ -195,8 +195,8 @@ describe('FixedSizeGrid', () => {
         <FixedSizeGrid
           {...defaultProps}
           columnCount={10}
-          defaultScrollLeft={900}
-          defaultScrollTop={150}
+          initialScrollLeft={900}
+          initialScrollTop={150}
           rowCount={10}
         />
       );
