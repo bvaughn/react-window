@@ -1,4 +1,4 @@
-function callScroll({
+function onScroll({
   horizontalScrollDirection,
   scrollLeft,
   scrollTop,
