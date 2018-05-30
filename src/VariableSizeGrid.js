@@ -156,11 +156,11 @@ const findNearestCellExponentialSearch = (
   index: number,
   offset: number
 ): number => {
-  const count = cellType === 'column' ? props.columnCount : props.rowCount;
+  const itemCount = cellType === 'column' ? props.columnCount : props.rowCount;
   let interval = 1;
 
   while (
-    index < count &&
+    index < itemCount &&
     getCellMetadata(cellType, props, index, instanceProps).offset < offset
   ) {
     index += interval;
@@ -171,7 +171,7 @@ const findNearestCellExponentialSearch = (
     cellType,
     props,
     instanceProps,
-    Math.min(index, count - 1),
+    Math.min(index, itemCount - 1),
     Math.floor(index / 2),
     offset
   );

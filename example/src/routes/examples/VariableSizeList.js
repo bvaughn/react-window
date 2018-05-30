@@ -23,8 +23,8 @@ export default function() {
         <div className={styles.ExampleDemo}>
           <VariableSizeList
             className={styles.List}
-            count={1000}
             height={150}
+            itemCount={1000}
             itemSize={index => rowSizes[index]}
             width={300}
           >
@@ -49,8 +49,8 @@ export default function() {
           <VariableSizeList
             className={styles.List}
             direction="horizontal"
-            count={1000}
             height={75}
+            itemCount={1000}
             itemSize={index => columnSizes[index]}
             width={300}
           >

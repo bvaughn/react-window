@@ -1,8 +1,8 @@
 import { FixedSizeList as List } from 'react-virtualized';
 
 <List
-  count={1000}
   height={150}
+  itemCount={1000}
   itemSize={35}
   width={300}
 >

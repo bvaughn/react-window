@@ -17,8 +17,8 @@ describe('FixedSizeList', () => {
     ));
     defaultProps = {
       children: cellRenderer,
-      count: 100,
       height: 100,
+      itemCount: 100,
       itemSize: 25,
       onItemsRendered,
       width: 50,
@@ -26,7 +26,7 @@ describe('FixedSizeList', () => {
   });
 
   it('should render an empty list', () => {
-    ReactTestRenderer.create(<FixedSizeList {...defaultProps} count={0} />);
+    ReactTestRenderer.create(<FixedSizeList {...defaultProps} itemCount={0} />);
     expect(cellRenderer.mock.calls.length).toMatchSnapshot();
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
@@ -174,7 +174,11 @@ describe('FixedSizeList', () => {
 
     it('should not scan past the end of the list', () => {
       ReactTestRenderer.create(
-        <FixedSizeList {...defaultProps} count={10} initialScrollOffset={150} />
+        <FixedSizeList
+          {...defaultProps}
+          itemCount={10}
+          initialScrollOffset={150}
+        />
       );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });

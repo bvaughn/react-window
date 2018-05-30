@@ -11,18 +11,18 @@ const FixedSizeList = createListComponent({
   getItemSize: ({ itemSize, size }: Props, index: number): number =>
     ((itemSize: any): number),
 
-  getEstimatedTotalSize: ({ count, itemSize }: Props) =>
-    ((itemSize: any): number) * count,
+  getEstimatedTotalSize: ({ itemCount, itemSize }: Props) =>
+    ((itemSize: any): number) * itemCount,
 
   getOffsetForIndexAndAlignment: (
-    { count, direction, height, itemSize, width }: Props,
+    { direction, height, itemCount, itemSize, width }: Props,
     index: number,
     align: ScrollToAlign,
     scrollOffset: number
   ): number => {
     const size = (((direction === 'horizontal' ? width : height): any): number);
     const maxOffset = Math.min(
-      count * ((itemSize: any): number) - size,
+      itemCount * ((itemSize: any): number) - size,
       index * ((itemSize: any): number)
     );
     const minOffset = Math.max(
@@ -50,16 +50,16 @@ const FixedSizeList = createListComponent({
   },
 
   getStartIndexForOffset: (
-    { itemSize, count }: Props,
+    { itemCount, itemSize }: Props,
     offset: number
   ): number =>
     Math.max(
       0,
-      Math.min(count - 1, Math.floor(offset / ((itemSize: any): number)))
+      Math.min(itemCount - 1, Math.floor(offset / ((itemSize: any): number)))
     ),
 
   getStopIndexForStartIndex: (
-    { count, direction, height, itemSize, width }: Props,
+    { direction, height, itemCount, itemSize, width }: Props,
     startIndex: number,
     scrollOffset: number
   ): number => {
@@ -68,7 +68,7 @@ const FixedSizeList = createListComponent({
     return Math.max(
       0,
       Math.min(
-        count - 1,
+        itemCount - 1,
         startIndex +
           Math.floor(
             (size + (scrollOffset - offset)) / ((itemSize: any): number)

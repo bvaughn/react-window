@@ -7,8 +7,8 @@ const rowHeights = new Array(1000)
   .map(() => 25 + Math.round(Math.random() * 50));
 
 <List
-  count={1000}
   height={150}
+  itemCount={1000}
   itemSize={index => rowHeights[index]}
   width={300}
 >

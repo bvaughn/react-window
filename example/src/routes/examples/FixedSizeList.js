@@ -16,8 +16,8 @@ export default function() {
         <div className={styles.ExampleDemo}>
           <FixedSizeList
             className={styles.List}
-            count={1000}
             height={150}
+            itemCount={1000}
             itemSize={35}
             width={300}
           >
@@ -42,8 +42,8 @@ export default function() {
           <FixedSizeList
             className={styles.List}
             direction="horizontal"
-            count={1000}
             height={75}
+            itemCount={1000}
             itemSize={100}
             width={300}
           >

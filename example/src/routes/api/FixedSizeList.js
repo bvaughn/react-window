@@ -47,17 +47,6 @@ const PROPS = [
     type: 'string',
   },
   {
-    description: (
-      <Fragment>
-        Total number of items in the list. Note that only a few items will be
-        rendered and displayed at a time.
-      </Fragment>
-    ),
-    isRequired: true,
-    name: 'count',
-    type: 'number',
-  },
-  {
     defaultValue: '"vertical"',
     description: (
       <Fragment>
@@ -102,6 +91,17 @@ const PROPS = [
       </Fragment>
     ),
     name: 'initialScrollOffset',
+    type: 'number',
+  },
+  {
+    description: (
+      <Fragment>
+        Total number of items in the list. Note that only a few items will be
+        rendered and displayed at a time.
+      </Fragment>
+    ),
+    isRequired: true,
+    name: 'itemCount',
     type: 'number',
   },
   {

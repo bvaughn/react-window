@@ -120,11 +120,11 @@ const findNearestCellExponentialSearch = (
   index: number,
   offset: number
 ): number => {
-  const { count } = props;
+  const { itemCount } = props;
   let interval = 1;
 
   while (
-    index < count &&
+    index < itemCount &&
     getCellMetadata(props, index, instanceProps).offset < offset
   ) {
     index += interval;
@@ -134,14 +134,14 @@ const findNearestCellExponentialSearch = (
   return findNearestCellBinarySearch(
     props,
     instanceProps,
-    Math.min(index, count - 1),
+    Math.min(index, itemCount - 1),
     Math.floor(index / 2),
     offset
   );
 };
 
 const getEstimatedTotalSize = (
-  { count }: Props,
+  { itemCount }: Props,
   { cellMetadataMap, estimatedItemSize, lastMeasuredIndex }: InstanceProps
 ) => {
   let totalSizeOfMeasuredCells = 0;
@@ -151,7 +151,7 @@ const getEstimatedTotalSize = (
     totalSizeOfMeasuredCells = cellMetadata.offset + cellMetadata.size;
   }
 
-  const numUnmeasuredCells = count - lastMeasuredIndex - 1;
+  const numUnmeasuredCells = itemCount - lastMeasuredIndex - 1;
   const totalSizeOfUnmeasuredCells = numUnmeasuredCells * estimatedItemSize;
 
   return totalSizeOfMeasuredCells + totalSizeOfUnmeasuredCells;
@@ -225,7 +225,7 @@ const VariableSizeList = createListComponent({
     scrollOffset: number,
     instanceProps: InstanceProps
   ): number => {
-    const { count, direction, height, width } = props;
+    const { direction, height, itemCount, width } = props;
 
     const size = (((direction === 'horizontal' ? width : height): any): number);
     const cellMetadata = getCellMetadata(props, startIndex, instanceProps);
@@ -234,7 +234,7 @@ const VariableSizeList = createListComponent({
     let offset = cellMetadata.offset + cellMetadata.size;
     let stopIndex = startIndex;
 
-    while (stopIndex < count - 1 && offset < maxOffset) {
+    while (stopIndex < itemCount - 1 && offset < maxOffset) {
       stopIndex++;
       offset += getCellMetadata(props, stopIndex, instanceProps).size;
     }

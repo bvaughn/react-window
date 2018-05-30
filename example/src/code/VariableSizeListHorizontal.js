@@ -7,9 +7,9 @@ const columnWidths = new Array(1000)
   .map(() => 75 + Math.round(Math.random() * 50));
 
 <List
-  count={1000}
   direction="horizontal"
   height={75}
+  itemCount={1000}
   itemSize={index => columnWidths[index]}
   width={300}
 >

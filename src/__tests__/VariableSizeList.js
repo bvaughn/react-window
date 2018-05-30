@@ -15,9 +15,9 @@ describe('VariableSizeList', () => {
     ));
     defaultProps = {
       children: cellRenderer,
-      count: 20,
       estimatedItemSize: 25,
       height: 100,
+      itemCount: 20,
       itemSize: index => 25 + index,
       width: 50,
     };

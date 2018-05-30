@@ -33,10 +33,10 @@ type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 export type Props = {|
   children: RenderFunction,
   className?: string,
-  count: number,
   initialScrollOffset?: number,
   direction: Direction,
   height: number | string,
+  itemCount: number,
   itemSize: itemSize,
   onItemsRendered?: onItemsRenderedCallback,
   onScroll?: onScrollCallback,
@@ -203,9 +203,9 @@ export default function createListComponent({
     render() {
       const {
         className,
-        count,
         direction,
         height,
+        itemCount,
         style,
         useIsScrolling,
         width,
@@ -247,7 +247,7 @@ export default function createListComponent({
               width: direction === 'horizontal' ? estimatedTotalSize : width,
             }}
           >
-            {count > 0 && (
+            {itemCount > 0 && (
               <ListItems
                 getCellStyle={this._getCellStyle}
                 isScrolling={useIsScrolling ? isScrolling : undefined}
@@ -342,7 +342,7 @@ export default function createListComponent({
     };
 
     _getRangeToRender(): [number, number, number, number] {
-      const { count, overscanCount } = this.props;
+      const { itemCount, overscanCount } = this.props;
       const { scrollDirection, scrollOffset } = this.state;
 
       const startIndex = getStartIndexForOffset(
@@ -366,7 +366,7 @@ export default function createListComponent({
 
       return [
         Math.max(0, startIndex - overscanBackward),
-        Math.max(0, Math.min(count - 1, stopIndex + overscanForward)),
+        Math.max(0, Math.min(itemCount - 1, stopIndex + overscanForward)),
         startIndex,
         stopIndex,
       ];

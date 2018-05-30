@@ -1,9 +1,9 @@
 import { FixedSizeList as List } from 'react-virtualized';
 
 <List
-  count={1000}
   direction="horizontal"
   height={75}
+  itemCount={1000}
   itemSize={100}
   width={300}
 >

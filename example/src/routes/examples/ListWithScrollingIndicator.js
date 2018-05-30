@@ -15,8 +15,8 @@ export default function() {
         <div className={styles.ExampleDemo}>
           <FixedSizeList
             className={styles.List}
-            count={1000}
             height={150}
+            itemCount={1000}
             itemSize={35}
             useIsScrolling
             width={300}
