@@ -23,7 +23,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeList changing cellSize updates the rendered items 1`] = `
+exports[`FixedSizeList changing itemSize updates the rendered items 1`] = `
 Array [
   Array [
     Object {

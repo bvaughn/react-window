@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
-type CellSize = number | ((index: number) => number);
+type itemSize = number | ((index: number) => number);
 type Direction = 'horizontal' | 'vertical';
 
 type RenderFunctionParams = {|
@@ -31,13 +31,13 @@ type onScrollCallback = ({
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 
 export type Props = {|
-  cellSize: CellSize,
   children: RenderFunction,
   className?: string,
   count: number,
   initialScrollOffset?: number,
   direction: Direction,
   height: number | string,
+  itemSize: itemSize,
   onItemsRendered?: onItemsRenderedCallback,
   onScroll?: onScrollCallback,
   overscanCount: number,
@@ -57,7 +57,7 @@ type GetCellOffset = (
   index: number,
   instanceProps: any
 ) => number;
-type GetCellSize = (props: Props, index: number, instanceProps: any) => number;
+type GetItemSize = (props: Props, index: number, instanceProps: any) => number;
 type GetEstimatedTotalSize = (props: Props, instanceProps: any) => number;
 type GetOffsetForIndexAndAlignment = (
   props: Props,
@@ -84,8 +84,8 @@ const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
 export default function createListComponent({
   getCellOffset,
-  getCellSize,
   getEstimatedTotalSize,
+  getItemSize,
   getOffsetForIndexAndAlignment,
   getStartIndexForOffset,
   getStopIndexForStartIndex,
@@ -93,8 +93,8 @@ export default function createListComponent({
   validateProps,
 }: {|
   getCellOffset: GetCellOffset,
-  getCellSize: GetCellSize,
   getEstimatedTotalSize: GetEstimatedTotalSize,
+  getItemSize: GetItemSize,
   getOffsetForIndexAndAlignment: GetOffsetForIndexAndAlignment,
   getStartIndexForOffset: GetStartIndexForOffset,
   getStopIndexForStartIndex: GetStopIndexForStartIndex,
@@ -332,11 +332,11 @@ export default function createListComponent({
             : 0,
         height:
           direction === 'vertical'
-            ? getCellSize(this.props, index, this._instanceProps)
+            ? getItemSize(this.props, index, this._instanceProps)
             : '100%',
         width:
           direction === 'horizontal'
-            ? getCellSize(this.props, index, this._instanceProps)
+            ? getItemSize(this.props, index, this._instanceProps)
             : '100%',
       };
     };

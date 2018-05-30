@@ -4,7 +4,7 @@ import createGridComponent from './createGridComponent';
 
 import type { Props, ScrollToAlign } from './createGridComponent';
 
-const DEFAULT_ESTIMATED_CELL_SIZE = 50;
+const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
 type DynanmicProps = {|
   estimatedColumnWidth: number,
@@ -12,7 +12,7 @@ type DynanmicProps = {|
   ...Props,
 |};
 
-type cellSizeGetter = (index: number) => number;
+type itemSizeGetter = (index: number) => number;
 type CellType = 'column' | 'row';
 
 type CellMetadata = {|
@@ -35,14 +35,14 @@ const getCellMetadata = (
   index: number,
   instanceProps: InstanceProps
 ): CellMetadata => {
-  let cellMetadataMap, cellSize, lastMeasuredIndex;
+  let cellMetadataMap, itemSize, lastMeasuredIndex;
   if (cellType === 'column') {
     cellMetadataMap = instanceProps.columnMetadataMap;
-    cellSize = ((props.columnWidth: any): cellSizeGetter);
+    itemSize = ((props.columnWidth: any): itemSizeGetter);
     lastMeasuredIndex = instanceProps.lastMeasuredColumnIndex;
   } else {
     cellMetadataMap = instanceProps.rowMetadataMap;
-    cellSize = ((props.rowHeight: any): cellSizeGetter);
+    itemSize = ((props.rowHeight: any): itemSizeGetter);
     lastMeasuredIndex = instanceProps.lastMeasuredRowIndex;
   }
 
@@ -54,7 +54,7 @@ const getCellMetadata = (
     }
 
     for (let i = lastMeasuredIndex + 1; i <= index; i++) {
-      let size = cellSize(i);
+      let size = itemSize(i);
 
       cellMetadataMap[i] = {
         offset,
@@ -379,8 +379,8 @@ const VariableSizeGrid = createGridComponent({
 
     const instanceProps = {
       columnMetadataMap: {},
-      estimatedColumnWidth: estimatedColumnWidth || DEFAULT_ESTIMATED_CELL_SIZE,
-      estimatedRowHeight: estimatedRowHeight || DEFAULT_ESTIMATED_CELL_SIZE,
+      estimatedColumnWidth: estimatedColumnWidth || DEFAULT_ESTIMATED_ITEM_SIZE,
+      estimatedRowHeight: estimatedRowHeight || DEFAULT_ESTIMATED_ITEM_SIZE,
       lastMeasuredColumnIndex: -1,
       lastMeasuredRowIndex: -1,
       rowMetadataMap: {},

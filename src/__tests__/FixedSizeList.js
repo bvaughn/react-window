@@ -16,10 +16,10 @@ describe('FixedSizeList', () => {
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     defaultProps = {
-      cellSize: 25,
       children: cellRenderer,
       count: 100,
       height: 100,
+      itemSize: 25,
       onItemsRendered,
       width: 50,
     };
@@ -84,11 +84,11 @@ describe('FixedSizeList', () => {
     });
   });
 
-  it('changing cellSize updates the rendered items', () => {
+  it('changing itemSize updates the rendered items', () => {
     const rendered = ReactTestRenderer.create(
       <FixedSizeList {...defaultProps} />
     );
-    rendered.update(<FixedSizeList {...defaultProps} cellSize={50} />);
+    rendered.update(<FixedSizeList {...defaultProps} itemSize={50} />);
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
@@ -295,13 +295,13 @@ describe('FixedSizeList', () => {
   describe('props validation', () => {
     beforeEach(() => spyOn(console, 'error'));
 
-    it('should fail if non-numeric cellSize is provided', () => {
+    it('should fail if non-numeric itemSize is provided', () => {
       expect(() =>
         ReactTestRenderer.create(
-          <FixedSizeList {...defaultProps} cellSize="abc" />
+          <FixedSizeList {...defaultProps} itemSize="abc" />
         )
       ).toThrow(
-        'An invalid "cellSize" prop has been specified. ' +
+        'An invalid "itemSize" prop has been specified. ' +
           'Value should be a number. ' +
           '"string" was specified.'
       );

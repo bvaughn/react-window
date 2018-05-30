@@ -5,7 +5,7 @@ import ComponentApi from '../../components/ComponentApi';
 
 import styles from './shared.module.css';
 
-import CODE from '../../code/VariableSizeListCellSize.js';
+import CODE from '../../code/VariableSizeListItemSize.js';
 
 export default () => (
   <ComponentApi
@@ -33,23 +33,6 @@ export default () => (
 
 const PROPS = [
   {
-    description: (
-      <Fragment>
-        Returns the size of a cell in the direction being windowed. For vertical
-        lists, this is the row height. For horizontal lists, this is the column
-        width.
-        <br />
-        <br />
-        <div className={styles.CodeBlockWrapper}>
-          <CodeBlock value={CODE} />
-        </div>
-      </Fragment>
-    ),
-    isRequired: true,
-    name: 'cellSize',
-    type: '(index: number) => number',
-  },
-  {
     defaultValue: 50,
     description: (
       <Fragment>
@@ -64,8 +47,25 @@ const PROPS = [
       </Fragment>
     ),
     isRequired: true,
-    name: 'estimatedCellSize',
+    name: 'estimatedItemSize',
     type: 'number',
+  },
+  {
+    description: (
+      <Fragment>
+        Returns the size of a cell in the direction being windowed. For vertical
+        lists, this is the row height. For horizontal lists, this is the column
+        width.
+        <br />
+        <br />
+        <div className={styles.CodeBlockWrapper}>
+          <CodeBlock value={CODE} />
+        </div>
+      </Fragment>
+    ),
+    isRequired: true,
+    name: 'itemSize',
+    type: '(index: number) => number',
   },
 ];
 

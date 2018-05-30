@@ -38,10 +38,10 @@ export default class ScrollToItem extends Component {
               Scroll to row 300 (align: center)
             </button>
             <VariableSizeList
-              cellSize={index => rowHeights[index]}
               className={styles.List}
               count={1000}
               height={150}
+              itemSize={index => rowHeights[index]}
               ref={this.listRef}
               width={300}
             >

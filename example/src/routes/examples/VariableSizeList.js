@@ -22,10 +22,10 @@ export default function() {
       <div className={styles.Example}>
         <div className={styles.ExampleDemo}>
           <VariableSizeList
-            cellSize={index => rowSizes[index]}
             className={styles.List}
             count={1000}
             height={150}
+            itemSize={index => rowSizes[index]}
             width={300}
           >
             {({ index, style }) => (
@@ -47,11 +47,11 @@ export default function() {
       <div className={styles.Example}>
         <div className={styles.ExampleDemo}>
           <VariableSizeList
-            cellSize={index => columnSizes[index]}
             className={styles.List}
             direction="horizontal"
             count={1000}
             height={75}
+            itemSize={index => columnSizes[index]}
             width={300}
           >
             {({ index, style }) => (

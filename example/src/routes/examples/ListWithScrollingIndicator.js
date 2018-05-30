@@ -14,10 +14,10 @@ export default function() {
       <div className={styles.Example}>
         <div className={styles.ExampleDemo}>
           <FixedSizeList
-            cellSize={35}
             className={styles.List}
             count={1000}
             height={150}
+            itemSize={35}
             useIsScrolling
             width={300}
           >

@@ -5,29 +5,29 @@ import createListComponent from './createListComponent';
 import type { Props, ScrollToAlign } from './createListComponent';
 
 const FixedSizeList = createListComponent({
-  getCellOffset: ({ cellSize, size }: Props, index: number): number =>
-    index * ((cellSize: any): number),
+  getCellOffset: ({ itemSize, size }: Props, index: number): number =>
+    index * ((itemSize: any): number),
 
-  getCellSize: ({ cellSize, size }: Props, index: number): number =>
-    ((cellSize: any): number),
+  getItemSize: ({ itemSize, size }: Props, index: number): number =>
+    ((itemSize: any): number),
 
-  getEstimatedTotalSize: ({ cellSize, count }: Props) =>
-    ((cellSize: any): number) * count,
+  getEstimatedTotalSize: ({ count, itemSize }: Props) =>
+    ((itemSize: any): number) * count,
 
   getOffsetForIndexAndAlignment: (
-    { cellSize, count, direction, height, width }: Props,
+    { count, direction, height, itemSize, width }: Props,
     index: number,
     align: ScrollToAlign,
     scrollOffset: number
   ): number => {
     const size = (((direction === 'horizontal' ? width : height): any): number);
     const maxOffset = Math.min(
-      count * ((cellSize: any): number) - size,
-      index * ((cellSize: any): number)
+      count * ((itemSize: any): number) - size,
+      index * ((itemSize: any): number)
     );
     const minOffset = Math.max(
       0,
-      index * ((cellSize: any): number) - size + ((cellSize: any): number)
+      index * ((itemSize: any): number) - size + ((itemSize: any): number)
     );
 
     switch (align) {
@@ -50,20 +50,20 @@ const FixedSizeList = createListComponent({
   },
 
   getStartIndexForOffset: (
-    { cellSize, count }: Props,
+    { itemSize, count }: Props,
     offset: number
   ): number =>
     Math.max(
       0,
-      Math.min(count - 1, Math.floor(offset / ((cellSize: any): number)))
+      Math.min(count - 1, Math.floor(offset / ((itemSize: any): number)))
     ),
 
   getStopIndexForStartIndex: (
-    { cellSize, count, direction, height, width }: Props,
+    { count, direction, height, itemSize, width }: Props,
     startIndex: number,
     scrollOffset: number
   ): number => {
-    const offset = startIndex * ((cellSize: any): number);
+    const offset = startIndex * ((itemSize: any): number);
     const size = (((direction === 'horizontal' ? width : height): any): number);
     return Math.max(
       0,
@@ -71,7 +71,7 @@ const FixedSizeList = createListComponent({
         count - 1,
         startIndex +
           Math.floor(
-            (size + (scrollOffset - offset)) / ((cellSize: any): number)
+            (size + (scrollOffset - offset)) / ((itemSize: any): number)
           )
       )
     );
@@ -81,13 +81,13 @@ const FixedSizeList = createListComponent({
     // Noop
   },
 
-  validateProps: ({ cellSize }: Props): void => {
+  validateProps: ({ itemSize }: Props): void => {
     if (process.env.NODE_ENV !== 'production') {
-      if (typeof cellSize !== 'number') {
+      if (typeof itemSize !== 'number') {
         throw Error(
-          'An invalid "cellSize" prop has been specified. ' +
+          'An invalid "itemSize" prop has been specified. ' +
             'Value should be a number. ' +
-            `"${cellSize === null ? 'null' : typeof cellSize}" was specified.`
+            `"${itemSize === null ? 'null' : typeof itemSize}" was specified.`
         );
       }
     }

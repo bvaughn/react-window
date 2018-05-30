@@ -1,9 +1,9 @@
 import { FixedSizeList as List } from 'react-virtualized';
 
 <List
-  cellSize={35}
   count={1000}
   height={150}
+  itemSize={35}
   width={300}
 >
   {({ index, style }) => (

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`VariableSizeList changing cellSize does not impact the rendered items 1`] = `
+exports[`VariableSizeList changing itemSize does not impact the rendered items 1`] = `
 Array [
   Array [
     Object {
@@ -13,7 +13,7 @@ Array [
 ]
 `;
 
-exports[`VariableSizeList estimatedCellSize should estimate an initial scrollable height based on this estimation 1`] = `
+exports[`VariableSizeList estimatedItemSize should estimate an initial scrollable height based on this estimation 1`] = `
 Object {
   "height": 1000,
   "overflow": "hidden",
@@ -22,7 +22,7 @@ Object {
 }
 `;
 
-exports[`VariableSizeList estimatedCellSize should udpate the scrollable height as more cells are measured 1`] = `
+exports[`VariableSizeList estimatedItemSize should udpate the scrollable height as more cells are measured 1`] = `
 Object {
   "height": 690,
   "overflow": "hidden",

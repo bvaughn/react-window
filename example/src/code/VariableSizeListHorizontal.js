@@ -7,10 +7,10 @@ const columnWidths = new Array(1000)
   .map(() => 75 + Math.round(Math.random() * 50));
 
 <List
-  cellSize={index => columnWidths[index]}
   count={1000}
   direction="horizontal"
   height={75}
+  itemSize={index => columnWidths[index]}
   width={300}
 >
   {({ index, style }) => (

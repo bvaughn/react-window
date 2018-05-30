@@ -14,11 +14,11 @@ describe('VariableSizeList', () => {
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     defaultProps = {
-      cellSize: index => 25 + index,
       children: cellRenderer,
       count: 20,
-      estimatedCellSize: 25,
+      estimatedItemSize: 25,
       height: 100,
+      itemSize: index => 25 + index,
       width: 50,
     };
   });
@@ -26,7 +26,7 @@ describe('VariableSizeList', () => {
   // Much of the shared List functionality is already tested by FixedSizeList tests.
   // This test covers functionality that is unique to VariableSizeList.
 
-  it('changing cellSize does not impact the rendered items', () => {
+  it('changing itemSize does not impact the rendered items', () => {
     const onItemsRendered = jest.fn();
     const rendered = ReactTestRenderer.create(
       <VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />
@@ -34,17 +34,17 @@ describe('VariableSizeList', () => {
     rendered.update(
       <VariableSizeList
         {...defaultProps}
-        cellSize={index => 50}
+        itemSize={index => 50}
         onItemsRendered={onItemsRendered}
       />
     );
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
-  describe('estimatedCellSize', () => {
+  describe('estimatedItemSize', () => {
     it('should estimate an initial scrollable height based on this estimation', () => {
       const rendered = ReactTestRenderer.create(
-        <VariableSizeList {...defaultProps} estimatedCellSize={50} />
+        <VariableSizeList {...defaultProps} estimatedItemSize={50} />
       );
       const scrollContainer = findScrollContainer(rendered);
       expect(scrollContainer.props.style).toMatchSnapshot();
@@ -52,7 +52,7 @@ describe('VariableSizeList', () => {
 
     it('should udpate the scrollable height as more cells are measured', () => {
       const rendered = ReactTestRenderer.create(
-        <VariableSizeList {...defaultProps} estimatedCellSize={50} />
+        <VariableSizeList {...defaultProps} estimatedItemSize={50} />
       );
       rendered.getInstance().scrollToItem(19);
       const scrollContainer = findScrollContainer(rendered);
@@ -143,13 +143,13 @@ describe('VariableSizeList', () => {
   describe('props validation', () => {
     beforeEach(() => spyOn(console, 'error'));
 
-    it('should fail if non-function cellSize is provided', () => {
+    it('should fail if non-function itemSize is provided', () => {
       expect(() =>
         ReactTestRenderer.create(
-          <VariableSizeList {...defaultProps} cellSize={123} />
+          <VariableSizeList {...defaultProps} itemSize={123} />
         )
       ).toThrow(
-        'An invalid "cellSize" prop has been specified. ' +
+        'An invalid "itemSize" prop has been specified. ' +
           'Value should be a function. "number" was specified.'
       );
     });

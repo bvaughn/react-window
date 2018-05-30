@@ -4,14 +4,14 @@ import createListComponent from './createListComponent';
 
 import type { Props, ScrollToAlign } from './createListComponent';
 
-const DEFAULT_ESTIMATED_CELL_SIZE = 50;
+const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
 type DynanmicProps = {|
-  estimatedCellSize: number,
+  estimatedItemSize: number,
   ...Props,
 |};
 
-type CelLSizeGetter = (index: number) => number;
+type itemSizeGetter = (index: number) => number;
 
 type CellMetadata = {|
   offset: number,
@@ -19,7 +19,7 @@ type CellMetadata = {|
 |};
 type InstanceProps = {|
   cellMetadataMap: { [index: number]: CellMetadata },
-  estimatedCellSize: number,
+  estimatedItemSize: number,
   lastMeasuredIndex: number,
 |};
 
@@ -28,7 +28,7 @@ const getCellMetadata = (
   index: number,
   instanceProps: InstanceProps
 ): CellMetadata => {
-  const { cellSize } = ((props: any): DynanmicProps);
+  const { itemSize } = ((props: any): DynanmicProps);
   const { cellMetadataMap, lastMeasuredIndex } = instanceProps;
 
   if (index > lastMeasuredIndex) {
@@ -39,7 +39,7 @@ const getCellMetadata = (
     }
 
     for (let i = lastMeasuredIndex + 1; i <= index; i++) {
-      let size = ((cellSize: any): CelLSizeGetter)(i);
+      let size = ((itemSize: any): itemSizeGetter)(i);
 
       cellMetadataMap[i] = {
         offset,
@@ -142,7 +142,7 @@ const findNearestCellExponentialSearch = (
 
 const getEstimatedTotalSize = (
   { count }: Props,
-  { cellMetadataMap, estimatedCellSize, lastMeasuredIndex }: InstanceProps
+  { cellMetadataMap, estimatedItemSize, lastMeasuredIndex }: InstanceProps
 ) => {
   let totalSizeOfMeasuredCells = 0;
 
@@ -152,7 +152,7 @@ const getEstimatedTotalSize = (
   }
 
   const numUnmeasuredCells = count - lastMeasuredIndex - 1;
-  const totalSizeOfUnmeasuredCells = numUnmeasuredCells * estimatedCellSize;
+  const totalSizeOfUnmeasuredCells = numUnmeasuredCells * estimatedItemSize;
 
   return totalSizeOfMeasuredCells + totalSizeOfUnmeasuredCells;
 };
@@ -164,7 +164,7 @@ const VariableSizeList = createListComponent({
     instanceProps: InstanceProps
   ): number => getCellMetadata(props, index, instanceProps).offset,
 
-  getCellSize: (
+  getItemSize: (
     props: Props,
     index: number,
     instanceProps: InstanceProps
@@ -243,11 +243,11 @@ const VariableSizeList = createListComponent({
   },
 
   initInstanceProps(props: Props, instance: any): InstanceProps {
-    const { estimatedCellSize } = ((props: any): DynanmicProps);
+    const { estimatedItemSize } = ((props: any): DynanmicProps);
 
     const instanceProps = {
       cellMetadataMap: {},
-      estimatedCellSize: estimatedCellSize || DEFAULT_ESTIMATED_CELL_SIZE,
+      estimatedItemSize: estimatedItemSize || DEFAULT_ESTIMATED_ITEM_SIZE,
       lastMeasuredIndex: -1,
     };
 
@@ -258,13 +258,13 @@ const VariableSizeList = createListComponent({
     return instanceProps;
   },
 
-  validateProps: ({ cellSize }: Props): void => {
+  validateProps: ({ itemSize }: Props): void => {
     if (process.env.NODE_ENV !== 'production') {
-      if (typeof cellSize !== 'function') {
+      if (typeof itemSize !== 'function') {
         throw Error(
-          'An invalid "cellSize" prop has been specified. ' +
+          'An invalid "itemSize" prop has been specified. ' +
             'Value should be a function. ' +
-            `"${cellSize === null ? 'null' : typeof cellSize}" was specified.`
+            `"${itemSize === null ? 'null' : typeof itemSize}" was specified.`
         );
       }
     }

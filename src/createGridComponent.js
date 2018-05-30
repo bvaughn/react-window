@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
-type CellSize = number | ((index: number) => number);
+type itemSize = number | ((index: number) => number);
 
 type RenderFunctionParams = {|
   columnIndex: number,
@@ -40,7 +40,7 @@ export type Props = {|
   children: RenderFunction,
   className?: string,
   columnCount: number,
-  columnWidth: CellSize,
+  columnWidth: itemSize,
   initialScrollLeft?: number,
   initialScrollTop?: number,
   height: number,
@@ -48,7 +48,7 @@ export type Props = {|
   onScroll?: OnScrollCallback,
   overscanCount: number,
   rowCount: number,
-  rowHeight: CellSize,
+  rowHeight: itemSize,
   style?: Object,
   useIsScrolling: boolean,
   width: number,
@@ -67,7 +67,7 @@ type getCellOffset = (
   index: number,
   instanceProps: any
 ) => number;
-type getCellSize = (props: Props, index: number, instanceProps: any) => number;
+type getItemSize = (props: Props, index: number, instanceProps: any) => number;
 type getEstimatedTotalSize = (props: Props, instanceProps: any) => number;
 type GetOffsetForCellAndAlignment = (
   props: Props,
@@ -111,13 +111,13 @@ export default function createGridComponent({
   getColumnOffset: getCellOffset,
   getColumnStartIndexForOffset: GetStartIndexForOffset,
   getColumnStopIndexForStartIndex: GetStopIndexForStartIndex,
-  getColumnWidth: getCellSize,
+  getColumnWidth: getItemSize,
   getEstimatedTotalHeight: getEstimatedTotalSize,
   getEstimatedTotalWidth: getEstimatedTotalSize,
   getOffsetForColumnAndAlignment: GetOffsetForCellAndAlignment,
   getOffsetForRowAndAlignment: GetOffsetForCellAndAlignment,
   getRowOffset: getCellOffset,
-  getRowHeight: getCellSize,
+  getRowHeight: getItemSize,
   getRowStartIndexForOffset: GetStartIndexForOffset,
   getRowStopIndexForStartIndex: GetStopIndexForStartIndex,
   initInstanceProps: InitInstanceProps,

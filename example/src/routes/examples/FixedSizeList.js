@@ -15,10 +15,10 @@ export default function() {
       <div className={styles.Example}>
         <div className={styles.ExampleDemo}>
           <FixedSizeList
-            cellSize={35}
             className={styles.List}
             count={1000}
             height={150}
+            itemSize={35}
             width={300}
           >
             {({ index, style }) => (
@@ -40,11 +40,11 @@ export default function() {
       <div className={styles.Example}>
         <div className={styles.ExampleDemo}>
           <FixedSizeList
-            cellSize={100}
             className={styles.List}
             direction="horizontal"
             count={1000}
             height={75}
+            itemSize={100}
             width={300}
           >
             {({ index, style }) => (

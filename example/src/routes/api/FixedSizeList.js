@@ -17,17 +17,6 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Size of a cell in the direction being windowed. For vertical lists, this
-        is the row height. For horizontal lists, this is the column width.
-      </Fragment>
-    ),
-    isRequired: true,
-    name: 'cellSize',
-    type: 'number',
-  },
-  {
-    description: (
-      <Fragment>
         Responsible for rendering the individual item specified by an{' '}
         <code>index</code> parameter. This method also receives a{' '}
         <code>style</code> parameter (used for positioning).
@@ -113,6 +102,17 @@ const PROPS = [
       </Fragment>
     ),
     name: 'initialScrollOffset',
+    type: 'number',
+  },
+  {
+    description: (
+      <Fragment>
+        Size of a cell in the direction being windowed. For vertical lists, this
+        is the row height. For horizontal lists, this is the column width.
+      </Fragment>
+    ),
+    isRequired: true,
+    name: 'itemSize',
     type: 'number',
   },
   {
