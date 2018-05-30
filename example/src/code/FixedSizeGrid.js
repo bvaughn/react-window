@@ -8,8 +8,8 @@ import { FixedSizeGrid as Grid } from 'react-virtualized';
   rowHeight={35}
   width={300}
 >
-  {({ columnIndex, key, rowIndex, style }) => (
-    <div key={key} style={style}>
+  {({ columnIndex, rowIndex, style }) => (
+    <div style={style}>
       row {rowIndex}, column {columnIndex}
     </div>
   )}

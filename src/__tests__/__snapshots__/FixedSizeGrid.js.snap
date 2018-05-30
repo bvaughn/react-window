@@ -499,7 +499,6 @@ Array [
   Object {
     "columnIndex": 0,
     "isScrolling": undefined,
-    "key": "0:0",
     "rowIndex": 0,
     "style": Object {
       "height": 25,
@@ -517,7 +516,6 @@ Array [
   Object {
     "columnIndex": 0,
     "isScrolling": false,
-    "key": "0:0",
     "rowIndex": 0,
     "style": Object {
       "height": 25,
@@ -535,7 +533,6 @@ Array [
   Object {
     "columnIndex": 0,
     "isScrolling": true,
-    "key": "3:0",
     "rowIndex": 3,
     "style": Object {
       "height": 25,
@@ -553,7 +550,6 @@ Array [
   Object {
     "columnIndex": 0,
     "isScrolling": false,
-    "key": "3:0",
     "rowIndex": 3,
     "style": Object {
       "height": 25,

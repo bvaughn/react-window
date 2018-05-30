@@ -21,10 +21,9 @@ export default function() {
             useIsScrolling
             width={300}
           >
-            {({ key, index, isScrolling, style }) => (
+            {({ index, isScrolling, style }) => (
               <div
                 className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
-                key={key}
                 style={style}
               >
                 {isScrolling ? 'Scrolling' : `Row ${index}`}

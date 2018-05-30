@@ -8,11 +8,11 @@ export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 type CellSize = number | ((index: number) => number);
 type Direction = 'horizontal' | 'vertical';
 
-type RenderFunctionParams = {
+type RenderFunctionParams = {|
   index: number,
-  key: string,
+  isScrolling?: boolean,
   style: Object,
-};
+|};
 type RenderFunction = (params: RenderFunctionParams) => React$Node;
 
 type ScrollDirection = 'forward' | 'backward';
@@ -102,7 +102,6 @@ export default function createListComponent({
   validateProps: ValidateProps,
 |}) {
   return class List extends PureComponent<Props, State> {
-    _cellStyleCache: { [index: number]: Object } = {};
     _instanceProps: any = initInstanceProps(this.props, this);
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _scrollingContainer: ?HTMLDivElement;
@@ -317,38 +316,29 @@ export default function createListComponent({
       }
     }
 
-    // Lazily create and cache cell styles while scrolling,
-    // So that pure component sCU will prevent re-renders.
+    // Lazily create and cache cell styles while scrolling.
     _getCellStyle: (index: number) => Object;
     _getCellStyle = (index: number): Object => {
       const { direction } = this.props;
-
-      let style;
-      if (this._cellStyleCache.hasOwnProperty(index)) {
-        style = this._cellStyleCache[index];
-      } else {
-        this._cellStyleCache[index] = style = {
-          position: 'absolute',
-          left:
-            direction === 'horizontal'
-              ? getCellOffset(this.props, index, this._instanceProps)
-              : 0,
-          top:
-            direction === 'vertical'
-              ? getCellOffset(this.props, index, this._instanceProps)
-              : 0,
-          height:
-            direction === 'vertical'
-              ? getCellSize(this.props, index, this._instanceProps)
-              : '100%',
-          width:
-            direction === 'horizontal'
-              ? getCellSize(this.props, index, this._instanceProps)
-              : '100%',
-        };
-      }
-
-      return style;
+      return {
+        position: 'absolute',
+        left:
+          direction === 'horizontal'
+            ? getCellOffset(this.props, index, this._instanceProps)
+            : 0,
+        top:
+          direction === 'vertical'
+            ? getCellOffset(this.props, index, this._instanceProps)
+            : 0,
+        height:
+          direction === 'vertical'
+            ? getCellSize(this.props, index, this._instanceProps)
+            : '100%',
+        width:
+          direction === 'horizontal'
+            ? getCellSize(this.props, index, this._instanceProps)
+            : '100%',
+      };
     };
 
     _getRangeToRender(): [number, number, number, number] {
@@ -434,11 +424,7 @@ export default function createListComponent({
     _resetIsScrolling = () => {
       this._resetIsScrollingTimeoutId = null;
 
-      this.setState({ isScrolling: false }, () => {
-        // Clear style cache after state update has been committed.
-        // This way we don't break pure sCU for cells that don't use isScrolling param.
-        this._cellStyleCache = {};
-      });
+      this.setState({ isScrolling: false });
     };
   };
 }
@@ -464,20 +450,37 @@ class ListItems extends PureComponent<ListItemsProps, void> {
     const cells = [];
 
     for (let index = startIndex; index <= stopIndex; index++) {
-      const key = '' + index;
-      const style = getCellStyle(index);
-
       cells.push(
-        renderFunction({
-          key,
-          index,
-          isScrolling,
-          style,
-        })
+        <ListItem
+          getCellStyle={getCellStyle}
+          key={index}
+          index={index}
+          isScrolling={isScrolling}
+          renderFunction={renderFunction}
+        />
       );
     }
 
     return cells;
+  }
+}
+
+type ListItemProps = {
+  getCellStyle: (index: number) => Object,
+  index: number,
+  isScrolling?: boolean,
+  renderFunction: RenderFunction,
+};
+
+class ListItem extends PureComponent<ListItemProps, void> {
+  render() {
+    const { getCellStyle, index, isScrolling, renderFunction } = this.props;
+
+    return renderFunction({
+      index,
+      isScrolling,
+      style: getCellStyle(index),
+    });
   }
 }
 

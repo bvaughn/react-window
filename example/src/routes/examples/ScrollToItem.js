@@ -45,12 +45,11 @@ export default class ScrollToItem extends Component {
               ref={this.listRef}
               width={300}
             >
-              {({ key, index, style }) => (
+              {({ index, style }) => (
                 <div
                   className={
                     index % 2 ? styles.ListItemOdd : styles.ListItemEven
                   }
-                  key={key}
                   style={style}
                 >
                   Row {index}
@@ -100,7 +99,7 @@ export default class ScrollToItem extends Component {
               rowHeight={index => rowHeights[index]}
               width={300}
             >
-              {({ columnIndex, key, rowIndex, style }) => (
+              {({ columnIndex, rowIndex, style }) => (
                 <div
                   className={
                     columnIndex % 2
@@ -111,7 +110,6 @@ export default class ScrollToItem extends Component {
                         ? styles.GridItemOdd
                         : styles.GridItemEven
                   }
-                  key={key}
                   style={style}
                 >
                   r{rowIndex}, c{columnIndex}

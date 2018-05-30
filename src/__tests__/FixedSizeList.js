@@ -12,10 +12,8 @@ describe('FixedSizeList', () => {
 
     onItemsRendered = jest.fn();
 
-    cellRenderer = jest.fn(({ key, style, ...rest }) => (
-      <div key={key} style={style}>
-        {JSON.stringify(rest, null, 2)}
-      </div>
+    cellRenderer = jest.fn(({ style, ...rest }) => (
+      <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     defaultProps = {
       cellSize: 25,
@@ -52,20 +50,16 @@ describe('FixedSizeList', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeList {...defaultProps} />
       );
-      // Scroll, then capture the rendered style for item 1,
+      // Scroll a few times.
+      // Each time, make sure to render item 3.
       rendered.getInstance().scrollToItem(1, 'start');
-      const cellOneA = cellRenderer.mock.calls.find(
-        ([params]) => params.index === 1
-      );
-      cellRenderer.mockClear();
-      // Scroll again, then capture the rendered style for item 1,
-      rendered.getInstance().scrollToItem(0, 'start');
-      const cellOneB = cellRenderer.mock.calls.find(
-        ([params]) => params.index === 1
-      );
-      // Both styles should be the same,
-      // Since the scroll debounce timer never cleared the style cache.
-      expect(cellOneA).toEqual(cellOneB);
+      rendered.getInstance().scrollToItem(2, 'start');
+      rendered.getInstance().scrollToItem(3, 'start');
+      // Find all of the times cell 3 was rendered.
+      // If we are caching props correctly, it should only be once.
+      expect(
+        cellRenderer.mock.calls.find(([params]) => params.index === 3)
+      ).toHaveLength(1);
     });
 
     it('should reset cached styles when scrolling stops', () => {
@@ -209,11 +203,10 @@ describe('FixedSizeList', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeList {...defaultProps} />
       );
+      rendered.getInstance().scrollToItem(100);
       cellRenderer.mockClear();
-      rendered.getInstance().scrollTo(100);
-      expect(cellRenderer).toHaveBeenCalledTimes(8);
       jest.runAllTimers();
-      expect(cellRenderer).toHaveBeenCalledTimes(8);
+      expect(cellRenderer).not.toHaveBeenCalled();
     });
   });
 

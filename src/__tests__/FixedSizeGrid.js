@@ -12,10 +12,8 @@ describe('FixedSizeGrid', () => {
 
     onItemsRendered = jest.fn();
 
-    cellRenderer = jest.fn(({ key, style, ...rest }) => (
-      <div key={key} style={style}>
-        {JSON.stringify(rest, null, 2)}
-      </div>
+    cellRenderer = jest.fn(({ style, ...rest }) => (
+      <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     defaultProps = {
       children: cellRenderer,
@@ -52,24 +50,24 @@ describe('FixedSizeGrid', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeGrid {...defaultProps} />
       );
-      // Scroll, then capture the rendered style for item 1,
+      // Scroll a few times.
+      // Each time, make sure to render row 3, column 1.
       rendered
         .getInstance()
         .scrollToItem({ columnIndex: 1, rowIndex: 1, align: 'start' });
-      const cellOneA = cellRenderer.mock.calls.find(
-        ([params]) => params.columnIndex === 1 && params.rowIndex === 1
-      );
-      cellRenderer.mockClear();
-      // Scroll again, then capture the rendered style for item 1,
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 0, rowIndex: 0, align: 'start' });
-      const cellOneB = cellRenderer.mock.calls.find(
-        ([params]) => params.columnIndex === 1 && params.rowIndex === 1
-      );
-      // Both styles should be the same,
-      // Since the scroll debounce timer never cleared the style cache.
-      expect(cellOneA).toEqual(cellOneB);
+        .scrollToItem({ columnIndex: 1, rowIndex: 2, align: 'start' });
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 1, rowIndex: 3, align: 'start' });
+      // Find all of the times row 3, column 1 was rendered.
+      // If we are caching props correctly, it should only be once.
+      expect(
+        cellRenderer.mock.calls.find(
+          ([params]) => params.rowIndex === 3 && params.columnIndex === 1
+        )
+      ).toHaveLength(1);
     });
 
     it('should reset cached styles when scrolling stops', () => {
@@ -227,11 +225,10 @@ describe('FixedSizeGrid', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeGrid {...defaultProps} />
       );
-      cellRenderer.mockClear();
       rendered.getInstance().scrollTo({ scrollLeft: 100, scrollTop: 100 });
-      expect(cellRenderer).toHaveBeenCalledTimes(35);
+      cellRenderer.mockClear();
       jest.runAllTimers();
-      expect(cellRenderer).toHaveBeenCalledTimes(35);
+      expect(cellRenderer).not.toHaveBeenCalled();
     });
   });
 

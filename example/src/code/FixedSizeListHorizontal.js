@@ -7,8 +7,8 @@ import { FixedSizeList as List } from 'react-virtualized';
   height={75}
   width={300}
 >
-  {({ key, index, style }) => (
-    <div key={key} style={style}>
+  {({ index, style }) => (
+    <div style={style}>
       Column {index}
     </div>
   )}

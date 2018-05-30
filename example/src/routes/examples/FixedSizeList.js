@@ -21,10 +21,9 @@ export default function() {
             height={150}
             width={300}
           >
-            {({ key, index, style }) => (
+            {({ index, style }) => (
               <div
                 className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
-                key={key}
                 style={style}
               >
                 Row {index}
@@ -48,10 +47,9 @@ export default function() {
             height={75}
             width={300}
           >
-            {({ key, index, style }) => (
+            {({ index, style }) => (
               <div
                 className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
-                key={key}
                 style={style}
               >
                 Column {index}

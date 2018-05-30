@@ -1,6 +1,6 @@
 <FixedSizeGrid {...props}>
-  {({ columnIndex, key, rowIndex, style }) => (
-    <div key={key} style={style}>
+  {({ columnIndex, rowIndex, style }) => (
+    <div style={style}>
       row {rowIndex}, column {columnIndex}
     </div>
   )}

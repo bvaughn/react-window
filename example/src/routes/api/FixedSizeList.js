@@ -30,10 +30,11 @@ const PROPS = [
       <Fragment>
         Responsible for rendering the individual item specified by an{' '}
         <code>index</code> parameter. This method also receives a{' '}
-        <code>key</code> parameter (used by React for{' '}
-        <a href="https://reactjs.org/docs/reconciliation.html">
-          reconciliation
-        </a>), and a <code>style</code> parameter (used for positioning).
+        <code>style</code> parameter (used for positioning).
+        <br />
+        <br />
+        If <code>useIsScrolling</code> is enabled for the list, the method also
+        receives an additional <code>isScrolling</code> boolean parameter.
         <br />
         <br />
         <div className={styles.CodeBlockWrapper}>

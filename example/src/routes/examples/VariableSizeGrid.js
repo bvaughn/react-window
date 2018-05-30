@@ -29,7 +29,7 @@ export default function() {
             rowHeight={index => rowHeights[index]}
             width={300}
           >
-            {({ columnIndex, key, rowIndex, style }) => (
+            {({ columnIndex, rowIndex, style }) => (
               <div
                 className={
                   columnIndex % 2
@@ -40,7 +40,6 @@ export default function() {
                       ? styles.GridItemOdd
                       : styles.GridItemEven
                 }
-                key={key}
                 style={style}
               >
                 r{rowIndex}, c{columnIndex}

@@ -7,12 +7,12 @@ export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type CellSize = number | ((index: number) => number);
 
-type RenderFunctionParams = {
+type RenderFunctionParams = {|
   columnIndex: number,
-  key: string,
+  isScrolling?: boolean,
   rowIndex: number,
   style: Object,
-};
+|};
 export type RenderFunction = (params: RenderFunctionParams) => React$Node;
 
 type ScrollDirection = 'forward' | 'backward';
@@ -124,7 +124,6 @@ export default function createGridComponent({
   validateProps: ValidateProps,
 |}) {
   return class Grid extends PureComponent<Props, State> {
-    _cellStyleCache: { [key: string]: Object } = {};
     _instanceProps: any;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _scrollingContainer: ?HTMLDivElement;
@@ -407,26 +406,16 @@ export default function createGridComponent({
       }
     }
 
-    // Lazily create and cache cell styles while scrolling,
-    // So that pure component sCU will prevent re-renders.
+    // Lazily create and cache cell styles while scrolling.
     _getCellStyle: (rowIndex: number, columnIndex: number) => Object;
     _getCellStyle = (rowIndex: number, columnIndex: number): Object => {
-      const key = `${rowIndex}:${columnIndex}`;
-
-      let style;
-      if (this._cellStyleCache.hasOwnProperty(key)) {
-        style = this._cellStyleCache[key];
-      } else {
-        this._cellStyleCache[key] = style = {
-          position: 'absolute',
-          left: getColumnOffset(this.props, columnIndex, this._instanceProps),
-          top: getRowOffset(this.props, rowIndex, this._instanceProps),
-          height: getRowHeight(this.props, rowIndex, this._instanceProps),
-          width: getColumnWidth(this.props, columnIndex, this._instanceProps),
-        };
-      }
-
-      return style;
+      return {
+        position: 'absolute',
+        left: getColumnOffset(this.props, columnIndex, this._instanceProps),
+        top: getRowOffset(this.props, rowIndex, this._instanceProps),
+        height: getRowHeight(this.props, rowIndex, this._instanceProps),
+        width: getColumnWidth(this.props, columnIndex, this._instanceProps),
+      };
     };
 
     _getHorizontalRangeToRender(): [number, number, number, number] {
@@ -548,11 +537,7 @@ export default function createGridComponent({
     _resetIsScrolling = () => {
       this._resetIsScrollingTimeoutId = null;
 
-      this.setState({ isScrolling: false }, () => {
-        // Clear style cache after state update has been committed.
-        // This way we don't break pure sCU for cells that don't use isScrolling param.
-        this._cellStyleCache = {};
-      });
+      this.setState({ isScrolling: false });
     };
   };
 }
@@ -587,22 +572,47 @@ class GridItems extends PureComponent<GridItemsProps, void> {
         columnIndex <= columnStopIndex;
         columnIndex++
       ) {
-        const key = `${rowIndex}:${columnIndex}`;
-        const style = getCellStyle(rowIndex, columnIndex);
-
         cells.push(
-          renderFunction({
-            columnIndex,
-            key,
-            isScrolling,
-            rowIndex,
-            style,
-          })
+          <GridItem
+            columnIndex={columnIndex}
+            getCellStyle={getCellStyle}
+            isScrolling={isScrolling}
+            key={`${rowIndex}:${columnIndex}`}
+            renderFunction={renderFunction}
+            rowIndex={rowIndex}
+          />
         );
       }
     }
 
     return cells;
+  }
+}
+
+type GridItemProps = {
+  columnIndex: number,
+  getCellStyle: (rowIndex: number, columnIndex: number) => Object,
+  isScrolling?: boolean,
+  renderFunction: RenderFunction,
+  rowIndex: number,
+};
+
+class GridItem extends PureComponent<GridItemProps, void> {
+  render() {
+    const {
+      columnIndex,
+      getCellStyle,
+      isScrolling,
+      renderFunction,
+      rowIndex,
+    } = this.props;
+
+    return renderFunction({
+      columnIndex,
+      isScrolling,
+      rowIndex,
+      style: getCellStyle(rowIndex, columnIndex),
+    });
   }
 }
 

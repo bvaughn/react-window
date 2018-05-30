@@ -10,10 +10,8 @@ describe('VariableSizeList', () => {
   beforeEach(() => {
     jest.useFakeTimers();
 
-    cellRenderer = jest.fn(({ key, style, ...rest }) => (
-      <div key={key} style={style}>
-        {JSON.stringify(rest, null, 2)}
-      </div>
+    cellRenderer = jest.fn(({ style, ...rest }) => (
+      <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     defaultProps = {
       cellSize: index => 25 + index,

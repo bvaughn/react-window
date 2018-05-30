@@ -5,8 +5,8 @@ import { FixedSizeList as List } from 'react-virtualized';
 // To do this, add the \`useIsScrolling\` property to your List or Grid.
 // Now an additional parameter, \`isScrolling\`, will be passed to your render method:
 <List useIsScrolling {...props}>
-  {({ key, index, isScrolling, style }) => (
-    <div key={key} style={style}>
+  {({ index, isScrolling, style }) => (
+    <div style={style}>
       {isScrolling ? 'Scrolling' : `Row ${index}`}
     </div>
   )}

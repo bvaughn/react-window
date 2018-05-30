@@ -17,8 +17,8 @@ const rowHeights = new Array(1000)
   rowHeight={index => rowHeights[index]}
   width={300}
 >
-  {({ columnIndex, key, rowIndex, style }) => (
-    <div key={key} style={style}>
+  {({ columnIndex, rowIndex, style }) => (
+    <div style={style}>
       row {rowIndex}, column {columnIndex}
     </div>
   )}
