@@ -26,7 +26,7 @@ exports[`VariableSizeList estimatedItemSize should udpate the scrollable height 
 Object {
   "height": 690,
   "overflow": "hidden",
-  "pointerEvents": "none",
+  "pointerEvents": "",
   "width": 50,
 }
 `;

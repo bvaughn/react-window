@@ -26,6 +26,7 @@ type onItemsRenderedCallback = ({
 type onScrollCallback = ({
   scrollDirection: ScrollDirection,
   scrollOffset: number,
+  scrollUpdateWasRequested: boolean,
 }) => void;
 
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
@@ -135,7 +136,6 @@ export default function createListComponent({
     scrollTo(scrollOffset: number): void {
       this.setState(
         prevState => ({
-          isScrolling: true,
           scrollDirection:
             prevState.scrollOffset < scrollOffset ? 'forward' : 'backward',
           scrollOffset: scrollOffset,
@@ -284,13 +284,19 @@ export default function createListComponent({
 
     _callOnScroll: (
       scrollDirection: ScrollDirection,
-      scrollOffset: number
+      scrollOffset: number,
+      scrollUpdateWasRequested: boolean
     ) => void;
     _callOnScroll = memoizeOne(
-      (scrollDirection: ScrollDirection, scrollOffset: number) =>
+      (
+        scrollDirection: ScrollDirection,
+        scrollOffset: number,
+        scrollUpdateWasRequested: boolean
+      ) =>
         ((this.props.onScroll: any): onScrollCallback)({
           scrollDirection,
           scrollOffset,
+          scrollUpdateWasRequested,
         })
     );
 
@@ -311,8 +317,16 @@ export default function createListComponent({
       }
 
       if (typeof this.props.onScroll === 'function') {
-        const { scrollDirection, scrollOffset } = this.state;
-        this._callOnScroll(scrollDirection, scrollOffset);
+        const {
+          scrollDirection,
+          scrollOffset,
+          scrollUpdateWasRequested,
+        } = this.state;
+        this._callOnScroll(
+          scrollDirection,
+          scrollOffset,
+          scrollUpdateWasRequested
+        );
       }
     }
 
@@ -374,30 +388,42 @@ export default function createListComponent({
 
     _onScrollHorizontal = (event: ScrollEvent): void => {
       const { scrollLeft } = event.currentTarget;
-      this.setState(
-        prevState => ({
+      this.setState(prevState => {
+        if (prevState.scrollOffset === scrollLeft) {
+          // Scroll position may have been updated by cDM/cDU,
+          // In which case we don't need to trigger another render,
+          // And we don't want to update state.isScrolling.
+          return null;
+        }
+
+        return {
           isScrolling: true,
           scrollDirection:
             prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
           scrollOffset: scrollLeft,
           scrollUpdateWasRequested: false,
-        }),
-        this._resetIsScrollingDebounced
-      );
+        };
+      }, this._resetIsScrollingDebounced);
     };
 
     _onScrollVertical = (event: ScrollEvent): void => {
       const { scrollTop } = event.currentTarget;
-      this.setState(
-        prevState => ({
+      this.setState(prevState => {
+        if (prevState.scrollOffset === scrollTop) {
+          // Scroll position may have been updated by cDM/cDU,
+          // In which case we don't need to trigger another render,
+          // And we don't want to update state.isScrolling.
+          return null;
+        }
+
+        return {
           isScrolling: true,
           scrollDirection:
             prevState.scrollOffset < scrollTop ? 'forward' : 'backward',
           scrollOffset: scrollTop,
           scrollUpdateWasRequested: false,
-        }),
-        this._resetIsScrollingDebounced
-      );
+        };
+      }, this._resetIsScrollingDebounced);
     };
 
     _scrollingContainerRef = (ref: any): void => {

@@ -1,28 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FixedSizeList callback props should call onScroll when scroll position changes 1`] = `
-Array [
-  Array [
-    Object {
-      "scrollDirection": "forward",
-      "scrollOffset": 0,
-    },
-  ],
-  Array [
-    Object {
-      "scrollDirection": "forward",
-      "scrollOffset": 100,
-    },
-  ],
-  Array [
-    Object {
-      "scrollDirection": "backward",
-      "scrollOffset": 0,
-    },
-  ],
-]
-`;
-
 exports[`FixedSizeList changing itemSize updates the rendered items 1`] = `
 Array [
   Array [
@@ -43,6 +20,36 @@ Array [
   ],
 ]
 `;
+
+exports[`FixedSizeList onScroll should call onScroll when scroll position changes 1`] = `
+Array [
+  Array [
+    Object {
+      "scrollDirection": "forward",
+      "scrollOffset": 0,
+      "scrollUpdateWasRequested": false,
+    },
+  ],
+  Array [
+    Object {
+      "scrollDirection": "forward",
+      "scrollOffset": 100,
+      "scrollUpdateWasRequested": true,
+    },
+  ],
+  Array [
+    Object {
+      "scrollDirection": "backward",
+      "scrollOffset": 0,
+      "scrollUpdateWasRequested": true,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeList onScroll should distinguish between "onScroll" events and scrollTo() calls 1`] = `true`;
+
+exports[`FixedSizeList onScroll should distinguish between "onScroll" events and scrollTo() calls 2`] = `false`;
 
 exports[`FixedSizeList overscanCount should accommodate a custom overscan 1`] = `
 Array [
@@ -124,6 +131,10 @@ Array [
   ],
 ]
 `;
+
+exports[`FixedSizeList scrollTo method should not report isScrolling 1`] = `false`;
+
+exports[`FixedSizeList scrollToItem method should not report isScrolling 1`] = `false`;
 
 exports[`FixedSizeList scrollToItem method should scroll to the correct item for align = "auto" 1`] = `
 Array [
@@ -295,15 +306,6 @@ Object {
   "height": 2500,
   "overflow": "hidden",
   "pointerEvents": "none",
-  "width": 50,
-}
-`;
-
-exports[`FixedSizeList should disable pointer events while scrolling 3`] = `
-Object {
-  "height": 2500,
-  "overflow": "hidden",
-  "pointerEvents": "",
   "width": 50,
 }
 `;

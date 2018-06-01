@@ -31,6 +31,7 @@ type OnScrollCallback = ({
   horizontalScrollDirection: ScrollDirection,
   scrollLeft: number,
   scrollTop: number,
+  scrollUpdateWasRequested: boolean,
   verticalScrollDirection: ScrollDirection,
 }) => void;
 
@@ -175,7 +176,6 @@ export default function createGridComponent({
         prevState => ({
           horizontalScrollDirection:
             prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
-          isScrolling: true,
           scrollLeft: scrollLeft,
           scrollTop: scrollTop,
           scrollUpdateWasRequested: true,
@@ -217,7 +217,6 @@ export default function createGridComponent({
 
     componentDidMount() {
       const { initialScrollLeft, initialScrollTop } = this.props;
-
       if (
         typeof initialScrollLeft === 'number' &&
         this._scrollingContainer != null
@@ -357,20 +356,23 @@ export default function createGridComponent({
       scrollLeft: number,
       scrollTop: number,
       horizontalScrollDirection: ScrollDirection,
-      verticalScrollDirection: ScrollDirection
+      verticalScrollDirection: ScrollDirection,
+      scrollUpdateWasRequested: boolean
     ) => void;
     _callOnScroll = memoizeOne(
       (
         scrollLeft: number,
         scrollTop: number,
         horizontalScrollDirection: ScrollDirection,
-        verticalScrollDirection: ScrollDirection
+        verticalScrollDirection: ScrollDirection,
+        scrollUpdateWasRequested: boolean
       ) =>
         ((this.props.onScroll: any): OnScrollCallback)({
           horizontalScrollDirection,
           scrollLeft,
           scrollTop,
           verticalScrollDirection,
+          scrollUpdateWasRequested,
         })
     );
 
@@ -405,13 +407,15 @@ export default function createGridComponent({
           horizontalScrollDirection,
           scrollLeft,
           scrollTop,
+          scrollUpdateWasRequested,
           verticalScrollDirection,
         } = this.state;
         this._callOnScroll(
           scrollLeft,
           scrollTop,
           horizontalScrollDirection,
-          verticalScrollDirection
+          verticalScrollDirection,
+          scrollUpdateWasRequested
         );
       }
     }
@@ -496,8 +500,18 @@ export default function createGridComponent({
 
     _onScroll = (event: ScrollEvent): void => {
       const { scrollLeft, scrollTop } = event.currentTarget;
-      this.setState(
-        prevState => ({
+      this.setState(prevState => {
+        if (
+          prevState.scrollLeft === scrollLeft &&
+          prevState.scrollTop === scrollTop
+        ) {
+          // Scroll position may have been updated by cDM/cDU,
+          // In which case we don't need to trigger another render,
+          // And we don't want to update state.isScrolling.
+          return null;
+        }
+
+        return {
           isScrolling: true,
           horizontalScrollDirection:
             prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
@@ -505,9 +519,9 @@ export default function createGridComponent({
           scrollTop,
           verticalScrollDirection:
             prevState.scrollTop < scrollTop ? 'forward' : 'backward',
-        }),
-        this._resetIsScrollingDebounced
-      );
+          scrollUpdateWasRequested: false,
+        };
+      }, this._resetIsScrollingDebounced);
     };
 
     _scrollingContainerRef = (ref: any): void => {

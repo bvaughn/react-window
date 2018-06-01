@@ -1,6 +1,17 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
+import ReactTestUtils from 'react-dom/test-utils';
 import { FixedSizeList } from '..';
+
+const simulateScroll = (instance, scrollOffset, direction = 'vertical') => {
+  if (direction === 'horizontal') {
+    instance._scrollingContainer.scrollLeft = scrollOffset;
+  } else {
+    instance._scrollingContainer.scrollTop = scrollOffset;
+  }
+  ReactTestUtils.Simulate.scroll(instance._scrollingContainer);
+};
 
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
@@ -63,12 +74,14 @@ describe('FixedSizeList', () => {
     });
 
     it('should reset cached styles when scrolling stops', () => {
-      const rendered = ReactTestRenderer.create(
-        <FixedSizeList {...defaultProps} useIsScrolling />
+      // Use ReactDOM renderer so the container ref and "onScroll" work correctly.
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} useIsScrolling />,
+        document.createElement('div')
       );
       // Scroll, then capture the rendered style for item 1,
       // Then let the debounce timer clear the cached styles.
-      rendered.getInstance().scrollToItem(1, 'start');
+      simulateScroll(instance, 251);
       const cellOneA = cellRenderer.mock.calls.find(
         ([params]) => params.index === 1
       );
@@ -76,7 +89,7 @@ describe('FixedSizeList', () => {
       cellRenderer.mockClear();
       // Scroll again, then capture the rendered style for item 1,
       // And confirm that the style was recreated.
-      rendered.getInstance().scrollToItem(0, 'start');
+      simulateScroll(instance, 0);
       const cellOneB = cellRenderer.mock.calls.find(
         ([params]) => params.index === 1
       );
@@ -94,7 +107,7 @@ describe('FixedSizeList', () => {
 
   it('should support momentum scrolling on iOS devices', () => {
     const rendered = ReactTestRenderer.create(
-      <FixedSizeList {...defaultProps} style={{ backgroundColor: 'red' }} />
+      <FixedSizeList {...defaultProps} />
     );
     expect(
       rendered.toJSON().props.style.WebkitOverflowScrolling
@@ -107,9 +120,7 @@ describe('FixedSizeList', () => {
     );
     const scrollContainer = findScrollContainer(rendered);
     expect(scrollContainer.props.style).toMatchSnapshot();
-    rendered.getInstance().scrollTo(100);
-    expect(scrollContainer.props.style).toMatchSnapshot();
-    jest.runAllTimers();
+    rendered.getInstance().setState({ isScrolling: true });
     expect(scrollContainer.props.style).toMatchSnapshot();
   });
 
@@ -191,12 +202,14 @@ describe('FixedSizeList', () => {
     });
 
     it('should pass an isScrolling param to children if requested', () => {
-      const rendered = ReactTestRenderer.create(
-        <FixedSizeList {...defaultProps} useIsScrolling />
+      // Use ReactDOM renderer so the container ref and "onScroll" work correctly.
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} useIsScrolling />,
+        document.createElement('div')
       );
       expect(cellRenderer.mock.calls[0]).toMatchSnapshot();
       cellRenderer.mockClear();
-      rendered.getInstance().scrollTo(100);
+      simulateScroll(instance, 100);
       expect(cellRenderer.mock.calls[0]).toMatchSnapshot();
       cellRenderer.mockClear();
       jest.runAllTimers();
@@ -204,13 +217,28 @@ describe('FixedSizeList', () => {
     });
 
     it('should not re-render children unnecessarily if isScrolling param is not used', () => {
-      const rendered = ReactTestRenderer.create(
-        <FixedSizeList {...defaultProps} />
+      // Use ReactDOM renderer so the container ref and "onScroll" work correctly.
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} />,
+        document.createElement('div')
       );
-      rendered.getInstance().scrollToItem(100);
+      simulateScroll(instance, 100);
       cellRenderer.mockClear();
       jest.runAllTimers();
       expect(cellRenderer).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('scrollTo method', () => {
+    it('should not report isScrolling', () => {
+      // Use ReactDOM renderer so the container ref and "onScroll" work correctly.
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} useIsScrolling />,
+        document.createElement('div')
+      );
+      cellRenderer.mockClear();
+      instance.scrollTo(100);
+      expect(cellRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
     });
   });
 
@@ -280,11 +308,21 @@ describe('FixedSizeList', () => {
       rendered.getInstance().scrollToItem(99, 'center');
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
+
+    it('should not report isScrolling', () => {
+      // Use ReactDOM renderer so the container ref and "onScroll" work correctly.
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} useIsScrolling />,
+        document.createElement('div')
+      );
+      cellRenderer.mockClear();
+      instance.scrollToItem(15);
+      expect(cellRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
+    });
   });
 
-  describe('callback props', () => {
-    // onItemsRendered is pretty well covered by other snapshot tests
-
+  // onItemsRendered is pretty well covered by other snapshot tests
+  describe('onScroll', () => {
     it('should call onScroll when scroll position changes', () => {
       const onScroll = jest.fn();
       const rendered = ReactTestRenderer.create(
@@ -293,6 +331,27 @@ describe('FixedSizeList', () => {
       rendered.getInstance().scrollTo(100);
       rendered.getInstance().scrollTo(0);
       expect(onScroll.mock.calls).toMatchSnapshot();
+    });
+
+    it('should distinguish between "onScroll" events and scrollTo() calls', () => {
+      const onScroll = jest.fn();
+      // Use ReactDOM renderer so the container ref and "onScroll" event work correctly.
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} onScroll={onScroll} />,
+        document.createElement('div')
+      );
+
+      onScroll.mockClear();
+      instance.scrollTo(100);
+      expect(
+        onScroll.mock.calls[0][0].scrollUpdateWasRequested
+      ).toMatchSnapshot();
+
+      onScroll.mockClear();
+      simulateScroll(instance, 200);
+      expect(
+        onScroll.mock.calls[0][0].scrollUpdateWasRequested
+      ).toMatchSnapshot();
     });
   });
 
