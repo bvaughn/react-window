@@ -397,11 +397,40 @@ const VariableSizeGrid = createGridComponent({
     };
 
     instance.resetAfterColumnIndex = (index: number) => {
-      instanceProps.lastMeasuredColumnIndex = index - 1;
+      instanceProps.lastMeasuredColumnIndex = Math.min(
+        instanceProps.lastMeasuredColumnIndex,
+        index - 1
+      );
+      instance._itemStyleCache = {};
+      instance.forceUpdate();
     };
 
     instance.resetAfterRowIndex = (index: number) => {
-      instanceProps.lastMeasuredRowIndex = index - 1;
+      instanceProps.lastMeasuredRowIndex = Math.min(
+        instanceProps.lastMeasuredRowIndex,
+        index - 1
+      );
+      instance._itemStyleCache = {};
+      instance.forceUpdate();
+    };
+
+    instance.resetAfterIndices = ({
+      columnIndex,
+      rowIndex,
+    }: {
+      columnIndex: number,
+      rowIndex: number,
+    }) => {
+      instanceProps.lastMeasuredColumnIndex = Math.min(
+        instanceProps.lastMeasuredColumnIndex,
+        columnIndex - 1
+      );
+      instanceProps.lastMeasuredRowIndex = Math.min(
+        instanceProps.lastMeasuredRowIndex,
+        rowIndex - 1
+      );
+      instance._itemStyleCache = {};
+      instance.forceUpdate();
     };
 
     return instanceProps;

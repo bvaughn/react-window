@@ -104,8 +104,8 @@ export default function createListComponent({
   validateProps: ValidateProps,
 |}) {
   return class List extends PureComponent<Props, State> {
-    _itemStyleCache: { [index: number]: Object } = {};
     _instanceProps: any = initInstanceProps(this.props, this);
+    _itemStyleCache: { [index: number]: Object } = {};
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _scrollingContainer: ?HTMLDivElement;
 

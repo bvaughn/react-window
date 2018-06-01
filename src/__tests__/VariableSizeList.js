@@ -161,14 +161,49 @@ describe('VariableSizeList', () => {
 
   describe('resetAfterIndex method', () => {
     it('should recalculate the estimated total size', () => {
-      // TODO Verify total size estimate is updated.
+      const itemSize = jest.fn(() => 75);
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeList {...defaultProps} itemSize={index => 25} />
+      );
+      rendered.getInstance().scrollToItem(19);
+      // We've measured every item initially.
+      const scrollContainer = findScrollContainer(rendered);
+      expect(scrollContainer.props.style.height).toEqual(500);
+      // Supplying a new itemSize alone should not impact anything.
+      rendered.update(
+        <VariableSizeList {...defaultProps} itemSize={itemSize} />
+      );
+      expect(scrollContainer.props.style.height).toEqual(500);
+      // Reset styles after index 15,
+      // And verify that the new estimated total takes this into account.
+      rendered.getInstance().resetAfterIndex(15);
+      rendered.getInstance().scrollToItem(19);
+      expect(itemSize).toHaveBeenCalledTimes(5);
+      expect(scrollContainer.props.style.height).toEqual(750);
     });
 
     it('should re-render items after the specified index with updated styles', () => {
-      // TODO Verify rendered item sizes are updated,
-      // And that our sCU caching strategy doesn't block the update,
-      // If it does we may have to revert to on-fiber style cache,
-      // Or somehow use an incremented key value to reset all items in the current window.
+      const itemSize = jest.fn(() => 75);
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeList
+          {...defaultProps}
+          itemCount={5}
+          itemSize={index => 25}
+        />
+      );
+      // We've rendered 5 rows initially.
+      expect(itemRenderer).toHaveBeenCalledTimes(5);
+      expect(itemRenderer.mock.calls[3][0].style.height).toBe(25);
+      // Supplying a new itemSize alone should not impact anything.
+      rendered.update(
+        <VariableSizeList {...defaultProps} itemCount={5} itemSize={itemSize} />
+      );
+      // Reset styles for rows 4 and 5.
+      // And verify that the affected rows are re-rendered with new styles.
+      itemRenderer.mockClear();
+      rendered.getInstance().resetAfterIndex(3);
+      expect(itemRenderer).toHaveBeenCalledTimes(5);
+      expect(itemRenderer.mock.calls[3][0].style.height).toBe(75);
     });
   });
 

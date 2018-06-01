@@ -114,6 +114,19 @@ const METHODS = [
     description: (
       <Fragment>
         <code>VariableSizeGrid</code> caches offsets and measurements for each
+        item for performance purposes. This method clears that cached data for
+        all items after (and including) the specified indices. It should be
+        called whenever an items size changes. (Note that this is not a typical
+        occurrance.)
+      </Fragment>
+    ),
+    signature:
+      'resetAfterIndices({ columnIndex: number, rowIndex: number }): void',
+  },
+  {
+    description: (
+      <Fragment>
+        <code>VariableSizeGrid</code> caches offsets and measurements for each
         row index for performance purposes. This method clears that cached data
         for all rows after (and including) the specified index. It should be
         called whenever a row's height changes. (Note that this is not a typical

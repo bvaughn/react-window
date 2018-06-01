@@ -7,6 +7,14 @@ const findScrollContainer = rendered => rendered.root.children[0].children[0];
 describe('VariableSizeGrid', () => {
   let itemRenderer, defaultProps, onItemsRendered;
 
+  const findItemRendererCall = (rowIndex: number, columnIndex: number) => {
+    const found = itemRenderer.mock.calls.find(
+      ([params]) =>
+        params.rowIndex === rowIndex && params.columnIndex === columnIndex
+    );
+    return found.length === 1 ? found[0] : null;
+  };
+
   beforeEach(() => {
     jest.useFakeTimers();
 
@@ -44,7 +52,7 @@ describe('VariableSizeGrid', () => {
     expect(itemRenderer).not.toHaveBeenCalled();
   });
 
-  describe('estimatedItemSize', () => {
+  describe('estimatedColumnWidth and estimatedRowHeight', () => {
     it('should estimate an initial scrollable size based on this value', () => {
       const columnWidth = jest.fn(() => 50);
       const rowHeight = jest.fn(() => 25);
@@ -191,14 +199,75 @@ describe('VariableSizeGrid', () => {
 
   describe('resetAfterIndex method', () => {
     it('should recalculate the estimated total size', () => {
-      // TODO Verify total size estimate is updated.
+      const columnWidth = jest.fn(() => 75);
+      const rowHeight = jest.fn(() => 35);
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid
+          {...defaultProps}
+          columnWidth={index => 50}
+          rowHeight={index => 25}
+        />
+      );
+      rendered.getInstance().scrollToItem({ columnIndex: 9, rowIndex: 19 });
+      // We've measured every item initially.
+      const scrollContainer = findScrollContainer(rendered);
+      expect(scrollContainer.props.style.height).toEqual(500);
+      expect(scrollContainer.props.style.width).toEqual(500);
+      // Supplying new item sizes alone should not impact anything.
+      rendered.update(
+        <VariableSizeGrid
+          {...defaultProps}
+          columnWidth={columnWidth}
+          rowHeight={rowHeight}
+        />
+      );
+      expect(scrollContainer.props.style.height).toEqual(500);
+      expect(scrollContainer.props.style.width).toEqual(500);
+      // Reset styles after index 75,
+      // And verify that the new estimated total takes this into account.
+      // This means 5 columns at 50px each and 5 at 75px each (625),
+      // And 15 rows at 25px each and 5 at 35px each (550px).
+      rendered
+        .getInstance()
+        .resetAfterIndices({ columnIndex: 5, rowIndex: 15 });
+      rendered.getInstance().scrollToItem({ columnIndex: 9, rowIndex: 19 });
+      expect(columnWidth).toHaveBeenCalledTimes(5);
+      expect(rowHeight).toHaveBeenCalledTimes(5);
+      expect(scrollContainer.props.style.height).toEqual(550);
+      expect(scrollContainer.props.style.width).toEqual(625);
     });
 
     it('should re-render items after the specified index with updated styles', () => {
-      // TODO Verify rendered item sizes are updated,
-      // And that our sCU caching strategy doesn't block the update,
-      // If it does we may have to revert to on-fiber style cache,
-      // Or somehow use an incremented key value to reset all items in the current window.
+      const columnWidth = jest.fn(() => 75);
+      const rowHeight = jest.fn(() => 35);
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid
+          {...defaultProps}
+          columnWidth={index => 50}
+          rowHeight={index => 25}
+        />
+      );
+      // We've rendered 5 columns and 5 rows initially.
+      expect(itemRenderer).toHaveBeenCalledTimes(25);
+      expect(findItemRendererCall(3, 3).style.height).toBe(25);
+      expect(findItemRendererCall(3, 3).style.width).toBe(50);
+      // Supplying new item sizes alone should not impact anything.
+      rendered.update(
+        <VariableSizeGrid
+          {...defaultProps}
+          columnCount={5}
+          columnWidth={columnWidth}
+          rowCount={5}
+          rowHeight={rowHeight}
+        />
+      );
+      // Reset styles for columns and rows 4 and 5.
+      // And verify that the affected rows are re-rendered with new styles.
+      itemRenderer.mockClear();
+      rendered.getInstance().resetAfterIndices({ columnIndex: 3, rowIndex: 3 });
+      expect(itemRenderer).toHaveBeenCalledTimes(25);
+      expect(findItemRendererCall(3, 3).style.height).toBe(35);
+      expect(findItemRendererCall(3, 3).style.width).toBe(75);
     });
   });
 

@@ -252,7 +252,12 @@ const VariableSizeList = createListComponent({
     };
 
     instance.resetAfterIndex = (index: number) => {
-      instanceProps.lastMeasuredIndex = index - 1;
+      instanceProps.lastMeasuredIndex = Math.min(
+        instanceProps.lastMeasuredIndex,
+        index - 1
+      );
+      instance._itemStyleCache = {};
+      instance.forceUpdate();
     };
 
     return instanceProps;
