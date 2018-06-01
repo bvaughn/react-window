@@ -86,7 +86,6 @@ describe('VariableSizeList', () => {
     });
   });
 
-  // TODO Verify all scrollToItem() snapshots below (they all look funky)
   describe('scrollToItem method', () => {
     it('should scroll to the correct item for align = "auto"', () => {
       const onItemsRendered = jest.fn();

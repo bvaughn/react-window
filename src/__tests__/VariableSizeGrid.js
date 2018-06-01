@@ -95,7 +95,6 @@ describe('VariableSizeGrid', () => {
     });
   });
 
-  // TODO Verify all scrollToItem() snapshots below (they all look funky)
   describe('scrollToItem method', () => {
     it('should scroll to the correct item for align = "auto"', () => {
       const rendered = ReactTestRenderer.create(
@@ -104,12 +103,12 @@ describe('VariableSizeGrid', () => {
       // Scroll down enough to show item 10 at the bottom.
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 10, rowIndex: 10, align: 'auto' });
+        .scrollToItem({ columnIndex: 5, rowIndex: 5, align: 'auto' });
       // No need to scroll again; item 9 is already visible.
       // Overscan indices will change though, since direction changes.
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 9, rowIndex: 9, align: 'auto' });
+        .scrollToItem({ columnIndex: 4, rowIndex: 4, align: 'auto' });
       // Scroll up enough to show item 2 at the top.
       rendered
         .getInstance()
@@ -124,18 +123,18 @@ describe('VariableSizeGrid', () => {
       // Scroll down enough to show item 10 at the top.
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 10, rowIndex: 10, align: 'start' });
+        .scrollToItem({ columnIndex: 5, rowIndex: 5, align: 'start' });
       // Scroll back up so that item 9 is at the top.
       // Overscroll direction wil change too.
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 9, rowIndex: 9, align: 'start' });
+        .scrollToItem({ columnIndex: 4, rowIndex: 4, align: 'start' });
       // Item 99 can't align at the top because there aren't enough items.
       // Scroll down as far as possible though.
       // Overscroll direction wil change again.
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 99, rowIndex: 99, align: 'start' });
+        .scrollToItem({ columnIndex: 9, rowIndex: 19, align: 'start' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
@@ -146,12 +145,12 @@ describe('VariableSizeGrid', () => {
       // Scroll down enough to show item 10 at the bottom.
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 10, rowIndex: 10, align: 'end' });
+        .scrollToItem({ columnIndex: 5, rowIndex: 5, align: 'end' });
       // Scroll back up so that item 9 is at the bottom.
       // Overscroll direction wil change too.
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 9, rowIndex: 9, align: 'end' });
+        .scrollToItem({ columnIndex: 4, rowIndex: 4, align: 'end' });
       // Item 1 can't align at the bottom because it's too close to the beginning.
       // Scroll up as far as possible though.
       // Overscroll direction wil change again.
@@ -168,12 +167,12 @@ describe('VariableSizeGrid', () => {
       // Scroll down enough to show item 10 in the middle.
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 10, rowIndex: 10, align: 'center' });
+        .scrollToItem({ columnIndex: 5, rowIndex: 5, align: 'center' });
       // Scroll back up so that item 9 is in the middle.
       // Overscroll direction wil change too.
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 9, rowIndex: 9, align: 'center' });
+        .scrollToItem({ columnIndex: 4, rowIndex: 4, align: 'center' });
       // Item 1 can't align in the middle because it's too close to the beginning.
       // Scroll up as far as possible though.
       // Overscroll direction wil change again.
@@ -185,7 +184,7 @@ describe('VariableSizeGrid', () => {
       // Overscroll direction wil change again.
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 99, rowIndex: 99, align: 'center' });
+        .scrollToItem({ columnIndex: 9, rowIndex: 19, align: 'center' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
   });

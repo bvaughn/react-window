@@ -29,6 +29,44 @@ type InstanceProps = {|
   rowMetadataMap: ItemMetadataMap,
 |};
 
+const getEstimatedTotalHeight = (
+  { rowCount }: Props,
+  { rowMetadataMap, estimatedRowHeight, lastMeasuredRowIndex }: InstanceProps
+) => {
+  let totalSizeOfMeasuredRows = 0;
+
+  if (lastMeasuredRowIndex >= 0) {
+    const itemMetadata = rowMetadataMap[lastMeasuredRowIndex];
+    totalSizeOfMeasuredRows = itemMetadata.offset + itemMetadata.size;
+  }
+
+  const numUnmeasuredItems = rowCount - lastMeasuredRowIndex - 1;
+  const totalSizeOfUnmeasuredItems = numUnmeasuredItems * estimatedRowHeight;
+
+  return totalSizeOfMeasuredRows + totalSizeOfUnmeasuredItems;
+};
+
+const getEstimatedTotalWidth = (
+  { columnCount }: Props,
+  {
+    columnMetadataMap,
+    estimatedColumnWidth,
+    lastMeasuredColumnIndex,
+  }: InstanceProps
+) => {
+  let totalSizeOfMeasuredRows = 0;
+
+  if (lastMeasuredColumnIndex >= 0) {
+    const itemMetadata = columnMetadataMap[lastMeasuredColumnIndex];
+    totalSizeOfMeasuredRows = itemMetadata.offset + itemMetadata.size;
+  }
+
+  const numUnmeasuredItems = columnCount - lastMeasuredColumnIndex - 1;
+  const totalSizeOfUnmeasuredItems = numUnmeasuredItems * estimatedColumnWidth;
+
+  return totalSizeOfMeasuredRows + totalSizeOfUnmeasuredItems;
+};
+
 const getItemMetadata = (
   itemType: ItemType,
   props: Props,
@@ -187,8 +225,16 @@ const getOffsetForIndexAndAlignment = (
 ): number => {
   const size = itemType === 'column' ? props.width : props.height;
   const itemMetadata = getItemMetadata(itemType, props, index, instanceProps);
-  const maxOffset = itemMetadata.offset;
-  const minOffset = itemMetadata.offset - size + itemMetadata.size;
+
+  // Get estimated total size after ItemMetadata is computed,
+  // To ensure it reflects actual measurements instead of just estimates.
+  const estimatedTotalSize =
+    itemType === 'column'
+      ? getEstimatedTotalWidth(props, instanceProps)
+      : getEstimatedTotalHeight(props, instanceProps);
+
+  const maxOffset = Math.min(estimatedTotalSize - size, itemMetadata.offset);
+  const minOffset = Math.max(0, itemMetadata.offset - size + itemMetadata.size);
 
   switch (align) {
     case 'start':
@@ -255,44 +301,8 @@ const VariableSizeGrid = createGridComponent({
     instanceProps: InstanceProps
   ): number => instanceProps.columnMetadataMap[index].size,
 
-  getEstimatedTotalHeight: (
-    { rowCount }: Props,
-    { rowMetadataMap, estimatedRowHeight, lastMeasuredRowIndex }: InstanceProps
-  ) => {
-    let totalSizeOfMeasuredRows = 0;
-
-    if (lastMeasuredRowIndex >= 0) {
-      const itemMetadata = rowMetadataMap[lastMeasuredRowIndex];
-      totalSizeOfMeasuredRows = itemMetadata.offset + itemMetadata.size;
-    }
-
-    const numUnmeasuredItems = rowCount - lastMeasuredRowIndex - 1;
-    const totalSizeOfUnmeasuredItems = numUnmeasuredItems * estimatedRowHeight;
-
-    return totalSizeOfMeasuredRows + totalSizeOfUnmeasuredItems;
-  },
-
-  getEstimatedTotalWidth: (
-    { columnCount }: Props,
-    {
-      columnMetadataMap,
-      estimatedColumnWidth,
-      lastMeasuredColumnIndex,
-    }: InstanceProps
-  ) => {
-    let totalSizeOfMeasuredRows = 0;
-
-    if (lastMeasuredColumnIndex >= 0) {
-      const itemMetadata = columnMetadataMap[lastMeasuredColumnIndex];
-      totalSizeOfMeasuredRows = itemMetadata.offset + itemMetadata.size;
-    }
-
-    const numUnmeasuredItems = columnCount - lastMeasuredColumnIndex - 1;
-    const totalSizeOfUnmeasuredItems =
-      numUnmeasuredItems * estimatedColumnWidth;
-
-    return totalSizeOfMeasuredRows + totalSizeOfUnmeasuredItems;
-  },
+  getEstimatedTotalHeight,
+  getEstimatedTotalWidth,
 
   getOffsetForColumnAndAlignment: (
     props: Props,
