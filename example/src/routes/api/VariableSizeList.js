@@ -36,14 +36,14 @@ const PROPS = [
     defaultValue: 50,
     description: (
       <Fragment>
-        Estimated size of a cell in the direction being windowed. For vertical
+        Estimated size of a item in the direction being windowed. For vertical
         lists, this is the row height. For horizontal lists, this is the column
         width.
         <br />
         <br />
         This value is used to calculated the estimated total size of a list
-        before its cells have all been measured. The total size impacts user
-        scrolling behavior. It is updated whenever new cells are measured.
+        before its items have all been measured. The total size impacts user
+        scrolling behavior. It is updated whenever new items are measured.
       </Fragment>
     ),
     isRequired: true,
@@ -53,7 +53,7 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Returns the size of a cell in the direction being windowed. For vertical
+        Returns the size of a item in the direction being windowed. For vertical
         lists, this is the row height. For horizontal lists, this is the column
         width.
         <br />
@@ -75,8 +75,8 @@ const METHODS = [
       <Fragment>
         <code>VariableSizeList</code> caches offsets and measurements for each
         index for performance purposes. This method clears that cached data for
-        all cells after (and including) the specified index. It should be called
-        whenever a cell's size changes. (Note that this is not a typical
+        all items after (and including) the specified index. It should be called
+        whenever a item's size changes. (Note that this is not a typical
         occurrance.)
       </Fragment>
     ),

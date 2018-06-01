@@ -13,35 +13,35 @@ type DynanmicProps = {|
 
 type itemSizeGetter = (index: number) => number;
 
-type CellMetadata = {|
+type ItemMetadata = {|
   offset: number,
   size: number,
 |};
 type InstanceProps = {|
-  cellMetadataMap: { [index: number]: CellMetadata },
+  itemMetadataMap: { [index: number]: ItemMetadata },
   estimatedItemSize: number,
   lastMeasuredIndex: number,
 |};
 
-const getCellMetadata = (
+const getItemMetadata = (
   props: Props,
   index: number,
   instanceProps: InstanceProps
-): CellMetadata => {
+): ItemMetadata => {
   const { itemSize } = ((props: any): DynanmicProps);
-  const { cellMetadataMap, lastMeasuredIndex } = instanceProps;
+  const { itemMetadataMap, lastMeasuredIndex } = instanceProps;
 
   if (index > lastMeasuredIndex) {
     let offset = 0;
     if (lastMeasuredIndex >= 0) {
-      const cellMetadata = cellMetadataMap[lastMeasuredIndex];
-      offset = cellMetadata.offset + cellMetadata.size;
+      const itemMetadata = itemMetadataMap[lastMeasuredIndex];
+      offset = itemMetadata.offset + itemMetadata.size;
     }
 
     for (let i = lastMeasuredIndex + 1; i <= index; i++) {
       let size = ((itemSize: any): itemSizeGetter)(i);
 
-      cellMetadataMap[i] = {
+      itemMetadataMap[i] = {
         offset,
         size,
       };
@@ -52,22 +52,22 @@ const getCellMetadata = (
     instanceProps.lastMeasuredIndex = index;
   }
 
-  return cellMetadataMap[index];
+  return itemMetadataMap[index];
 };
 
-const findNearestCell = (
+const findNearestItem = (
   props: Props,
   instanceProps: InstanceProps,
   offset: number
 ) => {
-  const { cellMetadataMap, lastMeasuredIndex } = instanceProps;
+  const { itemMetadataMap, lastMeasuredIndex } = instanceProps;
 
-  const lastMeasuredCellOffset =
-    lastMeasuredIndex > 0 ? cellMetadataMap[lastMeasuredIndex].offset : 0;
+  const lastMeasuredItemOffset =
+    lastMeasuredIndex > 0 ? itemMetadataMap[lastMeasuredIndex].offset : 0;
 
-  if (lastMeasuredCellOffset >= offset) {
-    // If we've already measured cells within this range just use a binary search as it's faster.
-    return findNearestCellBinarySearch(
+  if (lastMeasuredItemOffset >= offset) {
+    // If we've already measured items within this range just use a binary search as it's faster.
+    return findNearestItemBinarySearch(
       props,
       instanceProps,
       lastMeasuredIndex,
@@ -76,9 +76,9 @@ const findNearestCell = (
     );
   } else {
     // If we haven't yet measured this high, fallback to an exponential search with an inner binary search.
-    // The exponential search avoids pre-computing sizes for the full set of cells as a binary search would.
+    // The exponential search avoids pre-computing sizes for the full set of items as a binary search would.
     // The overall complexity for this approach is O(log n).
-    return findNearestCellExponentialSearch(
+    return findNearestItemExponentialSearch(
       props,
       instanceProps,
       lastMeasuredIndex,
@@ -87,7 +87,7 @@ const findNearestCell = (
   }
 };
 
-const findNearestCellBinarySearch = (
+const findNearestItemBinarySearch = (
   props: Props,
   instanceProps: InstanceProps,
   high: number,
@@ -96,7 +96,7 @@ const findNearestCellBinarySearch = (
 ): number => {
   while (low <= high) {
     const middle = low + Math.floor((high - low) / 2);
-    const currentOffset = getCellMetadata(props, middle, instanceProps).offset;
+    const currentOffset = getItemMetadata(props, middle, instanceProps).offset;
 
     if (currentOffset === offset) {
       return middle;
@@ -114,7 +114,7 @@ const findNearestCellBinarySearch = (
   }
 };
 
-const findNearestCellExponentialSearch = (
+const findNearestItemExponentialSearch = (
   props: Props,
   instanceProps: InstanceProps,
   index: number,
@@ -125,13 +125,13 @@ const findNearestCellExponentialSearch = (
 
   while (
     index < itemCount &&
-    getCellMetadata(props, index, instanceProps).offset < offset
+    getItemMetadata(props, index, instanceProps).offset < offset
   ) {
     index += interval;
     interval *= 2;
   }
 
-  return findNearestCellBinarySearch(
+  return findNearestItemBinarySearch(
     props,
     instanceProps,
     Math.min(index, itemCount - 1),
@@ -142,34 +142,33 @@ const findNearestCellExponentialSearch = (
 
 const getEstimatedTotalSize = (
   { itemCount }: Props,
-  { cellMetadataMap, estimatedItemSize, lastMeasuredIndex }: InstanceProps
+  { itemMetadataMap, estimatedItemSize, lastMeasuredIndex }: InstanceProps
 ) => {
-  let totalSizeOfMeasuredCells = 0;
+  let totalSizeOfMeasuredItems = 0;
 
   if (lastMeasuredIndex >= 0) {
-    const cellMetadata = cellMetadataMap[lastMeasuredIndex];
-    totalSizeOfMeasuredCells = cellMetadata.offset + cellMetadata.size;
+    const itemMetadata = itemMetadataMap[lastMeasuredIndex];
+    totalSizeOfMeasuredItems = itemMetadata.offset + itemMetadata.size;
   }
 
-  const numUnmeasuredCells = itemCount - lastMeasuredIndex - 1;
-  const totalSizeOfUnmeasuredCells = numUnmeasuredCells * estimatedItemSize;
+  const numUnmeasuredItems = itemCount - lastMeasuredIndex - 1;
+  const totalSizeOfUnmeasuredItems = numUnmeasuredItems * estimatedItemSize;
 
-  return totalSizeOfMeasuredCells + totalSizeOfUnmeasuredCells;
+  return totalSizeOfMeasuredItems + totalSizeOfUnmeasuredItems;
 };
 
 const VariableSizeList = createListComponent({
-  // TODO Rename to "getItemOffset"
-  getCellOffset: (
+  getItemOffset: (
     props: Props,
     index: number,
     instanceProps: InstanceProps
-  ): number => getCellMetadata(props, index, instanceProps).offset,
+  ): number => getItemMetadata(props, index, instanceProps).offset,
 
   getItemSize: (
     props: Props,
     index: number,
     instanceProps: InstanceProps
-  ): number => instanceProps.cellMetadataMap[index].size,
+  ): number => instanceProps.itemMetadataMap[index].size,
 
   getEstimatedTotalSize,
 
@@ -183,16 +182,16 @@ const VariableSizeList = createListComponent({
     const { direction, height, width } = props;
 
     const size = (((direction === 'horizontal' ? width : height): any): number);
-    const cellMetadata = getCellMetadata(props, index, instanceProps);
+    const itemMetadata = getItemMetadata(props, index, instanceProps);
 
-    // Get estimated total size after CellMetadata is computed,
+    // Get estimated total size after ItemMetadata is computed,
     // To ensure it reflects actual measurements instead of just estimates.
     const estimatedTotalSize = getEstimatedTotalSize(props, instanceProps);
 
-    const maxOffset = Math.min(estimatedTotalSize - size, cellMetadata.offset);
+    const maxOffset = Math.min(estimatedTotalSize - size, itemMetadata.offset);
     const minOffset = Math.max(
       0,
-      cellMetadata.offset - size + cellMetadata.size
+      itemMetadata.offset - size + itemMetadata.size
     );
 
     switch (align) {
@@ -218,7 +217,7 @@ const VariableSizeList = createListComponent({
     props: Props,
     offset: number,
     instanceProps: InstanceProps
-  ): number => findNearestCell(props, instanceProps, offset),
+  ): number => findNearestItem(props, instanceProps, offset),
 
   getStopIndexForStartIndex: (
     props: Props,
@@ -229,15 +228,15 @@ const VariableSizeList = createListComponent({
     const { direction, height, itemCount, width } = props;
 
     const size = (((direction === 'horizontal' ? width : height): any): number);
-    const cellMetadata = getCellMetadata(props, startIndex, instanceProps);
+    const itemMetadata = getItemMetadata(props, startIndex, instanceProps);
     const maxOffset = scrollOffset + size;
 
-    let offset = cellMetadata.offset + cellMetadata.size;
+    let offset = itemMetadata.offset + itemMetadata.size;
     let stopIndex = startIndex;
 
     while (stopIndex < itemCount - 1 && offset < maxOffset) {
       stopIndex++;
-      offset += getCellMetadata(props, stopIndex, instanceProps).size;
+      offset += getItemMetadata(props, stopIndex, instanceProps).size;
     }
 
     return stopIndex;
@@ -247,7 +246,7 @@ const VariableSizeList = createListComponent({
     const { estimatedItemSize } = ((props: any): DynanmicProps);
 
     const instanceProps = {
-      cellMetadataMap: {},
+      itemMetadataMap: {},
       estimatedItemSize: estimatedItemSize || DEFAULT_ESTIMATED_ITEM_SIZE,
       lastMeasuredIndex: -1,
     };

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FixedSizeGrid changing cell size updates the rendered items 1`] = `
+exports[`FixedSizeGrid changing item size updates the rendered items 1`] = `
 Array [
   Array [
     Object {

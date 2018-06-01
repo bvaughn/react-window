@@ -16,18 +16,18 @@ const simulateScroll = (instance, scrollOffset, direction = 'vertical') => {
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('FixedSizeList', () => {
-  let cellRenderer, defaultProps, onItemsRendered;
+  let itemRenderer, defaultProps, onItemsRendered;
 
   beforeEach(() => {
     jest.useFakeTimers();
 
     onItemsRendered = jest.fn();
 
-    cellRenderer = jest.fn(({ style, ...rest }) => (
+    itemRenderer = jest.fn(({ style, ...rest }) => (
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     defaultProps = {
-      children: cellRenderer,
+      children: itemRenderer,
       height: 100,
       itemCount: 100,
       itemSize: 25,
@@ -38,13 +38,13 @@ describe('FixedSizeList', () => {
 
   it('should render an empty list', () => {
     ReactTestRenderer.create(<FixedSizeList {...defaultProps} itemCount={0} />);
-    expect(cellRenderer.mock.calls.length).toMatchSnapshot();
+    expect(itemRenderer.mock.calls.length).toMatchSnapshot();
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
   it('should render a list of rows', () => {
     ReactTestRenderer.create(<FixedSizeList {...defaultProps} />);
-    expect(cellRenderer.mock.calls.length).toMatchSnapshot();
+    expect(itemRenderer.mock.calls.length).toMatchSnapshot();
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
@@ -52,7 +52,7 @@ describe('FixedSizeList', () => {
     ReactTestRenderer.create(
       <FixedSizeList {...defaultProps} direction="horizontal" />
     );
-    expect(cellRenderer.mock.calls.length).toMatchSnapshot();
+    expect(itemRenderer.mock.calls.length).toMatchSnapshot();
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
@@ -66,10 +66,10 @@ describe('FixedSizeList', () => {
       rendered.getInstance().scrollToItem(1, 'start');
       rendered.getInstance().scrollToItem(2, 'start');
       rendered.getInstance().scrollToItem(3, 'start');
-      // Find all of the times cell 3 was rendered.
+      // Find all of the times item 3 was rendered.
       // If we are caching props correctly, it should only be once.
       expect(
-        cellRenderer.mock.calls.find(([params]) => params.index === 3)
+        itemRenderer.mock.calls.find(([params]) => params.index === 3)
       ).toHaveLength(1);
     });
 
@@ -82,18 +82,18 @@ describe('FixedSizeList', () => {
       // Scroll, then capture the rendered style for item 1,
       // Then let the debounce timer clear the cached styles.
       simulateScroll(instance, 251);
-      const cellOneA = cellRenderer.mock.calls.find(
+      const itemOneA = itemRenderer.mock.calls.find(
         ([params]) => params.index === 1
       );
       jest.runAllTimers();
-      cellRenderer.mockClear();
+      itemRenderer.mockClear();
       // Scroll again, then capture the rendered style for item 1,
       // And confirm that the style was recreated.
       simulateScroll(instance, 0);
-      const cellOneB = cellRenderer.mock.calls.find(
+      const itemOneB = itemRenderer.mock.calls.find(
         ([params]) => params.index === 1
       );
-      expect(cellOneA[0].style).not.toBe(cellOneB[0].style);
+      expect(itemOneA[0].style).not.toBe(itemOneB[0].style);
     });
   });
 
@@ -198,7 +198,7 @@ describe('FixedSizeList', () => {
   describe('useIsScrolling', () => {
     it('should not pass an isScrolling param to children unless requested', () => {
       ReactTestRenderer.create(<FixedSizeList {...defaultProps} />);
-      expect(cellRenderer.mock.calls[0]).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
     });
 
     it('should pass an isScrolling param to children if requested', () => {
@@ -207,13 +207,13 @@ describe('FixedSizeList', () => {
         <FixedSizeList {...defaultProps} useIsScrolling />,
         document.createElement('div')
       );
-      expect(cellRenderer.mock.calls[0]).toMatchSnapshot();
-      cellRenderer.mockClear();
+      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
+      itemRenderer.mockClear();
       simulateScroll(instance, 100);
-      expect(cellRenderer.mock.calls[0]).toMatchSnapshot();
-      cellRenderer.mockClear();
+      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
+      itemRenderer.mockClear();
       jest.runAllTimers();
-      expect(cellRenderer.mock.calls[0]).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
     });
 
     it('should not re-render children unnecessarily if isScrolling param is not used', () => {
@@ -223,9 +223,9 @@ describe('FixedSizeList', () => {
         document.createElement('div')
       );
       simulateScroll(instance, 100);
-      cellRenderer.mockClear();
+      itemRenderer.mockClear();
       jest.runAllTimers();
-      expect(cellRenderer).not.toHaveBeenCalled();
+      expect(itemRenderer).not.toHaveBeenCalled();
     });
   });
 
@@ -236,9 +236,9 @@ describe('FixedSizeList', () => {
         <FixedSizeList {...defaultProps} useIsScrolling />,
         document.createElement('div')
       );
-      cellRenderer.mockClear();
+      itemRenderer.mockClear();
       instance.scrollTo(100);
-      expect(cellRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
     });
   });
 
@@ -315,9 +315,9 @@ describe('FixedSizeList', () => {
         <FixedSizeList {...defaultProps} useIsScrolling />,
         document.createElement('div')
       );
-      cellRenderer.mockClear();
+      itemRenderer.mockClear();
       instance.scrollToItem(15);
-      expect(cellRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
     });
   });
 

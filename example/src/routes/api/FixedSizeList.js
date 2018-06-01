@@ -107,7 +107,7 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Size of a cell in the direction being windowed. For vertical lists, this
+        Size of a item in the direction being windowed. For vertical lists, this
         is the row height. For horizontal lists, this is the column width.
       </Fragment>
     ),
@@ -148,12 +148,12 @@ const PROPS = [
     defaultValue: 1,
     description: (
       <Fragment>
-        The number of cells (rows or columns) to render outside of the visible
+        The number of items (rows or columns) to render outside of the visible
         area. This property can be important for two reasons:
         <ul>
           <li>
             Overscanning by one row or column allows the tab key to focus on the
-            next (not yet visible) cell.
+            next (not yet visible) item.
           </li>
           <li>
             Overscanning slightly can reduce or prevent a flash of empty space
@@ -161,7 +161,7 @@ const PROPS = [
           </li>
         </ul>
         Note that overscanning too much can negatively impact performance. By
-        default, List overscans by one cell.
+        default, List overscans by one item.
       </Fragment>
     ),
     name: 'overscanCount',
@@ -253,7 +253,7 @@ const METHODS = [
             vertical lists or the left for horizontal lists).
           </li>
         </ul>
-        <Link to="/examples/list/scroll-to-cell">
+        <Link to="/examples/list/scroll-to-item">
           See here for an example of this API.
         </Link>
       </Fragment>

@@ -64,14 +64,14 @@ type State = {|
   verticalScrollDirection: ScrollDirection,
 |};
 
-type getCellOffset = (
+type getItemOffset = (
   props: Props,
   index: number,
   instanceProps: any
 ) => number;
 type getItemSize = (props: Props, index: number, instanceProps: any) => number;
 type getEstimatedTotalSize = (props: Props, instanceProps: any) => number;
-type GetOffsetForCellAndAlignment = (
+type GetOffsetForItemAndAlignment = (
   props: Props,
   index: number,
   align: ScrollToAlign,
@@ -110,15 +110,15 @@ export default function createGridComponent({
   initInstanceProps,
   validateProps,
 }: {|
-  getColumnOffset: getCellOffset,
+  getColumnOffset: getItemOffset,
   getColumnStartIndexForOffset: GetStartIndexForOffset,
   getColumnStopIndexForStartIndex: GetStopIndexForStartIndex,
   getColumnWidth: getItemSize,
   getEstimatedTotalHeight: getEstimatedTotalSize,
   getEstimatedTotalWidth: getEstimatedTotalSize,
-  getOffsetForColumnAndAlignment: GetOffsetForCellAndAlignment,
-  getOffsetForRowAndAlignment: GetOffsetForCellAndAlignment,
-  getRowOffset: getCellOffset,
+  getOffsetForColumnAndAlignment: GetOffsetForItemAndAlignment,
+  getOffsetForRowAndAlignment: GetOffsetForItemAndAlignment,
+  getRowOffset: getItemOffset,
   getRowHeight: getItemSize,
   getRowStartIndexForOffset: GetStartIndexForOffset,
   getRowStopIndexForStartIndex: GetStopIndexForStartIndex,
@@ -126,7 +126,7 @@ export default function createGridComponent({
   validateProps: ValidateProps,
 |}) {
   return class Grid extends PureComponent<Props, State> {
-    _cellStyleCache: { [key: string]: Object } = {};
+    _itemStyleCache: { [key: string]: Object } = {};
     _instanceProps: any;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _scrollingContainer: ?HTMLDivElement;
@@ -271,7 +271,7 @@ export default function createGridComponent({
       ] = this._getHorizontalRangeToRender();
       const [rowStartIndex, rowStopIndex] = this._getVerticalRangeToRender();
 
-      const cells = [];
+      const items = [];
       if (columnCount > 0 && rowCount) {
         for (
           let rowIndex = rowStartIndex;
@@ -283,21 +283,21 @@ export default function createGridComponent({
             columnIndex <= columnStopIndex;
             columnIndex++
           ) {
-            cells.push(
+            items.push(
               <GridItem
                 columnIndex={columnIndex}
                 isScrolling={useIsScrolling ? isScrolling : undefined}
                 key={`${rowIndex}:${columnIndex}`}
                 renderFunction={this._renderFunction}
                 rowIndex={rowIndex}
-                style={this._getCellStyle(rowIndex, columnIndex)}
+                style={this._getItemStyle(rowIndex, columnIndex)}
               />
             );
           }
         }
       }
 
-      // Read this value AFTER cells have been created,
+      // Read this value AFTER items have been created,
       // So their actual sizes (if variable) are taken into consideration.
       const estimatedTotalHeight = getEstimatedTotalHeight(
         this.props,
@@ -331,7 +331,7 @@ export default function createGridComponent({
               width: estimatedTotalWidth,
             }}
           >
-            {cells}
+            {items}
           </div>
         </div>
       );
@@ -438,19 +438,19 @@ export default function createGridComponent({
       }
     }
 
-    // Lazily create and cache cell styles while scrolling,
+    // Lazily create and cache item styles while scrolling,
     // So that pure component sCU will prevent re-renders.
     // We maintain this cache, and pass a style prop rather than index,
-    // So that List can clear cached styles and force cell re-render if necessary.
-    _getCellStyle: (rowIndex: number, columnIndex: number) => Object;
-    _getCellStyle = (rowIndex: number, columnIndex: number): Object => {
+    // So that List can clear cached styles and force item re-render if necessary.
+    _getItemStyle: (rowIndex: number, columnIndex: number) => Object;
+    _getItemStyle = (rowIndex: number, columnIndex: number): Object => {
       const key = `${rowIndex}:${columnIndex}`;
 
       let style;
-      if (this._cellStyleCache.hasOwnProperty(key)) {
-        style = this._cellStyleCache[key];
+      if (this._itemStyleCache.hasOwnProperty(key)) {
+        style = this._itemStyleCache[key];
       } else {
-        this._cellStyleCache[key] = style = {
+        this._itemStyleCache[key] = style = {
           position: 'absolute',
           left: getColumnOffset(this.props, columnIndex, this._instanceProps),
           top: getRowOffset(this.props, rowIndex, this._instanceProps),
@@ -478,8 +478,8 @@ export default function createGridComponent({
         this._instanceProps
       );
 
-      // Overscan by one cell in each direction so that tab/focus works.
-      // If there isn't at least one extra cell, tab loops back around.
+      // Overscan by one item in each direction so that tab/focus works.
+      // If there isn't at least one extra item, tab loops back around.
       const overscanBackward =
         horizontalScrollDirection === 'backward'
           ? Math.max(1, overscanCount)
@@ -513,8 +513,8 @@ export default function createGridComponent({
         this._instanceProps
       );
 
-      // Overscan by one cell in each direction so that tab/focus works.
-      // If there isn't at least one extra cell, tab loops back around.
+      // Overscan by one item in each direction so that tab/focus works.
+      // If there isn't at least one extra item, tab loops back around.
       const overscanBackward =
         verticalScrollDirection === 'backward' ? Math.max(1, overscanCount) : 1;
       const overscanForward =
@@ -561,7 +561,7 @@ export default function createGridComponent({
     // Facade for the user-provided children function.
     // This adds the overhead of an additional method call,
     // But has hte benefit of not breaking pure sCU checks,
-    // Allowing List to avoid re-rendering cells until indices change.
+    // Allowing List to avoid re-rendering items until indices change.
     _renderFunction: RenderFunction;
     _renderFunction = (params: RenderFunctionParams) =>
       this.props.children(params);
@@ -593,8 +593,8 @@ export default function createGridComponent({
 
       this.setState({ isScrolling: false }, () => {
         // Clear style cache after state update has been committed.
-        // This way we don't break pure sCU for cells that don't use isScrolling param.
-        this._cellStyleCache = {};
+        // This way we don't break pure sCU for items that don't use isScrolling param.
+        this._itemStyleCache = {};
       });
     };
   };

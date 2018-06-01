@@ -49,7 +49,7 @@ export default function App() {
   );
 }
 
-// TODO Add a route showing how to use PureComponent for expensive cells.
+// TODO Add a route showing how to use PureComponent for expensive items.
 
 const EXAMPLE_ROUTES = [
   {
@@ -78,7 +78,7 @@ const EXAMPLE_ROUTES = [
     component: ListWithScrollingIndicatorExample,
   },
   {
-    path: '/examples/list/scroll-to-cell',
+    path: '/examples/list/scroll-to-item',
     title: 'Scrolling to an item',
     component: ScrollToItemExample,
   },

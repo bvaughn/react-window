@@ -5,17 +5,17 @@ import { VariableSizeList } from '..';
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('VariableSizeList', () => {
-  let cellRenderer, defaultProps, onItemsRendered;
+  let itemRenderer, defaultProps, onItemsRendered;
 
   beforeEach(() => {
     jest.useFakeTimers();
 
-    cellRenderer = jest.fn(({ style, ...rest }) => (
+    itemRenderer = jest.fn(({ style, ...rest }) => (
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     onItemsRendered = jest.fn();
     defaultProps = {
-      children: cellRenderer,
+      children: itemRenderer,
       estimatedItemSize: 25,
       height: 100,
       itemCount: 20,
@@ -32,7 +32,7 @@ describe('VariableSizeList', () => {
     const rendered = ReactTestRenderer.create(
       <VariableSizeList {...defaultProps} />
     );
-    cellRenderer.mockClear();
+    itemRenderer.mockClear();
     rendered.update(
       <VariableSizeList
         {...defaultProps}
@@ -40,7 +40,7 @@ describe('VariableSizeList', () => {
         onItemsRendered={onItemsRendered}
       />
     );
-    expect(cellRenderer).not.toHaveBeenCalled();
+    expect(itemRenderer).not.toHaveBeenCalled();
   });
 
   describe('estimatedItemSize', () => {
@@ -64,7 +64,7 @@ describe('VariableSizeList', () => {
       expect(scrollContainer.props.style.height).toEqual(4875);
     });
 
-    it('should udpate the scrollable size as more cells are measured', () => {
+    it('should udpate the scrollable size as more items are measured', () => {
       const itemSize = jest.fn(() => 25);
       const rendered = ReactTestRenderer.create(
         <VariableSizeList
@@ -165,8 +165,8 @@ describe('VariableSizeList', () => {
       // TODO Verify total size estimate is updated.
     });
 
-    it('should re-render cells after the specified index with updated styles', () => {
-      // TODO Verify rendered cell sizes are updated,
+    it('should re-render items after the specified index with updated styles', () => {
+      // TODO Verify rendered item sizes are updated,
       // And that our sCU caching strategy doesn't block the update,
       // If it does we may have to revert to on-fiber style cache,
       // Or somehow use an incremented key value to reset all items in the current window.

@@ -54,7 +54,7 @@ type State = {|
   scrollUpdateWasRequested: boolean,
 |};
 
-type GetCellOffset = (
+type GetItemOffset = (
   props: Props,
   index: number,
   instanceProps: any
@@ -85,7 +85,7 @@ type ValidateProps = (props: Props) => void;
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
 export default function createListComponent({
-  getCellOffset,
+  getItemOffset,
   getEstimatedTotalSize,
   getItemSize,
   getOffsetForIndexAndAlignment,
@@ -94,7 +94,7 @@ export default function createListComponent({
   initInstanceProps,
   validateProps,
 }: {|
-  getCellOffset: GetCellOffset,
+  getItemOffset: GetItemOffset,
   getEstimatedTotalSize: GetEstimatedTotalSize,
   getItemSize: GetItemSize,
   getOffsetForIndexAndAlignment: GetOffsetForIndexAndAlignment,
@@ -104,7 +104,7 @@ export default function createListComponent({
   validateProps: ValidateProps,
 |}) {
   return class List extends PureComponent<Props, State> {
-    _cellStyleCache: { [index: number]: Object } = {};
+    _itemStyleCache: { [index: number]: Object } = {};
     _instanceProps: any = initInstanceProps(this.props, this);
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _scrollingContainer: ?HTMLDivElement;
@@ -220,22 +220,22 @@ export default function createListComponent({
 
       const [startIndex, stopIndex] = this._getRangeToRender();
 
-      const cells = [];
+      const items = [];
       if (itemCount > 0) {
         for (let index = startIndex; index <= stopIndex; index++) {
-          cells.push(
+          items.push(
             <ListItem
               key={index}
               index={index}
               isScrolling={useIsScrolling ? isScrolling : undefined}
               renderFunction={this._renderFunction}
-              style={this._getCellStyle(index)}
+              style={this._getItemStyle(index)}
             />
           );
         }
       }
 
-      // Read this value AFTER cells have been created,
+      // Read this value AFTER items have been created,
       // So their actual sizes (if variable) are taken into consideration.
       const estimatedTotalSize = getEstimatedTotalSize(
         this.props,
@@ -265,7 +265,7 @@ export default function createListComponent({
               width: direction === 'horizontal' ? estimatedTotalSize : width,
             }}
           >
-            {cells}
+            {items}
           </div>
         </div>
       );
@@ -340,27 +340,27 @@ export default function createListComponent({
       }
     }
 
-    // Lazily create and cache cell styles while scrolling,
+    // Lazily create and cache item styles while scrolling,
     // So that pure component sCU will prevent re-renders.
     // We maintain this cache, and pass a style prop rather than index,
-    // So that List can clear cached styles and force cell re-render if necessary.
-    _getCellStyle: (index: number) => Object;
-    _getCellStyle = (index: number): Object => {
+    // So that List can clear cached styles and force item re-render if necessary.
+    _getItemStyle: (index: number) => Object;
+    _getItemStyle = (index: number): Object => {
       const { direction } = this.props;
 
       let style;
-      if (this._cellStyleCache.hasOwnProperty(index)) {
-        style = this._cellStyleCache[index];
+      if (this._itemStyleCache.hasOwnProperty(index)) {
+        style = this._itemStyleCache[index];
       } else {
-        this._cellStyleCache[index] = style = {
+        this._itemStyleCache[index] = style = {
           position: 'absolute',
           left:
             direction === 'horizontal'
-              ? getCellOffset(this.props, index, this._instanceProps)
+              ? getItemOffset(this.props, index, this._instanceProps)
               : 0,
           top:
             direction === 'vertical'
-              ? getCellOffset(this.props, index, this._instanceProps)
+              ? getItemOffset(this.props, index, this._instanceProps)
               : 0,
           height:
             direction === 'vertical'
@@ -392,8 +392,8 @@ export default function createListComponent({
         this._instanceProps
       );
 
-      // Overscan by one cell in each direction so that tab/focus works.
-      // If there isn't at least one extra cell, tab loops back around.
+      // Overscan by one item in each direction so that tab/focus works.
+      // If there isn't at least one extra item, tab loops back around.
       const overscanBackward =
         scrollDirection === 'backward' ? Math.max(1, overscanCount) : 1;
       const overscanForward =
@@ -454,7 +454,7 @@ export default function createListComponent({
     // Facade for the user-provided children function.
     // This adds the overhead of an additional method call,
     // But has hte benefit of not breaking pure sCU checks,
-    // Allowing List to avoid re-rendering cells until indices change.
+    // Allowing List to avoid re-rendering items until indices change.
     _renderFunction: RenderFunction;
     _renderFunction = (params: RenderFunctionParams) =>
       this.props.children(params);
@@ -475,8 +475,8 @@ export default function createListComponent({
 
       this.setState({ isScrolling: false }, () => {
         // Clear style cache after state update has been committed.
-        // This way we don't break pure sCU for cells that don't use isScrolling param.
-        this._cellStyleCache = {};
+        // This way we don't break pure sCU for items that don't use isScrolling param.
+        this._itemStyleCache = {};
       });
     };
   };

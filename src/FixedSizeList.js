@@ -5,7 +5,7 @@ import createListComponent from './createListComponent';
 import type { Props, ScrollToAlign } from './createListComponent';
 
 const FixedSizeList = createListComponent({
-  getCellOffset: ({ itemSize, size }: Props, index: number): number =>
+  getItemOffset: ({ itemSize, size }: Props, index: number): number =>
     index * ((itemSize: any): number),
 
   getItemSize: ({ itemSize, size }: Props, index: number): number =>

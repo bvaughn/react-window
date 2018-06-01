@@ -13,35 +13,35 @@ type DynanmicProps = {|
 |};
 
 type itemSizeGetter = (index: number) => number;
-type CellType = 'column' | 'row';
+type ItemType = 'column' | 'row';
 
-type CellMetadata = {|
+type ItemMetadata = {|
   offset: number,
   size: number,
 |};
-type CellMetadataMap = { [index: number]: CellMetadata };
+type ItemMetadataMap = { [index: number]: ItemMetadata };
 type InstanceProps = {|
-  columnMetadataMap: CellMetadataMap,
+  columnMetadataMap: ItemMetadataMap,
   estimatedColumnWidth: number,
   estimatedRowHeight: number,
   lastMeasuredColumnIndex: number,
   lastMeasuredRowIndex: number,
-  rowMetadataMap: CellMetadataMap,
+  rowMetadataMap: ItemMetadataMap,
 |};
 
-const getCellMetadata = (
-  cellType: CellType,
+const getItemMetadata = (
+  itemType: ItemType,
   props: Props,
   index: number,
   instanceProps: InstanceProps
-): CellMetadata => {
-  let cellMetadataMap, itemSize, lastMeasuredIndex;
-  if (cellType === 'column') {
-    cellMetadataMap = instanceProps.columnMetadataMap;
+): ItemMetadata => {
+  let itemMetadataMap, itemSize, lastMeasuredIndex;
+  if (itemType === 'column') {
+    itemMetadataMap = instanceProps.columnMetadataMap;
     itemSize = ((props.columnWidth: any): itemSizeGetter);
     lastMeasuredIndex = instanceProps.lastMeasuredColumnIndex;
   } else {
-    cellMetadataMap = instanceProps.rowMetadataMap;
+    itemMetadataMap = instanceProps.rowMetadataMap;
     itemSize = ((props.rowHeight: any): itemSizeGetter);
     lastMeasuredIndex = instanceProps.lastMeasuredRowIndex;
   }
@@ -49,14 +49,14 @@ const getCellMetadata = (
   if (index > lastMeasuredIndex) {
     let offset = 0;
     if (lastMeasuredIndex >= 0) {
-      const cellMetadata = cellMetadataMap[lastMeasuredIndex];
-      offset = cellMetadata.offset + cellMetadata.size;
+      const itemMetadata = itemMetadataMap[lastMeasuredIndex];
+      offset = itemMetadata.offset + itemMetadata.size;
     }
 
     for (let i = lastMeasuredIndex + 1; i <= index; i++) {
       let size = itemSize(i);
 
-      cellMetadataMap[i] = {
+      itemMetadataMap[i] = {
         offset,
         size,
       };
@@ -64,38 +64,38 @@ const getCellMetadata = (
       offset += size;
     }
 
-    if (cellType === 'column') {
+    if (itemType === 'column') {
       instanceProps.lastMeasuredColumnIndex = index;
     } else {
       instanceProps.lastMeasuredRowIndex = index;
     }
   }
 
-  return cellMetadataMap[index];
+  return itemMetadataMap[index];
 };
 
-const findNearestCell = (
-  cellType: CellType,
+const findNearestItem = (
+  itemType: ItemType,
   props: Props,
   instanceProps: InstanceProps,
   offset: number
 ) => {
-  let cellMetadataMap, lastMeasuredIndex;
-  if (cellType === 'column') {
-    cellMetadataMap = instanceProps.columnMetadataMap;
+  let itemMetadataMap, lastMeasuredIndex;
+  if (itemType === 'column') {
+    itemMetadataMap = instanceProps.columnMetadataMap;
     lastMeasuredIndex = instanceProps.lastMeasuredColumnIndex;
   } else {
-    cellMetadataMap = instanceProps.rowMetadataMap;
+    itemMetadataMap = instanceProps.rowMetadataMap;
     lastMeasuredIndex = instanceProps.lastMeasuredRowIndex;
   }
 
-  const lastMeasuredCellOffset =
-    lastMeasuredIndex > 0 ? cellMetadataMap[lastMeasuredIndex].offset : 0;
+  const lastMeasuredItemOffset =
+    lastMeasuredIndex > 0 ? itemMetadataMap[lastMeasuredIndex].offset : 0;
 
-  if (lastMeasuredCellOffset >= offset) {
-    // If we've already measured cells within this range just use a binary search as it's faster.
-    return findNearestCellBinarySearch(
-      cellType,
+  if (lastMeasuredItemOffset >= offset) {
+    // If we've already measured items within this range just use a binary search as it's faster.
+    return findNearestItemBinarySearch(
+      itemType,
       props,
       instanceProps,
       lastMeasuredIndex,
@@ -104,10 +104,10 @@ const findNearestCell = (
     );
   } else {
     // If we haven't yet measured this high, fallback to an exponential search with an inner binary search.
-    // The exponential search avoids pre-computing sizes for the full set of cells as a binary search would.
+    // The exponential search avoids pre-computing sizes for the full set of items as a binary search would.
     // The overall complexity for this approach is O(log n).
-    return findNearestCellExponentialSearch(
-      cellType,
+    return findNearestItemExponentialSearch(
+      itemType,
       props,
       instanceProps,
       lastMeasuredIndex,
@@ -116,8 +116,8 @@ const findNearestCell = (
   }
 };
 
-const findNearestCellBinarySearch = (
-  cellType: CellType,
+const findNearestItemBinarySearch = (
+  itemType: ItemType,
   props: Props,
   instanceProps: InstanceProps,
   high: number,
@@ -126,8 +126,8 @@ const findNearestCellBinarySearch = (
 ): number => {
   while (low <= high) {
     const middle = low + Math.floor((high - low) / 2);
-    const currentOffset = getCellMetadata(
-      cellType,
+    const currentOffset = getItemMetadata(
+      itemType,
       props,
       middle,
       instanceProps
@@ -149,26 +149,26 @@ const findNearestCellBinarySearch = (
   }
 };
 
-const findNearestCellExponentialSearch = (
-  cellType: CellType,
+const findNearestItemExponentialSearch = (
+  itemType: ItemType,
   props: Props,
   instanceProps: InstanceProps,
   index: number,
   offset: number
 ): number => {
-  const itemCount = cellType === 'column' ? props.columnCount : props.rowCount;
+  const itemCount = itemType === 'column' ? props.columnCount : props.rowCount;
   let interval = 1;
 
   while (
     index < itemCount &&
-    getCellMetadata(cellType, props, index, instanceProps).offset < offset
+    getItemMetadata(itemType, props, index, instanceProps).offset < offset
   ) {
     index += interval;
     interval *= 2;
   }
 
-  return findNearestCellBinarySearch(
-    cellType,
+  return findNearestItemBinarySearch(
+    itemType,
     props,
     instanceProps,
     Math.min(index, itemCount - 1),
@@ -178,17 +178,17 @@ const findNearestCellExponentialSearch = (
 };
 
 const getOffsetForIndexAndAlignment = (
-  cellType: CellType,
+  itemType: ItemType,
   props: Props,
   index: number,
   align: ScrollToAlign,
   scrollOffset: number,
   instanceProps: InstanceProps
 ): number => {
-  const size = cellType === 'column' ? props.width : props.height;
-  const cellMetadata = getCellMetadata(cellType, props, index, instanceProps);
-  const maxOffset = cellMetadata.offset;
-  const minOffset = cellMetadata.offset - size + cellMetadata.size;
+  const size = itemType === 'column' ? props.width : props.height;
+  const itemMetadata = getItemMetadata(itemType, props, index, instanceProps);
+  const maxOffset = itemMetadata.offset;
+  const minOffset = itemMetadata.offset - size + itemMetadata.size;
 
   switch (align) {
     case 'start':
@@ -214,13 +214,13 @@ const VariableSizeGrid = createGridComponent({
     props: Props,
     index: number,
     instanceProps: InstanceProps
-  ): number => getCellMetadata('column', props, index, instanceProps).offset,
+  ): number => getItemMetadata('column', props, index, instanceProps).offset,
 
   getColumnStartIndexForOffset: (
     props: Props,
     scrollLeft: number,
     instanceProps: InstanceProps
-  ): number => findNearestCell('column', props, instanceProps, scrollLeft),
+  ): number => findNearestItem('column', props, instanceProps, scrollLeft),
 
   getColumnStopIndexForStartIndex: (
     props: Props,
@@ -230,7 +230,7 @@ const VariableSizeGrid = createGridComponent({
   ): number => {
     const { columnCount, width } = props;
 
-    const cellMetadata = getCellMetadata(
+    const itemMetadata = getItemMetadata(
       'column',
       props,
       startIndex,
@@ -238,12 +238,12 @@ const VariableSizeGrid = createGridComponent({
     );
     const maxOffset = scrollLeft + width;
 
-    let offset = cellMetadata.offset + cellMetadata.size;
+    let offset = itemMetadata.offset + itemMetadata.size;
     let stopIndex = startIndex;
 
     while (stopIndex < columnCount - 1 && offset < maxOffset) {
       stopIndex++;
-      offset += getCellMetadata('column', props, stopIndex, instanceProps).size;
+      offset += getItemMetadata('column', props, stopIndex, instanceProps).size;
     }
 
     return stopIndex;
@@ -262,14 +262,14 @@ const VariableSizeGrid = createGridComponent({
     let totalSizeOfMeasuredRows = 0;
 
     if (lastMeasuredRowIndex >= 0) {
-      const cellMetadata = rowMetadataMap[lastMeasuredRowIndex];
-      totalSizeOfMeasuredRows = cellMetadata.offset + cellMetadata.size;
+      const itemMetadata = rowMetadataMap[lastMeasuredRowIndex];
+      totalSizeOfMeasuredRows = itemMetadata.offset + itemMetadata.size;
     }
 
-    const numUnmeasuredCells = rowCount - lastMeasuredRowIndex - 1;
-    const totalSizeOfUnmeasuredCells = numUnmeasuredCells * estimatedRowHeight;
+    const numUnmeasuredItems = rowCount - lastMeasuredRowIndex - 1;
+    const totalSizeOfUnmeasuredItems = numUnmeasuredItems * estimatedRowHeight;
 
-    return totalSizeOfMeasuredRows + totalSizeOfUnmeasuredCells;
+    return totalSizeOfMeasuredRows + totalSizeOfUnmeasuredItems;
   },
 
   getEstimatedTotalWidth: (
@@ -283,15 +283,15 @@ const VariableSizeGrid = createGridComponent({
     let totalSizeOfMeasuredRows = 0;
 
     if (lastMeasuredColumnIndex >= 0) {
-      const cellMetadata = columnMetadataMap[lastMeasuredColumnIndex];
-      totalSizeOfMeasuredRows = cellMetadata.offset + cellMetadata.size;
+      const itemMetadata = columnMetadataMap[lastMeasuredColumnIndex];
+      totalSizeOfMeasuredRows = itemMetadata.offset + itemMetadata.size;
     }
 
-    const numUnmeasuredCells = columnCount - lastMeasuredColumnIndex - 1;
-    const totalSizeOfUnmeasuredCells =
-      numUnmeasuredCells * estimatedColumnWidth;
+    const numUnmeasuredItems = columnCount - lastMeasuredColumnIndex - 1;
+    const totalSizeOfUnmeasuredItems =
+      numUnmeasuredItems * estimatedColumnWidth;
 
-    return totalSizeOfMeasuredRows + totalSizeOfUnmeasuredCells;
+    return totalSizeOfMeasuredRows + totalSizeOfUnmeasuredItems;
   },
 
   getOffsetForColumnAndAlignment: (
@@ -330,7 +330,7 @@ const VariableSizeGrid = createGridComponent({
     props: Props,
     index: number,
     instanceProps: InstanceProps
-  ): number => getCellMetadata('row', props, index, instanceProps).offset,
+  ): number => getItemMetadata('row', props, index, instanceProps).offset,
 
   getRowHeight: (
     props: Props,
@@ -342,7 +342,7 @@ const VariableSizeGrid = createGridComponent({
     props: Props,
     scrollTop: number,
     instanceProps: InstanceProps
-  ): number => findNearestCell('row', props, instanceProps, scrollTop),
+  ): number => findNearestItem('row', props, instanceProps, scrollTop),
 
   getRowStopIndexForStartIndex: (
     props: Props,
@@ -352,7 +352,7 @@ const VariableSizeGrid = createGridComponent({
   ): number => {
     const { rowCount, height } = props;
 
-    const cellMetadata = getCellMetadata(
+    const itemMetadata = getItemMetadata(
       'row',
       props,
       startIndex,
@@ -360,12 +360,12 @@ const VariableSizeGrid = createGridComponent({
     );
     const maxOffset = scrollTop + height;
 
-    let offset = cellMetadata.offset + cellMetadata.size;
+    let offset = itemMetadata.offset + itemMetadata.size;
     let stopIndex = startIndex;
 
     while (stopIndex < rowCount - 1 && offset < maxOffset) {
       stopIndex++;
-      offset += getCellMetadata('row', props, stopIndex, instanceProps).size;
+      offset += getItemMetadata('row', props, stopIndex, instanceProps).size;
     }
 
     return stopIndex;

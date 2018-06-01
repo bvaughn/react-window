@@ -13,18 +13,18 @@ const simulateScroll = (instance, { scrollLeft, scrollTop }) => {
 };
 
 describe('FixedSizeGrid', () => {
-  let cellRenderer, defaultProps, onItemsRendered;
+  let itemRenderer, defaultProps, onItemsRendered;
 
   beforeEach(() => {
     jest.useFakeTimers();
 
     onItemsRendered = jest.fn();
 
-    cellRenderer = jest.fn(({ style, ...rest }) => (
+    itemRenderer = jest.fn(({ style, ...rest }) => (
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     defaultProps = {
-      children: cellRenderer,
+      children: itemRenderer,
       columnCount: 100,
       columnWidth: 100,
       height: 100,
@@ -43,13 +43,13 @@ describe('FixedSizeGrid', () => {
       <FixedSizeGrid {...defaultProps} columnCount={0} />
     );
     ReactTestRenderer.create(<FixedSizeGrid {...defaultProps} rowCount={0} />);
-    expect(cellRenderer.mock.calls.length).toMatchSnapshot();
+    expect(itemRenderer.mock.calls.length).toMatchSnapshot();
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
   it('should render a grid of items', () => {
     ReactTestRenderer.create(<FixedSizeGrid {...defaultProps} />);
-    expect(cellRenderer.mock.calls.length).toMatchSnapshot();
+    expect(itemRenderer.mock.calls.length).toMatchSnapshot();
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
@@ -72,7 +72,7 @@ describe('FixedSizeGrid', () => {
       // Find all of the times row 3, column 1 was rendered.
       // If we are caching props correctly, it should only be once.
       expect(
-        cellRenderer.mock.calls.find(
+        itemRenderer.mock.calls.find(
           ([params]) => params.rowIndex === 3 && params.columnIndex === 1
         )
       ).toHaveLength(1);
@@ -87,22 +87,22 @@ describe('FixedSizeGrid', () => {
       // Scroll, then capture the rendered style for item 1,
       // Then let the debounce timer clear the cached styles.
       simulateScroll(instance, { scrollLeft: 100, scrollTop: 25 });
-      const cellOneA = cellRenderer.mock.calls.find(
+      const itemOneA = itemRenderer.mock.calls.find(
         ([params]) => params.columnIndex === 1 && params.rowIndex === 1
       );
       jest.runAllTimers();
-      cellRenderer.mockClear();
+      itemRenderer.mockClear();
       // Scroll again, then capture the rendered style for item 1,
       // And confirm that the style was recreated.
       simulateScroll(instance, { scrollLeft: 0, scrollTop: 0 });
-      const cellOneB = cellRenderer.mock.calls.find(
+      const itemOneB = itemRenderer.mock.calls.find(
         ([params]) => params.columnIndex === 1 && params.rowIndex === 1
       );
-      expect(cellOneA[0].style).not.toBe(cellOneB[0].style);
+      expect(itemOneA[0].style).not.toBe(itemOneB[0].style);
     });
   });
 
-  it('changing cell size updates the rendered items', () => {
+  it('changing item size updates the rendered items', () => {
     const rendered = ReactTestRenderer.create(
       <FixedSizeGrid {...defaultProps} />
     );
@@ -209,7 +209,7 @@ describe('FixedSizeGrid', () => {
   describe('useIsScrolling', () => {
     it('should not pass an isScrolling param to children unless requested', () => {
       ReactTestRenderer.create(<FixedSizeGrid {...defaultProps} />);
-      expect(cellRenderer.mock.calls[0]).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
     });
 
     it('should pass an isScrolling param to children if requested', () => {
@@ -218,13 +218,13 @@ describe('FixedSizeGrid', () => {
         <FixedSizeGrid {...defaultProps} useIsScrolling />,
         document.createElement('div')
       );
-      expect(cellRenderer.mock.calls[0]).toMatchSnapshot();
-      cellRenderer.mockClear();
+      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
+      itemRenderer.mockClear();
       simulateScroll(instance, { scrollLeft: 300, scrollTop: 400 });
-      expect(cellRenderer.mock.calls[0]).toMatchSnapshot();
-      cellRenderer.mockClear();
+      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
+      itemRenderer.mockClear();
       jest.runAllTimers();
-      expect(cellRenderer.mock.calls[0]).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
     });
 
     it('should not re-render children unnecessarily if isScrolling param is not used', () => {
@@ -234,9 +234,9 @@ describe('FixedSizeGrid', () => {
         document.createElement('div')
       );
       simulateScroll(instance, { scrollLeft: 300, scrollTop: 400 });
-      cellRenderer.mockClear();
+      itemRenderer.mockClear();
       jest.runAllTimers();
-      expect(cellRenderer).not.toHaveBeenCalled();
+      expect(itemRenderer).not.toHaveBeenCalled();
     });
   });
 
@@ -247,9 +247,9 @@ describe('FixedSizeGrid', () => {
         <FixedSizeGrid {...defaultProps} useIsScrolling />,
         document.createElement('div')
       );
-      cellRenderer.mockClear();
+      itemRenderer.mockClear();
       instance.scrollTo({ scrollLeft: 100, scrollTop: 100 });
-      expect(cellRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
     });
   });
 
@@ -352,9 +352,9 @@ describe('FixedSizeGrid', () => {
         <FixedSizeGrid {...defaultProps} useIsScrolling />,
         document.createElement('div')
       );
-      cellRenderer.mockClear();
+      itemRenderer.mockClear();
       instance.scrollToItem({ columnIndex: 15, rowIndex: 20 });
-      expect(cellRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
     });
   });
 

@@ -124,12 +124,12 @@ const PROPS = [
     defaultValue: 1,
     description: (
       <Fragment>
-        The number of cells (rows and columns) to render outside of the visible
+        The number of items (rows and columns) to render outside of the visible
         area. This property can be important for two reasons:
         <ul>
           <li>
             Overscanning by one row or column allows the tab key to focus on the
-            next (not yet visible) cell.
+            next (not yet visible) item.
           </li>
           <li>
             Overscanning slightly can reduce or prevent a flash of empty space
@@ -137,7 +137,7 @@ const PROPS = [
           </li>
         </ul>
         Note that overscanning too much can negatively impact performance. By
-        default, grid overscans by one cell.
+        default, grid overscans by one item.
       </Fragment>
     ),
     name: 'overscanCount',
@@ -233,7 +233,7 @@ const METHODS = [
           </li>
           <li>start - Align the item to the top, left hand of the grid.</li>
         </ul>
-        <Link to="/examples/list/scroll-to-cell">
+        <Link to="/examples/list/scroll-to-item">
           See here for an example of this API.
         </Link>
       </Fragment>
