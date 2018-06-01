@@ -50,6 +50,7 @@ type State = {|
   isScrolling: boolean,
   scrollDirection: ScrollDirection,
   scrollOffset: number,
+  scrollUpdateWasRequested: boolean,
 |};
 
 type GetCellOffset = (
@@ -119,6 +120,7 @@ export default function createListComponent({
         typeof this.props.initialScrollOffset === 'number'
           ? this.props.initialScrollOffset
           : 0,
+      scrollUpdateWasRequested: false,
     };
 
     static getDerivedStateFromProps(
@@ -131,32 +133,16 @@ export default function createListComponent({
     }
 
     scrollTo(scrollOffset: number): void {
-      if (this._scrollingContainer != null) {
-        const { direction } = this.props;
-
-        if (direction === 'horizontal') {
-          ((this
-            ._scrollingContainer: any): HTMLDivElement).scrollLeft = scrollOffset;
-        } else {
-          ((this
-            ._scrollingContainer: any): HTMLDivElement).scrollTop = scrollOffset;
-        }
-      }
-
-      if (process.env.NODE_ENV === 'test') {
-        // Setting scroll offset doesn't fire the onScroll callback for react-test-renderer.
-        // This test-only code makes it easier to test simualted scrolling behavior.
-        // It should be stripped out of any non-test code.
-        if (this.props.direction === 'horizontal') {
-          this._onScrollHorizontal(
-            ({ currentTarget: { scrollLeft: scrollOffset } }: any)
-          );
-        } else {
-          this._onScrollVertical(
-            ({ currentTarget: { scrollTop: scrollOffset } }: any)
-          );
-        }
-      }
+      this.setState(
+        prevState => ({
+          isScrolling: true,
+          scrollDirection:
+            prevState.scrollOffset < scrollOffset ? 'forward' : 'backward',
+          scrollOffset: scrollOffset,
+          scrollUpdateWasRequested: true,
+        }),
+        this._resetIsScrollingDebounced
+      );
     }
 
     scrollToItem(index: number, align: ScrollToAlign = 'auto'): void {
@@ -175,15 +161,16 @@ export default function createListComponent({
     componentDidMount() {
       const { initialScrollOffset, direction } = this.props;
 
-      if (typeof initialScrollOffset === 'number') {
-        if (this._scrollingContainer != null) {
-          if (direction === 'horizontal') {
-            ((this
-              ._scrollingContainer: any): HTMLDivElement).scrollLeft = initialScrollOffset;
-          } else {
-            ((this
-              ._scrollingContainer: any): HTMLDivElement).scrollTop = initialScrollOffset;
-          }
+      if (
+        typeof initialScrollOffset === 'number' &&
+        this._scrollingContainer !== null
+      ) {
+        if (direction === 'horizontal') {
+          ((this
+            ._scrollingContainer: any): HTMLDivElement).scrollLeft = initialScrollOffset;
+        } else {
+          ((this
+            ._scrollingContainer: any): HTMLDivElement).scrollTop = initialScrollOffset;
         }
       }
 
@@ -191,6 +178,19 @@ export default function createListComponent({
     }
 
     componentDidUpdate() {
+      const { direction } = this.props;
+      const { scrollOffset, scrollUpdateWasRequested } = this.state;
+
+      if (scrollUpdateWasRequested && this._scrollingContainer !== null) {
+        if (direction === 'horizontal') {
+          ((this
+            ._scrollingContainer: any): HTMLDivElement).scrollLeft = scrollOffset;
+        } else {
+          ((this
+            ._scrollingContainer: any): HTMLDivElement).scrollTop = scrollOffset;
+        }
+      }
+
       this._callPropsCallbacks();
     }
 
@@ -380,6 +380,7 @@ export default function createListComponent({
           scrollDirection:
             prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
           scrollOffset: scrollLeft,
+          scrollUpdateWasRequested: false,
         }),
         this._resetIsScrollingDebounced
       );
@@ -393,6 +394,7 @@ export default function createListComponent({
           scrollDirection:
             prevState.scrollOffset < scrollTop ? 'forward' : 'backward',
           scrollOffset: scrollTop,
+          scrollUpdateWasRequested: false,
         }),
         this._resetIsScrollingDebounced
       );
@@ -428,6 +430,8 @@ export default function createListComponent({
     };
   };
 }
+
+// TODO Maybe remove ListItems now. ListItem should be sufficient?
 
 type ListItemsProps = {
   getCellStyle: (index: number) => Object,

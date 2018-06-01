@@ -59,6 +59,7 @@ type State = {|
   horizontalScrollDirection: ScrollDirection,
   scrollLeft: number,
   scrollTop: number,
+  scrollUpdateWasRequested: boolean,
   verticalScrollDirection: ScrollDirection,
 |};
 
@@ -144,6 +145,7 @@ export default function createGridComponent({
         typeof this.props.initialScrollTop === 'number'
           ? this.props.initialScrollTop
           : 0,
+      scrollUpdateWasRequested: false,
       verticalScrollDirection: 'forward',
     };
 
@@ -169,18 +171,19 @@ export default function createGridComponent({
       scrollLeft: number,
       scrollTop: number,
     }): void {
-      if (this._scrollingContainer != null) {
-        ((this
-          ._scrollingContainer: any): HTMLDivElement).scrollLeft = scrollLeft;
-        ((this._scrollingContainer: any): HTMLDivElement).scrollTop = scrollTop;
-      }
-
-      if (process.env.NODE_ENV === 'test') {
-        // Setting scroll offset doesn't fire the onScroll callback for react-test-renderer.
-        // This test-only code makes it easier to test simualted scrolling behavior.
-        // It should be stripped out of any non-test code.
-        this._onScroll(({ currentTarget: { scrollLeft, scrollTop } }: any));
-      }
+      this.setState(
+        prevState => ({
+          horizontalScrollDirection:
+            prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
+          isScrolling: true,
+          scrollLeft: scrollLeft,
+          scrollTop: scrollTop,
+          scrollUpdateWasRequested: true,
+          verticalScrollDirection:
+            prevState.scrollTop < scrollTop ? 'forward' : 'backward',
+        }),
+        this._resetIsScrollingDebounced
+      );
     }
 
     scrollToItem({
@@ -234,6 +237,13 @@ export default function createGridComponent({
     }
 
     componentDidUpdate() {
+      const { scrollLeft, scrollTop, scrollUpdateWasRequested } = this.state;
+      if (scrollUpdateWasRequested && this._scrollingContainer !== null) {
+        ((this
+          ._scrollingContainer: any): HTMLDivElement).scrollLeft = scrollLeft;
+        ((this._scrollingContainer: any): HTMLDivElement).scrollTop = scrollTop;
+      }
+
       this._callPropsCallbacks();
     }
 
@@ -541,6 +551,8 @@ export default function createGridComponent({
     };
   };
 }
+
+// TODO Maybe remove GridItems now. GridItem should be sufficient?
 
 type GridItemsProps = {
   columnStartIndex: number,
