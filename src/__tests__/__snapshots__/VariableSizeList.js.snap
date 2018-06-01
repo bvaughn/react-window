@@ -1,36 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`VariableSizeList changing itemSize does not impact the rendered items 1`] = `
-Array [
-  Array [
-    Object {
-      "overscanStartIndex": 0,
-      "overscanStopIndex": 5,
-      "visibleStartIndex": 0,
-      "visibleStopIndex": 3,
-    },
-  ],
-]
-`;
-
-exports[`VariableSizeList estimatedItemSize should estimate an initial scrollable height based on this estimation 1`] = `
-Object {
-  "height": 1000,
-  "overflow": "hidden",
-  "pointerEvents": "",
-  "width": 50,
-}
-`;
-
-exports[`VariableSizeList estimatedItemSize should udpate the scrollable height as more cells are measured 1`] = `
-Object {
-  "height": 690,
-  "overflow": "hidden",
-  "pointerEvents": "",
-  "width": 50,
-}
-`;
-
 exports[`VariableSizeList scrollToItem method should scroll to the correct item for align = "auto" 1`] = `
 Array [
   Array [

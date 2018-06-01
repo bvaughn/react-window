@@ -158,6 +158,7 @@ const getEstimatedTotalSize = (
 };
 
 const VariableSizeList = createListComponent({
+  // TODO Rename to "getItemOffset"
   getCellOffset: (
     props: Props,
     index: number,

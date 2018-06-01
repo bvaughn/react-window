@@ -5,7 +5,7 @@ import { VariableSizeList } from '..';
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('VariableSizeList', () => {
-  let cellRenderer, defaultProps;
+  let cellRenderer, defaultProps, onItemsRendered;
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -13,12 +13,14 @@ describe('VariableSizeList', () => {
     cellRenderer = jest.fn(({ style, ...rest }) => (
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
+    onItemsRendered = jest.fn();
     defaultProps = {
       children: cellRenderer,
       estimatedItemSize: 25,
       height: 100,
       itemCount: 20,
       itemSize: index => 25 + index,
+      onItemsRendered,
       width: 50,
     };
   });
@@ -27,10 +29,10 @@ describe('VariableSizeList', () => {
   // This test covers functionality that is unique to VariableSizeList.
 
   it('changing itemSize does not impact the rendered items', () => {
-    const onItemsRendered = jest.fn();
     const rendered = ReactTestRenderer.create(
-      <VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />
+      <VariableSizeList {...defaultProps} />
     );
+    cellRenderer.mockClear();
     rendered.update(
       <VariableSizeList
         {...defaultProps}
@@ -38,28 +40,53 @@ describe('VariableSizeList', () => {
         onItemsRendered={onItemsRendered}
       />
     );
-    expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    expect(cellRenderer).not.toHaveBeenCalled();
   });
 
   describe('estimatedItemSize', () => {
-    it('should estimate an initial scrollable height based on this estimation', () => {
+    it('should estimate an initial scrollable size based on this value', () => {
+      const itemSize = jest.fn(() => 25);
       const rendered = ReactTestRenderer.create(
-        <VariableSizeList {...defaultProps} estimatedItemSize={50} />
+        <VariableSizeList
+          {...defaultProps}
+          estimatedItemSize={50}
+          height={100}
+          itemCount={100}
+          itemSize={itemSize}
+          overscanCount={0}
+        />
       );
+      // We'll render 5 rows initially, each at 25px tall (125px total).
+      // The remaining 95 rows will be estimated at 50px tall (4,750px total).
+      // This means an initial height estimate of 4,875px.
+      expect(itemSize).toHaveBeenCalledTimes(5);
       const scrollContainer = findScrollContainer(rendered);
-      expect(scrollContainer.props.style).toMatchSnapshot();
+      expect(scrollContainer.props.style.height).toEqual(4875);
     });
 
-    it('should udpate the scrollable height as more cells are measured', () => {
+    it('should udpate the scrollable size as more cells are measured', () => {
+      const itemSize = jest.fn(() => 25);
       const rendered = ReactTestRenderer.create(
-        <VariableSizeList {...defaultProps} estimatedItemSize={50} />
+        <VariableSizeList
+          {...defaultProps}
+          estimatedItemSize={50}
+          itemCount={100}
+          itemSize={itemSize}
+          overscanCount={0}
+        />
       );
-      rendered.getInstance().scrollToItem(19);
+      rendered.getInstance().scrollToItem(18);
+      // Including the additional 1 (minimum) overscan row,
+      // We've now measured 20 rows, each at 25px tall (500px total).
+      // The remaining 80 rows will be estimated at 50px tall (4,500px total).
+      // This means an updated height estimate of 4,500px.
+      expect(itemSize).toHaveBeenCalledTimes(20);
       const scrollContainer = findScrollContainer(rendered);
-      expect(scrollContainer.props.style).toMatchSnapshot();
+      expect(scrollContainer.props.style.height).toEqual(4500);
     });
   });
 
+  // TODO Verify all scrollToItem() snapshots below (they all look funky)
   describe('scrollToItem method', () => {
     it('should scroll to the correct item for align = "auto"', () => {
       const onItemsRendered = jest.fn();
@@ -134,9 +161,15 @@ describe('VariableSizeList', () => {
   });
 
   describe('resetAfterIndex method', () => {
-    it('should reset cached sizes after the specified index', () => {
-      // This impacts total height estimate.
-      // Also impacts the size of cells rendered.
+    it('should recalculate the estimated total size', () => {
+      // TODO Verify total size estimate is updated.
+    });
+
+    it('should re-render cells after the specified index with updated styles', () => {
+      // TODO Verify rendered cell sizes are updated,
+      // And that our sCU caching strategy doesn't block the update,
+      // If it does we may have to revert to on-fiber style cache,
+      // Or somehow use an incremented key value to reset all items in the current window.
     });
   });
 

@@ -1,0 +1,213 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VariableSizeGrid scrollToItem method should scroll to the correct item for align = "auto" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 4,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 6,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 7,
+      "overscanRowStopIndex": 11,
+      "visibleColumnStartIndex": 7,
+      "visibleColumnStopIndex": 9,
+      "visibleRowStartIndex": 8,
+      "visibleRowStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 1,
+      "overscanColumnStopIndex": 6,
+      "overscanRowStartIndex": 1,
+      "overscanRowStopIndex": 6,
+      "visibleColumnStartIndex": 2,
+      "visibleColumnStopIndex": 5,
+      "visibleRowStartIndex": 2,
+      "visibleRowStopIndex": 5,
+    },
+  ],
+]
+`;
+
+exports[`VariableSizeGrid scrollToItem method should scroll to the correct item for align = "center" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 4,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 7,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 8,
+      "overscanRowStopIndex": 12,
+      "visibleColumnStartIndex": 8,
+      "visibleColumnStopIndex": 9,
+      "visibleRowStartIndex": 9,
+      "visibleRowStopIndex": 11,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 6,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 7,
+      "overscanRowStopIndex": 11,
+      "visibleColumnStartIndex": 7,
+      "visibleColumnStopIndex": 9,
+      "visibleRowStartIndex": 8,
+      "visibleRowStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 4,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 97,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 47,
+      "overscanRowStopIndex": 19,
+      "visibleColumnStartIndex": 98,
+      "visibleColumnStopIndex": 98,
+      "visibleRowStartIndex": 48,
+      "visibleRowStopIndex": 48,
+    },
+  ],
+]
+`;
+
+exports[`VariableSizeGrid scrollToItem method should scroll to the correct item for align = "end" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 4,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 6,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 7,
+      "overscanRowStopIndex": 11,
+      "visibleColumnStartIndex": 7,
+      "visibleColumnStopIndex": 9,
+      "visibleRowStartIndex": 8,
+      "visibleRowStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 5,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 5,
+      "overscanRowStopIndex": 10,
+      "visibleColumnStartIndex": 6,
+      "visibleColumnStopIndex": 9,
+      "visibleRowStartIndex": 6,
+      "visibleRowStopIndex": 9,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 2,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 2,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 1,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 1,
+    },
+  ],
+]
+`;
+
+exports[`VariableSizeGrid scrollToItem method should scroll to the correct item for align = "start" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 4,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 9,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 9,
+      "overscanRowStopIndex": 13,
+      "visibleColumnStartIndex": 10,
+      "visibleColumnStopIndex": 10,
+      "visibleRowStartIndex": 10,
+      "visibleRowStopIndex": 12,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 8,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 8,
+      "overscanRowStopIndex": 12,
+      "visibleColumnStartIndex": 9,
+      "visibleColumnStopIndex": 9,
+      "visibleRowStartIndex": 9,
+      "visibleRowStopIndex": 11,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 98,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 98,
+      "overscanRowStopIndex": 19,
+      "visibleColumnStartIndex": 99,
+      "visibleColumnStopIndex": 99,
+      "visibleRowStartIndex": 99,
+      "visibleRowStopIndex": 99,
+    },
+  ],
+]
+`;
