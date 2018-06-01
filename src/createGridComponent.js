@@ -279,6 +279,32 @@ export default function createGridComponent({
       ] = this._getHorizontalRangeToRender();
       const [rowStartIndex, rowStopIndex] = this._getVerticalRangeToRender();
 
+      const cells = [];
+      if (columnCount > 0 && rowCount) {
+        for (
+          let rowIndex = rowStartIndex;
+          rowIndex <= rowStopIndex;
+          rowIndex++
+        ) {
+          for (
+            let columnIndex = columnStartIndex;
+            columnIndex <= columnStopIndex;
+            columnIndex++
+          ) {
+            cells.push(
+              <GridItem
+                columnIndex={columnIndex}
+                getCellStyle={this._getCellStyle}
+                isScrolling={useIsScrolling ? isScrolling : undefined}
+                key={`${rowIndex}:${columnIndex}`}
+                renderFunction={this._renderFunction}
+                rowIndex={rowIndex}
+              />
+            );
+          }
+        }
+      }
+
       return (
         <div
           className={className}
@@ -302,18 +328,7 @@ export default function createGridComponent({
               width: estimatedTotalWidth,
             }}
           >
-            {columnCount > 0 &&
-              rowCount > 0 && (
-                <GridItems
-                  columnStartIndex={columnStartIndex}
-                  columnStopIndex={columnStopIndex}
-                  getCellStyle={this._getCellStyle}
-                  isScrolling={useIsScrolling ? isScrolling : undefined}
-                  renderFunction={this._renderFunction}
-                  rowStartIndex={rowStartIndex}
-                  rowStopIndex={rowStopIndex}
-                />
-              )}
+            {cells}
           </div>
         </div>
       );
@@ -564,55 +579,6 @@ export default function createGridComponent({
       this.setState({ isScrolling: false });
     };
   };
-}
-
-// TODO Maybe remove GridItems now. GridItem should be sufficient?
-
-type GridItemsProps = {
-  columnStartIndex: number,
-  columnStopIndex: number,
-  getCellStyle: (rowIndex: number, columnIndex: number) => Object,
-  isScrolling?: boolean,
-  renderFunction: RenderFunction,
-  rowStartIndex: number,
-  rowStopIndex: number,
-};
-
-class GridItems extends PureComponent<GridItemsProps, void> {
-  render() {
-    const {
-      columnStartIndex,
-      columnStopIndex,
-      getCellStyle,
-      isScrolling,
-      renderFunction,
-      rowStartIndex,
-      rowStopIndex,
-    } = this.props;
-
-    const cells = [];
-
-    for (let rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
-      for (
-        let columnIndex = columnStartIndex;
-        columnIndex <= columnStopIndex;
-        columnIndex++
-      ) {
-        cells.push(
-          <GridItem
-            columnIndex={columnIndex}
-            getCellStyle={getCellStyle}
-            isScrolling={isScrolling}
-            key={`${rowIndex}:${columnIndex}`}
-            renderFunction={renderFunction}
-            rowIndex={rowIndex}
-          />
-        );
-      }
-    }
-
-    return cells;
-  }
 }
 
 type GridItemProps = {

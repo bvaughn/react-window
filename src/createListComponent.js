@@ -224,6 +224,21 @@ export default function createListComponent({
 
       const [startIndex, stopIndex] = this._getRangeToRender();
 
+      const cells = [];
+      if (itemCount > 0) {
+        for (let index = startIndex; index <= stopIndex; index++) {
+          cells.push(
+            <ListItem
+              getCellStyle={this._getCellStyle}
+              key={index}
+              index={index}
+              isScrolling={useIsScrolling ? isScrolling : undefined}
+              renderFunction={this._renderFunction}
+            />
+          );
+        }
+      }
+
       return (
         <div
           className={className}
@@ -247,15 +262,7 @@ export default function createListComponent({
               width: direction === 'horizontal' ? estimatedTotalSize : width,
             }}
           >
-            {itemCount > 0 && (
-              <ListItems
-                getCellStyle={this._getCellStyle}
-                isScrolling={useIsScrolling ? isScrolling : undefined}
-                renderFunction={this._renderFunction}
-                startIndex={startIndex}
-                stopIndex={stopIndex}
-              />
-            )}
+            {cells}
           </div>
         </div>
       );
@@ -455,44 +462,6 @@ export default function createListComponent({
       this.setState({ isScrolling: false });
     };
   };
-}
-
-// TODO Maybe remove ListItems now. ListItem should be sufficient?
-
-type ListItemsProps = {
-  getCellStyle: (index: number) => Object,
-  isScrolling?: boolean,
-  renderFunction: RenderFunction,
-  startIndex: number,
-  stopIndex: number,
-};
-
-class ListItems extends PureComponent<ListItemsProps, void> {
-  render() {
-    const {
-      getCellStyle,
-      isScrolling,
-      renderFunction,
-      startIndex,
-      stopIndex,
-    } = this.props;
-
-    const cells = [];
-
-    for (let index = startIndex; index <= stopIndex; index++) {
-      cells.push(
-        <ListItem
-          getCellStyle={getCellStyle}
-          key={index}
-          index={index}
-          isScrolling={isScrolling}
-          renderFunction={renderFunction}
-        />
-      );
-    }
-
-    return cells;
-  }
 }
 
 type ListItemProps = {
