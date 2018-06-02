@@ -256,6 +256,11 @@ const VariableSizeList = createListComponent({
         instanceProps.lastMeasuredIndex,
         index - 1
       );
+
+      // We could potentially optimize further by only evicting styles after this index,
+      // But since styles are only cached while scrolling is in progress-
+      // It seems an unnecessary optimization.
+      // It's unlikely that resetAfterIndex() will be called while a user is scrolling.
       instance._itemStyleCache = {};
       instance.forceUpdate();
     };

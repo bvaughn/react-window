@@ -72,7 +72,7 @@ describe('FixedSizeGrid', () => {
       // Find all of the times row 3, column 1 was rendered.
       // If we are caching props correctly, it should only be once.
       expect(
-        itemRenderer.mock.calls.find(
+        itemRenderer.mock.calls.filter(
           ([params]) => params.rowIndex === 3 && params.columnIndex === 1
         )
       ).toHaveLength(1);
@@ -87,7 +87,7 @@ describe('FixedSizeGrid', () => {
       // Scroll, then capture the rendered style for item 1,
       // Then let the debounce timer clear the cached styles.
       simulateScroll(instance, { scrollLeft: 100, scrollTop: 25 });
-      const itemOneA = itemRenderer.mock.calls.find(
+      const itemOneArgsA = itemRenderer.mock.calls.find(
         ([params]) => params.columnIndex === 1 && params.rowIndex === 1
       );
       jest.runAllTimers();
@@ -95,10 +95,10 @@ describe('FixedSizeGrid', () => {
       // Scroll again, then capture the rendered style for item 1,
       // And confirm that the style was recreated.
       simulateScroll(instance, { scrollLeft: 0, scrollTop: 0 });
-      const itemOneB = itemRenderer.mock.calls.find(
+      const itemOneArgsB = itemRenderer.mock.calls.find(
         ([params]) => params.columnIndex === 1 && params.rowIndex === 1
       );
-      expect(itemOneA[0].style).not.toBe(itemOneB[0].style);
+      expect(itemOneArgsA[0].style).not.toBe(itemOneArgsB[0].style);
     });
   });
 
@@ -117,9 +117,7 @@ describe('FixedSizeGrid', () => {
     const rendered = ReactTestRenderer.create(
       <FixedSizeGrid {...defaultProps} />
     );
-    expect(
-      rendered.toJSON().props.style.WebkitOverflowScrolling
-    ).toMatchSnapshot();
+    expect(rendered.toJSON().props.style.WebkitOverflowScrolling).toBe('touch');
   });
 
   it('should disable pointer events while scrolling', () => {
@@ -127,9 +125,9 @@ describe('FixedSizeGrid', () => {
       <FixedSizeGrid {...defaultProps} />
     );
     const scrollContainer = findScrollContainer(rendered);
-    expect(scrollContainer.props.style).toMatchSnapshot();
+    expect(scrollContainer.props.style.pointerEvents).toBe('');
     rendered.getInstance().setState({ isScrolling: true });
-    expect(scrollContainer.props.style).toMatchSnapshot();
+    expect(scrollContainer.props.style.pointerEvents).toBe('none');
   });
 
   describe('style overrides', () => {
@@ -137,14 +135,14 @@ describe('FixedSizeGrid', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeGrid {...defaultProps} className="custom" />
       );
-      expect(rendered.toJSON().props.className).toMatchSnapshot();
+      expect(rendered.toJSON().props.className).toBe('custom');
     });
 
     it('should support style prop', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeGrid {...defaultProps} style={{ backgroundColor: 'red' }} />
       );
-      expect(rendered.toJSON().props.style.backgroundColor).toMatchSnapshot();
+      expect(rendered.toJSON().props.style.backgroundColor).toBe('red');
     });
   });
 
@@ -209,7 +207,7 @@ describe('FixedSizeGrid', () => {
   describe('useIsScrolling', () => {
     it('should not pass an isScrolling param to children unless requested', () => {
       ReactTestRenderer.create(<FixedSizeGrid {...defaultProps} />);
-      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(undefined);
     });
 
     it('should pass an isScrolling param to children if requested', () => {
@@ -218,13 +216,13 @@ describe('FixedSizeGrid', () => {
         <FixedSizeGrid {...defaultProps} useIsScrolling />,
         document.createElement('div')
       );
-      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
       itemRenderer.mockClear();
       simulateScroll(instance, { scrollLeft: 300, scrollTop: 400 });
-      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(true);
       itemRenderer.mockClear();
       jest.runAllTimers();
-      expect(itemRenderer.mock.calls[0]).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
     });
 
     it('should not re-render children unnecessarily if isScrolling param is not used', () => {
@@ -249,7 +247,7 @@ describe('FixedSizeGrid', () => {
       );
       itemRenderer.mockClear();
       instance.scrollTo({ scrollLeft: 100, scrollTop: 100 });
-      expect(itemRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
     });
   });
 
@@ -354,12 +352,20 @@ describe('FixedSizeGrid', () => {
       );
       itemRenderer.mockClear();
       instance.scrollToItem({ columnIndex: 15, rowIndex: 20 });
-      expect(itemRenderer.mock.calls[0][0].isScrolling).toMatchSnapshot();
+      expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
     });
   });
 
   // onItemsRendered is pretty well covered by other snapshot tests
   describe('onScroll', () => {
+    it('should call onScroll after mount', () => {
+      const onScroll = jest.fn();
+      ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} onScroll={onScroll} />
+      );
+      expect(onScroll.mock.calls).toMatchSnapshot();
+    });
+
     it('should call onScroll when scroll position changes', () => {
       const onScroll = jest.fn();
       const rendered = ReactTestRenderer.create(
@@ -390,15 +396,11 @@ describe('FixedSizeGrid', () => {
 
       onScroll.mockClear();
       instance.scrollTo({ scrollLeft: 100, scrollTop: 100 });
-      expect(
-        onScroll.mock.calls[0][0].scrollUpdateWasRequested
-      ).toMatchSnapshot();
+      expect(onScroll.mock.calls[0][0].scrollUpdateWasRequested).toBe(true);
 
       onScroll.mockClear();
       simulateScroll(instance, { scrollLeft: 200, scrollTop: 200 });
-      expect(
-        onScroll.mock.calls[0][0].scrollUpdateWasRequested
-      ).toMatchSnapshot();
+      expect(onScroll.mock.calls[0][0].scrollUpdateWasRequested).toBe(false);
     });
   });
 

@@ -396,39 +396,38 @@ const VariableSizeGrid = createGridComponent({
       rowMetadataMap: {},
     };
 
-    instance.resetAfterColumnIndex = (index: number) => {
-      instanceProps.lastMeasuredColumnIndex = Math.min(
-        instanceProps.lastMeasuredColumnIndex,
-        index - 1
-      );
-      instance._itemStyleCache = {};
-      instance.forceUpdate();
+    instance.resetAfterColumnIndex = (columnIndex: number) => {
+      this.resetAfterIndices({ columnIndex });
     };
 
-    instance.resetAfterRowIndex = (index: number) => {
-      instanceProps.lastMeasuredRowIndex = Math.min(
-        instanceProps.lastMeasuredRowIndex,
-        index - 1
-      );
-      instance._itemStyleCache = {};
-      instance.forceUpdate();
+    instance.resetAfterRowIndex = (rowIndex: number) => {
+      this.resetAfterIndices({ rowIndex });
     };
 
     instance.resetAfterIndices = ({
       columnIndex,
       rowIndex,
     }: {
-      columnIndex: number,
-      rowIndex: number,
+      columnIndex?: number,
+      rowIndex?: number,
     }) => {
-      instanceProps.lastMeasuredColumnIndex = Math.min(
-        instanceProps.lastMeasuredColumnIndex,
-        columnIndex - 1
-      );
-      instanceProps.lastMeasuredRowIndex = Math.min(
-        instanceProps.lastMeasuredRowIndex,
-        rowIndex - 1
-      );
+      if (typeof columnIndex === 'number') {
+        instanceProps.lastMeasuredColumnIndex = Math.min(
+          instanceProps.lastMeasuredColumnIndex,
+          columnIndex - 1
+        );
+      }
+      if (typeof rowIndex === 'number') {
+        instanceProps.lastMeasuredRowIndex = Math.min(
+          instanceProps.lastMeasuredRowIndex,
+          rowIndex - 1
+        );
+      }
+
+      // We could potentially optimize further by only evicting styles after this index,
+      // But since styles are only cached while scrolling is in progress-
+      // It seems an unnecessary optimization.
+      // It's unlikely that resetAfterIndex() will be called while a user is scrolling.
       instance._itemStyleCache = {};
       instance.forceUpdate();
     };
