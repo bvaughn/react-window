@@ -43,13 +43,13 @@ describe('FixedSizeGrid', () => {
       <FixedSizeGrid {...defaultProps} columnCount={0} />
     );
     ReactTestRenderer.create(<FixedSizeGrid {...defaultProps} rowCount={0} />);
-    expect(itemRenderer.mock.calls.length).toMatchSnapshot();
-    expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    expect(itemRenderer).not.toHaveBeenCalled();
+    expect(onItemsRendered).not.toHaveBeenCalled();
   });
 
   it('should render a grid of items', () => {
     ReactTestRenderer.create(<FixedSizeGrid {...defaultProps} />);
-    expect(itemRenderer.mock.calls.length).toMatchSnapshot();
+    expect(itemRenderer).toHaveBeenCalledTimes(24);
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 

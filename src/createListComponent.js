@@ -312,18 +312,21 @@ export default function createListComponent({
 
     _callPropsCallbacks() {
       if (typeof this.props.onItemsRendered === 'function') {
-        const [
-          overscanStartIndex,
-          overscanStopIndex,
-          visibleStartIndex,
-          visibleStopIndex,
-        ] = this._getRangeToRender();
-        this._callOnItemsRendered(
-          overscanStartIndex,
-          overscanStopIndex,
-          visibleStartIndex,
-          visibleStopIndex
-        );
+        const { itemCount } = this.props;
+        if (itemCount > 0) {
+          const [
+            overscanStartIndex,
+            overscanStopIndex,
+            visibleStartIndex,
+            visibleStopIndex,
+          ] = this._getRangeToRender();
+          this._callOnItemsRendered(
+            overscanStartIndex,
+            overscanStopIndex,
+            visibleStartIndex,
+            visibleStopIndex
+          );
+        }
       }
 
       if (typeof this.props.onScroll === 'function') {

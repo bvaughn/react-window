@@ -38,13 +38,13 @@ describe('FixedSizeList', () => {
 
   it('should render an empty list', () => {
     ReactTestRenderer.create(<FixedSizeList {...defaultProps} itemCount={0} />);
-    expect(itemRenderer.mock.calls.length).toMatchSnapshot();
-    expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    expect(itemRenderer).not.toHaveBeenCalled();
+    expect(onItemsRendered).not.toHaveBeenCalled();
   });
 
   it('should render a list of rows', () => {
     ReactTestRenderer.create(<FixedSizeList {...defaultProps} />);
-    expect(itemRenderer.mock.calls.length).toMatchSnapshot();
+    expect(itemRenderer).toHaveBeenCalledTimes(7);
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
@@ -52,7 +52,7 @@ describe('FixedSizeList', () => {
     ReactTestRenderer.create(
       <FixedSizeList {...defaultProps} direction="horizontal" />
     );
-    expect(itemRenderer.mock.calls.length).toMatchSnapshot();
+    expect(itemRenderer).toHaveBeenCalledTimes(5);
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 

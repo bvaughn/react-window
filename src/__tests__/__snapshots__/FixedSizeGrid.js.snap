@@ -429,9 +429,7 @@ Object {
 }
 `;
 
-exports[`FixedSizeGrid should render a grid of items 1`] = `24`;
-
-exports[`FixedSizeGrid should render a grid of items 2`] = `
+exports[`FixedSizeGrid should render a grid of items 1`] = `
 Array [
   Array [
     Object {
@@ -443,49 +441,6 @@ Array [
       "visibleColumnStopIndex": 2,
       "visibleRowStartIndex": 0,
       "visibleRowStopIndex": 4,
-    },
-  ],
-]
-`;
-
-exports[`FixedSizeGrid should render an empty grid 1`] = `0`;
-
-exports[`FixedSizeGrid should render an empty grid 2`] = `
-Array [
-  Array [
-    Object {
-      "overscanColumnStartIndex": 0,
-      "overscanColumnStopIndex": 0,
-      "overscanRowStartIndex": 0,
-      "overscanRowStopIndex": 0,
-      "visibleColumnStartIndex": 0,
-      "visibleColumnStopIndex": 0,
-      "visibleRowStartIndex": 0,
-      "visibleRowStopIndex": 0,
-    },
-  ],
-  Array [
-    Object {
-      "overscanColumnStartIndex": 0,
-      "overscanColumnStopIndex": 0,
-      "overscanRowStartIndex": 0,
-      "overscanRowStopIndex": 5,
-      "visibleColumnStartIndex": 0,
-      "visibleColumnStopIndex": 0,
-      "visibleRowStartIndex": 0,
-      "visibleRowStopIndex": 4,
-    },
-  ],
-  Array [
-    Object {
-      "overscanColumnStartIndex": 0,
-      "overscanColumnStopIndex": 3,
-      "overscanRowStartIndex": 0,
-      "overscanRowStopIndex": 0,
-      "visibleColumnStartIndex": 0,
-      "visibleColumnStopIndex": 2,
-      "visibleRowStartIndex": 0,
-      "visibleRowStopIndex": 0,
     },
   ],
 ]

@@ -395,32 +395,36 @@ export default function createGridComponent({
     );
 
     _callPropsCallbacks() {
-      if (typeof this.props.onItemsRendered === 'function') {
-        const [
-          overscanColumnStartIndex,
-          overscanColumnStopIndex,
-          visibleColumnStartIndex,
-          visibleColumnStopIndex,
-        ] = this._getHorizontalRangeToRender();
-        const [
-          overscanRowStartIndex,
-          overscanRowStopIndex,
-          visibleRowStartIndex,
-          visibleRowStopIndex,
-        ] = this._getVerticalRangeToRender();
-        this._callOnItemsRendered(
-          overscanColumnStartIndex,
-          overscanColumnStopIndex,
-          overscanRowStartIndex,
-          overscanRowStopIndex,
-          visibleColumnStartIndex,
-          visibleColumnStopIndex,
-          visibleRowStartIndex,
-          visibleRowStopIndex
-        );
+      const { columnCount, onItemsRendered, onScroll, rowCount } = this.props;
+
+      if (typeof onItemsRendered === 'function') {
+        if (columnCount > 0 && rowCount > 0) {
+          const [
+            overscanColumnStartIndex,
+            overscanColumnStopIndex,
+            visibleColumnStartIndex,
+            visibleColumnStopIndex,
+          ] = this._getHorizontalRangeToRender();
+          const [
+            overscanRowStartIndex,
+            overscanRowStopIndex,
+            visibleRowStartIndex,
+            visibleRowStopIndex,
+          ] = this._getVerticalRangeToRender();
+          this._callOnItemsRendered(
+            overscanColumnStartIndex,
+            overscanColumnStopIndex,
+            overscanRowStartIndex,
+            overscanRowStopIndex,
+            visibleColumnStartIndex,
+            visibleColumnStopIndex,
+            visibleRowStartIndex,
+            visibleRowStopIndex
+          );
+        }
       }
 
-      if (typeof this.props.onScroll === 'function') {
+      if (typeof onScroll === 'function') {
         const {
           horizontalScrollDirection,
           scrollLeft,

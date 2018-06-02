@@ -310,9 +310,7 @@ Object {
 }
 `;
 
-exports[`FixedSizeList should render a list of columns 1`] = `5`;
-
-exports[`FixedSizeList should render a list of columns 2`] = `
+exports[`FixedSizeList should render a list of columns 1`] = `
 Array [
   Array [
     Object {
@@ -325,9 +323,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeList should render a list of rows 1`] = `7`;
-
-exports[`FixedSizeList should render a list of rows 2`] = `
+exports[`FixedSizeList should render a list of rows 1`] = `
 Array [
   Array [
     Object {
@@ -335,21 +331,6 @@ Array [
       "overscanStopIndex": 6,
       "visibleStartIndex": 0,
       "visibleStopIndex": 4,
-    },
-  ],
-]
-`;
-
-exports[`FixedSizeList should render an empty list 1`] = `0`;
-
-exports[`FixedSizeList should render an empty list 2`] = `
-Array [
-  Array [
-    Object {
-      "overscanStartIndex": 0,
-      "overscanStopIndex": 0,
-      "visibleStartIndex": 0,
-      "visibleStopIndex": 0,
     },
   ],
 ]
