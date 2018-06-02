@@ -1,5 +1,5 @@
 import React from 'react';
-import { FixedSizeGrid } from 'react-virtualized-v10';
+import { FixedSizeGrid } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
 import CodeSandboxLink from '../../components/CodeSandboxLink';
 

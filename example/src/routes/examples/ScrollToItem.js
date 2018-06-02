@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { VariableSizeGrid, VariableSizeList } from 'react-virtualized-v10';
+import { VariableSizeGrid, VariableSizeList } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
 import CodeSandboxLink from '../../components/CodeSandboxLink';
 

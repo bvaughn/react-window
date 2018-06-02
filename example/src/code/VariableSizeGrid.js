@@ -1,4 +1,4 @@
-import { VariableSizeGrid as Grid } from 'react-virtualized';
+import { VariableSizeGrid as Grid } from 'react-window';
 
 // These item sizes are arbitrary.
 // Yours should be based on the content of the item.

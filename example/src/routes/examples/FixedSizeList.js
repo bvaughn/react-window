@@ -1,5 +1,5 @@
 import React from 'react';
-import { FixedSizeList } from 'react-virtualized-v10';
+import { FixedSizeList } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
 import CodeSandboxLink from '../../components/CodeSandboxLink';
 

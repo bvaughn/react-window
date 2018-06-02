@@ -7636,7 +7636,7 @@ react-scripts@^2.0.0-next.66cc7a90:
   optionalDependencies:
     fsevents "1.2.0"
 
-"react-virtualized@link:..":
+"react-window@link:..":
   version "0.0.0"
   uid ""
 

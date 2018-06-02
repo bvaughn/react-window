@@ -1,6 +1,6 @@
 {
-  "short_name": "react-virtualized",
-  "name": "react-virtualized",
+  "short_name": "react-window",
+  "name": "react-window",
   "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#000000",

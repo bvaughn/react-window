@@ -1,4 +1,4 @@
-import { FixedSizeList as List } from 'react-virtualized';
+import { FixedSizeList as List } from 'react-window';
 
 const listRef = React.createRef();
 

@@ -1,4 +1,4 @@
-import { FixedSizeList as List } from 'react-virtualized';
+import { FixedSizeList as List } from 'react-window';
 
 // If your component's items are expensive to render,
 // You can boost performance by rendering a placeholder while the user is scrolling.

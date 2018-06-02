@@ -1,11 +1,11 @@
 {
-  "name": "react-virtualized-v10",
-  "version": "1.0.0",
+  "name": "react-window",
+  "version": "1.0.0-alpha.1",
   "description":
     "React components for efficiently rendering large lists and tabular data",
   "author": "bvaughn",
   "license": "MIT",
-  "repository": "bvaughn/react-virtualized-v10",
+  "repository": "bvaughn/react-window",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "files": ["dist"],

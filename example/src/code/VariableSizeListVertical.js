@@ -1,4 +1,4 @@
-import { VariableSizeList as List } from 'react-virtualized';
+import { VariableSizeList as List } from 'react-window';
 
 // These row heights are arbitrary.
 // Yours should be based on the content of the row.

@@ -1,4 +1,4 @@
-import { FixedSizeGrid as Grid } from 'react-virtualized';
+import { FixedSizeGrid as Grid } from 'react-window';
 
 <Grid
   columnCount={1000}

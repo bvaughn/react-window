@@ -21,7 +21,7 @@ export default function App() {
   return (
     <Router>
       <div className={styles.App}>
-        <Nav title="react-virtualized">
+        <Nav title="react-window">
           <SubMenu
             isActiveDark={true}
             items={EXAMPLE_ROUTES}
