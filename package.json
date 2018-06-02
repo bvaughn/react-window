@@ -2,10 +2,38 @@
   "name": "react-window",
   "version": "1.0.0-alpha.1",
   "description":
-    "React components for efficiently rendering large lists and tabular data",
-  "author": "bvaughn",
+    "React components for efficiently rendering large, scrollable lists and tabular data",
+  "author":
+    "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)",
+  "contributors": [
+    "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)"
+  ],
   "license": "MIT",
-  "repository": "bvaughn/react-window",
+  "homepage": "http://react-window.now.sh/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bvaughn/react-window.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bvaughn/react-window/issues"
+  },
+  "engines": {
+    "node": ">8.0.0"
+  },
+  "keywords": [
+    "react",
+    "reactjs",
+    "virtual",
+    "window",
+    "windowed",
+    "list",
+    "scrolling",
+    "infinite",
+    "virtualized",
+    "table",
+    "grid",
+    "spreadsheet"
+  ],
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "files": ["dist"],
@@ -17,6 +45,7 @@
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "build": "del dist && rollup -c",
+    "postbuild": "cp ./package.json ./dist/",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
     "predeploy": "cd example && yarn install && yarn run build",
