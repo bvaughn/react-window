@@ -40,7 +40,10 @@ export default function() {
             )}
           </FixedSizeGrid>
 
-          <CodeSandboxLink className={styles.TryItOutLink} id="1rp83rw8wl" />
+          <CodeSandboxLink
+            className={styles.TryItOutLink}
+            sandbox="fixed-size-grid"
+          />
         </div>
         <div className={styles.ExampleCode}>
           <CodeBlock value={CODE} />

@@ -47,7 +47,10 @@ export default function() {
             )}
           </VariableSizeGrid>
 
-          <CodeSandboxLink className={styles.TryItOutLink} id="241m0vromp" />
+          <CodeSandboxLink
+            className={styles.TryItOutLink}
+            sandbox="variable-size-grid"
+          />
         </div>
         <div className={styles.ExampleCode}>
           <CodeBlock value={CODE} />

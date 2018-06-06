@@ -57,7 +57,10 @@ export default class ScrollToItem extends Component {
               )}
             </VariableSizeList>
 
-            <CodeSandboxLink className={styles.TryItOutLink} id="mzy8pq360x" />
+            <CodeSandboxLink
+              className={styles.TryItOutLink}
+              sandbox="scrolling-to-a-list-item"
+            />
           </div>
           <div className={styles.ExampleCode}>
             <CodeBlock value={CODE_LIST} />
@@ -117,7 +120,10 @@ export default class ScrollToItem extends Component {
               )}
             </VariableSizeGrid>
 
-            <CodeSandboxLink className={styles.TryItOutLink} id="woy6mknj4w" />
+            <CodeSandboxLink
+              className={styles.TryItOutLink}
+              sandbox="scrolling-to-a-grid-item"
+            />
           </div>
           <div className={styles.ExampleCode}>
             <CodeBlock value={CODE_GRID} />

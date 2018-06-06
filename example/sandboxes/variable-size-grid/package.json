@@ -1,0 +1,9 @@
+{
+  "description": "Demo of react-window VariableSizeGrid",
+  "main": "src/index.js",
+  "dependencies": {
+    "react": "^16",
+    "react-dom": "^16",
+    "react-window": "alpha"
+  }
+}

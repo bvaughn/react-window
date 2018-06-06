@@ -2,15 +2,15 @@ import React from 'react';
 
 import styles from './CodeSandboxLink.module.css';
 
-const CodeSandboxLink = ({ className, id }) => {
-  if (!id) {
+const CodeSandboxLink = ({ className, tree = 'master', sandbox }) => {
+  if (!sandbox) {
     return null;
   }
 
   return (
     <a
       className={`${styles.CodeSandboxLink} ${className || ''}`}
-      href={`https://codesandbox.io/s/${id}`}
+      href={`https://codesandbox.io/s/github/bvaughn/react-window/tree/${tree}/example/sandboxes/${sandbox}`}
       rel="nofollow"
       target="_blank"
     >

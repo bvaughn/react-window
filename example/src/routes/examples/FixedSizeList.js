@@ -31,7 +31,10 @@ export default function() {
             )}
           </FixedSizeList>
 
-          <CodeSandboxLink className={styles.TryItOutLink} id="vjo8w37qw0" />
+          <CodeSandboxLink
+            className={styles.TryItOutLink}
+            sandbox="fixed-size-list-vertical"
+          />
         </div>
         <div className={styles.ExampleCode}>
           <CodeBlock value={CODE_VERTICAL} />
@@ -57,7 +60,10 @@ export default function() {
             )}
           </FixedSizeList>
 
-          <CodeSandboxLink className={styles.TryItOutLink} id="n4wwlyn8rm" />
+          <CodeSandboxLink
+            className={styles.TryItOutLink}
+            sandbox="fixed-size-list-horizontal"
+          />
         </div>
         <div className={styles.ExampleCode}>
           <CodeBlock value={CODE_HORIZONTAL} />

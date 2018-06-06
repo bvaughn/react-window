@@ -38,7 +38,10 @@ export default function() {
             )}
           </VariableSizeList>
 
-          <CodeSandboxLink className={styles.TryItOutLink} id="j3nw3nnnyy" />
+          <CodeSandboxLink
+            className={styles.TryItOutLink}
+            sandbox="variable-size-list-vertical"
+          />
         </div>
         <div className={styles.ExampleCode}>
           <CodeBlock value={CODE_VERTICAL} />
@@ -64,7 +67,10 @@ export default function() {
             )}
           </VariableSizeList>
 
-          <CodeSandboxLink className={styles.TryItOutLink} id="jnl8ljmnn5" />
+          <CodeSandboxLink
+            className={styles.TryItOutLink}
+            sandbox="variable-size-list-horizontal"
+          />
         </div>
         <div className={styles.ExampleCode}>
           <CodeBlock value={CODE_HORIZONTAL} />

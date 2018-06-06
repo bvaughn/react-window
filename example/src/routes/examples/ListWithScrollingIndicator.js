@@ -31,7 +31,10 @@ export default function() {
             )}
           </FixedSizeList>
 
-          <CodeSandboxLink className={styles.TryItOutLink} id="3qw073y3x6" />
+          <CodeSandboxLink
+            className={styles.TryItOutLink}
+            sandbox="scrolling-indicators"
+          />
         </div>
         <div className={styles.ExampleCode}>
           <CodeBlock value={CODE} />
