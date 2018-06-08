@@ -10,7 +10,7 @@ const CodeSandboxLink = ({ className, tree = 'master', sandbox }) => {
   return (
     <a
       className={`${styles.CodeSandboxLink} ${className || ''}`}
-      href={`https://codesandbox.io/s/github/bvaughn/react-window/tree/${tree}/example/sandboxes/${sandbox}`}
+      href={`https://codesandbox.io/s/github/bvaughn/react-window/tree/${tree}/website/sandboxes/${sandbox}`}
       rel="nofollow"
       target="_blank"
     >
@@ -33,7 +33,7 @@ const CodeSandboxLink = ({ className, tree = 'master', sandbox }) => {
           strokeMiterlimit={10}
           points="899,287.833 509,513 509,963"
         />
-        <line
+        <linewe
           className={styles.CodeSandboxSvgForeground}
           strokeWidth={80}
           strokeMiterlimit={10}

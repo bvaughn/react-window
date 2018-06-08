@@ -1,5 +1,5 @@
 dist/*
-example/build/*
-example/src/code/*
+website/build/*
+website/src/code/*
 package-lock.json
 yarn.lock

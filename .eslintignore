@@ -1,7 +1,7 @@
 dist
-example/build
-example/node_modules
-example/src/code
+website/build
+website/node_modules
+website/src/code
 node_modules
 package-lock.json
 yarn.lock
