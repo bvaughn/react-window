@@ -17,9 +17,9 @@ cd /local/path/to/react-window/website
 npm run start
 ```
 
-To deploy this website to Now, use the NPM "deploy" command from the project root:
+To deploy this website to Now, use the NPM "deploy" command from this directory:
 
 ```sh
-cd /local/path/to/react-window
+cd /local/path/to/react-window/website
 npm run deploy
 ```

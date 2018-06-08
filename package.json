@@ -48,8 +48,7 @@
     "postbuild": "cp ./package.json ./dist/",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
-    "predeploy": "cd website && yarn install && yarn run build",
-    "deploy": "gh-pages -d website/build"
+    "deploy": "cd website && yarn deploy"
   },
   "lint-staged": {
     "{website,src}/**/*.{js,json,css}": ["prettier --write", "git add"],
