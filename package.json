@@ -48,7 +48,8 @@
     "postbuild": "cp ./package.json ./dist/",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
-    "deploy": "cd website && yarn deploy"
+    "website:deploy": "cd website && yarn deploy",
+    "website:run": "cd website && yarn start"
   },
   "lint-staged": {
     "{website,src}/**/*.{js,json,css}": ["prettier --write", "git add"],
