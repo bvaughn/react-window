@@ -4,6 +4,8 @@
   padding: 0 1rem 1rem;
   background-color: #e9eded;
   box-sizing: border-box;
+  max-height: 100vh;
+  overflow: auto;
 }
 
 .SidebarNavHeaderContainer {
@@ -35,7 +37,6 @@
 
 .SidebarNavContent {
   display: flex;
-  max-height: 100vh;
   flex-direction: column;
   overflow: inherit;
   transition: none;
