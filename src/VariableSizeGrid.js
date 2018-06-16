@@ -144,12 +144,11 @@ const findNearestItem = (
     // If we haven't yet measured this high, fallback to an exponential search with an inner binary search.
     // The exponential search avoids pre-computing sizes for the full set of items as a binary search would.
     // The overall complexity for this approach is O(log n).
-    const index = lastMeasuredIndex > 0 ? lastMeasuredIndex : 0;
     return findNearestItemExponentialSearch(
       itemType,
       props,
       instanceProps,
-      index,
+      Math.max(0, lastMeasuredIndex),
       offset
     );
   }
