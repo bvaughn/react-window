@@ -45,7 +45,6 @@
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
     "build": "del dist && rollup -c",
-    "postbuild": "cp ./package.json ./dist/",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
     "website:deploy": "cd website && yarn deploy",
