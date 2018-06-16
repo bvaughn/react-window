@@ -5,7 +5,8 @@ import ComponentApi from '../../components/ComponentApi';
 
 import styles from './shared.module.css';
 
-import CODE_CHILDREN from '../../code/FixedSizeListChildren.js';
+import CODE_CHILDREN_CLASS from '../../code/FixedSizeListChildrenClass.js';
+import CODE_CHILDREN_FUNCTION from '../../code/FixedSizeListChildrenFunction.js';
 import CODE_ON_ITEMS_RENDERED from '../../code/FixedSizeListOnItemsRendered.js';
 import CODE_ON_SCROLL from '../../code/FixedSizeListOnScroll.js';
 
@@ -17,31 +18,39 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Responsible for rendering the individual item specified by an{' '}
-        <code>index</code> parameter. This method also receives a{' '}
-        <code>style</code> parameter (used for positioning).
-        <br />
-        <br />
-        If <code>useIsScrolling</code> is enabled for the list, the method also
-        receives an additional <code>isScrolling</code> boolean parameter.
-        <br />
-        <br />
+        <p>
+          React component responsible for rendering the individual item
+          specified by an <code>index</code> prop. This component also receives
+          a <code>style</code> prop (used for positioning).
+        </p>
+        <p>
+          If <code>useIsScrolling</code> is enabled for the list, the component
+          also receives an additional <code>isScrolling</code> boolean prop.
+        </p>
+        <p>Function components are useful for rendering simple items:</p>
         <div className={styles.CodeBlockWrapper}>
-          <CodeBlock value={CODE_CHILDREN} />
+          <CodeBlock value={CODE_CHILDREN_FUNCTION} />
+        </div>
+        <p>
+          To render more complex items, you may wish to extend{' '}
+          <code>PureComponent</code> to avoid unnecessary re-renders:
+        </p>
+        <div className={styles.CodeBlockWrapper}>
+          <CodeBlock value={CODE_CHILDREN_CLASS} />
         </div>
       </Fragment>
     ),
     isRequired: true,
     name: 'children',
-    type: 'function',
+    type: 'component',
   },
   {
     defaultValue: '""',
     description: (
-      <Fragment>
+      <p>
         Optional CSS class to attach to outermost <code>&lt;div&gt;</code>{' '}
         element.
-      </Fragment>
+      </p>
     ),
     name: 'className',
     type: 'string',
@@ -50,13 +59,15 @@ const PROPS = [
     defaultValue: '"vertical"',
     description: (
       <Fragment>
-        Primary scroll direction of the list. Acceptable values are:
+        <p>Primary scroll direction of the list. Acceptable values are:</p>
         <ul>
           <li>vertical (default) - Up/down scrolling.</li>
           <li>horizontal - Left/right scrolling.</li>
         </ul>
-        Note that lists may scroll in both directions (depending on CSS) but
-        content will only be windowed in the primary direction.
+        <p>
+          Note that lists may scroll in both directions (depending on CSS) but
+          content will only be windowed in the primary direction.
+        </p>
       </Fragment>
     ),
     name: 'direction',
@@ -65,14 +76,14 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Height of the list.
-        <br />
-        <br />
-        For vertical lists, this must be a number. It affects the number of rows
-        that will be rendered (and displayed) at any given time.
-        <br />
-        <br />
-        For horizontal lists, this can be a number or a string (e.g. "50%").
+        <p>Height of the list.</p>
+        <p>
+          For vertical lists, this must be a number. It affects the number of
+          rows that will be rendered (and displayed) at any given time.
+        </p>
+        <p>
+          For horizontal lists, this can be a number or a string (e.g. "50%").
+        </p>
       </Fragment>
     ),
     isRequired: true,
@@ -83,11 +94,11 @@ const PROPS = [
     defaultValue: 0,
     description: (
       <Fragment>
-        Scroll offset for initial render.
-        <br />
-        <br />
-        For vertical lists, this affects <code>scrollTop</code>. For horizontal
-        lists, this affects <code>scrollLeft</code>.
+        <p>Scroll offset for initial render.</p>
+        <p>
+          For vertical lists, this affects <code>scrollTop</code>. For
+          horizontal lists, this affects <code>scrollLeft</code>.
+        </p>
       </Fragment>
     ),
     name: 'initialScrollOffset',
@@ -95,10 +106,10 @@ const PROPS = [
   },
   {
     description: (
-      <Fragment>
+      <p>
         Total number of items in the list. Note that only a few items will be
         rendered and displayed at a time.
-      </Fragment>
+      </p>
     ),
     isRequired: true,
     name: 'itemCount',
@@ -106,10 +117,10 @@ const PROPS = [
   },
   {
     description: (
-      <Fragment>
+      <p>
         Size of a item in the direction being windowed. For vertical lists, this
         is the row height. For horizontal lists, this is the column width.
-      </Fragment>
+      </p>
     ),
     isRequired: true,
     name: 'itemSize',
@@ -118,9 +129,7 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Called when the items rendered by the list change.
-        <br />
-        <br />
+        <p>Called when the items rendered by the list change.</p>
         <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_ON_ITEMS_RENDERED} />
         </div>
@@ -132,10 +141,10 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Called when the list scroll positions changes, as a result of user
-        scrolling or scroll-to method calls.
-        <br />
-        <br />
+        <p>
+          Called when the list scroll positions changes, as a result of user
+          scrolling or scroll-to method calls.
+        </p>
         <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_ON_SCROLL} />
         </div>
@@ -148,8 +157,10 @@ const PROPS = [
     defaultValue: 1,
     description: (
       <Fragment>
-        The number of items (rows or columns) to render outside of the visible
-        area. This property can be important for two reasons:
+        <p>
+          The number of items (rows or columns) to render outside of the visible
+          area. This property can be important for two reasons:
+        </p>
         <ul>
           <li>
             Overscanning by one row or column allows the tab key to focus on the
@@ -160,8 +171,10 @@ const PROPS = [
             when a user first starts scrolling.
           </li>
         </ul>
-        Note that overscanning too much can negatively impact performance. By
-        default, List overscans by one item.
+        <p>
+          Note that overscanning too much can negatively impact performance. By
+          default, List overscans by one item.
+        </p>
       </Fragment>
     ),
     name: 'overscanCount',
@@ -170,10 +183,10 @@ const PROPS = [
   {
     defaultValue: null,
     description: (
-      <Fragment>
+      <p>
         Optional inline style to attach to outermost <code>&lt;div&gt;</code>{' '}
         element.
-      </Fragment>
+      </p>
     ),
     name: 'style',
     type: 'Object',
@@ -182,19 +195,21 @@ const PROPS = [
     defaultValue: false,
     description: (
       <Fragment>
-        Adds an additional <code>isScrolling</code> parameter to the{' '}
-        <code>children</code> render function. This parameter can be used to
-        show a placeholder row or column while the list is being scrolled.
-        <br />
-        <br />
-        Note that using this parameter will result in an additional render call
-        after scrolling has stopped (when<code>isScrolling</code> changse from
-        true to false).
-        <br />
-        <br />
-        <Link to="/examples/list/scrolling-indicators">
-          See here for an example of this API.
-        </Link>
+        <p>
+          Adds an additional <code>isScrolling</code> parameter to the{' '}
+          <code>children</code> render function. This parameter can be used to
+          show a placeholder row or column while the list is being scrolled.
+        </p>
+        <p>
+          Note that using this parameter will result in an additional render
+          call after scrolling has stopped (when<code>isScrolling</code> changse
+          from true to false).
+        </p>
+        <p>
+          <Link to="/examples/list/scrolling-indicators">
+            See here for an example of this API.
+          </Link>
+        </p>
       </Fragment>
     ),
     name: 'useIsScrolling',
@@ -203,14 +218,14 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Width of the list.
-        <br />
-        <br />
-        For horizontal lists, this must be a number. It affects the number of
-        columns that will be rendered (and displayed) at any given time.
-        <br />
-        <br />
-        For vertical lists, this can be a number or a string (e.g. "50%").
+        <p>Width of the list.</p>
+        <p>
+          For horizontal lists, this must be a number. It affects the number of
+          columns that will be rendered (and displayed) at any given time.
+        </p>
+        <p>
+          For vertical lists, this can be a number or a string (e.g. "50%").
+        </p>
       </Fragment>
     ),
     isRequired: true,
@@ -222,22 +237,22 @@ const PROPS = [
 const METHODS = [
   {
     description: (
-      <Fragment>
+      <p>
         Scroll to the specified offset (<code>scrollTop</code> or{' '}
         <code>scrollLeft</code>, depending on the <code>direction</code> prop).
-      </Fragment>
+      </p>
     ),
     signature: 'scrollTo(scrollOffset: number): void',
   },
   {
     description: (
       <Fragment>
-        Scroll to the specified item.
-        <br />
-        <br />
-        By default, the List will scroll as little as possible to ensure the
-        item is visible. You can control the alignment of the item though by
-        specifying a second alignment parameter. Acceptable values are:
+        <p>Scroll to the specified item.</p>
+        <p>
+          By default, the List will scroll as little as possible to ensure the
+          item is visible. You can control the alignment of the item though by
+          specifying a second alignment parameter. Acceptable values are:
+        </p>
         <ul>
           <li>
             auto (default) - Scroll as little as possible to ensure the item is
@@ -253,9 +268,11 @@ const METHODS = [
             vertical lists or the left for horizontal lists).
           </li>
         </ul>
-        <Link to="/examples/list/scroll-to-item">
-          See here for an example of this API.
-        </Link>
+        <p>
+          <Link to="/examples/list/scroll-to-item">
+            See here for an example of this API.
+          </Link>
+        </p>
       </Fragment>
     ),
     signature: 'scrollToItem(index: number, align: string = "auto"): void',

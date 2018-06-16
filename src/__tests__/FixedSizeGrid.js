@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -15,6 +15,14 @@ const simulateScroll = (instance, { scrollLeft, scrollTop }) => {
 describe('FixedSizeGrid', () => {
   let itemRenderer, defaultProps, onItemsRendered;
 
+  // Use PureComponent to test memoization.
+  // Pass through to itemRenderer mock for easier test assertions.
+  class PureItemRenderer extends PureComponent {
+    render() {
+      return itemRenderer(this.props);
+    }
+  }
+
   beforeEach(() => {
     jest.useFakeTimers();
 
@@ -24,7 +32,7 @@ describe('FixedSizeGrid', () => {
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     defaultProps = {
-      children: itemRenderer,
+      children: PureItemRenderer,
       columnCount: 100,
       columnWidth: 100,
       height: 100,

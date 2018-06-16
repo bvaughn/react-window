@@ -1,19 +1,19 @@
 // @flow
 
 import memoizeOne from 'memoize-one';
-import React, { PureComponent } from 'react';
+import React, { createElement, PureComponent } from 'react';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
 type Direction = 'horizontal' | 'vertical';
 
-type RenderFunctionParams = {|
+type RenderComponentProps = {|
   index: number,
   isScrolling?: boolean,
   style: Object,
 |};
-type RenderFunction = (params: RenderFunctionParams) => React$Node;
+type RenderComponent = (props: RenderComponentProps) => React$Node;
 
 type ScrollDirection = 'forward' | 'backward';
 
@@ -32,7 +32,7 @@ type onScrollCallback = ({
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 
 export type Props = {|
-  children: RenderFunction,
+  children: RenderComponent,
   className?: string,
   initialScrollOffset?: number,
   direction: Direction,
@@ -203,6 +203,7 @@ export default function createListComponent({
 
     render() {
       const {
+        children,
         className,
         direction,
         height,
@@ -224,13 +225,12 @@ export default function createListComponent({
       if (itemCount > 0) {
         for (let index = startIndex; index <= stopIndex; index++) {
           items.push(
-            <ListItem
-              key={index}
-              index={index}
-              isScrolling={useIsScrolling ? isScrolling : undefined}
-              renderFunction={this._renderFunction}
-              style={this._getItemStyle(index)}
-            />
+            createElement(children, {
+              key: index,
+              index,
+              isScrolling: useIsScrolling ? isScrolling : undefined,
+              style: this._getItemStyle(index),
+            })
           );
         }
       }
@@ -454,14 +454,6 @@ export default function createListComponent({
       this._scrollingContainer = ((ref: any): HTMLDivElement);
     };
 
-    // Facade for the user-provided children function.
-    // This adds the overhead of an additional method call,
-    // But has hte benefit of not breaking pure sCU checks,
-    // Allowing List to avoid re-rendering items until indices change.
-    _renderFunction: RenderFunction;
-    _renderFunction = (params: RenderFunctionParams) =>
-      this.props.children(params);
-
     _resetIsScrollingDebounced = () => {
       if (this._resetIsScrollingTimeoutId !== null) {
         clearTimeout(this._resetIsScrollingTimeoutId);
@@ -483,25 +475,6 @@ export default function createListComponent({
       });
     };
   };
-}
-
-type ListItemProps = {
-  index: number,
-  isScrolling?: boolean,
-  renderFunction: RenderFunction,
-  style: Object,
-};
-
-class ListItem extends PureComponent<ListItemProps, void> {
-  render() {
-    const { index, isScrolling, renderFunction, style } = this.props;
-
-    return renderFunction({
-      index,
-      isScrolling,
-      style,
-    });
-  }
 }
 
 // NOTE: I considered further wrapping individual items with a pure ListItem component.

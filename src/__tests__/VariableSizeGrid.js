@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ReactTestRenderer from 'react-test-renderer';
 import { VariableSizeGrid } from '..';
 
@@ -6,6 +6,14 @@ const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('VariableSizeGrid', () => {
   let itemRenderer, defaultProps, onItemsRendered;
+
+  // Use PureComponent to test memoization.
+  // Pass through to itemRenderer mock for easier test assertions.
+  class PureItemRenderer extends PureComponent {
+    render() {
+      return itemRenderer(this.props);
+    }
+  }
 
   const findItemRendererCall = (rowIndex: number, columnIndex: number) => {
     const found = itemRenderer.mock.calls.find(
@@ -23,7 +31,7 @@ describe('VariableSizeGrid', () => {
     ));
     onItemsRendered = jest.fn();
     defaultProps = {
-      children: itemRenderer,
+      children: PureItemRenderer,
       columnCount: 10,
       columnWidth: index => 50 + index,
       height: 100,

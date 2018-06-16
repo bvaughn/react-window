@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -18,6 +18,14 @@ const findScrollContainer = rendered => rendered.root.children[0].children[0];
 describe('FixedSizeList', () => {
   let itemRenderer, defaultProps, onItemsRendered;
 
+  // Use PureComponent to test memoization.
+  // Pass through to itemRenderer mock for easier test assertions.
+  class PureItemRenderer extends PureComponent {
+    render() {
+      return itemRenderer(this.props);
+    }
+  }
+
   beforeEach(() => {
     jest.useFakeTimers();
 
@@ -27,7 +35,7 @@ describe('FixedSizeList', () => {
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     defaultProps = {
-      children: itemRenderer,
+      children: PureItemRenderer,
       height: 100,
       itemCount: 100,
       itemSize: 25,

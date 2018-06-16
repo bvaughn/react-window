@@ -1,19 +1,19 @@
 // @flow
 
 import memoizeOne from 'memoize-one';
-import React, { PureComponent } from 'react';
+import React, { createElement, PureComponent } from 'react';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
 
-type RenderFunctionParams = {|
+type RenderComponentProps = {|
   columnIndex: number,
   isScrolling?: boolean,
   rowIndex: number,
   style: Object,
 |};
-export type RenderFunction = (params: RenderFunctionParams) => React$Node;
+export type RenderComponent = (props: RenderComponentProps) => React$Node;
 
 type ScrollDirection = 'forward' | 'backward';
 
@@ -38,7 +38,7 @@ type OnScrollCallback = ({
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 
 export type Props = {|
-  children: RenderFunction,
+  children: RenderComponent,
   className?: string,
   columnCount: number,
   columnWidth: itemSize,
@@ -255,6 +255,7 @@ export default function createGridComponent({
 
     render() {
       const {
+        children,
         className,
         columnCount,
         height,
@@ -284,14 +285,13 @@ export default function createGridComponent({
             columnIndex++
           ) {
             items.push(
-              <GridItem
-                columnIndex={columnIndex}
-                isScrolling={useIsScrolling ? isScrolling : undefined}
-                key={`${rowIndex}:${columnIndex}`}
-                renderFunction={this._renderFunction}
-                rowIndex={rowIndex}
-                style={this._getItemStyle(rowIndex, columnIndex)}
-              />
+              createElement(children, {
+                columnIndex,
+                isScrolling: useIsScrolling ? isScrolling : undefined,
+                key: `${rowIndex}:${columnIndex}`,
+                rowIndex,
+                style: this._getItemStyle(rowIndex, columnIndex),
+              })
             );
           }
         }
@@ -562,14 +562,6 @@ export default function createGridComponent({
       this._scrollingContainer = ((ref: any): HTMLDivElement);
     };
 
-    // Facade for the user-provided children function.
-    // This adds the overhead of an additional method call,
-    // But has hte benefit of not breaking pure sCU checks,
-    // Allowing List to avoid re-rendering items until indices change.
-    _renderFunction: RenderFunction;
-    _renderFunction = (params: RenderFunctionParams) =>
-      this.props.children(params);
-
     _resetIsScrollingDebounced = () => {
       if (this._resetIsScrollingTimeoutId !== null) {
         clearTimeout(this._resetIsScrollingTimeoutId);
@@ -602,33 +594,6 @@ export default function createGridComponent({
       });
     };
   };
-}
-
-type GridItemProps = {
-  columnIndex: number,
-  isScrolling?: boolean,
-  renderFunction: RenderFunction,
-  rowIndex: number,
-  style: Object,
-};
-
-class GridItem extends PureComponent<GridItemProps, void> {
-  render() {
-    const {
-      columnIndex,
-      isScrolling,
-      renderFunction,
-      rowIndex,
-      style,
-    } = this.props;
-
-    return renderFunction({
-      columnIndex,
-      isScrolling,
-      rowIndex,
-      style,
-    });
-  }
 }
 
 const validateSharedProps = ({ children, height, width }: Props): void => {

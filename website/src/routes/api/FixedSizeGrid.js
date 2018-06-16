@@ -5,7 +5,8 @@ import ComponentApi from '../../components/ComponentApi';
 
 import styles from './shared.module.css';
 
-import CODE_CHILDREN from '../../code/FixedSizeGridChildren.js';
+import CODE_CHILDREN_CLASS from '../../code/FixedSizeGridChildrenClass.js';
+import CODE_CHILDREN_FUNCTION from '../../code/FixedSizeGridChildrenFunction.js';
 import CODE_ON_ITEMS_RENDERED from '../../code/FixedSizeGridOnItemsRendered.js';
 import CODE_ON_SCROLL from '../../code/FixedSizeGridOnScroll.js';
 
@@ -17,59 +18,66 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Responsible for rendering the individual item specified by indices. This
-        method receives a <code>style</code> parameter (used for positioning).
-        <br />
-        <br />
-        If <code>useIsScrolling</code> is enabled for the list, the method also
-        receives an additional <code>isScrolling</code> boolean parameter.
-        <br />
-        <br />
+        <p>
+          React component responsible for rendering the individual item
+          specified by indices. This component receives a <code>style</code>{' '}
+          prop (used for positioning).
+        </p>
+        <p>
+          If <code>useIsScrolling</code> is enabled for the list, the component
+          also receives an additional <code>isScrolling</code> boolean prop.
+        </p>
+        <p>Function components are useful for rendering simple items:</p>
         <div className={styles.CodeBlockWrapper}>
-          <CodeBlock value={CODE_CHILDREN} />
+          <CodeBlock value={CODE_CHILDREN_FUNCTION} />
+        </div>
+        <p>
+          To render more complex items, you may wish to extend{' '}
+          <code>PureComponent</code> to avoid unnecessary re-renders:
+        </p>
+        <div className={styles.CodeBlockWrapper}>
+          <CodeBlock value={CODE_CHILDREN_CLASS} />
         </div>
       </Fragment>
     ),
     isRequired: true,
     name: 'children',
-    type: 'function',
+    type: 'component',
   },
   {
     defaultValue: '""',
     description: (
-      <Fragment>
+      <p>
         Optional CSS class to attach to outermost <code>&lt;div&gt;</code>{' '}
         element.
-      </Fragment>
+      </p>
     ),
     name: 'className',
     type: 'string',
   },
   {
     description: (
-      <Fragment>
+      <p>
         Number of columns in the grid. Note that only a few columns will be
         rendered and displayed at a time.
-      </Fragment>
+      </p>
     ),
     isRequired: true,
     name: 'columnCount',
     type: 'number',
   },
   {
-    description: (
-      <Fragment>Width of an individual column within the grid.</Fragment>
-    ),
+    description: <p>Width of an individual column within the grid.</p>,
     isRequired: true,
     name: 'columnWidth',
     type: 'number',
   },
   {
     description: (
-      <Fragment>
+      <p>
         Height of the grid. This affects the number of rows that will be
         rendered (and displayed) at any given time.
-      </Fragment>
+      </p>
     ),
     isRequired: true,
     name: 'height',
@@ -77,26 +85,20 @@ const PROPS = [
   },
   {
     defaultValue: 0,
-    description: (
-      <Fragment>Vertical scroll offset for initial render.</Fragment>
-    ),
+    description: <p>Vertical scroll offset for initial render.</p>,
     name: 'initialScrollLeft',
     type: 'number',
   },
   {
     defaultValue: 0,
-    description: (
-      <Fragment>Horizontal scroll offset for initial render.</Fragment>
-    ),
+    description: <p>Horizontal scroll offset for initial render.</p>,
     name: 'initialScrollTop',
     type: 'number',
   },
   {
     description: (
       <Fragment>
-        Called when the items rendered by the grid change.
-        <br />
-        <br />
+        <p>Called when the items rendered by the grid change.</p>
         <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_ON_ITEMS_RENDERED} />
         </div>
@@ -108,10 +110,10 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Called when the grid scroll positions changes, as a result of user
-        scrolling or scroll-to method calls.
-        <br />
-        <br />
+        <p>
+          Called when the grid scroll positions changes, as a result of user
+          scrolling or scroll-to method calls.
+        </p>
         <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_ON_SCROLL} />
         </div>
@@ -124,8 +126,10 @@ const PROPS = [
     defaultValue: 1,
     description: (
       <Fragment>
-        The number of items (rows and columns) to render outside of the visible
-        area. This property can be important for two reasons:
+        <p>
+          The number of items (rows and columns) to render outside of the
+          visible area. This property can be important for two reasons:
+        </p>
         <ul>
           <li>
             Overscanning by one row or column allows the tab key to focus on the
@@ -136,8 +140,10 @@ const PROPS = [
             when a user first starts scrolling.
           </li>
         </ul>
-        Note that overscanning too much can negatively impact performance. By
-        default, grid overscans by one item.
+        <p>
+          Note that overscanning too much can negatively impact performance. By
+          default, grid overscans by one item.
+        </p>
       </Fragment>
     ),
     name: 'overscanCount',
@@ -145,19 +151,17 @@ const PROPS = [
   },
   {
     description: (
-      <Fragment>
+      <p>
         Number of rows in the grid. Note that only a few rows will be rendered
         and displayed at a time.
-      </Fragment>
+      </p>
     ),
     isRequired: true,
     name: 'rowCount',
     type: 'number',
   },
   {
-    description: (
-      <Fragment>Height of an individual row within the grid.</Fragment>
-    ),
+    description: <p>Height of an individual row within the grid.</p>,
     isRequired: true,
     name: 'rowHeight',
     type: 'number',
@@ -165,10 +169,10 @@ const PROPS = [
   {
     defaultValue: null,
     description: (
-      <Fragment>
+      <p>
         Optional inline style to attach to outermost <code>&lt;div&gt;</code>{' '}
         element.
-      </Fragment>
+      </p>
     ),
     name: 'style',
     type: 'Object',
@@ -176,7 +180,7 @@ const PROPS = [
   {
     defaultValue: false,
     description: (
-      <Fragment>
+      <p>
         Adds an additional <code>isScrolling</code> parameter to the{' '}
         <code>children</code> render function. This parameter can be used to
         show a placeholder row or column while the grid is being scrolled.
@@ -190,17 +194,17 @@ const PROPS = [
         <Link to="/examples/list/scrolling-indicators">
           See here for an example of this API.
         </Link>
-      </Fragment>
+      </p>
     ),
     name: 'useIsScrolling',
     type: 'boolean',
   },
   {
     description: (
-      <Fragment>
+      <p>
         Width of the grid. This affects the number of columns that will be
         rendered (and displayed) at any given time.
-      </Fragment>
+      </p>
     ),
     isRequired: true,
     name: 'width',
@@ -210,18 +214,18 @@ const PROPS = [
 
 const METHODS = [
   {
-    description: <Fragment>Scroll to the specified offsets.</Fragment>,
+    description: <p>Scroll to the specified offsets.</p>,
     signature: 'scrollTo({scrollLeft: number, scrollTop: number}): void',
   },
   {
     description: (
       <Fragment>
-        Scroll to the specified item.
-        <br />
-        <br />
-        By default, the Grid will scroll as little as possible to ensure the
-        item is visible. You can control the alignment of the item though by
-        specifying a second alignment parameter. Acceptable values are:
+        <p>Scroll to the specified item.</p>
+        <p>
+          By default, the Grid will scroll as little as possible to ensure the
+          item is visible. You can control the alignment of the item though by
+          specifying a second alignment parameter. Acceptable values are:
+        </p>
         <ul>
           <li>
             auto (default) - Scroll as little as possible to ensure the item is
@@ -233,9 +237,11 @@ const METHODS = [
           </li>
           <li>start - Align the item to the top, left hand of the grid.</li>
         </ul>
-        <Link to="/examples/list/scroll-to-item">
-          See here for an example of this API.
-        </Link>
+        <p>
+          <Link to="/examples/list/scroll-to-item">
+            See here for an example of this API.
+          </Link>
+        </p>
       </Fragment>
     ),
     signature:

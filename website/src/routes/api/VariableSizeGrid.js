@@ -36,9 +36,7 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Returns the width of the specified column.
-        <br />
-        <br />
+        <p>Returns the width of the specified column.</p>
         <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_COLUMN_WIDTH} />
         </div>
@@ -52,13 +50,13 @@ const PROPS = [
     defaultValue: 50,
     description: (
       <Fragment>
-        Average (or estimated) column width for unrendered columns.
-        <br />
-        <br />
-        This value is used to calculated the estimated total width of a Grid
-        before its columns have all been measured. The estimated width impacts
-        user scrolling behavior. It is updated whenever new columns are
-        measured.
+        <p>Average (or estimated) column width for unrendered columns.</p>
+        <p>
+          This value is used to calculated the estimated total width of a Grid
+          before its columns have all been measured. The estimated width impacts
+          user scrolling behavior. It is updated whenever new columns are
+          measured.
+        </p>
       </Fragment>
     ),
     name: 'estimatedColumnWidth',
@@ -68,13 +66,13 @@ const PROPS = [
     defaultValue: 50,
     description: (
       <Fragment>
-        Average (or estimated) row height for unrendered rows.
-        <br />
-        <br />
-        This value is used to calculated the estimated total height of a Grid
-        before its rows have all been measured. The estimated height impacts
-        user scrolling behavior. It is updated whenever new columns are
-        measured.
+        <p>Average (or estimated) row height for unrendered rows.</p>
+        <p>
+          This value is used to calculated the estimated total height of a Grid
+          before its rows have all been measured. The estimated height impacts
+          user scrolling behavior. It is updated whenever new columns are
+          measured.
+        </p>
       </Fragment>
     ),
     name: 'estimatedRowHeight',
@@ -83,9 +81,7 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        Returns the height of the specified row.
-        <br />
-        <br />
+        <p>Returns the height of the specified row.</p>
         <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_ROW_HEIGHT} />
         </div>
@@ -100,38 +96,38 @@ const PROPS = [
 const METHODS = [
   {
     description: (
-      <Fragment>
+      <p>
         <code>VariableSizeGrid</code> caches offsets and measurements for each
         column index for performance purposes. This method clears that cached
         data for all columns after (and including) the specified index. It
         should be called whenever a column's width changes. (Note that this is
         not a typical occurrance.)
-      </Fragment>
+      </p>
     ),
     signature: 'resetAfterColumnIndex(index: number): void',
   },
   {
     description: (
-      <Fragment>
+      <p>
         <code>VariableSizeGrid</code> caches offsets and measurements for each
         item for performance purposes. This method clears that cached data for
         all items after (and including) the specified indices. It should be
         called whenever an items size changes. (Note that this is not a typical
         occurrance.)
-      </Fragment>
+      </p>
     ),
     signature:
       'resetAfterIndices({ columnIndex: number, rowIndex: number }): void',
   },
   {
     description: (
-      <Fragment>
+      <p>
         <code>VariableSizeGrid</code> caches offsets and measurements for each
         row index for performance purposes. This method clears that cached data
         for all rows after (and including) the specified index. It should be
         called whenever a row's height changes. (Note that this is not a typical
         occurrance.)
-      </Fragment>
+      </p>
     ),
     signature: 'resetAfterRowIndex(index: number): void',
   },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import ReactTestRenderer from 'react-test-renderer';
 import { VariableSizeList } from '..';
 
@@ -6,6 +6,14 @@ const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('VariableSizeList', () => {
   let itemRenderer, defaultProps, onItemsRendered;
+
+  // Use PureComponent to test memoization.
+  // Pass through to itemRenderer mock for easier test assertions.
+  class PureItemRenderer extends PureComponent {
+    render() {
+      return itemRenderer(this.props);
+    }
+  }
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -15,7 +23,7 @@ describe('VariableSizeList', () => {
     ));
     onItemsRendered = jest.fn();
     defaultProps = {
-      children: itemRenderer,
+      children: PureItemRenderer,
       estimatedItemSize: 25,
       height: 100,
       itemCount: 20,
