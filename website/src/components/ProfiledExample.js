@@ -27,7 +27,7 @@ export default class ProfiledExample extends PureComponent<Props, void> {
           {children}
         </Profiler>
         <div className={styles.Row}>
-          <Badge forwardedRef={this._numCommitsRef} label="commits" />
+          <Badge forwardedRef={this._numCommitsRef} label="renders" />
           <CodeSandboxLink sandbox={sandbox} />
           <Badge forwardedRef={this._averageTimeRef} label="average" />
         </div>
