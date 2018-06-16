@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
-import CodeSandboxLink from '../../components/CodeSandboxLink';
+import ProfiledExample from '../../components/ProfiledExample';
 
 import CODE_GRID from '../../code/ScrollToItemGrid.js';
 import CODE_LIST from '../../code/ScrollToItemList.js';
@@ -15,7 +15,45 @@ const rowHeights = new Array(1000)
   .fill(true)
   .map(() => 25 + Math.round(Math.random() * 50));
 
-export default class ScrollToItem extends Component {
+class ListItemRenderer extends PureComponent {
+  render() {
+    const { index, style } = this.props;
+
+    return (
+      <div
+        className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
+        style={style}
+      >
+        Row {index}
+      </div>
+    );
+  }
+}
+
+class GridItemRenderer extends PureComponent {
+  render() {
+    const { columnIndex, rowIndex, style } = this.props;
+
+    return (
+      <div
+        className={
+          columnIndex % 2
+            ? rowIndex % 2 === 0
+              ? styles.GridItemOdd
+              : styles.GridItemEven
+            : rowIndex % 2
+              ? styles.GridItemOdd
+              : styles.GridItemEven
+        }
+        style={style}
+      >
+        r{rowIndex}, c{columnIndex}
+      </div>
+    );
+  }
+}
+
+export default class ScrollToItem extends PureComponent {
   gridRef = React.createRef();
   listRef = React.createRef();
 
@@ -24,7 +62,10 @@ export default class ScrollToItem extends Component {
       <div className={styles.ExampleWrapper}>
         <h1 className={styles.ExampleHeader}>Scrolling to an item</h1>
         <div className={styles.Example}>
-          <div className={styles.ExampleDemo}>
+          <ProfiledExample
+            className={styles.ExampleDemo}
+            sandbox="scrolling-to-a-list-item"
+          >
             <button
               className={styles.ExampleButton}
               onClick={this.scrollToRow200Auto}
@@ -45,29 +86,18 @@ export default class ScrollToItem extends Component {
               ref={this.listRef}
               width={300}
             >
-              {({ index, style }) => (
-                <div
-                  className={
-                    index % 2 ? styles.ListItemOdd : styles.ListItemEven
-                  }
-                  style={style}
-                >
-                  Row {index}
-                </div>
-              )}
+              {ListItemRenderer}
             </VariableSizeList>
-
-            <CodeSandboxLink
-              className={styles.TryItOutLink}
-              sandbox="scrolling-to-a-list-item"
-            />
-          </div>
+          </ProfiledExample>
           <div className={styles.ExampleCode}>
             <CodeBlock value={CODE_LIST} />
           </div>
         </div>
         <div className={styles.Example}>
-          <div className={styles.ExampleDemo}>
+          <ProfiledExample
+            className={styles.ExampleDemo}
+            sandbox="scrolling-to-a-grid-item"
+          >
             <button
               className={styles.ExampleButton}
               onClick={this.scrollToRow100Column50Auto}
@@ -102,29 +132,9 @@ export default class ScrollToItem extends Component {
               rowHeight={index => rowHeights[index]}
               width={300}
             >
-              {({ columnIndex, rowIndex, style }) => (
-                <div
-                  className={
-                    columnIndex % 2
-                      ? rowIndex % 2 === 0
-                        ? styles.GridItemOdd
-                        : styles.GridItemEven
-                      : rowIndex % 2
-                        ? styles.GridItemOdd
-                        : styles.GridItemEven
-                  }
-                  style={style}
-                >
-                  r{rowIndex}, c{columnIndex}
-                </div>
-              )}
+              {GridItemRenderer}
             </VariableSizeGrid>
-
-            <CodeSandboxLink
-              className={styles.TryItOutLink}
-              sandbox="scrolling-to-a-grid-item"
-            />
-          </div>
+          </ProfiledExample>
           <div className={styles.ExampleCode}>
             <CodeBlock value={CODE_GRID} />
           </div>

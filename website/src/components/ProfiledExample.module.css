@@ -1,0 +1,27 @@
+.Row {
+  width: 100%;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Badge {
+  flex: 0 0 50px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  background-color: #f8f8f0;
+}
+
+.Label {
+  font-weight: bold;
+}
+
+.Count {
+  font-size: 1.25rem;
+  font-weight: lighter;
+  color: #263238;
+}

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { VariableSizeList } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
-import CodeSandboxLink from '../../components/CodeSandboxLink';
+import ProfiledExample from '../../components/ProfiledExample';
 
 import CODE_HORIZONTAL from '../../code/VariableSizeListHorizontal.js';
 import CODE_VERTICAL from '../../code/VariableSizeListVertical.js';
@@ -15,12 +15,30 @@ const rowSizes = new Array(1000)
   .fill(true)
   .map(() => 25 + Math.round(Math.random() * 50));
 
+class ItemRenderer extends PureComponent {
+  render() {
+    const { index, style } = this.props;
+
+    return (
+      <div
+        className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
+        style={style}
+      >
+        Item {index}
+      </div>
+    );
+  }
+}
+
 export default function() {
   return (
     <div className={styles.ExampleWrapper}>
       <h1 className={styles.ExampleHeader}>Variable Size List</h1>
       <div className={styles.Example}>
-        <div className={styles.ExampleDemo}>
+        <ProfiledExample
+          className={styles.ExampleDemo}
+          sandbox="variable-size-list-vertical"
+        >
           <VariableSizeList
             className={styles.List}
             height={150}
@@ -28,27 +46,18 @@ export default function() {
             itemSize={index => rowSizes[index]}
             width={300}
           >
-            {({ index, style }) => (
-              <div
-                className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
-                style={style}
-              >
-                Row {index}
-              </div>
-            )}
+            {ItemRenderer}
           </VariableSizeList>
-
-          <CodeSandboxLink
-            className={styles.TryItOutLink}
-            sandbox="variable-size-list-vertical"
-          />
-        </div>
+        </ProfiledExample>
         <div className={styles.ExampleCode}>
           <CodeBlock value={CODE_VERTICAL} />
         </div>
       </div>
       <div className={styles.Example}>
-        <div className={styles.ExampleDemo}>
+        <ProfiledExample
+          className={styles.ExampleDemo}
+          sandbox="variable-size-list-horizontal"
+        >
           <VariableSizeList
             className={styles.List}
             direction="horizontal"
@@ -57,21 +66,9 @@ export default function() {
             itemSize={index => columnSizes[index]}
             width={300}
           >
-            {({ index, style }) => (
-              <div
-                className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
-                style={style}
-              >
-                Column {index}
-              </div>
-            )}
+            {ItemRenderer}
           </VariableSizeList>
-
-          <CodeSandboxLink
-            className={styles.TryItOutLink}
-            sandbox="variable-size-list-horizontal"
-          />
-        </div>
+        </ProfiledExample>
         <div className={styles.ExampleCode}>
           <CodeBlock value={CODE_HORIZONTAL} />
         </div>

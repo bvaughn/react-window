@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { FixedSizeGrid } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
-import CodeSandboxLink from '../../components/CodeSandboxLink';
+import ProfiledExample from '../../components/ProfiledExample';
 
 import CODE from '../../code/FixedSizeGrid.js';
 
 import styles from './shared.module.css';
+
+class ItemRenderer extends PureComponent {
+  render() {
+    const { columnIndex, rowIndex, style } = this.props;
+
+    return (
+      <div
+        className={
+          columnIndex % 2
+            ? rowIndex % 2 === 0
+              ? styles.GridItemOdd
+              : styles.GridItemEven
+            : rowIndex % 2
+              ? styles.GridItemOdd
+              : styles.GridItemEven
+        }
+        style={style}
+      >
+        r{rowIndex}, c{columnIndex}
+      </div>
+    );
+  }
+}
 
 export default function() {
   return (
     <div className={styles.ExampleWrapper}>
       <h1 className={styles.ExampleHeader}>Basic Grid</h1>
       <div className={styles.Example}>
-        <div className={styles.ExampleDemo}>
+        <ProfiledExample
+          className={styles.ExampleDemo}
+          sandbox="fixed-size-grid"
+        >
           <FixedSizeGrid
             className={styles.Grid}
             columnCount={1000}
@@ -22,29 +48,9 @@ export default function() {
             rowHeight={35}
             width={300}
           >
-            {({ columnIndex, rowIndex, style }) => (
-              <div
-                className={
-                  columnIndex % 2
-                    ? rowIndex % 2 === 0
-                      ? styles.GridItemOdd
-                      : styles.GridItemEven
-                    : rowIndex % 2
-                      ? styles.GridItemOdd
-                      : styles.GridItemEven
-                }
-                style={style}
-              >
-                r{rowIndex}, c{columnIndex}
-              </div>
-            )}
+            {ItemRenderer}
           </FixedSizeGrid>
-
-          <CodeSandboxLink
-            className={styles.TryItOutLink}
-            sandbox="fixed-size-grid"
-          />
-        </div>
+        </ProfiledExample>
         <div className={styles.ExampleCode}>
           <CodeBlock value={CODE} />
         </div>

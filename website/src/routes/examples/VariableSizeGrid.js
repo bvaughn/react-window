@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
-import CodeSandboxLink from '../../components/CodeSandboxLink';
+import ProfiledExample from '../../components/ProfiledExample';
 
 import CODE from '../../code/VariableSizeGrid.js';
 
@@ -14,12 +14,38 @@ const rowHeights = new Array(1000)
   .fill(true)
   .map(() => 25 + Math.round(Math.random() * 50));
 
+class ItemRenderer extends PureComponent {
+  render() {
+    const { columnIndex, rowIndex, style } = this.props;
+
+    return (
+      <div
+        className={
+          columnIndex % 2
+            ? rowIndex % 2 === 0
+              ? styles.GridItemOdd
+              : styles.GridItemEven
+            : rowIndex % 2
+              ? styles.GridItemOdd
+              : styles.GridItemEven
+        }
+        style={style}
+      >
+        r{rowIndex}, c{columnIndex}
+      </div>
+    );
+  }
+}
+
 export default function() {
   return (
     <div className={styles.ExampleWrapper}>
       <h1 className={styles.ExampleHeader}>Variable Size Grid</h1>
       <div className={styles.Example}>
-        <div className={styles.ExampleDemo}>
+        <ProfiledExample
+          className={styles.ExampleDemo}
+          sandbox="variable-size-grid"
+        >
           <VariableSizeGrid
             className={styles.Grid}
             columnCount={1000}
@@ -29,29 +55,9 @@ export default function() {
             rowHeight={index => rowHeights[index]}
             width={300}
           >
-            {({ columnIndex, rowIndex, style }) => (
-              <div
-                className={
-                  columnIndex % 2
-                    ? rowIndex % 2 === 0
-                      ? styles.GridItemOdd
-                      : styles.GridItemEven
-                    : rowIndex % 2
-                      ? styles.GridItemOdd
-                      : styles.GridItemEven
-                }
-                style={style}
-              >
-                r{rowIndex}, c{columnIndex}
-              </div>
-            )}
+            {ItemRenderer}
           </VariableSizeGrid>
-
-          <CodeSandboxLink
-            className={styles.TryItOutLink}
-            sandbox="variable-size-grid"
-          />
-        </div>
+        </ProfiledExample>
         <div className={styles.ExampleCode}>
           <CodeBlock value={CODE} />
         </div>

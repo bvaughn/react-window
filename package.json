@@ -47,6 +47,7 @@
     "build": "del dist && rollup -c",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
+    "website:build": "cd website && yarn build",
     "website:deploy": "cd website && yarn deploy",
     "website:run": "cd website && yarn start"
   },
