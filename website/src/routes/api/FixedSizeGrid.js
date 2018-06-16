@@ -7,6 +7,7 @@ import styles from './shared.module.css';
 
 import CODE_CHILDREN_CLASS from '../../code/FixedSizeGridChildrenClass.js';
 import CODE_CHILDREN_FUNCTION from '../../code/FixedSizeGridChildrenFunction.js';
+import CODE_ITEM_KEY from '../../code/FixedSizeGridItemKey.js';
 import CODE_ON_ITEMS_RENDERED from '../../code/FixedSizeGridOnItemsRendered.js';
 import CODE_ON_SCROLL from '../../code/FixedSizeGridOnScroll.js';
 
@@ -94,6 +95,34 @@ const PROPS = [
     description: <p>Horizontal scroll offset for initial render.</p>,
     name: 'initialScrollTop',
     type: 'number',
+  },
+  {
+    description: (
+      <Fragment>
+        <p>
+          By default, grids will use an item's indices as its{' '}
+          <a href="https://reactjs.org/docs/lists-and-keys.html#keys">key</a>.
+          This is okay if:
+        </p>
+        <ul>
+          <li>Your collections of items is never sorted or modified</li>
+          <li>
+            Your item renderer is not stateful and does not extend{' '}
+            <code>PureComponent</code>
+          </li>
+        </ul>
+        <p>
+          If your grid does not satisfy the above constraints, use the{' '}
+          <code>itemKey</code> property to specify your own keys for items:
+        </p>
+        <div className={styles.CodeBlockWrapper}>
+          <CodeBlock value={CODE_ITEM_KEY} />
+        </div>
+      </Fragment>
+    ),
+    isRequired: false,
+    name: 'itemKey',
+    type: 'function',
   },
   {
     description: (

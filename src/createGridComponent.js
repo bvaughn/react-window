@@ -6,6 +6,10 @@ import React, { createElement, PureComponent } from 'react';
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
+type ItemKeyGetter = (indices: {
+  columnIndex: number,
+  rowIndex: number,
+}) => any;
 
 type RenderComponentProps = {|
   columnIndex: number,
@@ -45,6 +49,7 @@ export type Props = {|
   initialScrollLeft?: number,
   initialScrollTop?: number,
   height: number,
+  itemKey?: ItemKeyGetter,
   onItemsRendered?: OnItemsRenderedCallback,
   onScroll?: OnScrollCallback,
   overscanCount: number,
@@ -93,6 +98,9 @@ type InitInstanceProps = (props: Props, instance: any) => any;
 type ValidateProps = (props: Props) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
+
+const defaultItemKey: ItemKeyGetter = ({ columnIndex, rowIndex }) =>
+  `${rowIndex}:${columnIndex}`;
 
 export default function createGridComponent({
   getColumnOffset,
@@ -259,6 +267,7 @@ export default function createGridComponent({
         className,
         columnCount,
         height,
+        itemKey = defaultItemKey,
         rowCount,
         style,
         useIsScrolling,
@@ -288,7 +297,7 @@ export default function createGridComponent({
               createElement(children, {
                 columnIndex,
                 isScrolling: useIsScrolling ? isScrolling : undefined,
-                key: `${rowIndex}:${columnIndex}`,
+                key: itemKey({ columnIndex, rowIndex }),
                 rowIndex,
                 style: this._getItemStyle(rowIndex, columnIndex),
               })

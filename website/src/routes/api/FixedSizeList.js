@@ -7,6 +7,7 @@ import styles from './shared.module.css';
 
 import CODE_CHILDREN_CLASS from '../../code/FixedSizeListChildrenClass.js';
 import CODE_CHILDREN_FUNCTION from '../../code/FixedSizeListChildrenFunction.js';
+import CODE_ITEM_KEY from '../../code/FixedSizeListItemKey.js';
 import CODE_ON_ITEMS_RENDERED from '../../code/FixedSizeListOnItemsRendered.js';
 import CODE_ON_SCROLL from '../../code/FixedSizeListOnScroll.js';
 
@@ -114,6 +115,34 @@ const PROPS = [
     isRequired: true,
     name: 'itemCount',
     type: 'number',
+  },
+  {
+    description: (
+      <Fragment>
+        <p>
+          By default, lists will use an item's index as its{' '}
+          <a href="https://reactjs.org/docs/lists-and-keys.html#keys">key</a>.
+          This is okay if:
+        </p>
+        <ul>
+          <li>Your collections of items is never sorted or modified</li>
+          <li>
+            Your item renderer is not stateful and does not extend{' '}
+            <code>PureComponent</code>
+          </li>
+        </ul>
+        <p>
+          If your list does not satisfy the above constraints, use the{' '}
+          <code>itemKey</code> property to specify your own keys for items:
+        </p>
+        <div className={styles.CodeBlockWrapper}>
+          <CodeBlock value={CODE_ITEM_KEY} />
+        </div>
+      </Fragment>
+    ),
+    isRequired: false,
+    name: 'itemKey',
+    type: 'function',
   },
   {
     description: (

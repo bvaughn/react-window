@@ -365,6 +365,59 @@ describe('FixedSizeList', () => {
     });
   });
 
+  describe('itemKey', () => {
+    it('should be used', () => {
+      const itemKey = jest.fn(index => index);
+      ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} itemCount={3} itemKey={itemKey} />
+      );
+      expect(itemKey).toHaveBeenCalledTimes(3);
+      expect(itemKey.mock.calls[0][0]).toBe(0);
+      expect(itemKey.mock.calls[1][0]).toBe(1);
+      expect(itemKey.mock.calls[2][0]).toBe(2);
+    });
+
+    it('should allow items to be moved within the collection without causing caching problems', () => {
+      const keyMap = ['0', '1', '2'];
+      const keyMapItemRenderer = jest.fn(({ index, style }) => (
+        <div style={style}>{keyMap[index]}</div>
+      ));
+      class ItemRenderer extends PureComponent {
+        render() {
+          return keyMapItemRenderer(this.props);
+        }
+      }
+      const itemKey = jest.fn(index => keyMap[index]);
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} itemCount={3} itemKey={itemKey}>
+          {ItemRenderer}
+        </FixedSizeList>
+      );
+      expect(itemKey).toHaveBeenCalledTimes(3);
+      itemKey.mockClear();
+
+      expect(keyMapItemRenderer).toHaveBeenCalledTimes(3);
+      keyMapItemRenderer.mockClear();
+
+      // Simulate swapping the first and last items.
+      keyMap[0] = '2';
+      keyMap[2] = '0';
+
+      rendered.getInstance().forceUpdate();
+
+      // Our key getter should be called again for each key.
+      // Since we've modified the map, the first and last key will swap.
+      expect(itemKey).toHaveBeenCalledTimes(3);
+
+      // The first and third item have swapped place,
+      // So they should have been re-rendered,
+      // But the second item should not.
+      expect(keyMapItemRenderer).toHaveBeenCalledTimes(2);
+      expect(keyMapItemRenderer.mock.calls[0][0].index).toBe(0);
+      expect(keyMapItemRenderer.mock.calls[1][0].index).toBe(2);
+    });
+  });
+
   describe('props validation', () => {
     beforeEach(() => spyOn(console, 'error'));
 

@@ -412,6 +412,78 @@ describe('FixedSizeGrid', () => {
     });
   });
 
+  describe('itemKey', () => {
+    it('should be used', () => {
+      const itemKey = jest.fn(
+        ({ columnIndex, rowIndex }) => `${rowIndex}:${columnIndex}`
+      );
+      ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          columnCount={3}
+          rowCount={2}
+          itemKey={itemKey}
+        />
+      );
+      expect(itemKey).toHaveBeenCalledTimes(6);
+      expect(itemKey.mock.calls[0][0]).toEqual({ columnIndex: 0, rowIndex: 0 });
+      expect(itemKey.mock.calls[1][0]).toEqual({ columnIndex: 1, rowIndex: 0 });
+      expect(itemKey.mock.calls[2][0]).toEqual({ columnIndex: 2, rowIndex: 0 });
+      expect(itemKey.mock.calls[3][0]).toEqual({ columnIndex: 0, rowIndex: 1 });
+      expect(itemKey.mock.calls[4][0]).toEqual({ columnIndex: 1, rowIndex: 1 });
+      expect(itemKey.mock.calls[5][0]).toEqual({ columnIndex: 2, rowIndex: 1 });
+    });
+
+    it('should allow items to be moved within the collection without causing caching problems', () => {
+      const keyMap = [['0:0', '0:1:', '0:2'], ['1:0', '1:1:', '1:2']];
+      const keyMapItemRenderer = jest.fn(({ index, style }) => (
+        <div style={style}>{keyMap[index]}</div>
+      ));
+      class ItemRenderer extends PureComponent {
+        render() {
+          return keyMapItemRenderer(this.props);
+        }
+      }
+      const itemKey = jest.fn(
+        ({ columnIndex, rowIndex }) => keyMap[rowIndex][columnIndex]
+      );
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          columnCount={3}
+          rowCount={2}
+          itemKey={itemKey}
+        >
+          {ItemRenderer}
+        </FixedSizeGrid>
+      );
+      expect(itemKey).toHaveBeenCalledTimes(6);
+      itemKey.mockClear();
+
+      expect(keyMapItemRenderer).toHaveBeenCalledTimes(6);
+      keyMapItemRenderer.mockClear();
+
+      // Simulate swapping the first and last items.
+      keyMap[0][0] = '1:2';
+      keyMap[1][2] = '0:0';
+
+      rendered.getInstance().forceUpdate();
+
+      // Our key getter should be called again for each key.
+      // Since we've modified the map, the first and last key will swap.
+      expect(itemKey).toHaveBeenCalledTimes(6);
+
+      // The first and third item have swapped place,
+      // So they should have been re-rendered,
+      // But the second item should not.
+      expect(keyMapItemRenderer).toHaveBeenCalledTimes(2);
+      expect(keyMapItemRenderer.mock.calls[0][0].columnIndex).toBe(0);
+      expect(keyMapItemRenderer.mock.calls[0][0].rowIndex).toBe(0);
+      expect(keyMapItemRenderer.mock.calls[1][0].columnIndex).toBe(2);
+      expect(keyMapItemRenderer.mock.calls[1][0].rowIndex).toBe(1);
+    });
+  });
+
   describe('props validation', () => {
     beforeEach(() => spyOn(console, 'error'));
 
