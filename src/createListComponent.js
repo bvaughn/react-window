@@ -45,12 +45,15 @@ export type Props = {|
   onScroll?: onScrollCallback,
   overscanCount: number,
   style?: Object,
+  useAdjustedOffsets: boolean,
   useIsScrolling: boolean,
   width: number | string,
 |};
 
 type State = {|
   isScrolling: boolean,
+  onScrollCaptureTime: number,
+  onScrollOffsetDelta: number,
   scrollDirection: ScrollDirection,
   scrollOffset: number,
   scrollUpdateWasRequested: boolean,
@@ -88,6 +91,12 @@ const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
 const defaultItemKey: ItemKeyGetter = index => index;
 
+type Now = () => number;
+const now: Now =
+  typeof performance === 'object' && typeof performance.now === 'function'
+    ? () => performance.now()
+    : () => new Date().getTime();
+
 export default function createListComponent({
   getItemOffset,
   getEstimatedTotalSize,
@@ -110,6 +119,7 @@ export default function createListComponent({
   return class List extends PureComponent<Props, State> {
     _instanceProps: any = initInstanceProps(this.props, this);
     _itemStyleCache: { [index: number]: Object } = {};
+    _onScrollElappsedTime: number = 0;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _scrollingContainer: ?HTMLDivElement;
 
@@ -121,6 +131,8 @@ export default function createListComponent({
 
     state: State = {
       isScrolling: false,
+      onScrollCaptureTime: 0,
+      onScrollOffsetDelta: 0,
       scrollDirection: 'forward',
       scrollOffset:
         typeof this.props.initialScrollOffset === 'number'
@@ -141,6 +153,7 @@ export default function createListComponent({
     scrollTo(scrollOffset: number): void {
       this.setState(
         prevState => ({
+          onScrollOffsetDelta: 0,
           scrollDirection:
             prevState.scrollOffset < scrollOffset ? 'forward' : 'backward',
           scrollOffset: scrollOffset,
@@ -183,8 +196,12 @@ export default function createListComponent({
     }
 
     componentDidUpdate() {
-      const { direction } = this.props;
-      const { scrollOffset, scrollUpdateWasRequested } = this.state;
+      const { direction, useAdjustedOffsets } = this.props;
+      const {
+        onScrollCaptureTime,
+        scrollOffset,
+        scrollUpdateWasRequested,
+      } = this.state;
 
       if (scrollUpdateWasRequested && this._scrollingContainer !== null) {
         if (direction === 'horizontal') {
@@ -194,6 +211,8 @@ export default function createListComponent({
           ((this
             ._scrollingContainer: any): HTMLDivElement).scrollTop = scrollOffset;
         }
+      } else if (useAdjustedOffsets) {
+        this._onScrollElappsedTime = now() - onScrollCaptureTime;
       }
 
       this._callPropsCallbacks();
@@ -385,18 +404,25 @@ export default function createListComponent({
     };
 
     _getRangeToRender(): [number, number, number, number] {
-      const { itemCount, overscanCount } = this.props;
-      const { scrollDirection, scrollOffset } = this.state;
+      const { itemCount, overscanCount, useAdjustedOffsets } = this.props;
+      const { onScrollOffsetDelta, scrollDirection, scrollOffset } = this.state;
+
+      let adjustedScrollOffset = scrollOffset;
+      if (useAdjustedOffsets) {
+        const timeMultiplier = Math.min(1, this._onScrollElappsedTime / 16);
+        adjustedScrollOffset =
+          scrollOffset + onScrollOffsetDelta * timeMultiplier;
+      }
 
       const startIndex = getStartIndexForOffset(
         this.props,
-        scrollOffset,
+        adjustedScrollOffset,
         this._instanceProps
       );
       const stopIndex = getStopIndexForStartIndex(
         this.props,
         startIndex,
-        scrollOffset,
+        adjustedScrollOffset,
         this._instanceProps
       );
 
@@ -427,6 +453,8 @@ export default function createListComponent({
 
         return {
           isScrolling: true,
+          onScrollCaptureTime: now(),
+          onScrollOffsetDelta: scrollLeft - prevState.scrollOffset,
           scrollDirection:
             prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
           scrollOffset: scrollLeft,
@@ -447,6 +475,8 @@ export default function createListComponent({
 
         return {
           isScrolling: true,
+          onScrollCaptureTime: now(),
+          onScrollOffsetDelta: scrollTop - prevState.scrollOffset,
           scrollDirection:
             prevState.scrollOffset < scrollTop ? 'forward' : 'backward',
           scrollOffset: scrollTop,
@@ -473,11 +503,17 @@ export default function createListComponent({
     _resetIsScrolling = () => {
       this._resetIsScrollingTimeoutId = null;
 
-      this.setState({ isScrolling: false }, () => {
-        // Clear style cache after state update has been committed.
-        // This way we don't break pure sCU for items that don't use isScrolling param.
-        this._itemStyleCache = {};
-      });
+      this.setState(
+        {
+          isScrolling: false,
+          onScrollOffsetDelta: 0,
+        },
+        () => {
+          // Clear style cache after state update has been committed.
+          // This way we don't break pure sCU for items that don't use isScrolling param.
+          this._itemStyleCache = {};
+        }
+      );
     };
   };
 }

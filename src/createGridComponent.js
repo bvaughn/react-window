@@ -56,6 +56,7 @@ export type Props = {|
   rowCount: number,
   rowHeight: itemSize,
   style?: Object,
+  useAdjustedOffsets: boolean,
   useIsScrolling: boolean,
   width: number,
 |};
@@ -63,6 +64,9 @@ export type Props = {|
 type State = {|
   isScrolling: boolean,
   horizontalScrollDirection: ScrollDirection,
+  onScrollCaptureTime: number,
+  onScrollHorizontalOffsetDelta: number,
+  onScrollVerticalOffsetDelta: number,
   scrollLeft: number,
   scrollTop: number,
   scrollUpdateWasRequested: boolean,
@@ -102,6 +106,12 @@ const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 const defaultItemKey: ItemKeyGetter = ({ columnIndex, rowIndex }) =>
   `${rowIndex}:${columnIndex}`;
 
+type Now = () => number;
+const now: Now =
+  typeof performance === 'object' && typeof performance.now === 'function'
+    ? () => performance.now()
+    : () => new Date().getTime();
+
 export default function createGridComponent({
   getColumnOffset,
   getColumnStartIndexForOffset,
@@ -136,6 +146,7 @@ export default function createGridComponent({
   return class Grid extends PureComponent<Props, State> {
     _itemStyleCache: { [key: string]: Object } = {};
     _instanceProps: any;
+    _onScrollElappsedTime: number = 0;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _scrollingContainer: ?HTMLDivElement;
 
@@ -147,6 +158,9 @@ export default function createGridComponent({
     state: State = {
       isScrolling: false,
       horizontalScrollDirection: 'forward',
+      onScrollCaptureTime: 0,
+      onScrollHorizontalOffsetDelta: 0,
+      onScrollVerticalOffsetDelta: 0,
       scrollLeft:
         typeof this.props.initialScrollLeft === 'number'
           ? this.props.initialScrollLeft
@@ -245,11 +259,20 @@ export default function createGridComponent({
     }
 
     componentDidUpdate() {
-      const { scrollLeft, scrollTop, scrollUpdateWasRequested } = this.state;
+      const { useAdjustedOffsets } = this.props;
+      const {
+        onScrollCaptureTime,
+        scrollLeft,
+        scrollTop,
+        scrollUpdateWasRequested,
+      } = this.state;
+
       if (scrollUpdateWasRequested && this._scrollingContainer !== null) {
         ((this
           ._scrollingContainer: any): HTMLDivElement).scrollLeft = scrollLeft;
         ((this._scrollingContainer: any): HTMLDivElement).scrollTop = scrollTop;
+      } else if (useAdjustedOffsets) {
+        this._onScrollElappsedTime = now() - onScrollCaptureTime;
       }
 
       this._callPropsCallbacks();
@@ -476,18 +499,29 @@ export default function createGridComponent({
     };
 
     _getHorizontalRangeToRender(): [number, number, number, number] {
-      const { columnCount, overscanCount } = this.props;
-      const { horizontalScrollDirection, scrollLeft } = this.state;
+      const { columnCount, overscanCount, useAdjustedOffsets } = this.props;
+      const {
+        horizontalScrollDirection,
+        onScrollHorizontalOffsetDelta,
+        scrollLeft,
+      } = this.state;
+
+      let adjustedScrollLeft = scrollLeft;
+      if (useAdjustedOffsets) {
+        const timeMultiplier = Math.min(1, this._onScrollElappsedTime / 16);
+        adjustedScrollLeft =
+          scrollLeft + onScrollHorizontalOffsetDelta * timeMultiplier;
+      }
 
       const startIndex = getColumnStartIndexForOffset(
         this.props,
-        scrollLeft,
+        adjustedScrollLeft,
         this._instanceProps
       );
       const stopIndex = getColumnStopIndexForStartIndex(
         this.props,
         startIndex,
-        scrollLeft,
+        adjustedScrollLeft,
         this._instanceProps
       );
 
@@ -511,18 +545,29 @@ export default function createGridComponent({
     }
 
     _getVerticalRangeToRender(): [number, number, number, number] {
-      const { rowCount, overscanCount } = this.props;
-      const { verticalScrollDirection, scrollTop } = this.state;
+      const { rowCount, overscanCount, useAdjustedOffsets } = this.props;
+      const {
+        onScrollVerticalOffsetDelta,
+        verticalScrollDirection,
+        scrollTop,
+      } = this.state;
+
+      let adjustedScrollTop = scrollTop;
+      if (useAdjustedOffsets) {
+        const timeMultiplier = Math.min(1, this._onScrollElappsedTime / 16);
+        adjustedScrollTop =
+          scrollTop + onScrollVerticalOffsetDelta * timeMultiplier;
+      }
 
       const startIndex = getRowStartIndexForOffset(
         this.props,
-        scrollTop,
+        adjustedScrollTop,
         this._instanceProps
       );
       const stopIndex = getRowStopIndexForStartIndex(
         this.props,
         startIndex,
-        scrollTop,
+        adjustedScrollTop,
         this._instanceProps
       );
 
@@ -558,6 +603,9 @@ export default function createGridComponent({
           isScrolling: true,
           horizontalScrollDirection:
             prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
+          onScrollCaptureTime: now(),
+          onScrollHorizontalOffsetDelta: scrollLeft - prevState.scrollLeft,
+          onScrollVerticalOffsetDelta: scrollTop - prevState.scrollTop,
           scrollLeft,
           scrollTop,
           verticalScrollDirection:
