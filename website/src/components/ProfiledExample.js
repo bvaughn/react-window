@@ -27,9 +27,17 @@ export default class ProfiledExample extends PureComponent<Props, void> {
           {children}
         </Profiler>
         <div className={styles.Row}>
-          <Badge forwardedRef={this._numCommitsRef} label="renders" />
+          <Badge
+            forwardedRef={this._numCommitsRef}
+            label="renders"
+            tooltip="Number of times The collection above has rendered"
+          />
           <CodeSandboxLink sandbox={sandbox} />
-          <Badge forwardedRef={this._averageTimeRef} label="average" />
+          <Badge
+            forwardedRef={this._averageTimeRef}
+            label="average"
+            tooltip="Average time spent rendering the collection above (including individual items)"
+          />
         </div>
       </div>
     );
@@ -57,8 +65,8 @@ export default class ProfiledExample extends PureComponent<Props, void> {
   }
 }
 
-const Badge = ({ forwardedRef, label }) => (
-  <div className={styles.Badge}>
+const Badge = ({ forwardedRef, label, tooltip }) => (
+  <div className={styles.Badge} title={tooltip}>
     <small className={styles.Label}>{label}</small>
     <span className={styles.Count} ref={forwardedRef} />
   </div>
