@@ -6,10 +6,10 @@ import React, { createElement, PureComponent } from 'react';
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
-type Direction = 'horizontal' | 'vertical';
+export type Direction = 'horizontal' | 'vertical';
 type ItemKeyGetter = (index: number) => any;
 
-type RenderComponentProps = {|
+export type RenderComponentProps = {|
   index: number,
   isScrolling?: boolean,
   style: Object,
@@ -86,7 +86,7 @@ type ValidateProps = (props: Props) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
-const defaultItemKey: ItemKeyGetter = index => index;
+export const defaultItemKey: ItemKeyGetter = index => index;
 
 export default function createListComponent({
   getItemOffset,
@@ -108,7 +108,6 @@ export default function createListComponent({
   validateProps: ValidateProps,
 |}) {
   return class List extends PureComponent<Props, State> {
-    _instanceProps: any = initInstanceProps(this.props, this);
     _itemStyleCache: { [index: number]: Object } = {};
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _scrollingContainer: ?HTMLDivElement;
@@ -180,6 +179,7 @@ export default function createListComponent({
       }
 
       this._callPropsCallbacks();
+      this._commitHook();
     }
 
     componentDidUpdate() {
@@ -197,6 +197,7 @@ export default function createListComponent({
       }
 
       this._callPropsCallbacks();
+      this._commitHook();
     }
 
     componentWillUnmount() {
@@ -206,17 +207,7 @@ export default function createListComponent({
     }
 
     render() {
-      const {
-        children,
-        className,
-        direction,
-        height,
-        itemCount,
-        itemKey = defaultItemKey,
-        style,
-        useIsScrolling,
-        width,
-      } = this.props;
+      const { className, direction, height, style, width } = this.props;
       const { isScrolling } = this.state;
 
       const onScroll =
@@ -224,21 +215,7 @@ export default function createListComponent({
           ? this._onScrollVertical
           : this._onScrollHorizontal;
 
-      const [startIndex, stopIndex] = this._getRangeToRender();
-
-      const items = [];
-      if (itemCount > 0) {
-        for (let index = startIndex; index <= stopIndex; index++) {
-          items.push(
-            createElement(children, {
-              key: itemKey(index),
-              index,
-              isScrolling: useIsScrolling ? isScrolling : undefined,
-              style: this._getItemStyle(index),
-            })
-          );
-        }
-      }
+      const items = this._renderItems();
 
       // Read this value AFTER items have been created,
       // So their actual sizes (if variable) are taken into consideration.
@@ -348,6 +325,10 @@ export default function createListComponent({
       }
     }
 
+    // This method is called after mount and update.
+    // List implementations can override this method to be notified.
+    _commitHook() {}
+
     // Lazily create and cache item styles while scrolling,
     // So that pure component sCU will prevent re-renders.
     // We maintain this cache, and pass a style prop rather than index,
@@ -415,6 +396,33 @@ export default function createListComponent({
       ];
     }
 
+    _renderItems() {
+      const {
+        children,
+        itemCount,
+        itemKey = defaultItemKey,
+        useIsScrolling,
+      } = this.props;
+      const { isScrolling } = this.state;
+
+      const [startIndex, stopIndex] = this._getRangeToRender();
+
+      const items = [];
+      if (itemCount > 0) {
+        for (let index = startIndex; index <= stopIndex; index++) {
+          items.push(
+            createElement(children, {
+              key: itemKey(index),
+              index,
+              isScrolling: useIsScrolling ? isScrolling : undefined,
+              style: this._getItemStyle(index),
+            })
+          );
+        }
+      }
+      return items;
+    }
+
     _onScrollHorizontal = (event: ScrollEvent): void => {
       const { scrollLeft } = event.currentTarget;
       this.setState(prevState => {
@@ -479,6 +487,10 @@ export default function createListComponent({
         this._itemStyleCache = {};
       });
     };
+
+    // Intentionally placed after all other instance properties have been initialized,
+    // So that DynamicSizeList can override the render behavior.
+    _instanceProps: any = initInstanceProps(this.props, this);
   };
 }
 

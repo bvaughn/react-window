@@ -69,9 +69,24 @@
   justify-content: center;
 }
 
+.DynamicListItemEven,
+.DynamicListItemOdd {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0.5rem;
+}
+
+.DynamicListItemEven,
 .GridItemEven,
 .ListItemEven {
   background-color: #f8f8f0;
+}
+
+.ListColumn {
+  white-space: pre;
+  word-wrap: nowrap;
+  align-items: center;
 }
 
 @media (max-width: 37.5rem) {

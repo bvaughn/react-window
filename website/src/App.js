@@ -4,16 +4,17 @@ import { Nav } from './components/Nav';
 import { SubMenu } from './components/SubMenu';
 
 // Routes
+import DynamicSizeListExample from './routes/examples/DynamicSizeList';
+import FixedSizeGridApi from './routes/api/FixedSizeGrid';
+import FixedSizeGridExample from './routes/examples/FixedSizeGrid';
+import FixedSizeListApi from './routes/api/FixedSizeList';
+import FixedSizeListExample from './routes/examples/FixedSizeList';
+import ListWithScrollingIndicatorExample from './routes/examples/ListWithScrollingIndicator';
+import ScrollToItemExample from './routes/examples/ScrollToItem';
 import VariableSizeGridApi from './routes/api/VariableSizeGrid';
 import VariableSizeGridExample from './routes/examples/VariableSizeGrid';
 import VariableSizeListApi from './routes/api/VariableSizeList';
 import VariableSizeListExample from './routes/examples/VariableSizeList';
-import FixedSizeGridApi from './routes/api/FixedSizeGrid';
-import FixedSizeListApi from './routes/api/FixedSizeList';
-import FixedSizeGridExample from './routes/examples/FixedSizeGrid';
-import FixedSizeListExample from './routes/examples/FixedSizeList';
-import ListWithScrollingIndicatorExample from './routes/examples/ListWithScrollingIndicator';
-import ScrollToItemExample from './routes/examples/ScrollToItem';
 
 import styles from './App.module.css';
 
@@ -61,6 +62,11 @@ const EXAMPLE_ROUTES = [
     path: '/examples/list/variable-size',
     title: 'Variable Size List',
     component: VariableSizeListExample,
+  },
+  {
+    path: '/examples/list/dynamic-size',
+    title: 'Dynamic Size List',
+    component: DynamicSizeListExample,
   },
   {
     path: '/examples/grid/fixed-size',
