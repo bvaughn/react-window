@@ -7,6 +7,7 @@ import styles from './shared.module.css';
 
 import CODE_CHILDREN_CLASS from '../../code/FixedSizeListChildrenClass.js';
 import CODE_CHILDREN_FUNCTION from '../../code/FixedSizeListChildrenFunction.js';
+import CODE_ITEM_DATA from '../../code/FixedSizeListItemData.js';
 import CODE_ITEM_KEY from '../../code/FixedSizeListItemKey.js';
 import CODE_ON_ITEMS_RENDERED from '../../code/FixedSizeListOnItemsRendered.js';
 import CODE_ON_SCROLL from '../../code/FixedSizeListOnScroll.js';
@@ -75,6 +76,18 @@ const PROPS = [
     type: 'string',
   },
   {
+    defaultValue: '"div"',
+    description: (
+      <p>
+        Tag name passed to <code>document.createElement</code> to create the
+        inner container element. This is an advanced property; in most cases,
+        the default ("div") should be used.
+      </p>
+    ),
+    name: 'containerTagName',
+    type: 'string',
+  },
+  {
     description: (
       <Fragment>
         <p>Height of the list.</p>
@@ -115,6 +128,23 @@ const PROPS = [
     isRequired: true,
     name: 'itemCount',
     type: 'number',
+  },
+  {
+    description: (
+      <Fragment>
+        <p>
+          Contextual data to be passed to the item renderer as a{' '}
+          <code>data</code> prop. This is a light-weight alternative to React's
+          built-in context API.
+        </p>
+        <p>Item data is useful for item renderers that are class components.</p>
+        <div className={styles.CodeBlockWrapper}>
+          <CodeBlock value={CODE_ITEM_DATA} />
+        </div>
+      </Fragment>
+    ),
+    name: 'itemData',
+    type: 'any',
   },
   {
     description: (

@@ -7,6 +7,7 @@ import styles from './shared.module.css';
 
 import CODE_CHILDREN_CLASS from '../../code/FixedSizeGridChildrenClass.js';
 import CODE_CHILDREN_FUNCTION from '../../code/FixedSizeGridChildrenFunction.js';
+import CODE_ITEM_DATA from '../../code/FixedSizeGridItemData.js';
 import CODE_ITEM_KEY from '../../code/FixedSizeGridItemKey.js';
 import CODE_ON_ITEMS_RENDERED from '../../code/FixedSizeGridOnItemsRendered.js';
 import CODE_ON_SCROLL from '../../code/FixedSizeGridOnScroll.js';
@@ -74,6 +75,18 @@ const PROPS = [
     type: 'number',
   },
   {
+    defaultValue: '"div"',
+    description: (
+      <p>
+        Tag name passed to <code>document.createElement</code> to create the
+        inner container element. This is an advanced property; in most cases,
+        the default ("div") should be used.
+      </p>
+    ),
+    name: 'containerTagName',
+    type: 'string',
+  },
+  {
     description: (
       <p>
         Height of the grid. This affects the number of rows that will be
@@ -95,6 +108,23 @@ const PROPS = [
     description: <p>Horizontal scroll offset for initial render.</p>,
     name: 'initialScrollTop',
     type: 'number',
+  },
+  {
+    description: (
+      <Fragment>
+        <p>
+          Contextual data to be passed to the item renderer as a{' '}
+          <code>data</code> prop. This is a light-weight alternative to React's
+          built-in context API.
+        </p>
+        <p>Item data is useful for item renderers that are class components.</p>
+        <div className={styles.CodeBlockWrapper}>
+          <CodeBlock value={CODE_ITEM_DATA} />
+        </div>
+      </Fragment>
+    ),
+    name: 'itemData',
+    type: 'any',
   },
   {
     description: (
