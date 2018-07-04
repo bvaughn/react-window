@@ -484,6 +484,51 @@ describe('FixedSizeGrid', () => {
     });
   });
 
+  it('should use a custom containerTag if specified', () => {
+    const rendered = ReactTestRenderer.create(
+      <FixedSizeGrid {...defaultProps} containerTagName="section" />
+    );
+    expect(rendered.root.findByType('section')).toBeDefined();
+  });
+
+  describe('itemData', () => {
+    it('should pass itemData to item renderers as a "data" prop', () => {
+      const itemData = {};
+      ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} itemData={itemData} />
+      );
+      expect(itemRenderer).toHaveBeenCalled();
+      expect(
+        itemRenderer.mock.calls.filter(([params]) => params.data === itemData)
+      ).toHaveLength(itemRenderer.mock.calls.length);
+    });
+
+    it('should re-render items if itemData changes', () => {
+      const itemData = {};
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} itemData={itemData} />
+      );
+      expect(itemRenderer).toHaveBeenCalled();
+      itemRenderer.mockClear();
+
+      // Re-rendering should not affect pure sCU children:
+      rendered.update(<FixedSizeGrid {...defaultProps} itemData={itemData} />);
+      expect(itemRenderer).not.toHaveBeenCalled();
+
+      // Re-rendering with new itemData should re-render children:
+      const newItemData = {};
+      rendered.update(
+        <FixedSizeGrid {...defaultProps} itemData={newItemData} />
+      );
+      expect(itemRenderer).toHaveBeenCalled();
+      expect(
+        itemRenderer.mock.calls.filter(
+          ([params]) => params.data === newItemData
+        )
+      ).toHaveLength(itemRenderer.mock.calls.length);
+    });
+  });
+
   describe('props validation', () => {
     beforeEach(() => spyOn(console, 'error'));
 

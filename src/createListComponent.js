@@ -10,6 +10,7 @@ export type Direction = 'horizontal' | 'vertical';
 type ItemKeyGetter = (index: number) => any;
 
 export type RenderComponentProps = {|
+  data: any,
   index: number,
   isScrolling?: boolean,
   style: Object,
@@ -35,10 +36,12 @@ type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 export type Props = {|
   children: RenderComponent,
   className?: string,
+  containerTagName: string,
   initialScrollOffset?: number,
   direction: Direction,
   height: number | string,
   itemCount: number,
+  itemData?: any,
   itemKey?: ItemKeyGetter,
   itemSize: itemSize,
   onItemsRendered?: onItemsRenderedCallback,
@@ -113,6 +116,7 @@ export default function createListComponent({
     _scrollingContainer: ?HTMLDivElement;
 
     static defaultProps = {
+      containerTagName: 'div',
       direction: 'vertical',
       overscanCount: 2,
       useIsScrolling: false,
@@ -207,7 +211,14 @@ export default function createListComponent({
     }
 
     render() {
-      const { className, direction, height, style, width } = this.props;
+      const {
+        className,
+        containerTagName,
+        direction,
+        height,
+        style,
+        width,
+      } = this.props;
       const { isScrolling } = this.state;
 
       const onScroll =
@@ -239,16 +250,15 @@ export default function createListComponent({
           }}
           onScroll={onScroll}
         >
-          <div
-            style={{
+          {createElement(containerTagName, {
+            children: items,
+            style: {
               height: direction === 'horizontal' ? height : estimatedTotalSize,
               overflow: 'hidden',
               pointerEvents: isScrolling ? 'none' : '',
               width: direction === 'horizontal' ? estimatedTotalSize : width,
-            }}
-          >
-            {items}
-          </div>
+            },
+          })}
         </div>
       );
     }
@@ -400,6 +410,7 @@ export default function createListComponent({
       const {
         children,
         itemCount,
+        itemData,
         itemKey = defaultItemKey,
         useIsScrolling,
       } = this.props;
@@ -412,6 +423,7 @@ export default function createListComponent({
         for (let index = startIndex; index <= stopIndex; index++) {
           items.push(
             createElement(children, {
+              data: itemData,
               key: itemKey(index),
               index,
               isScrolling: useIsScrolling ? isScrolling : undefined,

@@ -13,6 +13,7 @@ type ItemKeyGetter = (indices: {
 
 type RenderComponentProps = {|
   columnIndex: number,
+  data: any,
   isScrolling?: boolean,
   rowIndex: number,
   style: Object,
@@ -46,9 +47,11 @@ export type Props = {|
   className?: string,
   columnCount: number,
   columnWidth: itemSize,
+  containerTagName: string,
   initialScrollLeft?: number,
   initialScrollTop?: number,
   height: number,
+  itemData?: any,
   itemKey?: ItemKeyGetter,
   onItemsRendered?: OnItemsRenderedCallback,
   onScroll?: OnScrollCallback,
@@ -140,6 +143,7 @@ export default function createGridComponent({
     _scrollingContainer: ?HTMLDivElement;
 
     static defaultProps = {
+      containerTagName: 'div',
       overscanCount: 1,
       useIsScrolling: false,
     };
@@ -266,7 +270,9 @@ export default function createGridComponent({
         children,
         className,
         columnCount,
+        containerTagName,
         height,
+        itemData,
         itemKey = defaultItemKey,
         rowCount,
         style,
@@ -296,6 +302,7 @@ export default function createGridComponent({
             items.push(
               createElement(children, {
                 columnIndex,
+                data: itemData,
                 isScrolling: useIsScrolling ? isScrolling : undefined,
                 key: itemKey({ columnIndex, rowIndex }),
                 rowIndex,
@@ -332,16 +339,15 @@ export default function createGridComponent({
           }}
           onScroll={this._onScroll}
         >
-          <div
-            style={{
+          {createElement(containerTagName, {
+            children: items,
+            style: {
               height: estimatedTotalHeight,
               overflow: 'hidden',
               pointerEvents: isScrolling ? 'none' : '',
               width: estimatedTotalWidth,
-            }}
-          >
-            {items}
-          </div>
+            },
+          })}
         </div>
       );
     }
