@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import React, { Component } from 'react';
 import { DynamicSizeList } from 'react-window';
-import randomWords from 'random-words';
+// import randomWords from 'random-words';
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
 
@@ -9,6 +9,12 @@ import CODE_HORIZONTAL from '../../code/DynamicSizeListHorizontal.js';
 import CODE_VERTICAL from '../../code/DynamicSizeListVertical.js';
 
 import styles from './shared.module.css';
+
+const words = ['cat', 'kitten', 'feline', 'kitty'];
+const randomWords = ({ min, max }) => {
+  const target = min + Math.round(Math.random() * (max - min));
+  return new Array(target).fill(true).map(() => words[Math.floor(Math.random() * words.length)]);
+}
 
 const names = [
   'Stasia',
