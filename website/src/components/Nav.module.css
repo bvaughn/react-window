@@ -21,18 +21,9 @@
   font-size: 2rem;
 }
 
-.SideNavHeader span {
-  flex: 1;
-}
-
-.SideNavHeader a:hover,
-.SideNavHeader a:focus,
-.SideNavHeader a:active,
-.SideNavHeader a:visited,
-.SideNavHeader a:link {
+.SideNavHeaderLink {
   text-decoration: none;
-  color: #000;
-  cursor: pointer;
+  color: inherit;
 }
 
 .SidebarNavContent {
@@ -61,6 +52,11 @@
   .SidebarNavContent {
     flex-direction: row;
     display: none;
+  }
+
+  .SideNavHeader {
+    flex: 1;
+    text-align: center;
   }
 
   .SidebarNavContentExpanded {

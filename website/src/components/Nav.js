@@ -1,6 +1,7 @@
 import React from 'react';
 import cs from 'classnames';
 import { MobileNavButton } from './MobileNavButton';
+import { MobileGitHubButton } from './MobileGitHubButton';
 
 import styles from './Nav.module.css';
 
@@ -20,7 +21,15 @@ export class Nav extends React.Component {
             isActive={this.state.isExpanded}
             onClick={this.toggleIsExpanded}
           />
-          <h1 className={styles.SideNavHeader}>{title}</h1>
+          <h1 className={styles.SideNavHeader}>
+            <a
+              className={styles.SideNavHeaderLink}
+              href="https://github.com/bvaughn/react-window"
+            >
+              {title}
+            </a>
+          </h1>
+          <MobileGitHubButton />
         </div>
         <div
           id="expandable"
