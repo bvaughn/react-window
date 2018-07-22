@@ -1,7 +1,7 @@
 // @flow
 
 import memoizeOne from 'memoize-one';
-import React, { createElement, PureComponent } from 'react';
+import { createElement, PureComponent } from 'react';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
@@ -47,14 +47,17 @@ export type Props = {|
   className?: string,
   columnCount: number,
   columnWidth: itemSize,
-  containerTagName: string,
+  height: number,
   initialScrollLeft?: number,
   initialScrollTop?: number,
-  height: number,
+  innerRef?: any,
+  innerTagName?: string,
   itemData?: any,
   itemKey?: ItemKeyGetter,
   onItemsRendered?: OnItemsRenderedCallback,
   onScroll?: OnScrollCallback,
+  outerRef?: any,
+  outerTagName?: string,
   overscanCount: number,
   rowCount: number,
   rowHeight: itemSize,
@@ -140,10 +143,11 @@ export default function createGridComponent({
     _itemStyleCache: { [key: string]: Object } = {};
     _instanceProps: any;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
-    _scrollingContainer: ?HTMLDivElement;
+    _outerRef: ?HTMLDivElement;
 
     static defaultProps = {
-      containerTagName: 'div',
+      innerTagName: 'div',
+      outerTagName: 'div',
       overscanCount: 1,
       useIsScrolling: false,
     };
@@ -230,19 +234,11 @@ export default function createGridComponent({
 
     componentDidMount() {
       const { initialScrollLeft, initialScrollTop } = this.props;
-      if (
-        typeof initialScrollLeft === 'number' &&
-        this._scrollingContainer != null
-      ) {
-        ((this
-          ._scrollingContainer: any): HTMLDivElement).scrollLeft = initialScrollLeft;
+      if (typeof initialScrollLeft === 'number' && this._outerRef != null) {
+        ((this._outerRef: any): HTMLDivElement).scrollLeft = initialScrollLeft;
       }
-      if (
-        typeof initialScrollTop === 'number' &&
-        this._scrollingContainer != null
-      ) {
-        ((this
-          ._scrollingContainer: any): HTMLDivElement).scrollTop = initialScrollTop;
+      if (typeof initialScrollTop === 'number' && this._outerRef != null) {
+        ((this._outerRef: any): HTMLDivElement).scrollTop = initialScrollTop;
       }
 
       this._callPropsCallbacks();
@@ -250,10 +246,9 @@ export default function createGridComponent({
 
     componentDidUpdate() {
       const { scrollLeft, scrollTop, scrollUpdateWasRequested } = this.state;
-      if (scrollUpdateWasRequested && this._scrollingContainer !== null) {
-        ((this
-          ._scrollingContainer: any): HTMLDivElement).scrollLeft = scrollLeft;
-        ((this._scrollingContainer: any): HTMLDivElement).scrollTop = scrollTop;
+      if (scrollUpdateWasRequested && this._outerRef !== null) {
+        ((this._outerRef: any): HTMLDivElement).scrollLeft = scrollLeft;
+        ((this._outerRef: any): HTMLDivElement).scrollTop = scrollTop;
       }
 
       this._callPropsCallbacks();
@@ -270,10 +265,12 @@ export default function createGridComponent({
         children,
         className,
         columnCount,
-        containerTagName,
         height,
+        innerRef,
+        innerTagName,
         itemData,
         itemKey = defaultItemKey,
+        outerTagName,
         rowCount,
         style,
         useIsScrolling,
@@ -324,11 +321,13 @@ export default function createGridComponent({
         this._instanceProps
       );
 
-      return (
-        <div
-          className={className}
-          ref={this._scrollingContainerRef}
-          style={{
+      return createElement(
+        ((outerTagName: any): string),
+        {
+          className,
+          onScroll: this._onScroll,
+          ref: this._outerRefSetter,
+          style: {
             position: 'relative',
             height,
             width,
@@ -336,19 +335,18 @@ export default function createGridComponent({
             WebkitOverflowScrolling: 'touch',
             willChange: 'transform',
             ...style,
-          }}
-          onScroll={this._onScroll}
-        >
-          {createElement(containerTagName, {
-            children: items,
-            style: {
-              height: estimatedTotalHeight,
-              overflow: 'hidden',
-              pointerEvents: isScrolling ? 'none' : '',
-              width: estimatedTotalWidth,
-            },
-          })}
-        </div>
+          },
+        },
+        createElement(((innerTagName: any): string), {
+          children: items,
+          ref: innerRef,
+          style: {
+            height: estimatedTotalHeight,
+            overflow: 'hidden',
+            pointerEvents: isScrolling ? 'none' : '',
+            width: estimatedTotalWidth,
+          },
+        })
       );
     }
 
@@ -573,8 +571,20 @@ export default function createGridComponent({
       }, this._resetIsScrollingDebounced);
     };
 
-    _scrollingContainerRef = (ref: any): void => {
-      this._scrollingContainer = ((ref: any): HTMLDivElement);
+    _outerRefSetter = (ref: any): void => {
+      const { outerRef } = this.props;
+
+      this._outerRef = ((ref: any): HTMLDivElement);
+
+      if (typeof outerRef === 'function') {
+        outerRef(ref);
+      } else if (
+        outerRef != null &&
+        typeof outerRef === 'object' &&
+        outerRef.hasOwnProperty('current')
+      ) {
+        outerRef.current = ref;
+      }
     };
 
     _resetIsScrollingDebounced = () => {

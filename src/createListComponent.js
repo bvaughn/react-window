@@ -1,7 +1,7 @@
 // @flow
 
 import memoizeOne from 'memoize-one';
-import React, { createElement, PureComponent } from 'react';
+import { createElement, PureComponent } from 'react';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
@@ -36,16 +36,19 @@ type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 export type Props = {|
   children: RenderComponent,
   className?: string,
-  containerTagName: string,
-  initialScrollOffset?: number,
   direction: Direction,
   height: number | string,
+  initialScrollOffset?: number,
+  innerRef?: any,
+  innerTagName?: string,
   itemCount: number,
   itemData?: any,
   itemKey?: ItemKeyGetter,
   itemSize: itemSize,
   onItemsRendered?: onItemsRenderedCallback,
   onScroll?: onScrollCallback,
+  outerRef?: any,
+  outerTagName?: string,
   overscanCount: number,
   style?: Object,
   useIsScrolling: boolean,
@@ -113,12 +116,13 @@ export default function createListComponent({
   return class List extends PureComponent<Props, State> {
     _instanceProps: any = initInstanceProps(this.props, this);
     _itemStyleCache: { [index: number]: Object } = {};
+    _outerRef: ?HTMLDivElement;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
-    _scrollingContainer: ?HTMLDivElement;
 
     static defaultProps = {
-      containerTagName: 'div',
       direction: 'vertical',
+      innerTagName: 'div',
+      outerTagName: 'div',
       overscanCount: 2,
       useIsScrolling: false,
     };
@@ -170,16 +174,13 @@ export default function createListComponent({
     componentDidMount() {
       const { initialScrollOffset, direction } = this.props;
 
-      if (
-        typeof initialScrollOffset === 'number' &&
-        this._scrollingContainer !== null
-      ) {
+      if (typeof initialScrollOffset === 'number' && this._outerRef !== null) {
         if (direction === 'horizontal') {
           ((this
-            ._scrollingContainer: any): HTMLDivElement).scrollLeft = initialScrollOffset;
+            ._outerRef: any): HTMLDivElement).scrollLeft = initialScrollOffset;
         } else {
           ((this
-            ._scrollingContainer: any): HTMLDivElement).scrollTop = initialScrollOffset;
+            ._outerRef: any): HTMLDivElement).scrollTop = initialScrollOffset;
         }
       }
 
@@ -190,13 +191,11 @@ export default function createListComponent({
       const { direction } = this.props;
       const { scrollOffset, scrollUpdateWasRequested } = this.state;
 
-      if (scrollUpdateWasRequested && this._scrollingContainer !== null) {
+      if (scrollUpdateWasRequested && this._outerRef !== null) {
         if (direction === 'horizontal') {
-          ((this
-            ._scrollingContainer: any): HTMLDivElement).scrollLeft = scrollOffset;
+          ((this._outerRef: any): HTMLDivElement).scrollLeft = scrollOffset;
         } else {
-          ((this
-            ._scrollingContainer: any): HTMLDivElement).scrollTop = scrollOffset;
+          ((this._outerRef: any): HTMLDivElement).scrollTop = scrollOffset;
         }
       }
 
@@ -213,12 +212,14 @@ export default function createListComponent({
       const {
         children,
         className,
-        containerTagName,
         direction,
         height,
+        innerRef,
+        innerTagName,
         itemCount,
         itemData,
         itemKey = defaultItemKey,
+        outerTagName,
         style,
         useIsScrolling,
         width,
@@ -254,11 +255,13 @@ export default function createListComponent({
         this._instanceProps
       );
 
-      return (
-        <div
-          className={className}
-          ref={this._scrollingContainerRef}
-          style={{
+      return createElement(
+        ((outerTagName: any): string),
+        {
+          className,
+          onScroll,
+          ref: this._outerRefSetter,
+          style: {
             position: 'relative',
             height,
             width,
@@ -266,19 +269,18 @@ export default function createListComponent({
             WebkitOverflowScrolling: 'touch',
             willChange: 'transform',
             ...style,
-          }}
-          onScroll={onScroll}
-        >
-          {createElement(containerTagName, {
-            children: items,
-            style: {
-              height: direction === 'horizontal' ? height : estimatedTotalSize,
-              overflow: 'hidden',
-              pointerEvents: isScrolling ? 'none' : '',
-              width: direction === 'horizontal' ? estimatedTotalSize : width,
-            },
-          })}
-        </div>
+          },
+        },
+        createElement(((innerTagName: any): string), {
+          children: items,
+          ref: innerRef,
+          style: {
+            height: direction === 'horizontal' ? height : estimatedTotalSize,
+            overflow: 'hidden',
+            pointerEvents: isScrolling ? 'none' : '',
+            width: direction === 'horizontal' ? estimatedTotalSize : width,
+          },
+        })
       );
     }
 
@@ -461,8 +463,20 @@ export default function createListComponent({
       }, this._resetIsScrollingDebounced);
     };
 
-    _scrollingContainerRef = (ref: any): void => {
-      this._scrollingContainer = ((ref: any): HTMLDivElement);
+    _outerRefSetter = (ref: any): void => {
+      const { outerRef } = this.props;
+
+      this._outerRef = ((ref: any): HTMLDivElement);
+
+      if (typeof outerRef === 'function') {
+        outerRef(ref);
+      } else if (
+        outerRef != null &&
+        typeof outerRef === 'object' &&
+        outerRef.hasOwnProperty('current')
+      ) {
+        outerRef.current = ref;
+      }
     };
 
     _resetIsScrollingDebounced = () => {

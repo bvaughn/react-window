@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -7,9 +7,9 @@ import { FixedSizeGrid } from '..';
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 const simulateScroll = (instance, { scrollLeft, scrollTop }) => {
-  instance._scrollingContainer.scrollLeft = scrollLeft;
-  instance._scrollingContainer.scrollTop = scrollTop;
-  ReactTestUtils.Simulate.scroll(instance._scrollingContainer);
+  instance._outerRef.scrollLeft = scrollLeft;
+  instance._outerRef.scrollTop = scrollTop;
+  ReactTestUtils.Simulate.scroll(instance._outerRef);
 };
 
 describe('FixedSizeGrid', () => {
@@ -484,11 +484,54 @@ describe('FixedSizeGrid', () => {
     });
   });
 
-  it('should use a custom containerTag if specified', () => {
-    const rendered = ReactTestRenderer.create(
-      <FixedSizeGrid {...defaultProps} containerTagName="section" />
-    );
-    expect(rendered.root.findByType('section')).toBeDefined();
+  describe('refs', () => {
+    it('should pass through innerRef and outerRef ref functions', () => {
+      const innerRef = jest.fn();
+      const outerRef = jest.fn();
+      ReactDOM.render(
+        <FixedSizeGrid
+          {...defaultProps}
+          innerRef={innerRef}
+          outerRef={outerRef}
+        />,
+        document.createElement('div')
+      );
+      expect(innerRef).toHaveBeenCalled();
+      expect(innerRef.mock.calls[0][0]).toBeInstanceOf(HTMLDivElement);
+      expect(outerRef).toHaveBeenCalled();
+      expect(outerRef.mock.calls[0][0]).toBeInstanceOf(HTMLDivElement);
+    });
+
+    it('should pass through innerRef and outerRef createRef objects', () => {
+      const innerRef = createRef();
+      const outerRef = createRef();
+      ReactDOM.render(
+        <FixedSizeGrid
+          {...defaultProps}
+          innerRef={innerRef}
+          outerRef={outerRef}
+        />,
+        document.createElement('div')
+      );
+      expect(innerRef.current).toBeInstanceOf(HTMLDivElement);
+      expect(outerRef.current).toBeInstanceOf(HTMLDivElement);
+    });
+  });
+
+  describe('custom tag names', () => {
+    it('should use a custom innerTagName if specified', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} innerTagName="section" />
+      );
+      expect(rendered.root.findByType('section')).toBeDefined();
+    });
+
+    it('should use a custom outerTagName if specified', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} outerTagName="section" />
+      );
+      expect(rendered.root.findByType('section')).toBeDefined();
+    });
   });
 
   describe('itemData', () => {

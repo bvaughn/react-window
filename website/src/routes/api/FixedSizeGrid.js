@@ -75,18 +75,6 @@ const PROPS = [
     type: 'number',
   },
   {
-    defaultValue: '"div"',
-    description: (
-      <p>
-        Tag name passed to <code>document.createElement</code> to create the
-        inner container element. This is an advanced property; in most cases,
-        the default ("div") should be used.
-      </p>
-    ),
-    name: 'containerTagName',
-    type: 'string',
-  },
-  {
     description: (
       <p>
         Height of the grid. This affects the number of rows that will be
@@ -108,6 +96,28 @@ const PROPS = [
     description: <p>Horizontal scroll offset for initial render.</p>,
     name: 'initialScrollTop',
     type: 'number',
+  },
+  {
+    description: (
+      <p>
+        Ref to attach to the inner container element. This is an advanced
+        property.
+      </p>
+    ),
+    name: 'innerRef',
+    type: 'function | createRef object',
+  },
+  {
+    defaultValue: '"div"',
+    description: (
+      <p>
+        Tag name passed to <code>document.createElement</code> to create the
+        inner container element. This is an advanced property; in most cases,
+        the default ("div") should be used.
+      </p>
+    ),
+    name: 'innerTagName',
+    type: 'string',
   },
   {
     description: (
@@ -180,6 +190,28 @@ const PROPS = [
     ),
     name: 'onScroll',
     type: 'function',
+  },
+  {
+    description: (
+      <p>
+        Ref to attach to the outer container element. This is an advanced
+        property.
+      </p>
+    ),
+    name: 'outerRef',
+    type: 'function | createRef object',
+  },
+  {
+    defaultValue: '"div"',
+    description: (
+      <p>
+        Tag name passed to <code>document.createElement</code> to create the
+        outer container element. This is an advanced property; in most cases,
+        the default ("div") should be used.
+      </p>
+    ),
+    name: 'outerTagName',
+    type: 'string',
   },
   {
     defaultValue: 1,
