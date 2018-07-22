@@ -7,7 +7,11 @@
 ## Install
 
 ```bash
-npm install --save react-window@alpha
+# Yarn
+yarn add react-window
+
+# NPM
+npm install --save react-window
 ```
 
 ## Usage
