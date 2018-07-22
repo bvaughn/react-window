@@ -1,10 +1,8 @@
 {
   "name": "react-window",
   "version": "1.0.1",
-  "description":
-    "React components for efficiently rendering large, scrollable lists and tabular data",
-  "author":
-    "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)",
+  "description": "React components for efficiently rendering large, scrollable lists and tabular data",
+  "author": "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)",
   "contributors": [
     "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)"
   ],
@@ -36,7 +34,9 @@
   ],
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "precommit": "lint-staged",
     "prettier": "prettier --write '**/*.{js,json,css}'",
@@ -52,7 +52,10 @@
     "website:run": "cd website && yarn start"
   },
   "lint-staged": {
-    "{website,src}/**/*.{js,json,css}": ["prettier --write", "git add"],
+    "{website,src}/**/*.{js,json,css}": [
+      "prettier --write",
+      "git add"
+    ],
     "**/*.js": "eslint --max-warnings 0"
   },
   "dependencies": {
@@ -65,6 +68,7 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
+    "babel-plugin-annotate-pure-calls": "^0.3.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",

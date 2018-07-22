@@ -7,6 +7,7 @@
     "react"
   ],
   "plugins": [
+    "annotate-pure-calls",
     "external-helpers"
   ]
 }
