@@ -140,8 +140,8 @@ export default function createGridComponent({
   validateProps: ValidateProps,
 |}) {
   return class Grid extends PureComponent<Props, State> {
+    _instanceProps: any = initInstanceProps(this.props, this);
     _itemStyleCache: { [key: string]: Object } = {};
-    _instanceProps: any;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _outerRef: ?HTMLDivElement;
 
@@ -167,12 +167,10 @@ export default function createGridComponent({
       verticalScrollDirection: 'forward',
     };
 
-    // always use explicit constructor for React components
-    // it produces less code after transpilation - #26
+    // Always use explicit constructor for React components.
+    // It produces less code after transpilation. (#26)
     constructor(props: Props) {
       super(props);
-
-      this._instanceProps = initInstanceProps(props, this);
     }
 
     static getDerivedStateFromProps(
