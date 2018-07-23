@@ -275,10 +275,10 @@ export default function createListComponent({
           children: items,
           ref: innerRef,
           style: {
-            height: direction === 'horizontal' ? height : estimatedTotalSize,
+            height: direction === 'horizontal' ? '100%' : estimatedTotalSize,
             overflow: 'hidden',
             pointerEvents: isScrolling ? 'none' : '',
-            width: direction === 'horizontal' ? estimatedTotalSize : width,
+            width: direction === 'horizontal' ? estimatedTotalSize : '100%',
           },
         })
       );
