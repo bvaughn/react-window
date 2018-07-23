@@ -137,6 +137,12 @@ export default function createListComponent({
       scrollUpdateWasRequested: false,
     };
 
+    // Always use explicit constructor for React components.
+    // It produces less code after transpilation. (#26)
+    constructor(props: Props) {
+      super(props);
+    }
+
     static getDerivedStateFromProps(
       nextProps: Props,
       prevState: State
