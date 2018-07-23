@@ -4,6 +4,6 @@
   "dependencies": {
     "react": "^16",
     "react-dom": "^16",
-    "react-window": "alpha"
+    "react-window": "^1"
   }
 }
