@@ -64,6 +64,34 @@ describe('FixedSizeList', () => {
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
+  describe('scrollbar handling', () => {
+    it('should set width to "100%" for vertical lists to avoid unnecessary horizontal scrollbar', () => {
+      const innerRef = createRef();
+      ReactDOM.render(
+        <FixedSizeList {...defaultProps} innerRef={innerRef} />,
+        document.createElement('div')
+      );
+      const style = innerRef.current.style;
+      expect(style.width).toBe('100%');
+      expect(style.height).toBe('2500px');
+    });
+
+    it('should set height to "100%" for horizontal lists to avoid unnecessary vertical scrollbar', () => {
+      const innerRef = createRef();
+      ReactDOM.render(
+        <FixedSizeList
+          {...defaultProps}
+          direction="horizontal"
+          innerRef={innerRef}
+        />,
+        document.createElement('div')
+      );
+      const style = innerRef.current.style;
+      expect(style.width).toBe('2500px');
+      expect(style.height).toBe('100%');
+    });
+  });
+
   describe('style caching', () => {
     it('should cache styles while scrolling to avoid breaking pure sCU for items', () => {
       const rendered = ReactTestRenderer.create(

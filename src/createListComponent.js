@@ -137,6 +137,13 @@ export default function createListComponent({
       scrollUpdateWasRequested: false,
     };
 
+    // Always use explicit constructor for React components.
+    // It produces less code after transpilation. (#26)
+    // eslint-disable-next-line no-useless-constructor
+    constructor(props: Props) {
+      super(props);
+    }
+
     scrollTo(scrollOffset: number): void {
       this.setState(
         prevState => ({
@@ -266,10 +273,10 @@ export default function createListComponent({
           children: items,
           ref: innerRef,
           style: {
-            height: direction === 'horizontal' ? height : estimatedTotalSize,
+            height: direction === 'horizontal' ? '100%' : estimatedTotalSize,
             overflow: 'hidden',
             pointerEvents: isScrolling ? 'none' : '',
-            width: direction === 'horizontal' ? estimatedTotalSize : width,
+            width: direction === 'horizontal' ? estimatedTotalSize : '100%',
           },
         })
       );
