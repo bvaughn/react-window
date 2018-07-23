@@ -12,12 +12,8 @@ const App = () => (
     itemSize={35}
     width={300}
   >
-    {({ key, index, style }) => (
-      <div
-        className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
-        key={key}
-        style={style}
-      >
+    {({ index, style }) => (
+      <div className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
         Row {index}
       </div>
     )}

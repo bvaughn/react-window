@@ -14,7 +14,7 @@ const App = () => (
     rowHeight={35}
     width={300}
   >
-    {({ columnIndex, key, rowIndex, style }) => (
+    {({ columnIndex, rowIndex, style }) => (
       <div
         className={
           columnIndex % 2
@@ -25,7 +25,6 @@ const App = () => (
               ? 'GridItemOdd'
               : 'GridItemEven'
         }
-        key={key}
         style={style}
       >
         r{rowIndex}, c{columnIndex}
