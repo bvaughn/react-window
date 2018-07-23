@@ -169,6 +169,7 @@ export default function createGridComponent({
 
     // Always use explicit constructor for React components.
     // It produces less code after transpilation. (#26)
+    // eslint-disable-next-line no-useless-constructor
     constructor(props: Props) {
       super(props);
     }
