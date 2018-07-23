@@ -114,7 +114,7 @@ export default function createListComponent({
   validateProps: ValidateProps,
 |}) {
   return class List extends PureComponent<Props, State> {
-    _instanceProps: any = initInstanceProps(this.props, this);
+    _instanceProps: any;
     _itemStyleCache: { [index: number]: Object } = {};
     _outerRef: ?HTMLDivElement;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
@@ -136,6 +136,14 @@ export default function createListComponent({
           : 0,
       scrollUpdateWasRequested: false,
     };
+
+    // always use explicit constructor for React components
+    // it produces less code after transpilation - #26
+    constructor(props: Props) {
+      super(props);
+
+      this._instanceProps = initInstanceProps(props, this);
+    }
 
     static getDerivedStateFromProps(
       nextProps: Props,

@@ -167,6 +167,8 @@ export default function createGridComponent({
       verticalScrollDirection: 'forward',
     };
 
+    // always use explicit constructor for React components
+    // it produces less code after transpilation - #26
     constructor(props: Props) {
       super(props);
 
