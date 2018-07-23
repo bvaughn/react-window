@@ -6,7 +6,7 @@ import type { Props, ScrollToAlign } from './createListComponent';
 
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
-type DynanmicProps = {|
+type VariableSizeProps = {|
   estimatedItemSize: number,
   ...Props,
 |};
@@ -28,7 +28,7 @@ const getItemMetadata = (
   index: number,
   instanceProps: InstanceProps
 ): ItemMetadata => {
-  const { itemSize } = ((props: any): DynanmicProps);
+  const { itemSize } = ((props: any): VariableSizeProps);
   const { itemMetadataMap, lastMeasuredIndex } = instanceProps;
 
   if (index > lastMeasuredIndex) {
@@ -243,7 +243,7 @@ const VariableSizeList = createListComponent({
   },
 
   initInstanceProps(props: Props, instance: any): InstanceProps {
-    const { estimatedItemSize } = ((props: any): DynanmicProps);
+    const { estimatedItemSize } = ((props: any): VariableSizeProps);
 
     const instanceProps = {
       itemMetadataMap: {},

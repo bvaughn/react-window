@@ -6,7 +6,7 @@ import type { Props, ScrollToAlign } from './createGridComponent';
 
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
-type DynamicProps = {|
+type VariableSizeProps = {|
   estimatedColumnWidth: number,
   estimatedRowHeight: number,
   ...Props,
@@ -385,7 +385,7 @@ const VariableSizeGrid = createGridComponent({
     const {
       estimatedColumnWidth,
       estimatedRowHeight,
-    } = ((props: any): DynamicProps);
+    } = ((props: any): VariableSizeProps);
 
     const instanceProps = {
       columnMetadataMap: {},
