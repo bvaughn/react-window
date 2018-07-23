@@ -113,7 +113,7 @@ export default function createListComponent({
   initInstanceProps: InitInstanceProps,
   validateProps: ValidateProps,
 |}) {
-  return class List extends PureComponent<Props, State> {
+  class List extends PureComponent<Props, State> {
     _instanceProps: any = initInstanceProps(this.props, this);
     _itemStyleCache: { [index: number]: Object } = {};
     _outerRef: ?HTMLDivElement;
@@ -136,15 +136,6 @@ export default function createListComponent({
           : 0,
       scrollUpdateWasRequested: false,
     };
-
-    static getDerivedStateFromProps(
-      nextProps: Props,
-      prevState: State
-    ): $Shape<State> {
-      validateSharedProps(nextProps);
-      validateProps(nextProps);
-      return null;
-    }
 
     scrollTo(scrollOffset: number): void {
       this.setState(
@@ -499,7 +490,20 @@ export default function createListComponent({
         this._itemStyleCache = {};
       });
     };
-  };
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    List.getDerivedStateFromProps = (
+      nextProps: Props,
+      prevState: State
+    ): $Shape<State> => {
+      validateSharedProps(nextProps);
+      validateProps(nextProps);
+      return null;
+    };
+  }
+
+  return List;
 }
 
 // NOTE: I considered further wrapping individual items with a pure ListItem component.
@@ -514,35 +518,33 @@ const validateSharedProps = ({
   height,
   width,
 }: Props): void => {
-  if (process.env.NODE_ENV !== 'production') {
-    if (direction !== 'horizontal' && direction !== 'vertical') {
-      throw Error(
-        'An invalid "direction" prop has been specified. ' +
-          'Value should be either "horizontal" or "vertical". ' +
-          `"${direction}" was specified.`
-      );
-    }
+  if (direction !== 'horizontal' && direction !== 'vertical') {
+    throw Error(
+      'An invalid "direction" prop has been specified. ' +
+        'Value should be either "horizontal" or "vertical". ' +
+        `"${direction}" was specified.`
+    );
+  }
 
-    if (typeof children !== 'function') {
-      throw Error(
-        'An invalid "children" prop has been specified. ' +
-          'Value should be a function that creates a React element. ' +
-          `"${children === null ? 'null' : typeof children}" was specified.`
-      );
-    }
+  if (typeof children !== 'function') {
+    throw Error(
+      'An invalid "children" prop has been specified. ' +
+        'Value should be a function that creates a React element. ' +
+        `"${children === null ? 'null' : typeof children}" was specified.`
+    );
+  }
 
-    if (direction === 'horizontal' && typeof width !== 'number') {
-      throw Error(
-        'An invalid "width" prop has been specified. ' +
-          'Horizontal lists must specify a number for width. ' +
-          `"${width === null ? 'null' : typeof width}" was specified.`
-      );
-    } else if (direction === 'vertical' && typeof height !== 'number') {
-      throw Error(
-        'An invalid "height" prop has been specified. ' +
-          'Vertical lists must specify a number for height. ' +
-          `"${height === null ? 'null' : typeof height}" was specified.`
-      );
-    }
+  if (direction === 'horizontal' && typeof width !== 'number') {
+    throw Error(
+      'An invalid "width" prop has been specified. ' +
+        'Horizontal lists must specify a number for width. ' +
+        `"${width === null ? 'null' : typeof width}" was specified.`
+    );
+  } else if (direction === 'vertical' && typeof height !== 'number') {
+    throw Error(
+      'An invalid "height" prop has been specified. ' +
+        'Vertical lists must specify a number for height. ' +
+        `"${height === null ? 'null' : typeof height}" was specified.`
+    );
   }
 };

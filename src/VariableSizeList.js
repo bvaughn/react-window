@@ -157,7 +157,7 @@ const getEstimatedTotalSize = (
   return totalSizeOfMeasuredItems + totalSizeOfUnmeasuredItems;
 };
 
-const VariableSizeList = createListComponent({
+const spec = {
   getItemOffset: (
     props: Props,
     index: number,
@@ -267,18 +267,20 @@ const VariableSizeList = createListComponent({
 
     return instanceProps;
   },
+};
 
-  validateProps: ({ itemSize }: Props): void => {
-    if (process.env.NODE_ENV !== 'production') {
-      if (typeof itemSize !== 'function') {
-        throw Error(
-          'An invalid "itemSize" prop has been specified. ' +
-            'Value should be a function. ' +
-            `"${itemSize === null ? 'null' : typeof itemSize}" was specified.`
-        );
-      }
+if (process.env.NODE_ENV !== 'production') {
+  spec.validateProps = ({ itemSize }: Props): void => {
+    if (typeof itemSize !== 'function') {
+      throw Error(
+        'An invalid "itemSize" prop has been specified. ' +
+          'Value should be a function. ' +
+          `"${itemSize === null ? 'null' : typeof itemSize}" was specified.`
+      );
     }
-  },
-});
+  };
+}
+
+const VariableSizeList = createListComponent(spec);
 
 export default VariableSizeList;

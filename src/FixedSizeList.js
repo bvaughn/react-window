@@ -4,7 +4,7 @@ import createListComponent from './createListComponent';
 
 import type { Props, ScrollToAlign } from './createListComponent';
 
-const FixedSizeList = createListComponent({
+const spec = {
   getItemOffset: ({ itemSize, size }: Props, index: number): number =>
     index * ((itemSize: any): number),
 
@@ -80,8 +80,10 @@ const FixedSizeList = createListComponent({
   initInstanceProps(props: Props): any {
     // Noop
   },
+};
 
-  validateProps: ({ itemSize }: Props): void => {
+if (process.env.NODE_ENV !== 'production') {
+  spec.validateProps = ({ itemSize }: Props): void => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof itemSize !== 'number') {
         throw Error(
@@ -91,7 +93,9 @@ const FixedSizeList = createListComponent({
         );
       }
     }
-  },
-});
+  };
+}
+
+const FixedSizeList = createListComponent(spec);
 
 export default FixedSizeList;

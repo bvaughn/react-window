@@ -255,7 +255,7 @@ const getOffsetForIndexAndAlignment = (
   }
 };
 
-const VariableSizeGrid = createGridComponent({
+const spec = {
   getColumnOffset: (
     props: Props,
     index: number,
@@ -434,26 +434,28 @@ const VariableSizeGrid = createGridComponent({
 
     return instanceProps;
   },
+};
 
-  validateProps: ({ columnWidth, rowHeight }: Props): void => {
-    if (process.env.NODE_ENV !== 'production') {
-      if (typeof columnWidth !== 'function') {
-        throw Error(
-          'An invalid "columnWidth" prop has been specified. ' +
-            'Value should be a function. ' +
-            `"${
-              columnWidth === null ? 'null' : typeof columnWidth
-            }" was specified.`
-        );
-      } else if (typeof rowHeight !== 'function') {
-        throw Error(
-          'An invalid "rowHeight" prop has been specified. ' +
-            'Value should be a function. ' +
-            `"${rowHeight === null ? 'null' : typeof rowHeight}" was specified.`
-        );
-      }
+if (process.env.NODE_ENV !== 'production') {
+  spec.validateProps = ({ columnWidth, rowHeight }: Props): void => {
+    if (typeof columnWidth !== 'function') {
+      throw Error(
+        'An invalid "columnWidth" prop has been specified. ' +
+          'Value should be a function. ' +
+          `"${
+            columnWidth === null ? 'null' : typeof columnWidth
+          }" was specified.`
+      );
+    } else if (typeof rowHeight !== 'function') {
+      throw Error(
+        'An invalid "rowHeight" prop has been specified. ' +
+          'Value should be a function. ' +
+          `"${rowHeight === null ? 'null' : typeof rowHeight}" was specified.`
+      );
     }
-  },
-});
+  };
+}
+
+const VariableSizeGrid = createGridComponent(spec);
 
 export default VariableSizeGrid;

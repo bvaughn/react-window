@@ -139,7 +139,7 @@ export default function createGridComponent({
   initInstanceProps: InitInstanceProps,
   validateProps: ValidateProps,
 |}) {
-  return class Grid extends PureComponent<Props, State> {
+  class Grid extends PureComponent<Props, State> {
     _itemStyleCache: { [key: string]: Object } = {};
     _instanceProps: any;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
@@ -171,15 +171,6 @@ export default function createGridComponent({
       super(props);
 
       this._instanceProps = initInstanceProps(props, this);
-    }
-
-    static getDerivedStateFromProps(
-      nextProps: Props,
-      prevState: State
-    ): $Shape<State> {
-      validateSharedProps(nextProps);
-      validateProps(nextProps);
-      return null;
     }
 
     scrollTo({
@@ -618,33 +609,44 @@ export default function createGridComponent({
         this._itemStyleCache = {};
       });
     };
-  };
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    Grid.getDerivedStateFromProps = (
+      nextProps: Props,
+      prevState: State
+    ): $Shape<State> => {
+      validateSharedProps(nextProps);
+      validateProps(nextProps);
+      return null;
+    };
+  }
+
+  return Grid;
 }
 
 const validateSharedProps = ({ children, height, width }: Props): void => {
-  if (process.env.NODE_ENV !== 'production') {
-    if (typeof children !== 'function') {
-      throw Error(
-        'An invalid "children" prop has been specified. ' +
-          'Value should be a function that creates a React element. ' +
-          `"${children === null ? 'null' : typeof children}" was specified.`
-      );
-    }
+  if (typeof children !== 'function') {
+    throw Error(
+      'An invalid "children" prop has been specified. ' +
+        'Value should be a function that creates a React element. ' +
+        `"${children === null ? 'null' : typeof children}" was specified.`
+    );
+  }
 
-    if (typeof width !== 'number') {
-      throw Error(
-        'An invalid "width" prop has been specified. ' +
-          'Grids must specify a number for width. ' +
-          `"${width === null ? 'null' : typeof width}" was specified.`
-      );
-    }
+  if (typeof width !== 'number') {
+    throw Error(
+      'An invalid "width" prop has been specified. ' +
+        'Grids must specify a number for width. ' +
+        `"${width === null ? 'null' : typeof width}" was specified.`
+    );
+  }
 
-    if (typeof height !== 'number') {
-      throw Error(
-        'An invalid "height" prop has been specified. ' +
-          'Grids must specify a number for height. ' +
-          `"${height === null ? 'null' : typeof height}" was specified.`
-      );
-    }
+  if (typeof height !== 'number') {
+    throw Error(
+      'An invalid "height" prop has been specified. ' +
+        'Grids must specify a number for height. ' +
+        `"${height === null ? 'null' : typeof height}" was specified.`
+    );
   }
 };
