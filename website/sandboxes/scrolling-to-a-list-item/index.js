@@ -26,10 +26,9 @@ class App extends Component {
           ref={this.listRef}
           width={300}
         >
-          {({ key, index, style }) => (
+          {({ index, style }) => (
             <div
               className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
-              key={key}
               style={style}
             >
               Row {index}

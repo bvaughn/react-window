@@ -46,7 +46,7 @@ class App extends Component {
           rowHeight={35}
           width={300}
         >
-          {({ columnIndex, key, rowIndex, style }) => (
+          {({ columnIndex, rowIndex, style }) => (
             <div
               className={
                 columnIndex % 2
@@ -57,7 +57,6 @@ class App extends Component {
                     ? 'GridItemOdd'
                     : 'GridItemEven'
               }
-              key={key}
               style={style}
             >
               r{rowIndex}, c{columnIndex}

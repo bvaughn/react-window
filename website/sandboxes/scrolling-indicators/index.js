@@ -13,12 +13,8 @@ const App = () => (
     useIsScrolling
     width={300}
   >
-    {({ key, index, isScrolling, style }) => (
-      <div
-        className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
-        key={key}
-        style={style}
-      >
+    {({ index, isScrolling, style }) => (
+      <div className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
         {isScrolling ? 'Scrolling' : `Row ${index}`}
       </div>
     )}
