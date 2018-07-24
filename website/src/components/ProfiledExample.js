@@ -12,6 +12,8 @@ type Props = {|
   sandbox?: string,
 |};
 
+const isProfilingEnabled = window.location.hash.includes('profile=true');
+
 export default class ProfiledExample extends PureComponent<Props, void> {
   _averageTimeRef = createRef();
   _numCommits = 0;
@@ -21,26 +23,37 @@ export default class ProfiledExample extends PureComponent<Props, void> {
   render() {
     const { className, children, sandbox } = this.props;
 
-    return (
-      <div className={className}>
-        <Profiler id={sandbox || 'Profiler'} onRender={this._onRender}>
-          {children}
-        </Profiler>
-        <div className={styles.Row}>
-          <Badge
-            forwardedRef={this._numCommitsRef}
-            label="renders"
-            tooltip="Number of times The collection above has rendered"
-          />
-          <CodeSandboxLink sandbox={sandbox} />
-          <Badge
-            forwardedRef={this._averageTimeRef}
-            label="average"
-            tooltip="Average time spent rendering the collection above (including individual items)"
-          />
+    if (isProfilingEnabled) {
+      return (
+        <div className={className}>
+          <Profiler id={sandbox || 'Profiler'} onRender={this._onRender}>
+            {children}
+          </Profiler>
+          <div className={styles.ProfilingRow}>
+            <Badge
+              forwardedRef={this._numCommitsRef}
+              label="renders"
+              tooltip="Number of times The collection above has rendered"
+            />
+            <CodeSandboxLink sandbox={sandbox} />
+            <Badge
+              forwardedRef={this._averageTimeRef}
+              label="average"
+              tooltip="Average time spent rendering the collection above (including individual items)"
+            />
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className={className}>
+          {children}
+          <div className={styles.Row}>
+            <CodeSandboxLink sandbox={sandbox} />
+          </div>
+        </div>
+      );
+    }
   }
 
   componentDidMount() {
