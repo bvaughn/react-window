@@ -396,20 +396,28 @@ const VariableSizeGrid = createGridComponent({
       rowMetadataMap: {},
     };
 
-    instance.resetAfterColumnIndex = (columnIndex: number) => {
-      this.resetAfterIndices({ columnIndex });
+    instance.resetAfterColumnIndex = (
+      columnIndex: number,
+      shouldForceUpdate?: boolean = true
+    ) => {
+      this.resetAfterIndices({ columnIndex, shouldForceUpdate });
     };
 
-    instance.resetAfterRowIndex = (rowIndex: number) => {
-      this.resetAfterIndices({ rowIndex });
+    instance.resetAfterRowIndex = (
+      rowIndex: number,
+      shouldForceUpdate?: boolean = true
+    ) => {
+      this.resetAfterIndices({ rowIndex, shouldForceUpdate });
     };
 
     instance.resetAfterIndices = ({
       columnIndex,
       rowIndex,
+      shouldForceUpdate = true,
     }: {
       columnIndex?: number,
       rowIndex?: number,
+      shouldForceUpdate?: boolean,
     }) => {
       if (typeof columnIndex === 'number') {
         instanceProps.lastMeasuredColumnIndex = Math.min(
@@ -429,7 +437,10 @@ const VariableSizeGrid = createGridComponent({
       // It seems an unnecessary optimization.
       // It's unlikely that resetAfterIndex() will be called while a user is scrolling.
       instance._itemStyleCache = {};
-      instance.forceUpdate();
+
+      if (shouldForceUpdate) {
+        instance.forceUpdate();
+      }
     };
 
     return instanceProps;

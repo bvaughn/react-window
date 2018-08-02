@@ -206,6 +206,19 @@ describe('VariableSizeGrid', () => {
   });
 
   describe('resetAfterIndex method', () => {
+    it('should not call forceUpdate if shouldForceUpdate is false', () => {
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid {...defaultProps} />
+      );
+      rendered.getInstance().forceUpdate = jest.fn();
+      rendered.getInstance().resetAfterIndices({
+        columnIndex: 5,
+        rowIndex: 15,
+        shouldForceUpdate: false,
+      });
+      expect(rendered.getInstance().forceUpdate).toHaveBeenCalledTimes(0);
+    });
+
     it('should recalculate the estimated total size', () => {
       const columnWidth = jest.fn(() => 75);
       const rowHeight = jest.fn(() => 35);

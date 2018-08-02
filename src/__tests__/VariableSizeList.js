@@ -168,6 +168,15 @@ describe('VariableSizeList', () => {
   });
 
   describe('resetAfterIndex method', () => {
+    it('should not call forceUpdate if shouldForceUpdate is false', () => {
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeList {...defaultProps} />
+      );
+      rendered.getInstance().forceUpdate = jest.fn();
+      rendered.getInstance().resetAfterIndex(15, false);
+      expect(rendered.getInstance().forceUpdate).toHaveBeenCalledTimes(0);
+    });
+
     it('should recalculate the estimated total size', () => {
       const itemSize = jest.fn(() => 75);
       const rendered = ReactTestRenderer.create(

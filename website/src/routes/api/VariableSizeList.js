@@ -74,14 +74,21 @@ const PROPS = [
 const METHODS = [
   {
     description: (
-      <p>
-        <code>VariableSizeList</code> caches offsets and measurements for each
-        index for performance purposes. This method clears that cached data for
-        all items after (and including) the specified index. It should be called
-        whenever a item's size changes. (Note that this is not a typical
-        occurrance.)
-      </p>
+      <Fragment>
+        <p>
+          <code>VariableSizeList</code> caches offsets and measurements for each
+          index for performance purposes. This method clears that cached data
+          for all items after (and including) the specified index. It should be
+          called whenever a item's size changes. (Note that this is not a
+          typical occurrance.)
+        </p>
+        <p>
+          You can set <code>shouldForceUpdate</code> to <code>false</code>
+          to prevent the list calling <code>forceUpdate</code> internally.
+        </p>
+      </Fragment>
     ),
-    signature: 'resetAfterIndex(index: number): void',
+    signature:
+      'resetAfterIndex(index: number, shouldForceUpdate: boolean = true): void',
   },
 ];

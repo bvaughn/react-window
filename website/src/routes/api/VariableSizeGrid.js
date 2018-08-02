@@ -96,39 +96,59 @@ const PROPS = [
 const METHODS = [
   {
     description: (
-      <p>
-        <code>VariableSizeGrid</code> caches offsets and measurements for each
-        column index for performance purposes. This method clears that cached
-        data for all columns after (and including) the specified index. It
-        should be called whenever a column's width changes. (Note that this is
-        not a typical occurrance.)
-      </p>
-    ),
-    signature: 'resetAfterColumnIndex(index: number): void',
-  },
-  {
-    description: (
-      <p>
-        <code>VariableSizeGrid</code> caches offsets and measurements for each
-        item for performance purposes. This method clears that cached data for
-        all items after (and including) the specified indices. It should be
-        called whenever an items size changes. (Note that this is not a typical
-        occurrance.)
-      </p>
+      <Fragment>
+        <p>
+          <code>VariableSizeGrid</code> caches offsets and measurements for each
+          column index for performance purposes. This method clears that cached
+          data for all columns after (and including) the specified index. It
+          should be called whenever a column's width changes. (Note that this is
+          not a typical occurrance.)
+        </p>
+        <p>
+          You can set <code>shouldForceUpdate</code> to <code>false</code>
+          to prevent the list calling <code>forceUpdate</code> internally.
+        </p>
+      </Fragment>
     ),
     signature:
-      'resetAfterIndices({ columnIndex: number, rowIndex: number }): void',
+      'resetAfterColumnIndex(index: number, shouldForceUpdate: boolean = true): void',
   },
   {
     description: (
-      <p>
-        <code>VariableSizeGrid</code> caches offsets and measurements for each
-        row index for performance purposes. This method clears that cached data
-        for all rows after (and including) the specified index. It should be
-        called whenever a row's height changes. (Note that this is not a typical
-        occurrance.)
-      </p>
+      <Fragment>
+        <p>
+          <code>VariableSizeGrid</code> caches offsets and measurements for each
+          item for performance purposes. This method clears that cached data for
+          all items after (and including) the specified indices. It should be
+          called whenever an items size changes. (Note that this is not a
+          typical occurrance.)
+        </p>
+        <p>
+          You can set <code>shouldForceUpdate</code> to <code>false</code>
+          to prevent the list calling <code>forceUpdate</code> internally.
+        </p>
+      </Fragment>
     ),
-    signature: 'resetAfterRowIndex(index: number): void',
+    signature:
+      'resetAfterIndices({ columnIndex: number, rowIndex: number, shouldForceUpdate: boolean = true }): void',
+  },
+  {
+    description: (
+      <Fragment>
+        <p>
+          <code>VariableSizeGrid</code> caches offsets and measurements for each
+          row index for performance purposes. This method clears that cached
+          data for all rows after (and including) the specified index. It should
+          be called whenever a row's height changes. (Note that this is not a
+          typical occurrance.)
+        </p>
+        <p>
+          You can set <code>shouldForceUpdate</code> to <code>false</code>
+          to prevent the list calling <code>forceUpdate</code> internally.
+        </p>
+      </Fragment>
+    ),
+    signature:
+      'resetAfterRowIndex(index: number, shouldForceUpdate: boolean = true): void',
   },
 ];
