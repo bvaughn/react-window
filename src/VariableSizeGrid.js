@@ -417,7 +417,7 @@ const VariableSizeGrid = createGridComponent({
     }: {
       columnIndex?: number,
       rowIndex?: number,
-      shouldForceUpdate?: boolean,
+      shouldForceUpdate: boolean,
     }) => {
       if (typeof columnIndex === 'number') {
         instanceProps.lastMeasuredColumnIndex = Math.min(
