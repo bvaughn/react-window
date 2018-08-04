@@ -190,6 +190,47 @@ describe('VariableSizeList', () => {
       expect(scrollContainer.props.style.height).toEqual(750);
     });
 
+    it('should delay the recalculation of the estimated total size if shouldForceUpdate is false', () => {
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeList
+          {...defaultProps}
+          estimatedItemSize={30}
+          overscanCount={1}
+          itemSize={index => 25}
+        />
+      );
+      const scrollContainer = findScrollContainer(rendered);
+      // The estimated total size should be (100 + 25 * 1 + 30 * 15)px = 575px.
+      expect(scrollContainer.props.style.height).toEqual(575);
+      // Supplying a new itemSize alone should not impact anything.
+      // Although the list get re-rendered by passing inline functions,
+      // but it still use the cached metrics to calculate the estimated size.
+      rendered.update(
+        <VariableSizeList
+          {...defaultProps}
+          estimatedItemSize={30}
+          overscanCount={1}
+          itemSize={index => 20}
+        />
+      );
+      expect(scrollContainer.props.style.height).toEqual(575);
+      // Reset calculation cache but don't re-render the list,
+      // the estimated total size should stay the same.
+      rendered.getInstance().resetAfterIndex(0, false);
+      expect(scrollContainer.props.style.height).toEqual(575);
+      // Pass inline function to make the list re-render.
+      rendered.update(
+        <VariableSizeList
+          {...defaultProps}
+          estimatedItemSize={30}
+          overscanCount={1}
+          itemSize={index => 20}
+        />
+      );
+      // The estimated total height should be (100 + 20 * 1 + 30 * 14)px = 540px.
+      expect(scrollContainer.props.style.height).toEqual(540);
+    });
+
     it('should re-render items after the specified index with updated styles', () => {
       const itemSize = jest.fn(() => 75);
       const rendered = ReactTestRenderer.create(

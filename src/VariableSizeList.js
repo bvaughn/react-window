@@ -251,7 +251,10 @@ const VariableSizeList = createListComponent({
       lastMeasuredIndex: -1,
     };
 
-    instance.resetAfterIndex = (index: number) => {
+    instance.resetAfterIndex = (
+      index: number,
+      shouldForceUpdate?: boolean = true
+    ) => {
       instanceProps.lastMeasuredIndex = Math.min(
         instanceProps.lastMeasuredIndex,
         index - 1
@@ -262,7 +265,10 @@ const VariableSizeList = createListComponent({
       // It seems an unnecessary optimization.
       // It's unlikely that resetAfterIndex() will be called while a user is scrolling.
       instance._itemStyleCache = {};
-      instance.forceUpdate();
+
+      if (shouldForceUpdate) {
+        instance.forceUpdate();
+      }
     };
 
     return instanceProps;

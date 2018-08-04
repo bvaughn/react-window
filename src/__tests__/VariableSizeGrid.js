@@ -245,6 +245,63 @@ describe('VariableSizeGrid', () => {
       expect(scrollContainer.props.style.width).toEqual(625);
     });
 
+    it('should delay the recalculation of the estimated total size if shouldForceUpdate is false', () => {
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid
+          {...defaultProps}
+          estimatedColumnWidth={30}
+          estimatedRowHeight={30}
+          overscanCount={1}
+          columnWidth={index => 50}
+          rowHeight={index => 25}
+        />
+      );
+      const scrollContainer = findScrollContainer(rendered);
+      // The estimated total height should be (100 + 25 * 1 + 30 * 15)px = 575px.
+      // The estimated total width should be (200 + 50 * 1 + 30 * 5)px = 400px.
+      expect(scrollContainer.props.style.height).toEqual(575);
+      expect(scrollContainer.props.style.width).toEqual(400);
+      // Supplying new item sizes alone should not impact anything.
+      // Although the grid get re-rendered by passing inline functions,
+      // but it still use the cached metrics to calculate the estimated size.
+      rendered.update(
+        <VariableSizeGrid
+          {...defaultProps}
+          estimatedColumnWidth={30}
+          estimatedRowHeight={30}
+          overscanCount={1}
+          columnWidth={index => 40}
+          rowHeight={index => 20}
+        />
+      );
+      expect(scrollContainer.props.style.height).toEqual(575);
+      expect(scrollContainer.props.style.width).toEqual(400);
+      // Reset calculation cache but don't re-render the grid,
+      // the estimated total size should stay the same.
+      rendered.getInstance().resetAfterIndices({
+        columnIndex: 0,
+        rowIndex: 0,
+        shouldForceUpdate: false,
+      });
+      expect(scrollContainer.props.style.height).toEqual(575);
+      expect(scrollContainer.props.style.width).toEqual(400);
+      // Pass inline function to make the grid re-render.
+      rendered.update(
+        <VariableSizeGrid
+          {...defaultProps}
+          estimatedColumnWidth={30}
+          estimatedRowHeight={30}
+          overscanCount={1}
+          columnWidth={index => 40}
+          rowHeight={index => 20}
+        />
+      );
+      // The estimated total height should be (100 + 20 * 1 + 30 * 14)px = 540px.
+      // The estimated total width should be (200 + 40 * 1 + 30 * 4)px = 360px.
+      expect(scrollContainer.props.style.height).toEqual(540);
+      expect(scrollContainer.props.style.width).toEqual(360);
+    });
+
     it('should re-render items after the specified index with updated styles', () => {
       const columnWidth = jest.fn(() => 75);
       const rowHeight = jest.fn(() => 35);
