@@ -168,16 +168,16 @@ export default class ScrollToItem extends PureComponent {
   scrollToRow350Column200End = () => {
     this.gridRef.current.scrollToItem({
       align: 'end',
-      columnIndex: 350,
-      rowIndex: 200,
+      columnIndex: 200,
+      rowIndex: 350,
     });
   };
 
   scrollToRow200Column100Center = () => {
     this.gridRef.current.scrollToItem({
       align: 'center',
-      columnIndex: 200,
-      rowIndex: 100,
+      columnIndex: 100,
+      rowIndex: 200,
     });
   };
 }
