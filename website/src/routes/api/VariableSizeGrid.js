@@ -105,8 +105,11 @@ const METHODS = [
           not a typical occurrance.)
         </p>
         <p>
-          You can set <code>shouldForceUpdate</code> to <code>false</code>
-          to prevent the list calling <code>forceUpdate</code> internally.
+          By default the grid will automatically re-render after the index is
+          reset. If you would like to delay this re-render until e.g. a state
+          update has completed in the parent component, specify a value of
+          <code>false</code>
+          for the second, optional parameter.
         </p>
       </Fragment>
     ),
@@ -124,8 +127,11 @@ const METHODS = [
           typical occurrance.)
         </p>
         <p>
-          You can set <code>shouldForceUpdate</code> to <code>false</code>
-          to prevent the list calling <code>forceUpdate</code> internally.
+          By default the grid will automatically re-render after the index is
+          reset. If you would like to delay this re-render until e.g. a state
+          update has completed in the parent component, specify a value of
+          <code>false</code>
+          for the second, optional parameter.
         </p>
       </Fragment>
     ),
@@ -143,8 +149,11 @@ const METHODS = [
           typical occurrance.)
         </p>
         <p>
-          You can set <code>shouldForceUpdate</code> to <code>false</code>
-          to prevent the list calling <code>forceUpdate</code> internally.
+          By default the grid will automatically re-render after the index is
+          reset. If you would like to delay this re-render until e.g. a state
+          update has completed in the parent component, specify a value of
+          <code>false</code>
+          for <code>shouldForceUpdate</code>, optional parameter.
         </p>
       </Fragment>
     ),
