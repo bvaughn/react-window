@@ -129,7 +129,8 @@ const METHODS = [
           By default the grid will automatically re-render after the index is
           reset. If you would like to delay this re-render until e.g. a state
           update has completed in the parent component, specify a value of
-          <code>false</code> for the optional <code>shouldForceUpdate</code> parameter.
+          <code>false</code> for the optional <code>shouldForceUpdate</code>{' '}
+          parameter.
         </p>
       </Fragment>
     ),
