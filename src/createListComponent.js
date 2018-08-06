@@ -32,6 +32,7 @@ type onScrollCallback = ({
 }) => void;
 
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
+type ItemStyleCache = { [index: number]: Object };
 
 export type Props = {|
   children: RenderComponent,
@@ -102,6 +103,7 @@ export default function createListComponent({
   getStartIndexForOffset,
   getStopIndexForStartIndex,
   initInstanceProps,
+  shouldResetStyleCacheOnItemSizeChange,
   validateProps,
 }: {|
   getItemOffset: GetItemOffset,
@@ -111,11 +113,11 @@ export default function createListComponent({
   getStartIndexForOffset: GetStartIndexForOffset,
   getStopIndexForStartIndex: GetStopIndexForStartIndex,
   initInstanceProps: InitInstanceProps,
+  shouldResetStyleCacheOnItemSizeChange: boolean,
   validateProps: ValidateProps,
 |}) {
   return class List extends PureComponent<Props, State> {
     _instanceProps: any = initInstanceProps(this.props, this);
-    _itemStyleCache: { [index: number]: Object } = {};
     _outerRef: ?HTMLDivElement;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
 
@@ -144,12 +146,9 @@ export default function createListComponent({
       super(props);
     }
 
-    static getDerivedStateFromProps(
-      nextProps: Props,
-      prevState: State
-    ): $Shape<State> {
-      validateSharedProps(nextProps);
-      validateProps(nextProps);
+    static getDerivedStateFromProps(props: Props, state: State): $Shape<State> {
+      validateSharedProps(props);
+      validateProps(props);
       return null;
     }
 
@@ -369,13 +368,17 @@ export default function createListComponent({
     // So that List can clear cached styles and force item re-render if necessary.
     _getItemStyle: (index: number) => Object;
     _getItemStyle = (index: number): Object => {
-      const { direction } = this.props;
+      const { direction, itemSize } = this.props;
+
+      const itemStyleCache = this._getItemStyleCache(
+        shouldResetStyleCacheOnItemSizeChange && itemSize
+      );
 
       let style;
-      if (this._itemStyleCache.hasOwnProperty(index)) {
-        style = this._itemStyleCache[index];
+      if (itemStyleCache.hasOwnProperty(index)) {
+        style = itemStyleCache[index];
       } else {
-        this._itemStyleCache[index] = style = {
+        itemStyleCache[index] = style = {
           position: 'absolute',
           left:
             direction === 'horizontal'
@@ -398,6 +401,9 @@ export default function createListComponent({
 
       return style;
     };
+
+    _getItemStyleCache: (_: any) => ItemStyleCache;
+    _getItemStyleCache = memoizeOne(_ => ({}));
 
     _getRangeToRender(): [number, number, number, number] {
       const { itemCount, overscanCount } = this.props;
@@ -503,7 +509,7 @@ export default function createListComponent({
       this.setState({ isScrolling: false }, () => {
         // Clear style cache after state update has been committed.
         // This way we don't break pure sCU for items that don't use isScrolling param.
-        this._itemStyleCache = {};
+        this._getItemStyleCache(-1);
       });
     };
   };

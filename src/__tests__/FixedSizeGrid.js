@@ -121,6 +121,24 @@ describe('FixedSizeGrid', () => {
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
+  it('changing itemSize updates the rendered items and busts the style cache', () => {
+    const rendered = ReactTestRenderer.create(
+      <FixedSizeGrid {...defaultProps} />
+    );
+    const styleOne = itemRenderer.mock.calls[0][0].style;
+    itemRenderer.mockClear();
+    rendered.update(<FixedSizeGrid {...defaultProps} columnWidth={150} />);
+    expect(itemRenderer).toHaveBeenCalled();
+    const styleTwo = itemRenderer.mock.calls[0][0].style;
+    expect(styleOne).not.toBe(styleTwo);
+    itemRenderer.mockClear();
+    rendered.update(
+      <FixedSizeGrid {...defaultProps} columnWidth={150} rowHeight={50} />
+    );
+    const styleThree = itemRenderer.mock.calls[0][0].style;
+    expect(styleTwo).not.toBe(styleThree);
+  });
+
   it('should support momentum scrolling on iOS devices', () => {
     const rendered = ReactTestRenderer.create(
       <FixedSizeGrid {...defaultProps} />

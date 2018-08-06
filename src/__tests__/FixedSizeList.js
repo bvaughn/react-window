@@ -141,6 +141,18 @@ describe('FixedSizeList', () => {
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
+  it('changing itemSize updates the rendered items and busts the style cache', () => {
+    const rendered = ReactTestRenderer.create(
+      <FixedSizeList {...defaultProps} />
+    );
+    const oldStyle = itemRenderer.mock.calls[0][0].style;
+    itemRenderer.mockClear();
+    rendered.update(<FixedSizeList {...defaultProps} itemSize={50} />);
+    expect(itemRenderer).toHaveBeenCalled();
+    const newStyle = itemRenderer.mock.calls[0][0].style;
+    expect(oldStyle).not.toBe(newStyle);
+  });
+
   it('should support momentum scrolling on iOS devices', () => {
     const rendered = ReactTestRenderer.create(
       <FixedSizeList {...defaultProps} />

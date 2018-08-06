@@ -41,6 +41,7 @@ type OnScrollCallback = ({
 }) => void;
 
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
+type ItemStyleCache = { [key: string]: Object };
 
 export type Props = {|
   children: RenderComponent,
@@ -122,6 +123,7 @@ export default function createGridComponent({
   getRowStartIndexForOffset,
   getRowStopIndexForStartIndex,
   initInstanceProps,
+  shouldResetStyleCacheOnItemSizeChange,
   validateProps,
 }: {|
   getColumnOffset: getItemOffset,
@@ -137,11 +139,11 @@ export default function createGridComponent({
   getRowStartIndexForOffset: GetStartIndexForOffset,
   getRowStopIndexForStartIndex: GetStopIndexForStartIndex,
   initInstanceProps: InitInstanceProps,
+  shouldResetStyleCacheOnItemSizeChange: boolean,
   validateProps: ValidateProps,
 |}) {
   return class Grid extends PureComponent<Props, State> {
     _instanceProps: any = initInstanceProps(this.props, this);
-    _itemStyleCache: { [key: string]: Object } = {};
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _outerRef: ?HTMLDivElement;
 
@@ -464,11 +466,16 @@ export default function createGridComponent({
     _getItemStyle = (rowIndex: number, columnIndex: number): Object => {
       const key = `${rowIndex}:${columnIndex}`;
 
+      const itemStyleCache = this._getItemStyleCache(
+        shouldResetStyleCacheOnItemSizeChange && this.props.columnWidth,
+        shouldResetStyleCacheOnItemSizeChange && this.props.rowHeight
+      );
+
       let style;
-      if (this._itemStyleCache.hasOwnProperty(key)) {
-        style = this._itemStyleCache[key];
+      if (itemStyleCache.hasOwnProperty(key)) {
+        style = itemStyleCache[key];
       } else {
-        this._itemStyleCache[key] = style = {
+        itemStyleCache[key] = style = {
           position: 'absolute',
           left: getColumnOffset(this.props, columnIndex, this._instanceProps),
           top: getRowOffset(this.props, rowIndex, this._instanceProps),
@@ -479,6 +486,9 @@ export default function createGridComponent({
 
       return style;
     };
+
+    _getItemStyleCache: (_: any, __: any) => ItemStyleCache;
+    _getItemStyleCache = memoizeOne((_, __) => ({}));
 
     _getHorizontalRangeToRender(): [number, number, number, number] {
       const { columnCount, overscanCount } = this.props;
@@ -616,7 +626,7 @@ export default function createGridComponent({
       this.setState({ isScrolling: false }, () => {
         // Clear style cache after state update has been committed.
         // This way we don't break pure sCU for items that don't use isScrolling param.
-        this._itemStyleCache = {};
+        this._getItemStyleCache(-1);
       });
     };
   };

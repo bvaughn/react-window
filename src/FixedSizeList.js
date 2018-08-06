@@ -81,6 +81,8 @@ const FixedSizeList = createListComponent({
     // Noop
   },
 
+  shouldResetStyleCacheOnItemSizeChange: true,
+
   validateProps: ({ itemSize }: Props): void => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof itemSize !== 'number') {

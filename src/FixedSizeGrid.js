@@ -154,6 +154,8 @@ const FixedSizeGrid = createGridComponent({
     // Noop
   },
 
+  shouldResetStyleCacheOnItemSizeChange: true,
+
   validateProps: ({ columnWidth, rowHeight }: Props): void => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof columnWidth !== 'number') {

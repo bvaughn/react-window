@@ -436,7 +436,7 @@ const VariableSizeGrid = createGridComponent({
       // But since styles are only cached while scrolling is in progress-
       // It seems an unnecessary optimization.
       // It's unlikely that resetAfterIndex() will be called while a user is scrolling.
-      instance._itemStyleCache = {};
+      instance._getItemStyleCache(-1);
 
       if (shouldForceUpdate) {
         instance.forceUpdate();
@@ -445,6 +445,8 @@ const VariableSizeGrid = createGridComponent({
 
     return instanceProps;
   },
+
+  shouldResetStyleCacheOnItemSizeChange: false,
 
   validateProps: ({ columnWidth, rowHeight }: Props): void => {
     if (process.env.NODE_ENV !== 'production') {
