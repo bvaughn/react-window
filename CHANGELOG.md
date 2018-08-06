@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.1.1
+* 🐛 `FixedSizeGrid` and `FixedSizeList` automatically clear style cache when item size props change.
+
 ### 1.1.0
 * 🎉 Use explicit `constructor` and `super` to generate cleaner component code. ([Andarist](https://github.com/Andarist) - [#26](https://github.com/bvaughn/react-window/pull/26))
 * 🎉 Add optional `shouldForceUpdate` param reset-index methods to specify `forceUpdate` behavior. ([nihgwu](https://github.com/nihgwu) - [#32](https://github.com/bvaughn/react-window/pull/32))
