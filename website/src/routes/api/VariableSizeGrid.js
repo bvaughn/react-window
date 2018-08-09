@@ -70,7 +70,7 @@ const PROPS = [
         <p>
           This value is used to calculated the estimated total height of a Grid
           before its rows have all been measured. The estimated height impacts
-          user scrolling behavior. It is updated whenever new columns are
+          user scrolling behavior. It is updated whenever new rows are
           measured.
         </p>
       </Fragment>
