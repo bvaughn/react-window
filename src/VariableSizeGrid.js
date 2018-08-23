@@ -233,7 +233,10 @@ const getOffsetForIndexAndAlignment = (
       ? getEstimatedTotalWidth(props, instanceProps)
       : getEstimatedTotalHeight(props, instanceProps);
 
-  const maxOffset = Math.min(estimatedTotalSize - size, itemMetadata.offset);
+  const maxOffset = Math.max(
+    0,
+    Math.min(estimatedTotalSize - size, itemMetadata.offset)
+  );
   const minOffset = Math.max(0, itemMetadata.offset - size + itemMetadata.size);
 
   switch (align) {

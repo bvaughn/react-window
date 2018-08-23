@@ -21,9 +21,12 @@ const FixedSizeList = createListComponent({
     scrollOffset: number
   ): number => {
     const size = (((direction === 'horizontal' ? width : height): any): number);
-    const maxOffset = Math.min(
-      itemCount * ((itemSize: any): number) - size,
-      index * ((itemSize: any): number)
+    const maxOffset = Math.max(
+      0,
+      Math.min(
+        itemCount * ((itemSize: any): number) - size,
+        index * ((itemSize: any): number)
+      )
     );
     const minOffset = Math.max(
       0,

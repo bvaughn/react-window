@@ -289,6 +289,21 @@ describe('FixedSizeList', () => {
   });
 
   describe('scrollToItem method', () => {
+    it('should not set invalid offsets when the list contains few items', () => {
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} itemCount={3} onScroll={onScroll} />
+      );
+      onScroll.mockClear();
+      // Offset should not be negative.
+      rendered.getInstance().scrollToItem(0);
+      expect(onScroll).toHaveBeenCalledWith({
+        scrollDirection: 'backward',
+        scrollOffset: 0,
+        scrollUpdateWasRequested: true,
+      });
+    });
+
     it('should scroll to the correct item for align = "auto"', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeList {...defaultProps} />

@@ -29,9 +29,12 @@ const FixedSizeGrid = createGridComponent({
     align: ScrollToAlign,
     scrollLeft: number
   ): number => {
-    const maxOffset = Math.min(
-      columnCount * ((columnWidth: any): number) - width,
-      columnIndex * ((columnWidth: any): number)
+    const maxOffset = Math.max(
+      0,
+      Math.min(
+        columnCount * ((columnWidth: any): number) - width,
+        columnIndex * ((columnWidth: any): number)
+      )
     );
     const minOffset = Math.max(
       0,
@@ -65,9 +68,12 @@ const FixedSizeGrid = createGridComponent({
     align: ScrollToAlign,
     scrollTop: number
   ): number => {
-    const maxOffset = Math.min(
-      rowCount * ((rowHeight: any): number) - height,
-      rowIndex * ((rowHeight: any): number)
+    const maxOffset = Math.max(
+      0,
+      Math.min(
+        rowCount * ((rowHeight: any): number) - height,
+        rowIndex * ((rowHeight: any): number)
+      )
     );
     const minOffset = Math.max(
       0,
