@@ -1,34 +1,44 @@
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
-import external from 'rollup-plugin-peer-deps-external';
-import postcss from 'rollup-plugin-postcss';
-import resolve from 'rollup-plugin-node-resolve';
-import url from 'rollup-plugin-url';
-
+import nodeResolve from 'rollup-plugin-node-resolve';
 import pkg from './package.json';
 
-export default {
-  input: 'src/index.js',
-  output: [
-    {
+const input = './src/index.js';
+
+const external = id => !id.startsWith('.') && !id.startsWith('/');
+
+export default [
+  {
+    input,
+    output: {
       file: pkg.main,
       format: 'cjs',
     },
-    {
+    external,
+    plugins: [
+      babel({
+        runtimeHelpers: true,
+        plugins: ['@babel/transform-runtime'],
+      }),
+      nodeResolve(),
+      commonjs(),
+    ],
+  },
+
+  {
+    input,
+    output: {
       file: pkg.module,
       format: 'esm',
     },
-  ],
-  plugins: [
-    external({ includeDependencies: true }),
-    postcss({
-      modules: true,
-    }),
-    url(),
-    babel({
-      exclude: 'node_modules/**',
-    }),
-    resolve(),
-    commonjs(),
-  ],
-};
+    external,
+    plugins: [
+      babel({
+        runtimeHelpers: true,
+        plugins: [['@babel/transform-runtime', { useESModules: true }]],
+      }),
+      nodeResolve(),
+      commonjs(),
+    ],
+  },
+];
