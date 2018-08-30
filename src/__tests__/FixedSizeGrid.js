@@ -278,6 +278,30 @@ describe('FixedSizeGrid', () => {
   });
 
   describe('scrollToItem method', () => {
+    it('should not set invalid offsets when the list contains few items', () => {
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          columnCount={1}
+          rowCount={2}
+          onScroll={onScroll}
+        />
+      );
+      onScroll.mockClear();
+      // Offset should not be negative.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 0, rowIndex: 0, align: 'auto' });
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'backward',
+        scrollLeft: 0,
+        scrollTop: 0,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'backward',
+      });
+    });
+
     it('should scroll to the correct item for align = "auto"', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeGrid {...defaultProps} />
