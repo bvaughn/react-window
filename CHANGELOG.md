@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.1.2
+* 🐛 Fixed edge case `scrollToItem` bug that caused lists/grids with very few items to have negative scroll offsets.
+
 ### 1.1.1
 * 🐛 `FixedSizeGrid` and `FixedSizeList` automatically clear style cache when item size props change.
 
