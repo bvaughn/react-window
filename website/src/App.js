@@ -14,6 +14,7 @@ import FixedSizeGridExample from './routes/examples/FixedSizeGrid';
 import FixedSizeListExample from './routes/examples/FixedSizeList';
 import ListWithScrollingIndicatorExample from './routes/examples/ListWithScrollingIndicator';
 import ScrollToItemExample from './routes/examples/ScrollToItem';
+import MemoizedListItemsExample from './routes/examples/MemoizedListItemsExample';
 
 import styles from './App.module.css';
 
@@ -49,8 +50,6 @@ export default function App() {
   );
 }
 
-// TODO Add a route showing how to use PureComponent for expensive items.
-
 const EXAMPLE_ROUTES = [
   {
     path: '/examples/list/fixed-size',
@@ -81,6 +80,11 @@ const EXAMPLE_ROUTES = [
     path: '/examples/list/scroll-to-item',
     title: 'Scrolling to an item',
     component: ScrollToItemExample,
+  },
+  {
+    path: '/examples/list/memoized-list-items',
+    title: 'Memoized List items',
+    component: MemoizedListItemsExample,
   },
 ];
 
