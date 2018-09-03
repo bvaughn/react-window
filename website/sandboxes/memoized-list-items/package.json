@@ -1,0 +1,10 @@
+{
+  "description": "Demo of react-window with advanced memoization techniques",
+  "main": "src/index.js",
+  "dependencies": {
+    "memoize-one": "^4",
+    "react": "^16",
+    "react-dom": "^16",
+    "react-window": "^1"
+  }
+}

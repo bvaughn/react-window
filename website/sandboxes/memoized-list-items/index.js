@@ -1,6 +1,17 @@
 import React, { PureComponent } from 'react';
+import ReactDOM from 'react-dom';
 import memoize from 'memoize-one';
 import { FixedSizeList as List } from 'react-window';
+
+const generateItems = numItems =>
+  Array(numItems)
+    .fill(true)
+    .map(_ => ({
+      isActive: false,
+      label: Math.random()
+        .toString(36)
+        .substr(2),
+    }));
 
 // If list items are expensive to render,
 // Consider using PureComponent to avoid unnecessary re-renders.
@@ -14,10 +25,7 @@ class ListItem extends PureComponent {
     const item = items[index];
 
     return (
-      <div
-        onClick={() => toggleItemActive(index)}
-        style={style}
-      >
+      <div onClick={() => toggleItemActive(index)} style={style}>
         {item.label} is {item.isActive ? 'active' : 'inactive'}
       </div>
     );
@@ -34,11 +42,9 @@ const getItemData = memoize((items, toggleItemActive) => ({
   toggleItemActive,
 }));
 
-class Example extends PureComponent {
+class App extends PureComponent {
   state = {
-    items: [
-      // Initialize/load items...
-    ],
+    items: generateItems(1000),
   };
 
   toggleItemActive = index =>
@@ -49,7 +55,7 @@ class Example extends PureComponent {
         ...item,
         isActive: !item.isActive,
       };
-      return {items};
+      return { items };
     });
 
   render() {
@@ -62,14 +68,16 @@ class Example extends PureComponent {
 
     return (
       <List
-        height={height}
+        height={150}
         itemCount={items.length}
         itemData={itemData}
         itemSize={35}
-        width={width}
+        width={300}
       >
         {ListItem}
       </List>
     );
   }
 }
+
+ReactDOM.render(<App />, document.getElementById('root'));

@@ -8,8 +8,8 @@ import CODE from '../../code/MemoizedListItems.js';
 
 import styles from './shared.module.css';
 
-const generateItems = () =>
-  Array(1000)
+const generateItems = numItems =>
+  Array(numItems)
     .fill(true)
     .map(_ => ({
       isActive: false,
@@ -49,22 +49,18 @@ class ItemRenderer extends PureComponent {
 
 export default class MemoizedListItemsExample extends PureComponent {
   state = {
-    items: generateItems(),
+    items: generateItems(1000),
   };
 
   toggleItemActive = index =>
     this.setState(prevState => {
       const item = prevState.items[index];
-
-      return {
-        items: {
-          ...prevState.items,
-          [index]: {
-            ...item,
-            isActive: !item.isActive,
-          },
-        },
+      const items = prevState.items.concat();
+      items[index] = {
+        ...item,
+        isActive: !item.isActive,
       };
+      return { items };
     });
 
   render() {
@@ -82,7 +78,7 @@ export default class MemoizedListItemsExample extends PureComponent {
             <FixedSizeList
               className={styles.List}
               height={150}
-              itemCount={1000}
+              itemCount={items.length}
               itemData={itemData}
               itemSize={35}
               width={300}
