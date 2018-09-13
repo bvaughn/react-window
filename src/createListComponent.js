@@ -282,7 +282,6 @@ export default function createListComponent({
           ref: innerRef,
           style: {
             height: direction === 'horizontal' ? '100%' : estimatedTotalSize,
-            overflow: 'hidden',
             pointerEvents: isScrolling ? 'none' : '',
             width: direction === 'horizontal' ? estimatedTotalSize : '100%',
           },
