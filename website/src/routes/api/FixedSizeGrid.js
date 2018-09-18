@@ -87,13 +87,13 @@ const PROPS = [
   },
   {
     defaultValue: 0,
-    description: <p>Vertical scroll offset for initial render.</p>,
+    description: <p>Horizontal scroll offset for initial render.</p>,
     name: 'initialScrollLeft',
     type: 'number',
   },
   {
     defaultValue: 0,
-    description: <p>Horizontal scroll offset for initial render.</p>,
+    description: <p>Vertical scroll offset for initial render.</p>,
     name: 'initialScrollTop',
     type: 'number',
   },
