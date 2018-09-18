@@ -4,7 +4,13 @@ import { FixedSizeList as List } from 'react-window';
 
 import './styles.css';
 
-class App extends Component {
+const Row = ({ index, style }) => (
+  <div className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
+    Row {index}
+  </div>
+);
+
+class Example extends Component {
   listRef = React.createRef();
 
   render() {
@@ -26,14 +32,7 @@ class App extends Component {
           ref={this.listRef}
           width={300}
         >
-          {({ index, style }) => (
-            <div
-              className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
-              style={style}
-            >
-              Row {index}
-            </div>
-          )}
+          {Row}
         </List>
       </Fragment>
     );
@@ -47,4 +46,4 @@ class App extends Component {
   };
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Example />, document.getElementById('root'));

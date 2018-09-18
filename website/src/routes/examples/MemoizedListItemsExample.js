@@ -18,7 +18,7 @@ const generateItems = numItems =>
         .substr(2),
     }));
 
-class ItemRenderer extends PureComponent {
+class Row extends PureComponent {
   render() {
     const { data, index, style } = this.props;
     const { items, toggleItemActive } = data;
@@ -83,7 +83,7 @@ export default class MemoizedListItemsExample extends PureComponent {
               itemSize={35}
               width={300}
             >
-              {ItemRenderer}
+              {Row}
             </FixedSizeList>
           </ProfiledExample>
           <div className={styles.ExampleCode}>

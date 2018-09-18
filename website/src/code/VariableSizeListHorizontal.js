@@ -6,16 +6,20 @@ const columnWidths = new Array(1000)
   .fill(true)
   .map(() => 75 + Math.round(Math.random() * 50));
 
-<List
-  direction="horizontal"
-  height={75}
-  itemCount={1000}
-  itemSize={index => columnWidths[index]}
-  width={300}
->
-  {({ index, style }) => (
-    <div style={style}>
-      Column {index}
-    </div>
-  )}
-</List>
+const getItemSize = index => columnWidths[index];
+
+const Column = ({ index, style }) => (
+  <div style={style}>Column {index}</div>
+);
+
+const Example = () => (
+  <List
+    direction="horizontal"
+    height={75}
+    itemCount={1000}
+    itemSize={getItemSize}
+    width={300}
+  >
+    {Column}
+  </List>
+);

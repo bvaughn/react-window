@@ -7,7 +7,7 @@ import CODE from '../../code/FixedSizeGrid.js';
 
 import styles from './shared.module.css';
 
-class ItemRenderer extends PureComponent {
+class Cell extends PureComponent {
   render() {
     const { columnIndex, rowIndex, style } = this.props;
 
@@ -48,7 +48,7 @@ export default function() {
             rowHeight={35}
             width={300}
           >
-            {ItemRenderer}
+            {Cell}
           </FixedSizeGrid>
         </ProfiledExample>
         <div className={styles.ExampleCode}>

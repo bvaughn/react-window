@@ -4,7 +4,24 @@ import { FixedSizeGrid as Grid } from 'react-window';
 
 import './styles.css';
 
-class App extends Component {
+const Cell = ({ columnIndex, rowIndex, style }) => (
+  <div
+    className={
+      columnIndex % 2
+        ? rowIndex % 2 === 0
+          ? 'GridItemOdd'
+          : 'GridItemEven'
+        : rowIndex % 2
+          ? 'GridItemOdd'
+          : 'GridItemEven'
+    }
+    style={style}
+  >
+    r{rowIndex}, c{columnIndex}
+  </div>
+);
+
+class Example extends Component {
   gridRef = React.createRef();
 
   render() {
@@ -46,22 +63,7 @@ class App extends Component {
           rowHeight={35}
           width={300}
         >
-          {({ columnIndex, rowIndex, style }) => (
-            <div
-              className={
-                columnIndex % 2
-                  ? rowIndex % 2 === 0
-                    ? 'GridItemOdd'
-                    : 'GridItemEven'
-                  : rowIndex % 2
-                    ? 'GridItemOdd'
-                    : 'GridItemEven'
-              }
-              style={style}
-            >
-              r{rowIndex}, c{columnIndex}
-            </div>
-          )}
+          {Cell}
         </Grid>
       </Fragment>
     );
@@ -99,4 +101,4 @@ class App extends Component {
   };
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Example />, document.getElementById('root'));

@@ -13,7 +13,24 @@ const rowHeights = new Array(1000)
   .fill(true)
   .map(() => 25 + Math.round(Math.random() * 50));
 
-const App = () => (
+const Cell = ({ columnIndex, rowIndex, style }) => (
+  <div
+    className={
+      columnIndex % 2
+        ? rowIndex % 2 === 0
+          ? 'GridItemOdd'
+          : 'GridItemEven'
+        : rowIndex % 2
+          ? 'GridItemOdd'
+          : 'GridItemEven'
+    }
+    style={style}
+  >
+    r{rowIndex}, c{columnIndex}
+  </div>
+);
+
+const Example = () => (
   <Grid
     className="Grid"
     columnCount={1000}
@@ -23,23 +40,8 @@ const App = () => (
     rowHeight={index => rowHeights[index]}
     width={300}
   >
-    {({ columnIndex, rowIndex, style }) => (
-      <div
-        className={
-          columnIndex % 2
-            ? rowIndex % 2 === 0
-              ? 'GridItemOdd'
-              : 'GridItemEven'
-            : rowIndex % 2
-              ? 'GridItemOdd'
-              : 'GridItemEven'
-        }
-        style={style}
-      >
-        r{rowIndex}, c{columnIndex}
-      </div>
-    )}
+    {Cell}
   </Grid>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Example />, document.getElementById('root'));

@@ -4,7 +4,24 @@ import { FixedSizeGrid as Grid } from 'react-window';
 
 import './styles.css';
 
-const App = () => (
+const Cell = ({ columnIndex, rowIndex, style }) => (
+  <div
+    className={
+      columnIndex % 2
+        ? rowIndex % 2 === 0
+          ? 'GridItemOdd'
+          : 'GridItemEven'
+        : rowIndex % 2
+          ? 'GridItemOdd'
+          : 'GridItemEven'
+    }
+    style={style}
+  >
+    r{rowIndex}, c{columnIndex}
+  </div>
+);
+
+const Example = () => (
   <Grid
     className="Grid"
     columnCount={1000}
@@ -14,23 +31,8 @@ const App = () => (
     rowHeight={35}
     width={300}
   >
-    {({ columnIndex, rowIndex, style }) => (
-      <div
-        className={
-          columnIndex % 2
-            ? rowIndex % 2 === 0
-              ? 'GridItemOdd'
-              : 'GridItemEven'
-            : rowIndex % 2
-              ? 'GridItemOdd'
-              : 'GridItemEven'
-        }
-        style={style}
-      >
-        r{rowIndex}, c{columnIndex}
-      </div>
-    )}
+    {Cell}
   </Grid>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Example />, document.getElementById('root'));

@@ -10,20 +10,24 @@ const rowSizes = new Array(1000)
   .fill(true)
   .map(() => 25 + Math.round(Math.random() * 50));
 
-const App = () => (
+const getItemSize = index => rowSizes[index];
+
+const Row = ({ index, style }) => (
+  <div className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
+    Row {index}
+  </div>
+);
+
+const Example = () => (
   <List
     className="List"
     height={150}
     itemCount={1000}
-    itemSize={index => rowSizes[index]}
+    itemSize={getItemSize}
     width={300}
   >
-    {({ index, style }) => (
-      <div className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
-        Row {index}
-      </div>
-    )}
+    {Row}
   </List>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Example />, document.getElementById('root'));

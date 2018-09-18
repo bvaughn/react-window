@@ -10,21 +10,25 @@ const columnSizes = new Array(1000)
   .fill(true)
   .map(() => 75 + Math.round(Math.random() * 50));
 
-const App = () => (
+const getItemSize = index => columnSizes[index];
+
+const Column = ({ index, style }) => (
+  <div className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
+    Column {index}
+  </div>
+);
+
+const Example = () => (
   <List
     className="List"
     direction="horizontal"
     height={75}
     itemCount={1000}
-    itemSize={index => columnSizes[index]}
+    itemSize={getItemSize}
     width={300}
   >
-    {({ index, style }) => (
-      <div className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
-        Column {index}
-      </div>
-    )}
+    {Column}
   </List>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Example />, document.getElementById('root'));

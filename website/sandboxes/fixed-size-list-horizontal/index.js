@@ -4,7 +4,13 @@ import { FixedSizeList as List } from 'react-window';
 
 import './styles.css';
 
-const App = () => (
+const Column = ({ index, style }) => (
+  <div className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
+    Column {index}
+  </div>
+);
+
+const Example = () => (
   <List
     className="List"
     direction="horizontal"
@@ -13,12 +19,8 @@ const App = () => (
     itemSize={100}
     width={300}
   >
-    {({ index, style }) => (
-      <div className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
-        Column {index}
-      </div>
-    )}
+    {Column}
   </List>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Example />, document.getElementById('root'));

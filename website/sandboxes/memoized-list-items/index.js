@@ -16,7 +16,7 @@ const generateItems = numItems =>
 // If list items are expensive to render,
 // Consider using PureComponent to avoid unnecessary re-renders.
 // https://reactjs.org/docs/react-api.html#reactpurecomponent
-class ListItem extends PureComponent {
+class Row extends PureComponent {
   render() {
     const { data, index, style } = this.props;
 
@@ -33,7 +33,7 @@ class ListItem extends PureComponent {
 }
 
 // This helper function memoizes incoming props,
-// To avoid causing unnecessary re-renders pure ListItem components.
+// To avoid causing unnecessary re-renders pure Row components.
 // This is only needed since we are passing multiple props with a wrapper object.
 // If we were only passing a single, stable value (e.g. items),
 // We could just pass the value directly.
@@ -42,7 +42,7 @@ const getItemData = memoize((items, toggleItemActive) => ({
   toggleItemActive,
 }));
 
-class App extends PureComponent {
+class Example extends PureComponent {
   state = {
     items: generateItems(1000),
   };
@@ -74,10 +74,10 @@ class App extends PureComponent {
         itemSize={35}
         width={300}
       >
-        {ListItem}
+        {Row}
       </List>
     );
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Example />, document.getElementById('root'));
