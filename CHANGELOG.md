@@ -1,6 +1,11 @@
 Changelog
 ------------
 
+### Unreleased
+* Remove `overflow:hidden` from inner container ([souporserious](https://github.com/souporserious) - [#56](https://github.com/bvaughn/react-window/pull/56))
+
+https://github.com/bvaughn/react-window/pull/
+
 ### 1.1.2
 * 🐛 Fixed edge case `scrollToItem` bug that caused lists/grids with very few items to have negative scroll offsets.
 
