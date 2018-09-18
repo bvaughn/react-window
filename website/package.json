@@ -4,8 +4,7 @@
   "scripts": {
     "build": "node scripts/build.js",
     "deploy": "now deploy ./build && now alias",
-    "postbuild":
-      "rm ./build/static/css/*.map && rm ./build/static/js/*.map && cp ./now.json ./build/",
+    "postbuild": "rm ./build/static/css/*.map && rm ./build/static/js/*.map && cp ./now.json ./build/",
     "predeploy": "yarn build",
     "start": "node scripts/start.js",
     "test": "node scripts/test.js --env=jsdom"
@@ -48,10 +47,10 @@
     "promise": "8.0.1",
     "prop-types": "^15.6.1",
     "raf": "3.4.0",
-    "react": "^16.5.0",
+    "react": "^16.5.1",
     "react-codemirror2": "^5.0.1",
     "react-dev-utils": "^6.0.0-next.66cc7a90",
-    "react-dom": "^16.5.0",
+    "react-dom": "^16.5.1",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-router-hash-link": "^1.2.0",
@@ -68,8 +67,12 @@
     "whatwg-fetch": "2.0.3"
   },
   "jest": {
-    "collectCoverageFrom": ["src/**/*.{js,jsx,mjs}"],
-    "setupFiles": ["<rootDir>/config/polyfills.js"],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,mjs}"
+    ],
+    "setupFiles": [
+      "<rootDir>/config/polyfills.js"
+    ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
       "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}"
@@ -79,10 +82,11 @@
     "transform": {
       "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|mjs|css|json)$)":
-        "<rootDir>/config/jest/fileTransform.js"
+      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"],
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
+    ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     },
@@ -97,15 +101,16 @@
     ]
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
   },
   "eslintIgnore": "src/code",
   "devDependencies": {
-    "language-babel": "https://github.com/gandm/language-babel",
-    "schedule": "^0.3.0"
+    "language-babel": "https://github.com/gandm/language-babel"
   },
   "browserslist": {
     "development": [
@@ -113,6 +118,11 @@
       "last 2 firefox versions",
       "last 2 edge versions"
     ],
-    "production": [">1%", "last 4 versions", "Firefox ESR", "not ie < 11"]
+    "production": [
+      ">1%",
+      "last 4 versions",
+      "Firefox ESR",
+      "not ie < 11"
+    ]
   }
 }
