@@ -192,8 +192,15 @@ export default function createGridComponent({
       scrollLeft: number,
       scrollTop: number,
     }): void {
-      this.setState(
-        prevState => ({
+      this.setState(prevState => {
+        if (scrollLeft === undefined) {
+          scrollLeft = prevState.scrollLeft;
+        }
+        if (scrollTop === undefined) {
+          scrollTop = prevState.scrollTop;
+        }
+
+        return {
           horizontalScrollDirection:
             prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
           scrollLeft: scrollLeft,
@@ -201,9 +208,8 @@ export default function createGridComponent({
           scrollUpdateWasRequested: true,
           verticalScrollDirection:
             prevState.scrollTop < scrollTop ? 'forward' : 'backward',
-        }),
-        this._resetIsScrollingDebounced
-      );
+        };
+      }, this._resetIsScrollingDebounced);
     }
 
     scrollToItem({

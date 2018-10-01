@@ -275,6 +275,43 @@ describe('FixedSizeGrid', () => {
       instance.scrollTo({ scrollLeft: 100, scrollTop: 100 });
       expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
     });
+
+    it('should allow only scrollLeft or scrollTop values to be specified', () => {
+      const instance = ReactDOM.render(
+        <FixedSizeGrid {...defaultProps} useIsScrolling />,
+        document.createElement('div')
+      );
+
+      instance.scrollTo({ scrollLeft: 100, scrollTop: 100 });
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleColumnStartIndex: 1,
+          visibleColumnStopIndex: 3,
+          visibleRowStartIndex: 4,
+          visibleRowStopIndex: 8,
+        })
+      );
+
+      itemRenderer.mockClear();
+      instance.scrollTo({ scrollTop: 200 });
+      expect(onItemsRendered).toHaveBeenCalled();
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleColumnStartIndex: 1,
+          visibleColumnStopIndex: 3,
+        })
+      );
+
+      itemRenderer.mockClear();
+      instance.scrollTo({ scrollLeft: 150 });
+      expect(onItemsRendered).toHaveBeenCalled();
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleRowStartIndex: 8,
+          visibleRowStopIndex: 12,
+        })
+      );
+    });
   });
 
   describe('scrollToItem method', () => {
