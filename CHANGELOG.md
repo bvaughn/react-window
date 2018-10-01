@@ -3,6 +3,7 @@ Changelog
 
 ### Unreleased
 * Remove `overflow:hidden` from inner container ([souporserious](https://github.com/souporserious) - [#56](https://github.com/bvaughn/react-window/pull/56))
+* 🎉 Relaxed grid `scrollTo` method to make `scrollLeft` and `scrollTop` params _optional_ (so you can only update one axis if desired).
 
 https://github.com/bvaughn/react-window/pull/
 
