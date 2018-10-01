@@ -36,7 +36,7 @@
   ],
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
-  "files": ["dist"],
+  "files": ["dist", "src/*.js"],
   "scripts": {
     "flow": "flow check src && flow check website",
     "precommit": "lint-staged",
@@ -45,7 +45,10 @@
     "lint": "eslint '**/*.js'",
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
-    "build": "del dist && rollup -c",
+    "build:flow":
+      "cp index.js.flow dist/index.cjs.js.flow && cp index.js.flow dist/index.esm.js.flow",
+    "build:source": "rollup -c",
+    "build": "del dist && mkdir dist && yarn build:flow && yarn build:source",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
     "website:build": "cd website && yarn build",
