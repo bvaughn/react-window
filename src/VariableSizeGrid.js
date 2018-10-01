@@ -403,14 +403,14 @@ const VariableSizeGrid = createGridComponent({
       columnIndex: number,
       shouldForceUpdate?: boolean = true
     ) => {
-      this.resetAfterIndices({ columnIndex, shouldForceUpdate });
+      instance.resetAfterIndices({ columnIndex, shouldForceUpdate });
     };
 
     instance.resetAfterRowIndex = (
       rowIndex: number,
       shouldForceUpdate?: boolean = true
     ) => {
-      this.resetAfterIndices({ rowIndex, shouldForceUpdate });
+      instance.resetAfterIndices({ rowIndex, shouldForceUpdate });
     };
 
     instance.resetAfterIndices = ({
