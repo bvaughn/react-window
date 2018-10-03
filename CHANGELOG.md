@@ -1,7 +1,7 @@
 Changelog
 ------------
 
-### Unreleased
+### 1.2.1
 * 🎉 Improved Flow types to include optional `itemData` parameter. ([TrySound](https://github.com/TrySound) - [#66](https://github.com/bvaughn/react-window/pull/66))
 * 🐛 `VariableSizeList` and `VariableSizeGrid` no longer call size getter functions with invalid index when item count is zero.
 
