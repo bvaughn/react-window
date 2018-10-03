@@ -38,7 +38,7 @@
   "module": "dist/index.esm.js",
   "files": ["dist", "src/*.js"],
   "scripts": {
-    "flow": "flow check src && flow check website",
+    "flow:check": "flow check --max-warnings=0 src && flow check website",
     "precommit": "lint-staged",
     "prettier": "prettier --write '**/*.{js,json,css}'",
     "linc": "lint-staged",

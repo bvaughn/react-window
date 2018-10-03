@@ -11,14 +11,14 @@ type ItemKeyGetter = (indices: {
   rowIndex: number,
 }) => any;
 
-type RenderComponentProps = {|
+type RenderComponentProps<T> = {|
   columnIndex: number,
-  data: any,
+  data: T,
   isScrolling?: boolean,
   rowIndex: number,
   style: Object,
 |};
-export type RenderComponent = (props: RenderComponentProps) => React$Node;
+export type RenderComponent<T> = (props: RenderComponentProps<T>) => React$Node;
 
 type ScrollDirection = 'forward' | 'backward';
 
@@ -43,8 +43,8 @@ type OnScrollCallback = ({
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 type ItemStyleCache = { [key: string]: Object };
 
-export type Props = {|
-  children: RenderComponent,
+export type Props<T> = {|
+  children: RenderComponent<T>,
   className?: string,
   columnCount: number,
   columnWidth: itemSize,
@@ -53,7 +53,7 @@ export type Props = {|
   initialScrollTop?: number,
   innerRef?: any,
   innerTagName?: string,
-  itemData?: any,
+  itemData: T,
   itemKey?: ItemKeyGetter,
   onItemsRendered?: OnItemsRenderedCallback,
   onScroll?: OnScrollCallback,
@@ -77,32 +77,36 @@ type State = {|
 |};
 
 type getItemOffset = (
-  props: Props,
+  props: Props<any>,
   index: number,
   instanceProps: any
 ) => number;
-type getItemSize = (props: Props, index: number, instanceProps: any) => number;
-type getEstimatedTotalSize = (props: Props, instanceProps: any) => number;
+type getItemSize = (
+  props: Props<any>,
+  index: number,
+  instanceProps: any
+) => number;
+type getEstimatedTotalSize = (props: Props<any>, instanceProps: any) => number;
 type GetOffsetForItemAndAlignment = (
-  props: Props,
+  props: Props<any>,
   index: number,
   align: ScrollToAlign,
   scrollOffset: number,
   instanceProps: any
 ) => number;
 type GetStartIndexForOffset = (
-  props: Props,
+  props: Props<any>,
   offset: number,
   instanceProps: any
 ) => number;
 type GetStopIndexForStartIndex = (
-  props: Props,
+  props: Props<any>,
   startIndex: number,
   scrollOffset: number,
   instanceProps: any
 ) => number;
-type InitInstanceProps = (props: Props, instance: any) => any;
-type ValidateProps = (props: Props) => void;
+type InitInstanceProps = (props: Props<any>, instance: any) => any;
+type ValidateProps = (props: Props<any>) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
@@ -142,13 +146,14 @@ export default function createGridComponent({
   shouldResetStyleCacheOnItemSizeChange: boolean,
   validateProps: ValidateProps,
 |}) {
-  return class Grid extends PureComponent<Props, State> {
+  return class Grid<T> extends PureComponent<Props<T>, State> {
     _instanceProps: any = initInstanceProps(this.props, this);
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _outerRef: ?HTMLDivElement;
 
     static defaultProps = {
       innerTagName: 'div',
+      itemData: undefined,
       outerTagName: 'div',
       overscanCount: 1,
       useIsScrolling: false,
@@ -172,12 +177,12 @@ export default function createGridComponent({
     // Always use explicit constructor for React components.
     // It produces less code after transpilation. (#26)
     // eslint-disable-next-line no-useless-constructor
-    constructor(props: Props) {
+    constructor(props: Props<T>) {
       super(props);
     }
 
     static getDerivedStateFromProps(
-      nextProps: Props,
+      nextProps: Props<T>,
       prevState: State
     ): $Shape<State> {
       validateSharedProps(nextProps);
@@ -637,7 +642,7 @@ export default function createGridComponent({
   };
 }
 
-const validateSharedProps = ({ children, height, width }: Props): void => {
+const validateSharedProps = ({ children, height, width }: Props<any>): void => {
   if (process.env.NODE_ENV !== 'production') {
     if (typeof children !== 'function') {
       throw Error(

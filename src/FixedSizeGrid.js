@@ -5,26 +5,26 @@ import createGridComponent from './createGridComponent';
 import type { Props, ScrollToAlign } from './createGridComponent';
 
 const FixedSizeGrid = createGridComponent({
-  getColumnOffset: ({ columnWidth }: Props, index: number): number =>
+  getColumnOffset: ({ columnWidth }: Props<any>, index: number): number =>
     index * ((columnWidth: any): number),
 
-  getColumnWidth: ({ columnWidth }: Props, index: number): number =>
+  getColumnWidth: ({ columnWidth }: Props<any>, index: number): number =>
     ((columnWidth: any): number),
 
-  getRowOffset: ({ rowHeight }: Props, index: number): number =>
+  getRowOffset: ({ rowHeight }: Props<any>, index: number): number =>
     index * ((rowHeight: any): number),
 
-  getRowHeight: ({ rowHeight }: Props, index: number): number =>
+  getRowHeight: ({ rowHeight }: Props<any>, index: number): number =>
     ((rowHeight: any): number),
 
-  getEstimatedTotalHeight: ({ rowCount, rowHeight }: Props) =>
+  getEstimatedTotalHeight: ({ rowCount, rowHeight }: Props<any>) =>
     ((rowHeight: any): number) * rowCount,
 
-  getEstimatedTotalWidth: ({ columnCount, columnWidth }: Props) =>
+  getEstimatedTotalWidth: ({ columnCount, columnWidth }: Props<any>) =>
     ((columnWidth: any): number) * columnCount,
 
   getOffsetForColumnAndAlignment: (
-    { columnCount, columnWidth, width }: Props,
+    { columnCount, columnWidth, width }: Props<any>,
     columnIndex: number,
     align: ScrollToAlign,
     scrollLeft: number
@@ -63,7 +63,7 @@ const FixedSizeGrid = createGridComponent({
   },
 
   getOffsetForRowAndAlignment: (
-    { rowHeight, height, rowCount }: Props,
+    { rowHeight, height, rowCount }: Props<any>,
     rowIndex: number,
     align: ScrollToAlign,
     scrollTop: number
@@ -102,7 +102,7 @@ const FixedSizeGrid = createGridComponent({
   },
 
   getColumnStartIndexForOffset: (
-    { columnWidth, columnCount }: Props,
+    { columnWidth, columnCount }: Props<any>,
     scrollLeft: number
   ): number =>
     Math.max(
@@ -114,7 +114,7 @@ const FixedSizeGrid = createGridComponent({
     ),
 
   getColumnStopIndexForStartIndex: (
-    { columnWidth, columnCount, width }: Props,
+    { columnWidth, columnCount, width }: Props<any>,
     startIndex: number,
     scrollLeft: number
   ): number => {
@@ -132,7 +132,7 @@ const FixedSizeGrid = createGridComponent({
   },
 
   getRowStartIndexForOffset: (
-    { rowHeight, rowCount }: Props,
+    { rowHeight, rowCount }: Props<any>,
     scrollTop: number
   ): number =>
     Math.max(
@@ -141,7 +141,7 @@ const FixedSizeGrid = createGridComponent({
     ),
 
   getRowStopIndexForStartIndex: (
-    { rowHeight, rowCount, height }: Props,
+    { rowHeight, rowCount, height }: Props<any>,
     startIndex: number,
     scrollTop: number
   ): number => {
@@ -156,13 +156,13 @@ const FixedSizeGrid = createGridComponent({
     );
   },
 
-  initInstanceProps(props: Props): any {
+  initInstanceProps(props: Props<any>): any {
     // Noop
   },
 
   shouldResetStyleCacheOnItemSizeChange: true,
 
-  validateProps: ({ columnWidth, rowHeight }: Props): void => {
+  validateProps: ({ columnWidth, rowHeight }: Props<any>): void => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof columnWidth !== 'number') {
         throw Error(

@@ -5,5 +5,5 @@ before_script:
   - yarn
 script:
   - yarn lint
-  - yarn flow
+  - yarn flow:check
   - yarn test

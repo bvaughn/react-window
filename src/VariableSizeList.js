@@ -8,7 +8,7 @@ const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
 type VariableSizeProps = {|
   estimatedItemSize: number,
-  ...Props,
+  ...Props<any>,
 |};
 
 type itemSizeGetter = (index: number) => number;
@@ -24,7 +24,7 @@ type InstanceProps = {|
 |};
 
 const getItemMetadata = (
-  props: Props,
+  props: Props<any>,
   index: number,
   instanceProps: InstanceProps
 ): ItemMetadata => {
@@ -56,7 +56,7 @@ const getItemMetadata = (
 };
 
 const findNearestItem = (
-  props: Props,
+  props: Props<any>,
   instanceProps: InstanceProps,
   offset: number
 ) => {
@@ -88,7 +88,7 @@ const findNearestItem = (
 };
 
 const findNearestItemBinarySearch = (
-  props: Props,
+  props: Props<any>,
   instanceProps: InstanceProps,
   high: number,
   low: number,
@@ -115,7 +115,7 @@ const findNearestItemBinarySearch = (
 };
 
 const findNearestItemExponentialSearch = (
-  props: Props,
+  props: Props<any>,
   instanceProps: InstanceProps,
   index: number,
   offset: number
@@ -141,7 +141,7 @@ const findNearestItemExponentialSearch = (
 };
 
 const getEstimatedTotalSize = (
-  { itemCount }: Props,
+  { itemCount }: Props<any>,
   { itemMetadataMap, estimatedItemSize, lastMeasuredIndex }: InstanceProps
 ) => {
   let totalSizeOfMeasuredItems = 0;
@@ -159,13 +159,13 @@ const getEstimatedTotalSize = (
 
 const VariableSizeList = createListComponent({
   getItemOffset: (
-    props: Props,
+    props: Props<any>,
     index: number,
     instanceProps: InstanceProps
   ): number => getItemMetadata(props, index, instanceProps).offset,
 
   getItemSize: (
-    props: Props,
+    props: Props<any>,
     index: number,
     instanceProps: InstanceProps
   ): number => instanceProps.itemMetadataMap[index].size,
@@ -173,7 +173,7 @@ const VariableSizeList = createListComponent({
   getEstimatedTotalSize,
 
   getOffsetForIndexAndAlignment: (
-    props: Props,
+    props: Props<any>,
     index: number,
     align: ScrollToAlign,
     scrollOffset: number,
@@ -217,13 +217,13 @@ const VariableSizeList = createListComponent({
   },
 
   getStartIndexForOffset: (
-    props: Props,
+    props: Props<any>,
     offset: number,
     instanceProps: InstanceProps
   ): number => findNearestItem(props, instanceProps, offset),
 
   getStopIndexForStartIndex: (
-    props: Props,
+    props: Props<any>,
     startIndex: number,
     scrollOffset: number,
     instanceProps: InstanceProps
@@ -245,7 +245,7 @@ const VariableSizeList = createListComponent({
     return stopIndex;
   },
 
-  initInstanceProps(props: Props, instance: any): InstanceProps {
+  initInstanceProps(props: Props<any>, instance: any): InstanceProps {
     const { estimatedItemSize } = ((props: any): VariableSizeProps);
 
     const instanceProps = {
@@ -279,7 +279,7 @@ const VariableSizeList = createListComponent({
 
   shouldResetStyleCacheOnItemSizeChange: false,
 
-  validateProps: ({ itemSize }: Props): void => {
+  validateProps: ({ itemSize }: Props<any>): void => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof itemSize !== 'function') {
         throw Error(
