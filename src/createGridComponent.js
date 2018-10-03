@@ -501,8 +501,12 @@ export default function createGridComponent({
     _getItemStyleCache = memoizeOne((_, __) => ({}));
 
     _getHorizontalRangeToRender(): [number, number, number, number] {
-      const { columnCount, overscanCount } = this.props;
+      const { columnCount, overscanCount, rowCount } = this.props;
       const { horizontalScrollDirection, scrollLeft } = this.state;
+
+      if (columnCount === 0 || rowCount === 0) {
+        return [0, 0, 0, 0];
+      }
 
       const startIndex = getColumnStartIndexForOffset(
         this.props,
@@ -536,8 +540,12 @@ export default function createGridComponent({
     }
 
     _getVerticalRangeToRender(): [number, number, number, number] {
-      const { rowCount, overscanCount } = this.props;
+      const { columnCount, rowCount, overscanCount } = this.props;
       const { verticalScrollDirection, scrollTop } = this.state;
+
+      if (columnCount === 0 || rowCount === 0) {
+        return [0, 0, 0, 0];
+      }
 
       const startIndex = getRowStartIndexForOffset(
         this.props,

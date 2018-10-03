@@ -5,7 +5,7 @@ import { VariableSizeList } from '..';
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('VariableSizeList', () => {
-  let itemRenderer, defaultProps, onItemsRendered;
+  let itemRenderer, itemSize, defaultProps, onItemsRendered;
 
   // Use PureComponent to test memoization.
   // Pass through to itemRenderer mock for easier test assertions.
@@ -21,13 +21,14 @@ describe('VariableSizeList', () => {
     itemRenderer = jest.fn(({ style, ...rest }) => (
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
+    itemSize = jest.fn(index => 25 + index);
     onItemsRendered = jest.fn();
     defaultProps = {
       children: PureItemRenderer,
       estimatedItemSize: 25,
       height: 100,
       itemCount: 20,
-      itemSize: index => 25 + index,
+      itemSize,
       onItemsRendered,
       width: 50,
     };
@@ -35,6 +36,15 @@ describe('VariableSizeList', () => {
 
   // Much of the shared List functionality is already tested by FixedSizeList tests.
   // This test covers functionality that is unique to VariableSizeList.
+
+  it('should render an empty list', () => {
+    ReactTestRenderer.create(
+      <VariableSizeList {...defaultProps} itemCount={0} />
+    );
+    expect(itemSize).not.toHaveBeenCalled();
+    expect(itemRenderer).not.toHaveBeenCalled();
+    expect(onItemsRendered).not.toHaveBeenCalled();
+  });
 
   it('changing itemSize does not impact the rendered items', () => {
     const rendered = ReactTestRenderer.create(

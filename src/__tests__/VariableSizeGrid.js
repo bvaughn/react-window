@@ -5,7 +5,7 @@ import { VariableSizeGrid } from '..';
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('VariableSizeGrid', () => {
-  let itemRenderer, defaultProps, onItemsRendered;
+  let columnWidth, defaultProps, itemRenderer, onItemsRendered, rowHeight;
 
   // Use PureComponent to test memoization.
   // Pass through to itemRenderer mock for easier test assertions.
@@ -30,20 +30,38 @@ describe('VariableSizeGrid', () => {
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     onItemsRendered = jest.fn();
+    columnWidth = jest.fn(index => 50 + index);
+    rowHeight = jest.fn(index => 25 + index);
     defaultProps = {
       children: PureItemRenderer,
       columnCount: 10,
-      columnWidth: index => 50 + index,
+      columnWidth,
       height: 100,
       onItemsRendered,
       rowCount: 20,
-      rowHeight: index => 25 + index,
+      rowHeight,
       width: 200,
     };
   });
 
   // Much of the shared Grid functionality is already tested by VariableSizeGrid tests.
   // This test covers functionality that is unique to VariableSizeGrid.
+
+  it('should render an empty grid', () => {
+    ReactTestRenderer.create(
+      <VariableSizeGrid {...defaultProps} columnCount={0} rowCount={0} />
+    );
+    ReactTestRenderer.create(
+      <VariableSizeGrid {...defaultProps} columnCount={0} />
+    );
+    ReactTestRenderer.create(
+      <VariableSizeGrid {...defaultProps} rowCount={0} />
+    );
+    expect(itemRenderer).not.toHaveBeenCalled();
+    expect(columnWidth).not.toHaveBeenCalled();
+    expect(rowHeight).not.toHaveBeenCalled();
+    expect(onItemsRendered).not.toHaveBeenCalled();
+  });
 
   it('changing item size does not impact the rendered items', () => {
     const rendered = ReactTestRenderer.create(

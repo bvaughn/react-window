@@ -416,6 +416,10 @@ export default function createListComponent({
       const { itemCount, overscanCount } = this.props;
       const { scrollDirection, scrollOffset } = this.state;
 
+      if (itemCount === 0) {
+        return [0, 0, 0, 0];
+      }
+
       const startIndex = getStartIndexForOffset(
         this.props,
         scrollOffset,
