@@ -1,7 +1,7 @@
 // @flow
 
 import memoizeOne from 'memoize-one';
-import React, { createElement, PureComponent } from 'react';
+import { createElement, PureComponent } from 'react';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
@@ -9,13 +9,13 @@ type itemSize = number | ((index: number) => number);
 export type Direction = 'horizontal' | 'vertical';
 type ItemKeyGetter = (index: number) => any;
 
-export type RenderComponentProps = {|
-  data: any,
+export type RenderComponentProps<T> = {|
+  data: T,
   index: number,
   isScrolling?: boolean,
   style: Object,
 |};
-type RenderComponent = (props: RenderComponentProps) => React$Node;
+type RenderComponent<T> = (props: RenderComponentProps<T>) => React$Node;
 
 type ScrollDirection = 'forward' | 'backward';
 
@@ -32,20 +32,24 @@ type onScrollCallback = ({
 }) => void;
 
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
+type ItemStyleCache = { [index: number]: Object };
 
-export type Props = {|
-  children: RenderComponent,
+export type Props<T> = {|
+  children: RenderComponent<T>,
   className?: string,
-  containerTagName: string,
-  initialScrollOffset?: number,
   direction: Direction,
   height: number | string,
+  initialScrollOffset?: number,
+  innerRef?: any,
+  innerTagName?: string,
   itemCount: number,
-  itemData?: any,
+  itemData: T,
   itemKey?: ItemKeyGetter,
   itemSize: itemSize,
   onItemsRendered?: onItemsRenderedCallback,
   onScroll?: onScrollCallback,
+  outerRef?: any,
+  outerTagName?: string,
   overscanCount: number,
   style?: Object,
   useIsScrolling: boolean,
@@ -60,32 +64,36 @@ type State = {|
 |};
 
 type GetItemOffset = (
-  props: Props,
+  props: Props<any>,
   index: number,
   instanceProps: any
 ) => number;
-type GetItemSize = (props: Props, index: number, instanceProps: any) => number;
-type GetEstimatedTotalSize = (props: Props, instanceProps: any) => number;
+type GetItemSize = (
+  props: Props<any>,
+  index: number,
+  instanceProps: any
+) => number;
+type GetEstimatedTotalSize = (props: Props<any>, instanceProps: any) => number;
 type GetOffsetForIndexAndAlignment = (
-  props: Props,
+  props: Props<any>,
   index: number,
   align: ScrollToAlign,
   scrollOffset: number,
   instanceProps: any
 ) => number;
 type GetStartIndexForOffset = (
-  props: Props,
+  props: Props<any>,
   offset: number,
   instanceProps: any
 ) => number;
 type GetStopIndexForStartIndex = (
-  props: Props,
+  props: Props<any>,
   startIndex: number,
   scrollOffset: number,
   instanceProps: any
 ) => number;
-type InitInstanceProps = (props: Props, instance: any) => any;
-type ValidateProps = (props: Props) => void;
+type InitInstanceProps = (props: Props<any>, instance: any) => any;
+type ValidateProps = (props: Props<any>) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
@@ -99,6 +107,7 @@ export default function createListComponent({
   getStartIndexForOffset,
   getStopIndexForStartIndex,
   initInstanceProps,
+  shouldResetStyleCacheOnItemSizeChange,
   validateProps,
 }: {|
   getItemOffset: GetItemOffset,
@@ -108,16 +117,19 @@ export default function createListComponent({
   getStartIndexForOffset: GetStartIndexForOffset,
   getStopIndexForStartIndex: GetStopIndexForStartIndex,
   initInstanceProps: InitInstanceProps,
+  shouldResetStyleCacheOnItemSizeChange: boolean,
   validateProps: ValidateProps,
 |}) {
-  return class List extends PureComponent<Props, State> {
-    _itemStyleCache: { [index: number]: Object } = {};
+  return class List<T> extends PureComponent<Props<T>, State> {
+    _instanceProps: any = initInstanceProps(this.props, this);
+    _outerRef: ?HTMLDivElement;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
-    _scrollingContainer: ?HTMLDivElement;
 
     static defaultProps = {
-      containerTagName: 'div',
       direction: 'vertical',
+      innerTagName: 'div',
+      itemData: undefined,
+      outerTagName: 'div',
       overscanCount: 2,
       useIsScrolling: false,
     };
@@ -132,12 +144,19 @@ export default function createListComponent({
       scrollUpdateWasRequested: false,
     };
 
+    // Always use explicit constructor for React components.
+    // It produces less code after transpilation. (#26)
+    // eslint-disable-next-line no-useless-constructor
+    constructor(props: Props<T>) {
+      super(props);
+    }
+
     static getDerivedStateFromProps(
-      nextProps: Props,
-      prevState: State
+      props: Props<T>,
+      state: State
     ): $Shape<State> {
-      validateSharedProps(nextProps);
-      validateProps(nextProps);
+      validateSharedProps(props);
+      validateProps(props);
       return null;
     }
 
@@ -169,16 +188,13 @@ export default function createListComponent({
     componentDidMount() {
       const { initialScrollOffset, direction } = this.props;
 
-      if (
-        typeof initialScrollOffset === 'number' &&
-        this._scrollingContainer !== null
-      ) {
+      if (typeof initialScrollOffset === 'number' && this._outerRef !== null) {
         if (direction === 'horizontal') {
           ((this
-            ._scrollingContainer: any): HTMLDivElement).scrollLeft = initialScrollOffset;
+            ._outerRef: any): HTMLDivElement).scrollLeft = initialScrollOffset;
         } else {
           ((this
-            ._scrollingContainer: any): HTMLDivElement).scrollTop = initialScrollOffset;
+            ._outerRef: any): HTMLDivElement).scrollTop = initialScrollOffset;
         }
       }
 
@@ -190,13 +206,11 @@ export default function createListComponent({
       const { direction } = this.props;
       const { scrollOffset, scrollUpdateWasRequested } = this.state;
 
-      if (scrollUpdateWasRequested && this._scrollingContainer !== null) {
+      if (scrollUpdateWasRequested && this._outerRef !== null) {
         if (direction === 'horizontal') {
-          ((this
-            ._scrollingContainer: any): HTMLDivElement).scrollLeft = scrollOffset;
+          ((this._outerRef: any): HTMLDivElement).scrollLeft = scrollOffset;
         } else {
-          ((this
-            ._scrollingContainer: any): HTMLDivElement).scrollTop = scrollOffset;
+          ((this._outerRef: any): HTMLDivElement).scrollTop = scrollOffset;
         }
       }
 
@@ -213,9 +227,14 @@ export default function createListComponent({
     render() {
       const {
         className,
-        containerTagName,
         direction,
         height,
+        innerRef,
+        innerTagName,
+        itemCount,
+        itemData,
+        itemKey = defaultItemKey,
+        outerTagName,
         style,
         width,
       } = this.props;
@@ -235,11 +254,13 @@ export default function createListComponent({
         this._instanceProps
       );
 
-      return (
-        <div
-          className={className}
-          ref={this._scrollingContainerRef}
-          style={{
+      return createElement(
+        ((outerTagName: any): string),
+        {
+          className,
+          onScroll,
+          ref: this._outerRefSetter,
+          style: {
             position: 'relative',
             height,
             width,
@@ -247,19 +268,17 @@ export default function createListComponent({
             WebkitOverflowScrolling: 'touch',
             willChange: 'transform',
             ...style,
-          }}
-          onScroll={onScroll}
-        >
-          {createElement(containerTagName, {
-            children: items,
-            style: {
-              height: direction === 'horizontal' ? height : estimatedTotalSize,
-              overflow: 'hidden',
-              pointerEvents: isScrolling ? 'none' : '',
-              width: direction === 'horizontal' ? estimatedTotalSize : width,
-            },
-          })}
-        </div>
+          },
+        },
+        createElement(((innerTagName: any): string), {
+          children: items,
+          ref: innerRef,
+          style: {
+            height: direction === 'horizontal' ? '100%' : estimatedTotalSize,
+            pointerEvents: isScrolling ? 'none' : '',
+            width: direction === 'horizontal' ? estimatedTotalSize : '100%',
+          },
+        })
       );
     }
 
@@ -345,13 +364,17 @@ export default function createListComponent({
     // So that List can clear cached styles and force item re-render if necessary.
     _getItemStyle: (index: number) => Object;
     _getItemStyle = (index: number): Object => {
-      const { direction } = this.props;
+      const { direction, itemSize } = this.props;
+
+      const itemStyleCache = this._getItemStyleCache(
+        shouldResetStyleCacheOnItemSizeChange && itemSize
+      );
 
       let style;
-      if (this._itemStyleCache.hasOwnProperty(index)) {
-        style = this._itemStyleCache[index];
+      if (itemStyleCache.hasOwnProperty(index)) {
+        style = itemStyleCache[index];
       } else {
-        this._itemStyleCache[index] = style = {
+        itemStyleCache[index] = style = {
           position: 'absolute',
           left:
             direction === 'horizontal'
@@ -375,9 +398,16 @@ export default function createListComponent({
       return style;
     };
 
+    _getItemStyleCache: (_: any) => ItemStyleCache;
+    _getItemStyleCache = memoizeOne(_ => ({}));
+
     _getRangeToRender(): [number, number, number, number] {
       const { itemCount, overscanCount } = this.props;
       const { scrollDirection, scrollOffset } = this.state;
+
+      if (itemCount === 0) {
+        return [0, 0, 0, 0];
+      }
 
       const startIndex = getStartIndexForOffset(
         this.props,
@@ -475,8 +505,20 @@ export default function createListComponent({
       }, this._resetIsScrollingDebounced);
     };
 
-    _scrollingContainerRef = (ref: any): void => {
-      this._scrollingContainer = ((ref: any): HTMLDivElement);
+    _outerRefSetter = (ref: any): void => {
+      const { outerRef } = this.props;
+
+      this._outerRef = ((ref: any): HTMLDivElement);
+
+      if (typeof outerRef === 'function') {
+        outerRef(ref);
+      } else if (
+        outerRef != null &&
+        typeof outerRef === 'object' &&
+        outerRef.hasOwnProperty('current')
+      ) {
+        outerRef.current = ref;
+      }
     };
 
     _resetIsScrollingDebounced = () => {
@@ -496,7 +538,7 @@ export default function createListComponent({
       this.setState({ isScrolling: false }, () => {
         // Clear style cache after state update has been committed.
         // This way we don't break pure sCU for items that don't use isScrolling param.
-        this._itemStyleCache = {};
+        this._getItemStyleCache(-1);
       });
     };
 
@@ -517,7 +559,7 @@ const validateSharedProps = ({
   direction,
   height,
   width,
-}: Props): void => {
+}: Props<any>): void => {
   if (process.env.NODE_ENV !== 'production') {
     if (direction !== 'horizontal' && direction !== 'vertical') {
       throw Error(

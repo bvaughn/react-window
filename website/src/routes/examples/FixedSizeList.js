@@ -8,7 +8,7 @@ import CODE_VERTICAL from '../../code/FixedSizeListVertical.js';
 
 import styles from './shared.module.css';
 
-class ItemRenderer extends PureComponent {
+class Item extends PureComponent {
   render() {
     const { index, style } = this.props;
 
@@ -39,7 +39,7 @@ export default function() {
             itemSize={35}
             width={300}
           >
-            {ItemRenderer}
+            {Item}
           </FixedSizeList>
         </ProfiledExample>
         <div className={styles.ExampleCode}>
@@ -59,7 +59,7 @@ export default function() {
             itemSize={100}
             width={300}
           >
-            {ItemRenderer}
+            {Item}
           </FixedSizeList>
         </ProfiledExample>
         <div className={styles.ExampleCode}>

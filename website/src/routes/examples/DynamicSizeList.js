@@ -13,8 +13,10 @@ import styles from './shared.module.css';
 const words = ['cat', 'kitten', 'feline', 'kitty'];
 const randomWords = ({ min, max }) => {
   const target = min + Math.round(Math.random() * (max - min));
-  return new Array(target).fill(true).map(() => words[Math.floor(Math.random() * words.length)]);
-}
+  return new Array(target)
+    .fill(true)
+    .map(() => words[Math.floor(Math.random() * words.length)]);
+};
 
 const names = [
   'Stasia',

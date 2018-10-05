@@ -336,14 +336,14 @@ const DynamicSizeList = createListComponent({
           // We could only wrap them for the initial render,
           // But we also want to automatically detect resizes.
           items.push(
-            <CellMeasurer
-              direction={direction}
-              index={index}
-              instance={instance}
-              item={item}
-              itemMetadata={instanceProps.itemMetadataMap[index]}
-              key={itemKey(index)}
-            />
+            createElement(CellMeasurer, {
+              direction,
+              index,
+              instance,
+              item,
+              itemMetadata: instanceProps.itemMetadataMap[index],
+              key: itemKey(index),
+            })
           );
         }
       }

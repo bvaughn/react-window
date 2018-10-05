@@ -4,7 +4,13 @@ import { FixedSizeList as List } from 'react-window';
 
 import './styles.css';
 
-const App = () => (
+const Row = ({ index, isScrolling, style }) => (
+  <div className={index % 2 ? 'ListItemOdd' : 'ListItemEven'} style={style}>
+    {isScrolling ? 'Scrolling' : `Row ${index}`}
+  </div>
+);
+
+const Example = () => (
   <List
     className="List"
     height={150}
@@ -13,16 +19,8 @@ const App = () => (
     useIsScrolling
     width={300}
   >
-    {({ key, index, isScrolling, style }) => (
-      <div
-        className={index % 2 ? 'ListItemOdd' : 'ListItemEven'}
-        key={key}
-        style={style}
-      >
-        {isScrolling ? 'Scrolling' : `Row ${index}`}
-      </div>
-    )}
+    {Row}
   </List>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<Example />, document.getElementById('root'));

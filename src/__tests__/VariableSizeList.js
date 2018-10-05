@@ -5,7 +5,7 @@ import { VariableSizeList } from '..';
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('VariableSizeList', () => {
-  let itemRenderer, defaultProps, onItemsRendered;
+  let itemRenderer, itemSize, defaultProps, onItemsRendered;
 
   // Use PureComponent to test memoization.
   // Pass through to itemRenderer mock for easier test assertions.
@@ -21,13 +21,14 @@ describe('VariableSizeList', () => {
     itemRenderer = jest.fn(({ style, ...rest }) => (
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
+    itemSize = jest.fn(index => 25 + index);
     onItemsRendered = jest.fn();
     defaultProps = {
       children: PureItemRenderer,
       estimatedItemSize: 25,
       height: 100,
       itemCount: 20,
-      itemSize: index => 25 + index,
+      itemSize,
       onItemsRendered,
       width: 50,
     };
@@ -35,6 +36,15 @@ describe('VariableSizeList', () => {
 
   // Much of the shared List functionality is already tested by FixedSizeList tests.
   // This test covers functionality that is unique to VariableSizeList.
+
+  it('should render an empty list', () => {
+    ReactTestRenderer.create(
+      <VariableSizeList {...defaultProps} itemCount={0} />
+    );
+    expect(itemSize).not.toHaveBeenCalled();
+    expect(itemRenderer).not.toHaveBeenCalled();
+    expect(onItemsRendered).not.toHaveBeenCalled();
+  });
 
   it('changing itemSize does not impact the rendered items', () => {
     const rendered = ReactTestRenderer.create(
@@ -95,6 +105,21 @@ describe('VariableSizeList', () => {
   });
 
   describe('scrollToItem method', () => {
+    it('should not set invalid offsets when the list contains few items', () => {
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeList {...defaultProps} itemCount={3} onScroll={onScroll} />
+      );
+      onScroll.mockClear();
+      // Offset should not be negative.
+      rendered.getInstance().scrollToItem(0);
+      expect(onScroll).toHaveBeenCalledWith({
+        scrollDirection: 'backward',
+        scrollOffset: 0,
+        scrollUpdateWasRequested: true,
+      });
+    });
+
     it('should scroll to the correct item for align = "auto"', () => {
       const onItemsRendered = jest.fn();
       const rendered = ReactTestRenderer.create(
@@ -188,6 +213,47 @@ describe('VariableSizeList', () => {
       rendered.getInstance().scrollToItem(19);
       expect(itemSize).toHaveBeenCalledTimes(5);
       expect(scrollContainer.props.style.height).toEqual(750);
+    });
+
+    it('should delay the recalculation of the estimated total size if shouldForceUpdate is false', () => {
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeList
+          {...defaultProps}
+          estimatedItemSize={30}
+          overscanCount={1}
+          itemSize={index => 25}
+        />
+      );
+      const scrollContainer = findScrollContainer(rendered);
+      // The estimated total size should be (100 + 25 * 1 + 30 * 15)px = 575px.
+      expect(scrollContainer.props.style.height).toEqual(575);
+      // Supplying a new itemSize alone should not impact anything.
+      // Although the list get re-rendered by passing inline functions,
+      // but it still use the cached metrics to calculate the estimated size.
+      rendered.update(
+        <VariableSizeList
+          {...defaultProps}
+          estimatedItemSize={30}
+          overscanCount={1}
+          itemSize={index => 20}
+        />
+      );
+      expect(scrollContainer.props.style.height).toEqual(575);
+      // Reset calculation cache but don't re-render the list,
+      // the estimated total size should stay the same.
+      rendered.getInstance().resetAfterIndex(0, false);
+      expect(scrollContainer.props.style.height).toEqual(575);
+      // Pass inline function to make the list re-render.
+      rendered.update(
+        <VariableSizeList
+          {...defaultProps}
+          estimatedItemSize={30}
+          overscanCount={1}
+          itemSize={index => 20}
+        />
+      );
+      // The estimated total height should be (100 + 20 * 1 + 30 * 14)px = 540px.
+      expect(scrollContainer.props.style.height).toEqual(540);
     });
 
     it('should re-render items after the specified index with updated styles', () => {

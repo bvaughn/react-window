@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -6,11 +6,11 @@ import { FixedSizeList } from '..';
 
 const simulateScroll = (instance, scrollOffset, direction = 'vertical') => {
   if (direction === 'horizontal') {
-    instance._scrollingContainer.scrollLeft = scrollOffset;
+    instance._outerRef.scrollLeft = scrollOffset;
   } else {
-    instance._scrollingContainer.scrollTop = scrollOffset;
+    instance._outerRef.scrollTop = scrollOffset;
   }
-  ReactTestUtils.Simulate.scroll(instance._scrollingContainer);
+  ReactTestUtils.Simulate.scroll(instance._outerRef);
 };
 
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
@@ -64,6 +64,34 @@ describe('FixedSizeList', () => {
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
+  describe('scrollbar handling', () => {
+    it('should set width to "100%" for vertical lists to avoid unnecessary horizontal scrollbar', () => {
+      const innerRef = createRef();
+      ReactDOM.render(
+        <FixedSizeList {...defaultProps} innerRef={innerRef} />,
+        document.createElement('div')
+      );
+      const style = innerRef.current.style;
+      expect(style.width).toBe('100%');
+      expect(style.height).toBe('2500px');
+    });
+
+    it('should set height to "100%" for horizontal lists to avoid unnecessary vertical scrollbar', () => {
+      const innerRef = createRef();
+      ReactDOM.render(
+        <FixedSizeList
+          {...defaultProps}
+          direction="horizontal"
+          innerRef={innerRef}
+        />,
+        document.createElement('div')
+      );
+      const style = innerRef.current.style;
+      expect(style.width).toBe('2500px');
+      expect(style.height).toBe('100%');
+    });
+  });
+
   describe('style caching', () => {
     it('should cache styles while scrolling to avoid breaking pure sCU for items', () => {
       const rendered = ReactTestRenderer.create(
@@ -111,6 +139,18 @@ describe('FixedSizeList', () => {
     );
     rendered.update(<FixedSizeList {...defaultProps} itemSize={50} />);
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
+  });
+
+  it('changing itemSize updates the rendered items and busts the style cache', () => {
+    const rendered = ReactTestRenderer.create(
+      <FixedSizeList {...defaultProps} />
+    );
+    const oldStyle = itemRenderer.mock.calls[0][0].style;
+    itemRenderer.mockClear();
+    rendered.update(<FixedSizeList {...defaultProps} itemSize={50} />);
+    expect(itemRenderer).toHaveBeenCalled();
+    const newStyle = itemRenderer.mock.calls[0][0].style;
+    expect(oldStyle).not.toBe(newStyle);
   });
 
   it('should support momentum scrolling on iOS devices', () => {
@@ -249,6 +289,21 @@ describe('FixedSizeList', () => {
   });
 
   describe('scrollToItem method', () => {
+    it('should not set invalid offsets when the list contains few items', () => {
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} itemCount={3} onScroll={onScroll} />
+      );
+      onScroll.mockClear();
+      // Offset should not be negative.
+      rendered.getInstance().scrollToItem(0);
+      expect(onScroll).toHaveBeenCalledWith({
+        scrollDirection: 'backward',
+        scrollOffset: 0,
+        scrollUpdateWasRequested: true,
+      });
+    });
+
     it('should scroll to the correct item for align = "auto"', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeList {...defaultProps} />
@@ -418,11 +473,54 @@ describe('FixedSizeList', () => {
     });
   });
 
-  it('should use a custom containerTag if specified', () => {
-    const rendered = ReactTestRenderer.create(
-      <FixedSizeList {...defaultProps} containerTagName="section" />
-    );
-    expect(rendered.root.findByType('section')).toBeDefined();
+  describe('refs', () => {
+    it('should pass through innerRef and outerRef ref functions', () => {
+      const innerRef = jest.fn();
+      const outerRef = jest.fn();
+      ReactDOM.render(
+        <FixedSizeList
+          {...defaultProps}
+          innerRef={innerRef}
+          outerRef={outerRef}
+        />,
+        document.createElement('div')
+      );
+      expect(innerRef).toHaveBeenCalled();
+      expect(innerRef.mock.calls[0][0]).toBeInstanceOf(HTMLDivElement);
+      expect(outerRef).toHaveBeenCalled();
+      expect(outerRef.mock.calls[0][0]).toBeInstanceOf(HTMLDivElement);
+    });
+
+    it('should pass through innerRef and outerRef createRef objects', () => {
+      const innerRef = createRef();
+      const outerRef = createRef();
+      ReactDOM.render(
+        <FixedSizeList
+          {...defaultProps}
+          innerRef={innerRef}
+          outerRef={outerRef}
+        />,
+        document.createElement('div')
+      );
+      expect(innerRef.current).toBeInstanceOf(HTMLDivElement);
+      expect(outerRef.current).toBeInstanceOf(HTMLDivElement);
+    });
+  });
+
+  describe('custom tag names', () => {
+    it('should use a custom innerTagName if specified', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} innerTagName="section" />
+      );
+      expect(rendered.root.findByType('section')).toBeDefined();
+    });
+
+    it('should use a custom outerTagName if specified', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} outerTagName="section" />
+      );
+      expect(rendered.root.findByType('section')).toBeDefined();
+    });
   });
 
   describe('itemData', () => {

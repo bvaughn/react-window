@@ -74,14 +74,24 @@ const PROPS = [
 const METHODS = [
   {
     description: (
-      <p>
-        <code>VariableSizeList</code> caches offsets and measurements for each
-        index for performance purposes. This method clears that cached data for
-        all items after (and including) the specified index. It should be called
-        whenever a item's size changes. (Note that this is not a typical
-        occurrance.)
-      </p>
+      <Fragment>
+        <p>
+          <code>VariableSizeList</code> caches offsets and measurements for each
+          index for performance purposes. This method clears that cached data
+          for all items after (and including) the specified index. It should be
+          called whenever a item's size changes. (Note that this is not a
+          typical occurrance.)
+        </p>
+        <p>
+          By default the list will automatically re-render after the index is
+          reset. If you would like to delay this re-render until e.g. a state
+          update has completed in the parent component, specify a value of
+          <code>false</code>
+          for the second, optional parameter.
+        </p>
+      </Fragment>
     ),
-    signature: 'resetAfterIndex(index: number): void',
+    signature:
+      'resetAfterIndex(index: number, shouldForceUpdate: boolean = true): void',
   },
 ];

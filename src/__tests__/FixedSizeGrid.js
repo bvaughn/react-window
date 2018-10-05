@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -7,9 +7,9 @@ import { FixedSizeGrid } from '..';
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 const simulateScroll = (instance, { scrollLeft, scrollTop }) => {
-  instance._scrollingContainer.scrollLeft = scrollLeft;
-  instance._scrollingContainer.scrollTop = scrollTop;
-  ReactTestUtils.Simulate.scroll(instance._scrollingContainer);
+  instance._outerRef.scrollLeft = scrollLeft;
+  instance._outerRef.scrollTop = scrollTop;
+  ReactTestUtils.Simulate.scroll(instance._outerRef);
 };
 
 describe('FixedSizeGrid', () => {
@@ -119,6 +119,24 @@ describe('FixedSizeGrid', () => {
       <FixedSizeGrid {...defaultProps} columnWidth={150} rowHeight={50} />
     );
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
+  });
+
+  it('changing itemSize updates the rendered items and busts the style cache', () => {
+    const rendered = ReactTestRenderer.create(
+      <FixedSizeGrid {...defaultProps} />
+    );
+    const styleOne = itemRenderer.mock.calls[0][0].style;
+    itemRenderer.mockClear();
+    rendered.update(<FixedSizeGrid {...defaultProps} columnWidth={150} />);
+    expect(itemRenderer).toHaveBeenCalled();
+    const styleTwo = itemRenderer.mock.calls[0][0].style;
+    expect(styleOne).not.toBe(styleTwo);
+    itemRenderer.mockClear();
+    rendered.update(
+      <FixedSizeGrid {...defaultProps} columnWidth={150} rowHeight={50} />
+    );
+    const styleThree = itemRenderer.mock.calls[0][0].style;
+    expect(styleTwo).not.toBe(styleThree);
   });
 
   it('should support momentum scrolling on iOS devices', () => {
@@ -257,9 +275,70 @@ describe('FixedSizeGrid', () => {
       instance.scrollTo({ scrollLeft: 100, scrollTop: 100 });
       expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
     });
+
+    it('should allow only scrollLeft or scrollTop values to be specified', () => {
+      const instance = ReactDOM.render(
+        <FixedSizeGrid {...defaultProps} useIsScrolling />,
+        document.createElement('div')
+      );
+
+      instance.scrollTo({ scrollLeft: 100, scrollTop: 100 });
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleColumnStartIndex: 1,
+          visibleColumnStopIndex: 3,
+          visibleRowStartIndex: 4,
+          visibleRowStopIndex: 8,
+        })
+      );
+
+      itemRenderer.mockClear();
+      instance.scrollTo({ scrollTop: 200 });
+      expect(onItemsRendered).toHaveBeenCalled();
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleColumnStartIndex: 1,
+          visibleColumnStopIndex: 3,
+        })
+      );
+
+      itemRenderer.mockClear();
+      instance.scrollTo({ scrollLeft: 150 });
+      expect(onItemsRendered).toHaveBeenCalled();
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleRowStartIndex: 8,
+          visibleRowStopIndex: 12,
+        })
+      );
+    });
   });
 
   describe('scrollToItem method', () => {
+    it('should not set invalid offsets when the list contains few items', () => {
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          columnCount={1}
+          rowCount={2}
+          onScroll={onScroll}
+        />
+      );
+      onScroll.mockClear();
+      // Offset should not be negative.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 0, rowIndex: 0, align: 'auto' });
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'backward',
+        scrollLeft: 0,
+        scrollTop: 0,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'backward',
+      });
+    });
+
     it('should scroll to the correct item for align = "auto"', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeGrid {...defaultProps} />
@@ -484,11 +563,54 @@ describe('FixedSizeGrid', () => {
     });
   });
 
-  it('should use a custom containerTag if specified', () => {
-    const rendered = ReactTestRenderer.create(
-      <FixedSizeGrid {...defaultProps} containerTagName="section" />
-    );
-    expect(rendered.root.findByType('section')).toBeDefined();
+  describe('refs', () => {
+    it('should pass through innerRef and outerRef ref functions', () => {
+      const innerRef = jest.fn();
+      const outerRef = jest.fn();
+      ReactDOM.render(
+        <FixedSizeGrid
+          {...defaultProps}
+          innerRef={innerRef}
+          outerRef={outerRef}
+        />,
+        document.createElement('div')
+      );
+      expect(innerRef).toHaveBeenCalled();
+      expect(innerRef.mock.calls[0][0]).toBeInstanceOf(HTMLDivElement);
+      expect(outerRef).toHaveBeenCalled();
+      expect(outerRef.mock.calls[0][0]).toBeInstanceOf(HTMLDivElement);
+    });
+
+    it('should pass through innerRef and outerRef createRef objects', () => {
+      const innerRef = createRef();
+      const outerRef = createRef();
+      ReactDOM.render(
+        <FixedSizeGrid
+          {...defaultProps}
+          innerRef={innerRef}
+          outerRef={outerRef}
+        />,
+        document.createElement('div')
+      );
+      expect(innerRef.current).toBeInstanceOf(HTMLDivElement);
+      expect(outerRef.current).toBeInstanceOf(HTMLDivElement);
+    });
+  });
+
+  describe('custom tag names', () => {
+    it('should use a custom innerTagName if specified', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} innerTagName="section" />
+      );
+      expect(rendered.root.findByType('section')).toBeDefined();
+    });
+
+    it('should use a custom outerTagName if specified', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} outerTagName="section" />
+      );
+      expect(rendered.root.findByType('section')).toBeDefined();
+    });
   });
 
   describe('itemData', () => {

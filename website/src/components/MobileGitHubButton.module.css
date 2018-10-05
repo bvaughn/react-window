@@ -1,0 +1,29 @@
+.MobileGitHubButton {
+  border-radius: 5px;
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+  outline: 0;
+  height: 2.5rem;
+  width: 2.5rem;
+  margin-left: 1rem;
+}
+.MobileGitHubButton {
+  display: none;
+  color: #546e7a;
+}
+
+.MobileGitHubButtonIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.MobileGitHubButtonIconPath {
+  fill: currentColor;
+}
+
+@media (max-width: 37.5rem) {
+  .MobileGitHubButton {
+    display: block;
+  }
+}

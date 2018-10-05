@@ -6,9 +6,9 @@ import type { Props, ScrollToAlign } from './createListComponent';
 
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
-type DynanmicProps = {|
+type VariableSizeProps = {|
   estimatedItemSize: number,
-  ...Props,
+  ...Props<any>,
 |};
 
 type itemSizeGetter = (index: number) => number;
@@ -24,11 +24,11 @@ type InstanceProps = {|
 |};
 
 const getItemMetadata = (
-  props: Props,
+  props: Props<any>,
   index: number,
   instanceProps: InstanceProps
 ): ItemMetadata => {
-  const { itemSize } = ((props: any): DynanmicProps);
+  const { itemSize } = ((props: any): VariableSizeProps);
   const { itemMetadataMap, lastMeasuredIndex } = instanceProps;
 
   if (index > lastMeasuredIndex) {
@@ -56,7 +56,7 @@ const getItemMetadata = (
 };
 
 const findNearestItem = (
-  props: Props,
+  props: Props<any>,
   instanceProps: InstanceProps,
   offset: number
 ) => {
@@ -88,7 +88,7 @@ const findNearestItem = (
 };
 
 const findNearestItemBinarySearch = (
-  props: Props,
+  props: Props<any>,
   instanceProps: InstanceProps,
   high: number,
   low: number,
@@ -115,7 +115,7 @@ const findNearestItemBinarySearch = (
 };
 
 const findNearestItemExponentialSearch = (
-  props: Props,
+  props: Props<any>,
   instanceProps: InstanceProps,
   index: number,
   offset: number
@@ -141,7 +141,7 @@ const findNearestItemExponentialSearch = (
 };
 
 const getEstimatedTotalSize = (
-  { itemCount }: Props,
+  { itemCount }: Props<any>,
   { itemMetadataMap, estimatedItemSize, lastMeasuredIndex }: InstanceProps
 ) => {
   let totalSizeOfMeasuredItems = 0;
@@ -159,13 +159,13 @@ const getEstimatedTotalSize = (
 
 const VariableSizeList = createListComponent({
   getItemOffset: (
-    props: Props,
+    props: Props<any>,
     index: number,
     instanceProps: InstanceProps
   ): number => getItemMetadata(props, index, instanceProps).offset,
 
   getItemSize: (
-    props: Props,
+    props: Props<any>,
     index: number,
     instanceProps: InstanceProps
   ): number => instanceProps.itemMetadataMap[index].size,
@@ -173,7 +173,7 @@ const VariableSizeList = createListComponent({
   getEstimatedTotalSize,
 
   getOffsetForIndexAndAlignment: (
-    props: Props,
+    props: Props<any>,
     index: number,
     align: ScrollToAlign,
     scrollOffset: number,
@@ -188,7 +188,10 @@ const VariableSizeList = createListComponent({
     // To ensure it reflects actual measurements instead of just estimates.
     const estimatedTotalSize = getEstimatedTotalSize(props, instanceProps);
 
-    const maxOffset = Math.min(estimatedTotalSize - size, itemMetadata.offset);
+    const maxOffset = Math.max(
+      0,
+      Math.min(estimatedTotalSize - size, itemMetadata.offset)
+    );
     const minOffset = Math.max(
       0,
       itemMetadata.offset - size + itemMetadata.size
@@ -214,13 +217,13 @@ const VariableSizeList = createListComponent({
   },
 
   getStartIndexForOffset: (
-    props: Props,
+    props: Props<any>,
     offset: number,
     instanceProps: InstanceProps
   ): number => findNearestItem(props, instanceProps, offset),
 
   getStopIndexForStartIndex: (
-    props: Props,
+    props: Props<any>,
     startIndex: number,
     scrollOffset: number,
     instanceProps: InstanceProps
@@ -242,8 +245,8 @@ const VariableSizeList = createListComponent({
     return stopIndex;
   },
 
-  initInstanceProps(props: Props, instance: any): InstanceProps {
-    const { estimatedItemSize } = ((props: any): DynanmicProps);
+  initInstanceProps(props: Props<any>, instance: any): InstanceProps {
+    const { estimatedItemSize } = ((props: any): VariableSizeProps);
 
     const instanceProps = {
       itemMetadataMap: {},
@@ -251,7 +254,10 @@ const VariableSizeList = createListComponent({
       lastMeasuredIndex: -1,
     };
 
-    instance.resetAfterIndex = (index: number) => {
+    instance.resetAfterIndex = (
+      index: number,
+      shouldForceUpdate?: boolean = true
+    ) => {
       instanceProps.lastMeasuredIndex = Math.min(
         instanceProps.lastMeasuredIndex,
         index - 1
@@ -261,14 +267,19 @@ const VariableSizeList = createListComponent({
       // But since styles are only cached while scrolling is in progress-
       // It seems an unnecessary optimization.
       // It's unlikely that resetAfterIndex() will be called while a user is scrolling.
-      instance._itemStyleCache = {};
-      instance.forceUpdate();
+      instance._getItemStyleCache(-1);
+
+      if (shouldForceUpdate) {
+        instance.forceUpdate();
+      }
     };
 
     return instanceProps;
   },
 
-  validateProps: ({ itemSize }: Props): void => {
+  shouldResetStyleCacheOnItemSizeChange: false,
+
+  validateProps: ({ itemSize }: Props<any>): void => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof itemSize !== 'function') {
         throw Error(

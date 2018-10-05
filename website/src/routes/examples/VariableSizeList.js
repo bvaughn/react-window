@@ -15,7 +15,7 @@ const rowSizes = new Array(1000)
   .fill(true)
   .map(() => 25 + Math.round(Math.random() * 50));
 
-class ItemRenderer extends PureComponent {
+class Item extends PureComponent {
   render() {
     const { index, style } = this.props;
 
@@ -46,7 +46,7 @@ export default function() {
             itemSize={index => rowSizes[index]}
             width={300}
           >
-            {ItemRenderer}
+            {Item}
           </VariableSizeList>
         </ProfiledExample>
         <div className={styles.ExampleCode}>
@@ -66,7 +66,7 @@ export default function() {
             itemSize={index => columnSizes[index]}
             width={300}
           >
-            {ItemRenderer}
+            {Item}
           </VariableSizeList>
         </ProfiledExample>
         <div className={styles.ExampleCode}>

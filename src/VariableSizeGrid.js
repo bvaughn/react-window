@@ -6,10 +6,10 @@ import type { Props, ScrollToAlign } from './createGridComponent';
 
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
-type DynanmicProps = {|
+type VariableSizeProps = {|
   estimatedColumnWidth: number,
   estimatedRowHeight: number,
-  ...Props,
+  ...Props<any>,
 |};
 
 type itemSizeGetter = (index: number) => number;
@@ -30,7 +30,7 @@ type InstanceProps = {|
 |};
 
 const getEstimatedTotalHeight = (
-  { rowCount }: Props,
+  { rowCount }: Props<any>,
   { rowMetadataMap, estimatedRowHeight, lastMeasuredRowIndex }: InstanceProps
 ) => {
   let totalSizeOfMeasuredRows = 0;
@@ -47,7 +47,7 @@ const getEstimatedTotalHeight = (
 };
 
 const getEstimatedTotalWidth = (
-  { columnCount }: Props,
+  { columnCount }: Props<any>,
   {
     columnMetadataMap,
     estimatedColumnWidth,
@@ -69,7 +69,7 @@ const getEstimatedTotalWidth = (
 
 const getItemMetadata = (
   itemType: ItemType,
-  props: Props,
+  props: Props<any>,
   index: number,
   instanceProps: InstanceProps
 ): ItemMetadata => {
@@ -114,7 +114,7 @@ const getItemMetadata = (
 
 const findNearestItem = (
   itemType: ItemType,
-  props: Props,
+  props: Props<any>,
   instanceProps: InstanceProps,
   offset: number
 ) => {
@@ -156,7 +156,7 @@ const findNearestItem = (
 
 const findNearestItemBinarySearch = (
   itemType: ItemType,
-  props: Props,
+  props: Props<any>,
   instanceProps: InstanceProps,
   high: number,
   low: number,
@@ -189,7 +189,7 @@ const findNearestItemBinarySearch = (
 
 const findNearestItemExponentialSearch = (
   itemType: ItemType,
-  props: Props,
+  props: Props<any>,
   instanceProps: InstanceProps,
   index: number,
   offset: number
@@ -217,7 +217,7 @@ const findNearestItemExponentialSearch = (
 
 const getOffsetForIndexAndAlignment = (
   itemType: ItemType,
-  props: Props,
+  props: Props<any>,
   index: number,
   align: ScrollToAlign,
   scrollOffset: number,
@@ -233,7 +233,10 @@ const getOffsetForIndexAndAlignment = (
       ? getEstimatedTotalWidth(props, instanceProps)
       : getEstimatedTotalHeight(props, instanceProps);
 
-  const maxOffset = Math.min(estimatedTotalSize - size, itemMetadata.offset);
+  const maxOffset = Math.max(
+    0,
+    Math.min(estimatedTotalSize - size, itemMetadata.offset)
+  );
   const minOffset = Math.max(0, itemMetadata.offset - size + itemMetadata.size);
 
   switch (align) {
@@ -257,19 +260,19 @@ const getOffsetForIndexAndAlignment = (
 
 const VariableSizeGrid = createGridComponent({
   getColumnOffset: (
-    props: Props,
+    props: Props<any>,
     index: number,
     instanceProps: InstanceProps
   ): number => getItemMetadata('column', props, index, instanceProps).offset,
 
   getColumnStartIndexForOffset: (
-    props: Props,
+    props: Props<any>,
     scrollLeft: number,
     instanceProps: InstanceProps
   ): number => findNearestItem('column', props, instanceProps, scrollLeft),
 
   getColumnStopIndexForStartIndex: (
-    props: Props,
+    props: Props<any>,
     startIndex: number,
     scrollLeft: number,
     instanceProps: InstanceProps
@@ -296,7 +299,7 @@ const VariableSizeGrid = createGridComponent({
   },
 
   getColumnWidth: (
-    props: Props,
+    props: Props<any>,
     index: number,
     instanceProps: InstanceProps
   ): number => instanceProps.columnMetadataMap[index].size,
@@ -305,7 +308,7 @@ const VariableSizeGrid = createGridComponent({
   getEstimatedTotalWidth,
 
   getOffsetForColumnAndAlignment: (
-    props: Props,
+    props: Props<any>,
     index: number,
     align: ScrollToAlign,
     scrollOffset: number,
@@ -321,7 +324,7 @@ const VariableSizeGrid = createGridComponent({
     ),
 
   getOffsetForRowAndAlignment: (
-    props: Props,
+    props: Props<any>,
     index: number,
     align: ScrollToAlign,
     scrollOffset: number,
@@ -337,25 +340,25 @@ const VariableSizeGrid = createGridComponent({
     ),
 
   getRowOffset: (
-    props: Props,
+    props: Props<any>,
     index: number,
     instanceProps: InstanceProps
   ): number => getItemMetadata('row', props, index, instanceProps).offset,
 
   getRowHeight: (
-    props: Props,
+    props: Props<any>,
     index: number,
     instanceProps: InstanceProps
   ): number => instanceProps.rowMetadataMap[index].size,
 
   getRowStartIndexForOffset: (
-    props: Props,
+    props: Props<any>,
     scrollTop: number,
     instanceProps: InstanceProps
   ): number => findNearestItem('row', props, instanceProps, scrollTop),
 
   getRowStopIndexForStartIndex: (
-    props: Props,
+    props: Props<any>,
     startIndex: number,
     scrollTop: number,
     instanceProps: InstanceProps
@@ -381,11 +384,11 @@ const VariableSizeGrid = createGridComponent({
     return stopIndex;
   },
 
-  initInstanceProps(props: Props, instance: any): InstanceProps {
+  initInstanceProps(props: Props<any>, instance: any): InstanceProps {
     const {
       estimatedColumnWidth,
       estimatedRowHeight,
-    } = ((props: any): DynanmicProps);
+    } = ((props: any): VariableSizeProps);
 
     const instanceProps = {
       columnMetadataMap: {},
@@ -396,20 +399,28 @@ const VariableSizeGrid = createGridComponent({
       rowMetadataMap: {},
     };
 
-    instance.resetAfterColumnIndex = (columnIndex: number) => {
-      this.resetAfterIndices({ columnIndex });
+    instance.resetAfterColumnIndex = (
+      columnIndex: number,
+      shouldForceUpdate?: boolean = true
+    ) => {
+      instance.resetAfterIndices({ columnIndex, shouldForceUpdate });
     };
 
-    instance.resetAfterRowIndex = (rowIndex: number) => {
-      this.resetAfterIndices({ rowIndex });
+    instance.resetAfterRowIndex = (
+      rowIndex: number,
+      shouldForceUpdate?: boolean = true
+    ) => {
+      instance.resetAfterIndices({ rowIndex, shouldForceUpdate });
     };
 
     instance.resetAfterIndices = ({
       columnIndex,
       rowIndex,
+      shouldForceUpdate = true,
     }: {
       columnIndex?: number,
       rowIndex?: number,
+      shouldForceUpdate: boolean,
     }) => {
       if (typeof columnIndex === 'number') {
         instanceProps.lastMeasuredColumnIndex = Math.min(
@@ -428,14 +439,19 @@ const VariableSizeGrid = createGridComponent({
       // But since styles are only cached while scrolling is in progress-
       // It seems an unnecessary optimization.
       // It's unlikely that resetAfterIndex() will be called while a user is scrolling.
-      instance._itemStyleCache = {};
-      instance.forceUpdate();
+      instance._getItemStyleCache(-1);
+
+      if (shouldForceUpdate) {
+        instance.forceUpdate();
+      }
     };
 
     return instanceProps;
   },
 
-  validateProps: ({ columnWidth, rowHeight }: Props): void => {
+  shouldResetStyleCacheOnItemSizeChange: false,
+
+  validateProps: ({ columnWidth, rowHeight }: Props<any>): void => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof columnWidth !== 'function') {
         throw Error(

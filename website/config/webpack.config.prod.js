@@ -154,6 +154,7 @@ module.exports = {
 
       // Load profiling-capable builds:
       'react-dom': 'react-dom/cjs/react-dom.profiling.min.js',
+      'schedule/tracking': 'schedule/cjs/schedule-tracking.profiling.min.js',
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -210,7 +211,7 @@ module.exports = {
 
           // Custom CodeMirror loader for syntax highlighting
           {
-            test: /code\//,
+            test: /code\/[^/]+$/,
             loader: require.resolve('../webpack/codemirror-loader'),
           },
 

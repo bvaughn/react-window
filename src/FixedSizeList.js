@@ -5,25 +5,28 @@ import createListComponent from './createListComponent';
 import type { Props, ScrollToAlign } from './createListComponent';
 
 const FixedSizeList = createListComponent({
-  getItemOffset: ({ itemSize, size }: Props, index: number): number =>
+  getItemOffset: ({ itemSize, size }: Props<any>, index: number): number =>
     index * ((itemSize: any): number),
 
-  getItemSize: ({ itemSize, size }: Props, index: number): number =>
+  getItemSize: ({ itemSize, size }: Props<any>, index: number): number =>
     ((itemSize: any): number),
 
-  getEstimatedTotalSize: ({ itemCount, itemSize }: Props) =>
+  getEstimatedTotalSize: ({ itemCount, itemSize }: Props<any>) =>
     ((itemSize: any): number) * itemCount,
 
   getOffsetForIndexAndAlignment: (
-    { direction, height, itemCount, itemSize, width }: Props,
+    { direction, height, itemCount, itemSize, width }: Props<any>,
     index: number,
     align: ScrollToAlign,
     scrollOffset: number
   ): number => {
     const size = (((direction === 'horizontal' ? width : height): any): number);
-    const maxOffset = Math.min(
-      itemCount * ((itemSize: any): number) - size,
-      index * ((itemSize: any): number)
+    const maxOffset = Math.max(
+      0,
+      Math.min(
+        itemCount * ((itemSize: any): number) - size,
+        index * ((itemSize: any): number)
+      )
     );
     const minOffset = Math.max(
       0,
@@ -50,7 +53,7 @@ const FixedSizeList = createListComponent({
   },
 
   getStartIndexForOffset: (
-    { itemCount, itemSize }: Props,
+    { itemCount, itemSize }: Props<any>,
     offset: number
   ): number =>
     Math.max(
@@ -59,7 +62,7 @@ const FixedSizeList = createListComponent({
     ),
 
   getStopIndexForStartIndex: (
-    { direction, height, itemCount, itemSize, width }: Props,
+    { direction, height, itemCount, itemSize, width }: Props<any>,
     startIndex: number,
     scrollOffset: number
   ): number => {
@@ -77,11 +80,13 @@ const FixedSizeList = createListComponent({
     );
   },
 
-  initInstanceProps(props: Props): any {
+  initInstanceProps(props: Props<any>): any {
     // Noop
   },
 
-  validateProps: ({ itemSize }: Props): void => {
+  shouldResetStyleCacheOnItemSizeChange: true,
+
+  validateProps: ({ itemSize }: Props<any>): void => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof itemSize !== 'number') {
         throw Error(

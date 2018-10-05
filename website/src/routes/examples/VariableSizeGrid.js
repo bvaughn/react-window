@@ -14,7 +14,7 @@ const rowHeights = new Array(1000)
   .fill(true)
   .map(() => 25 + Math.round(Math.random() * 50));
 
-class ItemRenderer extends PureComponent {
+class Cell extends PureComponent {
   render() {
     const { columnIndex, rowIndex, style } = this.props;
 
@@ -55,7 +55,7 @@ export default function() {
             rowHeight={index => rowHeights[index]}
             width={300}
           >
-            {ItemRenderer}
+            {Cell}
           </VariableSizeGrid>
         </ProfiledExample>
         <div className={styles.ExampleCode}>

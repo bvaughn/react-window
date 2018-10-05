@@ -5,7 +5,7 @@ import { VariableSizeGrid } from '..';
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('VariableSizeGrid', () => {
-  let itemRenderer, defaultProps, onItemsRendered;
+  let columnWidth, defaultProps, itemRenderer, onItemsRendered, rowHeight;
 
   // Use PureComponent to test memoization.
   // Pass through to itemRenderer mock for easier test assertions.
@@ -30,20 +30,38 @@ describe('VariableSizeGrid', () => {
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
     onItemsRendered = jest.fn();
+    columnWidth = jest.fn(index => 50 + index);
+    rowHeight = jest.fn(index => 25 + index);
     defaultProps = {
       children: PureItemRenderer,
       columnCount: 10,
-      columnWidth: index => 50 + index,
+      columnWidth,
       height: 100,
       onItemsRendered,
       rowCount: 20,
-      rowHeight: index => 25 + index,
+      rowHeight,
       width: 200,
     };
   });
 
   // Much of the shared Grid functionality is already tested by VariableSizeGrid tests.
   // This test covers functionality that is unique to VariableSizeGrid.
+
+  it('should render an empty grid', () => {
+    ReactTestRenderer.create(
+      <VariableSizeGrid {...defaultProps} columnCount={0} rowCount={0} />
+    );
+    ReactTestRenderer.create(
+      <VariableSizeGrid {...defaultProps} columnCount={0} />
+    );
+    ReactTestRenderer.create(
+      <VariableSizeGrid {...defaultProps} rowCount={0} />
+    );
+    expect(itemRenderer).not.toHaveBeenCalled();
+    expect(columnWidth).not.toHaveBeenCalled();
+    expect(rowHeight).not.toHaveBeenCalled();
+    expect(onItemsRendered).not.toHaveBeenCalled();
+  });
 
   it('changing item size does not impact the rendered items', () => {
     const rendered = ReactTestRenderer.create(
@@ -112,6 +130,30 @@ describe('VariableSizeGrid', () => {
   });
 
   describe('scrollToItem method', () => {
+    it('should not set invalid offsets when the list contains few items', () => {
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid
+          {...defaultProps}
+          columnCount={1}
+          rowCount={2}
+          onScroll={onScroll}
+        />
+      );
+      onScroll.mockClear();
+      // Offset should not be negative.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 0, rowIndex: 0, align: 'auto' });
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'backward',
+        scrollLeft: 0,
+        scrollTop: 0,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'backward',
+      });
+    });
+
     it('should scroll to the correct item for align = "auto"', () => {
       const rendered = ReactTestRenderer.create(
         <VariableSizeGrid {...defaultProps} />
@@ -243,6 +285,63 @@ describe('VariableSizeGrid', () => {
       expect(rowHeight).toHaveBeenCalledTimes(5);
       expect(scrollContainer.props.style.height).toEqual(550);
       expect(scrollContainer.props.style.width).toEqual(625);
+    });
+
+    it('should delay the recalculation of the estimated total size if shouldForceUpdate is false', () => {
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid
+          {...defaultProps}
+          estimatedColumnWidth={30}
+          estimatedRowHeight={30}
+          overscanCount={1}
+          columnWidth={index => 50}
+          rowHeight={index => 25}
+        />
+      );
+      const scrollContainer = findScrollContainer(rendered);
+      // The estimated total height should be (100 + 25 * 1 + 30 * 15)px = 575px.
+      // The estimated total width should be (200 + 50 * 1 + 30 * 5)px = 400px.
+      expect(scrollContainer.props.style.height).toEqual(575);
+      expect(scrollContainer.props.style.width).toEqual(400);
+      // Supplying new item sizes alone should not impact anything.
+      // Although the grid get re-rendered by passing inline functions,
+      // but it still use the cached metrics to calculate the estimated size.
+      rendered.update(
+        <VariableSizeGrid
+          {...defaultProps}
+          estimatedColumnWidth={30}
+          estimatedRowHeight={30}
+          overscanCount={1}
+          columnWidth={index => 40}
+          rowHeight={index => 20}
+        />
+      );
+      expect(scrollContainer.props.style.height).toEqual(575);
+      expect(scrollContainer.props.style.width).toEqual(400);
+      // Reset calculation cache but don't re-render the grid,
+      // the estimated total size should stay the same.
+      rendered.getInstance().resetAfterIndices({
+        columnIndex: 0,
+        rowIndex: 0,
+        shouldForceUpdate: false,
+      });
+      expect(scrollContainer.props.style.height).toEqual(575);
+      expect(scrollContainer.props.style.width).toEqual(400);
+      // Pass inline function to make the grid re-render.
+      rendered.update(
+        <VariableSizeGrid
+          {...defaultProps}
+          estimatedColumnWidth={30}
+          estimatedRowHeight={30}
+          overscanCount={1}
+          columnWidth={index => 40}
+          rowHeight={index => 20}
+        />
+      );
+      // The estimated total height should be (100 + 20 * 1 + 30 * 14)px = 540px.
+      // The estimated total width should be (200 + 40 * 1 + 30 * 4)px = 360px.
+      expect(scrollContainer.props.style.height).toEqual(540);
+      expect(scrollContainer.props.style.width).toEqual(360);
     });
 
     it('should re-render items after the specified index with updated styles', () => {

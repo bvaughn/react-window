@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
+import { unstable_track as track } from 'schedule/tracking';
+
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
 
@@ -143,12 +145,14 @@ export default class ScrollToItem extends PureComponent {
     );
   }
 
-  scrollToRow200Auto = () => {
-    this.listRef.current.scrollToItem(200);
-  };
-  scrollToRow300Center = () => {
-    this.listRef.current.scrollToItem(300, 'center');
-  };
+  scrollToRow200Auto = () =>
+    track('scroll to row 200', performance.now(), () =>
+      this.listRef.current.scrollToItem(200)
+    );
+  scrollToRow300Center = () =>
+    track('scroll to row 300', performance.now(), () =>
+      this.listRef.current.scrollToItem(300, 'center')
+    );
 
   scrollToRow100Column50Auto = () => {
     this.gridRef.current.scrollToItem({
@@ -168,16 +172,16 @@ export default class ScrollToItem extends PureComponent {
   scrollToRow350Column200End = () => {
     this.gridRef.current.scrollToItem({
       align: 'end',
-      columnIndex: 350,
-      rowIndex: 200,
+      columnIndex: 200,
+      rowIndex: 350,
     });
   };
 
   scrollToRow200Column100Center = () => {
     this.gridRef.current.scrollToItem({
       align: 'center',
-      columnIndex: 200,
-      rowIndex: 100,
+      columnIndex: 100,
+      rowIndex: 200,
     });
   };
 }
