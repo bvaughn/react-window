@@ -1,18 +1,24 @@
 // @flow
 
-import React, { createElement, Component } from 'react';
-import { findDOMNode } from 'react-dom';
+import { createElement } from 'react';
 
 import createListComponent, { defaultItemKey } from './createListComponent';
+import CellMeasurer from './CellMeasurer';
 
-import type { Direction, Props, ScrollToAlign } from './createListComponent';
+import type { Props, ScrollToAlign } from './createListComponent';
 
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
 type DynanmicProps = {|
   estimatedItemSize: number,
-  ...Props,
+  ...Props<any>,
 |};
+
+export type HandleNewMeasurements = (
+  index: number,
+  newSize: number,
+  isCommitPhase: boolean
+) => void;
 
 type ItemMetadata = {|
   offset: number,
@@ -20,34 +26,59 @@ type ItemMetadata = {|
 |};
 type InstanceProps = {|
   estimatedItemSize: number,
-  itemMetadataMap: { [index: number]: ItemMetadata },
+  itemOffsetMap: { [index: number]: number },
+  itemSizeMap: { [index: number]: number },
   lastMeasuredIndex: number,
+  lastPositionedIndex: number,
   totalMeasuredSize: number,
 |};
 
 const getItemMetadata = (
-  props: Props,
+  props: Props<any>,
   index: number,
   instanceProps: InstanceProps
 ): ItemMetadata => {
-  const { estimatedItemSize, itemMetadataMap } = instanceProps;
-
-  let itemMetadata = itemMetadataMap[index];
+  const {
+    estimatedItemSize,
+    itemOffsetMap,
+    itemSizeMap,
+    lastMeasuredIndex,
+    lastPositionedIndex,
+  } = instanceProps;
 
   // If the specified item has not yet been measured,
   // Just return an estimated size for now.
-  if (itemMetadata === undefined) {
-    itemMetadata = itemMetadataMap[index] = {
+  if (index > lastMeasuredIndex) {
+    return {
       offset: 0,
       size: estimatedItemSize,
     };
   }
 
-  return itemMetadata;
+  // Lazily update positions if they are stale.
+  if (index > lastPositionedIndex) {
+    if (lastPositionedIndex < 0) {
+      itemOffsetMap[0] = 0;
+    }
+
+    for (let i = Math.max(1, lastPositionedIndex); i <= index; i++) {
+      const prevOffset = itemOffsetMap[i - 1];
+      const prevSize = itemSizeMap[i - 1];
+
+      itemOffsetMap[i] = prevOffset + prevSize;
+    }
+
+    instanceProps.lastPositionedIndex = index;
+  }
+
+  let offset = itemOffsetMap[index];
+  let size = itemSizeMap[index];
+
+  return { offset, size };
 };
 
 const findNearestItemBinarySearch = (
-  props: Props,
+  props: Props<any>,
   instanceProps: InstanceProps,
   high: number,
   low: number,
@@ -74,9 +105,9 @@ const findNearestItemBinarySearch = (
 };
 
 const getEstimatedTotalSize = (
-  { itemCount }: Props,
+  { itemCount }: Props<any>,
   {
-    itemMetadataMap,
+    itemSizeMap,
     estimatedItemSize,
     lastMeasuredIndex,
     totalMeasuredSize,
@@ -84,72 +115,29 @@ const getEstimatedTotalSize = (
 ) =>
   totalMeasuredSize + (itemCount - lastMeasuredIndex - 1) * estimatedItemSize;
 
-type CellMeasurerProps = {|
-  direction: Direction,
-  index: number,
-  instance: any,
-  item: React$Element<any>,
-  itemMetadata: ItemMetadata,
-|};
-class CellMeasurer extends Component<CellMeasurerProps, void> {
-  componentDidMount() {
-    this._measureItem();
-  }
-
-  componentDidUpdate() {
-    // TODO Check if item needs to be remeasured.
-  }
-
-  render() {
-    return this.props.item;
-  }
-
-  _measureItem() {
-    const { direction, index, instance, itemMetadata } = this.props;
-
-    const node = findDOMNode(this);
-
-    if (
-      node &&
-      node.ownerDocument &&
-      node.ownerDocument.defaultView &&
-      node instanceof node.ownerDocument.defaultView.HTMLElement
-    ) {
-      const size =
-        direction === 'horizontal'
-          ? Math.ceil(node.offsetWidth)
-          : Math.ceil(node.offsetHeight);
-
-      if (itemMetadata.size !== size) {
-        instance._handleNewMeasurements(index, size);
-      }
-    }
-  }
-}
-
 const DynamicSizeList = createListComponent({
   getItemOffset: (
-    props: Props,
+    props: Props<any>,
     index: number,
     instanceProps: InstanceProps
   ): number => getItemMetadata(props, index, instanceProps).offset,
 
   getItemSize: (
-    props: Props,
+    props: Props<any>,
     index: number,
     instanceProps: InstanceProps
   ): number => {
     if (index > instanceProps.lastMeasuredIndex) {
       return instanceProps.estimatedItemSize;
     } else {
-      return instanceProps.itemMetadataMap[index].size;
+      return instanceProps.itemSizeMap[index];
     }
   },
 
   getEstimatedTotalSize,
 
   getOffsetForIndexAndAlignment: (
-    props: Props,
+    props: Props<any>,
     index: number,
     align: ScrollToAlign,
     scrollOffset: number,
@@ -190,7 +178,7 @@ const DynamicSizeList = createListComponent({
   },
 
   getStartIndexForOffset: (
-    props: Props,
+    props: Props<any>,
     offset: number,
     instanceProps: InstanceProps
   ): number => {
@@ -213,7 +201,7 @@ const DynamicSizeList = createListComponent({
   },
 
   getStopIndexForStartIndex: (
-    props: Props,
+    props: Props<any>,
     startIndex: number,
     scrollOffset: number,
     instanceProps: InstanceProps
@@ -235,17 +223,30 @@ const DynamicSizeList = createListComponent({
     return stopIndex;
   },
 
-  initInstanceProps(props: Props, instance: any): InstanceProps {
+  initInstanceProps(props: Props<any>, instance: any): InstanceProps {
     const { estimatedItemSize } = ((props: any): DynanmicProps);
 
     const instanceProps = {
       estimatedItemSize: estimatedItemSize || DEFAULT_ESTIMATED_ITEM_SIZE,
-      itemMetadataMap: {},
+      itemOffsetMap: {},
+      itemSizeMap: {},
       lastMeasuredIndex: -1,
+      lastPositionedIndex: -1,
       totalMeasuredSize: 0,
     };
 
     let hasNewMeasurements: boolean = false;
+
+    // TODO Cancel pending debounce on unmount
+    let debounceForceUpdateID = null;
+    const debounceForceUpdate = () => {
+      if (debounceForceUpdateID === null) {
+        debounceForceUpdateID = setTimeout(() => {
+          debounceForceUpdateID = null;
+          instance.forceUpdate();
+        }, 1);
+      }
+    };
 
     // List calls this method automatically after "mount" and "update".
     instance._commitHook = () => {
@@ -264,34 +265,45 @@ const DynamicSizeList = createListComponent({
     // This function may be called out of order!
     // It is not safe to reposition items here.
     // Be careful when comparing index and lastMeasuredIndex.
-    instance._handleNewMeasurements = (index: number, size: number) => {
-      const { itemMetadataMap, lastMeasuredIndex } = instanceProps;
+    const handleNewMeasurements: HandleNewMeasurements = (
+      index: number,
+      newSize: number,
+      isCommitPhase: boolean
+    ) => {
+      const {
+        itemSizeMap,
+        lastMeasuredIndex,
+        lastPositionedIndex,
+      } = instanceProps;
 
-      const itemMetadata = itemMetadataMap[index];
+      const oldSize = itemSizeMap[index];
 
-      // Adjust item position in case new measurements were recorded.
-      // This method will always be called in order (lowest to highest index),
-      // So it is safe to adjust positions here.
-      if (index > 0) {
-        const prevItemMetadata = itemMetadataMap[index - 1];
-        itemMetadata.offset = prevItemMetadata.offset + prevItemMetadata.size;
+      // Mark offsets after this as stale so that getItemMetadata() will lazily recalculate it.
+      if (index < lastPositionedIndex) {
+        instanceProps.lastPositionedIndex = index;
       }
 
       if (index <= lastMeasuredIndex) {
-        if (itemMetadata.size === size) {
+        if (oldSize === newSize) {
           return;
         }
 
-        instanceProps.totalMeasuredSize += size - itemMetadata.size;
+        // Adjust total size estimate by the delta in size.
+        instanceProps.totalMeasuredSize += newSize - oldSize;
       } else {
         instanceProps.lastMeasuredIndex = index;
-        instanceProps.totalMeasuredSize += size;
+        instanceProps.totalMeasuredSize += newSize;
       }
 
-      itemMetadata.size = size;
+      itemSizeMap[index] = newSize;
 
-      hasNewMeasurements = true;
+      if (isCommitPhase) {
+        hasNewMeasurements = true;
+      } else {
+        debounceForceUpdate();
+      }
     };
+    instance._handleNewMeasurements = handleNewMeasurements;
 
     // Override the item-rendering process to wrap items with CellMeasurer.
     // This keep the external API simpler.
@@ -311,10 +323,18 @@ const DynamicSizeList = createListComponent({
 
       const items = [];
       if (itemCount > 0) {
+        const { lastMeasuredIndex } = instanceProps;
+
         for (let index = startIndex; index <= stopIndex; index++) {
           let style = instance._getItemStyle(index);
 
-          if (index > instanceProps.lastMeasuredIndex) {
+          const { offset, size } = getItemMetadata(
+            instance.props,
+            index,
+            instanceProps
+          );
+
+          if (index > lastMeasuredIndex) {
             // Strip hard-coded dimensions from the inline style.
             // These would interfere with the item laying itself out anyway.
             // Constrain the item to fill either the width or height of the list,
@@ -323,6 +343,14 @@ const DynamicSizeList = createListComponent({
               ...style,
               height: direction === 'horizontal' ? height : undefined,
               width: direction === 'vertical' ? width : undefined,
+            };
+          } else {
+            style = {
+              ...style,
+              height: direction === 'horizontal' ? '100%' : undefined,
+              width: direction === 'vertical' ? '100%' : undefined,
+              left: direction === 'horizontal' ? offset : 0,
+              top: direction === 'vertical' ? offset : 0,
             };
           }
 
@@ -338,11 +366,11 @@ const DynamicSizeList = createListComponent({
           items.push(
             createElement(CellMeasurer, {
               direction,
+              handleNewMeasurements: instance._handleNewMeasurements,
               index,
-              instance,
               item,
-              itemMetadata: instanceProps.itemMetadataMap[index],
               key: itemKey(index),
+              size,
             })
           );
         }
@@ -357,7 +385,9 @@ const DynamicSizeList = createListComponent({
     return instanceProps;
   },
 
-  validateProps: ({ itemSize }: Props): void => {
+  shouldResetStyleCacheOnItemSizeChange: false,
+
+  validateProps: ({ itemSize }: Props<any>): void => {
     if (process.env.NODE_ENV !== 'production') {
       if (itemSize !== undefined) {
         throw Error('An unexpected "itemSize" prop has been provided.');

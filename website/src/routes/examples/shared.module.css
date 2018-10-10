@@ -89,6 +89,23 @@
   align-items: center;
 }
 
+.DynamicRowAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  flex: 0 0 auto;
+  line-height: 2.5rem;
+  text-align: center;
+}
+
+.DynamicRowText {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
 @media (max-width: 37.5rem) {
   .ExampleWrapper {
     padding: 0;

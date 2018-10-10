@@ -1,79 +1,93 @@
-import cn from 'classnames';
-import React, { Component } from 'react';
-import { DynamicSizeList } from 'react-window';
-// import randomWords from 'random-words';
+import React, { PureComponent } from 'react';
+import { DynamicSizeList as List } from 'react-window';
+import loremIpsum from 'lorem-ipsum';
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
 
-import CODE_HORIZONTAL from '../../code/DynamicSizeListHorizontal.js';
+//import CODE_HORIZONTAL from '../../code/DynamicSizeListHorizontal.js';
 import CODE_VERTICAL from '../../code/DynamicSizeListVertical.js';
 
 import styles from './shared.module.css';
 
-const words = ['cat', 'kitten', 'feline', 'kitty'];
-const randomWords = ({ min, max }) => {
-  const target = min + Math.round(Math.random() * (max - min));
-  return new Array(target)
-    .fill(true)
-    .map(() => words[Math.floor(Math.random() * words.length)]);
-};
-
-const names = [
-  'Stasia',
-  'Shaunta',
-  'Lavona',
-  'Felica',
-  'Glinda',
-  'Percy',
-  'Irina',
-  'Noriko',
-  'Evette',
-  'Margene',
-  'Cordia',
-  'Karmen',
-  'Kitty',
-  'Rima',
-  'Dessie',
-  'Kory',
-  'Oda',
-  'Alesia',
-  'Loura',
-  'Lucius',
+var colors = [
+  ['#1E88E5', '#90CAF9'],
+  ['#6D4C41', '#D7CCC8'],
+  ['#212121', '#BDBDBD'],
+  ['#388E3C', '#A5D6A7'],
+  ['#E53935', '#EF9A9A'],
+  ['#F4511E', '#FFAB91'],
+  ['#8E24AA', '#E1BEE7'],
+  ['#FFD600', '#FFF59D'],
 ];
 
-const items = new Array(500).fill(true).map(() => ({
-  paragraph: randomWords({ min: 3, max: 30 }).join(', '),
-  name: names[Math.floor(Math.random() * names.length)],
-}));
+const items = new Array(500).fill(true).map(() => {
+  const text = loremIpsum({ units: 'paragraphs' });
+  return {
+    colors: colors[Math.floor(Math.random() * colors.length)],
+    paragraph: text,
+    sentence: text.substr(0, text.indexOf('.')) + '…',
+  };
+});
 
-const itemRowRenderer = ({ index, style }) => (
-  <div
-    className={
-      index % 2 ? styles.DynamicListItemOdd : styles.DynamicListItemEven
-    }
-    style={style}
-  >
-    {index}: {items[index].paragraph}
-  </div>
-);
+class Row extends PureComponent {
+  state = {
+    isExpanded: true,
+  };
 
-const itemColumnRenderer = ({ index, style }) => (
-  <div
-    className={cn(
-      index % 2 ? styles.DynamicListItemOdd : styles.DynamicListItemEven,
-      styles.ListColumn
-    )}
-    style={style}
-  >
-    {index}: {items[index].name}
-  </div>
-);
+  toggleExpanded = () =>
+    this.setState(prevState => ({
+      isExpanded: !prevState.isExpanded,
+    }));
 
-export default class ScrollToItem extends Component {
+  render() {
+    const { index, style } = this.props;
+    const { isExpanded } = this.state;
+
+    const item = items[index];
+
+    return (
+      <div
+        className={
+          index % 2 ? styles.DynamicListItemOdd : styles.DynamicListItemEven
+        }
+        style={{
+          display: 'flex',
+          ...style,
+        }}
+      >
+        <div
+          className={styles.DynamicRowAvatar}
+          style={{
+            backgroundColor: item.colors[1],
+            color: item.colors[0],
+          }}
+        >
+          {index}
+        </div>
+        <div className={styles.DynamicRowText} onClick={this.toggleExpanded}>
+          {isExpanded ? item.paragraph : item.sentence}
+        </div>
+      </div>
+    );
+  }
+}
+
+export default class DynamicSizeList extends PureComponent {
   horizontalListRef = React.createRef();
   verticalListRef = React.createRef();
 
+  state = {
+    halfSize: false,
+  };
+
+  handleToggleResize = () =>
+    this.setState(prevState => ({
+      halfSize: !prevState.halfSize,
+    }));
+
   render() {
+    const { halfSize } = this.state;
+
     return (
       <div className={styles.ExampleWrapper}>
         <h1 className={styles.ExampleHeader}>Dynamic Size List</h1>
@@ -91,23 +105,30 @@ export default class ScrollToItem extends Component {
             >
               Scroll to 15,000px
             </button>
-            <DynamicSizeList
+            <button
+              className={styles.ExampleButton}
+              onClick={this.handleToggleResize}
+            >
+              Resize list
+            </button>
+            <List
               className={styles.List}
               height={200}
               itemCount={items.length}
               ref={this.verticalListRef}
-              width={300}
+              width={halfSize ? '50%' : '100%'}
             >
-              {itemRowRenderer}
-            </DynamicSizeList>
+              {Row}
+            </List>
           </ProfiledExample>
           <div className={styles.ExampleCode}>
             <CodeBlock value={CODE_VERTICAL} />
           </div>
         </div>
+        {/*
         <div className={styles.Example}>
           <ProfiledExample className={styles.ExampleDemo}>
-            <DynamicSizeList
+            <List
               className={styles.List}
               direction="horizontal"
               height={50}
@@ -116,12 +137,13 @@ export default class ScrollToItem extends Component {
               width={300}
             >
               {itemColumnRenderer}
-            </DynamicSizeList>
+            </List>
           </ProfiledExample>
           <div className={styles.ExampleCode}>
             <CodeBlock value={CODE_HORIZONTAL} />
           </div>
         </div>
+        */}
       </div>
     );
   }
