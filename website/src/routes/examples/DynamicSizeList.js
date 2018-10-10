@@ -4,7 +4,7 @@ import loremIpsum from 'lorem-ipsum';
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
 
-//import CODE_HORIZONTAL from '../../code/DynamicSizeListHorizontal.js';
+import CODE_HORIZONTAL from '../../code/DynamicSizeListHorizontal.js';
 import CODE_VERTICAL from '../../code/DynamicSizeListVertical.js';
 
 import styles from './shared.module.css';
@@ -26,6 +26,7 @@ const items = new Array(500).fill(true).map(() => {
     colors: colors[Math.floor(Math.random() * colors.length)],
     paragraph: text,
     sentence: text.substr(0, text.indexOf('.')) + '…',
+    words: loremIpsum({ units: 'words' }),
   };
 });
 
@@ -72,6 +73,37 @@ class Row extends PureComponent {
   }
 }
 
+class Column extends PureComponent {
+  render() {
+    const { index, style } = this.props;
+
+    const item = items[index];
+
+    return (
+      <div
+        className={
+          index % 2 ? styles.DynamicListItemOdd : styles.DynamicListItemEven
+        }
+        style={{
+          display: 'flex',
+          ...style,
+        }}
+      >
+        <div
+          className={styles.DynamicRowAvatar}
+          style={{
+            backgroundColor: item.colors[1],
+            color: item.colors[0],
+          }}
+        >
+          {index}
+        </div>
+        <div className={styles.DynamicRowText}>{item.words}</div>
+      </div>
+    );
+  }
+}
+
 export default class DynamicSizeList extends PureComponent {
   horizontalListRef = React.createRef();
   verticalListRef = React.createRef();
@@ -84,6 +116,9 @@ export default class DynamicSizeList extends PureComponent {
     this.setState(prevState => ({
       halfSize: !prevState.halfSize,
     }));
+
+  scrollTo15000Pixels = () => this.verticalListRef.current.scrollTo(15000);
+  scrollToRow200Auto = () => this.verticalListRef.current.scrollToItem(200);
 
   render() {
     const { halfSize } = this.state;
@@ -125,7 +160,6 @@ export default class DynamicSizeList extends PureComponent {
             <CodeBlock value={CODE_VERTICAL} />
           </div>
         </div>
-        {/*
         <div className={styles.Example}>
           <ProfiledExample className={styles.ExampleDemo}>
             <List
@@ -136,18 +170,14 @@ export default class DynamicSizeList extends PureComponent {
               ref={this.horizontalListRef}
               width={300}
             >
-              {itemColumnRenderer}
+              {Column}
             </List>
           </ProfiledExample>
           <div className={styles.ExampleCode}>
             <CodeBlock value={CODE_HORIZONTAL} />
           </div>
         </div>
-        */}
       </div>
     );
   }
-
-  scrollTo15000Pixels = () => this.verticalListRef.current.scrollTo(15000);
-  scrollToRow200Auto = () => this.verticalListRef.current.scrollToItem(200);
 }

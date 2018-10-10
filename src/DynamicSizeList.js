@@ -260,6 +260,8 @@ const DynamicSizeList = createListComponent({
         instance._itemStyleCache = {};
         instance.forceUpdate();
       }
+
+      // TODO Add ResizeObserver for list to clear all cached sizes and positions.
     };
 
     // This function may be called out of order!
@@ -377,6 +379,8 @@ const DynamicSizeList = createListComponent({
       }
       return items;
     };
+
+    // TODO Override scrollToItem to just-in-time measure.
 
     // TODO Add reset methods:
     // resetItem(index)
