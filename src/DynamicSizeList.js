@@ -240,7 +240,6 @@ const DynamicSizeList = createListComponent({
       totalMeasuredSize: 0,
     };
 
-    // TODO Cancel pending debounce on unmount
     let debounceForceUpdateID = null;
     const debounceForceUpdate = () => {
       if (debounceForceUpdateID === null) {
@@ -251,10 +250,18 @@ const DynamicSizeList = createListComponent({
       }
     };
 
+    // This method is called before unmounting.
+    instance._unmountHook = () => {
+      if (debounceForceUpdateID !== null) {
+        clearTimeout(debounceForceUpdateID);
+        debounceForceUpdateID = null;
+      }
+    };
+
     let hasNewMeasurements: boolean = false;
     let sizeDeltaTotal = 0;
 
-    // List calls this method automatically after "mount" and "update".
+    // This method is called after mount and update.
     instance._commitHook = () => {
       if (hasNewMeasurements) {
         hasNewMeasurements = false;
@@ -294,9 +301,6 @@ const DynamicSizeList = createListComponent({
           }
         );
       }
-
-      // TODO Add ResizeObserver for list to clear all cached sizes and positions?
-      // Alternately we could adust scrollOffset by delta when scrollDirection is BACKWARDS.
     };
 
     // This function may be called out of order!
@@ -402,6 +406,7 @@ const DynamicSizeList = createListComponent({
     };
 
     // TODO Override scrollToItem to just-in-time measure.
+    // Or decide not to support this and log a NO-OP warning.
 
     // TODO Add reset methods:
     // resetItem(index)

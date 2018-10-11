@@ -222,6 +222,8 @@ export default function createListComponent({
       if (this._resetIsScrollingTimeoutId !== null) {
         clearTimeout(this._resetIsScrollingTimeoutId);
       }
+
+      this._unmountHook();
     }
 
     render() {
@@ -354,6 +356,10 @@ export default function createListComponent({
     // This method is called after mount and update.
     // List implementations can override this method to be notified.
     _commitHook() {}
+
+    // This method is called before unmounting.
+    // List implementations can override this method to be notified.
+    _unmountHook() {}
 
     // Lazily create and cache item styles while scrolling,
     // So that pure component sCU will prevent re-renders.

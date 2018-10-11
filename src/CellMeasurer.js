@@ -9,7 +9,7 @@ import type { HandleNewMeasurements } from './DynamicSizeList';
 declare class ResizeObserver {
   constructor(callback: Function): void;
   observe(target: HTMLElement): void;
-  unobserve(target: HTMLElement): void;
+  disconnect(): void;
 }
 
 type CellMeasurerProps = {|
@@ -38,7 +38,7 @@ export default class CellMeasurer extends Component<CellMeasurerProps, void> {
   }
 
   componentWillUnmount() {
-    this._resizeObserver.unobserve(this._node);
+    this._resizeObserver.disconnect();
   }
 
   render() {
