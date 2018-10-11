@@ -149,6 +149,16 @@ const DynamicSizeList = createListComponent({
   ): number => {
     const { direction, height, width } = props;
 
+    if (process.env.NODE_ENV !== 'production') {
+      const { lastMeasuredIndex } = instanceProps;
+      if (index > lastMeasuredIndex) {
+        console.warn(
+          `DynamicSizeList does not support scrolling to items that yave not yet measured. ` +
+            `scrollToItem() was called with index ${index} but the last measured item was ${lastMeasuredIndex}.`
+        );
+      }
+    }
+
     const size = (((direction === 'horizontal' ? width : height): any): number);
     const itemMetadata = getItemMetadata(props, index, instanceProps);
 
@@ -404,9 +414,6 @@ const DynamicSizeList = createListComponent({
       }
       return items;
     };
-
-    // TODO Override scrollToItem to just-in-time measure.
-    // Or decide not to support this and log a NO-OP warning.
 
     return instanceProps;
   },
