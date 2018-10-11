@@ -80,7 +80,7 @@ class Column extends PureComponent {
   };
 
   render() {
-    const { index, style } = this.props;
+    const { data: showText, index, style } = this.props;
     const item = items[index];
 
     return (
@@ -99,20 +99,23 @@ class Column extends PureComponent {
         >
           {index}
         </div>
-        <div className={styles.DynamicColumnText} onClick={this.toggleExpanded}>
-          {item.isColumnExpanded ? item.words : item.word}
-        </div>
+        {showText && (
+          <div
+            className={styles.DynamicColumnText}
+            onClick={this.toggleExpanded}
+          >
+            {item.isColumnExpanded ? item.words : item.word}
+          </div>
+        )}
       </div>
     );
   }
 }
 
 export default class DynamicSizeList extends PureComponent {
-  horizontalListRef = React.createRef();
-  verticalListRef = React.createRef();
-
   state = {
     halfSize: false,
+    showText: true,
   };
 
   handleToggleResize = () =>
@@ -120,29 +123,19 @@ export default class DynamicSizeList extends PureComponent {
       halfSize: !prevState.halfSize,
     }));
 
-  scrollTo15000Pixels = () => this.verticalListRef.current.scrollTo(15000);
-  scrollToRow200Auto = () => this.verticalListRef.current.scrollToItem(200);
+  handleToggleText = () =>
+    this.setState(prevState => ({
+      showText: !prevState.showText,
+    }));
 
   render() {
-    const { halfSize } = this.state;
+    const { halfSize, showText } = this.state;
 
     return (
       <div className={styles.ExampleWrapper}>
         <h1 className={styles.ExampleHeader}>Dynamic Size List</h1>
         <div className={styles.Example}>
           <ProfiledExample className={styles.ExampleDemo}>
-            <button
-              className={styles.ExampleButton}
-              onClick={this.scrollToRow200Auto}
-            >
-              Scroll to row 200 (align: auto)
-            </button>
-            <button
-              className={styles.ExampleButton}
-              onClick={this.scrollTo15000Pixels}
-            >
-              Scroll to 15,000px
-            </button>
             <button
               className={styles.ExampleButton}
               onClick={this.handleToggleResize}
@@ -153,8 +146,7 @@ export default class DynamicSizeList extends PureComponent {
               className={styles.List}
               height={200}
               itemCount={items.length}
-              ref={this.verticalListRef}
-              width={halfSize ? '50%' : '100%'}
+              width={halfSize ? 200 : 300}
             >
               {Row}
             </List>
@@ -165,12 +157,18 @@ export default class DynamicSizeList extends PureComponent {
         </div>
         <div className={styles.Example}>
           <ProfiledExample className={styles.ExampleDemo}>
+            <button
+              className={styles.ExampleButton}
+              onClick={this.handleToggleText}
+            >
+              Toggle text
+            </button>
             <List
               className={styles.List}
               direction="horizontal"
               height={50}
               itemCount={items.length}
-              ref={this.horizontalListRef}
+              itemData={showText}
               width={300}
             >
               {Column}

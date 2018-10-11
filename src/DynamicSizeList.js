@@ -282,7 +282,10 @@ const DynamicSizeList = createListComponent({
         // To prevent items from "jumping" as items before them have been resized.
         instance.setState(
           prevState => {
-            if (prevState.scrollDirection === 'backward') {
+            if (
+              prevState.scrollDirection === 'backward' &&
+              !prevState.scrollUpdateWasRequested
+            ) {
               return {
                 scrollOffset: prevState.scrollOffset + sizeDeltaTotal,
               };
@@ -298,7 +301,8 @@ const DynamicSizeList = createListComponent({
             if (shouldForceUpdate) {
               instance.forceUpdate();
             } else {
-              const { direction, scrollOffset } = instance.state;
+              const { scrollOffset } = instance.state;
+              const { direction } = instance.props;
 
               if (direction === 'horizontal') {
                 ((instance._outerRef: any): HTMLDivElement).scrollLeft = scrollOffset;
@@ -341,6 +345,13 @@ const DynamicSizeList = createListComponent({
 
         // Adjust total size estimate by the delta in size.
         instanceProps.totalMeasuredSize += newSize - oldSize;
+
+        // Record the size delta here in case the user is scrolling up.
+        // In that event, we need to adjust the scroll offset by thie amount,
+        // To prevent items from "jumping" as items before them are resized.
+        if (isCommitPhase) {
+          sizeDeltaTotal += newSize - oldSize;
+        }
       } else {
         instanceProps.lastMeasuredIndex = index;
         instanceProps.totalMeasuredSize += newSize;
@@ -355,11 +366,6 @@ const DynamicSizeList = createListComponent({
 
       if (isCommitPhase) {
         hasNewMeasurements = true;
-
-        // Record the size delta here in case the user is scrolling up.
-        // In that event, we need to adjust the scroll offset by thie amount,
-        // To prevent items from "jumping" as items before them are resized.
-        sizeDeltaTotal += newSize - oldSize;
       } else {
         debounceForceUpdate();
       }
@@ -373,6 +379,7 @@ const DynamicSizeList = createListComponent({
         children,
         direction,
         itemCount,
+        itemData,
         itemKey = defaultItemKey,
         useIsScrolling,
       } = instance.props;
@@ -394,6 +401,7 @@ const DynamicSizeList = createListComponent({
           const style = instance._getItemStyle(index);
 
           const item = createElement(children, {
+            data: itemData,
             index,
             isScrolling: useIsScrolling ? isScrolling : undefined,
             style,
