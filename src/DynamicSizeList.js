@@ -26,6 +26,7 @@ type ItemMetadata = {|
 |};
 type InstanceProps = {|
   estimatedItemSize: number,
+  instance: any,
   itemOffsetMap: { [index: number]: number },
   itemSizeMap: { [index: number]: number },
   lastMeasuredIndex: number,
@@ -40,6 +41,7 @@ const getItemMetadata = (
 ): ItemMetadata => {
   const {
     estimatedItemSize,
+    instance,
     itemOffsetMap,
     itemSizeMap,
     lastMeasuredIndex,
@@ -61,11 +63,14 @@ const getItemMetadata = (
       itemOffsetMap[0] = 0;
     }
 
-    for (let i = Math.max(1, lastPositionedIndex); i <= index; i++) {
+    for (let i = Math.max(1, lastPositionedIndex + 1); i <= index; i++) {
       const prevOffset = itemOffsetMap[i - 1];
       const prevSize = itemSizeMap[i - 1];
 
       itemOffsetMap[i] = prevOffset + prevSize;
+
+      // Reset cached style to clear stale position.
+      delete instance._itemStyleCache[i];
     }
 
     instanceProps.lastPositionedIndex = index;
@@ -126,12 +131,11 @@ const DynamicSizeList = createListComponent({
     props: Props<any>,
     index: number,
     instanceProps: InstanceProps
-  ): number => {
-    if (index > instanceProps.lastMeasuredIndex) {
-      return instanceProps.estimatedItemSize;
-    } else {
-      return instanceProps.itemSizeMap[index];
-    }
+  ): ?number => {
+    // Do not hard-code item dimensions.
+    // We don't know them initially.
+    // Even once we do, changes in item content or list size should reflow.
+    return undefined;
   },
 
   getEstimatedTotalSize,
@@ -228,6 +232,7 @@ const DynamicSizeList = createListComponent({
 
     const instanceProps = {
       estimatedItemSize: estimatedItemSize || DEFAULT_ESTIMATED_ITEM_SIZE,
+      instance,
       itemOffsetMap: {},
       itemSizeMap: {},
       lastMeasuredIndex: -1,
@@ -252,16 +257,11 @@ const DynamicSizeList = createListComponent({
     instance._commitHook = () => {
       if (hasNewMeasurements) {
         hasNewMeasurements = false;
-
-        // We could potentially optimize further by only evicting styles after this index,
-        // But since styles are only cached while scrolling is in progress-
-        // It seems an unnecessary optimization.
-        // It's unlikely that resetAfterIndex() will be called while a user is scrolling.
-        instance._itemStyleCache = {};
         instance.forceUpdate();
       }
 
-      // TODO Add ResizeObserver for list to clear all cached sizes and positions.
+      // TODO Add ResizeObserver for list to clear all cached sizes and positions?
+      // Alternately we could adust scrollOffset by delta when scrollDirection is BACKWARDS.
     };
 
     // This function may be called out of order!
@@ -299,6 +299,11 @@ const DynamicSizeList = createListComponent({
 
       itemSizeMap[index] = newSize;
 
+      // Even though the size has changed, we don't need to reset the cached style,
+      // Because dynamic list items don't have constrained sizes.
+      // This enables them to resize when their content (or container size) changes.
+      // It also lets us avoid an unnecessary render in this case.
+
       if (isCommitPhase) {
         hasNewMeasurements = true;
       } else {
@@ -313,11 +318,9 @@ const DynamicSizeList = createListComponent({
       const {
         children,
         direction,
-        height,
         itemCount,
         itemKey = defaultItemKey,
         useIsScrolling,
-        width,
       } = instance.props;
       const { isScrolling } = instance.state;
 
@@ -325,36 +328,16 @@ const DynamicSizeList = createListComponent({
 
       const items = [];
       if (itemCount > 0) {
-        const { lastMeasuredIndex } = instanceProps;
-
         for (let index = startIndex; index <= stopIndex; index++) {
-          let style = instance._getItemStyle(index);
-
-          const { offset, size } = getItemMetadata(
+          const { size } = getItemMetadata(
             instance.props,
             index,
             instanceProps
           );
 
-          if (index > lastMeasuredIndex) {
-            // Strip hard-coded dimensions from the inline style.
-            // These would interfere with the item laying itself out anyway.
-            // Constrain the item to fill either the width or height of the list,
-            // Depending on the direction being windowed.
-            style = {
-              ...style,
-              height: direction === 'horizontal' ? height : undefined,
-              width: direction === 'vertical' ? width : undefined,
-            };
-          } else {
-            style = {
-              ...style,
-              height: direction === 'horizontal' ? '100%' : undefined,
-              width: direction === 'vertical' ? '100%' : undefined,
-              left: direction === 'horizontal' ? offset : 0,
-              top: direction === 'vertical' ? offset : 0,
-            };
-          }
+          // It's important to read style after fetching item metadata.
+          // getItemMetadata() will clear stale styles.
+          const style = instance._getItemStyle(index);
 
           const item = createElement(children, {
             index,
@@ -362,13 +345,11 @@ const DynamicSizeList = createListComponent({
             style,
           });
 
-          // Always wrap children in a CellMeasurer.
-          // We could only wrap them for the initial render,
-          // But we also want to automatically detect resizes.
+          // Always wrap children in a CellMeasurer to detect changes in size.
           items.push(
             createElement(CellMeasurer, {
               direction,
-              handleNewMeasurements: instance._handleNewMeasurements,
+              handleNewMeasurements,
               index,
               item,
               key: itemKey(index),

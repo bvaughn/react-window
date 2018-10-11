@@ -69,16 +69,23 @@
   justify-content: center;
 }
 
-.DynamicListItemEven,
-.DynamicListItemOdd {
+.DynamicColumnEven,
+.DynamicColumnOdd,
+.DynamicRowEven,
+.DynamicRowOdd {
   box-sizing: border-box;
+  padding: 0.5rem;
+  display: flex;
+}
+.DynamicColumnEven,
+.DynamicColumnOdd {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 0.5rem;
 }
 
-.DynamicListItemEven,
+.DynamicColumnEven,
+.DynamicRowEven,
 .GridItemEven,
 .ListItemEven {
   background-color: #f8f8f0;
@@ -90,6 +97,7 @@
   align-items: center;
 }
 
+.DynamicColumnAvatar,
 .DynamicRowAvatar {
   width: 2.5rem;
   height: 2.5rem;
@@ -100,10 +108,15 @@
   text-align: center;
 }
 
+.DynamicColumnText,
 .DynamicRowText {
   flex: 1;
   display: flex;
   align-items: center;
+  cursor: pointer;
+}
+.DynamicColumnText {
+  white-space: nowrap;
 }
 
 @media (max-width: 37.5rem) {

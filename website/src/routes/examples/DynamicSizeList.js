@@ -25,36 +25,32 @@ const items = new Array(500).fill(true).map(() => {
   return {
     colors: colors[Math.floor(Math.random() * colors.length)],
     paragraph: text,
+    isColumnExpanded: true,
+    isRowExpanded: true,
     sentence: text.substr(0, text.indexOf('.')) + '…',
-    words: loremIpsum({ units: 'words' }),
+    word: loremIpsum({ units: 'words' }),
+    words: loremIpsum({ units: 'words', count: 3 }),
   };
 });
 
 class Row extends PureComponent {
-  state = {
-    isExpanded: true,
+  toggleExpanded = () => {
+    const { index } = this.props;
+    // We mutate in place here rather than using setState,
+    // Because it persists the data after unmount an remount.
+    const item = items[index];
+    item.isRowExpanded = !item.isRowExpanded;
+    this.forceUpdate();
   };
-
-  toggleExpanded = () =>
-    this.setState(prevState => ({
-      isExpanded: !prevState.isExpanded,
-    }));
 
   render() {
     const { index, style } = this.props;
-    const { isExpanded } = this.state;
-
     const item = items[index];
 
     return (
       <div
-        className={
-          index % 2 ? styles.DynamicListItemOdd : styles.DynamicListItemEven
-        }
-        style={{
-          display: 'flex',
-          ...style,
-        }}
+        className={index % 2 ? styles.DynamicRowOdd : styles.DynamicRowEven}
+        style={style}
       >
         <div
           className={styles.DynamicRowAvatar}
@@ -66,7 +62,7 @@ class Row extends PureComponent {
           {index}
         </div>
         <div className={styles.DynamicRowText} onClick={this.toggleExpanded}>
-          {isExpanded ? item.paragraph : item.sentence}
+          {item.isRowExpanded ? item.paragraph : item.sentence}
         </div>
       </div>
     );
@@ -74,23 +70,28 @@ class Row extends PureComponent {
 }
 
 class Column extends PureComponent {
+  toggleExpanded = () => {
+    const { index } = this.props;
+    // We mutate in place here rather than using setState,
+    // Because it persists the data after unmount an remount.
+    const item = items[index];
+    item.isColumnExpanded = !item.isColumnExpanded;
+    this.forceUpdate();
+  };
+
   render() {
     const { index, style } = this.props;
-
     const item = items[index];
 
     return (
       <div
         className={
-          index % 2 ? styles.DynamicListItemOdd : styles.DynamicListItemEven
+          index % 2 ? styles.DynamicColumnOdd : styles.DynamicColumnEven
         }
-        style={{
-          display: 'flex',
-          ...style,
-        }}
+        style={style}
       >
         <div
-          className={styles.DynamicRowAvatar}
+          className={styles.DynamicColumnAvatar}
           style={{
             backgroundColor: item.colors[1],
             color: item.colors[0],
@@ -98,7 +99,9 @@ class Column extends PureComponent {
         >
           {index}
         </div>
-        <div className={styles.DynamicRowText}>{item.words}</div>
+        <div className={styles.DynamicColumnText} onClick={this.toggleExpanded}>
+          {item.isColumnExpanded ? item.words : item.word}
+        </div>
       </div>
     );
   }

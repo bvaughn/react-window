@@ -72,7 +72,7 @@ type GetItemSize = (
   props: Props<any>,
   index: number,
   instanceProps: any
-) => number;
+) => ?number;
 type GetEstimatedTotalSize = (props: Props<any>, instanceProps: any) => number;
 type GetOffsetForIndexAndAlignment = (
   props: Props<any>,
@@ -395,8 +395,14 @@ export default function createListComponent({
       return style;
     };
 
+    _itemStyleCache: ItemStyleCache;
+
     _getItemStyleCache: (_: any) => ItemStyleCache;
-    _getItemStyleCache = memoizeOne(_ => ({}));
+    _getItemStyleCache = memoizeOne(_ => {
+      this._itemStyleCache = {};
+
+      return this._itemStyleCache;
+    });
 
     _getRangeToRender(): [number, number, number, number] {
       const { itemCount, overscanCount } = this.props;
