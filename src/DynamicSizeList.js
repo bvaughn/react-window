@@ -408,10 +408,6 @@ const DynamicSizeList = createListComponent({
     // TODO Override scrollToItem to just-in-time measure.
     // Or decide not to support this and log a NO-OP warning.
 
-    // TODO Add reset methods:
-    // resetItem(index)
-    // resetAllItems()
-
     return instanceProps;
   },
 
