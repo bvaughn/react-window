@@ -12,7 +12,7 @@ declare class ResizeObserver {
   disconnect(): void;
 }
 
-type CellMeasurerProps = {|
+type ItemMeasurerProps = {|
   direction: Direction,
   handleNewMeasurements: HandleNewMeasurements,
   index: number,
@@ -20,7 +20,7 @@ type CellMeasurerProps = {|
   size: number,
 |};
 
-export default class CellMeasurer extends Component<CellMeasurerProps, void> {
+export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
   _node: HTMLElement = (null: any);
   _resizeObserver: ResizeObserver = (null: any);
 

@@ -3,7 +3,7 @@
 import { createElement } from 'react';
 
 import createListComponent, { defaultItemKey } from './createListComponent';
-import CellMeasurer from './CellMeasurer';
+import ItemMeasurer from './ItemMeasurer';
 
 import type { Props, ScrollToAlign } from './createListComponent';
 
@@ -366,7 +366,7 @@ const DynamicSizeList = createListComponent({
     };
     instance._handleNewMeasurements = handleNewMeasurements;
 
-    // Override the item-rendering process to wrap items with CellMeasurer.
+    // Override the item-rendering process to wrap items with ItemMeasurer.
     // This keep the external API simpler.
     instance._renderItems = () => {
       const {
@@ -399,9 +399,9 @@ const DynamicSizeList = createListComponent({
             style,
           });
 
-          // Always wrap children in a CellMeasurer to detect changes in size.
+          // Always wrap children in a ItemMeasurer to detect changes in size.
           items.push(
-            createElement(CellMeasurer, {
+            createElement(ItemMeasurer, {
               direction,
               handleNewMeasurements,
               index,
