@@ -240,8 +240,6 @@ const DynamicSizeList = createListComponent({
       totalMeasuredSize: 0,
     };
 
-    let hasNewMeasurements: boolean = false;
-
     // TODO Cancel pending debounce on unmount
     let debounceForceUpdateID = null;
     const debounceForceUpdate = () => {
@@ -253,11 +251,48 @@ const DynamicSizeList = createListComponent({
       }
     };
 
+    let hasNewMeasurements: boolean = false;
+    let sizeDeltaTotal = 0;
+
     // List calls this method automatically after "mount" and "update".
     instance._commitHook = () => {
       if (hasNewMeasurements) {
         hasNewMeasurements = false;
-        instance.forceUpdate();
+
+        let shouldForceUpdate;
+
+        // If the user is scrolling up, we need to adjust the scroll offset,
+        // To prevent items from "jumping" as items before them have been resized.
+        instance.setState(
+          prevState => {
+            if (prevState.scrollDirection === 'backward') {
+              return {
+                scrollOffset: prevState.scrollOffset + sizeDeltaTotal,
+              };
+            } else {
+              // There's no state to update,
+              // But we still want to re-render in this case.
+              shouldForceUpdate = true;
+
+              return null;
+            }
+          },
+          () => {
+            if (shouldForceUpdate) {
+              instance.forceUpdate();
+            } else {
+              const { direction, scrollOffset } = instance.state;
+
+              if (direction === 'horizontal') {
+                ((instance._outerRef: any): HTMLDivElement).scrollLeft = scrollOffset;
+              } else {
+                ((instance._outerRef: any): HTMLDivElement).scrollTop = scrollOffset;
+              }
+            }
+
+            sizeDeltaTotal = 0;
+          }
+        );
       }
 
       // TODO Add ResizeObserver for list to clear all cached sizes and positions?
@@ -306,6 +341,11 @@ const DynamicSizeList = createListComponent({
 
       if (isCommitPhase) {
         hasNewMeasurements = true;
+
+        // Record the size delta here in case the user is scrolling up.
+        // In that event, we need to adjust the scroll offset by thie amount,
+        // To prevent items from "jumping" as items before them are resized.
+        sizeDeltaTotal += newSize - oldSize;
       } else {
         debounceForceUpdate();
       }
