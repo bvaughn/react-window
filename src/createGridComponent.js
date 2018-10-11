@@ -497,6 +497,9 @@ export default function createGridComponent({
       return style;
     };
 
+    // TODO This memoized getter doesn't make much sense.
+    // If all that's really needed is for the impl to be able to reset the cache,
+    // Then we could expose a better API for that.
     _getItemStyleCache: (_: any, __: any) => ItemStyleCache;
     _getItemStyleCache = memoizeOne((_, __) => ({}));
 

@@ -403,6 +403,9 @@ export default function createListComponent({
 
     _itemStyleCache: ItemStyleCache;
 
+    // TODO This memoized getter doesn't make much sense.
+    // If all that's really needed is for the impl to be able to reset the cache,
+    // Then we could expose a better API for that.
     _getItemStyleCache: (_: any) => ItemStyleCache;
     _getItemStyleCache = memoizeOne(_ => {
       this._itemStyleCache = {};
