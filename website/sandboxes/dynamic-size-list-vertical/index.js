@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { DynamicSizeList as List } from 'react-window';
 import loremIpsum from 'lorem-ipsum';
 
 import './styles.css';
+
+// Polyfill ResizeObserver for demo
+if (typeof ResizeObserver === 'undefined') {
+  global.ResizeObserver = require('resize-observer-polyfill').default;
+}
 
 // This example uses an array of random strings,
 // But the list can also contain data that's async loaded, like images.
@@ -18,15 +23,22 @@ const Row = ({ data, index, style }) => (
 );
 
 const Example = () => (
-  <List
-    className="List"
-    height={150}
-    itemCount={items.length}
-    itemData={items}
-    width={300}
-  >
-    {Row}
-  </List>
+  <Fragment>
+    <List
+      className="List"
+      height={150}
+      itemCount={items.length}
+      itemData={items}
+      width={300}
+    >
+      {Row}
+    </List>
+    <p>
+      This component requires the{' '}
+      <a href="https://wicg.github.io/ResizeObserver">ResizeObserver</a> API (or
+      polyfill).
+    </p>
+  </Fragment>
 );
 
 ReactDOM.render(<Example />, document.getElementById('root'));

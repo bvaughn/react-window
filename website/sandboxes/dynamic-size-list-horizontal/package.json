@@ -5,6 +5,7 @@
     "lorem-ipsum": "^1",
     "react": "^16",
     "react-dom": "^16",
-    "react-window": "^1"
+    "react-window": "^1",
+    "resize-observer-polyfill": "^1"
   }
 }

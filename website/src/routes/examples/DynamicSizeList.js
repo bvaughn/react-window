@@ -9,6 +9,11 @@ import CODE_VERTICAL from '../../code/DynamicSizeListVertical.js';
 
 import styles from './shared.module.css';
 
+// Polyfill ResizeObserver for demo
+if (typeof ResizeObserver === 'undefined') {
+  global.ResizeObserver = require('resize-observer-polyfill').default;
+}
+
 var colors = [
   ['#1E88E5', '#90CAF9'],
   ['#6D4C41', '#D7CCC8'],
@@ -134,6 +139,19 @@ export default class DynamicSizeList extends PureComponent {
     return (
       <div className={styles.ExampleWrapper}>
         <h1 className={styles.ExampleHeader}>Dynamic Size List</h1>
+        <div className={styles.Note}>
+          <svg className={styles.NoteIcon} viewBox="0 0 24 24">
+            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+          </svg>
+          This component requires{' '}
+          <a
+            className={styles.NoteLink}
+            href="https://wicg.github.io/ResizeObserver"
+          >
+            ResizeObserver
+          </a>{' '}
+          (or polyfill).
+        </div>
         <div className={styles.Example}>
           <ProfiledExample
             className={styles.ExampleDemo}

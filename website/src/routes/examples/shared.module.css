@@ -41,6 +41,32 @@
   overflow: hidden;
 }
 
+.Note {
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem;
+  font-size: 1.15rem;
+  margin: 0 2rem 2rem 0;
+  border-radius: 0.25rem;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 0.5rem 1.5rem;
+  color: #fff;
+  background-color: #ff5370;
+}
+
+.NoteIcon {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+  fill: currentColor;
+}
+
+.NoteLink {
+  font-family: monospace;
+  color: inherit;
+  text-decoration: none;
+}
+
 .TryItOutLink {
   margin-top: 1rem;
 }
