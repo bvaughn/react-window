@@ -135,7 +135,10 @@ export default class DynamicSizeList extends PureComponent {
       <div className={styles.ExampleWrapper}>
         <h1 className={styles.ExampleHeader}>Dynamic Size List</h1>
         <div className={styles.Example}>
-          <ProfiledExample className={styles.ExampleDemo}>
+          <ProfiledExample
+            className={styles.ExampleDemo}
+            sandbox="dynamic-size-list-vertical"
+          >
             <button
               className={styles.ExampleButton}
               onClick={this.handleToggleResize}
@@ -156,7 +159,10 @@ export default class DynamicSizeList extends PureComponent {
           </div>
         </div>
         <div className={styles.Example}>
-          <ProfiledExample className={styles.ExampleDemo}>
+          <ProfiledExample
+            className={styles.ExampleDemo}
+            sandbox="dynamic-size-list-horizontal"
+          >
             <button
               className={styles.ExampleButton}
               onClick={this.handleToggleText}
