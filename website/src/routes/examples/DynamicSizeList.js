@@ -143,14 +143,16 @@ export default class DynamicSizeList extends PureComponent {
           <svg className={styles.NoteIcon} viewBox="0 0 24 24">
             <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
           </svg>
-          This component requires{' '}
-          <a
-            className={styles.NoteLink}
-            href="https://wicg.github.io/ResizeObserver"
-          >
-            ResizeObserver
-          </a>{' '}
-          (or polyfill).
+          <div>
+            This component requires{' '}
+            <a
+              className={styles.NoteLink}
+              href="https://wicg.github.io/ResizeObserver"
+            >
+              ResizeObserver
+            </a>{' '}
+            (or polyfill).
+          </div>
         </div>
         <div className={styles.Example}>
           <ProfiledExample
