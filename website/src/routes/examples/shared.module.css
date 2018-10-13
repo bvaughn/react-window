@@ -169,4 +169,12 @@
   .ExampleCode {
     padding: 1rem;
   }
+
+  .Note {
+    border-top: 2rem solid #fff;
+    display: flex;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }
