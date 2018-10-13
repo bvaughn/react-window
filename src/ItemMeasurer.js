@@ -21,24 +21,29 @@ type ItemMeasurerProps = {|
 |};
 
 export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
-  _node: HTMLElement = (null: any);
-  _resizeObserver: ResizeObserver = (null: any);
+  _node: HTMLElement | null = null;
+  _resizeObserver: ResizeObserver | null = null;
 
   componentDidMount() {
-    this._node = ((findDOMNode(this): any): HTMLElement);
+    const node = ((findDOMNode(this): any): HTMLElement);
+    this._node = node;
 
     // Force sync measure for the initial mount.
     // This is necessary to support the DynamicSizeList layout logic.
     this._measureItem(true);
 
-    // Watch for resizes due to changed content,
-    // Or changes in the size of the parent container.
-    this._resizeObserver = new ResizeObserver(this._onResize);
-    this._resizeObserver.observe(this._node);
+    if (typeof ResizeObserver !== 'undefined') {
+      // Watch for resizes due to changed content,
+      // Or changes in the size of the parent container.
+      this._resizeObserver = new ResizeObserver(this._onResize);
+      this._resizeObserver.observe(node);
+    }
   }
 
   componentWillUnmount() {
-    this._resizeObserver.disconnect();
+    if (this._resizeObserver !== null) {
+      this._resizeObserver.disconnect();
+    }
   }
 
   render() {
