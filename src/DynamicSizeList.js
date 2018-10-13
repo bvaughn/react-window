@@ -65,7 +65,12 @@ const getItemMetadata = (
 
     for (let i = Math.max(1, lastPositionedIndex + 1); i <= index; i++) {
       const prevOffset = itemOffsetMap[i - 1];
-      const prevSize = itemSizeMap[i - 1];
+
+      // In some browsers (e.g. Firefox) fast scrolling may skip rows.
+      // In this case, our assumptions about last measured indices may be incorrect.
+      // Handle this edge case to prevent NaN values from breaking styles.
+      // Slow scrolling back over these skipped rows will adjust their sizes.
+      const prevSize = itemSizeMap[i - 1] || 0;
 
       itemOffsetMap[i] = prevOffset + prevSize;
 
@@ -331,7 +336,11 @@ const DynamicSizeList = createListComponent({
         lastPositionedIndex,
       } = instanceProps;
 
-      const oldSize = itemSizeMap[index];
+      // In some browsers (e.g. Firefox) fast scrolling may skip rows.
+      // In this case, our assumptions about last measured indices may be incorrect.
+      // Handle this edge case to prevent NaN values from breaking styles.
+      // Slow scrolling back over these skipped rows will adjust their sizes.
+      const oldSize = itemSizeMap[index] || 0;
 
       // Mark offsets after this as stale so that getItemMetadata() will lazily recalculate it.
       if (index < lastPositionedIndex) {
