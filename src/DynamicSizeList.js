@@ -17,7 +17,7 @@ type DynanmicProps = {|
 export type HandleNewMeasurements = (
   index: number,
   newSize: number,
-  isCommitPhase: boolean
+  isFirstMeasureAfterMounting: boolean
 ) => void;
 
 type ItemMetadata = {|
@@ -281,7 +281,21 @@ const DynamicSizeList = createListComponent({
       if (hasNewMeasurements) {
         hasNewMeasurements = false;
 
+        // Edge case where cell sizes changed, but cancelled each other out.
+        // We still need to re-render in this case,
+        // Even though we don't need to adjust scroll offset.
+        if (sizeDeltaTotal === 0) {
+          instance.forceUpdate();
+          return;
+        }
+
         let shouldForceUpdate;
+
+        // In the setState commit hook, we'll decrement sizeDeltaTotal.
+        // In case the state update is processed synchronously,
+        // And triggers additional size updates itself,
+        // We should only drecement by the amount we updated state for originally.
+        const sizeDeltaForStateUpdate = sizeDeltaTotal;
 
         // If the user is scrolling up, we need to adjust the scroll offset,
         // To prevent items from "jumping" as items before them have been resized.
@@ -291,8 +305,12 @@ const DynamicSizeList = createListComponent({
               prevState.scrollDirection === 'backward' &&
               !prevState.scrollUpdateWasRequested
             ) {
+              // TODO This messes with Firefox's smooth scrolling.
+              // Is there a way to queue up these changes and only apply them when:
+              // 1: The user stops scrolling (after a debounced delay)
+              // 2: The list scrolls to offset or index 0?
               return {
-                scrollOffset: prevState.scrollOffset + sizeDeltaTotal,
+                scrollOffset: prevState.scrollOffset + sizeDeltaForStateUpdate,
               };
             } else {
               // There's no state to update,
@@ -316,7 +334,7 @@ const DynamicSizeList = createListComponent({
               }
             }
 
-            sizeDeltaTotal = 0;
+            sizeDeltaTotal -= sizeDeltaForStateUpdate;
           }
         );
       }
@@ -328,7 +346,7 @@ const DynamicSizeList = createListComponent({
     const handleNewMeasurements: HandleNewMeasurements = (
       index: number,
       newSize: number,
-      isCommitPhase: boolean
+      isFirstMeasureAfterMounting: boolean
     ) => {
       const {
         itemSizeMap,
@@ -358,7 +376,9 @@ const DynamicSizeList = createListComponent({
         // Record the size delta here in case the user is scrolling up.
         // In that event, we need to adjust the scroll offset by thie amount,
         // To prevent items from "jumping" as items before them are resized.
-        if (isCommitPhase) {
+        // We only do this for items that are newly measured (after mounting).
+        // Ones that change size later do not need to affect scroll offset.
+        if (isFirstMeasureAfterMounting) {
           sizeDeltaTotal += newSize - oldSize;
         }
       } else {
@@ -373,7 +393,7 @@ const DynamicSizeList = createListComponent({
       // This enables them to resize when their content (or container size) changes.
       // It also lets us avoid an unnecessary render in this case.
 
-      if (isCommitPhase) {
+      if (isFirstMeasureAfterMounting) {
         hasNewMeasurements = true;
       } else {
         debounceForceUpdate();

@@ -6,9 +6,33 @@ import { findDOMNode } from 'react-dom';
 import type { Direction } from './createListComponent';
 import type { HandleNewMeasurements } from './DynamicSizeList';
 
+class DOMRectReadOnly {
+  +x: number;
+  +y: number;
+  +width: number;
+  +height: number;
+  +top: number;
+  +right: number;
+  +bottom: number;
+  +left: number;
+}
+
+class ResizeObserverEntry {
+  +target: HTMLElement;
+  +contentRect: DOMRectReadOnly;
+}
+
+type Entries = $ReadOnlyArray<ResizeObserverEntry>;
+
+type ResizeObserverCallback = {
+  // eslint-disable-next-line no-use-before-define
+  (entries: Entries, observer: ResizeObserver): void,
+};
+
 declare class ResizeObserver {
-  constructor(callback: Function): void;
+  constructor(ResizeObserverCallback): ResizeObserver;
   observe(target: HTMLElement): void;
+  unobserve(target: HTMLElement): void;
   disconnect(): void;
 }
 
