@@ -31,7 +31,7 @@ class Cell extends PureComponent {
         }
         style={style}
       >
-        r{rowIndex}, c{columnIndex}
+        Item {rowIndex},{columnIndex}
       </div>
     );
   }

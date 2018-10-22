@@ -2,7 +2,7 @@ import { FixedSizeGrid as Grid } from 'react-window';
 
 const Cell = ({ columnIndex, rowIndex, style }) => (
   <div style={style}>
-    row {rowIndex}, column {columnIndex}
+    Item {rowIndex},{columnIndex}
   </div>
 );
 
