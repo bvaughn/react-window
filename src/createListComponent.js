@@ -15,7 +15,9 @@ type RenderComponentProps<T> = {|
   isScrolling?: boolean,
   style: Object,
 |};
-type RenderComponent<T> = (props: RenderComponentProps<T>) => React$Node;
+type RenderComponent<T> =
+  | React$ComponentType<RenderComponentProps<T>>
+  | ((props: RenderComponentProps<T>) => React$Node);
 
 type ScrollDirection = 'forward' | 'backward';
 
