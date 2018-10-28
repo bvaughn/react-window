@@ -261,3 +261,25 @@ const assertCustomType = (value: ItemData) => {};
     {Item}
   </VariableSizeGrid>;
 }
+
+{
+  class Item extends React.PureComponent<{ data: void }> {
+    render() {
+      const { data } = this.props;
+      assertVoid(data);
+      // $FlowFixMe itemData is undefined by default
+      assertEmpty(data);
+      return null;
+    }
+  }
+  <VariableSizeGrid
+    width={0}
+    height={0}
+    rowHeight={0}
+    rowCount={0}
+    columnWidth={0}
+    columnCount={0}
+  >
+    {Item}
+  </VariableSizeGrid>;
+}

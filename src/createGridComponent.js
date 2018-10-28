@@ -18,7 +18,9 @@ type RenderComponentProps<T> = {|
   rowIndex: number,
   style: Object,
 |};
-export type RenderComponent<T> = (props: RenderComponentProps<T>) => React$Node;
+export type RenderComponent<T> = React$ComponentType<
+  $Shape<RenderComponentProps<T>>
+>;
 
 type ScrollDirection = 'forward' | 'backward';
 
