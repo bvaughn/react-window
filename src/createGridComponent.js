@@ -654,10 +654,10 @@ export default function createGridComponent({
 
 const validateSharedProps = ({ children, height, width }: Props<any>): void => {
   if (process.env.NODE_ENV !== 'production') {
-    if (typeof children !== 'function') {
+    if (children == null) {
       throw Error(
         'An invalid "children" prop has been specified. ' +
-          'Value should be a function that creates a React element. ' +
+          'Value should be a React component. ' +
           `"${children === null ? 'null' : typeof children}" was specified.`
       );
     }

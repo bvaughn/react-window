@@ -678,14 +678,14 @@ describe('FixedSizeGrid', () => {
       );
     });
 
-    it('should fail if no children function is provided', () => {
+    it('should fail if no children value is provided', () => {
       expect(() =>
         ReactTestRenderer.create(
           <FixedSizeGrid {...defaultProps} children={undefined} />
         )
       ).toThrow(
         'An invalid "children" prop has been specified. ' +
-          'Value should be a function that creates a React element. ' +
+          'Value should be a React component. ' +
           '"undefined" was specified.'
       );
     });
