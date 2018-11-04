@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.2.4
+* 🐛 Added Flow annotations to memoized methods to avoid a Flow warning for newer versions of Flow
+
 ### 1.2.3
 * 🐛 Relaxed `children` validation checks. They were too strict and didn't support new React APIs like `memo`.
 
