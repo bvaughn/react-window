@@ -410,7 +410,7 @@ export default function createListComponent({
     };
 
     _getItemStyleCache: (_: any) => ItemStyleCache;
-    _getItemStyleCache = memoizeOne(_ => ({}));
+    _getItemStyleCache = memoizeOne((_: any) => ({}));
 
     _getRangeToRender(): [number, number, number, number] {
       const { itemCount, overscanCount } = this.props;

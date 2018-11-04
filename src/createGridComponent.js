@@ -500,7 +500,7 @@ export default function createGridComponent({
     };
 
     _getItemStyleCache: (_: any, __: any) => ItemStyleCache;
-    _getItemStyleCache = memoizeOne((_, __) => ({}));
+    _getItemStyleCache = memoizeOne((_: any, __: any) => ({}));
 
     _getHorizontalRangeToRender(): [number, number, number, number] {
       const { columnCount, overscanCount, rowCount } = this.props;
