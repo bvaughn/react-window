@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.2.3
+* 🐛 Relaxed `children` validation checks. They were too strict and didn't support new React APIs like `memo`.
+
 ### 1.2.2
 * 🐛 Improved Flow types for class component item renderers - ([nicholas-l](https://github.com/nicholas-l) - [#77](https://github.com/bvaughn/react-window/pull/77))
 
