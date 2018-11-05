@@ -18,6 +18,10 @@ npm install --save react-window
 
 Learn more at [react-window.now.sh](https://react-window.now.sh/).
 
+## How is this different from react-virtualized?
+
+react-window is smaller, faster and provides a simpler, more low-level API but offers less features than react-virtualized.
+
 ## License
 
 MIT © [bvaughn](https://github.com/bvaughn)
