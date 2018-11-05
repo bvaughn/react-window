@@ -28,7 +28,7 @@ I wrote `react-virtualized` several years ago. At the time, I was new to both Re
 If `react-window` provides the functionality your project needs, I would strongly recommend using it instead of `react-virtualized`. However if you need features that only `react-virtualized` provides, you have two options:
 
 1. Use `react-virtualized`. (It's still widely used by a lot of successful projects!)
-2. Create a component that decorates one of the `react-window` primitives and adds the functionality you need. You may event want to release this component to NPM (as its own, standalone package)! 🙂
+2. Create a component that decorates one of the `react-window` primitives and adds the functionality you need. You may even want to release this component to NPM (as its own, standalone package)! 🙂
 
 <sup>1 - Adding a `react-virtualized` list to a CRA project increases the (gzipped) build size by ~33.5 KB. Adding a `react-window` list to a CRA project increases the (gzipped) build size by &lt;2 KB.</sup>
 
