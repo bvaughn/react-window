@@ -37,12 +37,34 @@ class Row extends PureComponent {
 // This is only needed since we are passing multiple props with a wrapper object.
 // If we were only passing a single, stable value (e.g. items),
 // We could just pass the value directly.
-const getItemData = memoize((items, toggleItemActive) => ({
+const createItemData = memoize((items, toggleItemActive) => ({
   items,
   toggleItemActive,
 }));
 
-class Example extends PureComponent {
+// In this example, "items" is an Array of objects to render,
+// and "toggleItemActive" is a function that updates an item's state.
+function Example({ height, items, toggleItemActive, width }) {
+
+  // Bundle additional data to list items using the "itemData" prop.
+  // It will be accessible to item renderers as props.data.
+  // Memoize this data to avoid bypassing shouldComponentUpdate().
+  const itemData = createItemData(items, toggleItemActive);
+
+  return (
+    <List
+      height={height}
+      itemCount={items.length}
+      itemData={itemData}
+      itemSize={35}
+      width={width}
+    >
+      {Row}
+    </List>
+  );
+}
+
+class ExampleWrapper extends PureComponent {
   state = {
     items: generateItems(1000),
   };
@@ -59,25 +81,15 @@ class Example extends PureComponent {
     });
 
   render() {
-    const { items } = this.state;
-
-    // Bundle additional data to list items using the "itemData" prop.
-    // It will be accessible to item renderers as props.data.
-    // Memoize this data to avoid bypassing shouldComponentUpdate().
-    const itemData = getItemData(items, this.toggleItemActive);
-
     return (
-      <List
+      <Example
         height={150}
-        itemCount={items.length}
-        itemData={itemData}
-        itemSize={35}
+        items={this.state.items}
+        toggleItemActive={this.toggleItemActive}
         width={300}
-      >
-        {Row}
-      </List>
+      />
     );
   }
 }
 
-ReactDOM.render(<Example />, document.getElementById('root'));
+ReactDOM.render(<ExampleWrapper />, document.getElementById('root'));

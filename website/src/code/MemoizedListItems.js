@@ -5,7 +5,7 @@ import { FixedSizeList as List } from 'react-window';
 // If list items are expensive to render,
 // Consider using PureComponent to avoid unnecessary re-renders.
 // https://reactjs.org/docs/react-api.html#reactpurecomponent
-class ListItem extends PureComponent {
+class Row extends PureComponent {
   render() {
     const { data, index, style } = this.props;
 
@@ -25,51 +25,33 @@ class ListItem extends PureComponent {
 }
 
 // This helper function memoizes incoming props,
-// To avoid causing unnecessary re-renders pure ListItem components.
+// To avoid causing unnecessary re-renders pure Row components.
 // This is only needed since we are passing multiple props with a wrapper object.
 // If we were only passing a single, stable value (e.g. items),
 // We could just pass the value directly.
-const getItemData = memoize((items, toggleItemActive) => ({
+const createItemData = memoize((items, toggleItemActive) => ({
   items,
   toggleItemActive,
 }));
 
-class Example extends PureComponent {
-  state = {
-    items: [
-      // Initialize/load items...
-    ],
-  };
+// In this example, "items" is an Array of objects to render,
+// and "toggleItemActive" is a function that updates an item's state.
+function Example({ height, items, toggleItemActive, width }) {
 
-  toggleItemActive = index =>
-    this.setState(prevState => {
-      const item = prevState.items[index];
-      const items = prevState.items.concat();
-      items[index] = {
-        ...item,
-        isActive: !item.isActive,
-      };
-      return {items};
-    });
+  // Bundle additional data to list items using the "itemData" prop.
+  // It will be accessible to item renderers as props.data.
+  // Memoize this data to avoid bypassing shouldComponentUpdate().
+  const itemData = createItemData(items, toggleItemActive);
 
-  render() {
-    const { items } = this.state;
-
-    // Bundle additional data to list items using the "itemData" prop.
-    // It will be accessible to item renderers as props.data.
-    // Memoize this data to avoid bypassing shouldComponentUpdate().
-    const itemData = getItemData(items, this.toggleItemActive);
-
-    return (
-      <List
-        height={height}
-        itemCount={items.length}
-        itemData={itemData}
-        itemSize={35}
-        width={width}
-      >
-        {ListItem}
-      </List>
-    );
-  }
+  return (
+    <List
+      height={height}
+      itemCount={items.length}
+      itemData={itemData}
+      itemSize={35}
+      width={width}
+    >
+      {Row}
+    </List>
+  );
 }
