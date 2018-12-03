@@ -1,6 +1,12 @@
 Changelog
 ------------
 
+### 1.3.1
+* 🎉 Pass `itemData` value to custom `itemKey` callbacks when present - [#90](https://github.com/bvaughn/react-window/issues/90))
+
+### 1.3.0
+* (Skipped)
+
 ### 1.2.4
 * 🐛 Added Flow annotations to memoized methods to avoid a Flow warning for newer versions of Flow
 
