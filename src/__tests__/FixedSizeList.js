@@ -471,6 +471,22 @@ describe('FixedSizeList', () => {
       expect(keyMapItemRenderer.mock.calls[0][0].index).toBe(0);
       expect(keyMapItemRenderer.mock.calls[1][0].index).toBe(2);
     });
+
+    it('should receive a data value if itemData is provided', () => {
+      const itemKey = jest.fn(index => index);
+      const itemData = {};
+      ReactTestRenderer.create(
+        <FixedSizeList
+          {...defaultProps}
+          itemData={itemData}
+          itemKey={itemKey}
+        />
+      );
+      expect(itemKey).toHaveBeenCalled();
+      expect(
+        itemKey.mock.calls.filter(([index, data]) => data === itemData)
+      ).toHaveLength(itemKey.mock.calls.length);
+    });
   });
 
   describe('refs', () => {

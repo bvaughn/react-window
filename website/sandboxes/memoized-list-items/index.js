@@ -45,7 +45,6 @@ const createItemData = memoize((items, toggleItemActive) => ({
 // In this example, "items" is an Array of objects to render,
 // and "toggleItemActive" is a function that updates an item's state.
 function Example({ height, items, toggleItemActive, width }) {
-
   // Bundle additional data to list items using the "itemData" prop.
   // It will be accessible to item renderers as props.data.
   // Memoize this data to avoid bypassing shouldComponentUpdate().

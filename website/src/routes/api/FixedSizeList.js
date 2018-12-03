@@ -293,8 +293,8 @@ const PROPS = [
         </p>
         <p>
           Note that using this parameter will result in an additional render
-          call after scrolling has stopped (when <code>isScrolling</code> changes
-          from true to false).
+          call after scrolling has stopped (when <code>isScrolling</code>{' '}
+          changes from true to false).
         </p>
         <p>
           <Link to="/examples/list/scrolling-indicators">

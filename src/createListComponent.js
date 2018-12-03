@@ -7,7 +7,6 @@ export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
 type Direction = 'horizontal' | 'vertical';
-type ItemKeyGetter = (index: number) => any;
 
 type RenderComponentProps<T> = {|
   data: T,
@@ -44,7 +43,7 @@ export type Props<T> = {|
   innerTagName?: string,
   itemCount: number,
   itemData: T,
-  itemKey?: ItemKeyGetter,
+  itemKey?: (index: number, data: T) => any,
   itemSize: itemSize,
   onItemsRendered?: onItemsRenderedCallback,
   onScroll?: onScrollCallback,
@@ -97,7 +96,7 @@ type ValidateProps = (props: Props<any>) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
-const defaultItemKey: ItemKeyGetter = index => index;
+const defaultItemKey = (index: number, data: any) => index;
 
 export default function createListComponent({
   getItemOffset,
@@ -253,7 +252,7 @@ export default function createListComponent({
           items.push(
             createElement(children, {
               data: itemData,
-              key: itemKey(index),
+              key: itemKey(index, itemData),
               index,
               isScrolling: useIsScrolling ? isScrolling : undefined,
               style: this._getItemStyle(index),
