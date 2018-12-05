@@ -11,7 +11,7 @@ const rowHeights = new Array(1000)
 
 const Cell = ({ columnIndex, rowIndex, style }) => (
   <div style={style}>
-    row {rowIndex}, column {columnIndex}
+    Item {rowIndex},{columnIndex}
   </div>
 );
 

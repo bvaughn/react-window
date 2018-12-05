@@ -327,10 +327,11 @@ const DynamicSizeList = createListComponent({
               const { scrollOffset } = instance.state;
               const { direction } = instance.props;
 
+              const element = ((instance._outerRef: any): HTMLDivElement);
               if (direction === 'horizontal') {
-                ((instance._outerRef: any): HTMLDivElement).scrollLeft = scrollOffset;
+                element.scrollLeft = scrollOffset;
               } else {
-                ((instance._outerRef: any): HTMLDivElement).scrollTop = scrollOffset;
+                element.scrollTop = scrollOffset;
               }
             }
 

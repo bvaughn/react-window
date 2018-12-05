@@ -17,14 +17,14 @@ const rowSizes = new Array(1000)
 
 class Item extends PureComponent {
   render() {
-    const { index, style } = this.props;
+    const { data, index, style } = this.props;
 
     return (
       <div
         className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
         style={style}
       >
-        Item {index}
+        {data} {index}
       </div>
     );
   }
@@ -43,6 +43,7 @@ export default function() {
             className={styles.List}
             height={150}
             itemCount={1000}
+            itemData="Row"
             itemSize={index => rowSizes[index]}
             width={300}
           >
@@ -63,6 +64,7 @@ export default function() {
             direction="horizontal"
             height={75}
             itemCount={1000}
+            itemData="Column"
             itemSize={index => columnSizes[index]}
             width={300}
           >

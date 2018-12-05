@@ -6,10 +6,6 @@ import { createElement, PureComponent } from 'react';
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
-type ItemKeyGetter = (indices: {
-  columnIndex: number,
-  rowIndex: number,
-}) => any;
 
 type RenderComponentProps<T> = {|
   columnIndex: number,
@@ -18,7 +14,9 @@ type RenderComponentProps<T> = {|
   rowIndex: number,
   style: Object,
 |};
-export type RenderComponent<T> = (props: RenderComponentProps<T>) => React$Node;
+export type RenderComponent<T> = React$ComponentType<
+  $Shape<RenderComponentProps<T>>
+>;
 
 type ScrollDirection = 'forward' | 'backward';
 
@@ -54,7 +52,11 @@ export type Props<T> = {|
   innerRef?: any,
   innerTagName?: string,
   itemData: T,
-  itemKey?: ItemKeyGetter,
+  itemKey?: (params: {|
+    columnIndex: number,
+    data: T,
+    rowIndex: number,
+  |}) => any,
   onItemsRendered?: OnItemsRenderedCallback,
   onScroll?: OnScrollCallback,
   outerRef?: any,
@@ -110,7 +112,7 @@ type ValidateProps = (props: Props<any>) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
-const defaultItemKey: ItemKeyGetter = ({ columnIndex, rowIndex }) =>
+const defaultItemKey = ({ columnIndex, data, rowIndex }) =>
   `${rowIndex}:${columnIndex}`;
 
 export default function createGridComponent({
@@ -315,7 +317,7 @@ export default function createGridComponent({
                 columnIndex,
                 data: itemData,
                 isScrolling: useIsScrolling ? isScrolling : undefined,
-                key: itemKey({ columnIndex, rowIndex }),
+                key: itemKey({ columnIndex, data: itemData, rowIndex }),
                 rowIndex,
                 style: this._getItemStyle(rowIndex, columnIndex),
               })
@@ -501,7 +503,7 @@ export default function createGridComponent({
     // If all that's really needed is for the impl to be able to reset the cache,
     // Then we could expose a better API for that.
     _getItemStyleCache: (_: any, __: any) => ItemStyleCache;
-    _getItemStyleCache = memoizeOne((_, __) => ({}));
+    _getItemStyleCache = memoizeOne((_: any, __: any) => ({}));
 
     _getHorizontalRangeToRender(): [number, number, number, number] {
       const { columnCount, overscanCount, rowCount } = this.props;
@@ -655,10 +657,10 @@ export default function createGridComponent({
 
 const validateSharedProps = ({ children, height, width }: Props<any>): void => {
   if (process.env.NODE_ENV !== 'production') {
-    if (typeof children !== 'function') {
+    if (children == null) {
       throw Error(
         'An invalid "children" prop has been specified. ' +
-          'Value should be a function that creates a React element. ' +
+          'Value should be a React component. ' +
           `"${children === null ? 'null' : typeof children}" was specified.`
       );
     }

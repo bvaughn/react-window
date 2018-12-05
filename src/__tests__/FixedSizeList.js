@@ -471,6 +471,22 @@ describe('FixedSizeList', () => {
       expect(keyMapItemRenderer.mock.calls[0][0].index).toBe(0);
       expect(keyMapItemRenderer.mock.calls[1][0].index).toBe(2);
     });
+
+    it('should receive a data value if itemData is provided', () => {
+      const itemKey = jest.fn(index => index);
+      const itemData = {};
+      ReactTestRenderer.create(
+        <FixedSizeList
+          {...defaultProps}
+          itemData={itemData}
+          itemKey={itemKey}
+        />
+      );
+      expect(itemKey).toHaveBeenCalled();
+      expect(
+        itemKey.mock.calls.filter(([index, data]) => data === itemData)
+      ).toHaveLength(itemKey.mock.calls.length);
+    });
   });
 
   describe('refs', () => {
@@ -576,14 +592,14 @@ describe('FixedSizeList', () => {
       );
     });
 
-    it('should fail if no children function is provided', () => {
+    it('should fail if no children value is provided', () => {
       expect(() =>
         ReactTestRenderer.create(
           <FixedSizeList {...defaultProps} children={undefined} />
         )
       ).toThrow(
         'An invalid "children" prop has been specified. ' +
-          'Value should be a function that creates a React element. ' +
+          'Value should be a React component. ' +
           '"undefined" was specified.'
       );
     });

@@ -561,6 +561,24 @@ describe('FixedSizeGrid', () => {
       expect(keyMapItemRenderer.mock.calls[1][0].columnIndex).toBe(2);
       expect(keyMapItemRenderer.mock.calls[1][0].rowIndex).toBe(1);
     });
+
+    it('should receive a data value if itemData is provided', () => {
+      const itemKey = jest.fn(
+        ({ columnIndex, data, rowIndex }) => `${columnIndex}-${rowIndex}`
+      );
+      const itemData = {};
+      ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          itemData={itemData}
+          itemKey={itemKey}
+        />
+      );
+      expect(itemKey).toHaveBeenCalled();
+      expect(
+        itemKey.mock.calls.filter(([params]) => params.data === itemData)
+      ).toHaveLength(itemKey.mock.calls.length);
+    });
   });
 
   describe('refs', () => {
@@ -678,14 +696,14 @@ describe('FixedSizeGrid', () => {
       );
     });
 
-    it('should fail if no children function is provided', () => {
+    it('should fail if no children value is provided', () => {
       expect(() =>
         ReactTestRenderer.create(
           <FixedSizeGrid {...defaultProps} children={undefined} />
         )
       ).toThrow(
         'An invalid "children" prop has been specified. ' +
-          'Value should be a function that creates a React element. ' +
+          'Value should be a React component. ' +
           '"undefined" was specified.'
       );
     });

@@ -7,7 +7,6 @@ export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
 export type Direction = 'horizontal' | 'vertical';
-type ItemKeyGetter = (index: number) => any;
 
 export type RenderComponentProps<T> = {|
   data: T,
@@ -15,7 +14,7 @@ export type RenderComponentProps<T> = {|
   isScrolling?: boolean,
   style: Object,
 |};
-type RenderComponent<T> = (props: RenderComponentProps<T>) => React$Node;
+type RenderComponent<T> = React$ComponentType<$Shape<RenderComponentProps<T>>>;
 
 type ScrollDirection = 'forward' | 'backward';
 
@@ -44,7 +43,7 @@ export type Props<T> = {|
   innerTagName?: string,
   itemCount: number,
   itemData: T,
-  itemKey?: ItemKeyGetter,
+  itemKey?: (index: number, data: T) => any,
   itemSize: itemSize,
   onItemsRendered?: onItemsRenderedCallback,
   onScroll?: onScrollCallback,
@@ -97,7 +96,7 @@ type ValidateProps = (props: Props<any>) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
-export const defaultItemKey: ItemKeyGetter = index => index;
+export const defaultItemKey = (index: number, data: any) => index;
 
 export default function createListComponent({
   getItemOffset,
@@ -189,12 +188,11 @@ export default function createListComponent({
       const { initialScrollOffset, direction } = this.props;
 
       if (typeof initialScrollOffset === 'number' && this._outerRef !== null) {
+        const element = ((this._outerRef: any): HTMLDivElement);
         if (direction === 'horizontal') {
-          ((this
-            ._outerRef: any): HTMLDivElement).scrollLeft = initialScrollOffset;
+          element.scrollLeft = initialScrollOffset;
         } else {
-          ((this
-            ._outerRef: any): HTMLDivElement).scrollTop = initialScrollOffset;
+          element.scrollTop = initialScrollOffset;
         }
       }
 
@@ -207,10 +205,11 @@ export default function createListComponent({
       const { scrollOffset, scrollUpdateWasRequested } = this.state;
 
       if (scrollUpdateWasRequested && this._outerRef !== null) {
+        const element = ((this._outerRef: any): HTMLDivElement);
         if (direction === 'horizontal') {
-          ((this._outerRef: any): HTMLDivElement).scrollLeft = scrollOffset;
+          element.scrollLeft = scrollOffset;
         } else {
-          ((this._outerRef: any): HTMLDivElement).scrollTop = scrollOffset;
+          element.scrollTop = scrollOffset;
         }
       }
 
@@ -466,7 +465,7 @@ export default function createListComponent({
           items.push(
             createElement(children, {
               data: itemData,
-              key: itemKey(index),
+              key: itemKey(index, itemData),
               index,
               isScrolling: useIsScrolling ? isScrolling : undefined,
               style: this._getItemStyle(index),
@@ -581,10 +580,10 @@ const validateSharedProps = ({
       );
     }
 
-    if (typeof children !== 'function') {
+    if (children == null) {
       throw Error(
         'An invalid "children" prop has been specified. ' +
-          'Value should be a function that creates a React element. ' +
+          'Value should be a React component. ' +
           `"${children === null ? 'null' : typeof children}" was specified.`
       );
     }

@@ -1,6 +1,21 @@
 Changelog
 ------------
 
+### 1.3.1
+* 🎉 Pass `itemData` value to custom `itemKey` callbacks when present - [#90](https://github.com/bvaughn/react-window/issues/90))
+
+### 1.3.0
+* (Skipped)
+
+### 1.2.4
+* 🐛 Added Flow annotations to memoized methods to avoid a Flow warning for newer versions of Flow
+
+### 1.2.3
+* 🐛 Relaxed `children` validation checks. They were too strict and didn't support new React APIs like `memo`.
+
+### 1.2.2
+* 🐛 Improved Flow types for class component item renderers - ([nicholas-l](https://github.com/nicholas-l) - [#77](https://github.com/bvaughn/react-window/pull/77))
+
 ### 1.2.1
 * 🎉 Improved Flow types to include optional `itemData` parameter. ([TrySound](https://github.com/TrySound) - [#66](https://github.com/bvaughn/react-window/pull/66))
 * 🐛 `VariableSizeList` and `VariableSizeGrid` no longer call size getter functions with invalid index when item count is zero.
