@@ -167,7 +167,12 @@ const PROPS = [
   {
     description: (
       <Fragment>
-        <p>Called when the items rendered by the grid change.</p>
+        <p>Called when the range of items rendered by the grid changes.</p>
+        <p>
+          This callback will only be called when item indices change. It will
+          not be called if items are re-rendered for other reasons (e.g. a
+          change in <code>isScrolling</code> or <code>data</code> params).
+        </p>
         <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_ON_ITEMS_RENDERED} />
         </div>
