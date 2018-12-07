@@ -49,12 +49,13 @@ class Row extends PureComponent {
   };
 
   render() {
-    const { index, style } = this.props;
+    const { index, forwardedRef, style } = this.props;
     const item = items[index];
 
     return (
       <div
         className={index % 2 ? styles.DynamicRowOdd : styles.DynamicRowEven}
+        ref={forwardedRef}
         style={style}
       >
         <div
@@ -74,6 +75,13 @@ class Row extends PureComponent {
   }
 }
 
+const RefForwardedColumn = React.forwardRef((props, ref) => (
+  <Column {...props} forwardedRef={ref} />
+));
+const RefForwardedRow = React.forwardRef((props, ref) => (
+  <Row {...props} forwardedRef={ref} />
+));
+
 class Column extends PureComponent {
   toggleExpanded = () => {
     const { index } = this.props;
@@ -85,7 +93,7 @@ class Column extends PureComponent {
   };
 
   render() {
-    const { data: showText, index, style } = this.props;
+    const { data: showText, forwardedRef, index, style } = this.props;
     const item = items[index];
 
     return (
@@ -93,6 +101,7 @@ class Column extends PureComponent {
         className={
           index % 2 ? styles.DynamicColumnOdd : styles.DynamicColumnEven
         }
+        ref={forwardedRef}
         style={style}
       >
         <div
@@ -171,7 +180,7 @@ export default class DynamicSizeList extends PureComponent {
               itemCount={items.length}
               width={halfSize ? 200 : 300}
             >
-              {Row}
+              {RefForwardedRow}
             </List>
           </ProfiledExample>
           <div className={styles.ExampleCode}>
@@ -197,7 +206,7 @@ export default class DynamicSizeList extends PureComponent {
               itemData={showText}
               width={300}
             >
-              {Column}
+              {RefForwardedColumn}
             </List>
           </ProfiledExample>
           <div className={styles.ExampleCode}>

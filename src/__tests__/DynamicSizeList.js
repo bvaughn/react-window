@@ -1,5 +1,6 @@
 import React, {
   createRef,
+  forwardRef,
   PureComponent,
   unstable_Profiler as Profiler,
 } from 'react';
@@ -39,19 +40,25 @@ describe('DynamicSizeList', () => {
     }
   }
 
+  const RefForwarder = forwardRef((props, ref) => (
+    <PureItemRenderer {...props} forwardedRef={ref} />
+  ));
+
   beforeEach(() => {
     jest.useFakeTimers();
 
     container = document.createElement('div');
 
     itemSizes = [20, 25, 30, 35, 40];
-    itemRenderer = jest.fn(({ style, ...rest }) => (
-      <div style={style}>{JSON.stringify(rest, null, 2)}</div>
+    itemRenderer = jest.fn(({ forwardedRef, style, ...rest }) => (
+      <div ref={forwardedRef} style={style}>
+        {JSON.stringify(rest, null, 2)}
+      </div>
     ));
     onItemsRendered = jest.fn();
     innerRef = createRef();
     defaultProps = {
-      children: PureItemRenderer,
+      children: RefForwarder,
       estimatedItemSize: 25,
       height: 100,
       innerRef,
@@ -99,5 +106,37 @@ describe('DynamicSizeList', () => {
     );
 
     expect(onRender.mock.calls).toHaveLength(2);
+  });
+
+  describe('ref forwarding', () => {
+    it('should warn if ref is not forwarded', () => {
+      class ItemRenderer extends PureComponent {
+        render() {
+          const { index, style } = this.props;
+          return <div style={style}>{index}</div>;
+        }
+      }
+
+      console.warn = jest.fn();
+      render(
+        <DynamicSizeList {...defaultProps} itemCount={5}>
+          {ItemRenderer}
+        </DynamicSizeList>,
+        container
+      );
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(console.warn.mock.calls[0][0]).toContain(
+        'The item renderer "ItemRenderer" did not attach a ref'
+      );
+
+      // It should only warn once per item renderer type to avoid spamming the console.
+      render(
+        <DynamicSizeList {...defaultProps} itemCount={10}>
+          {ItemRenderer}
+        </DynamicSizeList>,
+        container
+      );
+      expect(console.warn).toHaveBeenCalledTimes(1);
+    });
   });
 });
