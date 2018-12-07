@@ -1,7 +1,7 @@
 import { DynamicSizeList as List } from 'react-window';
 
 // This example assumes 'items' is an array of strings.
-// // Your application may render a more complex item,
+// Your application may render a more complex item,
 // Like the one shown in this demo.
 const Row = ({ index, style }) => (
   <div style={style}>items[index]</div>
