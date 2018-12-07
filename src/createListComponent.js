@@ -241,7 +241,7 @@ export default function createListComponent({
         useIsScrolling,
         width,
         outerTagId,
-        innerTagId
+        innerTagId,
       } = this.props;
       const { isScrolling } = this.state;
 
