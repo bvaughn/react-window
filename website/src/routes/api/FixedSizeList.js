@@ -129,6 +129,18 @@ const PROPS = [
     type: 'string',
   },
   {
+    defaultValue: '""',
+    description: (
+      <p>
+        Tag id passed to <code>document.createElement</code> to pass the id to the
+        inner container element. This is an advanced property; in most cases,
+        the default ("") should be used.
+      </p>
+    ),
+    name: 'innerTagId',
+    type: 'string',
+  },
+  {
     description: (
       <p>
         Total number of items in the list. Note that only a few items will be
@@ -247,6 +259,18 @@ const PROPS = [
       </p>
     ),
     name: 'outerTagName',
+    type: 'string',
+  },
+  {
+    defaultValue: '""',
+    description: (
+        <p>
+            Tag id passed to <code>document.createElement</code> to pass the
+            id to outer container element. This is an advanced property; in most cases,
+            the default ("") should be used.
+        </p>
+    ),
+    name: 'outerTagId',
     type: 'string',
   },
   {
