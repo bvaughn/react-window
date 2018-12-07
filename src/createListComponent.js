@@ -41,6 +41,7 @@ export type Props<T> = {|
   initialScrollOffset?: number,
   innerRef?: any,
   innerTagName?: string,
+  innerTagId?: string,
   itemCount: number,
   itemData: T,
   itemKey?: (index: number, data: T) => any,
@@ -49,6 +50,7 @@ export type Props<T> = {|
   onScroll?: onScrollCallback,
   outerRef?: any,
   outerTagName?: string,
+  outerTagId?: string,
   overscanCount: number,
   style?: Object,
   useIsScrolling: boolean,
@@ -127,8 +129,10 @@ export default function createListComponent({
     static defaultProps = {
       direction: 'vertical',
       innerTagName: 'div',
+      innerTagId: '',
       itemData: undefined,
       outerTagName: 'div',
+      outerTagId: 'div',
       overscanCount: 2,
       useIsScrolling: false,
     };
@@ -236,6 +240,8 @@ export default function createListComponent({
         style,
         useIsScrolling,
         width,
+        outerTagId,
+        innerTagId
       } = this.props;
       const { isScrolling } = this.state;
 
@@ -271,6 +277,7 @@ export default function createListComponent({
       return createElement(
         ((outerTagName: any): string),
         {
+          id: outerTagId,
           className,
           onScroll,
           ref: this._outerRefSetter,
@@ -285,6 +292,7 @@ export default function createListComponent({
           },
         },
         createElement(((innerTagName: any): string), {
+          id: innerTagId,
           children: items,
           ref: innerRef,
           style: {

@@ -51,6 +51,7 @@ export type Props<T> = {|
   initialScrollTop?: number,
   innerRef?: any,
   innerTagName?: string,
+  innerTagId?: string,
   itemData: T,
   itemKey?: (params: {|
     columnIndex: number,
@@ -61,6 +62,7 @@ export type Props<T> = {|
   onScroll?: OnScrollCallback,
   outerRef?: any,
   outerTagName?: string,
+  outerTagId?: string,
   overscanCount: number,
   rowCount: number,
   rowHeight: itemSize,
@@ -155,8 +157,10 @@ export default function createGridComponent({
 
     static defaultProps = {
       innerTagName: 'div',
+      innerTagId: '',
       itemData: undefined,
       outerTagName: 'div',
+      outerTagId: '',
       overscanCount: 1,
       useIsScrolling: false,
     };
@@ -284,9 +288,11 @@ export default function createGridComponent({
         height,
         innerRef,
         innerTagName,
+        innerTagId,
         itemData,
         itemKey = defaultItemKey,
         outerTagName,
+        outerTagId,
         rowCount,
         style,
         useIsScrolling,
@@ -340,6 +346,7 @@ export default function createGridComponent({
       return createElement(
         ((outerTagName: any): string),
         {
+          id: outerTagId,
           className,
           onScroll: this._onScroll,
           ref: this._outerRefSetter,
@@ -354,6 +361,7 @@ export default function createGridComponent({
           },
         },
         createElement(((innerTagName: any): string), {
+          id: innerTagId,
           children: items,
           ref: innerRef,
           style: {
