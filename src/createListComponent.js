@@ -55,11 +55,10 @@ export type Props<T> = {|
   width: number | string,
 |};
 
-export type State = {|
+type State = {|
   isScrolling: boolean,
   scrollDirection: ScrollDirection,
   scrollOffset: number,
-  scrollOffsetDelta: number,
   scrollUpdateWasRequested: boolean,
 |};
 
@@ -141,7 +140,6 @@ export default function createListComponent({
         typeof this.props.initialScrollOffset === 'number'
           ? this.props.initialScrollOffset
           : 0,
-      scrollOffsetDelta: 0,
       scrollUpdateWasRequested: false,
     };
 
@@ -202,7 +200,7 @@ export default function createListComponent({
       this._commitHook();
     }
 
-    componentDidUpdate(prevProps: Props<any>, prevState: State) {
+    componentDidUpdate() {
       const { direction } = this.props;
       const { scrollOffset, scrollUpdateWasRequested } = this.state;
 
@@ -216,7 +214,7 @@ export default function createListComponent({
       }
 
       this._callPropsCallbacks();
-      this._commitHook(prevProps, prevState);
+      this._commitHook();
     }
 
     componentWillUnmount() {
@@ -238,7 +236,7 @@ export default function createListComponent({
         style,
         width,
       } = this.props;
-      const { isScrolling, scrollOffsetDelta } = this.state;
+      const { isScrolling } = this.state;
 
       const onScroll =
         direction === 'vertical'
@@ -264,6 +262,7 @@ export default function createListComponent({
             height,
             width,
             overflow: 'auto',
+            position: 'relative',
             WebkitOverflowScrolling: 'touch',
             willChange: 'transform',
             ...style,
@@ -273,16 +272,7 @@ export default function createListComponent({
           children: items,
           ref: innerRef,
           style: {
-            position: 'relative',
             height: direction === 'horizontal' ? '100%' : estimatedTotalSize,
-            marginLeft:
-              direction === 'horizontal'
-                ? `${-scrollOffsetDelta}px`
-                : undefined,
-            marginTop:
-              direction === 'horizontal'
-                ? undefined
-                : `${-scrollOffsetDelta}px`,
             pointerEvents: isScrolling ? 'none' : '',
             width: direction === 'horizontal' ? estimatedTotalSize : '100%',
           },
@@ -364,7 +354,7 @@ export default function createListComponent({
 
     // This method is called after mount and update.
     // List implementations can override this method to be notified.
-    _commitHook(prevProps?: Props<any>, prevState?: State) {}
+    _commitHook() {}
 
     // This method is called before unmounting.
     // List implementations can override this method to be notified.
@@ -424,7 +414,7 @@ export default function createListComponent({
 
     _getRangeToRender(): [number, number, number, number] {
       const { itemCount, overscanCount } = this.props;
-      const { scrollDirection, scrollOffset, scrollOffsetDelta } = this.state;
+      const { scrollDirection, scrollOffset } = this.state;
 
       if (itemCount === 0) {
         return [0, 0, 0, 0];
@@ -432,13 +422,13 @@ export default function createListComponent({
 
       const startIndex = getStartIndexForOffset(
         this.props,
-        scrollOffset + scrollOffsetDelta,
+        scrollOffset,
         this._instanceProps
       );
       const stopIndex = getStopIndexForStartIndex(
         this.props,
         startIndex,
-        scrollOffset + scrollOffsetDelta,
+        scrollOffset,
         this._instanceProps
       );
 
