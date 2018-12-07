@@ -539,6 +539,22 @@ describe('FixedSizeList', () => {
     });
   });
 
+  describe('custom tag ids', () => {
+    it('should use a custom innerTagId if specified', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} innerTagId="element-id" />
+      );
+      expect(rendered.root.findByProps({ id: 'element-id' })).toBeDefined();
+    });
+
+    it('should use a custom outerTagId if specified', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} outerTagId="element-id" />
+      );
+      expect(rendered.root.findByProps({ id: 'element-id' })).toBeDefined();
+    });
+  });
+
   describe('itemData', () => {
     it('should pass itemData to item renderers as a "data" prop', () => {
       const itemData = {};
