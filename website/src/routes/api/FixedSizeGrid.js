@@ -123,9 +123,8 @@ const PROPS = [
     defaultValue: '""',
     description: (
       <p>
-        Tag id passed to <code>document.createElement</code> to pass the id to the
-        inner container element. This is an advanced property; in most cases,
-        the default ("") should be used.
+         Pass id prop to <code>document.createElement</code> to create the
+         inner container element with specified id.
       </p>
     ),
     name: 'innerTagId',
@@ -234,9 +233,8 @@ const PROPS = [
     defaultValue: '""',
     description: (
         <p>
-            Tag id passed to <code>document.createElement</code> to pass the
-            id to outer container element. This is an advanced property; in most cases,
-            the default ("") should be used.
+          Pass id prop to <code>document.createElement</code> to create the
+          outer container element with specified id.
         </p>
     ),
     name: 'outerTagId',
