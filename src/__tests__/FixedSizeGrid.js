@@ -618,7 +618,7 @@ describe('FixedSizeGrid', () => {
   describe('custom tag names', () => {
     it('should use a custom innerTagName if specified', () => {
       const rendered = ReactTestRenderer.create(
-        <FixedSizeGrid {...defaultProps} innerTagName="section" />,
+        <FixedSizeGrid {...defaultProps} innerTagName="section" />
       );
       expect(rendered.root.findByType('section')).toBeDefined();
     });
