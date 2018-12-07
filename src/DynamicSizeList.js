@@ -5,7 +5,7 @@ import { createElement } from 'react';
 import createListComponent, { defaultItemKey } from './createListComponent';
 import ItemMeasurer from './ItemMeasurer';
 
-import type { Props, ScrollToAlign } from './createListComponent';
+import type { Props, ScrollToAlign, State } from './createListComponent';
 
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
@@ -277,7 +277,7 @@ const DynamicSizeList = createListComponent({
     let sizeDeltaTotal = 0;
 
     // This method is called after mount and update.
-    instance._commitHook = () => {
+    instance._commitHook = (prevProps?: Props<any>, prevState?: State) => {
       if (hasNewMeasurements) {
         hasNewMeasurements = false;
 
@@ -305,12 +305,19 @@ const DynamicSizeList = createListComponent({
               prevState.scrollDirection === 'backward' &&
               !prevState.scrollUpdateWasRequested
             ) {
-              // TODO This messes with Firefox's smooth scrolling.
-              // Is there a way to queue up these changes and only apply them when:
-              // 1: The user stops scrolling (after a debounced delay)
-              // 2: The list scrolls to offset or index 0?
+              // TRICKY
+              // If item(s) have changed size since they were last displayed, content will appear to jump.
+              // To avoid this, we may need to make small adjustments as a user scrolls to preserve apparent position.
+              // The most intuitive way to do this would be to adjust the scroll offset directly,
+              // but changing scroll offsets interrupts smooth scrolling for some browser's (e.g. Firefox).
+              // Instead we temporarily offset item positions by adjusting top/left margin on the container.
+              // Then after a delay/debounce (once scrolling has stopped) we remove this and adjust the offset.
+              // If we get to close to offset 0 (or item 0) we'll need to force this update,
+              // but that seems acceptable since the scrolling animation would be interrupted in that event anyway.
               return {
                 scrollOffset: prevState.scrollOffset + sizeDeltaForStateUpdate,
+                scrollOffsetDelta:
+                  prevState.scrollOffsetDelta + sizeDeltaForStateUpdate,
               };
             } else {
               // There's no state to update,
@@ -323,21 +330,63 @@ const DynamicSizeList = createListComponent({
           () => {
             if (shouldForceUpdate) {
               instance.forceUpdate();
-            } else {
-              const { scrollOffset } = instance.state;
-              const { direction } = instance.props;
-
-              const element = ((instance._outerRef: any): HTMLDivElement);
-              if (direction === 'horizontal') {
-                element.scrollLeft = scrollOffset;
-              } else {
-                element.scrollTop = scrollOffset;
-              }
             }
 
             sizeDeltaTotal -= sizeDeltaForStateUpdate;
           }
         );
+      } else if (prevState != null) {
+        if (
+          !instance.state.isScrolling &&
+          prevState.isScrolling &&
+          prevState.scrollOffsetDelta !== 0
+        ) {
+          const { scrollOffset, scrollOffsetDelta } = instance.state;
+
+          // TRICKY
+          // Clean up any temporary offset adjustments (made above) once scrolling has stopped.
+          // Be sure to update the scrollOffset in state before doing this,
+          // or the "scroll" event it triggers will cause a new batch of items to be rendered.
+          instance.setState(
+            {
+              scrollOffset: scrollOffset + scrollOffsetDelta,
+              scrollOffsetDelta: 0,
+            },
+            () => {
+              const element = ((instance._outerRef: any): HTMLDivElement);
+              if (instance.props.direction === 'horizontal') {
+                element.scrollLeft = scrollOffset + scrollOffsetDelta;
+              } else {
+                element.scrollTop = scrollOffset + scrollOffsetDelta;
+              }
+            }
+          );
+        } else {
+          // eslint-disable-next-line no-unused-vars
+          const [_, __, startIndex] = instance._getRangeToRender();
+          const { scrollOffset, scrollOffsetDelta } = instance.state;
+
+          // TRICKY
+          // If we get to close to the start of the list (either offset 0 or the first item)
+          // we should synchronously adjustour offsets without waiting for the debounce.
+          // This is still an awkward scrolling UX but it's hopefully not a common case.
+          if (startIndex === 0 || scrollOffset + scrollOffsetDelta <= 0) {
+            instance.setState(
+              {
+                scrollOffset: scrollOffset + scrollOffsetDelta,
+                scrollOffsetDelta: 0,
+              },
+              () => {
+                const element = ((instance._outerRef: any): HTMLDivElement);
+                if (instance.props.direction === 'horizontal') {
+                  element.scrollLeft = scrollOffset + scrollOffsetDelta;
+                } else {
+                  element.scrollTop = scrollOffset + scrollOffsetDelta;
+                }
+              }
+            );
+          }
+        }
       }
     };
 
