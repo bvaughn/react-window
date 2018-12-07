@@ -277,7 +277,7 @@ export default function createListComponent({
             height: direction === 'horizontal' ? '100%' : estimatedTotalSize,
             marginLeft:
               direction === 'horizontal'
-                ? `-${scrollOffsetDelta}px`
+                ? `${-scrollOffsetDelta}px`
                 : undefined,
             marginTop:
               direction === 'horizontal'
