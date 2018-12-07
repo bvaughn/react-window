@@ -370,7 +370,10 @@ const DynamicSizeList = createListComponent({
           // If we get to close to the start of the list (either offset 0 or the first item)
           // we should synchronously adjustour offsets without waiting for the debounce.
           // This is still an awkward scrolling UX but it's hopefully not a common case.
-          if (startIndex === 0 || scrollOffset + scrollOffsetDelta <= 0) {
+          if (
+            scrollOffsetDelta > 0 &&
+            (startIndex === 0 || scrollOffset + scrollOffsetDelta <= 0)
+          ) {
             instance.setState(
               {
                 scrollOffset: scrollOffset + scrollOffsetDelta,
