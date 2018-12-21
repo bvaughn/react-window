@@ -64,6 +64,22 @@ describe('FixedSizeList', () => {
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
+  it('should re-render items if direction changes', () => {
+    const rendered = ReactTestRenderer.create(
+      <FixedSizeList {...defaultProps} direction="vertical" />
+    );
+    expect(itemRenderer).toHaveBeenCalled();
+    itemRenderer.mockClear();
+
+    // Re-rendering should not affect pure sCU children:
+    rendered.update(<FixedSizeList {...defaultProps} direction="vertical" />);
+    expect(itemRenderer).not.toHaveBeenCalled();
+
+    // Re-rendering with new direction should re-render children:
+    rendered.update(<FixedSizeList {...defaultProps} direction="horizontal" />);
+    expect(itemRenderer).toHaveBeenCalled();
+  });
+
   describe('scrollbar handling', () => {
     it('should set width to "100%" for vertical lists to avoid unnecessary horizontal scrollbar', () => {
       const innerRef = createRef();

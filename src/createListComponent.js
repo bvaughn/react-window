@@ -382,7 +382,8 @@ export default function createListComponent({
       const { direction, itemSize } = this.props;
 
       const itemStyleCache = this._getItemStyleCache(
-        shouldResetStyleCacheOnItemSizeChange && itemSize
+        shouldResetStyleCacheOnItemSizeChange && itemSize,
+        shouldResetStyleCacheOnItemSizeChange && direction
       );
 
       let style;
@@ -413,8 +414,8 @@ export default function createListComponent({
       return style;
     };
 
-    _getItemStyleCache: (_: any) => ItemStyleCache;
-    _getItemStyleCache = memoizeOne((_: any) => ({}));
+    _getItemStyleCache: (_: any, __: any) => ItemStyleCache;
+    _getItemStyleCache = memoizeOne((_: any, __: any) => ({}));
 
     _getRangeToRender(): [number, number, number, number] {
       const { itemCount, overscanCount } = this.props;
@@ -528,7 +529,7 @@ export default function createListComponent({
       this.setState({ isScrolling: false }, () => {
         // Clear style cache after state update has been committed.
         // This way we don't break pure sCU for items that don't use isScrolling param.
-        this._getItemStyleCache(-1);
+        this._getItemStyleCache(-1, null);
       });
     };
   };
