@@ -413,7 +413,7 @@ export default function createListComponent({
 
     _getRangeToRender(): [number, number, number, number] {
       const { itemCount, overscanCount } = this.props;
-      const { scrollDirection, scrollOffset } = this.state;
+      const { isScrolling, scrollDirection, scrollOffset } = this.state;
 
       if (itemCount === 0) {
         return [0, 0, 0, 0];
@@ -434,9 +434,13 @@ export default function createListComponent({
       // Overscan by one item in each direction so that tab/focus works.
       // If there isn't at least one extra item, tab loops back around.
       const overscanBackward =
-        scrollDirection === 'backward' ? Math.max(1, overscanCount) : 1;
+        !isScrolling || scrollDirection === 'backward'
+          ? Math.max(1, overscanCount)
+          : 1;
       const overscanForward =
-        scrollDirection === 'forward' ? Math.max(1, overscanCount) : 1;
+        !isScrolling || scrollDirection === 'forward'
+          ? Math.max(1, overscanCount)
+          : 1;
 
       return [
         Math.max(0, startIndex - overscanBackward),

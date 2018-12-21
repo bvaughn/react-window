@@ -198,27 +198,36 @@ describe('FixedSizeList', () => {
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
-    it('should accommodate a custom overscan', () => {
-      ReactTestRenderer.create(
+    it('should overscan in the direction being scrolled', () => {
+      const instance = ReactDOM.render(
         <FixedSizeList
           {...defaultProps}
           initialScrollOffset={50}
           overscanCount={2}
-        />
+        />,
+        document.createElement('div')
+      );
+      // Simulate scrolling (rather than using scrollTo) to test isScrolling state.
+      simulateScroll(instance, 100);
+      simulateScroll(instance, 50);
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should overscan in both directions when not scrolling', () => {
+      ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} initialScrollOffset={50} />
       );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
-    it('should overscan in the direction being scrolled', () => {
-      const rendered = ReactTestRenderer.create(
+    it('should accommodate a custom overscan', () => {
+      ReactTestRenderer.create(
         <FixedSizeList
           {...defaultProps}
-          initialScrollOffset={50}
-          overscanCount={2}
+          initialScrollOffset={100}
+          overscanCount={3}
         />
       );
-      rendered.getInstance().scrollTo(100);
-      rendered.getInstance().scrollTo(50);
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
@@ -265,7 +274,7 @@ describe('FixedSizeList', () => {
     it('should not re-render children unnecessarily if isScrolling param is not used', () => {
       // Use ReactDOM renderer so the container ref and "onScroll" work correctly.
       const instance = ReactDOM.render(
-        <FixedSizeList {...defaultProps} />,
+        <FixedSizeList {...defaultProps} overscanCount={1} />,
         document.createElement('div')
       );
       simulateScroll(instance, 100);
