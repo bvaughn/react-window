@@ -102,7 +102,7 @@ Array [
     Object {
       "overscanColumnStartIndex": 0,
       "overscanColumnStopIndex": 5,
-      "overscanRowStartIndex": 3,
+      "overscanRowStartIndex": 2,
       "overscanRowStopIndex": 10,
       "visibleColumnStartIndex": 1,
       "visibleColumnStopIndex": 3,
@@ -119,7 +119,7 @@ Array [
     Object {
       "overscanColumnStartIndex": 0,
       "overscanColumnStopIndex": 6,
-      "overscanRowStartIndex": 3,
+      "overscanRowStartIndex": 2,
       "overscanRowStopIndex": 10,
       "visibleColumnStartIndex": 1,
       "visibleColumnStopIndex": 3,
@@ -136,7 +136,7 @@ Array [
     Object {
       "overscanColumnStartIndex": 0,
       "overscanColumnStopIndex": 5,
-      "overscanRowStartIndex": 3,
+      "overscanRowStartIndex": 1,
       "overscanRowStopIndex": 11,
       "visibleColumnStartIndex": 1,
       "visibleColumnStopIndex": 3,
@@ -151,9 +151,9 @@ exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount should accommo
 Array [
   Array [
     Object {
-      "overscanColumnStartIndex": 1,
+      "overscanColumnStartIndex": 0,
       "overscanColumnStopIndex": 6,
-      "overscanRowStartIndex": 9,
+      "overscanRowStartIndex": 8,
       "overscanRowStopIndex": 16,
       "visibleColumnStartIndex": 2,
       "visibleColumnStopIndex": 4,
@@ -198,13 +198,30 @@ Array [
 ]
 `;
 
+exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount should overscan in both directions when not scrolling 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 6,
+      "overscanRowStartIndex": 8,
+      "overscanRowStopIndex": 16,
+      "visibleColumnStartIndex": 2,
+      "visibleColumnStopIndex": 4,
+      "visibleRowStartIndex": 10,
+      "visibleRowStopIndex": 14,
+    },
+  ],
+]
+`;
+
 exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount should overscan in the direction being scrolled 1`] = `
 Array [
   Array [
     Object {
-      "overscanColumnStartIndex": 1,
+      "overscanColumnStartIndex": 0,
       "overscanColumnStopIndex": 6,
-      "overscanRowStartIndex": 9,
+      "overscanRowStartIndex": 8,
       "overscanRowStopIndex": 16,
       "visibleColumnStartIndex": 2,
       "visibleColumnStopIndex": 4,
@@ -214,9 +231,9 @@ Array [
   ],
   Array [
     Object {
-      "overscanColumnStartIndex": 9,
+      "overscanColumnStartIndex": 8,
       "overscanColumnStopIndex": 14,
-      "overscanRowStartIndex": 39,
+      "overscanRowStartIndex": 38,
       "overscanRowStopIndex": 46,
       "visibleColumnStartIndex": 10,
       "visibleColumnStopIndex": 12,
@@ -227,9 +244,9 @@ Array [
   Array [
     Object {
       "overscanColumnStartIndex": 3,
-      "overscanColumnStopIndex": 8,
+      "overscanColumnStopIndex": 9,
       "overscanRowStartIndex": 18,
-      "overscanRowStopIndex": 25,
+      "overscanRowStopIndex": 26,
       "visibleColumnStartIndex": 5,
       "visibleColumnStopIndex": 7,
       "visibleRowStartIndex": 20,

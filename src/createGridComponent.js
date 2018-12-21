@@ -510,7 +510,7 @@ export default function createGridComponent({
         overscanCount,
         rowCount,
       } = this.props;
-      const { horizontalScrollDirection, scrollLeft } = this.state;
+      const { horizontalScrollDirection, isScrolling, scrollLeft } = this.state;
 
       const overscanCountResolved: number =
         overscanColumnsCount || overscanCount || 1;
@@ -534,11 +534,11 @@ export default function createGridComponent({
       // Overscan by one item in each direction so that tab/focus works.
       // If there isn't at least one extra item, tab loops back around.
       const overscanBackward =
-        horizontalScrollDirection === 'backward'
+        !isScrolling || horizontalScrollDirection === 'backward'
           ? Math.max(1, overscanCountResolved)
           : 1;
       const overscanForward =
-        horizontalScrollDirection === 'forward'
+        !isScrolling || horizontalScrollDirection === 'forward'
           ? Math.max(1, overscanCountResolved)
           : 1;
 
@@ -557,7 +557,7 @@ export default function createGridComponent({
         overscanRowsCount,
         rowCount,
       } = this.props;
-      const { verticalScrollDirection, scrollTop } = this.state;
+      const { isScrolling, verticalScrollDirection, scrollTop } = this.state;
 
       const overscanCountResolved: number =
         overscanRowsCount || overscanCount || 1;
@@ -581,11 +581,11 @@ export default function createGridComponent({
       // Overscan by one item in each direction so that tab/focus works.
       // If there isn't at least one extra item, tab loops back around.
       const overscanBackward =
-        verticalScrollDirection === 'backward'
+        !isScrolling || verticalScrollDirection === 'backward'
           ? Math.max(1, overscanCountResolved)
           : 1;
       const overscanForward =
-        verticalScrollDirection === 'forward'
+        !isScrolling || verticalScrollDirection === 'forward'
           ? Math.max(1, overscanCountResolved)
           : 1;
 

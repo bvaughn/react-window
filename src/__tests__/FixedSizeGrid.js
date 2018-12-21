@@ -186,19 +186,6 @@ describe('FixedSizeGrid', () => {
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
-    it('should accommodate a custom overscan', () => {
-      ReactTestRenderer.create(
-        <FixedSizeGrid
-          {...defaultProps}
-          initialScrollLeft={250}
-          initialScrollTop={250}
-          overscanColumnsCount={2}
-          overscanRowsCount={2}
-        />
-      );
-      expect(onItemsRendered.mock.calls).toMatchSnapshot();
-    });
-
     it('should overscan in the direction being scrolled', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeGrid
@@ -211,6 +198,32 @@ describe('FixedSizeGrid', () => {
       );
       rendered.getInstance().scrollTo({ scrollLeft: 1000, scrollTop: 1000 });
       rendered.getInstance().scrollTo({ scrollLeft: 500, scrollTop: 500 });
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should overscan in both directions when not scrolling', () => {
+      ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          initialScrollLeft={250}
+          initialScrollTop={250}
+          overscanColumnsCount={2}
+          overscanRowsCount={2}
+        />
+      );
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should accommodate a custom overscan', () => {
+      ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          initialScrollLeft={250}
+          initialScrollTop={250}
+          overscanColumnsCount={2}
+          overscanRowsCount={2}
+        />
+      );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
