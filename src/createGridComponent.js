@@ -61,7 +61,9 @@ export type Props<T> = {|
   onScroll?: OnScrollCallback,
   outerRef?: any,
   outerTagName?: string,
-  overscanCount: number,
+  overscanColumnsCount?: number,
+  overscanCount?: number, // deprecated
+  overscanRowsCount?: number,
   rowCount: number,
   rowHeight: itemSize,
   style?: Object,
@@ -157,7 +159,6 @@ export default function createGridComponent({
       innerTagName: 'div',
       itemData: undefined,
       outerTagName: 'div',
-      overscanCount: 1,
       useIsScrolling: false,
     };
 
@@ -503,8 +504,16 @@ export default function createGridComponent({
     _getItemStyleCache = memoizeOne((_: any, __: any) => ({}));
 
     _getHorizontalRangeToRender(): [number, number, number, number] {
-      const { columnCount, overscanCount, rowCount } = this.props;
+      const {
+        columnCount,
+        overscanColumnsCount,
+        overscanCount,
+        rowCount,
+      } = this.props;
       const { horizontalScrollDirection, scrollLeft } = this.state;
+
+      const overscanCountResolved: number =
+        overscanColumnsCount || overscanCount || 1;
 
       if (columnCount === 0 || rowCount === 0) {
         return [0, 0, 0, 0];
@@ -526,11 +535,11 @@ export default function createGridComponent({
       // If there isn't at least one extra item, tab loops back around.
       const overscanBackward =
         horizontalScrollDirection === 'backward'
-          ? Math.max(1, overscanCount)
+          ? Math.max(1, overscanCountResolved)
           : 1;
       const overscanForward =
         horizontalScrollDirection === 'forward'
-          ? Math.max(1, overscanCount)
+          ? Math.max(1, overscanCountResolved)
           : 1;
 
       return [
@@ -542,8 +551,16 @@ export default function createGridComponent({
     }
 
     _getVerticalRangeToRender(): [number, number, number, number] {
-      const { columnCount, rowCount, overscanCount } = this.props;
+      const {
+        columnCount,
+        overscanCount,
+        overscanRowsCount,
+        rowCount,
+      } = this.props;
       const { verticalScrollDirection, scrollTop } = this.state;
+
+      const overscanCountResolved: number =
+        overscanRowsCount || overscanCount || 1;
 
       if (columnCount === 0 || rowCount === 0) {
         return [0, 0, 0, 0];
@@ -564,9 +581,13 @@ export default function createGridComponent({
       // Overscan by one item in each direction so that tab/focus works.
       // If there isn't at least one extra item, tab loops back around.
       const overscanBackward =
-        verticalScrollDirection === 'backward' ? Math.max(1, overscanCount) : 1;
+        verticalScrollDirection === 'backward'
+          ? Math.max(1, overscanCountResolved)
+          : 1;
       const overscanForward =
-        verticalScrollDirection === 'forward' ? Math.max(1, overscanCount) : 1;
+        verticalScrollDirection === 'forward'
+          ? Math.max(1, overscanCountResolved)
+          : 1;
 
       return [
         Math.max(0, startIndex - overscanBackward),
@@ -652,8 +673,20 @@ export default function createGridComponent({
   };
 }
 
-const validateSharedProps = ({ children, height, width }: Props<any>): void => {
+const validateSharedProps = ({
+  children,
+  height,
+  overscanCount,
+  width,
+}: Props<any>): void => {
   if (process.env.NODE_ENV !== 'production') {
+    if (typeof overscanCount === 'number') {
+      console.warn(
+        'The overscanCount prop has been deprecated. ' +
+          'Please use the overscanColumnsCount and overscanRowsCount props instead.'
+      );
+    }
+
     if (children == null) {
       throw Error(
         'An invalid "children" prop has been specified. ' +

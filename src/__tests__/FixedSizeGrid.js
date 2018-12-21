@@ -172,14 +172,15 @@ describe('FixedSizeGrid', () => {
     });
   });
 
-  describe('overscanCount', () => {
+  describe('overscanColumnsCount and overscanRowsCount', () => {
     it('should require a minimum of 1 overscan to support tabbing', () => {
       ReactTestRenderer.create(
         <FixedSizeGrid
           {...defaultProps}
           initialScrollLeft={250}
           initialScrollTop={250}
-          overscanCount={0}
+          overscanColumnsCount={0}
+          overscanRowsCount={0}
         />
       );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
@@ -191,7 +192,8 @@ describe('FixedSizeGrid', () => {
           {...defaultProps}
           initialScrollLeft={250}
           initialScrollTop={250}
-          overscanCount={2}
+          overscanColumnsCount={2}
+          overscanRowsCount={2}
         />
       );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
@@ -203,7 +205,8 @@ describe('FixedSizeGrid', () => {
           {...defaultProps}
           initialScrollLeft={250}
           initialScrollTop={250}
-          overscanCount={2}
+          overscanColumnsCount={2}
+          overscanRowsCount={2}
         />
       );
       rendered.getInstance().scrollTo({ scrollLeft: 1000, scrollTop: 1000 });
@@ -227,6 +230,61 @@ describe('FixedSizeGrid', () => {
         />
       );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    describe('overscanCount', () => {
+      it('should warn about deprecated overscanCount prop', () => {
+        spyOn(console, 'warn');
+        ReactTestRenderer.create(
+          <FixedSizeGrid {...defaultProps} overscanCount={1} />
+        );
+        expect(console.warn).toHaveBeenCalledTimes(1);
+        expect(console.warn).toHaveBeenLastCalledWith(
+          'The overscanCount prop has been deprecated. ' +
+            'Please use the overscanColumnsCount and overscanRowsCount props instead.'
+        );
+      });
+
+      it('should use overscanColumnsCount if both it and overscanCount are provided', () => {
+        spyOn(console, 'warn');
+        ReactTestRenderer.create(
+          <FixedSizeGrid
+            {...defaultProps}
+            initialScrollLeft={100}
+            initialScrollTop={100}
+            overscanColumnsCount={3}
+            overscanCount={2}
+          />
+        );
+        expect(onItemsRendered.mock.calls).toMatchSnapshot();
+      });
+
+      it('should use overscanRowsCount if both it and overscanCount are provided', () => {
+        spyOn(console, 'warn');
+        ReactTestRenderer.create(
+          <FixedSizeGrid
+            {...defaultProps}
+            initialScrollLeft={100}
+            initialScrollTop={100}
+            overscanCount={2}
+            overscanRowsCount={3}
+          />
+        );
+        expect(onItemsRendered.mock.calls).toMatchSnapshot();
+      });
+
+      it('should support deprecated overscanCount', () => {
+        spyOn(console, 'warn');
+        ReactTestRenderer.create(
+          <FixedSizeGrid
+            {...defaultProps}
+            initialScrollLeft={100}
+            initialScrollTop={100}
+            overscanCount={2}
+          />
+        );
+        expect(onItemsRendered.mock.calls).toMatchSnapshot();
+      });
     });
   });
 
