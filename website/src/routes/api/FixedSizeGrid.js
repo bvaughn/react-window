@@ -116,6 +116,18 @@ const PROPS = [
         the default ("div") should be used.
       </p>
     ),
+    name: 'innerElementType',
+    type: 'React$ElementType',
+  },
+  {
+    description: (
+      <p>
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>innerElementType</code> prop instead.
+      </p>
+    ),
     name: 'innerTagName',
     type: 'string',
   },
@@ -215,6 +227,18 @@ const PROPS = [
         the default ("div") should be used.
       </p>
     ),
+    name: 'outerElementType',
+    type: 'React$ElementType',
+  },
+  {
+    description: (
+      <p>
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>outerElementType</code> prop instead.
+      </p>
+    ),
     name: 'outerTagName',
     type: 'string',
   },
@@ -223,8 +247,8 @@ const PROPS = [
     description: (
       <Fragment>
         <p>
-          The number of items (rows and columns) to render outside of the
-          visible area. This property can be important for two reasons:
+          The number of columns to render outside of the visible area. This
+          property can be important for two reasons:
         </p>
         <ul>
           <li>
@@ -242,7 +266,47 @@ const PROPS = [
         </p>
       </Fragment>
     ),
+    name: 'overscanColumnsCount',
+    type: 'number',
+  },
+  {
+    description: (
+      <p>
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>overscanColumnsCount</code> and{' '}
+        <code>overscanRowsCount</code> properties instead.
+      </p>
+    ),
     name: 'overscanCount',
+    type: 'number',
+  },
+  {
+    defaultValue: 1,
+    description: (
+      <Fragment>
+        <p>
+          The number of rows to render outside of the visible area. This
+          property can be important for two reasons:
+        </p>
+        <ul>
+          <li>
+            Overscanning by one row or column allows the tab key to focus on the
+            next (not yet visible) item.
+          </li>
+          <li>
+            Overscanning slightly can reduce or prevent a flash of empty space
+            when a user first starts scrolling.
+          </li>
+        </ul>
+        <p>
+          Note that overscanning too much can negatively impact performance. By
+          default, grid overscans by one item.
+        </p>
+      </Fragment>
+    ),
+    name: 'overscanRowsCount',
     type: 'number',
   },
   {

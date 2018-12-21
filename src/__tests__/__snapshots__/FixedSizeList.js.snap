@@ -64,9 +64,9 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 1,
-      "overscanStopIndex": 8,
-      "visibleStartIndex": 2,
-      "visibleStopIndex": 6,
+      "overscanStopIndex": 11,
+      "visibleStartIndex": 4,
+      "visibleStopIndex": 8,
     },
   ],
 ]
@@ -89,10 +89,23 @@ exports[`FixedSizeList overscanCount should not scan past the end of the list 1`
 Array [
   Array [
     Object {
-      "overscanStartIndex": 5,
+      "overscanStartIndex": 4,
       "overscanStopIndex": 9,
       "visibleStartIndex": 6,
       "visibleStopIndex": 9,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeList overscanCount should overscan in both directions when not scrolling 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 8,
+      "visibleStartIndex": 2,
+      "visibleStopIndex": 6,
     },
   ],
 ]
@@ -102,7 +115,7 @@ exports[`FixedSizeList overscanCount should overscan in the direction being scro
 Array [
   Array [
     Object {
-      "overscanStartIndex": 1,
+      "overscanStartIndex": 0,
       "overscanStopIndex": 8,
       "visibleStartIndex": 2,
       "visibleStopIndex": 6,
@@ -152,7 +165,7 @@ Array [
   ],
   Array [
     Object {
-      "overscanStartIndex": 6,
+      "overscanStartIndex": 5,
       "overscanStopIndex": 13,
       "visibleStartIndex": 7,
       "visibleStopIndex": 11,
@@ -160,16 +173,8 @@ Array [
   ],
   Array [
     Object {
-      "overscanStartIndex": 5,
-      "overscanStopIndex": 12,
-      "visibleStartIndex": 7,
-      "visibleStopIndex": 11,
-    },
-  ],
-  Array [
-    Object {
       "overscanStartIndex": 0,
-      "overscanStopIndex": 7,
+      "overscanStopIndex": 8,
       "visibleStartIndex": 2,
       "visibleStopIndex": 6,
     },
@@ -189,7 +194,7 @@ Array [
   ],
   Array [
     Object {
-      "overscanStartIndex": 7,
+      "overscanStartIndex": 6,
       "overscanStopIndex": 14,
       "visibleStartIndex": 8,
       "visibleStopIndex": 12,
@@ -198,7 +203,7 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 5,
-      "overscanStopIndex": 12,
+      "overscanStopIndex": 13,
       "visibleStartIndex": 7,
       "visibleStopIndex": 11,
     },
@@ -206,14 +211,14 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 0,
-      "overscanStopIndex": 5,
+      "overscanStopIndex": 6,
       "visibleStartIndex": 0,
       "visibleStopIndex": 4,
     },
   ],
   Array [
     Object {
-      "overscanStartIndex": 95,
+      "overscanStartIndex": 94,
       "overscanStopIndex": 99,
       "visibleStartIndex": 96,
       "visibleStopIndex": 99,
@@ -234,7 +239,7 @@ Array [
   ],
   Array [
     Object {
-      "overscanStartIndex": 6,
+      "overscanStartIndex": 5,
       "overscanStopIndex": 13,
       "visibleStartIndex": 7,
       "visibleStopIndex": 11,
@@ -243,7 +248,7 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 4,
-      "overscanStopIndex": 11,
+      "overscanStopIndex": 12,
       "visibleStartIndex": 6,
       "visibleStopIndex": 10,
     },
@@ -251,7 +256,7 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 0,
-      "overscanStopIndex": 5,
+      "overscanStopIndex": 6,
       "visibleStartIndex": 0,
       "visibleStopIndex": 4,
     },
@@ -271,7 +276,7 @@ Array [
   ],
   Array [
     Object {
-      "overscanStartIndex": 9,
+      "overscanStartIndex": 8,
       "overscanStopIndex": 16,
       "visibleStartIndex": 10,
       "visibleStopIndex": 14,
@@ -280,14 +285,14 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 7,
-      "overscanStopIndex": 14,
+      "overscanStopIndex": 15,
       "visibleStartIndex": 9,
       "visibleStopIndex": 13,
     },
   ],
   Array [
     Object {
-      "overscanStartIndex": 95,
+      "overscanStartIndex": 94,
       "overscanStopIndex": 99,
       "visibleStartIndex": 96,
       "visibleStopIndex": 99,
