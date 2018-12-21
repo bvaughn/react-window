@@ -2,6 +2,9 @@
 
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
+import { cancelTimeout, requestTimeout } from './timer';
+
+import type { TimeoutID } from './timer';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
@@ -217,7 +220,7 @@ export default function createListComponent({
 
     componentWillUnmount() {
       if (this._resetIsScrollingTimeoutId !== null) {
-        clearTimeout(this._resetIsScrollingTimeoutId);
+        cancelTimeout(this._resetIsScrollingTimeoutId);
       }
     }
 
@@ -508,10 +511,10 @@ export default function createListComponent({
 
     _resetIsScrollingDebounced = () => {
       if (this._resetIsScrollingTimeoutId !== null) {
-        clearTimeout(this._resetIsScrollingTimeoutId);
+        cancelTimeout(this._resetIsScrollingTimeoutId);
       }
 
-      this._resetIsScrollingTimeoutId = setTimeout(
+      this._resetIsScrollingTimeoutId = requestTimeout(
         this._resetIsScrolling,
         IS_SCROLLING_DEBOUNCE_INTERVAL
       );
