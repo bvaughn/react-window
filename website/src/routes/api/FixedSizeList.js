@@ -131,8 +131,10 @@ const PROPS = [
   {
     description: (
       <p>
-        <strong>This property has been deprecated.</strong> Please use the{' '}
-        <code>innerElementType</code> prop instead.
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>innerElementType</code> prop instead.
       </p>
     ),
     name: 'innerTagName',
@@ -262,8 +264,10 @@ const PROPS = [
   {
     description: (
       <p>
-        <strong>This property has been deprecated.</strong> Please use the{' '}
-        <code>outerElementType</code> prop instead.
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>outerElementType</code> prop instead.
       </p>
     ),
     name: 'outerTagName',

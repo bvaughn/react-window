@@ -122,8 +122,10 @@ const PROPS = [
   {
     description: (
       <p>
-        <strong>This property has been deprecated.</strong> Please use the{' '}
-        <code>innerElementType</code> prop instead.
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>innerElementType</code> prop instead.
       </p>
     ),
     name: 'innerTagName',
@@ -231,8 +233,10 @@ const PROPS = [
   {
     description: (
       <p>
-        <strong>This property has been deprecated.</strong> Please use the{' '}
-        <code>outerElementType</code> prop instead.
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>outerElementType</code> prop instead.
       </p>
     ),
     name: 'outerTagName',
@@ -267,13 +271,13 @@ const PROPS = [
   },
   {
     description: (
-      <Fragment>
-        <p>
-          <strong>This property has been deprecated.</strong> Please use the{' '}
-          <code>overscanColumnsCount</code> and <code>overscanRowsCount</code>{' '}
-          properties instead.
-        </p>
-      </Fragment>
+      <p>
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>overscanColumnsCount</code> and{' '}
+        <code>overscanRowsCount</code> properties instead.
+      </p>
     ),
     name: 'overscanCount',
     type: 'number',
