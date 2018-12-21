@@ -1,4 +1,4 @@
-import React, { createRef, PureComponent } from 'react';
+import React, { createRef, forwardRef, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -532,19 +532,54 @@ describe('FixedSizeList', () => {
     });
   });
 
-  describe('custom tag names', () => {
-    it('should use a custom innerTagName if specified', () => {
+  describe('custom element types', () => {
+    it('should use a custom innerElementType if specified', () => {
       const rendered = ReactTestRenderer.create(
-        <FixedSizeList {...defaultProps} innerTagName="section" />
+        <FixedSizeList {...defaultProps} innerElementType="section" />
       );
       expect(rendered.root.findByType('section')).toBeDefined();
     });
 
-    it('should use a custom outerTagName if specified', () => {
+    it('should use a custom outerElementType if specified', () => {
       const rendered = ReactTestRenderer.create(
-        <FixedSizeList {...defaultProps} outerTagName="section" />
+        <FixedSizeList {...defaultProps} outerElementType="section" />
       );
       expect(rendered.root.findByType('section')).toBeDefined();
+    });
+
+    it('should support spreading additional, arbitrary props, e.g. id', () => {
+      const container = document.createElement('div');
+      ReactDOM.render(
+        <FixedSizeList
+          {...defaultProps}
+          innerElementType={forwardRef((props, ref) => (
+            <div ref={ref} id="inner" {...props} />
+          ))}
+          outerElementType={forwardRef((props, ref) => (
+            <div ref={ref} id="outer" {...props} />
+          ))}
+        />,
+        container
+      );
+      expect(container.firstChild.id).toBe('outer');
+      expect(container.firstChild.firstChild.id).toBe('inner');
+    });
+
+    it('should warn if legacy innerTagName or outerTagName props are used', () => {
+      spyOn(console, 'warn');
+      ReactDOM.render(
+        <FixedSizeList
+          {...defaultProps}
+          innerTagName="div"
+          outerTagName="div"
+        />,
+        document.createElement('div')
+      );
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The innerTagName and outerTagName props have been deprecated. ' +
+          'Please use the innerElementType and outerElementType props instead.'
+      );
     });
   });
 

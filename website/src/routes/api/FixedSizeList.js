@@ -125,6 +125,16 @@ const PROPS = [
         the default ("div") should be used.
       </p>
     ),
+    name: 'innerElementType',
+    type: 'React$ElementType',
+  },
+  {
+    description: (
+      <p>
+        <strong>This property has been deprecated.</strong> Please use the{' '}
+        <code>innerElementType</code> prop instead.
+      </p>
+    ),
     name: 'innerTagName',
     type: 'string',
   },
@@ -244,6 +254,16 @@ const PROPS = [
         Tag name passed to <code>document.createElement</code> to create the
         outer container element. This is an advanced property; in most cases,
         the default ("div") should be used.
+      </p>
+    ),
+    name: 'outerElementType',
+    type: 'React$ElementType',
+  },
+  {
+    description: (
+      <p>
+        <strong>This property has been deprecated.</strong> Please use the{' '}
+        <code>outerElementType</code> prop instead.
       </p>
     ),
     name: 'outerTagName',

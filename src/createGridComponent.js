@@ -53,7 +53,8 @@ export type Props<T> = {|
   initialScrollLeft?: number,
   initialScrollTop?: number,
   innerRef?: any,
-  innerTagName?: string,
+  innerElementType?: React$ElementType,
+  innerTagName?: string, // deprecated
   itemData: T,
   itemKey?: (params: {|
     columnIndex: number,
@@ -63,7 +64,8 @@ export type Props<T> = {|
   onItemsRendered?: OnItemsRenderedCallback,
   onScroll?: OnScrollCallback,
   outerRef?: any,
-  outerTagName?: string,
+  outerElementType?: React$ElementType,
+  outerTagName?: string, // deprecated
   overscanColumnsCount?: number,
   overscanCount?: number, // deprecated
   overscanRowsCount?: number,
@@ -159,9 +161,7 @@ export default function createGridComponent({
     _outerRef: ?HTMLDivElement;
 
     static defaultProps = {
-      innerTagName: 'div',
       itemData: undefined,
-      outerTagName: 'div',
       useIsScrolling: false,
     };
 
@@ -287,9 +287,11 @@ export default function createGridComponent({
         columnCount,
         height,
         innerRef,
+        innerElementType,
         innerTagName,
         itemData,
         itemKey = defaultItemKey,
+        outerElementType,
         outerTagName,
         rowCount,
         style,
@@ -342,7 +344,7 @@ export default function createGridComponent({
       );
 
       return createElement(
-        ((outerTagName: any): string),
+        outerElementType || outerTagName || 'div',
         {
           className,
           onScroll: this._onScroll,
@@ -357,7 +359,7 @@ export default function createGridComponent({
             ...style,
           },
         },
-        createElement(((innerTagName: any): string), {
+        createElement(innerElementType || innerTagName || 'div', {
           children: items,
           ref: innerRef,
           style: {
@@ -668,6 +670,8 @@ export default function createGridComponent({
 const validateSharedProps = ({
   children,
   height,
+  innerTagName,
+  outerTagName,
   overscanCount,
   width,
 }: Props<any>): void => {
@@ -676,6 +680,13 @@ const validateSharedProps = ({
       console.warn(
         'The overscanCount prop has been deprecated. ' +
           'Please use the overscanColumnsCount and overscanRowsCount props instead.'
+      );
+    }
+
+    if (innerTagName != null || outerTagName != null) {
+      console.warn(
+        'The innerTagName and outerTagName props have been deprecated. ' +
+          'Please use the innerElementType and outerElementType props instead.'
       );
     }
 

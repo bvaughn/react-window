@@ -43,7 +43,8 @@ export type Props<T> = {|
   height: number | string,
   initialScrollOffset?: number,
   innerRef?: any,
-  innerTagName?: string,
+  innerElementType?: React$ElementType,
+  innerTagName?: string, // deprecated
   itemCount: number,
   itemData: T,
   itemKey?: (index: number, data: T) => any,
@@ -51,7 +52,8 @@ export type Props<T> = {|
   onItemsRendered?: onItemsRenderedCallback,
   onScroll?: onScrollCallback,
   outerRef?: any,
-  outerTagName?: string,
+  outerElementType?: React$ElementType,
+  outerTagName?: string, // deprecated
   overscanCount: number,
   style?: Object,
   useIsScrolling: boolean,
@@ -129,9 +131,7 @@ export default function createListComponent({
 
     static defaultProps = {
       direction: 'vertical',
-      innerTagName: 'div',
       itemData: undefined,
-      outerTagName: 'div',
       overscanCount: 2,
       useIsScrolling: false,
     };
@@ -231,10 +231,12 @@ export default function createListComponent({
         direction,
         height,
         innerRef,
+        innerElementType,
         innerTagName,
         itemCount,
         itemData,
         itemKey = defaultItemKey,
+        outerElementType,
         outerTagName,
         style,
         useIsScrolling,
@@ -272,7 +274,7 @@ export default function createListComponent({
       );
 
       return createElement(
-        ((outerTagName: any): string),
+        outerElementType || outerTagName || 'div',
         {
           className,
           onScroll,
@@ -287,7 +289,7 @@ export default function createListComponent({
             ...style,
           },
         },
-        createElement(((innerTagName: any): string), {
+        createElement(innerElementType || innerTagName || 'div', {
           children: items,
           ref: innerRef,
           style: {
@@ -542,9 +544,18 @@ const validateSharedProps = ({
   children,
   direction,
   height,
+  innerTagName,
+  outerTagName,
   width,
 }: Props<any>): void => {
   if (process.env.NODE_ENV !== 'production') {
+    if (innerTagName != null || outerTagName != null) {
+      console.warn(
+        'The innerTagName and outerTagName props have been deprecated. ' +
+          'Please use the innerElementType and outerElementType props instead.'
+      );
+    }
+
     if (direction !== 'horizontal' && direction !== 'vertical') {
       throw Error(
         'An invalid "direction" prop has been specified. ' +
