@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { VariableSizeGrid, VariableSizeList } from 'react-window';
-import { unstable_track as track } from 'schedule/tracking';
+import { unstable_trace as trace } from 'scheduler/tracing';
 
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
@@ -146,11 +146,11 @@ export default class ScrollToItem extends PureComponent {
   }
 
   scrollToRow200Auto = () =>
-    track('scroll to row 200', performance.now(), () =>
+    trace('scroll to row 200', performance.now(), () =>
       this.listRef.current.scrollToItem(200)
     );
   scrollToRow300Center = () =>
-    track('scroll to row 300', performance.now(), () =>
+    trace('scroll to row 300', performance.now(), () =>
       this.listRef.current.scrollToItem(300, 'center')
     );
 

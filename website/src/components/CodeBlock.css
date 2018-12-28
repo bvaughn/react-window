@@ -5,3 +5,12 @@
 .CodeMirror-scroll {
   height: auto;
 }
+
+.CodeMirror .CodeMirror-line-highlight {
+  background-color: #162228;
+}
+
+/* Material theme overrides */
+.cm-s-material .cm-comment {
+  color: #647e8a;
+}

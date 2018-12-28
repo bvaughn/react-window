@@ -390,24 +390,15 @@ export default function createListComponent({
       if (itemStyleCache.hasOwnProperty(index)) {
         style = itemStyleCache[index];
       } else {
+        const offset = getItemOffset(this.props, index, this._instanceProps);
+        const size = getItemSize(this.props, index, this._instanceProps);
+
         itemStyleCache[index] = style = {
           position: 'absolute',
-          left:
-            direction === 'horizontal'
-              ? getItemOffset(this.props, index, this._instanceProps)
-              : 0,
-          top:
-            direction === 'vertical'
-              ? getItemOffset(this.props, index, this._instanceProps)
-              : 0,
-          height:
-            direction === 'vertical'
-              ? getItemSize(this.props, index, this._instanceProps)
-              : '100%',
-          width:
-            direction === 'horizontal'
-              ? getItemSize(this.props, index, this._instanceProps)
-              : '100%',
+          left: direction === 'horizontal' ? offset : 0,
+          top: direction === 'vertical' ? offset : 0,
+          height: direction === 'vertical' ? size : '100%',
+          width: direction === 'horizontal' ? size : '100%',
         };
       }
 
