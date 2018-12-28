@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, memo } from 'react';
 import ReactDOM from 'react-dom';
 import memoize from 'memoize-one';
-import { FixedSizeList as List } from 'react-window';
+import { FixedSizeList as List, areEqual } from 'react-window';
 
 const generateItems = numItems =>
   Array(numItems)
@@ -16,21 +16,17 @@ const generateItems = numItems =>
 // If list items are expensive to render,
 // Consider using PureComponent to avoid unnecessary re-renders.
 // https://reactjs.org/docs/react-api.html#reactpurecomponent
-class Row extends PureComponent {
-  render() {
-    const { data, index, style } = this.props;
+const Row = memo(({ data, index, style }) => {
+  // Data passed to List as "itemData" is available as props.data
+  const { items, toggleItemActive } = data;
+  const item = items[index];
 
-    // Data passed to List as "itemData" is available as props.data
-    const { items, toggleItemActive } = data;
-    const item = items[index];
-
-    return (
-      <div onClick={() => toggleItemActive(index)} style={style}>
-        {item.label} is {item.isActive ? 'active' : 'inactive'}
-      </div>
-    );
-  }
-}
+  return (
+    <div onClick={() => toggleItemActive(index)} style={style}>
+      {item.label} is {item.isActive ? 'active' : 'inactive'}
+    </div>
+  );
+}, areEqual);
 
 // This helper function memoizes incoming props,
 // To avoid causing unnecessary re-renders pure Row components.

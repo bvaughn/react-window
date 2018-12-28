@@ -1,0 +1,14 @@
+.MethodApi {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: 2rem 2rem 0;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.MethodApiSummary {
+  margin-bottom: 1rem;
+}
