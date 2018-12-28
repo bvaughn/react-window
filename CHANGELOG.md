@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.5.0
+* 🎉 Added advanced memoization helpers methods `areEqual` and `shouldComponentUpdate` for item renderers. - [#114](https://github.com/bvaughn/react-window/issues/114)
+
 ### 1.4.0
 * 🎉 List and Grid components now "overscan" (pre-render) in both directions when scrolling is not active. When scrolling is in progress, cells are only pre-rendered in the direction being scrolled. This change has been made in an effort to reduce visible flicker when scrolling starts without adding additional overhead during scroll (which is the most performance sensitive time).
 * 🎉 Grid components now support separate `overscanColumnsCount` and `overscanRowsCount` props. Legacy `overscanCount` prop will continue to work, but with a deprecation warning in DEV mode.
