@@ -4,6 +4,7 @@ import { Nav } from './components/Nav';
 import { SubMenu } from './components/SubMenu';
 
 // Routes
+import areEqualApi from './routes/api/areEqual';
 import DynamicSizeListExample from './routes/examples/DynamicSizeList';
 import DynamicSizeListApi from './routes/api/DynamicSizeList';
 import FixedSizeGridApi from './routes/api/FixedSizeGrid';
@@ -13,6 +14,7 @@ import FixedSizeListExample from './routes/examples/FixedSizeList';
 import ListWithScrollingIndicatorExample from './routes/examples/ListWithScrollingIndicator';
 import MemoizedListItemsExample from './routes/examples/MemoizedListItemsExample';
 import ScrollToItemExample from './routes/examples/ScrollToItem';
+import shouldComponentUpdateApi from './routes/api/shouldComponentUpdate';
 import VariableSizeGridApi from './routes/api/VariableSizeGrid';
 import VariableSizeGridExample from './routes/examples/VariableSizeGrid';
 import VariableSizeListApi from './routes/api/VariableSizeList';
@@ -30,7 +32,16 @@ export default function App() {
             items={EXAMPLE_ROUTES}
             title="Examples"
           />
-          <SubMenu isActiveDark={false} items={API_ROUTES} title="API" />
+          <SubMenu
+            isActiveDark={false}
+            items={COMPONENTS_ROUTES}
+            title="Components"
+          />
+          <SubMenu
+            isActiveDark={false}
+            items={METHODS_ROUTES}
+            title="Methods"
+          />
         </Nav>
         <main className={styles.Main}>
           <Route
@@ -39,13 +50,11 @@ export default function App() {
             render={() => <Redirect to={EXAMPLE_ROUTES[0].path} />}
           />
 
-          {EXAMPLE_ROUTES.map(({ component, path }) => (
-            <Route key={path} path={path} component={component} />
-          ))}
-
-          {API_ROUTES.map(({ component, path }) => (
-            <Route key={path} path={path} component={component} />
-          ))}
+          {[EXAMPLE_ROUTES, COMPONENTS_ROUTES, METHODS_ROUTES].map(routes =>
+            routes.map(({ component, path }) => (
+              <Route key={path} path={path} component={component} />
+            ))
+          )}
         </main>
       </div>
     </Router>
@@ -95,7 +104,7 @@ const EXAMPLE_ROUTES = [
   },
 ];
 
-const API_ROUTES = [
+const COMPONENTS_ROUTES = [
   {
     path: '/api/FixedSizeList',
     title: 'FixedSizeList',
@@ -120,5 +129,18 @@ const API_ROUTES = [
     path: '/api/VariableSizeGrid',
     title: 'VariableSizeGrid',
     component: VariableSizeGridApi,
+  },
+];
+
+const METHODS_ROUTES = [
+  {
+    path: '/api/areEqual',
+    title: 'areEqual',
+    component: areEqualApi,
+  },
+  {
+    path: '/api/shouldComponentUpdate',
+    title: 'shouldComponentUpdate',
+    component: shouldComponentUpdateApi,
   },
 ];

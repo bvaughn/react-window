@@ -12,7 +12,7 @@ Array [
   ],
   Array [
     Object {
-      "overscanStartIndex": 7,
+      "overscanStartIndex": 6,
       "overscanStopIndex": 12,
       "visibleStartIndex": 8,
       "visibleStopIndex": 10,
@@ -20,16 +20,8 @@ Array [
   ],
   Array [
     Object {
-      "overscanStartIndex": 6,
-      "overscanStopIndex": 11,
-      "visibleStartIndex": 8,
-      "visibleStopIndex": 10,
-    },
-  ],
-  Array [
-    Object {
       "overscanStartIndex": 0,
-      "overscanStopIndex": 6,
+      "overscanStopIndex": 7,
       "visibleStartIndex": 2,
       "visibleStopIndex": 5,
     },
@@ -49,7 +41,7 @@ Array [
   ],
   Array [
     Object {
-      "overscanStartIndex": 8,
+      "overscanStartIndex": 7,
       "overscanStopIndex": 13,
       "visibleStartIndex": 9,
       "visibleStopIndex": 11,
@@ -58,7 +50,7 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 6,
-      "overscanStopIndex": 11,
+      "overscanStopIndex": 12,
       "visibleStartIndex": 8,
       "visibleStopIndex": 10,
     },
@@ -66,7 +58,7 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 0,
-      "overscanStopIndex": 5,
+      "overscanStopIndex": 6,
       "visibleStartIndex": 0,
       "visibleStopIndex": 4,
     },
@@ -86,7 +78,7 @@ Array [
   ],
   Array [
     Object {
-      "overscanStartIndex": 8,
+      "overscanStartIndex": 7,
       "overscanStopIndex": 13,
       "visibleStartIndex": 9,
       "visibleStopIndex": 11,
@@ -95,7 +87,7 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 6,
-      "overscanStopIndex": 11,
+      "overscanStopIndex": 12,
       "visibleStartIndex": 8,
       "visibleStopIndex": 10,
     },
@@ -103,14 +95,14 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 0,
-      "overscanStopIndex": 5,
+      "overscanStopIndex": 6,
       "visibleStartIndex": 0,
       "visibleStopIndex": 4,
     },
   ],
   Array [
     Object {
-      "overscanStartIndex": 16,
+      "overscanStartIndex": 15,
       "overscanStopIndex": 19,
       "visibleStartIndex": 17,
       "visibleStopIndex": 19,
@@ -131,7 +123,7 @@ Array [
   ],
   Array [
     Object {
-      "overscanStartIndex": 7,
+      "overscanStartIndex": 6,
       "overscanStopIndex": 12,
       "visibleStartIndex": 8,
       "visibleStopIndex": 10,
@@ -140,7 +132,7 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 4,
-      "overscanStopIndex": 10,
+      "overscanStopIndex": 11,
       "visibleStartIndex": 6,
       "visibleStopIndex": 9,
     },
@@ -148,7 +140,7 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 0,
-      "overscanStopIndex": 4,
+      "overscanStopIndex": 5,
       "visibleStartIndex": 0,
       "visibleStopIndex": 3,
     },
@@ -168,7 +160,7 @@ Array [
   ],
   Array [
     Object {
-      "overscanStartIndex": 9,
+      "overscanStartIndex": 8,
       "overscanStopIndex": 14,
       "visibleStartIndex": 10,
       "visibleStopIndex": 12,
@@ -177,14 +169,14 @@ Array [
   Array [
     Object {
       "overscanStartIndex": 7,
-      "overscanStopIndex": 12,
+      "overscanStopIndex": 13,
       "visibleStartIndex": 9,
       "visibleStopIndex": 11,
     },
   ],
   Array [
     Object {
-      "overscanStartIndex": 16,
+      "overscanStartIndex": 15,
       "overscanStopIndex": 19,
       "visibleStartIndex": 17,
       "visibleStopIndex": 19,

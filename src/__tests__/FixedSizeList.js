@@ -1,4 +1,4 @@
-import React, { createRef, PureComponent } from 'react';
+import React, { createRef, forwardRef, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -62,6 +62,22 @@ describe('FixedSizeList', () => {
     );
     expect(itemRenderer).toHaveBeenCalledTimes(5);
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
+  });
+
+  it('should re-render items if direction changes', () => {
+    const rendered = ReactTestRenderer.create(
+      <FixedSizeList {...defaultProps} direction="vertical" />
+    );
+    expect(itemRenderer).toHaveBeenCalled();
+    itemRenderer.mockClear();
+
+    // Re-rendering should not affect pure sCU children:
+    rendered.update(<FixedSizeList {...defaultProps} direction="vertical" />);
+    expect(itemRenderer).not.toHaveBeenCalled();
+
+    // Re-rendering with new direction should re-render children:
+    rendered.update(<FixedSizeList {...defaultProps} direction="horizontal" />);
+    expect(itemRenderer).toHaveBeenCalled();
   });
 
   describe('scrollbar handling', () => {
@@ -198,27 +214,36 @@ describe('FixedSizeList', () => {
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
-    it('should accommodate a custom overscan', () => {
-      ReactTestRenderer.create(
+    it('should overscan in the direction being scrolled', () => {
+      const instance = ReactDOM.render(
         <FixedSizeList
           {...defaultProps}
           initialScrollOffset={50}
           overscanCount={2}
-        />
+        />,
+        document.createElement('div')
+      );
+      // Simulate scrolling (rather than using scrollTo) to test isScrolling state.
+      simulateScroll(instance, 100);
+      simulateScroll(instance, 50);
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should overscan in both directions when not scrolling', () => {
+      ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} initialScrollOffset={50} />
       );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
-    it('should overscan in the direction being scrolled', () => {
-      const rendered = ReactTestRenderer.create(
+    it('should accommodate a custom overscan', () => {
+      ReactTestRenderer.create(
         <FixedSizeList
           {...defaultProps}
-          initialScrollOffset={50}
-          overscanCount={2}
+          initialScrollOffset={100}
+          overscanCount={3}
         />
       );
-      rendered.getInstance().scrollTo(100);
-      rendered.getInstance().scrollTo(50);
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
@@ -265,7 +290,7 @@ describe('FixedSizeList', () => {
     it('should not re-render children unnecessarily if isScrolling param is not used', () => {
       // Use ReactDOM renderer so the container ref and "onScroll" work correctly.
       const instance = ReactDOM.render(
-        <FixedSizeList {...defaultProps} />,
+        <FixedSizeList {...defaultProps} overscanCount={1} />,
         document.createElement('div')
       );
       simulateScroll(instance, 100);
@@ -523,19 +548,54 @@ describe('FixedSizeList', () => {
     });
   });
 
-  describe('custom tag names', () => {
-    it('should use a custom innerTagName if specified', () => {
+  describe('custom element types', () => {
+    it('should use a custom innerElementType if specified', () => {
       const rendered = ReactTestRenderer.create(
-        <FixedSizeList {...defaultProps} innerTagName="section" />
+        <FixedSizeList {...defaultProps} innerElementType="section" />
       );
       expect(rendered.root.findByType('section')).toBeDefined();
     });
 
-    it('should use a custom outerTagName if specified', () => {
+    it('should use a custom outerElementType if specified', () => {
       const rendered = ReactTestRenderer.create(
-        <FixedSizeList {...defaultProps} outerTagName="section" />
+        <FixedSizeList {...defaultProps} outerElementType="section" />
       );
       expect(rendered.root.findByType('section')).toBeDefined();
+    });
+
+    it('should support spreading additional, arbitrary props, e.g. id', () => {
+      const container = document.createElement('div');
+      ReactDOM.render(
+        <FixedSizeList
+          {...defaultProps}
+          innerElementType={forwardRef((props, ref) => (
+            <div ref={ref} id="inner" {...props} />
+          ))}
+          outerElementType={forwardRef((props, ref) => (
+            <div ref={ref} id="outer" {...props} />
+          ))}
+        />,
+        container
+      );
+      expect(container.firstChild.id).toBe('outer');
+      expect(container.firstChild.firstChild.id).toBe('inner');
+    });
+
+    it('should warn if legacy innerTagName or outerTagName props are used', () => {
+      spyOn(console, 'warn');
+      ReactDOM.render(
+        <FixedSizeList
+          {...defaultProps}
+          innerTagName="div"
+          outerTagName="div"
+        />,
+        document.createElement('div')
+      );
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The innerTagName and outerTagName props have been deprecated. ' +
+          'Please use the innerElementType and outerElementType props instead.'
+      );
     });
   });
 

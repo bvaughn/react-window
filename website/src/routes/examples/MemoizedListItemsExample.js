@@ -1,6 +1,6 @@
 import memoize from 'memoize-one';
-import React, { PureComponent } from 'react';
-import { FixedSizeList } from 'react-window';
+import React, { PureComponent, memo } from 'react';
+import { FixedSizeList, areEqual } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
 
@@ -18,34 +18,31 @@ const generateItems = numItems =>
         .substr(2),
     }));
 
-class Row extends PureComponent {
-  render() {
-    const { data, index, style } = this.props;
-    const { items, toggleItemActive } = data;
-    const item = items[index];
+const Row = memo(({ data, index, style }) => {
+  const { items, toggleItemActive } = data;
+  const item = items[index];
 
-    return (
-      <div
-        className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
-        onClick={() => toggleItemActive(index)}
+  return (
+    <div
+      className={index % 2 ? styles.ListItemOdd : styles.ListItemEven}
+      onClick={() => toggleItemActive(index)}
+      style={{
+        ...style,
+        userSelect: 'none',
+        cursor: 'pointer',
+      }}
+    >
+      {item.label} is&nbsp;
+      <span
         style={{
-          ...style,
-          userSelect: 'none',
-          cursor: 'pointer',
+          color: item.isActive ? '#3D3' : '#F33',
         }}
       >
-        {item.label} is&nbsp;
-        <span
-          style={{
-            color: item.isActive ? '#3D3' : '#F33',
-          }}
-        >
-          {item.isActive ? 'active' : 'inactive'}
-        </span>
-      </div>
-    );
-  }
-}
+        {item.isActive ? 'active' : 'inactive'}
+      </span>
+    </div>
+  );
+}, areEqual);
 
 export default class MemoizedListItemsExample extends PureComponent {
   state = {

@@ -40,7 +40,15 @@ module.exports = function loader(content) {
     if (!line) {
       line = '&nbsp;'; // Don't collapse empty lines
     }
-    return `<pre class="CodeMirror-line" role="presentation">${line}</pre>\n`;
+
+    let className = 'CodeMirror-line';
+
+    if (line.includes('// !!')) {
+      line = line.replace('// !!', '');
+      className += ' CodeMirror-line-highlight';
+    }
+
+    return `<pre class="${className}" role="presentation">${line}</pre>\n`;
   });
 
   return `module.exports = ${JSON.stringify(lines.join('\n'))}`;

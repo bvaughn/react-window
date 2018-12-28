@@ -1,4 +1,4 @@
-import React, { createRef, PureComponent } from 'react';
+import React, { createRef, forwardRef, PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
@@ -172,26 +172,15 @@ describe('FixedSizeGrid', () => {
     });
   });
 
-  describe('overscanCount', () => {
+  describe('overscanColumnsCount and overscanRowsCount', () => {
     it('should require a minimum of 1 overscan to support tabbing', () => {
       ReactTestRenderer.create(
         <FixedSizeGrid
           {...defaultProps}
           initialScrollLeft={250}
           initialScrollTop={250}
-          overscanCount={0}
-        />
-      );
-      expect(onItemsRendered.mock.calls).toMatchSnapshot();
-    });
-
-    it('should accommodate a custom overscan', () => {
-      ReactTestRenderer.create(
-        <FixedSizeGrid
-          {...defaultProps}
-          initialScrollLeft={250}
-          initialScrollTop={250}
-          overscanCount={2}
+          overscanColumnsCount={0}
+          overscanRowsCount={0}
         />
       );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
@@ -203,11 +192,38 @@ describe('FixedSizeGrid', () => {
           {...defaultProps}
           initialScrollLeft={250}
           initialScrollTop={250}
-          overscanCount={2}
+          overscanColumnsCount={2}
+          overscanRowsCount={2}
         />
       );
       rendered.getInstance().scrollTo({ scrollLeft: 1000, scrollTop: 1000 });
       rendered.getInstance().scrollTo({ scrollLeft: 500, scrollTop: 500 });
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should overscan in both directions when not scrolling', () => {
+      ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          initialScrollLeft={250}
+          initialScrollTop={250}
+          overscanColumnsCount={2}
+          overscanRowsCount={2}
+        />
+      );
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should accommodate a custom overscan', () => {
+      ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          initialScrollLeft={250}
+          initialScrollTop={250}
+          overscanColumnsCount={2}
+          overscanRowsCount={2}
+        />
+      );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
@@ -227,6 +243,61 @@ describe('FixedSizeGrid', () => {
         />
       );
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    describe('overscanCount', () => {
+      it('should warn about deprecated overscanCount prop', () => {
+        spyOn(console, 'warn');
+        ReactTestRenderer.create(
+          <FixedSizeGrid {...defaultProps} overscanCount={1} />
+        );
+        expect(console.warn).toHaveBeenCalledTimes(1);
+        expect(console.warn).toHaveBeenLastCalledWith(
+          'The overscanCount prop has been deprecated. ' +
+            'Please use the overscanColumnsCount and overscanRowsCount props instead.'
+        );
+      });
+
+      it('should use overscanColumnsCount if both it and overscanCount are provided', () => {
+        spyOn(console, 'warn');
+        ReactTestRenderer.create(
+          <FixedSizeGrid
+            {...defaultProps}
+            initialScrollLeft={100}
+            initialScrollTop={100}
+            overscanColumnsCount={3}
+            overscanCount={2}
+          />
+        );
+        expect(onItemsRendered.mock.calls).toMatchSnapshot();
+      });
+
+      it('should use overscanRowsCount if both it and overscanCount are provided', () => {
+        spyOn(console, 'warn');
+        ReactTestRenderer.create(
+          <FixedSizeGrid
+            {...defaultProps}
+            initialScrollLeft={100}
+            initialScrollTop={100}
+            overscanCount={2}
+            overscanRowsCount={3}
+          />
+        );
+        expect(onItemsRendered.mock.calls).toMatchSnapshot();
+      });
+
+      it('should support deprecated overscanCount', () => {
+        spyOn(console, 'warn');
+        ReactTestRenderer.create(
+          <FixedSizeGrid
+            {...defaultProps}
+            initialScrollLeft={100}
+            initialScrollTop={100}
+            overscanCount={2}
+          />
+        );
+        expect(onItemsRendered.mock.calls).toMatchSnapshot();
+      });
     });
   });
 
@@ -615,19 +686,54 @@ describe('FixedSizeGrid', () => {
     });
   });
 
-  describe('custom tag names', () => {
-    it('should use a custom innerTagName if specified', () => {
+  describe('custom element types', () => {
+    it('should use a custom innerElementType if specified', () => {
       const rendered = ReactTestRenderer.create(
-        <FixedSizeGrid {...defaultProps} innerTagName="section" />
+        <FixedSizeGrid {...defaultProps} innerElementType="section" />
       );
       expect(rendered.root.findByType('section')).toBeDefined();
     });
 
-    it('should use a custom outerTagName if specified', () => {
+    it('should use a custom outerElementType if specified', () => {
       const rendered = ReactTestRenderer.create(
-        <FixedSizeGrid {...defaultProps} outerTagName="section" />
+        <FixedSizeGrid {...defaultProps} outerElementType="section" />
       );
       expect(rendered.root.findByType('section')).toBeDefined();
+    });
+
+    it('should support spreading additional, arbitrary props, e.g. id', () => {
+      const container = document.createElement('div');
+      ReactDOM.render(
+        <FixedSizeGrid
+          {...defaultProps}
+          innerElementType={forwardRef((props, ref) => (
+            <div ref={ref} id="inner" {...props} />
+          ))}
+          outerElementType={forwardRef((props, ref) => (
+            <div ref={ref} id="outer" {...props} />
+          ))}
+        />,
+        container
+      );
+      expect(container.firstChild.id).toBe('outer');
+      expect(container.firstChild.firstChild.id).toBe('inner');
+    });
+
+    it('should warn if legacy innerTagName or outerTagName props are used', () => {
+      spyOn(console, 'warn');
+      ReactDOM.render(
+        <FixedSizeGrid
+          {...defaultProps}
+          innerTagName="div"
+          outerTagName="div"
+        />,
+        document.createElement('div')
+      );
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The innerTagName and outerTagName props have been deprecated. ' +
+          'Please use the innerElementType and outerElementType props instead.'
+      );
     });
   });
 

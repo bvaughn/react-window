@@ -89,7 +89,8 @@ describe('VariableSizeGrid', () => {
           columnWidth={columnWidth}
           estimatedColumnWidth={200}
           estimatedRowHeight={100}
-          overscanCount={0}
+          overscanColumnsCount={0}
+          overscanRowsCount={0}
           rowCount={50}
           rowHeight={rowHeight}
         />
@@ -113,7 +114,8 @@ describe('VariableSizeGrid', () => {
           columnWidth={columnWidth}
           estimatedColumnWidth={200}
           estimatedRowHeight={100}
-          overscanCount={0}
+          overscanColumnsCount={0}
+          overscanRowsCount={0}
           rowCount={50}
           rowHeight={rowHeight}
         />
@@ -293,7 +295,8 @@ describe('VariableSizeGrid', () => {
           {...defaultProps}
           estimatedColumnWidth={30}
           estimatedRowHeight={30}
-          overscanCount={1}
+          overscanColumnsCount={1}
+          overscanRowsCount={1}
           columnWidth={index => 50}
           rowHeight={index => 25}
         />
@@ -311,7 +314,8 @@ describe('VariableSizeGrid', () => {
           {...defaultProps}
           estimatedColumnWidth={30}
           estimatedRowHeight={30}
-          overscanCount={1}
+          overscanColumnsCount={1}
+          overscanRowsCount={1}
           columnWidth={index => 40}
           rowHeight={index => 20}
         />
@@ -333,7 +337,8 @@ describe('VariableSizeGrid', () => {
           {...defaultProps}
           estimatedColumnWidth={30}
           estimatedRowHeight={30}
-          overscanCount={1}
+          overscanColumnsCount={1}
+          overscanRowsCount={1}
           columnWidth={index => 40}
           rowHeight={index => 20}
         />

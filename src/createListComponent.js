@@ -2,6 +2,9 @@
 
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
+import { cancelTimeout, requestTimeout } from './timer';
+
+import type { TimeoutID } from './timer';
 
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
@@ -40,7 +43,8 @@ export type Props<T> = {|
   height: number | string,
   initialScrollOffset?: number,
   innerRef?: any,
-  innerTagName?: string,
+  innerElementType?: React$ElementType,
+  innerTagName?: string, // deprecated
   itemCount: number,
   itemData: T,
   itemKey?: (index: number, data: T) => any,
@@ -48,7 +52,8 @@ export type Props<T> = {|
   onItemsRendered?: onItemsRenderedCallback,
   onScroll?: onScrollCallback,
   outerRef?: any,
-  outerTagName?: string,
+  outerElementType?: React$ElementType,
+  outerTagName?: string, // deprecated
   overscanCount: number,
   style?: Object,
   useIsScrolling: boolean,
@@ -126,9 +131,7 @@ export default function createListComponent({
 
     static defaultProps = {
       direction: 'vertical',
-      innerTagName: 'div',
       itemData: undefined,
-      outerTagName: 'div',
       overscanCount: 2,
       useIsScrolling: false,
     };
@@ -219,7 +222,7 @@ export default function createListComponent({
 
     componentWillUnmount() {
       if (this._resetIsScrollingTimeoutId !== null) {
-        clearTimeout(this._resetIsScrollingTimeoutId);
+        cancelTimeout(this._resetIsScrollingTimeoutId);
       }
 
       this._unmountHook();
@@ -231,7 +234,9 @@ export default function createListComponent({
         direction,
         height,
         innerRef,
+        innerElementType,
         innerTagName,
+        outerElementType,
         outerTagName,
         style,
         width,
@@ -253,7 +258,7 @@ export default function createListComponent({
       );
 
       return createElement(
-        ((outerTagName: any): string),
+        outerElementType || outerTagName || 'div',
         {
           className,
           onScroll,
@@ -268,7 +273,7 @@ export default function createListComponent({
             ...style,
           },
         },
-        createElement(((innerTagName: any): string), {
+        createElement(innerElementType || innerTagName || 'div', {
           children: items,
           ref: innerRef,
           style: {
@@ -369,31 +374,23 @@ export default function createListComponent({
       const { direction, itemSize } = this.props;
 
       const itemStyleCache = this._getItemStyleCache(
-        shouldResetStyleCacheOnItemSizeChange && itemSize
+        shouldResetStyleCacheOnItemSizeChange && itemSize,
+        shouldResetStyleCacheOnItemSizeChange && direction
       );
 
       let style;
       if (itemStyleCache.hasOwnProperty(index)) {
         style = itemStyleCache[index];
       } else {
+        const offset = getItemOffset(this.props, index, this._instanceProps);
+        const size = getItemSize(this.props, index, this._instanceProps);
+
         itemStyleCache[index] = style = {
           position: 'absolute',
-          left:
-            direction === 'horizontal'
-              ? getItemOffset(this.props, index, this._instanceProps)
-              : 0,
-          top:
-            direction === 'vertical'
-              ? getItemOffset(this.props, index, this._instanceProps)
-              : 0,
-          height:
-            direction === 'vertical'
-              ? getItemSize(this.props, index, this._instanceProps)
-              : '100%',
-          width:
-            direction === 'horizontal'
-              ? getItemSize(this.props, index, this._instanceProps)
-              : '100%',
+          left: direction === 'horizontal' ? offset : 0,
+          top: direction === 'vertical' ? offset : 0,
+          height: direction === 'vertical' ? size : '100%',
+          width: direction === 'horizontal' ? size : '100%',
         };
       }
 
@@ -405,8 +402,8 @@ export default function createListComponent({
     // TODO This memoized getter doesn't make much sense.
     // If all that's really needed is for the impl to be able to reset the cache,
     // Then we could expose a better API for that.
-    _getItemStyleCache: (_: any) => ItemStyleCache;
-    _getItemStyleCache = memoizeOne(_ => {
+    _getItemStyleCache: (_: any, __: any) => ItemStyleCache;
+    _getItemStyleCache = memoizeOne((_, __) => {
       this._itemStyleCache = {};
 
       return this._itemStyleCache;
@@ -414,7 +411,7 @@ export default function createListComponent({
 
     _getRangeToRender(): [number, number, number, number] {
       const { itemCount, overscanCount } = this.props;
-      const { scrollDirection, scrollOffset } = this.state;
+      const { isScrolling, scrollDirection, scrollOffset } = this.state;
 
       if (itemCount === 0) {
         return [0, 0, 0, 0];
@@ -435,9 +432,13 @@ export default function createListComponent({
       // Overscan by one item in each direction so that tab/focus works.
       // If there isn't at least one extra item, tab loops back around.
       const overscanBackward =
-        scrollDirection === 'backward' ? Math.max(1, overscanCount) : 1;
+        !isScrolling || scrollDirection === 'backward'
+          ? Math.max(1, overscanCount)
+          : 1;
       const overscanForward =
-        scrollDirection === 'forward' ? Math.max(1, overscanCount) : 1;
+        !isScrolling || scrollDirection === 'forward'
+          ? Math.max(1, overscanCount)
+          : 1;
 
       return [
         Math.max(0, startIndex - overscanBackward),
@@ -534,10 +535,10 @@ export default function createListComponent({
 
     _resetIsScrollingDebounced = () => {
       if (this._resetIsScrollingTimeoutId !== null) {
-        clearTimeout(this._resetIsScrollingTimeoutId);
+        cancelTimeout(this._resetIsScrollingTimeoutId);
       }
 
-      this._resetIsScrollingTimeoutId = setTimeout(
+      this._resetIsScrollingTimeoutId = requestTimeout(
         this._resetIsScrolling,
         IS_SCROLLING_DEBOUNCE_INTERVAL
       );
@@ -549,7 +550,7 @@ export default function createListComponent({
       this.setState({ isScrolling: false }, () => {
         // Clear style cache after state update has been committed.
         // This way we don't break pure sCU for items that don't use isScrolling param.
-        this._getItemStyleCache(-1);
+        this._getItemStyleCache(-1, null);
       });
     };
 
@@ -569,9 +570,18 @@ const validateSharedProps = ({
   children,
   direction,
   height,
+  innerTagName,
+  outerTagName,
   width,
 }: Props<any>): void => {
   if (process.env.NODE_ENV !== 'production') {
+    if (innerTagName != null || outerTagName != null) {
+      console.warn(
+        'The innerTagName and outerTagName props have been deprecated. ' +
+          'Please use the innerElementType and outerElementType props instead.'
+      );
+    }
+
     if (direction !== 'horizontal' && direction !== 'vertical') {
       throw Error(
         'An invalid "direction" prop has been specified. ' +
