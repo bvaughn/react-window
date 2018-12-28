@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { FixedSizeList, shouldComponentUpdate } from 'react-window';
+import React, { PureComponent } from 'react';
+import { FixedSizeList } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
 
@@ -8,10 +8,7 @@ import CODE_VERTICAL from '../../code/FixedSizeListVertical.js';
 
 import styles from './shared.module.css';
 
-class Item extends Component {
-  // Ignore changes in style wrapper Object.
-  shouldComponentUpdate = shouldComponentUpdate.bind(this);
-
+class Item extends PureComponent {
   render() {
     const { data, index, style } = this.props;
 

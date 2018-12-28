@@ -1,5 +1,5 @@
-import React, { PureComponent, memo } from 'react';
-import { FixedSizeGrid, areEqual } from 'react-window';
+import React, { PureComponent } from 'react';
+import { FixedSizeGrid } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
 
@@ -30,8 +30,6 @@ class Cell extends PureComponent {
   }
 }
 
-const MemoizedCell = memo(Cell, areEqual);
-
 export default function() {
   return (
     <div className={styles.ExampleWrapper}>
@@ -50,7 +48,7 @@ export default function() {
             rowHeight={35}
             width={300}
           >
-            {MemoizedCell}
+            {Cell}
           </FixedSizeGrid>
         </ProfiledExample>
         <div className={styles.ExampleCode}>
