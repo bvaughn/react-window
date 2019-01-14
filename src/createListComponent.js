@@ -44,6 +44,7 @@ export type Props<T> = {|
   initialScrollOffset?: number,
   innerRef?: any,
   innerElementType?: React$ElementType,
+  innerStyle?: Object,
   innerTagName?: string, // deprecated
   itemCount: number,
   itemData: T,
@@ -232,6 +233,7 @@ export default function createListComponent({
         height,
         innerRef,
         innerElementType,
+        innerStyle,
         innerTagName,
         itemCount,
         itemData,
@@ -296,6 +298,7 @@ export default function createListComponent({
             height: direction === 'horizontal' ? '100%' : estimatedTotalSize,
             pointerEvents: isScrolling ? 'none' : '',
             width: direction === 'horizontal' ? estimatedTotalSize : '100%',
+            ...innerStyle,
           },
         })
       );

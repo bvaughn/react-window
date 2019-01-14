@@ -54,6 +54,7 @@ export type Props<T> = {|
   initialScrollTop?: number,
   innerRef?: any,
   innerElementType?: React$ElementType,
+  innerStyle?: Object,
   innerTagName?: string, // deprecated
   itemData: T,
   itemKey?: (params: {|
@@ -288,6 +289,7 @@ export default function createGridComponent({
         height,
         innerRef,
         innerElementType,
+        innerStyle,
         innerTagName,
         itemData,
         itemKey = defaultItemKey,
@@ -366,6 +368,7 @@ export default function createGridComponent({
             height: estimatedTotalHeight,
             pointerEvents: isScrolling ? 'none' : '',
             width: estimatedTotalWidth,
+            ...innerStyle,
           },
         })
       );
