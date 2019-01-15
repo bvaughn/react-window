@@ -2,18 +2,15 @@ import React, { PureComponent } from 'react';
 import { VariableSizeList } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
+import { fillArray } from '../../utils';
 
 import CODE_HORIZONTAL from '../../code/VariableSizeListHorizontal.js';
 import CODE_VERTICAL from '../../code/VariableSizeListVertical.js';
 
 import styles from './shared.module.css';
 
-const columnSizes = new Array(1000)
-  .fill(true)
-  .map(() => 75 + Math.round(Math.random() * 50));
-const rowSizes = new Array(1000)
-  .fill(true)
-  .map(() => 25 + Math.round(Math.random() * 50));
+const columnSizes = fillArray(1000, () => 75 + Math.round(Math.random() * 50));
+const rowSizes = fillArray(1000, () => 25 + Math.round(Math.random() * 50));
 
 class Item extends PureComponent {
   render() {

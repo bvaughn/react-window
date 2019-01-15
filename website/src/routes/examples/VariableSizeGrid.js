@@ -2,17 +2,14 @@ import React, { PureComponent } from 'react';
 import { VariableSizeGrid } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
+import { fillArray } from '../../utils';
 
 import CODE from '../../code/VariableSizeGrid.js';
 
 import styles from './shared.module.css';
 
-const columnWidths = new Array(1000)
-  .fill(true)
-  .map(() => 75 + Math.round(Math.random() * 50));
-const rowHeights = new Array(1000)
-  .fill(true)
-  .map(() => 25 + Math.round(Math.random() * 50));
+const columnWidths = fillArray(1000, () => 75 + Math.round(Math.random() * 50));
+const rowHeights = fillArray(1000, () => 25 + Math.round(Math.random() * 50));
 
 class Cell extends PureComponent {
   render() {
