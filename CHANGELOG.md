@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.5.1
+* 🐛 Updated `getDerivedState` Flow annotations to address a warning in a newer version of Flow.
+
 ### 1.5.0
 * 🎉 Added advanced memoization helpers methods `areEqual` and `shouldComponentUpdate` for item renderers. - [#114](https://github.com/bvaughn/react-window/issues/114)
 
