@@ -156,7 +156,7 @@ export default function createListComponent({
     static getDerivedStateFromProps(
       props: Props<T>,
       state: State
-    ): $Shape<State> {
+    ): $Shape<State> | null {
       validateSharedProps(props);
       validateProps(props);
       return null;

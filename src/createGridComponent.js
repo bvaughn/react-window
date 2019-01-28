@@ -190,7 +190,7 @@ export default function createGridComponent({
     static getDerivedStateFromProps(
       nextProps: Props<T>,
       prevState: State
-    ): $Shape<State> {
+    ): $Shape<State> | null {
       validateSharedProps(nextProps);
       validateProps(nextProps);
       return null;
