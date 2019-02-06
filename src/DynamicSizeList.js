@@ -310,7 +310,7 @@ const DynamicSizeList = createListComponent({
               // To avoid this, we need to make small adjustments as a user scrolls to preserve apparent position.
               // This also ensures that the first item eventually aligns with scroll offset 0.
               return {
-                scrollOffset: prevState.scrollOffset + sizeDeltaForStateUpdate,
+                scrollOffset: Math.max(0, prevState.scrollOffset + sizeDeltaForStateUpdate)
               };
             } else {
               // There's no state to update,
