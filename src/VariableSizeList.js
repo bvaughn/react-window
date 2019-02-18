@@ -147,7 +147,7 @@ const getEstimatedTotalSize = (
   let totalSizeOfMeasuredItems = 0;
 
   if (lastMeasuredIndex >= 0) {
-    if (lastMeasuredIndex >= itemCount) lastMeasuredIndex = itemCount - 1;
+    if (lastMeasuredIndex >= itemMetadataMap.length) lastMeasuredIndex = itemMetadataMap.length - 1;
     const itemMetadata = itemMetadataMap[lastMeasuredIndex];
     totalSizeOfMeasuredItems = itemMetadata.offset + itemMetadata.size;
   }
