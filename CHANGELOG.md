@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.5.2
+* 🐛 Edge case bug fix for `VariableSizeList` and `VariableSizeGrid` when the number of items decreases while a scroll is in progress. - ([iamsolankiamit](https://github.com/iamsolankiamit) - [#138](https://github.com/bvaughn/react-window/pull/138))
+
 ### 1.5.1
 * 🐛 Updated `getDerivedState` Flow annotations to address a warning in a newer version of Flow.
 

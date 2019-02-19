@@ -35,7 +35,7 @@ const getEstimatedTotalHeight = (
 ) => {
   let totalSizeOfMeasuredRows = 0;
 
-  // Sanity check for decreased rowCount after "scroll" events
+  // Edge case check for when the number of items decreases while a scroll is in progress.
   // https://github.com/bvaughn/react-window/pull/138
   if (lastMeasuredRowIndex >= rowCount) {
     lastMeasuredRowIndex = rowCount - 1;
@@ -62,7 +62,7 @@ const getEstimatedTotalWidth = (
 ) => {
   let totalSizeOfMeasuredRows = 0;
 
-  // Sanity check for decreased columnCount after "scroll" events
+  // Edge case check for when the number of items decreases while a scroll is in progress.
   // https://github.com/bvaughn/react-window/pull/138
   if (lastMeasuredColumnIndex >= columnCount) {
     lastMeasuredColumnIndex = columnCount - 1;

@@ -146,7 +146,7 @@ const getEstimatedTotalSize = (
 ) => {
   let totalSizeOfMeasuredItems = 0;
 
-  // Sanity check for decreased itemCount after "scroll" events
+  // Edge case check for when the number of items decreases while a scroll is in progress.
   // https://github.com/bvaughn/react-window/pull/138
   if (lastMeasuredIndex >= itemCount) {
     lastMeasuredIndex = itemCount - 1;
