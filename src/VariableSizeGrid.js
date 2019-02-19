@@ -35,6 +35,12 @@ const getEstimatedTotalHeight = (
 ) => {
   let totalSizeOfMeasuredRows = 0;
 
+  // Sanity check for decreased rowCount after "scroll" events
+  // https://github.com/bvaughn/react-window/pull/138
+  if (lastMeasuredRowIndex >= rowCount) {
+    lastMeasuredRowIndex = rowCount - 1;
+  }
+
   if (lastMeasuredRowIndex >= 0) {
     const itemMetadata = rowMetadataMap[lastMeasuredRowIndex];
     totalSizeOfMeasuredRows = itemMetadata.offset + itemMetadata.size;
@@ -55,6 +61,12 @@ const getEstimatedTotalWidth = (
   }: InstanceProps
 ) => {
   let totalSizeOfMeasuredRows = 0;
+
+  // Sanity check for decreased columnCount after "scroll" events
+  // https://github.com/bvaughn/react-window/pull/138
+  if (lastMeasuredColumnIndex >= columnCount) {
+    lastMeasuredColumnIndex = columnCount - 1;
+  }
 
   if (lastMeasuredColumnIndex >= 0) {
     const itemMetadata = columnMetadataMap[lastMeasuredColumnIndex];

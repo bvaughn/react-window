@@ -1,6 +1,14 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
+import { render } from 'react-dom';
+import { Simulate } from 'react-dom/test-utils';
 import ReactTestRenderer from 'react-test-renderer';
 import { VariableSizeGrid } from '..';
+
+const simulateScroll = (instance, { scrollLeft, scrollTop }) => {
+  instance._outerRef.scrollLeft = scrollLeft;
+  instance._outerRef.scrollTop = scrollTop;
+  Simulate.scroll(instance._outerRef);
+};
 
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
@@ -407,5 +415,37 @@ describe('VariableSizeGrid', () => {
           'Value should be a function. "number" was specified.'
       );
     });
+  });
+
+  // https://github.com/bvaughn/react-window/pull/138
+  it('should descrease scroll size when itemCount decreases', () => {
+    const innerRef = createRef();
+    const gridRef = createRef();
+
+    class Wrapper extends PureComponent {
+      state = { columnCount: 100, rowCount: 200 };
+      render() {
+        return (
+          <VariableSizeGrid
+            {...defaultProps}
+            columnCount={this.state.columnCount}
+            innerRef={innerRef}
+            ref={gridRef}
+            rowCount={this.state.rowCount}
+          />
+        );
+      }
+    }
+
+    // Use ReactDOM renderer so "scroll" events work correctly.
+    const instance = render(<Wrapper />, document.createElement('div'));
+
+    // Simulate scrolling past several rows.
+    simulateScroll(gridRef.current, { scrollLeft: 3000, scrollTop: 4000 });
+
+    // Decrease itemCount a lot and verify the scroll height is descreased as well.
+    instance.setState({ columnCount: 2, rowCount: 4 });
+    expect(innerRef.current.style.height).toEqual('106px');
+    expect(innerRef.current.style.width).toEqual('101px');
   });
 });
