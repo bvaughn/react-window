@@ -396,6 +396,7 @@ export default function createListComponent({
         itemStyleCache[index] = style = {
           position: 'absolute',
           left: direction === 'horizontal' ? offset : 0,
+          right: direction === 'horizontal' ? offset : 0,
           top: direction === 'vertical' ? offset : 0,
           height: direction === 'vertical' ? size : '100%',
           width: direction === 'horizontal' ? size : '100%',
@@ -448,7 +449,7 @@ export default function createListComponent({
     }
 
     _onScrollHorizontal = (event: ScrollEvent): void => {
-      const { scrollLeft } = event.currentTarget;
+      const { scrollLeft, scrollWidth, clientWidth } = event.currentTarget;
       this.setState(prevState => {
         if (prevState.scrollOffset === scrollLeft) {
           // Scroll position may have been updated by cDM/cDU,
@@ -457,11 +458,13 @@ export default function createListComponent({
           return null;
         }
 
+        const isRtl = this.props.style && this.props.style.direction === 'rtl';
+
         return {
           isScrolling: true,
           scrollDirection:
             prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
-          scrollOffset: scrollLeft,
+          scrollOffset: isRtl ? scrollWidth - clientWidth - scrollLeft : scrollLeft,
           scrollUpdateWasRequested: false,
         };
       }, this._resetIsScrollingDebounced);
