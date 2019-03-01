@@ -464,7 +464,9 @@ export default function createListComponent({
           isScrolling: true,
           scrollDirection:
             prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
-          scrollOffset: isRtl ? scrollWidth - clientWidth - scrollLeft : scrollLeft,
+          scrollOffset: isRtl
+            ? scrollWidth - clientWidth - scrollLeft
+            : scrollLeft,
           scrollUpdateWasRequested: false,
         };
       }, this._resetIsScrollingDebounced);
