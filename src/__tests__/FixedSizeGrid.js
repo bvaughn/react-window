@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
 import { FixedSizeGrid } from '..';
+import * as domHelpers from '../domHelpers';
 
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
@@ -13,7 +14,7 @@ const simulateScroll = (instance, { scrollLeft, scrollTop }) => {
 };
 
 describe('FixedSizeGrid', () => {
-  let itemRenderer, defaultProps, onItemsRendered;
+  let defaultProps, getScrollbarSize, itemRenderer, onItemsRendered;
 
   // Use PureComponent to test memoization.
   // Pass through to itemRenderer mock for easier test assertions.
@@ -25,6 +26,9 @@ describe('FixedSizeGrid', () => {
 
   beforeEach(() => {
     jest.useFakeTimers();
+
+    // Mock the DOM helper util for testing purposes.
+    getScrollbarSize = domHelpers.getScrollbarSize = jest.fn(() => 0);
 
     onItemsRendered = jest.fn();
 
@@ -511,6 +515,50 @@ describe('FixedSizeGrid', () => {
       itemRenderer.mockClear();
       instance.scrollToItem({ columnIndex: 15, rowIndex: 20 });
       expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
+    });
+
+    it('should account for scrollbar size', () => {
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          columnWidth={100}
+          height={150}
+          rowHeight={25}
+          width={300}
+          onScroll={onScroll}
+        />
+      );
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 15, rowIndex: 10, align: 'end' });
+
+      // With hidden scrollbars (size === 0) we would expect...
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'forward',
+        scrollLeft: 1300,
+        scrollTop: 125,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'forward',
+      });
+
+      getScrollbarSize.mockImplementation(() => 20);
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 15, rowIndex: 10, align: 'end' });
+
+      // With scrollbars of size 20 we would expect those values ot increase by 20px
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'forward',
+        scrollLeft: 1320,
+        scrollTop: 145,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'forward',
+      });
     });
   });
 

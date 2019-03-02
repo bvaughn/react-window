@@ -3,6 +3,7 @@
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
+import { getScrollbarSize } from './domHelpers';
 
 import type { TimeoutID } from './timer';
 
@@ -101,7 +102,8 @@ type GetOffsetForItemAndAlignment = (
   index: number,
   align: ScrollToAlign,
   scrollOffset: number,
-  instanceProps: any
+  instanceProps: any,
+  scrollbarSize: number
 ) => number;
 type GetStartIndexForOffset = (
   props: Props<any>,
@@ -233,6 +235,7 @@ export default function createGridComponent({
       rowIndex: number,
     }): void {
       const { scrollLeft, scrollTop } = this.state;
+      const scrollbarSize = getScrollbarSize();
 
       this.scrollTo({
         scrollLeft: getOffsetForColumnAndAlignment(
@@ -240,14 +243,16 @@ export default function createGridComponent({
           columnIndex,
           align,
           scrollLeft,
-          this._instanceProps
+          this._instanceProps,
+          scrollbarSize
         ),
         scrollTop: getOffsetForRowAndAlignment(
           this.props,
           rowIndex,
           align,
           scrollTop,
-          this._instanceProps
+          this._instanceProps,
+          scrollbarSize
         ),
       });
     }
