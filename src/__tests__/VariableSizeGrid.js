@@ -301,6 +301,53 @@ describe('VariableSizeGrid', () => {
         verticalScrollDirection: 'forward',
       });
     });
+
+    it('should not account for scrollbar size when no scrollbar is visible for a particular direction', () => {
+      getScrollbarSize.mockImplementation(() => 20);
+
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid
+          {...defaultProps}
+          columnCount={1}
+          onScroll={onScroll}
+        />
+      );
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 0, rowIndex: 10, align: 'end' });
+
+      // Since there aren't enough columns to require horizontal scrolling,
+      // the additional 20px for the scrollbar should not be taken into consideration.
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'backward',
+        scrollLeft: 0,
+        scrollTop: 230,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'forward',
+      });
+
+      rendered.update(
+        <VariableSizeGrid {...defaultProps} rowCount={1} onScroll={onScroll} />
+      );
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 15, rowIndex: 0, align: 'end' });
+
+      // Since there aren't enough rows to require vertical scrolling,
+      // the additional 20px for the scrollbar should not be taken into consideration.
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'forward',
+        scrollLeft: 720,
+        scrollTop: 0,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'backward',
+      });
+    });
   });
 
   describe('resetAfterIndex method', () => {

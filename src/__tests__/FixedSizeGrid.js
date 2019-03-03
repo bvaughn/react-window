@@ -560,6 +560,65 @@ describe('FixedSizeGrid', () => {
         verticalScrollDirection: 'forward',
       });
     });
+
+    it('should not account for scrollbar size when no scrollbar is visible for a particular direction', () => {
+      getScrollbarSize.mockImplementation(() => 20);
+
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          columnCount={2}
+          columnWidth={100}
+          height={150}
+          rowHeight={25}
+          width={300}
+          onScroll={onScroll}
+        />
+      );
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 0, rowIndex: 10, align: 'end' });
+
+      // Since there aren't enough columns to require horizontal scrolling,
+      // the additional 20px for the scrollbar should not be taken into consideration.
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'backward',
+        scrollLeft: 0,
+        scrollTop: 125,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'forward',
+      });
+
+      rendered.update(
+        <FixedSizeGrid
+          {...defaultProps}
+          columnWidth={100}
+          height={150}
+          rowCount={4}
+          rowHeight={25}
+          width={300}
+          onScroll={onScroll}
+        />
+      );
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 15, rowIndex: 0, align: 'end' });
+
+      // Since there aren't enough rows to require vertical scrolling,
+      // the additional 20px for the scrollbar should not be taken into consideration.
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'forward',
+        scrollLeft: 1300,
+        scrollTop: 0,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'backward',
+      });
+    });
   });
 
   // onItemsRendered is pretty well covered by other snapshot tests

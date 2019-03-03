@@ -234,8 +234,24 @@ export default function createGridComponent({
       columnIndex: number,
       rowIndex: number,
     }): void {
+      const { height, width } = this.props;
       const { scrollLeft, scrollTop } = this.state;
       const scrollbarSize = getScrollbarSize();
+
+      const estimatedTotalHeight = getEstimatedTotalHeight(
+        this.props,
+        this._instanceProps
+      );
+      const estimatedTotalWidth = getEstimatedTotalWidth(
+        this.props,
+        this._instanceProps
+      );
+
+      // The scrollbar size should be considered when scrolling an item into view,
+      // to ensure it's fully visible.
+      // But we only need to account for its size when it's actually visible.
+      const horizontalScrollbarSize = estimatedTotalWidth > width ? scrollbarSize : 0;
+      const verticalScrollbarSize = estimatedTotalHeight > height ? scrollbarSize : 0;
 
       this.scrollTo({
         scrollLeft: getOffsetForColumnAndAlignment(
@@ -244,7 +260,7 @@ export default function createGridComponent({
           align,
           scrollLeft,
           this._instanceProps,
-          scrollbarSize
+          verticalScrollbarSize
         ),
         scrollTop: getOffsetForRowAndAlignment(
           this.props,
@@ -252,7 +268,7 @@ export default function createGridComponent({
           align,
           scrollTop,
           this._instanceProps,
-          scrollbarSize
+          horizontalScrollbarSize
         ),
       });
     }
