@@ -39,7 +39,7 @@ export default function() {
             itemData="صف"
             itemSize={35}
             width={300}
-            style={{ direction: "rtl" }}
+            style={{ direction: 'rtl' }}
           >
             {Item}
           </FixedSizeList>
@@ -61,7 +61,7 @@ export default function() {
             itemData="عمود"
             itemSize={100}
             width={300}
-            style={{ direction: "rtl" }}
+            style={{ direction: 'rtl' }}
           >
             {Item}
           </FixedSizeList>
