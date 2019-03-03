@@ -39,7 +39,6 @@ export default function() {
             itemSize={100}
             layout="horizontal"
             width={300}
-            style={{ direction: 'rtl' }}
           >
             {Item}
           </FixedSizeList>

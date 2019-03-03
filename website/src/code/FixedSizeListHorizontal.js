@@ -6,10 +6,10 @@ const Column = ({ index, style }) => (
 
 const Example = () => (
   <List
-    direction="horizontal"
     height={75}
     itemCount={1000}
     itemSize={100}
+    layout="horizontal"
     width={300}
   >
     {Column}

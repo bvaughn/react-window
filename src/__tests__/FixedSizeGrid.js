@@ -924,7 +924,7 @@ describe('FixedSizeGrid', () => {
     it('should fail if a string height is provided', () => {
       expect(() =>
         ReactTestRenderer.create(
-          <FixedSizeGrid {...defaultProps} direction="vertical" height="100%" />
+          <FixedSizeGrid {...defaultProps} height="100%" />
         )
       ).toThrow(
         'An invalid "height" prop has been specified. ' +
@@ -936,11 +936,7 @@ describe('FixedSizeGrid', () => {
     it('should fail if a string width is provided', () => {
       expect(() =>
         ReactTestRenderer.create(
-          <FixedSizeGrid
-            {...defaultProps}
-            direction="horizontal"
-            width="100%"
-          />
+          <FixedSizeGrid {...defaultProps} width="100%" />
         )
       ).toThrow(
         'An invalid "width" prop has been specified. ' +

@@ -58,11 +58,11 @@ export default function() {
         >
           <VariableSizeList
             className={styles.List}
-            direction="horizontal"
             height={75}
             itemCount={1000}
             itemData="Column"
             itemSize={index => columnSizes[index]}
+            layout="horizontal"
             width={300}
           >
             {Item}

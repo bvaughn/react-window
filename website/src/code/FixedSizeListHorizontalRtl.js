@@ -6,7 +6,7 @@ const Column = ({ index, style }) => (
 
 const Example = () => (
   <List
-    direction="ltr"
+    direction="rtl"
     height={75}
     itemCount={1000}
     itemSize={100}

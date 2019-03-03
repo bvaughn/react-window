@@ -58,13 +58,32 @@ describe('FixedSizeList', () => {
 
   it('should render a list of columns', () => {
     ReactTestRenderer.create(
-      <FixedSizeList {...defaultProps} direction="horizontal" />
+      <FixedSizeList {...defaultProps} layout="horizontal" />
     );
     expect(itemRenderer).toHaveBeenCalledTimes(5);
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
+  it('should re-render items if layout changes', () => {
+    const rendered = ReactTestRenderer.create(
+      <FixedSizeList {...defaultProps} layout="vertical" />
+    );
+    expect(itemRenderer).toHaveBeenCalled();
+    itemRenderer.mockClear();
+
+    // Re-rendering should not affect pure sCU children:
+    rendered.update(<FixedSizeList {...defaultProps} layout="vertical" />);
+    expect(itemRenderer).not.toHaveBeenCalled();
+
+    // Re-rendering with new layout should re-render children:
+    rendered.update(<FixedSizeList {...defaultProps} layout="horizontal" />);
+    expect(itemRenderer).toHaveBeenCalled();
+  });
+
+  // TODO Deprecate direction "horizontal"
   it('should re-render items if direction changes', () => {
+    spyOn(console, 'warn'); // Ingore legacy prop warning
+
     const rendered = ReactTestRenderer.create(
       <FixedSizeList {...defaultProps} direction="vertical" />
     );
@@ -75,7 +94,7 @@ describe('FixedSizeList', () => {
     rendered.update(<FixedSizeList {...defaultProps} direction="vertical" />);
     expect(itemRenderer).not.toHaveBeenCalled();
 
-    // Re-rendering with new direction should re-render children:
+    // Re-rendering with new layout should re-render children:
     rendered.update(<FixedSizeList {...defaultProps} direction="horizontal" />);
     expect(itemRenderer).toHaveBeenCalled();
   });
@@ -97,7 +116,7 @@ describe('FixedSizeList', () => {
       ReactDOM.render(
         <FixedSizeList
           {...defaultProps}
-          direction="horizontal"
+          layout="horizontal"
           innerRef={innerRef}
         />,
         document.createElement('div')
@@ -597,6 +616,32 @@ describe('FixedSizeList', () => {
           'Please use the innerElementType and outerElementType props instead.'
       );
     });
+
+    it('should warn if legacy direction "horizontal" value is used', () => {
+      spyOn(console, 'warn');
+      ReactDOM.render(
+        <FixedSizeList {...defaultProps} direction="horizontal" />,
+        document.createElement('div')
+      );
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The direction prop should be either "ltr" (default) or "rtl". ' +
+          'Please use the layout prop to specify "vertical" (default) or "horizontal" orientation.'
+      );
+    });
+
+    it('should warn if legacy direction "vertical" value is used', () => {
+      spyOn(console, 'warn');
+      ReactDOM.render(
+        <FixedSizeList {...defaultProps} direction="vertical" />,
+        document.createElement('div')
+      );
+      expect(console.warn).toHaveBeenCalledTimes(1);
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'The direction prop should be either "ltr" (default) or "rtl". ' +
+          'Please use the layout prop to specify "vertical" (default) or "horizontal" orientation.'
+      );
+    });
   });
 
   describe('itemData', () => {
@@ -664,6 +709,18 @@ describe('FixedSizeList', () => {
       );
     });
 
+    it('should fail if an invalid layout is provided', () => {
+      expect(() =>
+        ReactTestRenderer.create(
+          <FixedSizeList {...defaultProps} layout={null} />
+        )
+      ).toThrow(
+        'An invalid "layout" prop has been specified. ' +
+          'Value should be either "horizontal" or "vertical". ' +
+          '"null" was specified.'
+      );
+    });
+
     it('should fail if an invalid direction is provided', () => {
       expect(() =>
         ReactTestRenderer.create(
@@ -671,7 +728,7 @@ describe('FixedSizeList', () => {
         )
       ).toThrow(
         'An invalid "direction" prop has been specified. ' +
-          'Value should be either "horizontal" or "vertical". ' +
+          'Value should be either "ltr" or "rtl". ' +
           '"null" was specified.'
       );
     });
@@ -679,7 +736,7 @@ describe('FixedSizeList', () => {
     it('should fail if a string height is provided for a vertical list', () => {
       expect(() =>
         ReactTestRenderer.create(
-          <FixedSizeList {...defaultProps} direction="vertical" height="100%" />
+          <FixedSizeList {...defaultProps} layout="vertical" height="100%" />
         )
       ).toThrow(
         'An invalid "height" prop has been specified. ' +
@@ -691,11 +748,7 @@ describe('FixedSizeList', () => {
     it('should fail if a string width is provided for a horizontal list', () => {
       expect(() =>
         ReactTestRenderer.create(
-          <FixedSizeList
-            {...defaultProps}
-            direction="horizontal"
-            width="100%"
-          />
+          <FixedSizeList {...defaultProps} layout="horizontal" width="100%" />
         )
       ).toThrow(
         'An invalid "width" prop has been specified. ' +

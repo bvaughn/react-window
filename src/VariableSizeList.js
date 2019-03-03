@@ -185,9 +185,11 @@ const VariableSizeList = createListComponent({
     scrollOffset: number,
     instanceProps: InstanceProps
   ): number => {
-    const { direction, height, width } = props;
+    const { direction, height, layout, width } = props;
 
-    const size = (((direction === 'horizontal' ? width : height): any): number);
+    // TODO Deprecate direction "horizontal"
+    const isHorizontal = direction === 'horizontal' || layout === 'horizontal';
+    const size = (((isHorizontal ? width : height): any): number);
     const itemMetadata = getItemMetadata(props, index, instanceProps);
 
     // Get estimated total size after ItemMetadata is computed,
@@ -234,9 +236,11 @@ const VariableSizeList = createListComponent({
     scrollOffset: number,
     instanceProps: InstanceProps
   ): number => {
-    const { direction, height, itemCount, width } = props;
+    const { direction, height, itemCount, layout, width } = props;
 
-    const size = (((direction === 'horizontal' ? width : height): any): number);
+    // TODO Deprecate direction "horizontal"
+    const isHorizontal = direction === 'horizontal' || layout === 'horizontal';
+    const size = (((isHorizontal ? width : height): any): number);
     const itemMetadata = getItemMetadata(props, startIndex, instanceProps);
     const maxOffset = scrollOffset + size;
 
