@@ -307,7 +307,7 @@ export default function createListComponent({
             overflow: 'auto',
             WebkitOverflowScrolling: 'touch',
             willChange: 'transform',
-            direction: direction === 'rtl' ? 'rtl' : 'ltr',
+            direction,
             ...style,
           },
         },
@@ -486,14 +486,23 @@ export default function createListComponent({
 
         const { direction } = this.props;
 
+        // HACK According to the spec, scrollLeft should be negative for RTL aligned elements.
+        // Chrome does not seem to adhere; its scrolLeft values are positive (measured relative to the left).
+        // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
+        let scrollOffset = scrollLeft;
+        if (direction === 'rtl') {
+          if (scrollLeft < 0) {
+            scrollOffset = -scrollOffset;
+          } else {
+            scrollOffset = scrollWidth - clientWidth - scrollLeft;
+          }
+        }
+
         return {
           isScrolling: true,
           scrollDirection:
             prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
-          scrollOffset:
-            direction === 'rtl'
-              ? scrollWidth - clientWidth - scrollLeft
-              : scrollLeft,
+          scrollOffset,
           scrollUpdateWasRequested: false,
         };
       }, this._resetIsScrollingDebounced);

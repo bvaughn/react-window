@@ -668,14 +668,23 @@ export default function createGridComponent({
 
         const { direction } = this.props;
 
+        // HACK According to the spec, scrollLeft should be negative for RTL aligned elements.
+        // Chrome does not seem to adhere; its scrolLeft values are positive (measured relative to the left).
+        // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
+        let calculatedScrollLeft = scrollLeft;
+        if (direction === 'rtl') {
+          if (scrollLeft < 0) {
+            calculatedScrollLeft = -scrollLeft;
+          } else {
+            calculatedScrollLeft = scrollWidth - clientWidth - scrollLeft;
+          }
+        }
+
         return {
           isScrolling: true,
           horizontalScrollDirection:
             prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
-          scrollLeft:
-            direction === 'rtl'
-              ? scrollWidth - clientWidth - scrollLeft
-              : scrollLeft,
+          scrollLeft: calculatedScrollLeft,
           scrollTop,
           verticalScrollDirection:
             prevState.scrollTop < scrollTop ? 'forward' : 'backward',
