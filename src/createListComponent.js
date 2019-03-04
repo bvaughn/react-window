@@ -491,7 +491,7 @@ export default function createListComponent({
         // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
         let scrollOffset = scrollLeft;
         if (direction === 'rtl') {
-          if (scrollLeft < 0) {
+          if (scrollLeft <= 0) {
             scrollOffset = -scrollOffset;
           } else {
             scrollOffset = scrollWidth - clientWidth - scrollLeft;
