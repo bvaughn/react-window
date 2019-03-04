@@ -66,6 +66,17 @@ const PROPS = [
           <li>ltr (default)</li>
           <li>rtl</li>
         </ul>
+        <p>
+          This property also automatically sets the{' '}
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/CSS/direction"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            CSS <code>direction</code> style
+          </a>{' '}
+          for the list component.
+        </p>
       </Fragment>
     ),
     name: 'direction',

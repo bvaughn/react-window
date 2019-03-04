@@ -221,6 +221,39 @@ describe('FixedSizeList', () => {
     });
   });
 
+  describe('direction', () => {
+    it('should set the appropriate CSS direction style', () => {
+      const renderer = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} direction="ltr" />
+      );
+      expect(renderer.toJSON().props.style.direction).toBe('ltr');
+      renderer.update(<FixedSizeList {...defaultProps} direction="rtl" />);
+      expect(renderer.toJSON().props.style.direction).toBe('rtl');
+    });
+
+    it('should position items correctly', () => {
+      const renderer = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} direction="ltr" />
+      );
+
+      let params = itemRenderer.mock.calls[0][0];
+      expect(params.index).toBe(0);
+      let style = params.style;
+      expect(style.left).toBe(0);
+      expect(style.right).toBeUndefined();
+
+      itemRenderer.mockClear();
+
+      renderer.update(<FixedSizeList {...defaultProps} direction="rtl" />);
+
+      params = itemRenderer.mock.calls[0][0];
+      expect(params.index).toBe(0);
+      style = params.style;
+      expect(style.left).toBeUndefined();
+      expect(style.right).toBe(0);
+    });
+  });
+
   describe('overscanCount', () => {
     it('should require a minimum of 1 overscan to support tabbing', () => {
       ReactTestRenderer.create(
@@ -602,45 +635,68 @@ describe('FixedSizeList', () => {
 
     it('should warn if legacy innerTagName or outerTagName props are used', () => {
       spyOn(console, 'warn');
-      ReactDOM.render(
+
+      const renderer = ReactTestRenderer.create(
         <FixedSizeList
           {...defaultProps}
           innerTagName="div"
           outerTagName="div"
-        />,
-        document.createElement('div')
+        />
       );
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(console.warn).toHaveBeenLastCalledWith(
         'The innerTagName and outerTagName props have been deprecated. ' +
           'Please use the innerElementType and outerElementType props instead.'
       );
+
+      renderer.update(
+        <FixedSizeList
+          {...defaultProps}
+          innerTagName="div"
+          outerTagName="div"
+        />
+      );
+
+      // But it should only warn once.
+      expect(console.warn).toHaveBeenCalledTimes(1);
     });
 
     it('should warn if legacy direction "horizontal" value is used', () => {
       spyOn(console, 'warn');
-      ReactDOM.render(
-        <FixedSizeList {...defaultProps} direction="horizontal" />,
-        document.createElement('div')
+
+      const renderer = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} direction="horizontal" />
       );
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(console.warn).toHaveBeenLastCalledWith(
         'The direction prop should be either "ltr" (default) or "rtl". ' +
           'Please use the layout prop to specify "vertical" (default) or "horizontal" orientation.'
       );
+
+      renderer.update(
+        <FixedSizeList {...defaultProps} direction="horizontal" />
+      );
+
+      // But it should only warn once.
+      expect(console.warn).toHaveBeenCalledTimes(1);
     });
 
     it('should warn if legacy direction "vertical" value is used', () => {
       spyOn(console, 'warn');
-      ReactDOM.render(
-        <FixedSizeList {...defaultProps} direction="vertical" />,
-        document.createElement('div')
+
+      const renderer = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} direction="vertical" />
       );
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(console.warn).toHaveBeenLastCalledWith(
         'The direction prop should be either "ltr" (default) or "rtl". ' +
           'Please use the layout prop to specify "vertical" (default) or "horizontal" orientation.'
       );
+
+      renderer.update(<FixedSizeList {...defaultProps} direction="vertical" />);
+
+      // But it should only warn once.
+      expect(console.warn).toHaveBeenCalledTimes(1);
     });
   });
 

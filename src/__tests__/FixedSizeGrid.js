@@ -176,6 +176,41 @@ describe('FixedSizeGrid', () => {
     });
   });
 
+  describe('direction', () => {
+    it('should set the appropriate CSS direction style', () => {
+      const renderer = ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} direction="ltr" />
+      );
+      expect(renderer.toJSON().props.style.direction).toBe('ltr');
+      renderer.update(<FixedSizeGrid {...defaultProps} direction="rtl" />);
+      expect(renderer.toJSON().props.style.direction).toBe('rtl');
+    });
+
+    it('should position items correctly', () => {
+      const renderer = ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} direction="ltr" />
+      );
+
+      let params = itemRenderer.mock.calls[0][0];
+      expect(params.columnIndex).toBe(0);
+      expect(params.rowIndex).toBe(0);
+      let style = params.style;
+      expect(style.left).toBe(0);
+      expect(style.right).toBeUndefined();
+
+      itemRenderer.mockClear();
+
+      renderer.update(<FixedSizeGrid {...defaultProps} direction="rtl" />);
+
+      params = itemRenderer.mock.calls[0][0];
+      expect(params.columnIndex).toBe(0);
+      expect(params.rowIndex).toBe(0);
+      style = params.style;
+      expect(style.left).toBeUndefined();
+      expect(style.right).toBe(0);
+    });
+  });
+
   describe('overscanColumnsCount and overscanRowsCount', () => {
     it('should require a minimum of 1 overscan to support tabbing', () => {
       ReactTestRenderer.create(
@@ -252,7 +287,8 @@ describe('FixedSizeGrid', () => {
     describe('overscanCount', () => {
       it('should warn about deprecated overscanCount prop', () => {
         spyOn(console, 'warn');
-        ReactTestRenderer.create(
+
+        const renderer = ReactTestRenderer.create(
           <FixedSizeGrid {...defaultProps} overscanCount={1} />
         );
         expect(console.warn).toHaveBeenCalledTimes(1);
@@ -260,10 +296,16 @@ describe('FixedSizeGrid', () => {
           'The overscanCount prop has been deprecated. ' +
             'Please use the overscanColumnsCount and overscanRowsCount props instead.'
         );
+
+        renderer.update(<FixedSizeGrid {...defaultProps} overscanCount={1} />);
+
+        // But it should only warn once.
+        expect(console.warn).toHaveBeenCalledTimes(1);
       });
 
       it('should use overscanColumnsCount if both it and overscanCount are provided', () => {
         spyOn(console, 'warn');
+
         ReactTestRenderer.create(
           <FixedSizeGrid
             {...defaultProps}
@@ -278,6 +320,7 @@ describe('FixedSizeGrid', () => {
 
       it('should use overscanRowsCount if both it and overscanCount are provided', () => {
         spyOn(console, 'warn');
+
         ReactTestRenderer.create(
           <FixedSizeGrid
             {...defaultProps}
@@ -292,6 +335,7 @@ describe('FixedSizeGrid', () => {
 
       it('should support deprecated overscanCount', () => {
         spyOn(console, 'warn');
+
         ReactTestRenderer.create(
           <FixedSizeGrid
             {...defaultProps}
@@ -828,19 +872,29 @@ describe('FixedSizeGrid', () => {
 
     it('should warn if legacy innerTagName or outerTagName props are used', () => {
       spyOn(console, 'warn');
-      ReactDOM.render(
+      const renderer = ReactTestRenderer.create(
         <FixedSizeGrid
           {...defaultProps}
           innerTagName="div"
           outerTagName="div"
-        />,
-        document.createElement('div')
+        />
       );
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(console.warn).toHaveBeenLastCalledWith(
         'The innerTagName and outerTagName props have been deprecated. ' +
           'Please use the innerElementType and outerElementType props instead.'
       );
+
+      renderer.update(
+        <FixedSizeGrid
+          {...defaultProps}
+          innerTagName="div"
+          outerTagName="div"
+        />
+      );
+
+      // But it should only warn once.
+      expect(console.warn).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -918,6 +972,18 @@ describe('FixedSizeGrid', () => {
         'An invalid "children" prop has been specified. ' +
           'Value should be a React component. ' +
           '"undefined" was specified.'
+      );
+    });
+
+    it('should fail if an invalid direction is provided', () => {
+      expect(() =>
+        ReactTestRenderer.create(
+          <FixedSizeGrid {...defaultProps} direction={null} />
+        )
+      ).toThrow(
+        'An invalid "direction" prop has been specified. ' +
+          'Value should be either "ltr" or "rtl". ' +
+          '"null" was specified.'
       );
     });
 

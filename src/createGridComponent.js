@@ -7,6 +7,7 @@ import { getScrollbarSize } from './domHelpers';
 
 import type { TimeoutID } from './timer';
 
+type Direction = 'ltr' | 'rtl';
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
@@ -50,6 +51,7 @@ export type Props<T> = {|
   className?: string,
   columnCount: number,
   columnWidth: itemSize,
+  direction: Direction,
   height: number,
   initialScrollLeft?: number,
   initialScrollTop?: number,
@@ -78,6 +80,7 @@ export type Props<T> = {|
 |};
 
 type State = {|
+  instance: any,
   isScrolling: boolean,
   horizontalScrollDirection: ScrollDirection,
   scrollLeft: number,
@@ -124,6 +127,15 @@ const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 const defaultItemKey = ({ columnIndex, data, rowIndex }) =>
   `${rowIndex}:${columnIndex}`;
 
+// In DEV mode, this Set helps us only log a warning once per component instace.
+// This avoids spamming the console every time a render happens.
+let devWarningsOverscanCount = null;
+let devWarningsTagName = null;
+if (process.env.NODE_ENV !== 'production') {
+  devWarningsOverscanCount = new WeakSet();
+  devWarningsTagName = new WeakSet();
+}
+
 export default function createGridComponent({
   getColumnOffset,
   getColumnStartIndexForOffset,
@@ -163,11 +175,13 @@ export default function createGridComponent({
     _outerRef: ?HTMLDivElement;
 
     static defaultProps = {
+      direction: 'ltr',
       itemData: undefined,
       useIsScrolling: false,
     };
 
     state: State = {
+      instance: this,
       isScrolling: false,
       horizontalScrollDirection: 'forward',
       scrollLeft:
@@ -193,7 +207,7 @@ export default function createGridComponent({
       nextProps: Props<T>,
       prevState: State
     ): $Shape<State> | null {
-      validateSharedProps(nextProps);
+      validateSharedProps(nextProps, prevState);
       validateProps(nextProps);
       return null;
     }
@@ -308,6 +322,7 @@ export default function createGridComponent({
         children,
         className,
         columnCount,
+        direction,
         height,
         innerRef,
         innerElementType,
@@ -379,6 +394,7 @@ export default function createGridComponent({
             overflow: 'auto',
             WebkitOverflowScrolling: 'touch',
             willChange: 'transform',
+            direction,
             ...style,
           },
         },
@@ -505,12 +521,15 @@ export default function createGridComponent({
     // So that List can clear cached styles and force item re-render if necessary.
     _getItemStyle: (rowIndex: number, columnIndex: number) => Object;
     _getItemStyle = (rowIndex: number, columnIndex: number): Object => {
-      const key = `${rowIndex}:${columnIndex}`;
+      const { columnWidth, direction, rowHeight } = this.props;
 
       const itemStyleCache = this._getItemStyleCache(
-        shouldResetStyleCacheOnItemSizeChange && this.props.columnWidth,
-        shouldResetStyleCacheOnItemSizeChange && this.props.rowHeight
+        shouldResetStyleCacheOnItemSizeChange && columnWidth,
+        shouldResetStyleCacheOnItemSizeChange && direction,
+        shouldResetStyleCacheOnItemSizeChange && rowHeight
       );
+
+      const key = `${rowIndex}:${columnIndex}`;
 
       let style;
       if (itemStyleCache.hasOwnProperty(key)) {
@@ -518,7 +537,11 @@ export default function createGridComponent({
       } else {
         itemStyleCache[key] = style = {
           position: 'absolute',
-          left: getColumnOffset(this.props, columnIndex, this._instanceProps),
+          [direction === 'rtl' ? 'right' : 'left']: getColumnOffset(
+            this.props,
+            columnIndex,
+            this._instanceProps
+          ),
           top: getRowOffset(this.props, rowIndex, this._instanceProps),
           height: getRowHeight(this.props, rowIndex, this._instanceProps),
           width: getColumnWidth(this.props, columnIndex, this._instanceProps),
@@ -528,8 +551,8 @@ export default function createGridComponent({
       return style;
     };
 
-    _getItemStyleCache: (_: any, __: any) => ItemStyleCache;
-    _getItemStyleCache = memoizeOne((_: any, __: any) => ({}));
+    _getItemStyleCache: (_: any, __: any, ___: any) => ItemStyleCache;
+    _getItemStyleCache = memoizeOne((_: any, __: any, ___: any) => ({}));
 
     _getHorizontalRangeToRender(): [number, number, number, number] {
       const {
@@ -626,7 +649,12 @@ export default function createGridComponent({
     }
 
     _onScroll = (event: ScrollEvent): void => {
-      const { scrollLeft, scrollTop } = event.currentTarget;
+      const {
+        clientWidth,
+        scrollLeft,
+        scrollTop,
+        scrollWidth,
+      } = event.currentTarget;
       this.setState(prevState => {
         if (
           prevState.scrollLeft === scrollLeft &&
@@ -638,11 +666,16 @@ export default function createGridComponent({
           return null;
         }
 
+        const { direction } = this.props;
+
         return {
           isScrolling: true,
           horizontalScrollDirection:
             prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
-          scrollLeft,
+          scrollLeft:
+            direction === 'rtl'
+              ? scrollWidth - clientWidth - scrollLeft
+              : scrollLeft,
           scrollTop,
           verticalScrollDirection:
             prevState.scrollTop < scrollTop ? 'forward' : 'backward',
@@ -690,27 +723,37 @@ export default function createGridComponent({
   };
 }
 
-const validateSharedProps = ({
-  children,
-  height,
-  innerTagName,
-  outerTagName,
-  overscanCount,
-  width,
-}: Props<any>): void => {
+const validateSharedProps = (
+  {
+    children,
+    direction,
+    height,
+    innerTagName,
+    outerTagName,
+    overscanCount,
+    width,
+  }: Props<any>,
+  { instance }: State
+): void => {
   if (process.env.NODE_ENV !== 'production') {
     if (typeof overscanCount === 'number') {
-      console.warn(
-        'The overscanCount prop has been deprecated. ' +
-          'Please use the overscanColumnsCount and overscanRowsCount props instead.'
-      );
+      if (!((devWarningsOverscanCount: any): WeakSet<any>).has(instance)) {
+        ((devWarningsOverscanCount: any): WeakSet<any>).add(instance);
+        console.warn(
+          'The overscanCount prop has been deprecated. ' +
+            'Please use the overscanColumnsCount and overscanRowsCount props instead.'
+        );
+      }
     }
 
     if (innerTagName != null || outerTagName != null) {
-      console.warn(
-        'The innerTagName and outerTagName props have been deprecated. ' +
-          'Please use the innerElementType and outerElementType props instead.'
-      );
+      if (!((devWarningsTagName: any): WeakSet<any>).has(instance)) {
+        ((devWarningsTagName: any): WeakSet<any>).add(instance);
+        console.warn(
+          'The innerTagName and outerTagName props have been deprecated. ' +
+            'Please use the innerElementType and outerElementType props instead.'
+        );
+      }
     }
 
     if (children == null) {
@@ -719,6 +762,19 @@ const validateSharedProps = ({
           'Value should be a React component. ' +
           `"${children === null ? 'null' : typeof children}" was specified.`
       );
+    }
+
+    switch (direction) {
+      case 'ltr':
+      case 'rtl':
+        // Valid values
+        break;
+      default:
+        throw Error(
+          'An invalid "direction" prop has been specified. ' +
+            'Value should be either "ltr" or "rtl". ' +
+            `"${direction}" was specified.`
+        );
     }
 
     if (typeof width !== 'number') {

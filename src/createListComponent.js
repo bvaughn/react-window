@@ -9,6 +9,7 @@ import type { TimeoutID } from './timer';
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
+// TODO Deprecate directions "horizontal" and "vertical"
 type Direction = 'ltr' | 'rtl' | 'horizontal' | 'vertical';
 type Layout = 'horizontal' | 'vertical';
 
@@ -63,6 +64,7 @@ export type Props<T> = {|
 |};
 
 type State = {|
+  instance: any,
   isScrolling: boolean,
   scrollDirection: ScrollDirection,
   scrollOffset: number,
@@ -105,6 +107,15 @@ const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
 const defaultItemKey = (index: number, data: any) => index;
 
+// In DEV mode, this Set helps us only log a warning once per component instace.
+// This avoids spamming the console every time a render happens.
+let devWarningsDirection = null;
+let devWarningsTagName = null;
+if (process.env.NODE_ENV !== 'production') {
+  devWarningsDirection = new WeakSet();
+  devWarningsTagName = new WeakSet();
+}
+
 export default function createListComponent({
   getItemOffset,
   getEstimatedTotalSize,
@@ -140,6 +151,7 @@ export default function createListComponent({
     };
 
     state: State = {
+      instance: this,
       isScrolling: false,
       scrollDirection: 'forward',
       scrollOffset:
@@ -154,9 +166,15 @@ export default function createListComponent({
     // eslint-disable-next-line no-useless-constructor
     constructor(props: Props<T>) {
       super(props);
+    }
 
-      validateSharedProps(props);
-      validateProps(props);
+    static getDerivedStateFromProps(
+      nextProps: Props<T>,
+      prevState: State
+    ): $Shape<State> | null {
+      validateSharedProps(nextProps, prevState);
+      validateProps(nextProps);
+      return null;
     }
 
     scrollTo(scrollOffset: number): void {
@@ -404,8 +422,7 @@ export default function createListComponent({
 
         itemStyleCache[index] = style = {
           position: 'absolute',
-          left: isHorizontal ? offset : 0,
-          right: isHorizontal ? offset : 0,
+          [direction === 'rtl' ? 'right' : 'left']: isHorizontal ? offset : 0,
           top: !isHorizontal ? offset : 0,
           height: !isHorizontal ? size : '100%',
           width: isHorizontal ? size : '100%',
@@ -458,7 +475,7 @@ export default function createListComponent({
     }
 
     _onScrollHorizontal = (event: ScrollEvent): void => {
-      const { scrollLeft, scrollWidth, clientWidth } = event.currentTarget;
+      const { clientWidth, scrollLeft, scrollWidth } = event.currentTarget;
       this.setState(prevState => {
         if (prevState.scrollOffset === scrollLeft) {
           // Scroll position may have been updated by cDM/cDU,
@@ -547,21 +564,27 @@ export default function createListComponent({
 // I assume people already do this (render function returning a class component),
 // So my doing it would just unnecessarily double the wrappers.
 
-const validateSharedProps = ({
-  children,
-  direction,
-  height,
-  layout,
-  innerTagName,
-  outerTagName,
-  width,
-}: Props<any>): void => {
+const validateSharedProps = (
+  {
+    children,
+    direction,
+    height,
+    layout,
+    innerTagName,
+    outerTagName,
+    width,
+  }: Props<any>,
+  { instance }: State
+): void => {
   if (process.env.NODE_ENV !== 'production') {
     if (innerTagName != null || outerTagName != null) {
-      console.warn(
-        'The innerTagName and outerTagName props have been deprecated. ' +
-          'Please use the innerElementType and outerElementType props instead.'
-      );
+      if (!((devWarningsTagName: any): WeakSet<any>).has(instance)) {
+        ((devWarningsTagName: any): WeakSet<any>).add(instance);
+        console.warn(
+          'The innerTagName and outerTagName props have been deprecated. ' +
+            'Please use the innerElementType and outerElementType props instead.'
+        );
+      }
     }
 
     // TODO Deprecate direction "horizontal"
@@ -570,10 +593,13 @@ const validateSharedProps = ({
     switch (direction) {
       case 'horizontal':
       case 'vertical':
-        console.warn(
-          'The direction prop should be either "ltr" (default) or "rtl". ' +
-            'Please use the layout prop to specify "vertical" (default) or "horizontal" orientation.'
-        );
+        if (!((devWarningsDirection: any): WeakSet<any>).has(instance)) {
+          ((devWarningsDirection: any): WeakSet<any>).add(instance);
+          console.warn(
+            'The direction prop should be either "ltr" (default) or "rtl". ' +
+              'Please use the layout prop to specify "vertical" (default) or "horizontal" orientation.'
+          );
+        }
         break;
       case 'ltr':
       case 'rtl':
