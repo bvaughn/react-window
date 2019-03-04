@@ -2,7 +2,7 @@
   "description": "Demo of react-window with advanced memoization techniques",
   "main": "src/index.js",
   "dependencies": {
-    "memoize-one": "^4",
+    "memoize-one": "^5",
     "react": "^16.6",
     "react-dom": "^16.6",
     "react-window": "^1"
