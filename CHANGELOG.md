@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.6.2
+* 🐛 Bugfix for RTL  when scrolling back towards the beginning (right) of the list.
+
 ### 1.6.1
 * 🐛 Bugfix to account for differences between Chrome and non-Chrome browsers with regard to RTL and "scroll" events.
 
