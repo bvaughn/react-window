@@ -58,17 +58,24 @@ const PROPS = [
     type: 'string',
   },
   {
-    defaultValue: '"vertical"',
+    defaultValue: '"ltr"',
     description: (
       <Fragment>
-        <p>Primary scroll direction of the list. Acceptable values are:</p>
+        <p>Determines the direction of text and horizontal scrolling.</p>
         <ul>
-          <li>vertical (default) - Up/down scrolling.</li>
-          <li>horizontal - Left/right scrolling.</li>
+          <li>ltr (default)</li>
+          <li>rtl</li>
         </ul>
         <p>
-          Note that lists may scroll in both directions (depending on CSS) but
-          content will only be windowed in the primary direction.
+          This property also automatically sets the{' '}
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/CSS/direction"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            CSS <code>direction</code> style
+          </a>{' '}
+          for the list component.
         </p>
       </Fragment>
     ),
@@ -206,6 +213,24 @@ const PROPS = [
     isRequired: true,
     name: 'itemSize',
     type: 'number',
+  },
+  {
+    defaultValue: '"vertical"',
+    description: (
+      <Fragment>
+        <p>Layout/orientation of the list. Acceptable values are:</p>
+        <ul>
+          <li>vertical (default) - Up/down scrolling.</li>
+          <li>horizontal - Left/right scrolling.</li>
+        </ul>
+        <p>
+          Note that lists may scroll in both directions (depending on CSS) but
+          content will only be windowed in the layout direction specified.
+        </p>
+      </Fragment>
+    ),
+    name: 'layout',
+    type: 'string',
   },
   {
     description: (
