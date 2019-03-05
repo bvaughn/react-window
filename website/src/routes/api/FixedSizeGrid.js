@@ -75,6 +75,31 @@ const PROPS = [
     type: 'number',
   },
   {
+    defaultValue: '"ltr"',
+    description: (
+      <Fragment>
+        <p>Determines the direction of text and horizontal scrolling.</p>
+        <ul>
+          <li>ltr (default)</li>
+          <li>rtl</li>
+        </ul>
+        <p>
+          This property also automatically sets the{' '}
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/CSS/direction"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            CSS <code>direction</code> style
+          </a>{' '}
+          for the grid component.
+        </p>
+      </Fragment>
+    ),
+    name: 'direction',
+    type: 'string',
+  },
+  {
     description: (
       <p>
         Height of the grid. This affects the number of rows that will be

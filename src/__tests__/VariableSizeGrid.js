@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { Simulate } from 'react-dom/test-utils';
 import ReactTestRenderer from 'react-test-renderer';
 import { VariableSizeGrid } from '..';
+import * as domHelpers from '../domHelpers';
 
 const simulateScroll = (instance, { scrollLeft, scrollTop }) => {
   instance._outerRef.scrollLeft = scrollLeft;
@@ -13,7 +14,12 @@ const simulateScroll = (instance, { scrollLeft, scrollTop }) => {
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('VariableSizeGrid', () => {
-  let columnWidth, defaultProps, itemRenderer, onItemsRendered, rowHeight;
+  let columnWidth,
+    defaultProps,
+    getScrollbarSize,
+    itemRenderer,
+    onItemsRendered,
+    rowHeight;
 
   // Use PureComponent to test memoization.
   // Pass through to itemRenderer mock for easier test assertions.
@@ -33,6 +39,9 @@ describe('VariableSizeGrid', () => {
 
   beforeEach(() => {
     jest.useFakeTimers();
+
+    // Mock the DOM helper util for testing purposes.
+    getScrollbarSize = domHelpers.getScrollbarSize = jest.fn(() => 0);
 
     itemRenderer = jest.fn(({ style, ...rest }) => (
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
@@ -254,6 +263,90 @@ describe('VariableSizeGrid', () => {
         .getInstance()
         .scrollToItem({ columnIndex: 9, rowIndex: 19, align: 'center' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should account for scrollbar size', () => {
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid {...defaultProps} onScroll={onScroll} />
+      );
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 15, rowIndex: 10, align: 'end' });
+
+      // With hidden scrollbars (size === 0) we would expect...
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'forward',
+        scrollLeft: 720,
+        scrollTop: 230,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'forward',
+      });
+
+      getScrollbarSize.mockImplementation(() => 20);
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 15, rowIndex: 10, align: 'end' });
+
+      // With scrollbars of size 20 we would expect those values ot increase by 20px
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'forward',
+        scrollLeft: 740,
+        scrollTop: 250,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'forward',
+      });
+    });
+
+    it('should not account for scrollbar size when no scrollbar is visible for a particular direction', () => {
+      getScrollbarSize.mockImplementation(() => 20);
+
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid
+          {...defaultProps}
+          columnCount={1}
+          onScroll={onScroll}
+        />
+      );
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 0, rowIndex: 10, align: 'end' });
+
+      // Since there aren't enough columns to require horizontal scrolling,
+      // the additional 20px for the scrollbar should not be taken into consideration.
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'backward',
+        scrollLeft: 0,
+        scrollTop: 230,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'forward',
+      });
+
+      rendered.update(
+        <VariableSizeGrid {...defaultProps} rowCount={1} onScroll={onScroll} />
+      );
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 15, rowIndex: 0, align: 'end' });
+
+      // Since there aren't enough rows to require vertical scrolling,
+      // the additional 20px for the scrollbar should not be taken into consideration.
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'forward',
+        scrollLeft: 720,
+        scrollTop: 0,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'backward',
+      });
     });
   });
 

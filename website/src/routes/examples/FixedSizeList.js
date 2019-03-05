@@ -54,11 +54,11 @@ export default function() {
         >
           <FixedSizeList
             className={styles.List}
-            direction="horizontal"
             height={75}
             itemCount={1000}
             itemData="Column"
             itemSize={100}
+            layout="horizontal"
             width={300}
           >
             {Item}
