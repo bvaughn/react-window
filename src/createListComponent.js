@@ -69,6 +69,8 @@ type State = {|
   scrollDirection: ScrollDirection,
   scrollOffset: number,
   scrollUpdateWasRequested: boolean,
+  isStandardRtl: boolean,
+  scrollLeft: number,
 |};
 
 type GetItemOffset = (
@@ -159,6 +161,8 @@ export default function createListComponent({
           ? this.props.initialScrollOffset
           : 0,
       scrollUpdateWasRequested: false,
+      isStandardRtl: false,
+      scrollLeft: 0,
     };
 
     // Always use explicit constructor for React components.
