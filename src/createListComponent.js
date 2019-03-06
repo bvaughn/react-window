@@ -490,8 +490,16 @@ export default function createListComponent({
         // Chrome does not seem to adhere; its scrolLeft values are positive (measured relative to the left).
         // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
         let scrollOffset = scrollLeft;
+        const isStandardRtl = prevState.scrollLeft < 0;
+        const isBouncing = prevState.isStandardRtl && scrollLeft > 0;
+
+        isBouncing && (scrollOffset = -scrollOffset);
         if (direction === 'rtl') {
-          if (scrollLeft <= 0) {
+          if (
+            scrollLeft < 0 ||
+            ((scrollLeft === 0 && isStandardRtl) ||
+              (prevState.isStandardRtl && !isBouncing))
+          ) {
             scrollOffset = -scrollOffset;
           } else {
             scrollOffset = scrollWidth - clientWidth - scrollLeft;
@@ -502,7 +510,9 @@ export default function createListComponent({
           isScrolling: true,
           scrollDirection:
             prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
-          scrollOffset,
+          scrollOffset: isBouncing ? prevState.scrollLeft : scrollOffset,
+          scrollLeft,
+          isStandardRtl: isStandardRtl || prevState.isStandardRtl,
           scrollUpdateWasRequested: false,
         };
       }, this._resetIsScrollingDebounced);
