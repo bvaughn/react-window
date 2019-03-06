@@ -673,7 +673,7 @@ export default function createGridComponent({
         // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
         let calculatedScrollLeft = scrollLeft;
         if (direction === 'rtl') {
-          if (scrollLeft < 0) {
+          if (scrollLeft <= 0) {
             calculatedScrollLeft = -scrollLeft;
           } else {
             calculatedScrollLeft = scrollWidth - clientWidth - scrollLeft;
