@@ -4,6 +4,7 @@ import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
 import { getScrollbarSize } from './domHelpers';
+import WeakSet from './weakset';
 
 import type { TimeoutID } from './timer';
 

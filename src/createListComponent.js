@@ -3,6 +3,7 @@
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
+import WeakSet from './weakset';
 
 import type { TimeoutID } from './timer';
 
