@@ -1,4 +1,5 @@
 // @flow
 
-const WeaksetExport = typeof WeakSet === 'undefined' ? Set : WeakSet;
-export default WeaksetExport;
+const WeakSetExport: typeof WeakSet =
+  typeof (WeakSet: any) === 'undefined' ? (Set: any) : (WeakSet: any);
+export default WeakSetExport;
