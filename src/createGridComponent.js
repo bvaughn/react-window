@@ -132,8 +132,10 @@ const defaultItemKey = ({ columnIndex, data, rowIndex }) =>
 let devWarningsOverscanCount = null;
 let devWarningsTagName = null;
 if (process.env.NODE_ENV !== 'production') {
-  devWarningsOverscanCount = new WeakSet();
-  devWarningsTagName = new WeakSet();
+  if (typeof window.WeakSet !== 'undefined') {
+    devWarningsOverscanCount = new WeakSet();
+    devWarningsTagName = new WeakSet();
+  }
 }
 
 export default function createGridComponent({
@@ -746,8 +748,8 @@ const validateSharedProps = (
 ): void => {
   if (process.env.NODE_ENV !== 'production') {
     if (typeof overscanCount === 'number') {
-      if (!((devWarningsOverscanCount: any): WeakSet<any>).has(instance)) {
-        ((devWarningsOverscanCount: any): WeakSet<any>).add(instance);
+      if (devWarningsOverscanCount && !devWarningsOverscanCount.has(instance)) {
+        devWarningsOverscanCount.add(instance);
         console.warn(
           'The overscanCount prop has been deprecated. ' +
             'Please use the overscanColumnsCount and overscanRowsCount props instead.'
@@ -756,8 +758,8 @@ const validateSharedProps = (
     }
 
     if (innerTagName != null || outerTagName != null) {
-      if (!((devWarningsTagName: any): WeakSet<any>).has(instance)) {
-        ((devWarningsTagName: any): WeakSet<any>).add(instance);
+      if (devWarningsTagName && !devWarningsTagName.has(instance)) {
+        devWarningsTagName.add(instance);
         console.warn(
           'The innerTagName and outerTagName props have been deprecated. ' +
             'Please use the innerElementType and outerElementType props instead.'

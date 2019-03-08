@@ -112,8 +112,10 @@ const defaultItemKey = (index: number, data: any) => index;
 let devWarningsDirection = null;
 let devWarningsTagName = null;
 if (process.env.NODE_ENV !== 'production') {
-  devWarningsDirection = new WeakSet();
-  devWarningsTagName = new WeakSet();
+  if (typeof window.WeakSet !== 'undefined') {
+    devWarningsDirection = new WeakSet();
+    devWarningsTagName = new WeakSet();
+  }
 }
 
 export default function createListComponent({
@@ -587,8 +589,8 @@ const validateSharedProps = (
 ): void => {
   if (process.env.NODE_ENV !== 'production') {
     if (innerTagName != null || outerTagName != null) {
-      if (!((devWarningsTagName: any): WeakSet<any>).has(instance)) {
-        ((devWarningsTagName: any): WeakSet<any>).add(instance);
+      if (devWarningsTagName && !devWarningsTagName.has(instance)) {
+        devWarningsTagName.add(instance);
         console.warn(
           'The innerTagName and outerTagName props have been deprecated. ' +
             'Please use the innerElementType and outerElementType props instead.'
@@ -602,8 +604,8 @@ const validateSharedProps = (
     switch (direction) {
       case 'horizontal':
       case 'vertical':
-        if (!((devWarningsDirection: any): WeakSet<any>).has(instance)) {
-          ((devWarningsDirection: any): WeakSet<any>).add(instance);
+        if (devWarningsDirection && !devWarningsDirection.has(instance)) {
+          devWarningsDirection.add(instance);
           console.warn(
             'The direction prop should be either "ltr" (default) or "rtl". ' +
               'Please use the layout prop to specify "vertical" (default) or "horizontal" orientation.'
