@@ -63,6 +63,14 @@ Yes. I recommend using the [`react-window-infinite-loader` package](https://npmj
 
 Here's a [Code Sandbox demo](https://codesandbox.io/s/5wqo7z2np4).
 
+### Can I attach custom properties or event handlers?
+
+Yes, using the `outerElementType` prop.
+
+<img width="412" alt="Screen Shot 2019-03-12 at 8 58 09 AM" src="https://user-images.githubusercontent.com/29597/54215333-f9ee9a80-44a4-11e9-9142-34c67026d950.png">
+
+Here's a [Code Sandbox demo](https://codesandbox.io/s/4zqx79nww0).
+
 ## License
 
 MIT © [bvaughn](https://github.com/bvaughn)
