@@ -4,18 +4,18 @@
   "description":
     "React components for efficiently rendering large, scrollable lists and tabular data",
   "author":
-    "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)",
+    "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/alexgriss/)",
   "contributors": [
-    "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)"
+    "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/alexgriss/)"
   ],
   "license": "MIT",
   "homepage": "http://react-window.now.sh/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bvaughn/react-window.git"
+    "url": "https://github.com/alexgriss/react-window.git"
   },
   "bugs": {
-    "url": "https://github.com/bvaughn/react-window/issues"
+    "url": "https://github.com/alexgriss/react-window/issues"
   },
   "engines": {
     "node": ">8.0.0"

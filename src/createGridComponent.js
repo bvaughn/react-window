@@ -347,14 +347,45 @@ export default function createGridComponent({
       const [rowStartIndex, rowStopIndex] = this._getVerticalRangeToRender();
 
       const items = [];
+      const topStickyItems = [];
+      const leftStickyItems = [];
+
       if (columnCount > 0 && rowCount) {
         for (
-          let rowIndex = rowStartIndex;
+          let columnIndex = Math.max(1, columnStartIndex);
+          columnIndex <= columnStopIndex;
+          columnIndex++
+        ) {
+          topStickyItems.push(
+            createElement(children, {
+              columnIndex,
+              data: itemData,
+              isScrolling: useIsScrolling ? isScrolling : undefined,
+              key: itemKey({ columnIndex, data: itemData, rowIndex: 0 }),
+              rowIndex: 0,
+              style: this._getItemStyle(0, columnIndex),
+            })
+          );
+        }
+
+        for (
+          let rowIndex = Math.max(1, rowStartIndex);
           rowIndex <= rowStopIndex;
           rowIndex++
         ) {
+          leftStickyItems.push(
+            createElement(children, {
+              columnIndex: 0,
+              data: itemData,
+              isScrolling: useIsScrolling ? isScrolling : undefined,
+              key: itemKey({ columnIndex: 0, data: itemData, rowIndex }),
+              rowIndex,
+              style: this._getItemStyle(rowIndex, 0),
+            })
+          );
+
           for (
-            let columnIndex = columnStartIndex;
+            let columnIndex = Math.max(1, columnStartIndex);
             columnIndex <= columnStopIndex;
             columnIndex++
           ) {
@@ -381,6 +412,39 @@ export default function createGridComponent({
       const estimatedTotalWidth = getEstimatedTotalWidth(
         this.props,
         this._instanceProps
+      );
+      
+      const topLeftStyle = this._getItemStyle(0, 0);
+
+      items.unshift(
+        createElement('div', {
+          children: leftStickyItems,
+          key: 'left-sticky',
+          className: 'left-sticky',
+          style: {
+            height: estimatedTotalHeight,
+            width: topLeftStyle.width,
+            position: 'sticky',
+            left: 0,
+            zIndex: 1,
+            transform: `translateY(-${topLeftStyle.height}px)`,
+          },
+        })
+      );
+
+      items.unshift(
+        createElement('div', {
+          children: topStickyItems,
+          key: 'top-sticky',
+          className: 'top-sticky',
+          style: {
+            height: topLeftStyle.height,
+            width: estimatedTotalWidth,
+            position: 'sticky',
+            top: 0,
+            zIndex: 1,
+          },
+        })
       );
 
       return createElement(
