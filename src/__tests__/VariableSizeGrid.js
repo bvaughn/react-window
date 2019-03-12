@@ -190,6 +190,10 @@ describe('VariableSizeGrid', () => {
       rendered
         .getInstance()
         .scrollToItem({ columnIndex: 2, rowIndex: 2, align: 'auto' });
+      // Scroll down to row 10, without changing scrollLeft
+      rendered.getInstance().scrollToItem({ rowIndex: 10, align: 'auto' });
+      // Scroll left to column 0, without changing scrollTop
+      rendered.getInstance().scrollToItem({ columnIndex: 0, align: 'auto' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
@@ -212,6 +216,10 @@ describe('VariableSizeGrid', () => {
       rendered
         .getInstance()
         .scrollToItem({ columnIndex: 9, rowIndex: 19, align: 'start' });
+      // Scroll up to row 10, without changing scrollLeft
+      rendered.getInstance().scrollToItem({ rowIndex: 10, align: 'start' });
+      // Scroll left to column 0, without changing scrollTop
+      rendered.getInstance().scrollToItem({ columnIndex: 0, align: 'start' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
@@ -234,6 +242,10 @@ describe('VariableSizeGrid', () => {
       rendered
         .getInstance()
         .scrollToItem({ columnIndex: 1, rowIndex: 1, align: 'end' });
+      // Scroll down to row 10, without changing scrollLeft
+      rendered.getInstance().scrollToItem({ rowIndex: 10, align: 'end' });
+      // Scroll right to column 9, without changing scrollTop
+      rendered.getInstance().scrollToItem({ columnIndex: 9, align: 'end' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
@@ -262,6 +274,10 @@ describe('VariableSizeGrid', () => {
       rendered
         .getInstance()
         .scrollToItem({ columnIndex: 9, rowIndex: 19, align: 'center' });
+      // Scroll up to row 10, without changing scrollLeft
+      rendered.getInstance().scrollToItem({ rowIndex: 10, align: 'center' });
+      // Scroll left to column 3, without changing scrollTop
+      rendered.getInstance().scrollToItem({ columnIndex: 3, align: 'center' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
