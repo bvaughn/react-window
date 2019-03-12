@@ -206,7 +206,7 @@ const PROPS = [
       <Fragment>
         <p>Called when the range of items rendered by the grid changes.</p>
         <p>
-          This callback will only be called when item indices change. It will
+          This callback will only be called when item indices change. It will
           not be called if items are re-rendered for other reasons (e.g. a
           change in <code>isScrolling</code> or <code>data</code> params).
         </p>
@@ -409,19 +409,31 @@ const METHODS = [
         <p>
           By default, the Grid will scroll as little as possible to ensure the
           item is visible. You can control the alignment of the item though by
-          specifying a second alignment parameter. Acceptable values are:
+          specifying an <code>align</code> property. Acceptable values are:
         </p>
         <ul>
           <li>
-            auto (default) - Scroll as little as possible to ensure the item is
-            visible. (If the item is already visible, it won't scroll at all.)
+            <code>auto</code> (default) - Scroll as little as possible to ensure
+            the item is visible. (If the item is already visible, it won't
+            scroll at all.)
           </li>
-          <li>center - Center align the item within the grid.</li>
           <li>
-            end - Align the item to the bottom, right hand side of the grid.
+            <code>center</code> - Center align the item within the grid.
           </li>
-          <li>start - Align the item to the top, left hand of the grid.</li>
+          <li>
+            <code>end</code> - Align the item to the bottom, right hand side of
+            the grid.
+          </li>
+          <li>
+            <code>start</code> - Align the item to the top, left hand of the
+            grid.
+          </li>
         </ul>
+        <p>
+          If either <code>columnIndex</code> or <code>rowIndex</code> are
+          omitted, <code>scrollLeft</code> or <code>scrollTop</code> will be
+          unchanged (respectively).
+        </p>
         <p>
           <Link to="/examples/list/scroll-to-item">
             See here for an example of this API.
@@ -430,6 +442,6 @@ const METHODS = [
       </Fragment>
     ),
     signature:
-      'scrollToItem({align: string = "auto", columnIndex: number, rowIndex: number }): void',
+      'scrollToItem({align: string = "auto", columnIndex?: number, rowIndex?: number }): void',
   },
 ];
