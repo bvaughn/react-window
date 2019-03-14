@@ -3,20 +3,19 @@ import React, { PureComponent, memo } from 'react';
 import { FixedSizeList, areEqual } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
+import { fillArray } from '../../utils';
 
 import CODE from '../../code/MemoizedListItems.js';
 
 import styles from './shared.module.css';
 
 const generateItems = numItems =>
-  Array(numItems)
-    .fill(true)
-    .map(_ => ({
-      isActive: false,
-      label: Math.random()
-        .toString(36)
-        .substr(2),
-    }));
+  fillArray(numItems, () => ({
+    isActive: false,
+    label: Math.random()
+      .toString(36)
+      .substr(2),
+  }));
 
 const Row = memo(({ data, index, style }) => {
   const { items, toggleItemActive } = data;

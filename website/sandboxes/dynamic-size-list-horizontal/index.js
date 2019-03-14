@@ -26,7 +26,7 @@ const Example = () => (
   <Fragment>
     <List
       className="List"
-      direction="horizontal"
+      layout="horizontal"
       height={50}
       itemCount={items.length}
       itemData={items}

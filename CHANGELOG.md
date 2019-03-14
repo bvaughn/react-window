@@ -1,6 +1,22 @@
 Changelog
 ------------
 
+### 1.6.2
+* 🐛 Bugfix for RTL  when scrolling back towards the beginning (right) of the list.
+
+### 1.6.1
+* 🐛 Bugfix to account for differences between Chrome and non-Chrome browsers with regard to RTL and "scroll" events.
+
+### 1.6.0
+* 🎉 RTL support added for lists and grids. Special thanks to [davidgarsan](https://github.com/davidgarsan) for his support. - [#156](https://github.com/bvaughn/react-window/pull/156)
+* 🐛 Grid `scrollToItem` methods take scrollbar size into account when aligning items - [#153](https://github.com/bvaughn/react-window/issues/153)
+
+### 1.5.2
+* 🐛 Edge case bug fix for `VariableSizeList` and `VariableSizeGrid` when the number of items decreases while a scroll is in progress. - ([iamsolankiamit](https://github.com/iamsolankiamit) - [#138](https://github.com/bvaughn/react-window/pull/138))
+
+### 1.5.1
+* 🐛 Updated `getDerivedState` Flow annotations to address a warning in a newer version of Flow.
+
 ### 1.5.0
 * 🎉 Added advanced memoization helpers methods `areEqual` and `shouldComponentUpdate` for item renderers. - [#114](https://github.com/bvaughn/react-window/issues/114)
 

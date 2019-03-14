@@ -9,7 +9,9 @@ import type { TimeoutID } from './timer';
 export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
-export type Direction = 'horizontal' | 'vertical';
+// TODO Deprecate directions "horizontal" and "vertical"
+export type Direction = 'ltr' | 'rtl' | 'horizontal' | 'vertical';
+export type Layout = 'horizontal' | 'vertical';
 
 export type RenderComponentProps<T> = {|
   data: T,
@@ -49,6 +51,7 @@ export type Props<T> = {|
   itemData: T,
   itemKey?: (index: number, data: T) => any,
   itemSize: itemSize,
+  layout: Layout,
   onItemsRendered?: onItemsRenderedCallback,
   onScroll?: onScrollCallback,
   outerRef?: any,
@@ -61,6 +64,7 @@ export type Props<T> = {|
 |};
 
 type State = {|
+  instance: any,
   isScrolling: boolean,
   scrollDirection: ScrollDirection,
   scrollOffset: number,
@@ -103,6 +107,17 @@ const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
 export const defaultItemKey = (index: number, data: any) => index;
 
+// In DEV mode, this Set helps us only log a warning once per component instace.
+// This avoids spamming the console every time a render happens.
+let devWarningsDirection = null;
+let devWarningsTagName = null;
+if (process.env.NODE_ENV !== 'production') {
+  if (typeof window.WeakSet !== 'undefined') {
+    devWarningsDirection = new WeakSet();
+    devWarningsTagName = new WeakSet();
+  }
+}
+
 export default function createListComponent({
   getItemOffset,
   getEstimatedTotalSize,
@@ -130,13 +145,15 @@ export default function createListComponent({
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
 
     static defaultProps = {
-      direction: 'vertical',
+      direction: 'ltr',
       itemData: undefined,
+      layout: 'vertical',
       overscanCount: 2,
       useIsScrolling: false,
     };
 
     state: State = {
+      instance: this,
       isScrolling: false,
       scrollDirection: 'forward',
       scrollOffset:
@@ -154,11 +171,11 @@ export default function createListComponent({
     }
 
     static getDerivedStateFromProps(
-      props: Props<T>,
-      state: State
-    ): $Shape<State> {
-      validateSharedProps(props);
-      validateProps(props);
+      nextProps: Props<T>,
+      prevState: State
+    ): $Shape<State> | null {
+      validateSharedProps(nextProps, prevState);
+      validateProps(nextProps);
       return null;
     }
 
@@ -188,14 +205,16 @@ export default function createListComponent({
     }
 
     componentDidMount() {
-      const { initialScrollOffset, direction } = this.props;
+      const { direction, initialScrollOffset, layout } = this.props;
 
       if (typeof initialScrollOffset === 'number' && this._outerRef !== null) {
-        const element = ((this._outerRef: any): HTMLDivElement);
-        if (direction === 'horizontal') {
-          element.scrollLeft = initialScrollOffset;
+        // TODO Deprecate direction "horizontal"
+        if (direction === 'horizontal' || layout === 'horizontal') {
+          ((this
+            ._outerRef: any): HTMLDivElement).scrollLeft = initialScrollOffset;
         } else {
-          element.scrollTop = initialScrollOffset;
+          ((this
+            ._outerRef: any): HTMLDivElement).scrollTop = initialScrollOffset;
         }
       }
 
@@ -204,15 +223,15 @@ export default function createListComponent({
     }
 
     componentDidUpdate() {
-      const { direction } = this.props;
+      const { direction, layout } = this.props;
       const { scrollOffset, scrollUpdateWasRequested } = this.state;
 
       if (scrollUpdateWasRequested && this._outerRef !== null) {
-        const element = ((this._outerRef: any): HTMLDivElement);
-        if (direction === 'horizontal') {
-          element.scrollLeft = scrollOffset;
+        // TODO Deprecate direction "horizontal"
+        if (direction === 'horizontal' || layout === 'horizontal') {
+          ((this._outerRef: any): HTMLDivElement).scrollLeft = scrollOffset;
         } else {
-          element.scrollTop = scrollOffset;
+          ((this._outerRef: any): HTMLDivElement).scrollTop = scrollOffset;
         }
       }
 
@@ -236,6 +255,7 @@ export default function createListComponent({
         innerRef,
         innerElementType,
         innerTagName,
+        layout,
         outerElementType,
         outerTagName,
         style,
@@ -243,10 +263,13 @@ export default function createListComponent({
       } = this.props;
       const { isScrolling } = this.state;
 
-      const onScroll =
-        direction === 'vertical'
-          ? this._onScrollVertical
-          : this._onScrollHorizontal;
+      // TODO Deprecate direction "horizontal"
+      const isHorizontal =
+        direction === 'horizontal' || layout === 'horizontal';
+
+      const onScroll = isHorizontal
+        ? this._onScrollHorizontal
+        : this._onScrollVertical;
 
       const items = this._renderItems();
 
@@ -270,6 +293,7 @@ export default function createListComponent({
             position: 'relative',
             WebkitOverflowScrolling: 'touch',
             willChange: 'transform',
+            direction,
             ...style,
           },
         },
@@ -277,9 +301,9 @@ export default function createListComponent({
           children: items,
           ref: innerRef,
           style: {
-            height: direction === 'horizontal' ? '100%' : estimatedTotalSize,
+            height: isHorizontal ? '100%' : estimatedTotalSize,
             pointerEvents: isScrolling ? 'none' : '',
-            width: direction === 'horizontal' ? estimatedTotalSize : '100%',
+            width: isHorizontal ? estimatedTotalSize : '100%',
           },
         })
       );
@@ -371,10 +395,11 @@ export default function createListComponent({
     // So that List can clear cached styles and force item re-render if necessary.
     _getItemStyle: (index: number) => Object;
     _getItemStyle = (index: number): Object => {
-      const { direction, itemSize } = this.props;
+      const { direction, itemSize, layout } = this.props;
 
       const itemStyleCache = this._getItemStyleCache(
         shouldResetStyleCacheOnItemSizeChange && itemSize,
+        shouldResetStyleCacheOnItemSizeChange && layout,
         shouldResetStyleCacheOnItemSizeChange && direction
       );
 
@@ -385,12 +410,16 @@ export default function createListComponent({
         const offset = getItemOffset(this.props, index, this._instanceProps);
         const size = getItemSize(this.props, index, this._instanceProps);
 
+        // TODO Deprecate direction "horizontal"
+        const isHorizontal =
+          direction === 'horizontal' || layout === 'horizontal';
+
         itemStyleCache[index] = style = {
           position: 'absolute',
-          left: direction === 'horizontal' ? offset : 0,
-          top: direction === 'vertical' ? offset : 0,
-          height: direction === 'vertical' ? size : '100%',
-          width: direction === 'horizontal' ? size : '100%',
+          [direction === 'rtl' ? 'right' : 'left']: isHorizontal ? offset : 0,
+          top: !isHorizontal ? offset : 0,
+          height: !isHorizontal ? size : '100%',
+          width: isHorizontal ? size : '100%',
         };
       }
 
@@ -402,11 +431,11 @@ export default function createListComponent({
     // TODO This memoized getter doesn't make much sense.
     // If all that's really needed is for the impl to be able to reset the cache,
     // Then we could expose a better API for that.
-    _getItemStyleCache: (_: any, __: any) => ItemStyleCache;
-    _getItemStyleCache = memoizeOne((_, __) => {
+    _getItemStyleCache: (_: any, __: any, ___: any) => ItemStyleCache;
+    _getItemStyleCache = memoizeOne((_: any, __: any, ___: any) => {
       this._itemStyleCache = {};
 
-      return this._itemStyleCache;
+       return this._itemStyleCache;
     });
 
     _getRangeToRender(): [number, number, number, number] {
@@ -478,7 +507,7 @@ export default function createListComponent({
     }
 
     _onScrollHorizontal = (event: ScrollEvent): void => {
-      const { scrollLeft } = event.currentTarget;
+      const { clientWidth, scrollLeft, scrollWidth } = event.currentTarget;
       this.setState(prevState => {
         if (prevState.scrollOffset === scrollLeft) {
           // Scroll position may have been updated by cDM/cDU,
@@ -487,11 +516,25 @@ export default function createListComponent({
           return null;
         }
 
+        const { direction } = this.props;
+
+        // HACK According to the spec, scrollLeft should be negative for RTL aligned elements.
+        // Chrome does not seem to adhere; its scrolLeft values are positive (measured relative to the left).
+        // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
+        let scrollOffset = scrollLeft;
+        if (direction === 'rtl') {
+          if (scrollLeft <= 0) {
+            scrollOffset = -scrollOffset;
+          } else {
+            scrollOffset = scrollWidth - clientWidth - scrollLeft;
+          }
+        }
+
         return {
           isScrolling: true,
           scrollDirection:
             prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
-          scrollOffset: scrollLeft,
+          scrollOffset,
           scrollUpdateWasRequested: false,
         };
       }, this._resetIsScrollingDebounced);
@@ -566,28 +609,66 @@ export default function createListComponent({
 // I assume people already do this (render function returning a class component),
 // So my doing it would just unnecessarily double the wrappers.
 
-const validateSharedProps = ({
-  children,
-  direction,
-  height,
-  innerTagName,
-  outerTagName,
-  width,
-}: Props<any>): void => {
+const validateSharedProps = (
+  {
+    children,
+    direction,
+    height,
+    layout,
+    innerTagName,
+    outerTagName,
+    width,
+  }: Props<any>,
+  { instance }: State
+): void => {
   if (process.env.NODE_ENV !== 'production') {
     if (innerTagName != null || outerTagName != null) {
-      console.warn(
-        'The innerTagName and outerTagName props have been deprecated. ' +
-          'Please use the innerElementType and outerElementType props instead.'
-      );
+      if (devWarningsTagName && !devWarningsTagName.has(instance)) {
+        devWarningsTagName.add(instance);
+        console.warn(
+          'The innerTagName and outerTagName props have been deprecated. ' +
+            'Please use the innerElementType and outerElementType props instead.'
+        );
+      }
     }
 
-    if (direction !== 'horizontal' && direction !== 'vertical') {
-      throw Error(
-        'An invalid "direction" prop has been specified. ' +
-          'Value should be either "horizontal" or "vertical". ' +
-          `"${direction}" was specified.`
-      );
+    // TODO Deprecate direction "horizontal"
+    const isHorizontal = direction === 'horizontal' || layout === 'horizontal';
+
+    switch (direction) {
+      case 'horizontal':
+      case 'vertical':
+        if (devWarningsDirection && !devWarningsDirection.has(instance)) {
+          devWarningsDirection.add(instance);
+          console.warn(
+            'The direction prop should be either "ltr" (default) or "rtl". ' +
+              'Please use the layout prop to specify "vertical" (default) or "horizontal" orientation.'
+          );
+        }
+        break;
+      case 'ltr':
+      case 'rtl':
+        // Valid values
+        break;
+      default:
+        throw Error(
+          'An invalid "direction" prop has been specified. ' +
+            'Value should be either "ltr" or "rtl". ' +
+            `"${direction}" was specified.`
+        );
+    }
+
+    switch (layout) {
+      case 'horizontal':
+      case 'vertical':
+        // Valid values
+        break;
+      default:
+        throw Error(
+          'An invalid "layout" prop has been specified. ' +
+            'Value should be either "horizontal" or "vertical". ' +
+            `"${layout}" was specified.`
+        );
     }
 
     if (children == null) {
@@ -598,13 +679,13 @@ const validateSharedProps = ({
       );
     }
 
-    if (direction === 'horizontal' && typeof width !== 'number') {
+    if (isHorizontal && typeof width !== 'number') {
       throw Error(
         'An invalid "width" prop has been specified. ' +
           'Horizontal lists must specify a number for width. ' +
           `"${width === null ? 'null' : typeof width}" was specified.`
       );
-    } else if (direction === 'vertical' && typeof height !== 'number') {
+    } else if (!isHorizontal && typeof height !== 'number') {
       throw Error(
         'An invalid "height" prop has been specified. ' +
           'Vertical lists must specify a number for height. ' +

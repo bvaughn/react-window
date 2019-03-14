@@ -3,7 +3,7 @@
 import { cloneElement, Component } from 'react';
 import { findDOMNode } from 'react-dom';
 
-import type { Direction } from './createListComponent';
+import type { Direction, Layout } from './createListComponent';
 import type { HandleNewMeasurements } from './DynamicSizeList';
 
 class DOMRectReadOnly {
@@ -38,6 +38,7 @@ declare class ResizeObserver {
 
 type ItemMeasurerProps = {|
   direction: Direction,
+  layout: Layout,
   handleNewMeasurements: HandleNewMeasurements,
   index: number,
   item: React$Element<any>,
@@ -107,6 +108,7 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
   _measureItem = (isCommitPhase: boolean) => {
     const {
       direction,
+      layout,
       handleNewMeasurements,
       index,
       size: oldSize,
@@ -121,7 +123,7 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
       node instanceof node.ownerDocument.defaultView.HTMLElement
     ) {
       const newSize =
-        direction === 'horizontal'
+        direction === 'horizontal' || layout === 'horizontal'
           ? Math.ceil(node.offsetWidth)
           : Math.ceil(node.offsetHeight);
 

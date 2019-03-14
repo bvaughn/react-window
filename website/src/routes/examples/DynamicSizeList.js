@@ -200,7 +200,7 @@ export default class DynamicSizeList extends PureComponent {
             </button>
             <List
               className={styles.List}
-              direction="horizontal"
+              layout="horizontal"
               height={50}
               itemCount={items.length}
               itemData={showText}

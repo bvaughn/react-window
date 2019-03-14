@@ -35,6 +35,12 @@ const getEstimatedTotalHeight = (
 ) => {
   let totalSizeOfMeasuredRows = 0;
 
+  // Edge case check for when the number of items decreases while a scroll is in progress.
+  // https://github.com/bvaughn/react-window/pull/138
+  if (lastMeasuredRowIndex >= rowCount) {
+    lastMeasuredRowIndex = rowCount - 1;
+  }
+
   if (lastMeasuredRowIndex >= 0) {
     const itemMetadata = rowMetadataMap[lastMeasuredRowIndex];
     totalSizeOfMeasuredRows = itemMetadata.offset + itemMetadata.size;
@@ -55,6 +61,12 @@ const getEstimatedTotalWidth = (
   }: InstanceProps
 ) => {
   let totalSizeOfMeasuredRows = 0;
+
+  // Edge case check for when the number of items decreases while a scroll is in progress.
+  // https://github.com/bvaughn/react-window/pull/138
+  if (lastMeasuredColumnIndex >= columnCount) {
+    lastMeasuredColumnIndex = columnCount - 1;
+  }
 
   if (lastMeasuredColumnIndex >= 0) {
     const itemMetadata = columnMetadataMap[lastMeasuredColumnIndex];
@@ -221,7 +233,8 @@ const getOffsetForIndexAndAlignment = (
   index: number,
   align: ScrollToAlign,
   scrollOffset: number,
-  instanceProps: InstanceProps
+  instanceProps: InstanceProps,
+  scrollbarSize: number
 ): number => {
   const size = itemType === 'column' ? props.width : props.height;
   const itemMetadata = getItemMetadata(itemType, props, index, instanceProps);
@@ -237,7 +250,10 @@ const getOffsetForIndexAndAlignment = (
     0,
     Math.min(estimatedTotalSize - size, itemMetadata.offset)
   );
-  const minOffset = Math.max(0, itemMetadata.offset - size + itemMetadata.size);
+  const minOffset = Math.max(
+    0,
+    itemMetadata.offset - size + scrollbarSize + itemMetadata.size
+  );
 
   switch (align) {
     case 'start':
@@ -312,7 +328,8 @@ const VariableSizeGrid = createGridComponent({
     index: number,
     align: ScrollToAlign,
     scrollOffset: number,
-    instanceProps: InstanceProps
+    instanceProps: InstanceProps,
+    scrollbarSize: number
   ): number =>
     getOffsetForIndexAndAlignment(
       'column',
@@ -320,7 +337,8 @@ const VariableSizeGrid = createGridComponent({
       index,
       align,
       scrollOffset,
-      instanceProps
+      instanceProps,
+      scrollbarSize
     ),
 
   getOffsetForRowAndAlignment: (
@@ -328,7 +346,8 @@ const VariableSizeGrid = createGridComponent({
     index: number,
     align: ScrollToAlign,
     scrollOffset: number,
-    instanceProps: InstanceProps
+    instanceProps: InstanceProps,
+    scrollbarSize: number
   ): number =>
     getOffsetForIndexAndAlignment(
       'row',
@@ -336,7 +355,8 @@ const VariableSizeGrid = createGridComponent({
       index,
       align,
       scrollOffset,
-      instanceProps
+      instanceProps,
+      scrollbarSize
     ),
 
   getRowOffset: (
