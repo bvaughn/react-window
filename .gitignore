@@ -16,6 +16,7 @@ dist
 .env.test.local
 .env.production.local
 .watchmanconfig
+.idea
 
 package-lock.json
 npm-debug.log*
