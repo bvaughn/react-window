@@ -26,6 +26,30 @@ Array [
       "visibleRowStopIndex": 5,
     },
   ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 1,
+      "overscanColumnStopIndex": 6,
+      "overscanRowStartIndex": 7,
+      "overscanRowStopIndex": 11,
+      "visibleColumnStartIndex": 2,
+      "visibleColumnStopIndex": 5,
+      "visibleRowStartIndex": 8,
+      "visibleRowStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 7,
+      "overscanRowStopIndex": 11,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 8,
+      "visibleRowStopIndex": 10,
+    },
+  ],
 ]
 `;
 
@@ -91,6 +115,30 @@ Array [
       "visibleRowStopIndex": 19,
     },
   ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 5,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 8,
+      "overscanRowStopIndex": 12,
+      "visibleColumnStartIndex": 6,
+      "visibleColumnStopIndex": 9,
+      "visibleRowStartIndex": 9,
+      "visibleRowStopIndex": 11,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 6,
+      "overscanRowStartIndex": 8,
+      "overscanRowStopIndex": 12,
+      "visibleColumnStartIndex": 1,
+      "visibleColumnStopIndex": 5,
+      "visibleRowStartIndex": 9,
+      "visibleRowStopIndex": 11,
+    },
+  ],
 ]
 `;
 
@@ -144,6 +192,30 @@ Array [
       "visibleRowStopIndex": 3,
     },
   ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 7,
+      "overscanRowStopIndex": 11,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 8,
+      "visibleRowStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 5,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 7,
+      "overscanRowStopIndex": 11,
+      "visibleColumnStartIndex": 6,
+      "visibleColumnStopIndex": 9,
+      "visibleRowStartIndex": 8,
+      "visibleRowStopIndex": 10,
+    },
+  ],
 ]
 `;
 
@@ -195,6 +267,30 @@ Array [
       "visibleColumnStopIndex": 9,
       "visibleRowStartIndex": 17,
       "visibleRowStopIndex": 19,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 5,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 9,
+      "overscanRowStopIndex": 13,
+      "visibleColumnStartIndex": 6,
+      "visibleColumnStopIndex": 9,
+      "visibleRowStartIndex": 10,
+      "visibleRowStopIndex": 12,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 9,
+      "overscanRowStopIndex": 13,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 10,
+      "visibleRowStopIndex": 12,
     },
   ],
 ]
