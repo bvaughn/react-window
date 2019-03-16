@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.7.0
+* 🎉 Grid `scrollToItem` supports optional `rowIndex` and `columnIndex` params ([jgoz](https://github.com/jgoz) - [#174](https://github.com/bvaughn/react-window/pull/174))
+
 ### 1.6.2
 * 🐛 Bugfix for RTL  when scrolling back towards the beginning (right) of the list.
 
