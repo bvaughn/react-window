@@ -112,7 +112,7 @@ const defaultItemKey = (index: number, data: any) => index;
 let devWarningsDirection = null;
 let devWarningsTagName = null;
 if (process.env.NODE_ENV !== 'production') {
-  if (typeof window.WeakSet !== 'undefined') {
+  if (typeof window !== 'undefined' && typeof window.WeakSet !== 'undefined') {
     devWarningsDirection = new WeakSet();
     devWarningsTagName = new WeakSet();
   }
