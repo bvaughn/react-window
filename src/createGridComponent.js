@@ -132,7 +132,7 @@ const defaultItemKey = ({ columnIndex, data, rowIndex }) =>
 let devWarningsOverscanCount = null;
 let devWarningsTagName = null;
 if (process.env.NODE_ENV !== 'production') {
-  if (typeof window.WeakSet !== 'undefined') {
+  if (typeof window !== 'undefined' && typeof window.WeakSet !== 'undefined') {
     devWarningsOverscanCount = new WeakSet();
     devWarningsTagName = new WeakSet();
   }
