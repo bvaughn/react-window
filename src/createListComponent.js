@@ -224,13 +224,18 @@ export default function createListComponent({
     }
 
     componentDidUpdate() {
-      const { direction, layout } = this.props;
+      const { direction, itemCount, itemSize, layout, width } = this.props;
       const { scrollOffset, scrollUpdateWasRequested } = this.state;
 
       if (scrollUpdateWasRequested && this._outerRef !== null) {
         // TODO Deprecate direction "horizontal"
         if (direction === 'horizontal' || layout === 'horizontal') {
-          ((this._outerRef: any): HTMLDivElement).scrollLeft = scrollOffset;
+          const scrollWithDirection =
+            direction === 'rtl'
+              ? itemCount * itemSize - width - scrollOffset
+              : scrollOffset;
+          ((this
+            ._outerRef: any): HTMLDivElement).scrollLeft = scrollWithDirection;
         } else {
           ((this._outerRef: any): HTMLDivElement).scrollTop = scrollOffset;
         }

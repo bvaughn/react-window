@@ -23,12 +23,9 @@ const FixedSizeList = createListComponent({
     // TODO Deprecate direction "horizontal"
     const isHorizontal = direction === 'horizontal' || layout === 'horizontal';
     const size = (((isHorizontal ? width : height): any): number);
-    const maxOffset = Math.max(
-      0,
-      Math.min(
-        itemCount * ((itemSize: any): number) - size,
-        index * ((itemSize: any): number)
-      )
+    const maxOffset = Math.min(
+      itemCount * ((itemSize: any): number) - size,
+      index * ((itemSize: any): number)
     );
     const minOffset = Math.max(
       0,
@@ -55,10 +52,10 @@ const FixedSizeList = createListComponent({
   },
 
   getStartIndexForOffset: (
-    { itemCount, itemSize }: Props<any>,
+    { itemCount, itemSize, direction }: Props<any>,
     offset: number
   ): number =>
-    Math.max(
+    Math[direction === 'rtl' ? 'min' : 'max'](
       0,
       Math.min(itemCount - 1, Math.floor(offset / ((itemSize: any): number)))
     ),
