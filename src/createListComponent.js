@@ -61,6 +61,7 @@ export type Props<T> = {|
   style?: Object,
   useIsScrolling: boolean,
   width: number | string,
+  persistedIndexes?: number[],
 |};
 
 type State = {|
@@ -261,6 +262,7 @@ export default function createListComponent({
         style,
         useIsScrolling,
         width,
+        persistedIndexes,
       } = this.props;
       const { isScrolling } = this.state;
 
@@ -287,6 +289,21 @@ export default function createListComponent({
             })
           );
         }
+      }
+      if (persistedIndexes) {
+        persistedIndexes.forEach(index => {
+          // @flow-ignore
+          if (!items.find(item => item.key === index))
+            items.push(
+              createElement(children, {
+                data: itemData,
+                key: itemKey(index, itemData),
+                index,
+                isScrolling: useIsScrolling ? isScrolling : undefined,
+                style: this._getItemStyle(index),
+              })
+            );
+        });
       }
 
       // Read this value AFTER items have been created,
