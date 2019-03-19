@@ -71,6 +71,10 @@ Yes, using the `outerElementType` prop.
 
 Here's a [Code Sandbox demo](https://codesandbox.io/s/4zqx79nww0).
 
+### Does this library support "sticky" items?
+
+Yes, although it requires a small amount of user code. Here's a [Code Sandbox demo](https://codesandbox.io/s/0mk3qwpl4l).
+
 ## License
 
 MIT © [bvaughn](https://github.com/bvaughn)
