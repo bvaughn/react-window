@@ -71,6 +71,14 @@ Yes, using the `outerElementType` prop.
 
 Here's a [Code Sandbox demo](https://codesandbox.io/s/4zqx79nww0).
 
+### Can I add gutter or padding between items?
+
+Yes, although it requires a bit of inline styling.
+
+<img width="416" alt="Screen Shot 2019-03-26 at 6 33 56 PM" src="https://user-images.githubusercontent.com/29597/55043972-c14ad700-4ff5-11e9-9caa-2e9f4d85f96c.png">
+
+Here's a [Code Sandbox demo](https://codesandbox.io/s/2w8wmlm89p).
+
 ### Does this library support "sticky" items?
 
 Yes, although it requires a small amount of user code. Here's a [Code Sandbox demo](https://codesandbox.io/s/0mk3qwpl4l).
