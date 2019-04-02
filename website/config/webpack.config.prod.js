@@ -211,7 +211,7 @@ module.exports = {
 
           // Custom CodeMirror loader for syntax highlighting
           {
-            test: /code\/[^/]+$/,
+            test: /[/\\\\]code[/\\\\]/,
             loader: require.resolve('../webpack/codemirror-loader'),
           },
 

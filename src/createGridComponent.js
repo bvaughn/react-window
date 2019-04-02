@@ -132,7 +132,7 @@ const defaultItemKey = ({ columnIndex, data, rowIndex }) =>
 let devWarningsOverscanCount = null;
 let devWarningsTagName = null;
 if (process.env.NODE_ENV !== 'production') {
-  if (typeof window.WeakSet !== 'undefined') {
+  if (typeof window !== 'undefined' && typeof window.WeakSet !== 'undefined') {
     devWarningsOverscanCount = new WeakSet();
     devWarningsTagName = new WeakSet();
   }
@@ -247,8 +247,8 @@ export default function createGridComponent({
       rowIndex,
     }: {
       align: ScrollToAlign,
-      columnIndex: number,
-      rowIndex: number,
+      columnIndex?: number,
+      rowIndex?: number,
     }): void {
       const { height, width } = this.props;
       const { scrollLeft, scrollTop } = this.state;
@@ -272,22 +272,28 @@ export default function createGridComponent({
         estimatedTotalHeight > height ? scrollbarSize : 0;
 
       this.scrollTo({
-        scrollLeft: getOffsetForColumnAndAlignment(
-          this.props,
-          columnIndex,
-          align,
-          scrollLeft,
-          this._instanceProps,
-          verticalScrollbarSize
-        ),
-        scrollTop: getOffsetForRowAndAlignment(
-          this.props,
-          rowIndex,
-          align,
-          scrollTop,
-          this._instanceProps,
-          horizontalScrollbarSize
-        ),
+        scrollLeft:
+          columnIndex !== undefined
+            ? getOffsetForColumnAndAlignment(
+                this.props,
+                columnIndex,
+                align,
+                scrollLeft,
+                this._instanceProps,
+                verticalScrollbarSize
+              )
+            : scrollLeft,
+        scrollTop:
+          rowIndex !== undefined
+            ? getOffsetForRowAndAlignment(
+                this.props,
+                rowIndex,
+                align,
+                scrollTop,
+                this._instanceProps,
+                horizontalScrollbarSize
+              )
+            : scrollTop,
       });
     }
 

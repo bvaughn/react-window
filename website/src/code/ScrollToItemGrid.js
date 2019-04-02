@@ -20,3 +20,9 @@ gridRef.current.scrollToItem({
   columnIndex: 150,
   rowIndex: 300
 });
+
+// You can specify only columnIndex or rowIndex if you just want to scroll one axis.
+// For example:
+gridRef.current.scrollToItem({
+  columnIndex: 100,
+});

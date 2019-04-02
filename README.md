@@ -2,7 +2,7 @@
 
 > React components for efficiently rendering large lists and tabular data
 
-[![NPM registry](https://img.shields.io/npm/v/react-window.svg?style=for-the-badge)](https://yarnpkg.com/en/package/react-window) [![Travis](https://img.shields.io/badge/ci-travis-green.svg?style=for-the-badge)](https://travis-ci.org/bvaughn/react-window) [![NPM license](https://img.shields.io/badge/license-mit-red.svg?style=for-the-badge)](LICENSE)
+[![NPM registry](https://img.shields.io/npm/v/react-window.svg?style=for-the-badge)](https://yarnpkg.com/en/package/react-window) [![Travis](https://img.shields.io/badge/ci-travis-green.svg?style=for-the-badge)](https://travis-ci.org/bvaughn/react-window) [![NPM license](https://img.shields.io/badge/license-mit-red.svg?style=for-the-badge)](LICENSE.md)
 
 ## Install
 
@@ -70,6 +70,20 @@ Yes, using the `outerElementType` prop.
 <img width="412" alt="Screen Shot 2019-03-12 at 8 58 09 AM" src="https://user-images.githubusercontent.com/29597/54215333-f9ee9a80-44a4-11e9-9142-34c67026d950.png">
 
 Here's a [Code Sandbox demo](https://codesandbox.io/s/4zqx79nww0).
+
+### Can I add gutter or padding between items?
+
+Yes, although it requires a bit of inline styling.
+
+<img width="416" alt="Screen Shot 2019-03-26 at 6 33 56 PM" src="https://user-images.githubusercontent.com/29597/55043972-c14ad700-4ff5-11e9-9caa-2e9f4d85f96c.png">
+
+Here's a [Code Sandbox demo](https://codesandbox.io/s/2w8wmlm89p).
+
+### Does this library support "sticky" items?
+
+Yes, although it requires a small amount of user code. Here are Code Sandbox demos for list and grids:
+* [List demo](https://codesandbox.io/s/0mk3qwpl4l)
+* [Grid demo](https://codesandbox.io/s/vqk32863wy)
 
 ## License
 

@@ -121,6 +121,18 @@ export default class ScrollToItem extends PureComponent {
             >
               Scroll to row 200, column 100 (align: center)
             </button>
+            <button
+              className={styles.ExampleButton}
+              onClick={this.scrollToRow100}
+            >
+              Scroll to row 100 (align: auto)
+            </button>
+            <button
+              className={styles.ExampleButton}
+              onClick={this.scrollToColumn50Auto}
+            >
+              Scroll to column 50 (align: auto)
+            </button>
             <VariableSizeGrid
               className={styles.Grid}
               columnCount={1000}
@@ -142,6 +154,12 @@ export default class ScrollToItem extends PureComponent {
     );
   }
 
+  scrollToColumn50Auto = () => {
+    this.gridRef.current.scrollToItem({
+      columnIndex: 50,
+    });
+  };
+
   scrollToRow200Auto = () =>
     trace('scroll to row 200', performance.now(), () =>
       this.listRef.current.scrollToItem(200)
@@ -150,6 +168,12 @@ export default class ScrollToItem extends PureComponent {
     trace('scroll to row 300', performance.now(), () =>
       this.listRef.current.scrollToItem(300, 'center')
     );
+
+  scrollToRow100 = () => {
+    this.gridRef.current.scrollToItem({
+      rowIndex: 100,
+    });
+  };
 
   scrollToRow100Column50Auto = () => {
     this.gridRef.current.scrollToItem({
