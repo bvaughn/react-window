@@ -152,7 +152,7 @@ const DynamicSizeList = createListComponent({
     scrollOffset: number,
     instanceProps: InstanceProps
   ): number => {
-    const { direction, height, width } = props;
+    const { direction, layout, height, width } = props;
 
     if (process.env.NODE_ENV !== 'production') {
       const { lastMeasuredIndex } = instanceProps;
@@ -164,7 +164,9 @@ const DynamicSizeList = createListComponent({
       }
     }
 
-    const size = (((direction === 'horizontal' ? width : height): any): number);
+    const size = (((direction === 'horizontal' || layout === 'horizontal'
+      ? width
+      : height): any): number);
     const itemMetadata = getItemMetadata(props, index, instanceProps);
 
     // Get estimated total size after ItemMetadata is computed,
@@ -225,9 +227,11 @@ const DynamicSizeList = createListComponent({
     scrollOffset: number,
     instanceProps: InstanceProps
   ): number => {
-    const { direction, height, itemCount, width } = props;
+    const { direction, layout, height, itemCount, width } = props;
 
-    const size = (((direction === 'horizontal' ? width : height): any): number);
+    const size = (((direction === 'horizontal' || layout === 'horizontal'
+      ? width
+      : height): any): number);
     const itemMetadata = getItemMetadata(props, startIndex, instanceProps);
     const maxOffset = scrollOffset + size;
 
@@ -325,7 +329,7 @@ const DynamicSizeList = createListComponent({
               instance.forceUpdate();
             } else {
               const { scrollOffset } = instance.state;
-              const { direction } = instance.props;
+              const { direction, layout } = instance.props;
 
               // Adjusting scroll offset directly interrupts smooth scrolling for some browsers (e.g. Firefox).
               // The relative scrollBy() method doesn't interrupt (or at least it won't as of Firefox v65).
@@ -335,10 +339,17 @@ const DynamicSizeList = createListComponent({
               // $FlowFixMe Property scrollBy is missing in HTMLDivElement
               if (typeof element.scrollBy === 'function') {
                 element.scrollBy(
-                  direction === 'horizontal' ? sizeDeltaForStateUpdate : 0,
-                  direction === 'horizontal' ? 0 : sizeDeltaForStateUpdate
+                  direction === 'horizontal' || layout === 'horizontal'
+                    ? sizeDeltaForStateUpdate
+                    : 0,
+                  direction === 'horizontal' || layout === 'horizontal'
+                    ? 0
+                    : sizeDeltaForStateUpdate
                 );
-              } else if (direction === 'horizontal') {
+              } else if (
+                direction === 'horizontal' ||
+                layout === 'horizontal'
+              ) {
                 element.scrollLeft = scrollOffset;
               } else {
                 element.scrollTop = scrollOffset;
@@ -418,6 +429,7 @@ const DynamicSizeList = createListComponent({
       const {
         children,
         direction,
+        layout,
         itemCount,
         itemData,
         itemKey = defaultItemKey,
@@ -451,6 +463,7 @@ const DynamicSizeList = createListComponent({
           items.push(
             createElement(ItemMeasurer, {
               direction,
+              layout,
               handleNewMeasurements,
               index,
               item,

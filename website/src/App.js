@@ -11,6 +11,7 @@ import FixedSizeGridApi from './routes/api/FixedSizeGrid';
 import FixedSizeGridExample from './routes/examples/FixedSizeGrid';
 import FixedSizeListApi from './routes/api/FixedSizeList';
 import FixedSizeListExample from './routes/examples/FixedSizeList';
+import RTLLayoutExample from './routes/examples/RTLLayout';
 import ListWithScrollingIndicatorExample from './routes/examples/ListWithScrollingIndicator';
 import MemoizedListItemsExample from './routes/examples/MemoizedListItemsExample';
 import ScrollToItemExample from './routes/examples/ScrollToItem';
@@ -101,6 +102,11 @@ const EXAMPLE_ROUTES = [
     path: '/examples/list/memoized-list-items',
     title: 'Memoized List items',
     component: MemoizedListItemsExample,
+  },
+  {
+    path: '/examples/list/fixed-size-rtl',
+    title: 'RTL layout',
+    component: RTLLayoutExample,
   },
 ];
 

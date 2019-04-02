@@ -146,6 +146,12 @@ const getEstimatedTotalSize = (
 ) => {
   let totalSizeOfMeasuredItems = 0;
 
+  // Edge case check for when the number of items decreases while a scroll is in progress.
+  // https://github.com/bvaughn/react-window/pull/138
+  if (lastMeasuredIndex >= itemCount) {
+    lastMeasuredIndex = itemCount - 1;
+  }
+
   if (lastMeasuredIndex >= 0) {
     const itemMetadata = itemMetadataMap[lastMeasuredIndex];
     totalSizeOfMeasuredItems = itemMetadata.offset + itemMetadata.size;
@@ -179,9 +185,11 @@ const VariableSizeList = createListComponent({
     scrollOffset: number,
     instanceProps: InstanceProps
   ): number => {
-    const { direction, height, width } = props;
+    const { direction, height, layout, width } = props;
 
-    const size = (((direction === 'horizontal' ? width : height): any): number);
+    // TODO Deprecate direction "horizontal"
+    const isHorizontal = direction === 'horizontal' || layout === 'horizontal';
+    const size = (((isHorizontal ? width : height): any): number);
     const itemMetadata = getItemMetadata(props, index, instanceProps);
 
     // Get estimated total size after ItemMetadata is computed,
@@ -228,9 +236,11 @@ const VariableSizeList = createListComponent({
     scrollOffset: number,
     instanceProps: InstanceProps
   ): number => {
-    const { direction, height, itemCount, width } = props;
+    const { direction, height, itemCount, layout, width } = props;
 
-    const size = (((direction === 'horizontal' ? width : height): any): number);
+    // TODO Deprecate direction "horizontal"
+    const isHorizontal = direction === 'horizontal' || layout === 'horizontal';
+    const size = (((isHorizontal ? width : height): any): number);
     const itemMetadata = getItemMetadata(props, startIndex, instanceProps);
     const maxOffset = scrollOffset + size;
 

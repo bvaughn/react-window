@@ -4,18 +4,15 @@ import { unstable_trace as trace } from 'scheduler/tracing';
 
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
+import { fillArray } from '../../utils';
 
 import CODE_GRID from '../../code/ScrollToItemGrid.js';
 import CODE_LIST from '../../code/ScrollToItemList.js';
 
 import styles from './shared.module.css';
 
-const columnWidths = new Array(1000)
-  .fill(true)
-  .map(() => 75 + Math.round(Math.random() * 50));
-const rowHeights = new Array(1000)
-  .fill(true)
-  .map(() => 25 + Math.round(Math.random() * 50));
+const columnWidths = fillArray(1000, () => 75 + Math.round(Math.random() * 50));
+const rowHeights = fillArray(1000, () => 25 + Math.round(Math.random() * 50));
 
 class ListItemRenderer extends PureComponent {
   render() {
@@ -124,6 +121,18 @@ export default class ScrollToItem extends PureComponent {
             >
               Scroll to row 200, column 100 (align: center)
             </button>
+            <button
+              className={styles.ExampleButton}
+              onClick={this.scrollToRow100}
+            >
+              Scroll to row 100 (align: auto)
+            </button>
+            <button
+              className={styles.ExampleButton}
+              onClick={this.scrollToColumn50Auto}
+            >
+              Scroll to column 50 (align: auto)
+            </button>
             <VariableSizeGrid
               className={styles.Grid}
               columnCount={1000}
@@ -145,6 +154,12 @@ export default class ScrollToItem extends PureComponent {
     );
   }
 
+  scrollToColumn50Auto = () => {
+    this.gridRef.current.scrollToItem({
+      columnIndex: 50,
+    });
+  };
+
   scrollToRow200Auto = () =>
     trace('scroll to row 200', performance.now(), () =>
       this.listRef.current.scrollToItem(200)
@@ -153,6 +168,12 @@ export default class ScrollToItem extends PureComponent {
     trace('scroll to row 300', performance.now(), () =>
       this.listRef.current.scrollToItem(300, 'center')
     );
+
+  scrollToRow100 = () => {
+    this.gridRef.current.scrollToItem({
+      rowIndex: 100,
+    });
+  };
 
   scrollToRow100Column50Auto = () => {
     this.gridRef.current.scrollToItem({

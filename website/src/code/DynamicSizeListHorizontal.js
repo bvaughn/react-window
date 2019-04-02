@@ -10,7 +10,7 @@ const Column = ({ index, style }) => (
 // Note that no itemSize is required for dyanmic lists!
 const Example = () => (
   <List
-    direction="horizontal"
+    layout="horizontal"
     height={50}
     itemCount={1000}
     width={300}

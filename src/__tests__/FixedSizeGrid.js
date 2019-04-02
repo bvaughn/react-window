@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
 import { FixedSizeGrid } from '..';
+import * as domHelpers from '../domHelpers';
 
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
@@ -13,7 +14,7 @@ const simulateScroll = (instance, { scrollLeft, scrollTop }) => {
 };
 
 describe('FixedSizeGrid', () => {
-  let itemRenderer, defaultProps, onItemsRendered;
+  let defaultProps, getScrollbarSize, itemRenderer, onItemsRendered;
 
   // Use PureComponent to test memoization.
   // Pass through to itemRenderer mock for easier test assertions.
@@ -25,6 +26,9 @@ describe('FixedSizeGrid', () => {
 
   beforeEach(() => {
     jest.useFakeTimers();
+
+    // Mock the DOM helper util for testing purposes.
+    getScrollbarSize = domHelpers.getScrollbarSize = jest.fn(() => 0);
 
     onItemsRendered = jest.fn();
 
@@ -172,6 +176,41 @@ describe('FixedSizeGrid', () => {
     });
   });
 
+  describe('direction', () => {
+    it('should set the appropriate CSS direction style', () => {
+      const renderer = ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} direction="ltr" />
+      );
+      expect(renderer.toJSON().props.style.direction).toBe('ltr');
+      renderer.update(<FixedSizeGrid {...defaultProps} direction="rtl" />);
+      expect(renderer.toJSON().props.style.direction).toBe('rtl');
+    });
+
+    it('should position items correctly', () => {
+      const renderer = ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} direction="ltr" />
+      );
+
+      let params = itemRenderer.mock.calls[0][0];
+      expect(params.columnIndex).toBe(0);
+      expect(params.rowIndex).toBe(0);
+      let style = params.style;
+      expect(style.left).toBe(0);
+      expect(style.right).toBeUndefined();
+
+      itemRenderer.mockClear();
+
+      renderer.update(<FixedSizeGrid {...defaultProps} direction="rtl" />);
+
+      params = itemRenderer.mock.calls[0][0];
+      expect(params.columnIndex).toBe(0);
+      expect(params.rowIndex).toBe(0);
+      style = params.style;
+      expect(style.left).toBeUndefined();
+      expect(style.right).toBe(0);
+    });
+  });
+
   describe('overscanColumnsCount and overscanRowsCount', () => {
     it('should require a minimum of 1 overscan to support tabbing', () => {
       ReactTestRenderer.create(
@@ -248,7 +287,8 @@ describe('FixedSizeGrid', () => {
     describe('overscanCount', () => {
       it('should warn about deprecated overscanCount prop', () => {
         spyOn(console, 'warn');
-        ReactTestRenderer.create(
+
+        const renderer = ReactTestRenderer.create(
           <FixedSizeGrid {...defaultProps} overscanCount={1} />
         );
         expect(console.warn).toHaveBeenCalledTimes(1);
@@ -256,10 +296,16 @@ describe('FixedSizeGrid', () => {
           'The overscanCount prop has been deprecated. ' +
             'Please use the overscanColumnsCount and overscanRowsCount props instead.'
         );
+
+        renderer.update(<FixedSizeGrid {...defaultProps} overscanCount={1} />);
+
+        // But it should only warn once.
+        expect(console.warn).toHaveBeenCalledTimes(1);
       });
 
       it('should use overscanColumnsCount if both it and overscanCount are provided', () => {
         spyOn(console, 'warn');
+
         ReactTestRenderer.create(
           <FixedSizeGrid
             {...defaultProps}
@@ -274,6 +320,7 @@ describe('FixedSizeGrid', () => {
 
       it('should use overscanRowsCount if both it and overscanCount are provided', () => {
         spyOn(console, 'warn');
+
         ReactTestRenderer.create(
           <FixedSizeGrid
             {...defaultProps}
@@ -288,6 +335,7 @@ describe('FixedSizeGrid', () => {
 
       it('should support deprecated overscanCount', () => {
         spyOn(console, 'warn');
+
         ReactTestRenderer.create(
           <FixedSizeGrid
             {...defaultProps}
@@ -427,6 +475,10 @@ describe('FixedSizeGrid', () => {
       rendered
         .getInstance()
         .scrollToItem({ columnIndex: 2, rowIndex: 2, align: 'auto' });
+      // Scroll down to row 10, without changing scrollLeft
+      rendered.getInstance().scrollToItem({ rowIndex: 10, align: 'auto' });
+      // Scroll left to column 0, without changing scrollTop
+      rendered.getInstance().scrollToItem({ columnIndex: 0, align: 'auto' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
@@ -449,6 +501,10 @@ describe('FixedSizeGrid', () => {
       rendered
         .getInstance()
         .scrollToItem({ columnIndex: 99, rowIndex: 99, align: 'start' });
+      // Scroll up to row 10, without changing scrollLeft
+      rendered.getInstance().scrollToItem({ rowIndex: 10, align: 'start' });
+      // Scroll left to column 0, without changing scrollTop
+      rendered.getInstance().scrollToItem({ columnIndex: 0, align: 'start' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
@@ -471,6 +527,10 @@ describe('FixedSizeGrid', () => {
       rendered
         .getInstance()
         .scrollToItem({ columnIndex: 1, rowIndex: 1, align: 'end' });
+      // Scroll down to row 10, without changing scrollLeft
+      rendered.getInstance().scrollToItem({ rowIndex: 10, align: 'end' });
+      // Scroll right to column 9, without changing scrollTop
+      rendered.getInstance().scrollToItem({ columnIndex: 9, align: 'end' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
@@ -499,6 +559,10 @@ describe('FixedSizeGrid', () => {
       rendered
         .getInstance()
         .scrollToItem({ columnIndex: 99, rowIndex: 99, align: 'center' });
+      // Scroll up to row 10, without changing scrollLeft
+      rendered.getInstance().scrollToItem({ rowIndex: 10, align: 'center' });
+      // Scroll left to column 3, without changing scrollTop
+      rendered.getInstance().scrollToItem({ columnIndex: 3, align: 'center' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
@@ -511,6 +575,109 @@ describe('FixedSizeGrid', () => {
       itemRenderer.mockClear();
       instance.scrollToItem({ columnIndex: 15, rowIndex: 20 });
       expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
+    });
+
+    it('should account for scrollbar size', () => {
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          columnWidth={100}
+          height={150}
+          rowHeight={25}
+          width={300}
+          onScroll={onScroll}
+        />
+      );
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 15, rowIndex: 10, align: 'end' });
+
+      // With hidden scrollbars (size === 0) we would expect...
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'forward',
+        scrollLeft: 1300,
+        scrollTop: 125,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'forward',
+      });
+
+      getScrollbarSize.mockImplementation(() => 20);
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 15, rowIndex: 10, align: 'end' });
+
+      // With scrollbars of size 20 we would expect those values ot increase by 20px
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'forward',
+        scrollLeft: 1320,
+        scrollTop: 145,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'forward',
+      });
+    });
+
+    it('should not account for scrollbar size when no scrollbar is visible for a particular direction', () => {
+      getScrollbarSize.mockImplementation(() => 20);
+
+      const onScroll = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          columnCount={2}
+          columnWidth={100}
+          height={150}
+          rowHeight={25}
+          width={300}
+          onScroll={onScroll}
+        />
+      );
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 0, rowIndex: 10, align: 'end' });
+
+      // Since there aren't enough columns to require horizontal scrolling,
+      // the additional 20px for the scrollbar should not be taken into consideration.
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'backward',
+        scrollLeft: 0,
+        scrollTop: 125,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'forward',
+      });
+
+      rendered.update(
+        <FixedSizeGrid
+          {...defaultProps}
+          columnWidth={100}
+          height={150}
+          rowCount={4}
+          rowHeight={25}
+          width={300}
+          onScroll={onScroll}
+        />
+      );
+
+      onScroll.mockClear();
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 15, rowIndex: 0, align: 'end' });
+
+      // Since there aren't enough rows to require vertical scrolling,
+      // the additional 20px for the scrollbar should not be taken into consideration.
+      expect(onScroll).toHaveBeenCalledWith({
+        horizontalScrollDirection: 'forward',
+        scrollLeft: 1300,
+        scrollTop: 0,
+        scrollUpdateWasRequested: true,
+        verticalScrollDirection: 'backward',
+      });
     });
   });
 
@@ -721,19 +888,29 @@ describe('FixedSizeGrid', () => {
 
     it('should warn if legacy innerTagName or outerTagName props are used', () => {
       spyOn(console, 'warn');
-      ReactDOM.render(
+      const renderer = ReactTestRenderer.create(
         <FixedSizeGrid
           {...defaultProps}
           innerTagName="div"
           outerTagName="div"
-        />,
-        document.createElement('div')
+        />
       );
       expect(console.warn).toHaveBeenCalledTimes(1);
       expect(console.warn).toHaveBeenLastCalledWith(
         'The innerTagName and outerTagName props have been deprecated. ' +
           'Please use the innerElementType and outerElementType props instead.'
       );
+
+      renderer.update(
+        <FixedSizeGrid
+          {...defaultProps}
+          innerTagName="div"
+          outerTagName="div"
+        />
+      );
+
+      // But it should only warn once.
+      expect(console.warn).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -814,10 +991,22 @@ describe('FixedSizeGrid', () => {
       );
     });
 
+    it('should fail if an invalid direction is provided', () => {
+      expect(() =>
+        ReactTestRenderer.create(
+          <FixedSizeGrid {...defaultProps} direction={null} />
+        )
+      ).toThrow(
+        'An invalid "direction" prop has been specified. ' +
+          'Value should be either "ltr" or "rtl". ' +
+          '"null" was specified.'
+      );
+    });
+
     it('should fail if a string height is provided', () => {
       expect(() =>
         ReactTestRenderer.create(
-          <FixedSizeGrid {...defaultProps} direction="vertical" height="100%" />
+          <FixedSizeGrid {...defaultProps} height="100%" />
         )
       ).toThrow(
         'An invalid "height" prop has been specified. ' +
@@ -829,11 +1018,7 @@ describe('FixedSizeGrid', () => {
     it('should fail if a string width is provided', () => {
       expect(() =>
         ReactTestRenderer.create(
-          <FixedSizeGrid
-            {...defaultProps}
-            direction="horizontal"
-            width="100%"
-          />
+          <FixedSizeGrid {...defaultProps} width="100%" />
         )
       ).toThrow(
         'An invalid "width" prop has been specified. ' +

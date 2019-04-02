@@ -1,6 +1,17 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
+import { render } from 'react-dom';
+import { Simulate } from 'react-dom/test-utils';
 import ReactTestRenderer from 'react-test-renderer';
 import { VariableSizeList } from '..';
+
+const simulateScroll = (instance, scrollOffset, direction = 'vertical') => {
+  if (direction === 'horizontal') {
+    instance._outerRef.scrollLeft = scrollOffset;
+  } else {
+    instance._outerRef.scrollTop = scrollOffset;
+  }
+  Simulate.scroll(instance._outerRef);
+};
 
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
@@ -294,5 +305,35 @@ describe('VariableSizeList', () => {
           'Value should be a function. "number" was specified.'
       );
     });
+  });
+
+  // https://github.com/bvaughn/react-window/pull/138
+  it('should descrease scroll size when itemCount decreases', () => {
+    const innerRef = createRef();
+    const listRef = createRef();
+
+    class Wrapper extends PureComponent {
+      state = { itemCount: 100 };
+      render() {
+        return (
+          <VariableSizeList
+            {...defaultProps}
+            itemCount={this.state.itemCount}
+            innerRef={innerRef}
+            ref={listRef}
+          />
+        );
+      }
+    }
+
+    // Use ReactDOM renderer so "scroll" events work correctly.
+    const instance = render(<Wrapper />, document.createElement('div'));
+
+    // Simulate scrolling past several rows.
+    simulateScroll(listRef.current, 3000);
+
+    // Decrease itemCount a lot and verify the scroll height is descreased as well.
+    instance.setState({ itemCount: 3 });
+    expect(innerRef.current.style.height).toEqual('78px');
   });
 });

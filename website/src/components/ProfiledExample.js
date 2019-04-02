@@ -13,7 +13,7 @@ type Props = {|
   style?: Object,
 |};
 
-const isProfilingEnabled = window.location.hash.includes('profile=true');
+const isProfilingEnabled = window.location.hash.indexOf('profile=true') >= 0;
 
 export default class ProfiledExample extends PureComponent<Props, void> {
   _averageTimeRef = createRef();

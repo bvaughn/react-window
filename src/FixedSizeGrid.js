@@ -27,7 +27,9 @@ const FixedSizeGrid = createGridComponent({
     { columnCount, columnWidth, width }: Props<any>,
     columnIndex: number,
     align: ScrollToAlign,
-    scrollLeft: number
+    scrollLeft: number,
+    instanceProps: typeof undefined,
+    scrollbarSize: number
   ): number => {
     const maxOffset = Math.max(
       0,
@@ -40,6 +42,7 @@ const FixedSizeGrid = createGridComponent({
       0,
       columnIndex * ((columnWidth: any): number) -
         width +
+        scrollbarSize +
         ((columnWidth: any): number)
     );
 
@@ -66,7 +69,9 @@ const FixedSizeGrid = createGridComponent({
     { rowHeight, height, rowCount }: Props<any>,
     rowIndex: number,
     align: ScrollToAlign,
-    scrollTop: number
+    scrollTop: number,
+    instanceProps: typeof undefined,
+    scrollbarSize: number
   ): number => {
     const maxOffset = Math.max(
       0,
@@ -79,6 +84,7 @@ const FixedSizeGrid = createGridComponent({
       0,
       rowIndex * ((rowHeight: any): number) -
         height +
+        scrollbarSize +
         ((rowHeight: any): number)
     );
 
