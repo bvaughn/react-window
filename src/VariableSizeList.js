@@ -28,7 +28,7 @@ const getItemMetadata = (
   index: number,
   instanceProps: InstanceProps
 ): ItemMetadata => {
-  const { itemSize } = ((props: any): VariableSizeProps);
+  const { itemSize, paddingTop } = ((props: any): VariableSizeProps);
   const { itemMetadataMap, lastMeasuredIndex } = instanceProps;
 
   if (index > lastMeasuredIndex) {
@@ -52,7 +52,7 @@ const getItemMetadata = (
     instanceProps.lastMeasuredIndex = index;
   }
 
-  return itemMetadataMap[index];
+  return index > 0 ? itemMetadataMap[index] : paddingTop + itemMetadataMap[index];
 };
 
 const findNearestItem = (

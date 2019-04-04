@@ -58,6 +58,8 @@ export type Props<T> = {|
   outerElementType?: React$ElementType,
   outerTagName?: string, // deprecated
   overscanCount: number,
+  paddingBottom: number,
+  paddingTop: number,
   style?: Object,
   useIsScrolling: boolean,
   width: number | string,
@@ -149,6 +151,8 @@ export default function createListComponent({
       itemData: undefined,
       layout: 'vertical',
       overscanCount: 2,
+      paddingTop: 0,
+      paddingBottom: 0,
       useIsScrolling: false,
     };
 
@@ -258,6 +262,8 @@ export default function createListComponent({
         layout,
         outerElementType,
         outerTagName,
+        paddingBottom,
+        paddingTop,
         style,
         useIsScrolling,
         width,
@@ -294,7 +300,7 @@ export default function createListComponent({
       const estimatedTotalSize = getEstimatedTotalSize(
         this.props,
         this._instanceProps
-      );
+      ) + paddingBottom + paddingTop;
 
       return createElement(
         outerElementType || outerTagName || 'div',

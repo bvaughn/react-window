@@ -5,8 +5,8 @@ import createListComponent from './createListComponent';
 import type { Props, ScrollToAlign } from './createListComponent';
 
 const FixedSizeList = createListComponent({
-  getItemOffset: ({ itemSize, size }: Props<any>, index: number): number =>
-    index * ((itemSize: any): number),
+  getItemOffset: ({ itemSize, paddingTop, size }: Props<any>, index: number): number =>
+    paddingTop + index * ((itemSize: any): number),
 
   getItemSize: ({ itemSize, size }: Props<any>, index: number): number =>
     ((itemSize: any): number),
@@ -15,7 +15,7 @@ const FixedSizeList = createListComponent({
     ((itemSize: any): number) * itemCount,
 
   getOffsetForIndexAndAlignment: (
-    { direction, height, itemCount, itemSize, layout, width }: Props<any>,
+    { direction, height, itemCount, itemSize, layout, paddingTop, width }: Props<any>,
     index: number,
     align: ScrollToAlign,
     scrollOffset: number
@@ -23,14 +23,14 @@ const FixedSizeList = createListComponent({
     // TODO Deprecate direction "horizontal"
     const isHorizontal = direction === 'horizontal' || layout === 'horizontal';
     const size = (((isHorizontal ? width : height): any): number);
-    const maxOffset = Math.max(
+    const maxOffset = paddingTop + Math.max(
       0,
       Math.min(
         itemCount * ((itemSize: any): number) - size,
         index * ((itemSize: any): number)
       )
     );
-    const minOffset = Math.max(
+    const minOffset = paddingTop + Math.max(
       0,
       index * ((itemSize: any): number) - size + ((itemSize: any): number)
     );
