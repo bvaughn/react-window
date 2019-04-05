@@ -4,6 +4,7 @@ import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
 import { FixedSizeGrid } from '..';
 import * as domHelpers from '../domHelpers';
+import { defaultCellRangeRenderer } from '../createGridComponent';
 
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
@@ -1083,6 +1084,54 @@ describe('FixedSizeGrid', () => {
           'Grids must specify a number for width. ' +
           '"string" was specified.'
       );
+    });
+  });
+
+  describe('cellRangeRenderer', () => {
+    it('should use a custom cellRangeRenderer if specified', () => {
+      const width = 90;
+      const height = 70;
+      const columnWidth = 20;
+      const rowHeight = 40;
+      const overscanRowsCount = 1;
+      const overscanColumnsCount = 1;
+
+      const expectedColumnStopIndex = Math.floor(
+        width / columnWidth + overscanColumnsCount
+      );
+
+      const expectedRowStopIndex = Math.floor(
+        height / rowHeight + overscanRowsCount
+      );
+
+      const CustomRow = props => <div {...props} />;
+      const cellRangeRenderer = jest
+        .fn()
+        .mockImplementation(defaultCellRangeRenderer);
+
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          {...{
+            width,
+            height,
+            columnWidth,
+            rowHeight,
+            overscanRowsCount,
+            overscanColumnsCount,
+          }}
+          cellRangeRenderer={cellRangeRenderer}
+        />
+      );
+
+      expect(cellRangeRenderer).toHaveBeenCalledTimes(1);
+      expect(cellRangeRenderer).toHaveBeenCalledWith({
+        columnStartIndex: 0,
+        rowStartIndex: 0,
+        columnStopIndex: expectedColumnStopIndex,
+        rowStopIndex: expectedRowStopIndex,
+        childFactory: expect.any(Function),
+      });
     });
   });
 });

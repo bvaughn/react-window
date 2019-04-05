@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
 import { FixedSizeList } from '..';
+import { defaultRowRangeRenderer } from '../createListComponent';
 
 const simulateScroll = (instance, scrollOffset, direction = 'vertical') => {
   if (direction === 'horizontal') {
@@ -868,6 +869,40 @@ describe('FixedSizeList', () => {
           'Horizontal lists must specify a number for width. ' +
           '"string" was specified.'
       );
+    });
+  });
+
+  describe('rowRangeRenderer', () => {
+    it('should use a custom rowRangeRenderer if specified', () => {
+      const height = 70;
+      const itemSize = 40;
+      const overscanCount = 1;
+
+      const expectedStopIndex = Math.floor(height / itemSize + overscanCount);
+
+      const CustomRow = props => <div {...props} />;
+      const rowRangeRenderer = jest
+        .fn()
+        .mockImplementation(defaultRowRangeRenderer);
+
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList
+          {...defaultProps}
+          {...{
+            height,
+            itemSize,
+            overscanCount,
+          }}
+          rowRangeRenderer={rowRangeRenderer}
+        />
+      );
+
+      expect(rowRangeRenderer).toHaveBeenCalledTimes(1);
+      expect(rowRangeRenderer).toHaveBeenCalledWith({
+        startIndex: 0,
+        stopIndex: expectedStopIndex,
+        childFactory: expect.any(Function),
+      });
     });
   });
 });

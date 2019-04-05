@@ -46,7 +46,23 @@ type OnScrollCallback = ({
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 type ItemStyleCache = { [key: string]: Object };
 
+type CellRangeRendererParams<T> = {|
+  columnStartIndex: number,
+  columnStopIndex: number,
+  rowStartIndex: number,
+  rowStopIndex: number,
+  childFactory: (params: {|
+    rowIndex: number,
+    columnIndex: number,
+  |}) => React$Element<RenderComponent<T>>,
+|};
+
+type CellRangeRenderer<T> = (
+  params: CellRangeRendererParams<T>
+) => React$Element<RenderComponent<T>>[];
+
 export type Props<T> = {|
+  cellRangeRenderer?: CellRangeRenderer<T>,
   children: RenderComponent<T>,
   className?: string,
   columnCount: number,
@@ -126,6 +142,26 @@ const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
 const defaultItemKey = ({ columnIndex, data, rowIndex }) =>
   `${rowIndex}:${columnIndex}`;
+
+export function defaultCellRangeRenderer<T>({
+  rowStartIndex,
+  rowStopIndex,
+  columnStartIndex,
+  columnStopIndex,
+  childFactory,
+}: CellRangeRendererParams<T>): React$Element<RenderComponent<T>>[] {
+  const items = [];
+  for (let rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
+    for (
+      let columnIndex = columnStartIndex;
+      columnIndex <= columnStopIndex;
+      columnIndex++
+    ) {
+      items.push(childFactory({ rowIndex, columnIndex }));
+    }
+  }
+  return items;
+}
 
 // In DEV mode, this Set helps us only log a warning once per component instance.
 // This avoids spamming the console every time a render happens.
@@ -348,6 +384,7 @@ export default function createGridComponent({
 
     render() {
       const {
+        cellRangeRenderer = (defaultCellRangeRenderer: CellRangeRenderer<T>),
         children,
         className,
         columnCount,
@@ -373,30 +410,29 @@ export default function createGridComponent({
       ] = this._getHorizontalRangeToRender();
       const [rowStartIndex, rowStopIndex] = this._getVerticalRangeToRender();
 
-      const items = [];
+      const resolvedIsScrolling = useIsScrolling ? isScrolling : undefined;
+
+      const childFactory = ({ rowIndex, columnIndex }) => {
+        return createElement(children, {
+          columnIndex,
+          data: itemData,
+          isScrolling: resolvedIsScrolling,
+          key: itemKey({ columnIndex, data: itemData, rowIndex }),
+          rowIndex,
+          style: this._getItemStyle(rowIndex, columnIndex),
+        });
+      };
+
+      let items = [];
+
       if (columnCount > 0 && rowCount) {
-        for (
-          let rowIndex = rowStartIndex;
-          rowIndex <= rowStopIndex;
-          rowIndex++
-        ) {
-          for (
-            let columnIndex = columnStartIndex;
-            columnIndex <= columnStopIndex;
-            columnIndex++
-          ) {
-            items.push(
-              createElement(children, {
-                columnIndex,
-                data: itemData,
-                isScrolling: useIsScrolling ? isScrolling : undefined,
-                key: itemKey({ columnIndex, data: itemData, rowIndex }),
-                rowIndex,
-                style: this._getItemStyle(rowIndex, columnIndex),
-              })
-            );
-          }
-        }
+        items = cellRangeRenderer({
+          rowStartIndex,
+          rowStopIndex,
+          columnStartIndex,
+          columnStopIndex,
+          childFactory,
+        });
       }
 
       // Read this value AFTER items have been created,

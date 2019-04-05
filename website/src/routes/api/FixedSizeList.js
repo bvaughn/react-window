@@ -10,6 +10,7 @@ import CODE_CHILDREN_FUNCTION from '../../code/FixedSizeListChildrenFunction.js'
 import CODE_ITEM_DATA from '../../code/FixedSizeListItemData.js';
 import CODE_ITEM_KEY from '../../code/FixedSizeListItemKey.js';
 import CODE_ON_ITEMS_RENDERED from '../../code/FixedSizeListOnItemsRendered.js';
+import CODE_ROW_RANGE_RENDERER from '../../code/FixedSizeListRowRangeRenderer.js';
 import CODE_ON_SCROLL from '../../code/FixedSizeListOnScroll.js';
 
 export default () => (
@@ -324,6 +325,27 @@ const PROPS = [
     ),
     name: 'overscanCount',
     type: 'number',
+  },
+  {
+    description: (
+      <Fragment>
+        <p>
+          By default, lists render rows consecutively without decoration.
+          Occasionally, you may need to render dynamic content that spans
+          multiple items. In general, this can be handled with the{' '}
+          <code>children</code> prop or the <code>innerElementType</code> prop.
+          However, if you truly need a fine level of control over the rendering
+          mechanism, rendering, you can do so here. This is an advanced
+          property.
+        </p>
+        <div className={styles.CodeBlockWrapper}>
+          <CodeBlock value={CODE_ROW_RANGE_RENDERER} />
+        </div>
+      </Fragment>
+    ),
+    isRequired: false,
+    name: 'rowRangeRenderer',
+    type: 'function',
   },
   {
     defaultValue: null,

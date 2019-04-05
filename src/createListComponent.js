@@ -38,6 +38,18 @@ type onScrollCallback = ({
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 type ItemStyleCache = { [index: number]: Object };
 
+type RowRangeRendererParams<T> = {|
+  startIndex: number,
+  stopIndex: number,
+  childFactory: (params: {| index: number |}) => React$Element<
+    RenderComponent<T>
+  >,
+|};
+
+type RowRangeRenderer<T> = (
+  params: RowRangeRendererParams<T>
+) => React$Element<RenderComponent<T>>[];
+
 export type Props<T> = {|
   children: RenderComponent<T>,
   className?: string,
@@ -58,6 +70,7 @@ export type Props<T> = {|
   outerElementType?: React$ElementType,
   outerTagName?: string, // deprecated
   overscanCount: number,
+  rowRangeRenderer?: RowRangeRenderer<T>,
   style?: Object,
   useIsScrolling: boolean,
   width: number | string,
@@ -106,6 +119,23 @@ type ValidateProps = (props: Props<any>) => void;
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
 const defaultItemKey = (index: number, data: any) => index;
+
+export function defaultRowRangeRenderer<T>({
+  startIndex,
+  stopIndex,
+  childFactory,
+}: RowRangeRendererParams<T>): React$Element<RenderComponent<T>>[] {
+  const items = [];
+  for (let index = startIndex; index <= stopIndex; index++) {
+    items.push(
+      childFactory({
+        index,
+      })
+    );
+  }
+
+  return items;
+}
 
 // In DEV mode, this Set helps us only log a warning once per component instance.
 // This avoids spamming the console every time a render happens.
@@ -266,6 +296,7 @@ export default function createListComponent({
         layout,
         outerElementType,
         outerTagName,
+        rowRangeRenderer = (defaultRowRangeRenderer: RowRangeRenderer<T>),
         style,
         useIsScrolling,
         width,
@@ -282,19 +313,26 @@ export default function createListComponent({
 
       const [startIndex, stopIndex] = this._getRangeToRender();
 
-      const items = [];
+      const resolvedIsScrolling = useIsScrolling ? isScrolling : undefined;
+
+      const childFactory = ({ index }) => {
+        return createElement(children, {
+          data: itemData,
+          key: itemKey(index, itemData),
+          index,
+          isScrolling: resolvedIsScrolling,
+          style: this._getItemStyle(index),
+        });
+      };
+
+      let items = [];
+
       if (itemCount > 0) {
-        for (let index = startIndex; index <= stopIndex; index++) {
-          items.push(
-            createElement(children, {
-              data: itemData,
-              key: itemKey(index, itemData),
-              index,
-              isScrolling: useIsScrolling ? isScrolling : undefined,
-              style: this._getItemStyle(index),
-            })
-          );
-        }
+        items = rowRangeRenderer({
+          startIndex,
+          stopIndex,
+          childFactory,
+        });
       }
 
       // Read this value AFTER items have been created,

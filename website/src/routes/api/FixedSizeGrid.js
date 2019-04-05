@@ -5,6 +5,7 @@ import ComponentApi from '../../components/ComponentApi';
 
 import styles from './shared.module.css';
 
+import CODE_CELL_RANGE_RENDERER from '../../code/FixedSizeGridCellRangeRenderer.js';
 import CODE_CHILDREN_CLASS from '../../code/FixedSizeGridChildrenClass.js';
 import CODE_CHILDREN_FUNCTION from '../../code/FixedSizeGridChildrenFunction.js';
 import CODE_ITEM_DATA from '../../code/FixedSizeGridItemData.js';
@@ -17,6 +18,27 @@ export default () => (
 );
 
 const PROPS = [
+  {
+    description: (
+      <Fragment>
+        <p>
+          By default, lists render cells consecutively without decoration.
+          Occasionally, you may need to render dynamic content that spans
+          multiple cells. In general, this can be handled with the{' '}
+          <code>children</code> prop or the <code>innerElementType</code> prop.
+          However, if you truly need a fine level of control over the rendering
+          mechanism, rendering, you can do so here. This is an advanced
+          property.
+        </p>
+        <div className={styles.CodeBlockWrapper}>
+          <CodeBlock value={CODE_CELL_RANGE_RENDERER} />
+        </div>
+      </Fragment>
+    ),
+    isRequired: false,
+    name: 'cellRangeRenderer',
+    type: 'function',
+  },
   {
     description: (
       <Fragment>

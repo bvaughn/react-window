@@ -4,6 +4,7 @@ import { Simulate } from 'react-dom/test-utils';
 import ReactTestRenderer from 'react-test-renderer';
 import { VariableSizeGrid } from '..';
 import * as domHelpers from '../domHelpers';
+import { defaultCellRangeRenderer } from '../createGridComponent';
 
 const simulateScroll = (instance, { scrollLeft, scrollTop }) => {
   instance._outerRef.scrollLeft = scrollLeft;
@@ -583,5 +584,53 @@ describe('VariableSizeGrid', () => {
     instance.setState({ columnCount: 2, rowCount: 4 });
     expect(innerRef.current.style.height).toEqual('106px');
     expect(innerRef.current.style.width).toEqual('101px');
+  });
+
+  describe('cellRangeRenderer', () => {
+    it('should use a custom cellRangeRenderer if specified', () => {
+      const width = 90;
+      const height = 70;
+      const columnWidth = _ => 20;
+      const rowHeight = _ => 40;
+      const overscanRowsCount = 1;
+      const overscanColumnsCount = 1;
+
+      const expectedColumnStopIndex = Math.floor(
+        width / columnWidth() + overscanColumnsCount
+      );
+
+      const expectedRowStopIndex = Math.floor(
+        height / rowHeight() + overscanRowsCount
+      );
+
+      const CustomRow = props => <div {...props} />;
+      const cellRangeRenderer = jest
+        .fn()
+        .mockImplementation(defaultCellRangeRenderer);
+
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid
+          {...defaultProps}
+          {...{
+            width,
+            height,
+            columnWidth,
+            rowHeight,
+            overscanRowsCount,
+            overscanColumnsCount,
+          }}
+          cellRangeRenderer={cellRangeRenderer}
+        />
+      );
+
+      expect(cellRangeRenderer).toHaveBeenCalledTimes(1);
+      expect(cellRangeRenderer).toHaveBeenCalledWith({
+        columnStartIndex: 0,
+        rowStartIndex: 0,
+        columnStopIndex: expectedColumnStopIndex,
+        rowStopIndex: expectedRowStopIndex,
+        childFactory: expect.any(Function),
+      });
+    });
   });
 });

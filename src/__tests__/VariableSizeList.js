@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { Simulate } from 'react-dom/test-utils';
 import ReactTestRenderer from 'react-test-renderer';
 import { VariableSizeList } from '..';
+import { defaultRowRangeRenderer } from '../createListComponent';
 
 const simulateScroll = (instance, scrollOffset, direction = 'vertical') => {
   if (direction === 'horizontal') {
@@ -348,5 +349,39 @@ describe('VariableSizeList', () => {
     // Decrease itemCount a lot and verify the scroll height is descreased as well.
     instance.setState({ itemCount: 3 });
     expect(innerRef.current.style.height).toEqual('78px');
+  });
+
+  describe('rowRangeRenderer', () => {
+    it('should use a custom rowRangeRenderer if specified', () => {
+      const height = 70;
+      const itemSize = _ => 40;
+      const overscanCount = 1;
+
+      const expectedStopIndex = Math.floor(height / itemSize() + overscanCount);
+
+      const CustomRow = props => <div {...props} />;
+      const rowRangeRenderer = jest
+        .fn()
+        .mockImplementation(defaultRowRangeRenderer);
+
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeList
+          {...defaultProps}
+          {...{
+            height,
+            itemSize,
+            overscanCount,
+          }}
+          rowRangeRenderer={rowRangeRenderer}
+        />
+      );
+
+      expect(rowRangeRenderer).toHaveBeenCalledTimes(1);
+      expect(rowRangeRenderer).toHaveBeenCalledWith({
+        startIndex: 0,
+        stopIndex: expectedStopIndex,
+        childFactory: expect.any(Function),
+      });
+    });
   });
 });
