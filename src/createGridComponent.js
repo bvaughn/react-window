@@ -127,7 +127,7 @@ const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 const defaultItemKey = ({ columnIndex, data, rowIndex }) =>
   `${rowIndex}:${columnIndex}`;
 
-// In DEV mode, this Set helps us only log a warning once per component instace.
+// In DEV mode, this Set helps us only log a warning once per component instance.
 // This avoids spamming the console every time a render happens.
 let devWarningsOverscanCount = null;
 let devWarningsTagName = null;
