@@ -180,19 +180,27 @@ export default function createListComponent({
     }
 
     scrollTo(scrollOffset: number): void {
-      this.setState(
-        prevState => ({
+      scrollOffset = Math.max(0, scrollOffset);
+
+      this.setState(prevState => {
+        if (prevState.scrollOffset === scrollOffset) {
+          return null;
+        }
+        return {
           scrollDirection:
             prevState.scrollOffset < scrollOffset ? 'forward' : 'backward',
           scrollOffset: scrollOffset,
           scrollUpdateWasRequested: true,
-        }),
-        this._resetIsScrollingDebounced
-      );
+        };
+      }, this._resetIsScrollingDebounced);
     }
 
     scrollToItem(index: number, align: ScrollToAlign = 'auto'): void {
+      const { itemCount } = this.props;
       const { scrollOffset } = this.state;
+
+      index = Math.max(0, Math.min(index, itemCount - 1));
+
       this.scrollTo(
         getOffsetForIndexAndAlignment(
           this.props,

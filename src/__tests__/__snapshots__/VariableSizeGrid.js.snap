@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`VariableSizeGrid scrollToItem method should not set invalid offsets when the list contains few items 1`] = `[Function]`;
+
 exports[`VariableSizeGrid scrollToItem method should scroll to the correct item for align = "auto" 1`] = `
 Array [
   Array [

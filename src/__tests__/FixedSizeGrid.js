@@ -431,31 +431,30 @@ describe('FixedSizeGrid', () => {
         })
       );
     });
+
+    it('should ignore offsets less than zero', () => {
+      const onScroll = jest.fn();
+      const instance = ReactDOM.render(
+        <FixedSizeGrid {...defaultProps} onScroll={onScroll} />,
+        document.createElement('div')
+      );
+      instance.scrollTo({ scrollLeft: 100, scrollTop: 100 });
+      onScroll.mockClear();
+      instance.scrollTo({ scrollLeft: -1, scrollTop: -1 });
+      expect(onScroll.mock.calls[0][0].scrollLeft).toBe(0);
+      expect(onScroll.mock.calls[0][0].scrollTop).toBe(0);
+    });
   });
 
   describe('scrollToItem method', () => {
     it('should not set invalid offsets when the list contains few items', () => {
-      const onScroll = jest.fn();
       const rendered = ReactTestRenderer.create(
-        <FixedSizeGrid
-          {...defaultProps}
-          columnCount={1}
-          rowCount={2}
-          onScroll={onScroll}
-        />
+        <FixedSizeGrid {...defaultProps} columnCount={1} rowCount={2} />
       );
-      onScroll.mockClear();
-      // Offset should not be negative.
-      rendered
-        .getInstance()
-        .scrollToItem({ columnIndex: 0, rowIndex: 0, align: 'auto' });
-      expect(onScroll).toHaveBeenCalledWith({
-        horizontalScrollDirection: 'backward',
-        scrollLeft: 0,
-        scrollTop: 0,
-        scrollUpdateWasRequested: true,
-        verticalScrollDirection: 'backward',
-      });
+      expect(onItemsRendered).toMatchSnapshot();
+      onItemsRendered.mockClear();
+      rendered.getInstance().scrollToItem(0);
+      expect(onItemsRendered).not.toHaveBeenCalled();
     });
 
     it('should scroll to the correct item for align = "auto"', () => {
@@ -678,6 +677,30 @@ describe('FixedSizeGrid', () => {
         scrollUpdateWasRequested: true,
         verticalScrollDirection: 'backward',
       });
+    });
+
+    it('should ignore indexes less than zero', () => {
+      const instance = ReactDOM.render(
+        <FixedSizeGrid {...defaultProps} />,
+        document.createElement('div')
+      );
+      instance.scrollToItem({ columnIndex: 20, rowIndex: 20 });
+      onItemsRendered.mockClear();
+      instance.scrollToItem({ columnIndex: -1, rowIndex: -1 });
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should ignore indexes greater than itemCount', () => {
+      const instance = ReactDOM.render(
+        <FixedSizeGrid {...defaultProps} />,
+        document.createElement('div')
+      );
+      onItemsRendered.mockClear();
+      instance.scrollToItem({
+        columnIndex: defaultProps.columnCount * 2,
+        rowIndex: defaultProps.rowCount * 2,
+      });
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
   });
 

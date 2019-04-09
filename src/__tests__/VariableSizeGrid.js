@@ -159,18 +159,10 @@ describe('VariableSizeGrid', () => {
           onScroll={onScroll}
         />
       );
-      onScroll.mockClear();
-      // Offset should not be negative.
-      rendered
-        .getInstance()
-        .scrollToItem({ columnIndex: 0, rowIndex: 0, align: 'auto' });
-      expect(onScroll).toHaveBeenCalledWith({
-        horizontalScrollDirection: 'backward',
-        scrollLeft: 0,
-        scrollTop: 0,
-        scrollUpdateWasRequested: true,
-        verticalScrollDirection: 'backward',
-      });
+      expect(onItemsRendered).toMatchSnapshot();
+      onItemsRendered.mockClear();
+      rendered.getInstance().scrollToItem(0);
+      expect(onItemsRendered).not.toHaveBeenCalled();
     });
 
     it('should scroll to the correct item for align = "auto"', () => {
@@ -290,12 +282,12 @@ describe('VariableSizeGrid', () => {
       onScroll.mockClear();
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 15, rowIndex: 10, align: 'end' });
+        .scrollToItem({ columnIndex: 5, rowIndex: 10, align: 'end' });
 
       // With hidden scrollbars (size === 0) we would expect...
       expect(onScroll).toHaveBeenCalledWith({
         horizontalScrollDirection: 'forward',
-        scrollLeft: 720,
+        scrollLeft: 115,
         scrollTop: 230,
         scrollUpdateWasRequested: true,
         verticalScrollDirection: 'forward',
@@ -306,12 +298,12 @@ describe('VariableSizeGrid', () => {
       onScroll.mockClear();
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 15, rowIndex: 10, align: 'end' });
+        .scrollToItem({ columnIndex: 5, rowIndex: 10, align: 'end' });
 
       // With scrollbars of size 20 we would expect those values ot increase by 20px
       expect(onScroll).toHaveBeenCalledWith({
         horizontalScrollDirection: 'forward',
-        scrollLeft: 740,
+        scrollLeft: 135,
         scrollTop: 250,
         scrollUpdateWasRequested: true,
         verticalScrollDirection: 'forward',
@@ -352,13 +344,13 @@ describe('VariableSizeGrid', () => {
       onScroll.mockClear();
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 15, rowIndex: 0, align: 'end' });
+        .scrollToItem({ columnIndex: 5, rowIndex: 0, align: 'end' });
 
       // Since there aren't enough rows to require vertical scrolling,
       // the additional 20px for the scrollbar should not be taken into consideration.
       expect(onScroll).toHaveBeenCalledWith({
         horizontalScrollDirection: 'forward',
-        scrollLeft: 720,
+        scrollLeft: 115,
         scrollTop: 0,
         scrollUpdateWasRequested: true,
         verticalScrollDirection: 'backward',

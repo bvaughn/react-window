@@ -121,14 +121,10 @@ describe('VariableSizeList', () => {
       const rendered = ReactTestRenderer.create(
         <VariableSizeList {...defaultProps} itemCount={3} onScroll={onScroll} />
       );
-      onScroll.mockClear();
-      // Offset should not be negative.
+      expect(onItemsRendered).toMatchSnapshot();
+      onItemsRendered.mockClear();
       rendered.getInstance().scrollToItem(0);
-      expect(onScroll).toHaveBeenCalledWith({
-        scrollDirection: 'backward',
-        scrollOffset: 0,
-        scrollUpdateWasRequested: true,
-      });
+      expect(onItemsRendered).not.toHaveBeenCalled();
     });
 
     it('should scroll to the correct item for align = "auto"', () => {

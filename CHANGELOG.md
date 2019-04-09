@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.7.2
+* 🐛 Add guards to avoid invalid scroll offsets when `scrollTo()` is called with a negative offset or when `scrollToItem` is called with invalid indices (negative or too large).
+
 ### 1.7.1
 * 🐛 Fix SSR regression introduced in 1.7.0 - ([Betree](https://github.com/Betree) - [#185](https://github.com/bvaughn/react-window/pull/185))
 
