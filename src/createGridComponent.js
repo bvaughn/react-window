@@ -3,7 +3,7 @@
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
-import { getScrollbarSize } from './domHelpers';
+import { getScrollbarSize, normalizeScrollLeft } from './domHelpers';
 
 import type { TimeoutID } from './timer';
 
@@ -84,6 +84,7 @@ type State = {|
   isScrolling: boolean,
   horizontalScrollDirection: ScrollDirection,
   scrollLeft: number,
+  normalizedScrollLeft: number,
   scrollTop: number,
   scrollUpdateWasRequested: boolean,
   verticalScrollDirection: ScrollDirection,
@@ -182,27 +183,50 @@ export default function createGridComponent({
       useIsScrolling: false,
     };
 
-    state: State = {
-      instance: this,
-      isScrolling: false,
-      horizontalScrollDirection: 'forward',
-      scrollLeft:
-        typeof this.props.initialScrollLeft === 'number'
-          ? this.props.initialScrollLeft
-          : 0,
-      scrollTop:
-        typeof this.props.initialScrollTop === 'number'
-          ? this.props.initialScrollTop
-          : 0,
-      scrollUpdateWasRequested: false,
-      verticalScrollDirection: 'forward',
-    };
-
     // Always use explicit constructor for React components.
     // It produces less code after transpilation. (#26)
     // eslint-disable-next-line no-useless-constructor
     constructor(props: Props<T>) {
       super(props);
+
+      const {
+        direction,
+        width,
+        initialScrollLeft,
+        initialScrollTop,
+      } = this.props;
+
+      const estimatedWidth = getEstimatedTotalWidth(
+        this.props,
+        this._instanceProps
+      );
+      const scrollLeft =
+        typeof initialScrollLeft === 'number'
+          ? initialScrollLeft
+          : normalizeScrollLeft({
+              direction: direction,
+              scrollLeft: 0,
+              clientWidth: width,
+              scrollWidth: estimatedWidth,
+            });
+
+      const initialNormalizedScrollLeft = normalizeScrollLeft({
+        direction: direction,
+        scrollLeft: scrollLeft,
+        clientWidth: width,
+        scrollWidth: estimatedWidth,
+      });
+
+      this.state = {
+        instance: this,
+        isScrolling: false,
+        horizontalScrollDirection: 'forward',
+        scrollLeft: scrollLeft,
+        normalizedScrollLeft: initialNormalizedScrollLeft,
+        scrollTop: typeof initialScrollTop === 'number' ? initialScrollTop : 0,
+        scrollUpdateWasRequested: false,
+        verticalScrollDirection: 'forward',
+      };
     }
 
     static getDerivedStateFromProps(
@@ -221,11 +245,41 @@ export default function createGridComponent({
       scrollLeft: number,
       scrollTop: number,
     }): void {
-      if (scrollLeft !== undefined) {
-        scrollLeft = Math.max(0, scrollLeft);
-      }
       if (scrollTop !== undefined) {
         scrollTop = Math.max(0, scrollTop);
+      }
+
+      let normalizedScrollLeft = undefined;
+
+      const { direction, width } = this.props;
+      let horizontalScrollDirection = 'backward';
+      if (scrollLeft !== undefined) {
+        const scrollWidth = getEstimatedTotalWidth(
+          this.props,
+          this._instanceProps
+        );
+        normalizedScrollLeft = normalizeScrollLeft({
+          direction,
+          scrollLeft,
+          scrollWidth,
+          clientWidth: width,
+        });
+
+        if (normalizedScrollLeft < 0) {
+          normalizedScrollLeft = 0;
+
+          scrollLeft = normalizeScrollLeft({
+            direction,
+            scrollLeft: normalizedScrollLeft,
+            scrollWidth,
+            clientWidth: width,
+          });
+        }
+
+        horizontalScrollDirection =
+          this.state.normalizedScrollLeft < normalizedScrollLeft
+            ? 'forward'
+            : 'backward';
       }
 
       this.setState(prevState => {
@@ -244,9 +298,9 @@ export default function createGridComponent({
         }
 
         return {
-          horizontalScrollDirection:
-            prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
+          horizontalScrollDirection: horizontalScrollDirection,
           scrollLeft: scrollLeft,
+          normalizedScrollLeft: normalizedScrollLeft,
           scrollTop: scrollTop,
           scrollUpdateWasRequested: true,
           verticalScrollDirection:
@@ -264,8 +318,8 @@ export default function createGridComponent({
       columnIndex?: number,
       rowIndex?: number,
     }): void {
-      const { columnCount, height, rowCount, width } = this.props;
-      const { scrollLeft, scrollTop } = this.state;
+      const { columnCount, height, rowCount, width, direction } = this.props;
+      const { scrollLeft, scrollTop, normalizedScrollLeft } = this.state;
       const scrollbarSize = getScrollbarSize();
 
       if (columnIndex !== undefined) {
@@ -292,30 +346,103 @@ export default function createGridComponent({
       const verticalScrollbarSize =
         estimatedTotalHeight > height ? scrollbarSize : 0;
 
-      this.scrollTo({
-        scrollLeft:
-          columnIndex !== undefined
-            ? getOffsetForColumnAndAlignment(
-                this.props,
-                columnIndex,
-                align,
-                scrollLeft,
-                this._instanceProps,
-                verticalScrollbarSize
-              )
-            : scrollLeft,
-        scrollTop:
-          rowIndex !== undefined
-            ? getOffsetForRowAndAlignment(
-                this.props,
-                rowIndex,
-                align,
-                scrollTop,
-                this._instanceProps,
-                horizontalScrollbarSize
-              )
-            : scrollTop,
-      });
+      let newNormalizedScrollLeft = normalizedScrollLeft;
+      let browserScrollLeft = scrollLeft;
+      let horizontalScrollDirection = 'backward';
+      if (columnIndex !== undefined) {
+        // Determine where we would scroll to if we were in a perfect world.
+        newNormalizedScrollLeft = getOffsetForColumnAndAlignment(
+          this.props,
+          columnIndex,
+          align,
+          normalizedScrollLeft,
+          this._instanceProps,
+          verticalScrollbarSize
+        );
+
+        // Now we need to determine how large the scrollWidth will be once
+        // rendered so we can determine where to actually scroll the browser to.
+        // When rendered we overscan by a given number of columns and recalculate
+        // how wide the scrolling content should be based on that. We need to do
+        // the same here to calculate the scrollLeft
+        const startIndex = getColumnStartIndexForOffset(
+          this.props,
+          newNormalizedScrollLeft,
+          this._instanceProps
+        );
+        const stopIndex = getColumnStopIndexForStartIndex(
+          this.props,
+          startIndex,
+          newNormalizedScrollLeft,
+          this._instanceProps
+        );
+
+        horizontalScrollDirection =
+          normalizedScrollLeft < newNormalizedScrollLeft
+            ? 'forward'
+            : 'backward';
+
+        const overscanForward =
+          horizontalScrollDirection === 'forward'
+            ? Math.max(1, this.props.overscanColumnsCount || 1)
+            : 1;
+
+        // This will update the index that we've measured up to matching that to what we'd measure once rendered
+        getColumnOffset(
+          this.props,
+          Math.max(0, Math.min(columnCount - 1, stopIndex + overscanForward)),
+          this._instanceProps
+        );
+
+        // Re-calculate the estimated width now that we've measured more
+        // columns in getColumnOffset above so that we can convert
+        // back from a normalized scrollLeft to one the browser understands.
+        // This is important as we'll change the width to this new value when
+        // rendered. If we use the existing width to calculate where we want the
+        // browser to scroll to that value will be incorrect by the time it's happened.
+        const newEstimatedTotalWidth = getEstimatedTotalWidth(
+          this.props,
+          this._instanceProps
+        );
+
+        browserScrollLeft = normalizeScrollLeft({
+          direction,
+          scrollLeft: newNormalizedScrollLeft,
+          scrollWidth: newEstimatedTotalWidth,
+          clientWidth: width - verticalScrollbarSize,
+        });
+      }
+
+      const newScrollTop =
+        rowIndex !== undefined
+          ? getOffsetForRowAndAlignment(
+              this.props,
+              rowIndex,
+              align,
+              scrollTop,
+              this._instanceProps,
+              horizontalScrollbarSize
+            )
+          : scrollTop;
+
+      this.setState(prevState => {
+        if (
+          prevState.scrollLeft === browserScrollLeft &&
+          prevState.scrollTop === newScrollTop
+        ) {
+          return null;
+        }
+
+        return {
+          horizontalScrollDirection: horizontalScrollDirection,
+          scrollLeft: browserScrollLeft,
+          normalizedScrollLeft: newNormalizedScrollLeft,
+          scrollTop: newScrollTop,
+          scrollUpdateWasRequested: true,
+          verticalScrollDirection:
+            prevState.scrollTop < newScrollTop ? 'forward' : 'backward',
+        };
+      }, this._resetIsScrollingDebounced);
     }
 
     componentDidMount() {
@@ -335,6 +462,32 @@ export default function createGridComponent({
       if (scrollUpdateWasRequested && this._outerRef !== null) {
         ((this._outerRef: any): HTMLDivElement).scrollLeft = scrollLeft;
         ((this._outerRef: any): HTMLDivElement).scrollTop = scrollTop;
+
+        const { direction, width, height } = this.props;
+        const scrollbarSize = getScrollbarSize();
+
+        // Now that scrollLeft has changed programmatically we need to update the normalized version of this
+        // We can't calculate it before now because we may have changed the scrollWidth of the component as
+        // a result of measuring more elements and we need that to calculate a normalized version.
+
+        // The scrollbar size should be considered when scrolling an item into view,
+        // to ensure it's fully visible.
+        // But we only need to account for its size when it's actually visible.
+        const verticalScrollbarSize =
+          ((this._outerRef: any): HTMLDivElement).scrollHeight > height
+            ? scrollbarSize
+            : 0;
+
+        const normalizedScrollLeft = normalizeScrollLeft({
+          direction,
+          scrollLeft: scrollLeft,
+          scrollWidth: ((this._outerRef: any): HTMLDivElement).scrollWidth,
+          clientWidth: width - verticalScrollbarSize,
+        });
+
+        this.setState({
+          normalizedScrollLeft,
+        });
       }
 
       this._callPropsCallbacks();
@@ -498,7 +651,6 @@ export default function createGridComponent({
 
     _callPropsCallbacks() {
       const { columnCount, onItemsRendered, onScroll, rowCount } = this.props;
-
       if (typeof onItemsRendered === 'function') {
         if (columnCount > 0 && rowCount > 0) {
           const [
@@ -590,7 +742,11 @@ export default function createGridComponent({
         overscanCount,
         rowCount,
       } = this.props;
-      const { horizontalScrollDirection, isScrolling, scrollLeft } = this.state;
+      const {
+        horizontalScrollDirection,
+        isScrolling,
+        normalizedScrollLeft,
+      } = this.state;
 
       const overscanCountResolved: number =
         overscanColumnsCount || overscanCount || 1;
@@ -601,13 +757,13 @@ export default function createGridComponent({
 
       const startIndex = getColumnStartIndexForOffset(
         this.props,
-        scrollLeft,
+        normalizedScrollLeft,
         this._instanceProps
       );
       const stopIndex = getColumnStopIndexForStartIndex(
         this.props,
         startIndex,
-        scrollLeft,
+        normalizedScrollLeft,
         this._instanceProps
       );
 
@@ -695,26 +851,22 @@ export default function createGridComponent({
           return null;
         }
 
-        const { direction } = this.props;
-
-        // HACK According to the spec, scrollLeft should be negative for RTL aligned elements.
-        // Chrome does not seem to adhere; its scrollLeft values are positive (measured relative to the left).
-        // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
-        let calculatedScrollLeft = scrollLeft;
-        if (direction === 'rtl') {
-          if (scrollLeft <= 0) {
-            calculatedScrollLeft = -scrollLeft;
-          } else {
-            calculatedScrollLeft = scrollWidth - clientWidth - scrollLeft;
-          }
-        }
+        const normalizedScrollLeft = normalizeScrollLeft({
+          direction: this.props.direction,
+          scrollLeft,
+          clientWidth,
+          scrollWidth,
+        });
 
         return {
           isScrolling: true,
           horizontalScrollDirection:
-            prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
-          scrollLeft: calculatedScrollLeft,
+            prevState.normalizedScrollLeft < normalizedScrollLeft
+              ? 'forward'
+              : 'backward',
+          scrollLeft,
           scrollTop,
+          normalizedScrollLeft,
           verticalScrollDirection:
             prevState.scrollTop < scrollTop ? 'forward' : 'backward',
           scrollUpdateWasRequested: false,

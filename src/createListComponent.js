@@ -5,6 +5,7 @@ import { createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
 
 import type { TimeoutID } from './timer';
+import { normalizeScrollLeft } from './domHelpers';
 
 export type ScrollToAlign = 'auto' | 'smart' | 'center' | 'start' | 'end';
 
@@ -68,6 +69,7 @@ type State = {|
   isScrolling: boolean,
   scrollDirection: ScrollDirection,
   scrollOffset: number,
+  normalizedScrollLeft: number,
   scrollUpdateWasRequested: boolean,
 |};
 
@@ -152,22 +154,50 @@ export default function createListComponent({
       useIsScrolling: false,
     };
 
-    state: State = {
-      instance: this,
-      isScrolling: false,
-      scrollDirection: 'forward',
-      scrollOffset:
-        typeof this.props.initialScrollOffset === 'number'
-          ? this.props.initialScrollOffset
-          : 0,
-      scrollUpdateWasRequested: false,
-    };
-
     // Always use explicit constructor for React components.
     // It produces less code after transpilation. (#26)
     // eslint-disable-next-line no-useless-constructor
     constructor(props: Props<T>) {
       super(props);
+
+      const { direction, layout, width, initialScrollOffset } = this.props;
+
+      let scrollOffset;
+      let initialNormalizedScrollLeft = 0;
+      if (layout === 'horizontal' || direction === 'horizontal') {
+        const estimatedWidth = getEstimatedTotalSize(
+          this.props,
+          this._instanceProps
+        );
+        scrollOffset =
+          typeof initialScrollOffset === 'number'
+            ? initialScrollOffset
+            : normalizeScrollLeft({
+                direction: direction,
+                scrollLeft: 0,
+                clientWidth: width,
+                scrollWidth: estimatedWidth,
+              });
+
+        initialNormalizedScrollLeft = normalizeScrollLeft({
+          direction: direction,
+          scrollLeft: scrollOffset,
+          clientWidth: width,
+          scrollWidth: estimatedWidth,
+        });
+      } else {
+        scrollOffset =
+          typeof initialScrollOffset === 'number' ? initialScrollOffset : 0;
+      }
+
+      this.state = {
+        instance: this,
+        isScrolling: false,
+        scrollDirection: 'forward',
+        scrollOffset,
+        normalizedScrollLeft: initialNormalizedScrollLeft,
+        scrollUpdateWasRequested: false,
+      };
     }
 
     static getDerivedStateFromProps(
@@ -180,36 +210,143 @@ export default function createListComponent({
     }
 
     scrollTo(scrollOffset: number): void {
-      scrollOffset = Math.max(0, scrollOffset);
+      let normalizedScrollLeft = undefined;
+
+      const { layout, direction, width } = this.props;
+      if (layout === 'horizontal' || direction === 'horizontal') {
+        const scrollWidth = getEstimatedTotalSize(
+          this.props,
+          this._instanceProps
+        );
+        normalizedScrollLeft = normalizeScrollLeft({
+          direction,
+          scrollLeft: scrollOffset,
+          scrollWidth,
+          clientWidth: width,
+        });
+
+        if (normalizedScrollLeft < 0) {
+          normalizedScrollLeft = 0;
+
+          scrollOffset = normalizeScrollLeft({
+            direction,
+            scrollLeft: normalizedScrollLeft,
+            scrollWidth,
+            clientWidth: width,
+          });
+        }
+      } else {
+        scrollOffset = Math.max(0, scrollOffset);
+      }
 
       this.setState(prevState => {
         if (prevState.scrollOffset === scrollOffset) {
           return null;
         }
+
+        const directionCalculation =
+          layout === 'horizontal' || direction === 'horizontal'
+            ? prevState.normalizedScrollLeft < normalizedScrollLeft
+            : prevState.scrollOffset < scrollOffset;
+
         return {
-          scrollDirection:
-            prevState.scrollOffset < scrollOffset ? 'forward' : 'backward',
+          scrollDirection: directionCalculation ? 'forward' : 'backward',
           scrollOffset: scrollOffset,
+          normalizedScrollLeft: normalizedScrollLeft,
           scrollUpdateWasRequested: true,
         };
       }, this._resetIsScrollingDebounced);
     }
 
     scrollToItem(index: number, align: ScrollToAlign = 'auto'): void {
-      const { itemCount } = this.props;
-      const { scrollOffset } = this.state;
+      const { itemCount, layout, direction, width } = this.props;
+      const { scrollOffset, normalizedScrollLeft } = this.state;
 
       index = Math.max(0, Math.min(index, itemCount - 1));
 
-      this.scrollTo(
-        getOffsetForIndexAndAlignment(
+      let newNormalizedScrollOffset = undefined;
+      let browserOffset = scrollOffset;
+      let scrollDirection = 'backward';
+      if (layout === 'horizontal' || direction === 'horizontal') {
+        newNormalizedScrollOffset = getOffsetForIndexAndAlignment(
+          this.props,
+          index,
+          align,
+          normalizedScrollLeft,
+          this._instanceProps
+        );
+
+        const startIndex = getStartIndexForOffset(
+          this.props,
+          newNormalizedScrollOffset,
+          this._instanceProps
+        );
+        const stopIndex = getStopIndexForStartIndex(
+          this.props,
+          startIndex,
+          newNormalizedScrollOffset,
+          this._instanceProps
+        );
+
+        if (normalizedScrollLeft < newNormalizedScrollOffset) {
+          scrollDirection = 'forward';
+        }
+
+        const overscanForward =
+          scrollDirection === 'forward'
+            ? Math.max(1, this.props.overscanCount || 1)
+            : 1;
+
+        // This will update the index that we've measured up to matching that to what we'd measure once rendered
+        getItemOffset(
+          this.props,
+          Math.max(0, Math.min(itemCount - 1, stopIndex + overscanForward)),
+          this._instanceProps
+        );
+
+        // Re-calculate the estimated width now that we've measured more
+        // columns in getOffsetForIndexAndAlignment above so that we can convert
+        // back from a normalized scrollLeft to one the browser understands.
+        // This is important as we'll change the width to this new value when
+        // rendered. If we use the existing width to calculate where we want the
+        // browser to scroll to that value will be incorrect by the time it's happened.
+        const newEstimatedTotalWidth = getEstimatedTotalSize(
+          this.props,
+          this._instanceProps
+        );
+
+        browserOffset = normalizeScrollLeft({
+          direction,
+          scrollLeft: newNormalizedScrollOffset,
+          scrollWidth: newEstimatedTotalWidth,
+          clientWidth: width,
+        });
+      } else {
+        browserOffset = getOffsetForIndexAndAlignment(
           this.props,
           index,
           align,
           scrollOffset,
           this._instanceProps
-        )
-      );
+        );
+
+        if (scrollOffset < browserOffset) {
+          scrollDirection = 'forward';
+        }
+      }
+
+      this.setState(prevState => {
+        if (prevState.scrollOffset === browserOffset) {
+          return null;
+        }
+
+        return {
+          scrollDirection: scrollDirection,
+          scrollOffset: browserOffset,
+          normalizedScrollLeft: newNormalizedScrollOffset,
+          scrollUpdateWasRequested: true,
+        };
+      }, this._resetIsScrollingDebounced);
     }
 
     componentDidMount() {
@@ -230,13 +367,26 @@ export default function createListComponent({
     }
 
     componentDidUpdate() {
-      const { direction, layout } = this.props;
+      const { direction, layout, width } = this.props;
       const { scrollOffset, scrollUpdateWasRequested } = this.state;
 
       if (scrollUpdateWasRequested && this._outerRef !== null) {
         // TODO Deprecate direction "horizontal"
         if (direction === 'horizontal' || layout === 'horizontal') {
           ((this._outerRef: any): HTMLDivElement).scrollLeft = scrollOffset;
+          // Now that scrollLeft has changed programmatically we need to update the normalized version of this
+          // We can't calculate it before now because we may have changed the scrollWidth of the component as
+          // a result of measuring more elements and we need that to calculate a normalized version.
+          const normalizedScrollLeft = normalizeScrollLeft({
+            direction,
+            scrollLeft: scrollOffset,
+            scrollWidth: ((this._outerRef: any): HTMLDivElement).scrollWidth,
+            clientWidth: width,
+          });
+
+          this.setState({
+            normalizedScrollLeft,
+          });
         } else {
           ((this._outerRef: any): HTMLDivElement).scrollTop = scrollOffset;
         }
@@ -446,22 +596,32 @@ export default function createListComponent({
     _getItemStyleCache = memoizeOne((_: any, __: any, ___: any) => ({}));
 
     _getRangeToRender(): [number, number, number, number] {
-      const { itemCount, overscanCount } = this.props;
-      const { isScrolling, scrollDirection, scrollOffset } = this.state;
+      const { itemCount, overscanCount, direction, layout } = this.props;
+      const {
+        isScrolling,
+        scrollDirection,
+        scrollOffset,
+        normalizedScrollLeft,
+      } = this.state;
 
       if (itemCount === 0) {
         return [0, 0, 0, 0];
       }
 
+      const offsetToUse =
+        layout === 'vertical' || direction === 'vertical'
+          ? scrollOffset
+          : normalizedScrollLeft;
+
       const startIndex = getStartIndexForOffset(
         this.props,
-        scrollOffset,
+        offsetToUse,
         this._instanceProps
       );
       const stopIndex = getStopIndexForStartIndex(
         this.props,
         startIndex,
-        scrollOffset,
+        offsetToUse,
         this._instanceProps
       );
 
@@ -494,25 +654,26 @@ export default function createListComponent({
           return null;
         }
 
-        const { direction } = this.props;
+        // We've got to decide on a direction of ltr/rtl to determine a
+        // normalized scrollLeft in the case of 'horizontal' so pick ltr.
+        const mappedDirection =
+          this.props.direction === 'horizontal' ? 'ltr' : this.props.direction;
 
-        // HACK According to the spec, scrollLeft should be negative for RTL aligned elements.
-        // Chrome does not seem to adhere; its scrolLeft values are positive (measured relative to the left).
-        // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
-        let scrollOffset = scrollLeft;
-        if (direction === 'rtl') {
-          if (scrollLeft <= 0) {
-            scrollOffset = -scrollOffset;
-          } else {
-            scrollOffset = scrollWidth - clientWidth - scrollLeft;
-          }
-        }
+        const normalizedScrollLeft = normalizeScrollLeft({
+          direction: mappedDirection,
+          scrollLeft,
+          clientWidth,
+          scrollWidth,
+        });
 
         return {
           isScrolling: true,
           scrollDirection:
-            prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
-          scrollOffset,
+            prevState.normalizedScrollLeft < normalizedScrollLeft
+              ? 'forward'
+              : 'backward',
+          scrollOffset: scrollLeft,
+          normalizedScrollLeft,
           scrollUpdateWasRequested: false,
         };
       }, this._resetIsScrollingDebounced);

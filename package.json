@@ -94,6 +94,8 @@
     "flow-bin": "^0.80.0",
     "gh-pages": "^1.1.0",
     "lint-staged": "^7.0.5",
+    "normalize-scroll-left": "^0.1.2",
+    "path": "^0.12.7",
     "prettier": "^1.12.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",

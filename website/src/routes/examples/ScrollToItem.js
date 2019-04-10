@@ -83,6 +83,12 @@ export default class ScrollToItem extends PureComponent {
             >
               Scroll to row 300 (align: center)
             </button>
+            <button
+              className={styles.ExampleButton}
+              onClick={this.scrollTo10000}
+            >
+              Scroll to 10000
+            </button>
             <VariableSizeList
               className={styles.List}
               height={150}
@@ -90,6 +96,8 @@ export default class ScrollToItem extends PureComponent {
               itemSize={index => rowHeights[index]}
               ref={this.listRef}
               width={300}
+              layout="horizontal"
+              direction="rtl"
             >
               {ListItemRenderer}
             </VariableSizeList>
@@ -145,6 +153,30 @@ export default class ScrollToItem extends PureComponent {
             >
               Scroll to column 50 (align: auto)
             </button>
+            <button
+              className={styles.ExampleButton}
+              onClick={this.scrollToColumn950Auto}
+            >
+              Scroll to column 950 (align: auto)
+            </button>
+            <button
+              className={styles.ExampleButton}
+              onClick={this.scrollTo100100}
+            >
+              Scroll to 100,100
+            </button>
+            <button
+              className={styles.ExampleButton}
+              onClick={this.scrollTo50000100}
+            >
+              Scroll to 50000,100
+            </button>
+            <button
+              className={styles.ExampleButton}
+              onClick={this.scrollTo99000100}
+            >
+              Scroll to 99000,100
+            </button>
             <VariableSizeGrid
               className={styles.Grid}
               columnCount={1000}
@@ -154,6 +186,7 @@ export default class ScrollToItem extends PureComponent {
               rowCount={1000}
               rowHeight={index => rowHeights[index]}
               width={300}
+              direction="rtl"
             >
               {GridItemRenderer}
             </VariableSizeGrid>
@@ -166,9 +199,36 @@ export default class ScrollToItem extends PureComponent {
     );
   }
 
+  scrollTo100100 = () => {
+    this.gridRef.current.scrollTo({
+      scrollLeft: 100,
+      scrollTop: 100,
+    });
+  };
+
+  scrollTo50000100 = () => {
+    this.gridRef.current.scrollTo({
+      scrollLeft: 50000,
+      scrollTop: 100,
+    });
+  };
+
+  scrollTo99000100 = () => {
+    this.gridRef.current.scrollTo({
+      scrollLeft: 99000,
+      scrollTop: 100,
+    });
+  };
+
   scrollToColumn50Auto = () => {
     this.gridRef.current.scrollToItem({
       columnIndex: 50,
+    });
+  };
+
+  scrollToColumn950Auto = () => {
+    this.gridRef.current.scrollToItem({
+      columnIndex: 950,
     });
   };
 
@@ -180,6 +240,9 @@ export default class ScrollToItem extends PureComponent {
     trace('scroll to row 300', performance.now(), () =>
       this.listRef.current.scrollToItem(300, 'center')
     );
+  scrollTo10000 = () => trace('scroll to 10000', performance.now(), () =>
+    this.listRef.current.scrollTo(10000)
+  );
 
   scrollToRow250Smart = () => {
     trace('scroll to row 250', performance.now(), () =>
