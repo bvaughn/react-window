@@ -363,6 +363,18 @@ describe('FixedSizeList', () => {
       instance.scrollTo(100);
       expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
     });
+
+    it('should ignore values less than zero', () => {
+      const onScroll = jest.fn();
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} onScroll={onScroll} />,
+        document.createElement('div')
+      );
+      instance.scrollTo(100);
+      onScroll.mockClear();
+      instance.scrollTo(-1);
+      expect(onScroll.mock.calls[0][0].scrollOffset).toBe(0);
+    });
   });
 
   describe('scrollToItem method', () => {
@@ -371,14 +383,10 @@ describe('FixedSizeList', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeList {...defaultProps} itemCount={3} onScroll={onScroll} />
       );
-      onScroll.mockClear();
-      // Offset should not be negative.
+      expect(onItemsRendered).toMatchSnapshot();
+      onItemsRendered.mockClear();
       rendered.getInstance().scrollToItem(0);
-      expect(onScroll).toHaveBeenCalledWith({
-        scrollDirection: 'backward',
-        scrollOffset: 0,
-        scrollUpdateWasRequested: true,
-      });
+      expect(onItemsRendered).not.toHaveBeenCalled();
     });
 
     it('should scroll to the correct item for align = "auto"', () => {
@@ -456,6 +464,27 @@ describe('FixedSizeList', () => {
       itemRenderer.mockClear();
       instance.scrollToItem(15);
       expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
+    });
+
+    it('should ignore indexes less than zero', () => {
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} />,
+        document.createElement('div')
+      );
+      instance.scrollToItem(20);
+      onItemsRendered.mockClear();
+      instance.scrollToItem(-1);
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should ignore indexes greater than itemCount', () => {
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} />,
+        document.createElement('div')
+      );
+      onItemsRendered.mockClear();
+      instance.scrollToItem(defaultProps.itemCount * 2);
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
   });
 

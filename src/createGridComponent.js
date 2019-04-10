@@ -127,7 +127,7 @@ const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 const defaultItemKey = ({ columnIndex, data, rowIndex }) =>
   `${rowIndex}:${columnIndex}`;
 
-// In DEV mode, this Set helps us only log a warning once per component instace.
+// In DEV mode, this Set helps us only log a warning once per component instance.
 // This avoids spamming the console every time a render happens.
 let devWarningsOverscanCount = null;
 let devWarningsTagName = null;
@@ -221,12 +221,26 @@ export default function createGridComponent({
       scrollLeft: number,
       scrollTop: number,
     }): void {
+      if (scrollLeft !== undefined) {
+        scrollLeft = Math.max(0, scrollLeft);
+      }
+      if (scrollTop !== undefined) {
+        scrollTop = Math.max(0, scrollTop);
+      }
+
       this.setState(prevState => {
         if (scrollLeft === undefined) {
           scrollLeft = prevState.scrollLeft;
         }
         if (scrollTop === undefined) {
           scrollTop = prevState.scrollTop;
+        }
+
+        if (
+          prevState.scrollLeft === scrollLeft &&
+          prevState.scrollTop === scrollTop
+        ) {
+          return null;
         }
 
         return {
@@ -250,9 +264,16 @@ export default function createGridComponent({
       columnIndex?: number,
       rowIndex?: number,
     }): void {
-      const { height, width } = this.props;
+      const { columnCount, height, rowCount, width } = this.props;
       const { scrollLeft, scrollTop } = this.state;
       const scrollbarSize = getScrollbarSize();
+
+      if (columnIndex !== undefined) {
+        columnIndex = Math.max(0, Math.min(columnIndex, columnCount - 1));
+      }
+      if (rowIndex !== undefined) {
+        rowIndex = Math.max(0, Math.min(rowIndex, rowCount - 1));
+      }
 
       const estimatedTotalHeight = getEstimatedTotalHeight(
         this.props,
@@ -677,7 +698,7 @@ export default function createGridComponent({
         const { direction } = this.props;
 
         // HACK According to the spec, scrollLeft should be negative for RTL aligned elements.
-        // Chrome does not seem to adhere; its scrolLeft values are positive (measured relative to the left).
+        // Chrome does not seem to adhere; its scrollLeft values are positive (measured relative to the left).
         // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
         let calculatedScrollLeft = scrollLeft;
         if (direction === 'rtl') {

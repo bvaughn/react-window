@@ -153,6 +153,34 @@ Array [
 ]
 `;
 
+exports[`FixedSizeList scrollToItem method should ignore indexes greater than itemCount 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 94,
+      "overscanStopIndex": 99,
+      "visibleStartIndex": 96,
+      "visibleStopIndex": 99,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeList scrollToItem method should ignore indexes less than zero 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 6,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 4,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeList scrollToItem method should not set invalid offsets when the list contains few items 1`] = `[Function]`;
+
 exports[`FixedSizeList scrollToItem method should scroll to the correct item for align = "auto" 1`] = `
 Array [
   Array [

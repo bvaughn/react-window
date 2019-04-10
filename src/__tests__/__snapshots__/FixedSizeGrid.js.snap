@@ -273,6 +273,42 @@ Array [
 ]
 `;
 
+exports[`FixedSizeGrid scrollToItem method should ignore indexes greater than itemCount 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 97,
+      "overscanColumnStopIndex": 99,
+      "overscanRowStartIndex": 95,
+      "overscanRowStopIndex": 99,
+      "visibleColumnStartIndex": 98,
+      "visibleColumnStopIndex": 99,
+      "visibleRowStartIndex": 96,
+      "visibleRowStopIndex": 99,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeGrid scrollToItem method should ignore indexes less than zero 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 3,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 5,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 2,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 4,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeGrid scrollToItem method should not set invalid offsets when the list contains few items 1`] = `[Function]`;
+
 exports[`FixedSizeGrid scrollToItem method should scroll to the correct item for align = "auto" 1`] = `
 Array [
   Array [
