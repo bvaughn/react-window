@@ -150,6 +150,43 @@ Array [
 ]
 `;
 
+exports[`VariableSizeList scrollToItem method should scroll to the correct item for align = "smart" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 5,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 7,
+      "overscanStopIndex": 13,
+      "visibleStartIndex": 9,
+      "visibleStopIndex": 11,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 4,
+      "overscanStopIndex": 11,
+      "visibleStartIndex": 6,
+      "visibleStopIndex": 9,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 6,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 4,
+    },
+  ],
+]
+`;
+
 exports[`VariableSizeList scrollToItem method should scroll to the correct item for align = "start" 1`] = `
 Array [
   Array [

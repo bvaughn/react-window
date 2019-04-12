@@ -8,7 +8,7 @@ import { getScrollbarSize } from './domHelpers';
 import type { TimeoutID } from './timer';
 
 type Direction = 'ltr' | 'rtl';
-export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
+export type ScrollToAlign = 'auto' | 'smart' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
 

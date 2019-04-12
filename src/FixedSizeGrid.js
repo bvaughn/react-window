@@ -46,6 +46,14 @@ const FixedSizeGrid = createGridComponent({
         ((columnWidth: any): number)
     );
 
+    if (align === 'smart') {
+      if (scrollLeft >= minOffset - width && scrollLeft <= maxOffset + width) {
+        align = 'auto';
+      } else {
+        align = 'center';
+      }
+    }
+
     switch (align) {
       case 'start':
         return maxOffset;
@@ -87,6 +95,14 @@ const FixedSizeGrid = createGridComponent({
         scrollbarSize +
         ((rowHeight: any): number)
     );
+
+    if (align === 'smart') {
+      if (scrollTop >= minOffset - height && scrollTop <= maxOffset + height) {
+        align = 'auto';
+      } else {
+        align = 'center';
+      }
+    }
 
     switch (align) {
       case 'start':

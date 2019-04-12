@@ -6,7 +6,7 @@ import { cancelTimeout, requestTimeout } from './timer';
 
 import type { TimeoutID } from './timer';
 
-export type ScrollToAlign = 'auto' | 'center' | 'start' | 'end';
+export type ScrollToAlign = 'auto' | 'smart' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
 // TODO Deprecate directions "horizontal" and "vertical"

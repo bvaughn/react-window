@@ -540,6 +540,95 @@ Array [
 ]
 `;
 
+exports[`FixedSizeGrid scrollToItem method should scroll to the correct item for align = "smart" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 3,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 5,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 2,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 4,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 8,
+      "overscanColumnStopIndex": 12,
+      "overscanRowStartIndex": 7,
+      "overscanRowStopIndex": 13,
+      "visibleColumnStartIndex": 9,
+      "visibleColumnStopIndex": 11,
+      "visibleRowStartIndex": 8,
+      "visibleRowStopIndex": 12,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 6,
+      "visibleColumnStartIndex": 1,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 1,
+      "visibleRowStopIndex": 5,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 7,
+      "overscanRowStopIndex": 13,
+      "visibleColumnStartIndex": 1,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 8,
+      "visibleRowStopIndex": 12,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 3,
+      "overscanRowStartIndex": 7,
+      "overscanRowStopIndex": 13,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 2,
+      "visibleRowStartIndex": 8,
+      "visibleRowStopIndex": 12,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 3,
+      "overscanColumnStopIndex": 7,
+      "overscanRowStartIndex": 4,
+      "overscanRowStopIndex": 10,
+      "visibleColumnStartIndex": 4,
+      "visibleColumnStopIndex": 6,
+      "visibleRowStartIndex": 5,
+      "visibleRowStopIndex": 9,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 8,
+      "overscanColumnStopIndex": 12,
+      "overscanRowStartIndex": 6,
+      "overscanRowStopIndex": 12,
+      "visibleColumnStartIndex": 9,
+      "visibleColumnStopIndex": 11,
+      "visibleRowStartIndex": 7,
+      "visibleRowStopIndex": 11,
+    },
+  ],
+]
+`;
+
 exports[`FixedSizeGrid scrollToItem method should scroll to the correct item for align = "start" 1`] = `
 Array [
   Array [
