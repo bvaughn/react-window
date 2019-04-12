@@ -418,6 +418,12 @@ const METHODS = [
             scroll at all.)
           </li>
           <li>
+            smart - If the item is already visible, don't scroll at all. If it
+            is less than one viewport away, scroll as little as possible so that
+            it becomes visible. If it is more than one viewport away, scroll so
+            that it is centered within the grid.
+          </li>
+          <li>
             <code>center</code> - Center align the item within the grid.
           </li>
           <li>
