@@ -52,6 +52,12 @@ class Example extends Component {
           >
             Scroll to row 200, column 100 (align: center)
           </button>
+          <button
+            className="ExampleButton"
+            onClick={this.scrollToRow250Column150Smart}
+          >
+            Scroll to row 250, column 150 (align: smart)
+          </button>
         </div>
         <Grid
           className="Grid"
@@ -97,6 +103,14 @@ class Example extends Component {
       align: 'center',
       columnIndex: 100,
       rowIndex: 200,
+    });
+  };
+
+  scrollToRow250Column150Smart = () => {
+    this.gridRef.current.scrollToItem({
+      align: 'smart',
+      columnIndex: 150,
+      rowIndex: 250,
     });
   };
 }

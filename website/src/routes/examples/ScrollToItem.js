@@ -73,6 +73,12 @@ export default class ScrollToItem extends PureComponent {
             </button>
             <button
               className={styles.ExampleButton}
+              onClick={this.scrollToRow250Smart}
+            >
+              Scroll to row 250 (align: smart)
+            </button>
+            <button
+              className={styles.ExampleButton}
               onClick={this.scrollToRow300Center}
             >
               Scroll to row 300 (align: center)
@@ -123,6 +129,12 @@ export default class ScrollToItem extends PureComponent {
             </button>
             <button
               className={styles.ExampleButton}
+              onClick={this.scrollToRow250Column150Smart}
+            >
+              Scroll to row 250, column 150 (align: smart)
+            </button>
+            <button
+              className={styles.ExampleButton}
               onClick={this.scrollToRow100}
             >
               Scroll to row 100 (align: auto)
@@ -169,6 +181,12 @@ export default class ScrollToItem extends PureComponent {
       this.listRef.current.scrollToItem(300, 'center')
     );
 
+  scrollToRow250Smart = () => {
+    trace('scroll to row 250', performance.now(), () =>
+      this.listRef.current.scrollToItem(250, 'smart')
+    );
+  };
+
   scrollToRow100 = () => {
     this.gridRef.current.scrollToItem({
       rowIndex: 100,
@@ -203,6 +221,14 @@ export default class ScrollToItem extends PureComponent {
       align: 'center',
       columnIndex: 100,
       rowIndex: 200,
+    });
+  };
+
+  scrollToRow250Column150Smart = () => {
+    this.gridRef.current.scrollToItem({
+      align: 'smart',
+      columnIndex: 150,
+      rowIndex: 250,
     });
   };
 }
