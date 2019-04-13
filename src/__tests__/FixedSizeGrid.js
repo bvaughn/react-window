@@ -155,7 +155,7 @@ describe('FixedSizeGrid', () => {
       <FixedSizeGrid {...defaultProps} />
     );
     const scrollContainer = findScrollContainer(rendered);
-    expect(scrollContainer.props.style.pointerEvents).toBe('');
+    expect(scrollContainer.props.style.pointerEvents).toBe(undefined);
     rendered.getInstance().setState({ isScrolling: true });
     expect(scrollContainer.props.style.pointerEvents).toBe('none');
   });

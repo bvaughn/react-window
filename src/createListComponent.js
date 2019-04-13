@@ -326,7 +326,7 @@ export default function createListComponent({
           ref: innerRef,
           style: {
             height: isHorizontal ? '100%' : estimatedTotalSize,
-            pointerEvents: isScrolling ? 'none' : null,
+            pointerEvents: isScrolling ? 'none' : undefined,
             width: isHorizontal ? estimatedTotalSize : '100%',
           },
         })

@@ -432,7 +432,7 @@ export default function createGridComponent({
           ref: innerRef,
           style: {
             height: estimatedTotalHeight,
-            pointerEvents: isScrolling ? 'none' : '',
+            pointerEvents: isScrolling ? 'none' : undefined,
             width: estimatedTotalWidth,
           },
         })
