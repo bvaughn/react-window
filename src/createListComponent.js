@@ -17,6 +17,7 @@ type RenderComponentProps<T> = {|
   data: T,
   index: number,
   isScrolling?: boolean,
+  isVisible?: boolean,
   style: Object,
 |};
 type RenderComponent<T> = React$ComponentType<$Shape<RenderComponentProps<T>>>;
@@ -151,6 +152,7 @@ export default function createListComponent({
       layout: 'vertical',
       overscanCount: 2,
       useIsScrolling: false,
+      useIsVisible: false,
     };
 
     state: State = {
