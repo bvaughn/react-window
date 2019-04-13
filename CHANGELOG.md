@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.8.1
+* 🐛 Replaced an incorrect empty-string value for `pointer-events` with `undefined` ([oliviertassinari](https://github.com/oliviertassinari) - [#210](https://github.com/bvaughn/react-window/pull/210))
+
 ### 1.8.0
 * 🎉 Added new "smart" align option for grid and list scroll-to-item methods ([gaearon](https://github.com/gaearon) - [#209](https://github.com/bvaughn/react-window/pull/209))
 
