@@ -60,6 +60,7 @@ export type Props<T> = {|
   overscanCount: number,
   style?: Object,
   useIsScrolling: boolean,
+  useIsVisible: boolean,
   width: number | string,
 |};
 
@@ -268,6 +269,7 @@ export default function createListComponent({
         outerTagName,
         style,
         useIsScrolling,
+        useIsVisible,
         width,
       } = this.props;
       const { isScrolling } = this.state;
@@ -280,7 +282,12 @@ export default function createListComponent({
         ? this._onScrollHorizontal
         : this._onScrollVertical;
 
-      const [startIndex, stopIndex] = this._getRangeToRender();
+      const [
+        startIndex,
+        stopIndex,
+        visibleStartIndex,
+        visibleStopIndex,
+      ] = this._getRangeToRender();
 
       const items = [];
       if (itemCount > 0) {
@@ -291,6 +298,9 @@ export default function createListComponent({
               key: itemKey(index, itemData),
               index,
               isScrolling: useIsScrolling ? isScrolling : undefined,
+              isVisible: useIsVisible
+                ? index >= visibleStartIndex && index <= visibleStopIndex
+                : undefined,
               style: this._getItemStyle(index),
             })
           );

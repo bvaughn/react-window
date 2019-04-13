@@ -26,8 +26,10 @@ const PROPS = [
           a <code>style</code> prop (used for positioning).
         </p>
         <p>
-          If <code>useIsScrolling</code> is enabled for the list, the component
-          also receives an additional <code>isScrolling</code> boolean prop.
+          If <code>useIsScrolling</code> or <code>useIsVisible</code> are
+          enabled for the list, the component also receives an additional{' '}
+          <code>isScrolling</code> or <code>isVisible</code> boolean prop,
+          respectively.
         </p>
         <p>Function components are useful for rendering simple items:</p>
         <div className={styles.CodeBlockWrapper}>
@@ -358,6 +360,19 @@ const PROPS = [
       </Fragment>
     ),
     name: 'useIsScrolling',
+    type: 'boolean',
+  },
+  {
+    defaultValue: false,
+    description: (
+      <Fragment>
+        <p>
+          Adds an additional <code>isVisible</code> parameter to the{' '}
+          <code>children</code> render function.
+        </p>
+      </Fragment>
+    ),
+    name: 'useIsVisible',
     type: 'boolean',
   },
   {

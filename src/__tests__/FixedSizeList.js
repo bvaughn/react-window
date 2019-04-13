@@ -870,4 +870,28 @@ describe('FixedSizeList', () => {
       );
     });
   });
+
+  describe('useIsVisible', () => {
+    it('should not pass an isVisible prop to children unless requested', () => {
+      ReactTestRenderer.create(<FixedSizeList {...defaultProps} />);
+      expect(itemRenderer.mock.calls[0][0].isVisible).toBeUndefined();
+    });
+
+    it('should pass an isVisible prop to children if requested', () => {
+      ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} useIsVisible />
+      );
+      expect(itemRenderer.mock.calls[0][0].isVisible).toBeDefined();
+    });
+
+    it('should pass an accurate isVisible prop to children', () => {
+      ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} useIsVisible />
+      );
+
+      expect(itemRenderer).toHaveBeenCalledTimes(7);
+      expect(itemRenderer.mock.calls[0][0].isVisible).toBe(true);
+      expect(itemRenderer.mock.calls[6][0].isVisible).toBe(false);
+    });
+  });
 });
