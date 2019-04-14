@@ -7,3 +7,4 @@ export { default as FixedSizeList } from './FixedSizeList';
 
 export { default as areEqual } from './areEqual';
 export { default as shouldComponentUpdate } from './shouldComponentUpdate';
+export { getScrollbarSize } from './domHelpers';
