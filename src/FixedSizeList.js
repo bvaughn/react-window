@@ -35,6 +35,17 @@ const FixedSizeList = createListComponent({
       index * ((itemSize: any): number) - size + ((itemSize: any): number)
     );
 
+    if (align === 'smart') {
+      if (
+        scrollOffset >= minOffset - size &&
+        scrollOffset <= maxOffset + size
+      ) {
+        align = 'auto';
+      } else {
+        align = 'center';
+      }
+    }
+
     switch (align) {
       case 'start':
         return maxOffset;

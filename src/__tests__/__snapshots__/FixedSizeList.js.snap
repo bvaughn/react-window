@@ -292,6 +292,99 @@ Array [
 ]
 `;
 
+exports[`FixedSizeList scrollToItem method should scroll to the correct item for align = "smart" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 6,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 4,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 6,
+      "overscanStopIndex": 14,
+      "visibleStartIndex": 8,
+      "visibleStopIndex": 12,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 4,
+      "overscanStopIndex": 12,
+      "visibleStartIndex": 6,
+      "visibleStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 6,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 4,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 94,
+      "overscanStopIndex": 99,
+      "visibleStartIndex": 96,
+      "visibleStopIndex": 99,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 93,
+      "overscanStopIndex": 99,
+      "visibleStartIndex": 95,
+      "visibleStopIndex": 99,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 94,
+      "overscanStopIndex": 99,
+      "visibleStartIndex": 96,
+      "visibleStopIndex": 99,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 92,
+      "overscanStopIndex": 99,
+      "visibleStartIndex": 94,
+      "visibleStopIndex": 98,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 94,
+      "overscanStopIndex": 99,
+      "visibleStartIndex": 96,
+      "visibleStopIndex": 99,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 86,
+      "overscanStopIndex": 94,
+      "visibleStartIndex": 88,
+      "visibleStopIndex": 92,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 94,
+      "overscanStopIndex": 99,
+      "visibleStartIndex": 96,
+      "visibleStopIndex": 99,
+    },
+  ],
+]
+`;
+
 exports[`FixedSizeList scrollToItem method should scroll to the correct item for align = "start" 1`] = `
 Array [
   Array [

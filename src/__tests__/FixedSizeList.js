@@ -200,7 +200,7 @@ describe('FixedSizeList', () => {
       <FixedSizeList {...defaultProps} />
     );
     const scrollContainer = findScrollContainer(rendered);
-    expect(scrollContainer.props.style.pointerEvents).toBe('');
+    expect(scrollContainer.props.style.pointerEvents).toBe(undefined);
     rendered.getInstance().setState({ isScrolling: true });
     expect(scrollContainer.props.style.pointerEvents).toBe('none');
   });
@@ -452,6 +452,34 @@ describe('FixedSizeList', () => {
       // Scroll down as far as possible though.
       // Overscroll direction wil change again.
       rendered.getInstance().scrollToItem(99, 'center');
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should scroll to the correct item for align = "smart"', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} />
+      );
+      // Scroll down enough to show item 10 in the middle.
+      rendered.getInstance().scrollToItem(10, 'smart');
+      // Scrolldn't scroll at all because it's close enough.
+      rendered.getInstance().scrollToItem(9, 'smart');
+      // Should scroll but not center because it's close enough.
+      rendered.getInstance().scrollToItem(6, 'smart');
+      // Item 1 can't align in the middle because it's too close to the beginning.
+      // Scroll up as far as possible though.
+      rendered.getInstance().scrollToItem(1, 'smart');
+      // Item 99 can't align in the middle because it's too close to the end.
+      // Scroll down as far as possible though.
+      rendered.getInstance().scrollToItem(99, 'smart');
+      // This shouldn't scroll at all because it's close enough.
+      rendered.getInstance().scrollToItem(95, 'smart');
+      rendered.getInstance().scrollToItem(99, 'smart');
+      // This should scroll with the 'auto' behavior because it's within a screen.
+      rendered.getInstance().scrollToItem(94, 'smart');
+      rendered.getInstance().scrollToItem(99, 'smart');
+      // This should scroll with the 'center' behavior because it's too far.
+      rendered.getInstance().scrollToItem(90, 'smart');
+      rendered.getInstance().scrollToItem(99, 'smart');
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
