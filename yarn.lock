@@ -5939,8 +5939,7 @@ normalize-range@^0.1.2:
 
 normalize-scroll-left@^0.1.2:
   version "0.1.2"
-  resolved "https://eu.artifactory.swg-devops.com:443/artifactory/api/npm/sec-ibmi2-npm/normalize-scroll-left/-/normalize-scroll-left-0.1.2.tgz#6b79691ba79eb5fb107fa5edfbdc06b55caee2aa"
-  integrity sha1-a3lpG6eetfsQf6Xt+9wGtVyu4qo=
+  resolved "https://registry.yarnpkg.com/normalize-scroll-left/-/normalize-scroll-left-0.1.2.tgz#6b79691ba79eb5fb107fa5edfbdc06b55caee2aa"
 
 normalize-url@^1.4.0:
   version "1.9.1"
@@ -6320,8 +6319,7 @@ path-type@^2.0.0:
 
 path@^0.12.7:
   version "0.12.7"
-  resolved "https://eu.artifactory.swg-devops.com:443/artifactory/api/npm/sec-ibmi2-npm/path/-/path-0.12.7.tgz#d4dc2a506c4ce2197eb481ebfcd5b36c0140b10f"
-  integrity sha1-1NwqUGxM4hl+tIHr/NWzbAFAsQ8=
+  resolved "https://registry.yarnpkg.com/path/-/path-0.12.7.tgz#d4dc2a506c4ce2197eb481ebfcd5b36c0140b10f"
   dependencies:
     process "^0.11.1"
     util "^0.10.3"
@@ -6731,8 +6729,7 @@ process-nextick-args@~2.0.0:
 
 process@^0.11.1, process@^0.11.10:
   version "0.11.10"
-  resolved "https://eu.artifactory.swg-devops.com:443/artifactory/api/npm/sec-ibmi2-npm/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
-  integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
+  resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
 
 progress@^2.0.0:
   version "2.0.0"
