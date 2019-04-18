@@ -160,11 +160,13 @@ export default function createListComponent({
     constructor(props: Props<T>) {
       super(props);
 
-      const { direction, layout, width, initialScrollOffset } = this.props;
+      const { direction, layout, initialScrollOffset } = this.props;
 
       let scrollOffset;
       let initialNormalizedScrollLeft = 0;
       if (layout === 'horizontal' || direction === 'horizontal') {
+        const mappedDirection = this._mappedDirectionForNormalization();
+        const width = this._widthPropAsNumber();
         const estimatedWidth = getEstimatedTotalSize(
           this.props,
           this._instanceProps
@@ -173,14 +175,14 @@ export default function createListComponent({
           typeof initialScrollOffset === 'number'
             ? initialScrollOffset
             : normalizeScrollLeft({
-                direction: direction,
+                direction: mappedDirection,
                 scrollLeft: 0,
-                clientWidth: width,
+                clientWidth: ((width: any): number),
                 scrollWidth: estimatedWidth,
               });
 
         initialNormalizedScrollLeft = normalizeScrollLeft({
-          direction: direction,
+          direction: mappedDirection,
           scrollLeft: scrollOffset,
           clientWidth: width,
           scrollWidth: estimatedWidth,
@@ -210,16 +212,18 @@ export default function createListComponent({
     }
 
     scrollTo(scrollOffset: number): void {
-      let normalizedScrollLeft = undefined;
+      let normalizedScrollLeft;
 
-      const { layout, direction, width } = this.props;
+      const { layout, direction } = this.props;
       if (layout === 'horizontal' || direction === 'horizontal') {
         const scrollWidth = getEstimatedTotalSize(
           this.props,
           this._instanceProps
         );
+        const mappedDirection = this._mappedDirectionForNormalization();
+        const width = this._widthPropAsNumber();
         normalizedScrollLeft = normalizeScrollLeft({
-          direction,
+          direction: mappedDirection,
           scrollLeft: scrollOffset,
           scrollWidth,
           clientWidth: width,
@@ -229,7 +233,7 @@ export default function createListComponent({
           normalizedScrollLeft = 0;
 
           scrollOffset = normalizeScrollLeft({
-            direction,
+            direction: mappedDirection,
             scrollLeft: normalizedScrollLeft,
             scrollWidth,
             clientWidth: width,
@@ -259,7 +263,7 @@ export default function createListComponent({
     }
 
     scrollToItem(index: number, align: ScrollToAlign = 'auto'): void {
-      const { itemCount, layout, direction, width } = this.props;
+      const { itemCount, layout, direction } = this.props;
       const { scrollOffset, normalizedScrollLeft } = this.state;
 
       index = Math.max(0, Math.min(index, itemCount - 1));
@@ -316,10 +320,10 @@ export default function createListComponent({
         );
 
         browserOffset = normalizeScrollLeft({
-          direction,
+          direction: this._mappedDirectionForNormalization(),
           scrollLeft: newNormalizedScrollOffset,
           scrollWidth: newEstimatedTotalWidth,
-          clientWidth: width,
+          clientWidth: this._widthPropAsNumber(),
         });
       } else {
         browserOffset = getOffsetForIndexAndAlignment(
@@ -367,7 +371,7 @@ export default function createListComponent({
     }
 
     componentDidUpdate() {
-      const { direction, layout, width } = this.props;
+      const { direction, layout } = this.props;
       const { scrollOffset, scrollUpdateWasRequested } = this.state;
 
       if (scrollUpdateWasRequested && this._outerRef !== null) {
@@ -378,10 +382,10 @@ export default function createListComponent({
           // We can't calculate it before now because we may have changed the scrollWidth of the component as
           // a result of measuring more elements and we need that to calculate a normalized version.
           const normalizedScrollLeft = normalizeScrollLeft({
-            direction,
+            direction: this._mappedDirectionForNormalization(),
             scrollLeft: scrollOffset,
             scrollWidth: ((this._outerRef: any): HTMLDivElement).scrollWidth,
-            clientWidth: width,
+            clientWidth: this._widthPropAsNumber(),
           });
 
           this.setState({
@@ -654,13 +658,8 @@ export default function createListComponent({
           return null;
         }
 
-        // We've got to decide on a direction of ltr/rtl to determine a
-        // normalized scrollLeft in the case of 'horizontal' so pick ltr.
-        const mappedDirection =
-          this.props.direction === 'horizontal' ? 'ltr' : this.props.direction;
-
         const normalizedScrollLeft = normalizeScrollLeft({
-          direction: mappedDirection,
+          direction: this._mappedDirectionForNormalization(),
           scrollLeft,
           clientWidth,
           scrollWidth,
@@ -735,6 +734,19 @@ export default function createListComponent({
         this._getItemStyleCache(-1, null);
       });
     };
+
+    // We've got to decide on a direction of ltr/rtl to determine a
+    // normalized scrollLeft in the case of 'horizontal' so pick ltr.
+    _mappedDirectionForNormalization(): 'ltr' | 'rtl' {
+      const direction = this.props.direction;
+      return direction === 'horizontal' || direction === 'vertical'
+        ? 'ltr'
+        : direction;
+    }
+
+    _widthPropAsNumber(): number {
+      return ((this.props.width: any): number);
+    }
   };
 }
 

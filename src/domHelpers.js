@@ -41,12 +41,9 @@ export function normalizeScrollLeft(props: NormalizeScrollLeftProps): number {
   switch (detectScrollType()) {
     case 'negative':
       return -props.scrollLeft;
-      break;
     case 'reverse':
       return props.scrollLeft;
-      break;
     default:
       return props.scrollWidth - props.clientWidth - props.scrollLeft;
-      break;
   }
 }
