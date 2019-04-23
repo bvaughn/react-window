@@ -326,6 +326,38 @@ const PROPS = [
     type: 'number',
   },
   {
+    defaultValue: 1,
+    description: (
+      <Fragment>
+        <p>
+          The number of items (rows or columns) to render outside of the visible
+          area while scrolling. This applies to the opposite direction of scrolling,
+          which means that if you scroll downwards, it defines the number of items
+          to be rendered above the visible area, whereas <code>overscanCount</code> defines
+          the number of items to be rendered below the visible area.
+          This property can be important for two reasons:
+        </p>
+        <ul>
+          <li>
+            Overscanning by one row or column allows the tab key to focus on the
+            previous (not visible) item.
+          </li>
+          <li>
+            Overscanning slightly can reduce or prevent a flash of empty space
+            when a user changes the scrolling direction.
+          </li>
+        </ul>
+        <p>
+          Note that overscanning too much can negatively impact performance. By
+          default, List overscans by one item. To improve performance consider
+          using memoized components for each item renderer.
+        </p>
+      </Fragment>
+    ),
+    name: 'trailingOverscanCount',
+    type: 'number',
+  },
+  {
     defaultValue: null,
     description: (
       <p>
