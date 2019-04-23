@@ -58,6 +58,7 @@ export type Props<T> = {|
   outerElementType?: React$ElementType,
   outerTagName?: string, // deprecated
   overscanCount: number,
+  trailingOverscanCount: number,
   style?: Object,
   useIsScrolling: boolean,
   width: number | string,
@@ -149,6 +150,7 @@ export default function createListComponent({
       itemData: undefined,
       layout: 'vertical',
       overscanCount: 2,
+      trailingOverscanCount: 1,
       useIsScrolling: false,
     };
 
@@ -446,7 +448,7 @@ export default function createListComponent({
     _getItemStyleCache = memoizeOne((_: any, __: any, ___: any) => ({}));
 
     _getRangeToRender(): [number, number, number, number] {
-      const { itemCount, overscanCount } = this.props;
+      const { itemCount, overscanCount, trailingOverscanCount } = this.props;
       const { isScrolling, scrollDirection, scrollOffset } = this.state;
 
       if (itemCount === 0) {
@@ -465,16 +467,22 @@ export default function createListComponent({
         this._instanceProps
       );
 
+      // Do not allow trailing overscan larger than the forward overscan
+      // to avoid components being discarded when scrolling stops.
+      const trailingOverscanCountToUse = Math.min(
+        overscanCount,
+        trailingOverscanCount
+      );
       // Overscan by one item in each direction so that tab/focus works.
       // If there isn't at least one extra item, tab loops back around.
       const overscanBackward =
         !isScrolling || scrollDirection === 'backward'
           ? Math.max(1, overscanCount)
-          : 1;
+          : Math.max(1, trailingOverscanCountToUse);
       const overscanForward =
         !isScrolling || scrollDirection === 'forward'
           ? Math.max(1, overscanCount)
-          : 1;
+          : Math.max(1, trailingOverscanCountToUse);
 
       return [
         Math.max(0, startIndex - overscanBackward),

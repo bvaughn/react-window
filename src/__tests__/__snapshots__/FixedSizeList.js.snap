@@ -59,7 +59,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeList overscanCount should accommodate a custom overscan 1`] = `
+exports[`FixedSizeList overscanCount and trailingOverscanCount should accommodate a custom overscan 1`] = `
 Array [
   Array [
     Object {
@@ -72,7 +72,83 @@ Array [
 ]
 `;
 
-exports[`FixedSizeList overscanCount should not scan past the beginning of the list 1`] = `
+exports[`FixedSizeList overscanCount and trailingOverscanCount should ignore "trailingOverscanCount" when not scrolling 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 1,
+      "overscanStopIndex": 11,
+      "visibleStartIndex": 4,
+      "visibleStopIndex": 8,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeList overscanCount and trailingOverscanCount should overscan "overscanCount" in the direction being scrolled and "trailingOverscanCount" in the opposite direction 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 11,
+      "visibleStartIndex": 2,
+      "visibleStopIndex": 6,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 6,
+      "overscanStopIndex": 17,
+      "visibleStartIndex": 8,
+      "visibleStopIndex": 12,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 8,
+      "visibleStartIndex": 2,
+      "visibleStopIndex": 6,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeList overscanCount and trailingOverscanCount should cap "trailingOverscanCount" to "overscanCount" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 9,
+      "visibleStartIndex": 2,
+      "visibleStopIndex": 6,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 5,
+      "overscanStopIndex": 15,
+      "visibleStartIndex": 8,
+      "visibleStopIndex": 12,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeList overscanCount and trailingOverscanCount should overscan in both directions when not scrolling 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 8,
+      "visibleStartIndex": 2,
+      "visibleStopIndex": 6,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeList overscanCount and trailingOverscanCount should not scan past the beginning of the list 1`] = `
 Array [
   Array [
     Object {
@@ -85,7 +161,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeList overscanCount should not scan past the end of the list 1`] = `
+exports[`FixedSizeList overscanCount and trailingOverscanCount should not scan past the end of the list 1`] = `
 Array [
   Array [
     Object {
@@ -98,49 +174,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeList overscanCount should overscan in both directions when not scrolling 1`] = `
-Array [
-  Array [
-    Object {
-      "overscanStartIndex": 0,
-      "overscanStopIndex": 8,
-      "visibleStartIndex": 2,
-      "visibleStopIndex": 6,
-    },
-  ],
-]
-`;
-
-exports[`FixedSizeList overscanCount should overscan in the direction being scrolled 1`] = `
-Array [
-  Array [
-    Object {
-      "overscanStartIndex": 0,
-      "overscanStopIndex": 8,
-      "visibleStartIndex": 2,
-      "visibleStopIndex": 6,
-    },
-  ],
-  Array [
-    Object {
-      "overscanStartIndex": 3,
-      "overscanStopIndex": 10,
-      "visibleStartIndex": 4,
-      "visibleStopIndex": 8,
-    },
-  ],
-  Array [
-    Object {
-      "overscanStartIndex": 0,
-      "overscanStopIndex": 7,
-      "visibleStartIndex": 2,
-      "visibleStopIndex": 6,
-    },
-  ],
-]
-`;
-
-exports[`FixedSizeList overscanCount should require a minimum of 1 overscan to support tabbing 1`] = `
+exports[`FixedSizeList overscanCount and trailingOverscanCount should require a minimum of 1 overscan to support tabbing 1`] = `
 Array [
   Array [
     Object {
