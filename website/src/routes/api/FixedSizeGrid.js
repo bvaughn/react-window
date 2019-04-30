@@ -268,6 +268,18 @@ const PROPS = [
     type: 'string',
   },
   {
+    description: (
+      <p>
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>overscanColumnCount</code> property instead.
+      </p>
+    ),
+    name: 'overscanColumnsCount',
+    type: 'number',
+  },
+  {
     defaultValue: 1,
     description: (
       <Fragment>
@@ -291,7 +303,7 @@ const PROPS = [
         </p>
       </Fragment>
     ),
-    name: 'overscanColumnsCount',
+    name: 'overscanColumnCount',
     type: 'number',
   },
   {
@@ -300,11 +312,23 @@ const PROPS = [
         <strong className={styles.DeprecatedProp}>
           This property has been deprecated.
         </strong>{' '}
-        Please use the <code>overscanColumnsCount</code> and{' '}
-        <code>overscanRowsCount</code> properties instead.
+        Please use the <code>overscanColumnCount</code> and{' '}
+        <code>overscanRowCount</code> properties instead.
       </p>
     ),
     name: 'overscanCount',
+    type: 'number',
+  },
+  {
+    description: (
+      <p>
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>overscanRowCount</code> property instead.
+      </p>
+    ),
+    name: 'overscanRowsCount',
     type: 'number',
   },
   {

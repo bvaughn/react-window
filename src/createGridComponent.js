@@ -69,9 +69,11 @@ export type Props<T> = {|
   outerRef?: any,
   outerElementType?: React$ElementType,
   outerTagName?: string, // deprecated
-  overscanColumnsCount?: number,
+  overscanColumnCount?: number,
+  overscanColumnsCount?: number, // deprecated
   overscanCount?: number, // deprecated
-  overscanRowsCount?: number,
+  overscanRowCount?: number,
+  overscanRowsCount?: number, // deprecated
   rowCount: number,
   rowHeight: itemSize,
   style?: Object,
@@ -586,6 +588,7 @@ export default function createGridComponent({
     _getHorizontalRangeToRender(): [number, number, number, number] {
       const {
         columnCount,
+        overscanColumnCount,
         overscanColumnsCount,
         overscanCount,
         rowCount,
@@ -593,7 +596,7 @@ export default function createGridComponent({
       const { horizontalScrollDirection, isScrolling, scrollLeft } = this.state;
 
       const overscanCountResolved: number =
-        overscanColumnsCount || overscanCount || 1;
+        overscanColumnCount || overscanColumnsCount || overscanCount || 1;
 
       if (columnCount === 0 || rowCount === 0) {
         return [0, 0, 0, 0];
@@ -634,13 +637,14 @@ export default function createGridComponent({
       const {
         columnCount,
         overscanCount,
+        overscanRowCount,
         overscanRowsCount,
         rowCount,
       } = this.props;
       const { isScrolling, verticalScrollDirection, scrollTop } = this.state;
 
       const overscanCountResolved: number =
-        overscanRowsCount || overscanCount || 1;
+        overscanRowCount || overscanRowsCount || overscanCount || 1;
 
       if (columnCount === 0 || rowCount === 0) {
         return [0, 0, 0, 0];
@@ -774,12 +778,16 @@ const validateSharedProps = (
   { instance }: State
 ): void => {
   if (process.env.NODE_ENV !== 'production') {
-    if (typeof overscanCount === 'number') {
+    if (
+      typeof overscanCount === 'number' ||
+      typeof overscanColumnsCount === 'number' ||
+      typeof overscanRowsCount === 'number'
+    ) {
       if (devWarningsOverscanCount && !devWarningsOverscanCount.has(instance)) {
         devWarningsOverscanCount.add(instance);
         console.warn(
-          'The overscanCount prop has been deprecated. ' +
-            'Please use the overscanColumnsCount and overscanRowsCount props instead.'
+          'The overscanCount, overscanColumnsCount and overscanRowsCount props have been deprecated. ' +
+            'Please use the overscanColumnCount and overscanRowCount props instead.'
         );
       }
     }

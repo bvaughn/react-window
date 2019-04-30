@@ -96,7 +96,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount overscanCount should support deprecated overscanCount 1`] = `
+exports[`FixedSizeGrid overscanColumnCount and overscanRowCount overscanCount should support deprecated overscanColumnsCount and overscanRowsCount 1`] = `
 Array [
   Array [
     Object {
@@ -113,7 +113,41 @@ Array [
 ]
 `;
 
-exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount overscanCount should use overscanColumnsCount if both it and overscanCount are provided 1`] = `
+exports[`FixedSizeGrid overscanColumnCount and overscanRowCount overscanCount should support deprecated overscanCount 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 5,
+      "overscanRowStartIndex": 2,
+      "overscanRowStopIndex": 10,
+      "visibleColumnStartIndex": 1,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 4,
+      "visibleRowStopIndex": 8,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeGrid overscanColumnCount and overscanRowCount overscanCount should use overscanColumnCount and overscanRowCount if both them and deprecated props are provided 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 6,
+      "overscanRowStartIndex": 1,
+      "overscanRowStopIndex": 11,
+      "visibleColumnStartIndex": 1,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 4,
+      "visibleRowStopIndex": 8,
+    },
+  ],
+]
+`;
+
+exports[`FixedSizeGrid overscanColumnCount and overscanRowCount overscanCount should use overscanColumnsCount if both it and overscanCount are provided 1`] = `
 Array [
   Array [
     Object {
@@ -130,7 +164,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount overscanCount should use overscanRowsCount if both it and overscanCount are provided 1`] = `
+exports[`FixedSizeGrid overscanColumnCount and overscanRowCount overscanCount should use overscanRowCount if both it and overscanCount are provided 1`] = `
 Array [
   Array [
     Object {
@@ -147,7 +181,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount should accommodate a custom overscan 1`] = `
+exports[`FixedSizeGrid overscanColumnCount and overscanRowCount should accommodate a custom overscan 1`] = `
 Array [
   Array [
     Object {
@@ -164,7 +198,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount should not scan past the beginning of the grid 1`] = `
+exports[`FixedSizeGrid overscanColumnCount and overscanRowCount should not scan past the beginning of the grid 1`] = `
 Array [
   Array [
     Object {
@@ -181,7 +215,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount should not scan past the end of the grid 1`] = `
+exports[`FixedSizeGrid overscanColumnCount and overscanRowCount should not scan past the end of the grid 1`] = `
 Array [
   Array [
     Object {
@@ -198,7 +232,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount should overscan in both directions when not scrolling 1`] = `
+exports[`FixedSizeGrid overscanColumnCount and overscanRowCount should overscan in both directions when not scrolling 1`] = `
 Array [
   Array [
     Object {
@@ -215,7 +249,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount should overscan in the direction being scrolled 1`] = `
+exports[`FixedSizeGrid overscanColumnCount and overscanRowCount should overscan in the direction being scrolled 1`] = `
 Array [
   Array [
     Object {
@@ -256,7 +290,7 @@ Array [
 ]
 `;
 
-exports[`FixedSizeGrid overscanColumnsCount and overscanRowsCount should require a minimum of 1 overscan to support tabbing 1`] = `
+exports[`FixedSizeGrid overscanColumnCount and overscanRowCount should require a minimum of 1 overscan to support tabbing 1`] = `
 Array [
   Array [
     Object {
