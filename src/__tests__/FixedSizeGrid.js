@@ -289,20 +289,43 @@ describe('FixedSizeGrid', () => {
         spyOn(console, 'warn');
 
         const renderer = ReactTestRenderer.create(
+          <FixedSizeGrid {...defaultProps} overscanCount={1} />
+        );
+        expect(console.warn).toHaveBeenCalledTimes(1);
+        expect(console.warn).toHaveBeenLastCalledWith(
+          'The overscanCount prop has been deprecated. ' +
+            'Please use the overscanColumnCount and overscanRowCount props instead.'
+        );
+
+        renderer.update(<FixedSizeGrid {...defaultProps} overscanCount={1} />);
+
+        // But it should only warn once.
+        expect(console.warn).toHaveBeenCalledTimes(1);
+      });
+
+      it('should warn about deprecated overscanRowsCount or overscanColumnsCount prop', () => {
+        spyOn(console, 'warn');
+
+        const renderer = ReactTestRenderer.create(
           <FixedSizeGrid
             {...defaultProps}
-            overscanCount={1}
             overscanRowsCount={1}
             overscanColumnsCount={1}
           />
         );
         expect(console.warn).toHaveBeenCalledTimes(1);
         expect(console.warn).toHaveBeenLastCalledWith(
-          'The overscanCount, overscanColumnsCount and overscanRowsCount props have been deprecated. ' +
+          'The overscanColumnsCount and overscanRowsCount props have been deprecated. ' +
             'Please use the overscanColumnCount and overscanRowCount props instead.'
         );
 
-        renderer.update(<FixedSizeGrid {...defaultProps} overscanCount={1} />);
+        renderer.update(
+          <FixedSizeGrid
+            {...defaultProps}
+            overscanRowsCount={1}
+            overscanColumnsCount={1}
+          />
+        );
 
         // But it should only warn once.
         expect(console.warn).toHaveBeenCalledTimes(1);

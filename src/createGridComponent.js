@@ -132,10 +132,12 @@ const defaultItemKey = ({ columnIndex, data, rowIndex }) =>
 // In DEV mode, this Set helps us only log a warning once per component instance.
 // This avoids spamming the console every time a render happens.
 let devWarningsOverscanCount = null;
+let devWarningsOverscanRowsColumnsCount = null;
 let devWarningsTagName = null;
 if (process.env.NODE_ENV !== 'production') {
   if (typeof window !== 'undefined' && typeof window.WeakSet !== 'undefined') {
     devWarningsOverscanCount = new WeakSet();
+    devWarningsOverscanRowsColumnsCount = new WeakSet();
     devWarningsTagName = new WeakSet();
   }
 }
@@ -772,21 +774,35 @@ const validateSharedProps = (
     height,
     innerTagName,
     outerTagName,
+    overscanColumnsCount,
     overscanCount,
+    overscanRowsCount,
     width,
   }: Props<any>,
   { instance }: State
 ): void => {
   if (process.env.NODE_ENV !== 'production') {
-    if (
-      typeof overscanCount === 'number' ||
-      typeof overscanColumnsCount === 'number' ||
-      typeof overscanRowsCount === 'number'
-    ) {
+    if (typeof overscanCount === 'number') {
       if (devWarningsOverscanCount && !devWarningsOverscanCount.has(instance)) {
         devWarningsOverscanCount.add(instance);
         console.warn(
-          'The overscanCount, overscanColumnsCount and overscanRowsCount props have been deprecated. ' +
+          'The overscanCount prop has been deprecated. ' +
+            'Please use the overscanColumnCount and overscanRowCount props instead.'
+        );
+      }
+    }
+
+    if (
+      typeof overscanColumnsCount === 'number' ||
+      typeof overscanRowsCount === 'number'
+    ) {
+      if (
+        devWarningsOverscanRowsColumnsCount &&
+        !devWarningsOverscanRowsColumnsCount.has(instance)
+      ) {
+        devWarningsOverscanRowsColumnsCount.add(instance);
+        console.warn(
+          'The overscanColumnsCount and overscanRowsCount props have been deprecated. ' +
             'Please use the overscanColumnCount and overscanRowCount props instead.'
         );
       }
