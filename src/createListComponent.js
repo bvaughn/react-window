@@ -177,7 +177,7 @@ export default function createListComponent({
             : normalizeScrollLeft({
                 direction: mappedDirection,
                 scrollLeft: 0,
-                clientWidth: ((width: any): number),
+                clientWidth: Math.min(((width: any): number), estimatedWidth),
                 scrollWidth: estimatedWidth,
               });
 
@@ -323,7 +323,10 @@ export default function createListComponent({
           direction: this._mappedDirectionForNormalization(),
           scrollLeft: newNormalizedScrollOffset,
           scrollWidth: newEstimatedTotalWidth,
-          clientWidth: this._widthPropAsNumber(),
+          clientWidth: Math.min(
+            this._widthPropAsNumber(),
+            newEstimatedTotalWidth
+          ),
         });
       } else {
         browserOffset = getOffsetForIndexAndAlignment(

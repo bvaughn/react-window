@@ -356,4 +356,144 @@ describe('RTL', () => {
       testWhenScrollToItemCalledWith7(-600);
     });
   });
+
+  describe('When there is enough space to render all items', () => {
+    describe('List', () => {
+      beforeEach(() => {
+        defaultProps = {
+          children: itemRenderer,
+          itemCount: 4,
+          itemSize: 100,
+          height: 100,
+          width: 800,
+          layout: 'horizontal',
+          direction: 'rtl',
+          overscanCount: 1,
+          outerRef,
+          onScroll,
+        };
+      });
+
+      function createListAndSetWidths() {
+        rendering = render(<FixedSizeList {...defaultProps} />, container);
+        Object.defineProperties(outerRef.current, {
+          clientWidth: { writable: true },
+          scrollWidth: { writable: true },
+        });
+        outerRef.current.clientWidth = 800;
+        outerRef.current.scrollWidth = 800;
+
+        itemRenderer.mockClear();
+        onScroll.mockClear();
+      }
+
+      function testWhenScrollToItemCalledWith2() {
+        describe('when scrolled to column 2', () => {
+          beforeEach(() => {
+            rendering.scrollToItem(2);
+          });
+
+          it('does not report onScroll', () => {
+            expect(onScroll).not.toHaveBeenCalled();
+          });
+        });
+      }
+
+      describe('default scrollType', () => {
+        beforeEach(() => {
+          _setScrollType('default');
+          createListAndSetWidths();
+        });
+
+        testWhenScrollToItemCalledWith2();
+      });
+
+      describe('reverse scrollType', () => {
+        beforeEach(() => {
+          _setScrollType('reverse');
+          createListAndSetWidths();
+        });
+
+        testWhenScrollToItemCalledWith2();
+      });
+
+      describe('negative scrollType', () => {
+        beforeEach(() => {
+          _setScrollType('negative');
+          createListAndSetWidths();
+        });
+
+        testWhenScrollToItemCalledWith2();
+      });
+    });
+
+    describe('Grid', () => {
+      beforeEach(() => {
+        defaultProps = {
+          children: itemRenderer,
+          columnCount: 4,
+          columnWidth: 100,
+          height: 800,
+          rowCount: 4,
+          rowHeight: 100,
+          width: 800,
+          direction: 'rtl',
+          outerRef,
+          onScroll,
+        };
+      });
+
+      function createGridAndSetWidths() {
+        rendering = render(<FixedSizeGrid {...defaultProps} />, container);
+        Object.defineProperties(outerRef.current, {
+          clientWidth: { writable: true },
+          scrollWidth: { writable: true },
+        });
+        outerRef.current.clientWidth = 800;
+        outerRef.current.scrollWidth = 800;
+
+        itemRenderer.mockClear();
+        onScroll.mockClear();
+      }
+
+      function testWhenScrollToItemCalledWithCol2() {
+        describe('when scrolled to column 2', () => {
+          beforeEach(() => {
+            rendering.scrollToItem({ columnIndex: 2 });
+          });
+
+          it('does not report onScroll', () => {
+            expect(onScroll).not.toHaveBeenCalled();
+          });
+        });
+      }
+
+      describe('default scrollType', () => {
+        beforeEach(() => {
+          _setScrollType('default');
+          createGridAndSetWidths();
+        });
+
+        testWhenScrollToItemCalledWithCol2();
+      });
+
+      describe('reverse scrollType', () => {
+        beforeEach(() => {
+          _setScrollType('reverse');
+          createGridAndSetWidths();
+        });
+
+        testWhenScrollToItemCalledWithCol2();
+      });
+
+      describe('negative scrollType', () => {
+        beforeEach(() => {
+          _setScrollType('negative');
+          createGridAndSetWidths();
+        });
+
+        testWhenScrollToItemCalledWithCol2();
+      });
+    });
+  });
 });

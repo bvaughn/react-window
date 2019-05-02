@@ -206,7 +206,7 @@ export default function createGridComponent({
           : normalizeScrollLeft({
               direction: direction,
               scrollLeft: 0,
-              clientWidth: width,
+              clientWidth: Math.min(width, estimatedWidth),
               scrollWidth: estimatedWidth,
             });
 
@@ -409,7 +409,8 @@ export default function createGridComponent({
           direction,
           scrollLeft: newNormalizedScrollLeft,
           scrollWidth: newEstimatedTotalWidth,
-          clientWidth: width - verticalScrollbarSize,
+          clientWidth:
+            Math.min(width, newEstimatedTotalWidth) - verticalScrollbarSize,
         });
       }
 
