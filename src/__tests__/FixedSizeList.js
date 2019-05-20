@@ -870,4 +870,19 @@ describe('FixedSizeList', () => {
       );
     });
   });
+
+  it('should allow any props to be passed to the outer div', () => {
+    const mockHandleKeyDown = jest.fn();
+
+    const result = ReactTestRenderer.create(
+      <FixedSizeList
+        {...defaultProps}
+        itemCount={0}
+        tabIndex={0}
+        onKeyDown={mockHandleKeyDown}
+      />
+    ).toJSON();
+
+    expect(result).toMatchSnapshot();
+  });
 });

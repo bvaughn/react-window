@@ -554,7 +554,7 @@ describe('VariableSizeGrid', () => {
   });
 
   // https://github.com/bvaughn/react-window/pull/138
-  it('should descrease scroll size when itemCount decreases', () => {
+  it('should decrease scroll size when itemCount decreases', () => {
     const innerRef = createRef();
     const gridRef = createRef();
 
@@ -583,5 +583,21 @@ describe('VariableSizeGrid', () => {
     instance.setState({ columnCount: 2, rowCount: 4 });
     expect(innerRef.current.style.height).toEqual('106px');
     expect(innerRef.current.style.width).toEqual('101px');
+  });
+
+  it('should allow any props to be passed to the outer div', () => {
+    const mockHandleKeyDown = jest.fn();
+
+    const result = ReactTestRenderer.create(
+      <VariableSizeGrid
+        {...defaultProps}
+        columnCount={0}
+        rowCount={0}
+        tabIndex={0}
+        onKeyDown={mockHandleKeyDown}
+      />
+    ).toJSON();
+
+    expect(result).toMatchSnapshot();
   });
 });

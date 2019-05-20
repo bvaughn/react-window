@@ -706,6 +706,36 @@ Array [
 ]
 `;
 
+exports[`FixedSizeGrid should allow any props to be passed to the outer div 1`] = `
+<div
+  className={undefined}
+  onKeyDown={[Function]}
+  onScroll={[Function]}
+  style={
+    Object {
+      "WebkitOverflowScrolling": "touch",
+      "direction": "ltr",
+      "height": 100,
+      "overflow": "auto",
+      "position": "relative",
+      "width": 200,
+      "willChange": "transform",
+    }
+  }
+  tabIndex={0}
+>
+  <div
+    style={
+      Object {
+        "height": 0,
+        "pointerEvents": undefined,
+        "width": 0,
+      }
+    }
+  />
+</div>
+`;
+
 exports[`FixedSizeGrid should render a grid of items 1`] = `
 Array [
   Array [

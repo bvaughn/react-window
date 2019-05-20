@@ -1085,4 +1085,20 @@ describe('FixedSizeGrid', () => {
       );
     });
   });
+
+  it('should allow any props to be passed to the outer div', () => {
+    const mockHandleKeyDown = jest.fn();
+
+    const result = ReactTestRenderer.create(
+      <FixedSizeGrid
+        {...defaultProps}
+        columnCount={0}
+        rowCount={0}
+        tabIndex={0}
+        onKeyDown={mockHandleKeyDown}
+      />
+    ).toJSON();
+
+    expect(result).toMatchSnapshot();
+  });
 });

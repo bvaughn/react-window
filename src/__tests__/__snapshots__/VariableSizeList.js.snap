@@ -223,3 +223,33 @@ Array [
   ],
 ]
 `;
+
+exports[`VariableSizeList should allow any props to be passed to the outer div 1`] = `
+<div
+  className={undefined}
+  onKeyDown={[Function]}
+  onScroll={[Function]}
+  style={
+    Object {
+      "WebkitOverflowScrolling": "touch",
+      "direction": "ltr",
+      "height": 100,
+      "overflow": "auto",
+      "position": "relative",
+      "width": 50,
+      "willChange": "transform",
+    }
+  }
+  tabIndex={0}
+>
+  <div
+    style={
+      Object {
+        "height": 0,
+        "pointerEvents": undefined,
+        "width": "100%",
+      }
+    }
+  />
+</div>
+`;

@@ -321,7 +321,7 @@ describe('VariableSizeList', () => {
   });
 
   // https://github.com/bvaughn/react-window/pull/138
-  it('should descrease scroll size when itemCount decreases', () => {
+  it('should decrease scroll size when itemCount decreases', () => {
     const innerRef = createRef();
     const listRef = createRef();
 
@@ -348,5 +348,20 @@ describe('VariableSizeList', () => {
     // Decrease itemCount a lot and verify the scroll height is descreased as well.
     instance.setState({ itemCount: 3 });
     expect(innerRef.current.style.height).toEqual('78px');
+  });
+
+  it('should allow any props to be passed to the outer div', () => {
+    const mockHandleKeyDown = jest.fn();
+
+    const result = ReactTestRenderer.create(
+      <VariableSizeList
+        {...defaultProps}
+        itemCount={0}
+        tabIndex={0}
+        onKeyDown={mockHandleKeyDown}
+      />
+    ).toJSON();
+
+    expect(result).toMatchSnapshot();
   });
 });
