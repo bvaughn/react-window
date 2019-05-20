@@ -277,7 +277,7 @@ export default function createListComponent({
         onScroll: _onScroll,
         outerRef: _outerRef,
         overscanCount: _overscanCount,
-        ...restOfProps,
+        ...restOfProps
       } = this.props;
       const { isScrolling } = this.state;
 

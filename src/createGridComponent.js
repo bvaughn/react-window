@@ -377,7 +377,7 @@ export default function createGridComponent({
         overscanCount: _overscanCount,
         overscanRowsCount: _overscanRowsCount,
         rowHeight: _rowHeight,
-        ...restOfProps,
+        ...restOfProps
       } = this.props;
       const { isScrolling } = this.state;
 
