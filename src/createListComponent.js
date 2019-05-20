@@ -269,6 +269,15 @@ export default function createListComponent({
         style,
         useIsScrolling,
         width,
+        // these only here to remove from `restOfProps
+        estimatedItemSize: _estimatedItemSize,
+        itemSize: _itemSize,
+        initialScrollOffset: _initialScrollOffset,
+        onItemsRendered: _onItemsRendered,
+        onScroll: _onScroll,
+        outerRef: _outerRef,
+        overscanCount: _overscanCount,
+        ...restOfProps,
       } = this.props;
       const { isScrolling } = this.state;
 
@@ -320,6 +329,7 @@ export default function createListComponent({
             direction,
             ...style,
           },
+          ...restOfProps,
         },
         createElement(innerElementType || innerTagName || 'div', {
           children: items,

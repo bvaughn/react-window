@@ -364,6 +364,20 @@ export default function createGridComponent({
         style,
         useIsScrolling,
         width,
+        // these are only here to remove from `restOfProps`
+        columnWidth: _columnWidth,
+        estimatedColumnWidth: _estimatedColumnWidth,
+        estimatedRowHeight: _estimatedRowHeight,
+        initialScrollLeft: _initialScrollLeft,
+        initialScrollTop: _initialScrollTop,
+        onItemsRendered: _onItemsRendered,
+        onScroll: _onScroll,
+        outerRef: _outerRef,
+        overscanColumnsCount: _overscanColumnsCount,
+        overscanCount: _overscanCount,
+        overscanRowsCount: _overscanRowsCount,
+        rowHeight: _rowHeight,
+        ...restOfProps,
       } = this.props;
       const { isScrolling } = this.state;
 
@@ -426,6 +440,7 @@ export default function createGridComponent({
             direction,
             ...style,
           },
+          ...restOfProps,
         },
         createElement(innerElementType || innerTagName || 'div', {
           children: items,
