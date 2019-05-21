@@ -467,7 +467,7 @@ const DynamicSizeList = createListComponent({
               handleNewMeasurements,
               index,
               item,
-              key: itemKey(index),
+              key: itemKey(index, itemData),
               size,
             })
           );
