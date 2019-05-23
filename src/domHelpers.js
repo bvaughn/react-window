@@ -36,7 +36,7 @@ type Props = {
   scrollTop: number,
 };
 
-export function isVerticallyOverScolled({
+export function isVerticallyOverScrolled({
   clientHeight,
   scrollHeight,
   scrollTop,

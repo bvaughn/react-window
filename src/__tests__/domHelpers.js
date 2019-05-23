@@ -1,11 +1,11 @@
-import { isVerticallyOverScolled } from '../domHelpers';
+import { isVerticallyOverScrolled } from '../domHelpers';
 
-describe('isVerticallyOverScolled', () => {
+describe('isVerticallyOverScrolled', () => {
   const clientHeight = 500;
   const scrollHeight = 1000;
 
   it('returns overscrolled when scrollTop is less than 0', () => {
-    const isOverScolled = isVerticallyOverScolled({
+    const isOverScolled = isVerticallyOverScrolled({
       scrollTop: -1,
       clientHeight,
       scrollHeight,
@@ -14,7 +14,7 @@ describe('isVerticallyOverScolled', () => {
   });
 
   it('returns not overscrolled when scrollTop is equal to 0', () => {
-    const isOverScolled = isVerticallyOverScolled({
+    const isOverScolled = isVerticallyOverScrolled({
       scrollTop: 0,
       clientHeight,
       scrollHeight,
@@ -23,7 +23,7 @@ describe('isVerticallyOverScolled', () => {
   });
 
   it('returns not overscrolled when scrollTop is equal to scrollHeight minus clientHeight', () => {
-    const isOverScolled = isVerticallyOverScolled({
+    const isOverScolled = isVerticallyOverScrolled({
       scrollTop: scrollHeight - clientHeight,
       clientHeight,
       scrollHeight,
@@ -32,7 +32,7 @@ describe('isVerticallyOverScolled', () => {
   });
 
   it('returns overscrolled when scrollTop is greater than scrollHeight minus clientHeight', () => {
-    const isOverScolled = isVerticallyOverScolled({
+    const isOverScolled = isVerticallyOverScrolled({
       scrollTop: scrollHeight - clientHeight + 1,
       clientHeight,
       scrollHeight,

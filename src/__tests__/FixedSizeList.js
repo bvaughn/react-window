@@ -45,8 +45,8 @@ describe('FixedSizeList', () => {
     };
 
     // Test renders will set clientHeight and scrollHeight to zero
-    // so we need to manually mock the response of isVerticallyOverScolled.
-    domHelpers.isVerticallyOverScolled = () => false;
+    // so we need to manually mock the response of isVerticallyOverScrolled.
+    domHelpers.isVerticallyOverScrolled = () => false;
   });
 
   it('should render an empty list', () => {
@@ -558,8 +558,8 @@ describe('FixedSizeList', () => {
       expect(onScroll.mock.calls[0][0].scrollUpdateWasRequested).toBe(false);
     });
 
-    it('should not call onScroll if isVerticallyOverScolled', () => {
-      domHelpers.isVerticallyOverScolled = () => true;
+    it('should not call onScroll if isVerticallyOverScrolled', () => {
+      domHelpers.isVerticallyOverScrolled = () => true;
       const onScroll = jest.fn();
       // Use ReactDOM renderer so the container ref and "onScroll" event work correctly.
       const instance = ReactDOM.render(
