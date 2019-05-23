@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import ReactTestUtils from 'react-dom/test-utils';
 import { FixedSizeList } from '..';
+import * as domHelpers from '../domHelpers';
 
 const simulateScroll = (instance, scrollOffset, direction = 'vertical') => {
   if (direction === 'horizontal') {
@@ -42,6 +43,10 @@ describe('FixedSizeList', () => {
       onItemsRendered,
       width: 50,
     };
+
+    // Test renders will set clientHeight and scrollHeight to zero
+    // so we need to manually mock the response of isVerticallyOverScolled.
+    domHelpers.isVerticallyOverScolled = () => false;
   });
 
   it('should render an empty list', () => {
@@ -551,6 +556,19 @@ describe('FixedSizeList', () => {
       onScroll.mockClear();
       simulateScroll(instance, 200);
       expect(onScroll.mock.calls[0][0].scrollUpdateWasRequested).toBe(false);
+    });
+
+    it('should not call onScroll if isVerticallyOverScolled', () => {
+      domHelpers.isVerticallyOverScolled = () => true;
+      const onScroll = jest.fn();
+      // Use ReactDOM renderer so the container ref and "onScroll" event work correctly.
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} onScroll={onScroll} />,
+        document.createElement('div')
+      );
+      onScroll.mockClear();
+      simulateScroll(instance, 200);
+      expect(onScroll).not.toHaveBeenCalled();
     });
   });
 

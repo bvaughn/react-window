@@ -20,3 +20,17 @@ export function getScrollbarSize(recalculate?: boolean = false): number {
 
   return size;
 }
+
+// Determines whether or not we have scrolled outside of the
+// container boundaries. This occurs frequently on iOS
+// with the rubber band overscrolling feature. This current
+// implementation is focused specifically on vertical scrolling
+// for Lists. A similar strategy for horizontal scrolling may
+// need extra consideration due to rtl vs ltr concerns.
+//
+// MDN determine if an element has been totally scrolled:
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#Problems_and_solutions
+export const isVerticallyOverScolled = ({ scrollTop, scrollHeight, clientHeight }) => {
+  const isOverScrolled = (scrollTop < 0) || (scrollTop > (scrollHeight - clientHeight));
+  return isOverScrolled;
+}

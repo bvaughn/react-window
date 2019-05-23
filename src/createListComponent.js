@@ -2,6 +2,7 @@
 
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
+import { isVerticallyOverScolled } from './domHelpers'
 import { cancelTimeout, requestTimeout } from './timer';
 
 import type { TimeoutID } from './timer';
@@ -519,12 +520,20 @@ export default function createListComponent({
     };
 
     _onScrollVertical = (event: ScrollEvent): void => {
-      const { scrollTop } = event.currentTarget;
+      const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+
       this.setState(prevState => {
         if (prevState.scrollOffset === scrollTop) {
           // Scroll position may have been updated by cDM/cDU,
           // In which case we don't need to trigger another render,
           // And we don't want to update state.isScrolling.
+          return null;
+        }
+
+        // On iOS, we can arrive at negative offsets by swiping past the
+        // start or past the end which activates the rubber band overscrolling feature.
+        // When this happens, we're scrolling outside the constraints and don't need rerenders.
+        if (isVerticallyOverScolled({ scrollTop, scrollHeight, clientHeight })) {
           return null;
         }
 
