@@ -2,7 +2,7 @@
 
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
-import { isVerticallyOverScolled } from './domHelpers'
+import { isVerticallyOverScolled } from './domHelpers';
 import { cancelTimeout, requestTimeout } from './timer';
 
 import type { TimeoutID } from './timer';
@@ -533,7 +533,9 @@ export default function createListComponent({
         // On iOS, we can arrive at negative offsets by swiping past the
         // start or past the end which activates the rubber band overscrolling feature.
         // When this happens, we're scrolling outside the constraints and don't need rerenders.
-        if (isVerticallyOverScolled({ scrollTop, scrollHeight, clientHeight })) {
+        if (
+          isVerticallyOverScolled({ scrollTop, scrollHeight, clientHeight })
+        ) {
           return null;
         }
 

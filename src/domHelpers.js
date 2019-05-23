@@ -30,7 +30,18 @@ export function getScrollbarSize(recalculate?: boolean = false): number {
 //
 // MDN determine if an element has been totally scrolled:
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight#Problems_and_solutions
-export const isVerticallyOverScolled = ({ scrollTop, scrollHeight, clientHeight }) => {
-  const isOverScrolled = (scrollTop < 0) || (scrollTop > (scrollHeight - clientHeight));
+type Props = {
+  clientHeight: number,
+  scrollHeight: number,
+  scrollTop: number,
+};
+
+export function isVerticallyOverScolled({
+  clientHeight,
+  scrollHeight,
+  scrollTop,
+}: Props): boolean {
+  const isOverScrolled =
+    scrollTop < 0 || scrollTop > scrollHeight - clientHeight;
   return isOverScrolled;
 }
