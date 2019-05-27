@@ -68,6 +68,7 @@ type State = {|
   isScrolling: boolean,
   scrollDirection: ScrollDirection,
   scrollOffset: number,
+  scrollOffsetRTLNonStandard: boolean | null,
   scrollUpdateWasRequested: boolean,
 |};
 
@@ -160,6 +161,7 @@ export default function createListComponent({
         typeof this.props.initialScrollOffset === 'number'
           ? this.props.initialScrollOffset
           : 0,
+      scrollOffsetRTLNonStandard: null,
       scrollUpdateWasRequested: false,
     };
 
@@ -496,15 +498,22 @@ export default function createListComponent({
 
         const { direction } = this.props;
 
-        // HACK According to the spec, scrollLeft should be negative for RTL aligned elements.
-        // Chrome does not seem to adhere; its scrolLeft values are positive (measured relative to the left).
+        let scrollOffsetRTLNonStandard = prevState.scrollOffsetRTLNonStandard;
+
+        // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
+        // Chrome does not seem to adhere; its scrollLeft values are positive (measured relative to the left).
         // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
         let scrollOffset = scrollLeft;
         if (direction === 'rtl') {
-          if (scrollLeft <= 0) {
-            scrollOffset = -scrollOffset;
-          } else {
+          // TRICKY It's important that we only set this value once; iOS elastic bounce can calse false positives.
+          if (scrollOffsetRTLNonStandard === null && scrollLeft !== 0) {
+            scrollOffsetRTLNonStandard = scrollLeft > 0;
+          }
+
+          if (scrollOffsetRTLNonStandard) {
             scrollOffset = scrollWidth - clientWidth - scrollLeft;
+          } else {
+            scrollOffset = -scrollOffset;
           }
         }
 
@@ -519,6 +528,7 @@ export default function createListComponent({
           scrollDirection:
             prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
           scrollOffset,
+          scrollOffsetRTLNonStandard,
           scrollUpdateWasRequested: false,
         };
       }, this._resetIsScrollingDebounced);

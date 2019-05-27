@@ -86,6 +86,7 @@ type State = {|
   isScrolling: boolean,
   horizontalScrollDirection: ScrollDirection,
   scrollLeft: number,
+  scrollLeftRTLNonStandard: boolean | null,
   scrollTop: number,
   scrollUpdateWasRequested: boolean,
   verticalScrollDirection: ScrollDirection,
@@ -194,6 +195,7 @@ export default function createGridComponent({
         typeof this.props.initialScrollLeft === 'number'
           ? this.props.initialScrollLeft
           : 0,
+      scrollLeftRTLNonStandard: null,
       scrollTop:
         typeof this.props.initialScrollTop === 'number'
           ? this.props.initialScrollTop
@@ -705,15 +707,22 @@ export default function createGridComponent({
 
         const { direction } = this.props;
 
-        // HACK According to the spec, scrollLeft should be negative for RTL aligned elements.
+        let scrollLeftRTLNonStandard = prevState.scrollLeftRTLNonStandard;
+
+        // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
         // Chrome does not seem to adhere; its scrollLeft values are positive (measured relative to the left).
         // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
         let calculatedScrollLeft = scrollLeft;
         if (direction === 'rtl') {
-          if (scrollLeft <= 0) {
-            calculatedScrollLeft = -scrollLeft;
-          } else {
+          // TRICKY It's important that we only set this value once; iOS elastic bounce can calse false positives.
+          if (scrollLeftRTLNonStandard === null && scrollLeft !== 0) {
+            scrollLeftRTLNonStandard = scrollLeft > 0;
+          }
+
+          if (scrollLeftRTLNonStandard) {
             calculatedScrollLeft = scrollWidth - clientWidth - scrollLeft;
+          } else {
+            calculatedScrollLeft = -scrollLeft;
           }
         }
 
@@ -732,6 +741,7 @@ export default function createGridComponent({
           horizontalScrollDirection:
             prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
           scrollLeft: calculatedScrollLeft,
+          scrollLeftRTLNonStandard,
           scrollTop: calculatedScrollTop,
           verticalScrollDirection:
             prevState.scrollTop < scrollTop ? 'forward' : 'backward',
