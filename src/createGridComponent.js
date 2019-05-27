@@ -685,9 +685,11 @@ export default function createGridComponent({
 
     _onScroll = (event: ScrollEvent): void => {
       const {
+        clientHeight,
         clientWidth,
         scrollLeft,
         scrollTop,
+        scrollHeight,
         scrollWidth,
       } = event.currentTarget;
       this.setState(prevState => {
@@ -715,12 +717,22 @@ export default function createGridComponent({
           }
         }
 
+        // Prevent Safari's elastic scrolling from causing visual shaking when scrolling past bounds.
+        calculatedScrollLeft = Math.max(
+          0,
+          Math.min(calculatedScrollLeft, scrollWidth - clientWidth)
+        );
+        const calculatedScrollTop = Math.max(
+          0,
+          Math.min(scrollTop, scrollHeight - clientHeight)
+        );
+
         return {
           isScrolling: true,
           horizontalScrollDirection:
             prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
           scrollLeft: calculatedScrollLeft,
-          scrollTop,
+          scrollTop: calculatedScrollTop,
           verticalScrollDirection:
             prevState.scrollTop < scrollTop ? 'forward' : 'backward',
           scrollUpdateWasRequested: false,

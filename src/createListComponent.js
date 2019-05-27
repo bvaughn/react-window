@@ -508,6 +508,12 @@ export default function createListComponent({
           }
         }
 
+        // Prevent Safari's elastic scrolling from causing visual shaking when scrolling past bounds.
+        scrollOffset = Math.max(
+          0,
+          Math.min(scrollOffset, scrollWidth - clientWidth)
+        );
+
         return {
           isScrolling: true,
           scrollDirection:
@@ -519,7 +525,7 @@ export default function createListComponent({
     };
 
     _onScrollVertical = (event: ScrollEvent): void => {
-      const { scrollTop } = event.currentTarget;
+      const { clientHeight, scrollHeight, scrollTop } = event.currentTarget;
       this.setState(prevState => {
         if (prevState.scrollOffset === scrollTop) {
           // Scroll position may have been updated by cDM/cDU,
@@ -528,11 +534,17 @@ export default function createListComponent({
           return null;
         }
 
+        // Prevent Safari's elastic scrolling from causing visual shaking when scrolling past bounds.
+        const scrollOffset = Math.max(
+          0,
+          Math.min(scrollTop, scrollHeight - clientHeight)
+        );
+
         return {
           isScrolling: true,
           scrollDirection:
-            prevState.scrollOffset < scrollTop ? 'forward' : 'backward',
-          scrollOffset: scrollTop,
+            prevState.scrollOffset < scrollOffset ? 'forward' : 'backward',
+          scrollOffset,
           scrollUpdateWasRequested: false,
         };
       }, this._resetIsScrollingDebounced);
