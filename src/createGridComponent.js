@@ -343,6 +343,9 @@ export default function createGridComponent({
       const { scrollLeft, scrollTop, scrollUpdateWasRequested } = this.state;
 
       if (scrollUpdateWasRequested && this._outerRef != null) {
+        // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
+        // This is not the case for all browsers though (e.g. Chrome reports values as positive, measured relative to the left).
+        // So we need to determine which browser behavior we're dealing with, and mimic it.
         const outerRef = ((this._outerRef: any): HTMLElement);
         if (direction === 'rtl') {
           const isNegative = isRTLOffsetNegative();
@@ -728,8 +731,9 @@ export default function createGridComponent({
           const isNegative = isRTLOffsetNegative();
 
           // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
-          // Chrome does not seem to adhere; its scrollLeft values are positive (measured relative to the left).
-          // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
+          // This is not the case for all browsers though (e.g. Chrome reports values as positive, measured relative to the left).
+          // It's also easier for this component if we convert offsets to the same format as they would be in for ltr.
+          // So the simplest solution is to determine which browser behavior we're dealing with, and convert based on it.
           if (isNegative) {
             calculatedScrollLeft = -scrollLeft;
           } else {
