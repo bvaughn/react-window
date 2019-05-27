@@ -96,6 +96,7 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
   componentWillUnmount() {
     if (this._resizeObserver !== null) {
       this._resizeObserver.disconnect();
+      this._resizeObserver = null;
     }
   }
 
@@ -141,8 +142,10 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
     if (ref instanceof HTMLElement) {
       this._didProvideValidRef = true;
       this._node = ref;
-    } else if (ref !== null) {
+    } else if (ref) {
       this._node = ((findDOMNode(ref): any): HTMLElement);
+    } else {
+      this._node = null;
     }
 
     if (this._resizeObserver !== null && this._node !== null) {
