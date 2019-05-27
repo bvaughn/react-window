@@ -3,6 +3,7 @@
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
+import { isRTLOffsetNegative } from './domHelpers';
 
 import type { TimeoutID } from './timer';
 
@@ -68,7 +69,6 @@ type State = {|
   isScrolling: boolean,
   scrollDirection: ScrollDirection,
   scrollOffset: number,
-  scrollOffsetRTLNonStandard: boolean | null,
   scrollUpdateWasRequested: boolean,
 |};
 
@@ -161,7 +161,6 @@ export default function createListComponent({
         typeof this.props.initialScrollOffset === 'number'
           ? this.props.initialScrollOffset
           : 0,
-      scrollOffsetRTLNonStandard: null,
       scrollUpdateWasRequested: false,
     };
 
@@ -217,14 +216,13 @@ export default function createListComponent({
     componentDidMount() {
       const { direction, initialScrollOffset, layout } = this.props;
 
-      if (typeof initialScrollOffset === 'number' && this._outerRef !== null) {
+      if (typeof initialScrollOffset === 'number' && this._outerRef != null) {
+        const outerRef = ((this._outerRef: any): HTMLElement);
         // TODO Deprecate direction "horizontal"
         if (direction === 'horizontal' || layout === 'horizontal') {
-          ((this
-            ._outerRef: any): HTMLDivElement).scrollLeft = initialScrollOffset;
+          outerRef.scrollLeft = initialScrollOffset;
         } else {
-          ((this
-            ._outerRef: any): HTMLDivElement).scrollTop = initialScrollOffset;
+          outerRef.scrollTop = initialScrollOffset;
         }
       }
 
@@ -235,12 +233,23 @@ export default function createListComponent({
       const { direction, layout } = this.props;
       const { scrollOffset, scrollUpdateWasRequested } = this.state;
 
-      if (scrollUpdateWasRequested && this._outerRef !== null) {
+      if (scrollUpdateWasRequested && this._outerRef != null) {
+        const outerRef = ((this._outerRef: any): HTMLElement);
         // TODO Deprecate direction "horizontal"
         if (direction === 'horizontal' || layout === 'horizontal') {
-          ((this._outerRef: any): HTMLDivElement).scrollLeft = scrollOffset;
+          if (direction === 'rtl') {
+            const isNegative = isRTLOffsetNegative();
+            if (isNegative) {
+              outerRef.scrollLeft = -scrollOffset;
+            } else {
+              const { clientWidth, scrollWidth } = outerRef;
+              outerRef.scrollLeft = scrollWidth - clientWidth - scrollOffset;
+            }
+          } else {
+            outerRef.scrollLeft = scrollOffset;
+          }
         } else {
-          ((this._outerRef: any): HTMLDivElement).scrollTop = scrollOffset;
+          outerRef.scrollTop = scrollOffset;
         }
       }
 
@@ -498,22 +507,17 @@ export default function createListComponent({
 
         const { direction } = this.props;
 
-        let scrollOffsetRTLNonStandard = prevState.scrollOffsetRTLNonStandard;
-
-        // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
-        // Chrome does not seem to adhere; its scrollLeft values are positive (measured relative to the left).
-        // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
         let scrollOffset = scrollLeft;
         if (direction === 'rtl') {
-          // TRICKY It's important that we only set this value once; iOS elastic bounce can calse false positives.
-          if (scrollOffsetRTLNonStandard === null && scrollLeft !== 0) {
-            scrollOffsetRTLNonStandard = scrollLeft > 0;
-          }
+          const isNegative = isRTLOffsetNegative();
 
-          if (scrollOffsetRTLNonStandard) {
-            scrollOffset = scrollWidth - clientWidth - scrollLeft;
+          // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
+          // Chrome does not seem to adhere; its scrollLeft values are positive (measured relative to the left).
+          // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
+          if (isNegative) {
+            scrollOffset = -scrollLeft;
           } else {
-            scrollOffset = -scrollOffset;
+            scrollOffset = scrollWidth - clientWidth - scrollLeft;
           }
         }
 
@@ -528,7 +532,6 @@ export default function createListComponent({
           scrollDirection:
             prevState.scrollOffset < scrollLeft ? 'forward' : 'backward',
           scrollOffset,
-          scrollOffsetRTLNonStandard,
           scrollUpdateWasRequested: false,
         };
       }, this._resetIsScrollingDebounced);

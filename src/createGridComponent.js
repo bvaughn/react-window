@@ -3,7 +3,7 @@
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
-import { getScrollbarSize } from './domHelpers';
+import { getScrollbarSize, isRTLOffsetNegative } from './domHelpers';
 
 import type { TimeoutID } from './timer';
 
@@ -86,7 +86,6 @@ type State = {|
   isScrolling: boolean,
   horizontalScrollDirection: ScrollDirection,
   scrollLeft: number,
-  scrollLeftRTLNonStandard: boolean | null,
   scrollTop: number,
   scrollUpdateWasRequested: boolean,
   verticalScrollDirection: ScrollDirection,
@@ -195,7 +194,6 @@ export default function createGridComponent({
         typeof this.props.initialScrollLeft === 'number'
           ? this.props.initialScrollLeft
           : 0,
-      scrollLeftRTLNonStandard: null,
       scrollTop:
         typeof this.props.initialScrollTop === 'number'
           ? this.props.initialScrollTop
@@ -326,21 +324,39 @@ export default function createGridComponent({
 
     componentDidMount() {
       const { initialScrollLeft, initialScrollTop } = this.props;
-      if (typeof initialScrollLeft === 'number' && this._outerRef != null) {
-        ((this._outerRef: any): HTMLDivElement).scrollLeft = initialScrollLeft;
-      }
-      if (typeof initialScrollTop === 'number' && this._outerRef != null) {
-        ((this._outerRef: any): HTMLDivElement).scrollTop = initialScrollTop;
+
+      if (this._outerRef != null) {
+        const outerRef = ((this._outerRef: any): HTMLElement);
+        if (typeof initialScrollLeft === 'number') {
+          outerRef.scrollLeft = initialScrollLeft;
+        }
+        if (typeof initialScrollTop === 'number') {
+          outerRef.scrollTop = initialScrollTop;
+        }
       }
 
       this._callPropsCallbacks();
     }
 
     componentDidUpdate() {
+      const { direction } = this.props;
       const { scrollLeft, scrollTop, scrollUpdateWasRequested } = this.state;
-      if (scrollUpdateWasRequested && this._outerRef !== null) {
-        ((this._outerRef: any): HTMLDivElement).scrollLeft = scrollLeft;
-        ((this._outerRef: any): HTMLDivElement).scrollTop = scrollTop;
+
+      if (scrollUpdateWasRequested && this._outerRef != null) {
+        const outerRef = ((this._outerRef: any): HTMLElement);
+        if (direction === 'rtl') {
+          const isNegative = isRTLOffsetNegative();
+          if (isNegative) {
+            outerRef.scrollLeft = -scrollLeft;
+          } else {
+            const { clientWidth, scrollWidth } = outerRef;
+            outerRef.scrollLeft = scrollWidth - clientWidth - scrollLeft;
+          }
+        } else {
+          outerRef.scrollLeft = Math.max(0, scrollLeft);
+        }
+
+        outerRef.scrollTop = Math.max(0, scrollTop);
       }
 
       this._callPropsCallbacks();
@@ -707,22 +723,17 @@ export default function createGridComponent({
 
         const { direction } = this.props;
 
-        let scrollLeftRTLNonStandard = prevState.scrollLeftRTLNonStandard;
-
-        // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
-        // Chrome does not seem to adhere; its scrollLeft values are positive (measured relative to the left).
-        // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
         let calculatedScrollLeft = scrollLeft;
         if (direction === 'rtl') {
-          // TRICKY It's important that we only set this value once; iOS elastic bounce can calse false positives.
-          if (scrollLeftRTLNonStandard === null && scrollLeft !== 0) {
-            scrollLeftRTLNonStandard = scrollLeft > 0;
-          }
+          const isNegative = isRTLOffsetNegative();
 
-          if (scrollLeftRTLNonStandard) {
-            calculatedScrollLeft = scrollWidth - clientWidth - scrollLeft;
-          } else {
+          // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
+          // Chrome does not seem to adhere; its scrollLeft values are positive (measured relative to the left).
+          // See https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeft
+          if (isNegative) {
             calculatedScrollLeft = -scrollLeft;
+          } else {
+            calculatedScrollLeft = scrollWidth - clientWidth - scrollLeft;
           }
         }
 
@@ -741,7 +752,6 @@ export default function createGridComponent({
           horizontalScrollDirection:
             prevState.scrollLeft < scrollLeft ? 'forward' : 'backward',
           scrollLeft: calculatedScrollLeft,
-          scrollLeftRTLNonStandard,
           scrollTop: calculatedScrollTop,
           verticalScrollDirection:
             prevState.scrollTop < scrollTop ? 'forward' : 'backward',
