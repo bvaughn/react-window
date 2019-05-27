@@ -29,6 +29,31 @@ describe('FixedSizeList', () => {
   beforeEach(() => {
     jest.useFakeTimers();
 
+    // JSdom does not do actual layout and so doesn't return meaningful values here.
+    // For the purposes of our tests though, we can mock out semi-meaningful values.
+    Object.defineProperties(HTMLElement.prototype, {
+      clientWidth: {
+        configurable: true,
+        get: function() {
+          return parseInt(this.style.width, 10) || 0;
+        },
+      },
+      clientHeight: {
+        configurable: true,
+        get: function() {
+          return parseInt(this.style.height, 10) || 0;
+        },
+      },
+      scrollHeight: {
+        configurable: true,
+        get: () => Number.MAX_SAFE_INTEGER,
+      },
+      scrollWidth: {
+        configurable: true,
+        get: () => Number.MAX_SAFE_INTEGER,
+      },
+    });
+
     onItemsRendered = jest.fn();
 
     itemRenderer = jest.fn(({ style, ...rest }) => (

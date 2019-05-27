@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useRef } from 'react';
 import { FixedSizeGrid, FixedSizeList } from 'react-window';
 import CodeBlock from '../../components/CodeBlock';
 import ProfiledExample from '../../components/ProfiledExample';
@@ -47,6 +47,22 @@ class Item extends PureComponent {
 }
 
 export default function() {
+  const gridRef = useRef();
+  const listRef = useRef();
+
+  const scrollGridTo500 = () => gridRef.current.scrollTo({ scrollLeft: 500 });
+  const scrollGridTo1500 = () => gridRef.current.scrollTo({ scrollLeft: 1500 });
+  const scrollGridToItem8Auto = () =>
+    gridRef.current.scrollToItem({ columnIndex: 8 });
+  const scrollGridToItem12Center = () =>
+    gridRef.current.scrollToItem({ columnIndex: 12, align: 'center' });
+
+  const scrollListTo500 = () => listRef.current.scrollTo(500);
+  const scrollListTo1500 = () => listRef.current.scrollTo(1500);
+  const scrollListToItem8Auto = () => listRef.current.scrollToItem(8);
+  const scrollListToItem12Center = () =>
+    listRef.current.scrollToItem(12, 'center');
+
   return (
     <div className={styles.ExampleWrapper}>
       <h1 className={styles.ExampleHeader}>RTL List</h1>
@@ -55,13 +71,32 @@ export default function() {
           className={styles.ExampleDemo}
           sandbox="fixed-size-list-horizontal-rtl"
         >
+          <button
+            className={styles.ExampleButton}
+            onClick={scrollListToItem8Auto}
+          >
+            Scroll to item 8 (align: auto)
+          </button>
+          <button
+            className={styles.ExampleButton}
+            onClick={scrollListToItem12Center}
+          >
+            Scroll to item 12 (align: center)
+          </button>
+          <button className={styles.ExampleButton} onClick={scrollListTo500}>
+            Scroll to 500
+          </button>
+          <button className={styles.ExampleButton} onClick={scrollListTo1500}>
+            Scroll to 1500
+          </button>
           <FixedSizeList
             className={styles.List}
             direction="rtl"
             height={75}
-            itemCount={1000}
+            itemCount={20}
             itemSize={100}
             layout="horizontal"
+            ref={listRef}
             width={300}
           >
             {Item}
@@ -77,13 +112,32 @@ export default function() {
           className={styles.ExampleDemo}
           sandbox="fixed-size-grid-rtl"
         >
+          <button
+            className={styles.ExampleButton}
+            onClick={scrollGridToItem8Auto}
+          >
+            Scroll to column 8 (align: auto)
+          </button>
+          <button
+            className={styles.ExampleButton}
+            onClick={scrollGridToItem12Center}
+          >
+            Scroll to column 12 (align: center)
+          </button>
+          <button className={styles.ExampleButton} onClick={scrollGridTo500}>
+            Scroll to 500
+          </button>
+          <button className={styles.ExampleButton} onClick={scrollGridTo1500}>
+            Scroll to 1500
+          </button>
           <FixedSizeGrid
             className={styles.Grid}
-            columnCount={1000}
+            columnCount={20}
             columnWidth={100}
             direction="rtl"
             height={150}
-            rowCount={1000}
+            ref={gridRef}
+            rowCount={20}
             rowHeight={35}
             width={300}
           >

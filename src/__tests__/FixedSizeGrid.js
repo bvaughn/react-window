@@ -27,6 +27,31 @@ describe('FixedSizeGrid', () => {
   beforeEach(() => {
     jest.useFakeTimers();
 
+    // JSdom does not do actual layout and so doesn't return meaningful values here.
+    // For the purposes of our tests though, we can mock out semi-meaningful values.
+    Object.defineProperties(HTMLElement.prototype, {
+      clientWidth: {
+        configurable: true,
+        get: function() {
+          return parseInt(this.style.width, 10) || 0;
+        },
+      },
+      clientHeight: {
+        configurable: true,
+        get: function() {
+          return parseInt(this.style.height, 10) || 0;
+        },
+      },
+      scrollHeight: {
+        configurable: true,
+        get: () => Number.MAX_SAFE_INTEGER,
+      },
+      scrollWidth: {
+        configurable: true,
+        get: () => Number.MAX_SAFE_INTEGER,
+      },
+    });
+
     // Mock the DOM helper util for testing purposes.
     getScrollbarSize = domHelpers.getScrollbarSize = jest.fn(() => 0);
 
@@ -99,6 +124,7 @@ describe('FixedSizeGrid', () => {
       // Scroll, then capture the rendered style for item 1,
       // Then let the debounce timer clear the cached styles.
       simulateScroll(instance, { scrollLeft: 100, scrollTop: 25 });
+      expect(itemRenderer).toHaveBeenCalled();
       const itemOneArgsA = itemRenderer.mock.calls.find(
         ([params]) => params.columnIndex === 1 && params.rowIndex === 1
       );
@@ -107,6 +133,7 @@ describe('FixedSizeGrid', () => {
       // Scroll again, then capture the rendered style for item 1,
       // And confirm that the style was recreated.
       simulateScroll(instance, { scrollLeft: 0, scrollTop: 0 });
+      expect(itemRenderer).toHaveBeenCalled();
       const itemOneArgsB = itemRenderer.mock.calls.find(
         ([params]) => params.columnIndex === 1 && params.rowIndex === 1
       );
