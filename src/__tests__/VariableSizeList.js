@@ -121,14 +121,10 @@ describe('VariableSizeList', () => {
       const rendered = ReactTestRenderer.create(
         <VariableSizeList {...defaultProps} itemCount={3} onScroll={onScroll} />
       );
-      onScroll.mockClear();
-      // Offset should not be negative.
+      expect(onItemsRendered).toMatchSnapshot();
+      onItemsRendered.mockClear();
       rendered.getInstance().scrollToItem(0);
-      expect(onScroll).toHaveBeenCalledWith({
-        scrollDirection: 'backward',
-        scrollOffset: 0,
-        scrollUpdateWasRequested: true,
-      });
+      expect(onItemsRendered).not.toHaveBeenCalled();
     });
 
     it('should scroll to the correct item for align = "auto"', () => {
@@ -199,6 +195,23 @@ describe('VariableSizeList', () => {
       // Scroll down as far as possible though.
       // Overscroll direction wil change again.
       rendered.getInstance().scrollToItem(19, 'center');
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should scroll to the correct item for align = "smart"', () => {
+      const onItemsRendered = jest.fn();
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />
+      );
+      // Scroll down enough to show item 10 in the middle.
+      rendered.getInstance().scrollToItem(10, 'smart');
+      // Scrolldn't scroll at all because it's close enough.
+      rendered.getInstance().scrollToItem(9, 'smart');
+      // Should scroll but not center because it's close enough.
+      rendered.getInstance().scrollToItem(6, 'smart');
+      // Item 1 can't align in the middle because it's too close to the beginning.
+      // Scroll up as far as possible though.
+      rendered.getInstance().scrollToItem(1, 'smart');
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
   });

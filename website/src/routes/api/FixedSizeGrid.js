@@ -291,6 +291,18 @@ const PROPS = [
         </p>
       </Fragment>
     ),
+    name: 'overscanColumnCount',
+    type: 'number',
+  },
+  {
+    description: (
+      <p>
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>overscanColumnCount</code> property instead.
+      </p>
+    ),
     name: 'overscanColumnsCount',
     type: 'number',
   },
@@ -300,8 +312,8 @@ const PROPS = [
         <strong className={styles.DeprecatedProp}>
           This property has been deprecated.
         </strong>{' '}
-        Please use the <code>overscanColumnsCount</code> and{' '}
-        <code>overscanRowsCount</code> properties instead.
+        Please use the <code>overscanColumnCount</code> and{' '}
+        <code>overscanRowCount</code> properties instead.
       </p>
     ),
     name: 'overscanCount',
@@ -330,6 +342,18 @@ const PROPS = [
           default, grid overscans by one item.
         </p>
       </Fragment>
+    ),
+    name: 'overscanRowCount',
+    type: 'number',
+  },
+  {
+    description: (
+      <p>
+        <strong className={styles.DeprecatedProp}>
+          This property has been deprecated.
+        </strong>{' '}
+        Please use the <code>overscanRowCount</code> property instead.
+      </p>
     ),
     name: 'overscanRowsCount',
     type: 'number',
@@ -416,6 +440,12 @@ const METHODS = [
             <code>auto</code> (default) - Scroll as little as possible to ensure
             the item is visible. (If the item is already visible, it won't
             scroll at all.)
+          </li>
+          <li>
+            smart - If the item is already visible, don't scroll at all. If it
+            is less than one viewport away, scroll as little as possible so that
+            it becomes visible. If it is more than one viewport away, scroll so
+            that it is centered within the grid.
           </li>
           <li>
             <code>center</code> - Center align the item within the grid.

@@ -106,8 +106,8 @@ describe('VariableSizeGrid', () => {
           columnWidth={columnWidth}
           estimatedColumnWidth={200}
           estimatedRowHeight={100}
-          overscanColumnsCount={0}
-          overscanRowsCount={0}
+          overscanColumnCount={0}
+          overscanRowCount={0}
           rowCount={50}
           rowHeight={rowHeight}
         />
@@ -131,8 +131,8 @@ describe('VariableSizeGrid', () => {
           columnWidth={columnWidth}
           estimatedColumnWidth={200}
           estimatedRowHeight={100}
-          overscanColumnsCount={0}
-          overscanRowsCount={0}
+          overscanColumnCount={0}
+          overscanRowCount={0}
           rowCount={50}
           rowHeight={rowHeight}
         />
@@ -159,18 +159,10 @@ describe('VariableSizeGrid', () => {
           onScroll={onScroll}
         />
       );
-      onScroll.mockClear();
-      // Offset should not be negative.
-      rendered
-        .getInstance()
-        .scrollToItem({ columnIndex: 0, rowIndex: 0, align: 'auto' });
-      expect(onScroll).toHaveBeenCalledWith({
-        horizontalScrollDirection: 'backward',
-        scrollLeft: 0,
-        scrollTop: 0,
-        scrollUpdateWasRequested: true,
-        verticalScrollDirection: 'backward',
-      });
+      expect(onItemsRendered).toMatchSnapshot();
+      onItemsRendered.mockClear();
+      rendered.getInstance().scrollToItem(0);
+      expect(onItemsRendered).not.toHaveBeenCalled();
     });
 
     it('should scroll to the correct item for align = "auto"', () => {
@@ -281,6 +273,41 @@ describe('VariableSizeGrid', () => {
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
+    it('should scroll to the correct item for align = "smart"', () => {
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid {...defaultProps} />
+      );
+
+      // Scroll down enough to show item 10 at the center.
+      // It was further than one screen away, so it gets centered.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 10, rowIndex: 10, align: 'smart' });
+      // No need to scroll again; item 9 is already visible.
+      // Overscan indices will change though, since direction changes.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 9, rowIndex: 9, align: 'smart' });
+      // Scroll up enough to show item 2 as close to the center as we can.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 2, rowIndex: 2, align: 'smart' });
+      // Scroll down to row 10, without changing scrollLeft
+      rendered.getInstance().scrollToItem({ rowIndex: 10, align: 'smart' });
+      // Scroll left to column 0, without changing scrollTop
+      rendered.getInstance().scrollToItem({ columnIndex: 0, align: 'smart' });
+
+      // Scrolling within a distance of a single screen from viewport
+      // should have the 'auto' behavior of scrolling as little as possible.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 5, rowIndex: 5, align: 'smart' });
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 10, rowIndex: 10, align: 'smart' });
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
     it('should account for scrollbar size', () => {
       const onScroll = jest.fn();
       const rendered = ReactTestRenderer.create(
@@ -290,12 +317,12 @@ describe('VariableSizeGrid', () => {
       onScroll.mockClear();
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 15, rowIndex: 10, align: 'end' });
+        .scrollToItem({ columnIndex: 5, rowIndex: 10, align: 'end' });
 
       // With hidden scrollbars (size === 0) we would expect...
       expect(onScroll).toHaveBeenCalledWith({
         horizontalScrollDirection: 'forward',
-        scrollLeft: 720,
+        scrollLeft: 115,
         scrollTop: 230,
         scrollUpdateWasRequested: true,
         verticalScrollDirection: 'forward',
@@ -306,12 +333,12 @@ describe('VariableSizeGrid', () => {
       onScroll.mockClear();
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 15, rowIndex: 10, align: 'end' });
+        .scrollToItem({ columnIndex: 5, rowIndex: 10, align: 'end' });
 
       // With scrollbars of size 20 we would expect those values ot increase by 20px
       expect(onScroll).toHaveBeenCalledWith({
         horizontalScrollDirection: 'forward',
-        scrollLeft: 740,
+        scrollLeft: 135,
         scrollTop: 250,
         scrollUpdateWasRequested: true,
         verticalScrollDirection: 'forward',
@@ -352,13 +379,13 @@ describe('VariableSizeGrid', () => {
       onScroll.mockClear();
       rendered
         .getInstance()
-        .scrollToItem({ columnIndex: 15, rowIndex: 0, align: 'end' });
+        .scrollToItem({ columnIndex: 5, rowIndex: 0, align: 'end' });
 
       // Since there aren't enough rows to require vertical scrolling,
       // the additional 20px for the scrollbar should not be taken into consideration.
       expect(onScroll).toHaveBeenCalledWith({
         horizontalScrollDirection: 'forward',
-        scrollLeft: 720,
+        scrollLeft: 115,
         scrollTop: 0,
         scrollUpdateWasRequested: true,
         verticalScrollDirection: 'backward',
@@ -412,8 +439,8 @@ describe('VariableSizeGrid', () => {
           {...defaultProps}
           estimatedColumnWidth={30}
           estimatedRowHeight={30}
-          overscanColumnsCount={1}
-          overscanRowsCount={1}
+          overscanColumnCount={1}
+          overscanRowCount={1}
           columnWidth={index => 50}
           rowHeight={index => 25}
         />
@@ -431,8 +458,8 @@ describe('VariableSizeGrid', () => {
           {...defaultProps}
           estimatedColumnWidth={30}
           estimatedRowHeight={30}
-          overscanColumnsCount={1}
-          overscanRowsCount={1}
+          overscanColumnCount={1}
+          overscanRowCount={1}
           columnWidth={index => 40}
           rowHeight={index => 20}
         />
@@ -454,8 +481,8 @@ describe('VariableSizeGrid', () => {
           {...defaultProps}
           estimatedColumnWidth={30}
           estimatedRowHeight={30}
-          overscanColumnsCount={1}
-          overscanRowsCount={1}
+          overscanColumnCount={1}
+          overscanRowCount={1}
           columnWidth={index => 40}
           rowHeight={index => 20}
         />

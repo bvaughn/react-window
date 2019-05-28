@@ -29,6 +29,31 @@ describe('FixedSizeList', () => {
   beforeEach(() => {
     jest.useFakeTimers();
 
+    // JSdom does not do actual layout and so doesn't return meaningful values here.
+    // For the purposes of our tests though, we can mock out semi-meaningful values.
+    Object.defineProperties(HTMLElement.prototype, {
+      clientWidth: {
+        configurable: true,
+        get: function() {
+          return parseInt(this.style.width, 10) || 0;
+        },
+      },
+      clientHeight: {
+        configurable: true,
+        get: function() {
+          return parseInt(this.style.height, 10) || 0;
+        },
+      },
+      scrollHeight: {
+        configurable: true,
+        get: () => Number.MAX_SAFE_INTEGER,
+      },
+      scrollWidth: {
+        configurable: true,
+        get: () => Number.MAX_SAFE_INTEGER,
+      },
+    });
+
     onItemsRendered = jest.fn();
 
     itemRenderer = jest.fn(({ style, ...rest }) => (
@@ -200,7 +225,7 @@ describe('FixedSizeList', () => {
       <FixedSizeList {...defaultProps} />
     );
     const scrollContainer = findScrollContainer(rendered);
-    expect(scrollContainer.props.style.pointerEvents).toBe('');
+    expect(scrollContainer.props.style.pointerEvents).toBe(undefined);
     rendered.getInstance().setState({ isScrolling: true });
     expect(scrollContainer.props.style.pointerEvents).toBe('none');
   });
@@ -363,6 +388,18 @@ describe('FixedSizeList', () => {
       instance.scrollTo(100);
       expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
     });
+
+    it('should ignore values less than zero', () => {
+      const onScroll = jest.fn();
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} onScroll={onScroll} />,
+        document.createElement('div')
+      );
+      instance.scrollTo(100);
+      onScroll.mockClear();
+      instance.scrollTo(-1);
+      expect(onScroll.mock.calls[0][0].scrollOffset).toBe(0);
+    });
   });
 
   describe('scrollToItem method', () => {
@@ -371,14 +408,10 @@ describe('FixedSizeList', () => {
       const rendered = ReactTestRenderer.create(
         <FixedSizeList {...defaultProps} itemCount={3} onScroll={onScroll} />
       );
-      onScroll.mockClear();
-      // Offset should not be negative.
+      expect(onItemsRendered).toMatchSnapshot();
+      onItemsRendered.mockClear();
       rendered.getInstance().scrollToItem(0);
-      expect(onScroll).toHaveBeenCalledWith({
-        scrollDirection: 'backward',
-        scrollOffset: 0,
-        scrollUpdateWasRequested: true,
-      });
+      expect(onItemsRendered).not.toHaveBeenCalled();
     });
 
     it('should scroll to the correct item for align = "auto"', () => {
@@ -447,6 +480,34 @@ describe('FixedSizeList', () => {
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
+    it('should scroll to the correct item for align = "smart"', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} />
+      );
+      // Scroll down enough to show item 10 in the middle.
+      rendered.getInstance().scrollToItem(10, 'smart');
+      // Scrolldn't scroll at all because it's close enough.
+      rendered.getInstance().scrollToItem(9, 'smart');
+      // Should scroll but not center because it's close enough.
+      rendered.getInstance().scrollToItem(6, 'smart');
+      // Item 1 can't align in the middle because it's too close to the beginning.
+      // Scroll up as far as possible though.
+      rendered.getInstance().scrollToItem(1, 'smart');
+      // Item 99 can't align in the middle because it's too close to the end.
+      // Scroll down as far as possible though.
+      rendered.getInstance().scrollToItem(99, 'smart');
+      // This shouldn't scroll at all because it's close enough.
+      rendered.getInstance().scrollToItem(95, 'smart');
+      rendered.getInstance().scrollToItem(99, 'smart');
+      // This should scroll with the 'auto' behavior because it's within a screen.
+      rendered.getInstance().scrollToItem(94, 'smart');
+      rendered.getInstance().scrollToItem(99, 'smart');
+      // This should scroll with the 'center' behavior because it's too far.
+      rendered.getInstance().scrollToItem(90, 'smart');
+      rendered.getInstance().scrollToItem(99, 'smart');
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
     it('should not report isScrolling', () => {
       // Use ReactDOM renderer so the container ref and "onScroll" work correctly.
       const instance = ReactDOM.render(
@@ -456,6 +517,27 @@ describe('FixedSizeList', () => {
       itemRenderer.mockClear();
       instance.scrollToItem(15);
       expect(itemRenderer.mock.calls[0][0].isScrolling).toBe(false);
+    });
+
+    it('should ignore indexes less than zero', () => {
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} />,
+        document.createElement('div')
+      );
+      instance.scrollToItem(20);
+      onItemsRendered.mockClear();
+      instance.scrollToItem(-1);
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should ignore indexes greater than itemCount', () => {
+      const instance = ReactDOM.render(
+        <FixedSizeList {...defaultProps} />,
+        document.createElement('div')
+      );
+      onItemsRendered.mockClear();
+      instance.scrollToItem(defaultProps.itemCount * 2);
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
   });
 

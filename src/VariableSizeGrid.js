@@ -255,6 +255,14 @@ const getOffsetForIndexAndAlignment = (
     itemMetadata.offset - size + scrollbarSize + itemMetadata.size
   );
 
+  if (align === 'smart') {
+    if (scrollOffset >= minOffset - size && scrollOffset <= maxOffset + size) {
+      align = 'auto';
+    } else {
+      align = 'center';
+    }
+  }
+
   switch (align) {
     case 'start':
       return maxOffset;

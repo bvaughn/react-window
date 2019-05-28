@@ -20,6 +20,9 @@ class Example extends Component {
           <button className="ExampleButton" onClick={this.scrollToRow200Auto}>
             Scroll to row 200 (align: auto)
           </button>
+          <button className="ExampleButton" onClick={this.scrollToRow250Smart}>
+            Scroll to row 250 (align: smart)
+          </button>
           <button className="ExampleButton" onClick={this.scrollToRow300Center}>
             Scroll to row 300 (align: center)
           </button>
@@ -40,6 +43,9 @@ class Example extends Component {
 
   scrollToRow200Auto = () => {
     this.listRef.current.scrollToItem(200);
+  };
+  scrollToRow250Smart = () => {
+    this.listRef.current.scrollToItem(250, 'smart');
   };
   scrollToRow300Center = () => {
     this.listRef.current.scrollToItem(300, 'center');

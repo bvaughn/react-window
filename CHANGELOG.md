@@ -1,6 +1,21 @@
 Changelog
 ------------
 
+### 1.8.2
+* ✨ Deprecated grid props `overscanColumnsCount` and `overscanRowsCount` props in favor of more consistently named `overscanColumnCount` and `overscanRowCount`. ([nihgwu](https://github.com/nihgwu) - [#229](https://github.com/bvaughn/react-window/pull/229))
+* 🐛 Fixed shaky elastic scroll problems present in iOS Safari. [#244](https://github.com/bvaughn/react-window/issues/244)
+* 🐛 Fixed RTL edge case bugs and broken scroll-to-item behavior. [#159](https://github.com/bvaughn/react-window/issues/159)
+* 🐛 Fixed broken synchronized scrolling for RTL lists/grids. [#198](https://github.com/bvaughn/react-window/issues/198)
+
+### 1.8.1
+* 🐛 Replaced an incorrect empty-string value for `pointer-events` with `undefined` ([oliviertassinari](https://github.com/oliviertassinari) - [#210](https://github.com/bvaughn/react-window/pull/210))
+
+### 1.8.0
+* 🎉 Added new "smart" align option for grid and list scroll-to-item methods ([gaearon](https://github.com/gaearon) - [#209](https://github.com/bvaughn/react-window/pull/209))
+
+### 1.7.2
+* 🐛 Add guards to avoid invalid scroll offsets when `scrollTo()` is called with a negative offset or when `scrollToItem` is called with invalid indices (negative or too large).
+
 ### 1.7.1
 * 🐛 Fix SSR regression introduced in 1.7.0 - ([Betree](https://github.com/Betree) - [#185](https://github.com/bvaughn/react-window/pull/185))
 

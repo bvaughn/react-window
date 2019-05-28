@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`VariableSizeGrid scrollToItem method should not set invalid offsets when the list contains few items 1`] = `[Function]`;
+
 exports[`VariableSizeGrid scrollToItem method should scroll to the correct item for align = "auto" 1`] = `
 Array [
   Array [
@@ -214,6 +216,95 @@ Array [
       "visibleColumnStopIndex": 9,
       "visibleRowStartIndex": 8,
       "visibleRowStopIndex": 10,
+    },
+  ],
+]
+`;
+
+exports[`VariableSizeGrid scrollToItem method should scroll to the correct item for align = "smart" 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 4,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 5,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 8,
+      "overscanRowStopIndex": 12,
+      "visibleColumnStartIndex": 6,
+      "visibleColumnStopIndex": 9,
+      "visibleRowStartIndex": 9,
+      "visibleRowStopIndex": 11,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 5,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 5,
+      "visibleColumnStartIndex": 1,
+      "visibleColumnStopIndex": 4,
+      "visibleRowStartIndex": 1,
+      "visibleRowStopIndex": 4,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 5,
+      "overscanRowStartIndex": 8,
+      "overscanRowStopIndex": 12,
+      "visibleColumnStartIndex": 1,
+      "visibleColumnStopIndex": 4,
+      "visibleRowStartIndex": 9,
+      "visibleRowStopIndex": 11,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 8,
+      "overscanRowStopIndex": 12,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 9,
+      "visibleRowStopIndex": 11,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 1,
+      "overscanColumnStopIndex": 6,
+      "overscanRowStartIndex": 2,
+      "overscanRowStopIndex": 8,
+      "visibleColumnStartIndex": 2,
+      "visibleColumnStopIndex": 5,
+      "visibleRowStartIndex": 3,
+      "visibleRowStopIndex": 7,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 5,
+      "overscanColumnStopIndex": 9,
+      "overscanRowStartIndex": 8,
+      "overscanRowStopIndex": 12,
+      "visibleColumnStartIndex": 6,
+      "visibleColumnStopIndex": 9,
+      "visibleRowStartIndex": 9,
+      "visibleRowStopIndex": 11,
     },
   ],
 ]
