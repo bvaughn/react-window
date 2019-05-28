@@ -1,7 +1,7 @@
 Changelog
 ------------
 
-### Unreleased
+### 1.8.2
 * ✨ Deprecated grid props `overscanColumnsCount` and `overscanRowsCount` props in favor of more consistently named `overscanColumnCount` and `overscanRowCount`. ([nihgwu](https://github.com/nihgwu) - [#229](https://github.com/bvaughn/react-window/pull/229))
 * 🐛 Fixed shaky elastic scroll problems present in iOS Safari. [#244](https://github.com/bvaughn/react-window/issues/244)
 * 🐛 Fixed RTL edge case bugs and broken scroll-to-item behavior. [#159](https://github.com/bvaughn/react-window/issues/159)
