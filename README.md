@@ -71,7 +71,7 @@ Yes, using the `outerElementType` prop.
 
 Here's a [Code Sandbox demo](https://codesandbox.io/s/4zqx79nww0).
 
-### Can I add padding to a list?
+### Can I add padding to the top and bottom of a list?
 
 Yes, although it requires a bit of inline styling.
 
