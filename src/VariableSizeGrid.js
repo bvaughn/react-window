@@ -19,7 +19,7 @@ type ItemMetadata = {|
   offset: number,
   size: number,
 |};
-type ItemMetadataMap = { [index: number]: ItemMetadata };
+type ItemMetadataMap = { [index: number]: ItemMetadata, ... };
 type InstanceProps = {|
   columnMetadataMap: ItemMetadataMap,
   estimatedColumnWidth: number,
@@ -445,11 +445,11 @@ const VariableSizeGrid = createGridComponent({
       columnIndex,
       rowIndex,
       shouldForceUpdate = true,
-    }: {
+    }: {|
       columnIndex?: number,
       rowIndex?: number,
       shouldForceUpdate: boolean,
-    }) => {
+    |}) => {
       if (typeof columnIndex === 'number') {
         instanceProps.lastMeasuredColumnIndex = Math.min(
           instanceProps.lastMeasuredColumnIndex,

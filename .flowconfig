@@ -5,6 +5,7 @@
 [libs]
 
 [lints]
+implicit-inexact-object=error
 
 [options]
 include_warnings=true
