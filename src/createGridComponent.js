@@ -46,6 +46,22 @@ type OnScrollCallback = ({
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 type ItemStyleCache = { [key: string]: Object };
 
+type OuterProps = {|
+  children: React$Node,
+  className: string | void,
+  onScroll: ScrollEvent => void,
+  style: {
+    [string]: mixed,
+  },
+|};
+
+type InnerProps = {|
+  children: React$Node,
+  style: {
+    [string]: mixed,
+  },
+|};
+
 export type Props<T> = {|
   children: RenderComponent<T>,
   className?: string,
@@ -56,7 +72,7 @@ export type Props<T> = {|
   initialScrollLeft?: number,
   initialScrollTop?: number,
   innerRef?: any,
-  innerElementType?: React$ElementType,
+  innerElementType?: string | React$AbstractComponent<InnerProps, any>,
   innerTagName?: string, // deprecated
   itemData: T,
   itemKey?: (params: {|
@@ -67,7 +83,7 @@ export type Props<T> = {|
   onItemsRendered?: OnItemsRenderedCallback,
   onScroll?: OnScrollCallback,
   outerRef?: any,
-  outerElementType?: React$ElementType,
+  outerElementType?: string | React$AbstractComponent<OuterProps, any>,
   outerTagName?: string, // deprecated
   overscanColumnCount?: number,
   overscanColumnsCount?: number, // deprecated
