@@ -89,7 +89,7 @@ Here's a [Code Sandbox demo](https://codesandbox.io/s/2w8wmlm89p).
 
 ### Does this library support "sticky" items?
 
-Yes, although it requires a small amount of user code. Here's a [Code Sandbox demo](https://codesandbox.io/s/0mk3qwpl4l).
+Yes, although it requires a small amount of user code. Here are Code Sandbox demos for [List](https://codesandbox.io/s/0mk3qwpl4l) and [Grid](https://codesandbox.io/s/xjzrzmxv8q).
 
 ## License
 
