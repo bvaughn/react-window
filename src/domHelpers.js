@@ -21,7 +21,9 @@ export function getScrollbarSize(recalculate?: boolean = false): number {
   return size;
 }
 
-let cachedRTLResult: boolean | null = null;
+export type RTLOffsetType = 'default' | 'negative' | 'reverse';
+
+let cachedRTLResult: RTLOffsetType | null = null;
 
 // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
 // Chrome does not seem to adhere; its scrollLeft values are positive (measured relative to the left).
@@ -29,7 +31,7 @@ let cachedRTLResult: boolean | null = null;
 // The safest way to check this is to intentionally set a negative offset,
 // and then verify that the subsequent "scroll" event matches the negative offset.
 // If it does not match, then we can assume a non-standard RTL scroll implementation.
-export function isRTLOffsetNegative(recalculate?: boolean = false): boolean {
+export function getRTLOffsetType(recalculate?: boolean = false): RTLOffsetType {
   if (cachedRTLResult === null || recalculate) {
     const outerDiv = document.createElement('div');
     const outerStyle = outerDiv.style;
@@ -47,8 +49,16 @@ export function isRTLOffsetNegative(recalculate?: boolean = false): boolean {
 
     ((document.body: any): HTMLBodyElement).appendChild(outerDiv);
 
-    outerDiv.scrollLeft = -10;
-    cachedRTLResult = outerDiv.scrollLeft === -10;
+    if (outerDiv.scrollLeft > 0) {
+      cachedRTLResult = 'default';
+    } else {
+      outerDiv.scrollLeft = 1;
+      if (outerDiv.scrollLeft === 0) {
+        cachedRTLResult = 'negative';
+      } else {
+        cachedRTLResult = 'reverse';
+      }
+    }
 
     ((document.body: any): HTMLBodyElement).removeChild(outerDiv);
 
