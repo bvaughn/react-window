@@ -189,6 +189,76 @@ describe('VariableSizeGrid', () => {
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
+    it('should scroll to the correct item for align = "auto" at the bottom of the grid', () => {
+      getScrollbarSize.mockImplementation(() => 20);
+
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid {...defaultProps} />
+      );
+      onItemsRendered.mockClear();
+
+      // Scroll down to the last row in the list.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 5, rowIndex: 19, align: 'auto' });
+
+      expect(onItemsRendered).toHaveBeenCalledTimes(1);
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleRowStartIndex: 18,
+          visibleRowStopIndex: 19,
+        })
+      );
+      // Repeat the previous scrollToItem call.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 5, rowIndex: 19, align: 'auto' });
+
+      // Shouldn't have been called again
+      expect(onItemsRendered).toHaveBeenCalledTimes(1);
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleRowStartIndex: 18,
+          visibleRowStopIndex: 19,
+        })
+      );
+    });
+
+    it('should scroll to the correct item for align = "auto" at the end of the grid', () => {
+      getScrollbarSize.mockImplementation(() => 20);
+
+      const rendered = ReactTestRenderer.create(
+        <VariableSizeGrid {...defaultProps} width={120} />
+      );
+      onItemsRendered.mockClear();
+
+      // Scroll scross to the last row in the list.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 9, rowIndex: 10, align: 'auto' });
+
+      expect(onItemsRendered).toHaveBeenCalledTimes(1);
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleColumnStartIndex: 8,
+          visibleColumnStopIndex: 9,
+        })
+      );
+      // Repeat the previous scrollToItem call.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 9, rowIndex: 10, align: 'auto' });
+
+      // Shouldn't have been called again
+      expect(onItemsRendered).toHaveBeenCalledTimes(1);
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleColumnStartIndex: 8,
+          visibleColumnStopIndex: 9,
+        })
+      );
+    });
+
     it('should scroll to the correct item for align = "start"', () => {
       const rendered = ReactTestRenderer.create(
         <VariableSizeGrid {...defaultProps} />

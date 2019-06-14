@@ -274,6 +274,8 @@ const getOffsetForIndexAndAlignment = (
     default:
       if (scrollOffset >= minOffset && scrollOffset <= maxOffset) {
         return scrollOffset;
+      } else if (minOffset > maxOffset) {
+        return minOffset;
       } else if (scrollOffset - minOffset < maxOffset - scrollOffset) {
         return minOffset;
       } else {
