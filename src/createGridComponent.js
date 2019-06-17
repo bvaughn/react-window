@@ -368,7 +368,7 @@ export default function createGridComponent({
             case 'negative':
               outerRef.scrollLeft = -scrollLeft;
               break;
-            case 'reverse':
+            case 'positive-ascending':
               outerRef.scrollLeft = scrollLeft;
               break;
             default:
@@ -757,7 +757,7 @@ export default function createGridComponent({
             case 'negative':
               calculatedScrollLeft = -scrollLeft;
               break;
-            case 'default':
+            case 'positive-descending':
               calculatedScrollLeft = scrollWidth - clientWidth - scrollLeft;
               break;
           }

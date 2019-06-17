@@ -21,7 +21,10 @@ export function getScrollbarSize(recalculate?: boolean = false): number {
   return size;
 }
 
-export type RTLOffsetType = 'default' | 'negative' | 'reverse';
+export type RTLOffsetType =
+  | 'negative'
+  | 'positive-descending'
+  | 'positive-ascending';
 
 let cachedRTLResult: RTLOffsetType | null = null;
 
@@ -50,13 +53,13 @@ export function getRTLOffsetType(recalculate?: boolean = false): RTLOffsetType {
     ((document.body: any): HTMLBodyElement).appendChild(outerDiv);
 
     if (outerDiv.scrollLeft > 0) {
-      cachedRTLResult = 'default';
+      cachedRTLResult = 'positive-descending';
     } else {
       outerDiv.scrollLeft = 1;
       if (outerDiv.scrollLeft === 0) {
         cachedRTLResult = 'negative';
       } else {
-        cachedRTLResult = 'reverse';
+        cachedRTLResult = 'positive-ascending';
       }
     }
 
