@@ -117,6 +117,8 @@ const FixedSizeGrid = createGridComponent({
       default:
         if (scrollTop >= minOffset && scrollTop <= maxOffset) {
           return scrollTop;
+          // Because we only take into account the scrollbar size when calculating minOffset
+          // this value can be larger than maxOffset when at the end of the list
         } else if (minOffset > maxOffset) {
           return minOffset;
         } else if (scrollTop - minOffset < maxOffset - scrollTop) {
