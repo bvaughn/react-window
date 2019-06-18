@@ -1,8 +1,10 @@
 {
   "name": "react-window",
-  "version": "1.8.2",
-  "description": "React components for efficiently rendering large, scrollable lists and tabular data",
-  "author": "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)",
+  "version": "1.8.3",
+  "description":
+    "React components for efficiently rendering large, scrollable lists and tabular data",
+  "author":
+    "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)",
   "contributors": [
     "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)"
   ],
@@ -34,10 +36,7 @@
   ],
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
-  "files": [
-    "dist",
-    "src/*.js"
-  ],
+  "files": ["dist", "src/*.js"],
   "scripts": {
     "flow": "flow check --max-warnings=0 src && flow check website",
     "precommit": "lint-staged",
@@ -46,7 +45,8 @@
     "lint": "eslint '**/*.js'",
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
-    "build:flow": "cp flow-template dist/index.cjs.js.flow && cp flow-template dist/index.esm.js.flow",
+    "build:flow":
+      "cp flow-template dist/index.cjs.js.flow && cp flow-template dist/index.esm.js.flow",
     "build:source": "rollup -c",
     "build": "del dist && mkdir dist && yarn build:flow && yarn build:source",
     "start": "rollup -c -w",
@@ -56,10 +56,7 @@
     "website:run": "cd website && yarn start"
   },
   "lint-staged": {
-    "{website,src}/**/*.{js,json,css}": [
-      "prettier --write",
-      "git add"
-    ],
+    "{website,src}/**/*.{js,json,css}": ["prettier --write", "git add"],
     "**/*.js": "eslint --max-warnings 0"
   },
   "dependencies": {
