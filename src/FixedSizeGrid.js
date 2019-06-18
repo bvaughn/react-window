@@ -66,6 +66,8 @@ const FixedSizeGrid = createGridComponent({
         if (scrollLeft >= minOffset && scrollLeft <= maxOffset) {
           return scrollLeft;
         } else if (minOffset > maxOffset) {
+          // Because we only take into account the scrollbar size when calculating minOffset
+          // this value can be larger than maxOffset when at the end of the list
           return minOffset;
         } else if (scrollLeft - minOffset < maxOffset - scrollLeft) {
           return minOffset;
@@ -117,9 +119,9 @@ const FixedSizeGrid = createGridComponent({
       default:
         if (scrollTop >= minOffset && scrollTop <= maxOffset) {
           return scrollTop;
+        } else if (minOffset > maxOffset) {
           // Because we only take into account the scrollbar size when calculating minOffset
           // this value can be larger than maxOffset when at the end of the list
-        } else if (minOffset > maxOffset) {
           return minOffset;
         } else if (scrollTop - minOffset < maxOffset - scrollTop) {
           return minOffset;

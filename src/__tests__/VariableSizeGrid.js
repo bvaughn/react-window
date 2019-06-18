@@ -224,7 +224,7 @@ describe('VariableSizeGrid', () => {
       );
     });
 
-    it('should scroll to the correct item for align = "auto" at the end of the grid', () => {
+    it('should scroll to the correct item for align = "auto" at the right hand side of the grid', () => {
       getScrollbarSize.mockImplementation(() => 20);
 
       const rendered = ReactTestRenderer.create(
