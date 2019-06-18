@@ -3,7 +3,7 @@
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
-import { isRTLOffsetNegative } from './domHelpers';
+import { getRTLOffsetType } from './domHelpers';
 
 import type { TimeoutID } from './timer';
 
@@ -251,18 +251,24 @@ export default function createListComponent({
 
       if (scrollUpdateWasRequested && this._outerRef != null) {
         const outerRef = ((this._outerRef: any): HTMLElement);
+
         // TODO Deprecate direction "horizontal"
         if (direction === 'horizontal' || layout === 'horizontal') {
           if (direction === 'rtl') {
             // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
             // This is not the case for all browsers though (e.g. Chrome reports values as positive, measured relative to the left).
             // So we need to determine which browser behavior we're dealing with, and mimic it.
-            const isNegative = isRTLOffsetNegative();
-            if (isNegative) {
-              outerRef.scrollLeft = -scrollOffset;
-            } else {
-              const { clientWidth, scrollWidth } = outerRef;
-              outerRef.scrollLeft = scrollWidth - clientWidth - scrollOffset;
+            switch (getRTLOffsetType()) {
+              case 'negative':
+                outerRef.scrollLeft = -scrollOffset;
+                break;
+              case 'positive-ascending':
+                outerRef.scrollLeft = scrollOffset;
+                break;
+              default:
+                const { clientWidth, scrollWidth } = outerRef;
+                outerRef.scrollLeft = scrollWidth - clientWidth - scrollOffset;
+                break;
             }
           } else {
             outerRef.scrollLeft = scrollOffset;
@@ -528,16 +534,17 @@ export default function createListComponent({
 
         let scrollOffset = scrollLeft;
         if (direction === 'rtl') {
-          const isNegative = isRTLOffsetNegative();
-
           // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
           // This is not the case for all browsers though (e.g. Chrome reports values as positive, measured relative to the left).
           // It's also easier for this component if we convert offsets to the same format as they would be in for ltr.
           // So the simplest solution is to determine which browser behavior we're dealing with, and convert based on it.
-          if (isNegative) {
-            scrollOffset = -scrollLeft;
-          } else {
-            scrollOffset = scrollWidth - clientWidth - scrollLeft;
+          switch (getRTLOffsetType()) {
+            case 'negative':
+              scrollOffset = -scrollLeft;
+              break;
+            case 'positive-descending':
+              scrollOffset = scrollWidth - clientWidth - scrollLeft;
+              break;
           }
         }
 
