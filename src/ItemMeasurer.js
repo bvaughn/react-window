@@ -1,5 +1,4 @@
 // @flow
-
 import { cloneElement, Component } from 'react';
 import { findDOMNode } from 'react-dom';
 

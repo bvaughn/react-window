@@ -11,6 +11,7 @@ const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
 type DynanmicProps = {|
   estimatedItemSize: number,
+  ItemMeasurer: any
   ...Props<any>,
 |};
 
@@ -461,7 +462,7 @@ const DynamicSizeList = createListComponent({
 
           // Always wrap children in a ItemMeasurer to detect changes in size.
           items.push(
-            createElement(ItemMeasurer, {
+            createElement(this.props.ItemMeasurer || ItemMeasurer, {
               direction,
               layout,
               handleNewMeasurements,
