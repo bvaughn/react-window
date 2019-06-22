@@ -11,7 +11,7 @@ const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
 type DynanmicProps = {|
   estimatedItemSize: number,
-  ItemMeasurer: any
+  ItemMeasurer: any,
   ...Props<any>,
 |};
 
