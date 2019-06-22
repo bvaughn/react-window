@@ -9,7 +9,7 @@ import type { Props, ScrollToAlign } from './createListComponent';
 
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
-type DynanmicProps = {|
+type DynamicProps = {|
   estimatedItemSize: number,
   ItemMeasurer: any,
   ...Props<any>,
@@ -248,7 +248,7 @@ const DynamicSizeList = createListComponent({
   },
 
   initInstanceProps(props: Props<any>, instance: any): InstanceProps {
-    const { estimatedItemSize } = ((props: any): DynanmicProps);
+    const { estimatedItemSize } = ((props: any): DynamicProps);
 
     const instanceProps = {
       estimatedItemSize: estimatedItemSize || DEFAULT_ESTIMATED_ITEM_SIZE,
@@ -462,7 +462,7 @@ const DynamicSizeList = createListComponent({
 
           // Always wrap children in a ItemMeasurer to detect changes in size.
           items.push(
-            createElement(this.props.ItemMeasurer || ItemMeasurer, {
+            createElement(instance.props.ItemMeasurer || ItemMeasurer, {
               direction,
               layout,
               handleNewMeasurements,
