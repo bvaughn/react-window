@@ -23,12 +23,13 @@ const FixedSizeList = createListComponent({
     // TODO Deprecate direction "horizontal"
     const isHorizontal = direction === 'horizontal' || layout === 'horizontal';
     const size = (((isHorizontal ? width : height): any): number);
-    const maxOffset = Math.max(
+    const lastViewportOffset = Math.max(
       0,
-      Math.min(
-        itemCount * ((itemSize: any): number) - size,
-        index * ((itemSize: any): number)
-      )
+      itemCount * ((itemSize: any): number) - size
+    );
+    const maxOffset = Math.min(
+      lastViewportOffset,
+      index * ((itemSize: any): number)
     );
     const minOffset = Math.max(
       0,
@@ -51,14 +52,35 @@ const FixedSizeList = createListComponent({
         return maxOffset;
       case 'end':
         return minOffset;
-      case 'center':
-        return Math.round(minOffset + (maxOffset - minOffset) / 2);
+      case 'center': {
+        // "Centered" offset is usually the average of the min and max
+        // offsets. But near the beginning or end of the list, this math
+        // doesn't produce the actual closest-to-center offset, so we
+        // override.
+        const centered = Math.round(minOffset + (maxOffset - minOffset) / 2);
+        if (centered < Math.ceil(size / 2)) {
+          return 0; // near the beginning
+        } else if (centered > lastViewportOffset + Math.floor(size / 2)) {
+          return lastViewportOffset; // near the end
+        } else {
+          return centered;
+        }
+      }
       case 'auto':
       default:
         if (scrollOffset >= minOffset && scrollOffset <= maxOffset) {
           return scrollOffset;
-        } else if (scrollOffset - minOffset < maxOffset - scrollOffset) {
-          return minOffset;
+        } else if (scrollOffset < minOffset) {
+          // For auto alignment, if size isn't an even multiple of itemSize,
+          // always put the partial item at the end of the viewport because it
+          // looks better than at the beginning. Exception: don't do this if the
+          // viewport is already scrolled to the end.
+          const remainder = size % ((itemSize: any): number);
+          if (minOffset + remainder < lastViewportOffset) {
+            return minOffset + remainder;
+          } else {
+            return minOffset;
+          }
         } else {
           return maxOffset;
         }
@@ -83,14 +105,17 @@ const FixedSizeList = createListComponent({
     const isHorizontal = direction === 'horizontal' || layout === 'horizontal';
     const offset = startIndex * ((itemSize: any): number);
     const size = (((isHorizontal ? width : height): any): number);
+    // How far before the scrollOffset does the first visible item start?
+    // Will be zero if scrollOffset is an item boundary.
+    const startingPartialSize = scrollOffset - offset;
+    const visibleItems = Math.ceil(
+      (size + startingPartialSize) / ((itemSize: any): number)
+    );
     return Math.max(
       0,
       Math.min(
         itemCount - 1,
-        startIndex +
-          Math.floor(
-            (size + (scrollOffset - offset)) / ((itemSize: any): number)
-          )
+        startIndex + visibleItems - 1 // -1 is because stop index is inclusive
       )
     );
   },
