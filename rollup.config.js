@@ -15,12 +15,14 @@ export default [
     output: {
       file: pkg.main,
       format: 'cjs',
+      sourcemap: true,
     },
     external,
     plugins: [
       babel({
         runtimeHelpers: true,
         plugins: ['@babel/transform-runtime'],
+        sourceMaps: true,
       }),
       nodeResolve(),
       commonjs(),
@@ -32,12 +34,14 @@ export default [
     output: {
       file: pkg.module,
       format: 'esm',
+      sourcemap: true,
     },
     external,
     plugins: [
       babel({
         runtimeHelpers: true,
         plugins: [['@babel/transform-runtime', { useESModules: true }]],
+        sourceMaps: true,
       }),
       nodeResolve(),
       commonjs(),
