@@ -31,12 +31,13 @@ const FixedSizeGrid = createGridComponent({
     instanceProps: typeof undefined,
     scrollbarSize: number
   ): number => {
-    const maxOffset = Math.max(
+    const lastColumnOffset = Math.max(
       0,
-      Math.min(
-        columnCount * ((columnWidth: any): number) - width,
-        columnIndex * ((columnWidth: any): number)
-      )
+      columnCount * ((columnWidth: any): number) - width
+    );
+    const maxOffset = Math.min(
+      lastColumnOffset,
+      columnIndex * ((columnWidth: any): number)
     );
     const minOffset = Math.max(
       0,
@@ -60,7 +61,18 @@ const FixedSizeGrid = createGridComponent({
       case 'end':
         return minOffset;
       case 'center':
-        return Math.round(minOffset + (maxOffset - minOffset) / 2);
+        // "Centered" offset is usually the average of the min and max.
+        // But near the edges of the list, this doesn't hold true.
+        const middleOffset = Math.round(
+          minOffset + (maxOffset - minOffset) / 2
+        );
+        if (middleOffset < Math.ceil(width / 2)) {
+          return 0; // near the beginning
+        } else if (middleOffset > lastColumnOffset + Math.floor(width / 2)) {
+          return lastColumnOffset; // near the end
+        } else {
+          return middleOffset;
+        }
       case 'auto':
       default:
         if (scrollLeft >= minOffset && scrollLeft <= maxOffset) {
@@ -69,7 +81,7 @@ const FixedSizeGrid = createGridComponent({
           // Because we only take into account the scrollbar size when calculating minOffset
           // this value can be larger than maxOffset when at the end of the list
           return minOffset;
-        } else if (scrollLeft - minOffset < maxOffset - scrollLeft) {
+        } else if (scrollLeft < minOffset) {
           return minOffset;
         } else {
           return maxOffset;
@@ -85,12 +97,13 @@ const FixedSizeGrid = createGridComponent({
     instanceProps: typeof undefined,
     scrollbarSize: number
   ): number => {
-    const maxOffset = Math.max(
+    const lastRowOffset = Math.max(
       0,
-      Math.min(
-        rowCount * ((rowHeight: any): number) - height,
-        rowIndex * ((rowHeight: any): number)
-      )
+      rowCount * ((rowHeight: any): number) - height
+    );
+    const maxOffset = Math.min(
+      lastRowOffset,
+      rowIndex * ((rowHeight: any): number)
     );
     const minOffset = Math.max(
       0,
@@ -114,7 +127,18 @@ const FixedSizeGrid = createGridComponent({
       case 'end':
         return minOffset;
       case 'center':
-        return Math.round(minOffset + (maxOffset - minOffset) / 2);
+        // "Centered" offset is usually the average of the min and max.
+        // But near the edges of the list, this doesn't hold true.
+        const middleOffset = Math.round(
+          minOffset + (maxOffset - minOffset) / 2
+        );
+        if (middleOffset < Math.ceil(height / 2)) {
+          return 0; // near the beginning
+        } else if (middleOffset > lastRowOffset + Math.floor(height / 2)) {
+          return lastRowOffset; // near the end
+        } else {
+          return middleOffset;
+        }
       case 'auto':
       default:
         if (scrollTop >= minOffset && scrollTop <= maxOffset) {
@@ -123,7 +147,7 @@ const FixedSizeGrid = createGridComponent({
           // Because we only take into account the scrollbar size when calculating minOffset
           // this value can be larger than maxOffset when at the end of the list
           return minOffset;
-        } else if (scrollTop - minOffset < maxOffset - scrollTop) {
+        } else if (scrollTop < minOffset) {
           return minOffset;
         } else {
           return maxOffset;
@@ -149,14 +173,14 @@ const FixedSizeGrid = createGridComponent({
     scrollLeft: number
   ): number => {
     const left = startIndex * ((columnWidth: any): number);
+    const numVisibleColumns = Math.ceil(
+      (width + scrollLeft - left) / ((columnWidth: any): number)
+    );
     return Math.max(
       0,
       Math.min(
         columnCount - 1,
-        startIndex +
-          Math.floor(
-            (width + (scrollLeft - left)) / ((columnWidth: any): number)
-          )
+        startIndex + numVisibleColumns - 1 // -1 is because stop index is inclusive
       )
     );
   },
@@ -175,13 +199,15 @@ const FixedSizeGrid = createGridComponent({
     startIndex: number,
     scrollTop: number
   ): number => {
-    const left = startIndex * ((rowHeight: any): number);
+    const top = startIndex * ((rowHeight: any): number);
+    const numVisibleRows = Math.ceil(
+      (height + scrollTop - top) / ((rowHeight: any): number)
+    );
     return Math.max(
       0,
       Math.min(
         rowCount - 1,
-        startIndex +
-          Math.floor((height + (scrollTop - left)) / ((rowHeight: any): number))
+        startIndex + numVisibleRows - 1 // -1 is because stop index is inclusive
       )
     );
   },

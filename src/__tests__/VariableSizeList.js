@@ -29,6 +29,32 @@ describe('VariableSizeList', () => {
   beforeEach(() => {
     jest.useFakeTimers();
 
+    // JSdom does not do actual layout and so doesn't return meaningful values here.
+    // For the purposes of our tests though, we can mock out semi-meaningful values.
+    // This mock is required for e.g. "onScroll" tests to work properly.
+    Object.defineProperties(HTMLElement.prototype, {
+      clientWidth: {
+        configurable: true,
+        get: function() {
+          return parseInt(this.style.width, 10) || 0;
+        },
+      },
+      clientHeight: {
+        configurable: true,
+        get: function() {
+          return parseInt(this.style.height, 10) || 0;
+        },
+      },
+      scrollHeight: {
+        configurable: true,
+        get: () => Number.MAX_SAFE_INTEGER,
+      },
+      scrollWidth: {
+        configurable: true,
+        get: () => Number.MAX_SAFE_INTEGER,
+      },
+    });
+
     itemRenderer = jest.fn(({ style, ...rest }) => (
       <div style={style}>{JSON.stringify(rest, null, 2)}</div>
     ));
@@ -142,6 +168,40 @@ describe('VariableSizeList', () => {
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
 
+    it('scroll with align = "auto" should work with partially-visible items', () => {
+      const rendered = ReactTestRenderer.create(
+        // Create list where items don't fit exactly into container.
+        // The container has space for 3 1/3 items.
+        <VariableSizeList
+          {...defaultProps}
+          itemCount={100}
+          itemSize={() => 30}
+        />
+      );
+      // Scroll down enough to show item 10 at the bottom.
+      // Should show 4 items: 3 full and one partial at the beginning
+      rendered.getInstance().scrollToItem(10, 'auto');
+      // No need to scroll again; item 9 is already visible.
+      // Because there's no scrolling, it won't call onItemsRendered.
+      rendered.getInstance().scrollToItem(9, 'auto');
+      // Scroll to near the end. #96 will be shown as partial.
+      rendered.getInstance().scrollToItem(99, 'auto');
+      // Scroll back to show #96 fully. This will cause #99 to be shown as a
+      // partial. Because #96 was already shown previously as a partial, all
+      // props of the onItemsRendered will be the same. This means that even
+      // though a scroll happened in the DOM, onItemsRendered won't be called.
+      rendered.getInstance().scrollToItem(96, 'auto');
+      // Scroll forward again. Because item #99 was already shown partially,
+      // all props of the onItemsRendered will be the same.
+      rendered.getInstance().scrollToItem(99, 'auto');
+      // Scroll to the second item. A partial fifth item should
+      // be shown after it.
+      rendered.getInstance().scrollToItem(1, 'auto');
+      // Scroll to the first item. Now the fourth item should be a partial.
+      rendered.getInstance().scrollToItem(0, 'auto');
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
     it('should scroll to the correct item for align = "start"', () => {
       const onItemsRendered = jest.fn();
       const rendered = ReactTestRenderer.create(
@@ -212,6 +272,36 @@ describe('VariableSizeList', () => {
       // Item 1 can't align in the middle because it's too close to the beginning.
       // Scroll up as far as possible though.
       rendered.getInstance().scrollToItem(1, 'smart');
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+  });
+
+  describe('onScroll', () => {
+    it('scrolling should report partial items correctly in onItemsRendered', () => {
+      // Use ReactDOM renderer so the container ref works correctly.
+      const instance = render(
+        <VariableSizeList
+          {...defaultProps}
+          initialScrollOffset={20}
+          itemCount={100}
+          itemSize={() => 25}
+        />,
+        document.createElement('div')
+      );
+      // Scroll 2 items fwd, but thanks to the initialScrollOffset, we should
+      // still be showing partials on both ends.
+      simulateScroll(instance, 70);
+      // Scroll a little fwd to cause partials to be hidden
+      simulateScroll(instance, 75);
+      // Scroll backwards to show partials again
+      simulateScroll(instance, 70);
+      // Scroll near the end so that the last item is shown
+      // as a partial.
+      simulateScroll(instance, 96 * 25 - 5);
+      // Scroll to the end. No partials.
+      simulateScroll(instance, 96 * 25);
+      // Verify that backwards scrolling near the end works OK.
+      simulateScroll(instance, 96 * 25 - 5);
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
   });

@@ -1,5 +1,159 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`VariableSizeGrid onScroll scrolling should report partial items correctly in onItemsRendered 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 3,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 5,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 2,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 4,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 6,
+      "visibleColumnStartIndex": 1,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 1,
+      "visibleRowStopIndex": 5,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 1,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 1,
+      "overscanRowStopIndex": 6,
+      "visibleColumnStartIndex": 2,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 2,
+      "visibleRowStopIndex": 5,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 6,
+      "visibleColumnStartIndex": 1,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 1,
+      "visibleRowStopIndex": 5,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 96,
+      "overscanColumnStopIndex": 99,
+      "overscanRowStartIndex": 94,
+      "overscanRowStopIndex": 99,
+      "visibleColumnStartIndex": 97,
+      "visibleColumnStopIndex": 99,
+      "visibleRowStartIndex": 95,
+      "visibleRowStopIndex": 99,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 97,
+      "overscanColumnStopIndex": 99,
+      "overscanRowStartIndex": 95,
+      "overscanRowStopIndex": 99,
+      "visibleColumnStartIndex": 98,
+      "visibleColumnStopIndex": 99,
+      "visibleRowStartIndex": 96,
+      "visibleRowStopIndex": 99,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 96,
+      "overscanColumnStopIndex": 99,
+      "overscanRowStartIndex": 94,
+      "overscanRowStopIndex": 99,
+      "visibleColumnStartIndex": 97,
+      "visibleColumnStopIndex": 99,
+      "visibleRowStartIndex": 95,
+      "visibleRowStopIndex": 99,
+    },
+  ],
+]
+`;
+
+exports[`VariableSizeGrid scrollToItem method scroll with align = "auto" should work with partially-visible items 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 3,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 4,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 2,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 7,
+      "overscanColumnStopIndex": 11,
+      "overscanRowStartIndex": 6,
+      "overscanRowStopIndex": 11,
+      "visibleColumnStartIndex": 8,
+      "visibleColumnStopIndex": 10,
+      "visibleRowStartIndex": 7,
+      "visibleRowStopIndex": 10,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 96,
+      "overscanColumnStopIndex": 99,
+      "overscanRowStartIndex": 95,
+      "overscanRowStopIndex": 99,
+      "visibleColumnStartIndex": 97,
+      "visibleColumnStopIndex": 99,
+      "visibleRowStartIndex": 96,
+      "visibleRowStopIndex": 99,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 4,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 5,
+      "visibleColumnStartIndex": 1,
+      "visibleColumnStopIndex": 3,
+      "visibleRowStartIndex": 1,
+      "visibleRowStopIndex": 4,
+    },
+  ],
+  Array [
+    Object {
+      "overscanColumnStartIndex": 0,
+      "overscanColumnStopIndex": 3,
+      "overscanRowStartIndex": 0,
+      "overscanRowStopIndex": 4,
+      "visibleColumnStartIndex": 0,
+      "visibleColumnStopIndex": 2,
+      "visibleRowStartIndex": 0,
+      "visibleRowStopIndex": 3,
+    },
+  ],
+]
+`;
+
 exports[`VariableSizeGrid scrollToItem method should not set invalid offsets when the list contains few items 1`] = `[Function]`;
 
 exports[`VariableSizeGrid scrollToItem method should scroll to the correct item for align = "auto" 1`] = `

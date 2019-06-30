@@ -241,6 +241,13 @@ const PROPS = [
           not be called if items are re-rendered for other reasons (e.g. a
           change in <code>isScrolling</code> or <code>data</code> params).
         </p>
+        <p>
+          The <code>visibleStartIndex</code> and <code>visibleStopIndex</code>
+          parameters are the first and last index currently visible, including
+          items that are partially visible. Note that scrolling a
+          partially-visible item into full visibility might not trigger this
+          callback because the item indices might not change.
+        </p>
         <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_ON_ITEMS_RENDERED} />
         </div>
@@ -299,7 +306,7 @@ const PROPS = [
     type: 'string',
   },
   {
-    defaultValue: 1,
+    defaultValue: 2,
     description: (
       <Fragment>
         <p>
@@ -317,8 +324,11 @@ const PROPS = [
           </li>
         </ul>
         <p>
-          Note that overscanning too much can negatively impact performance. By
-          default, List overscans by one item.
+          Note that overscanning too much can negatively impact performance. To
+          support tabbing and accessibility, List will overscan at least one
+          item, even if this value is set to zero. When items are partially
+          visible at the start and/or end of the viewport, overscanning starts
+          after the partially visible items.
         </p>
       </Fragment>
     ),
@@ -401,13 +411,14 @@ const METHODS = [
         <ul>
           <li>
             auto (default) - Scroll as little as possible to ensure the item is
-            visible. (If the item is already visible, it won't scroll at all.)
+            fully visible. If the item is already fully visible, it won't scroll
+            at all.
           </li>
           <li>
-            smart - If the item is already visible, don't scroll at all. If it
-            is less than one viewport away, scroll as little as possible so that
-            it becomes visible. If it is more than one viewport away, scroll so
-            that it is centered within the list.
+            smart - If the item is already fully visible, don't scroll at all.
+            If it's less than one viewport away, scroll as little as possible so
+            that it becomes visible. If it is more than one viewport away,
+            scroll so that it is centered within the list.
           </li>
           <li>center - Center align the item within the list.</li>
           <li>
