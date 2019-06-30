@@ -1,6 +1,10 @@
 Changelog
 ------------
 
+### 1.8.4
+* 🐛 Fixed size list and grid components now accurately report `visibleStopIndex` in `onItemsRendered`. (Previously this value was incorrectly reported as one index higher.) - ([justingrant](https://github.com/justingrant) - [#274](https://github.com/bvaughn/react-window/pull/274))
+* 🐛 Fixed size list and grid components `scrollToItem` "center" mode when the item being scrolled to is near the viewport edge. - ([justingrant](https://github.com/justingrant) - [#274](https://github.com/bvaughn/react-window/pull/274))
+
 ### 1.8.3
 * 🐛 Edge case bug-fix for `scrollToItem` when scrollbars are present ([MarkFalconbridge](https://github.com/MarkFalconbridge) - [#267](https://github.com/bvaughn/react-window/pull/267))
 * 🐛 Fixed RTL scroll offsets for non-Chromium Edge ([MarkFalconbridge](https://github.com/MarkFalconbridge) - [#268](https://github.com/bvaughn/react-window/pull/268))
