@@ -81,7 +81,7 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
 
     // Force sync measure for the initial mount.
     // This is necessary to support the DynamicSizeList layout logic.
-    this._measureItem(true);
+    this._measureItem(true, true);
 
     if (typeof ResizeObserver !== 'undefined') {
       // Watch for resizes due to changed content,
@@ -106,7 +106,7 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
     });
   }
 
-  _measureItem = (isCommitPhase: boolean) => {
+  _measureItem = (isCommitPhase: boolean, isMount: boolean) => {
     const {
       direction,
       layout,
@@ -128,7 +128,7 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
           ? Math.ceil(node.offsetWidth)
           : Math.ceil(node.offsetHeight);
 
-      if (oldSize !== newSize) {
+      if (oldSize !== newSize || isMount) {
         handleNewMeasurements(index, newSize, isCommitPhase);
       }
     }
@@ -154,6 +154,6 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
   };
 
   _onResize = () => {
-    this._measureItem(false);
+    this._measureItem(false, false);
   };
 }
