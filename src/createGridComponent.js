@@ -3,7 +3,7 @@
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
-import { getScrollbarSize, isRTLOffsetNegative } from './domHelpers';
+import { getScrollbarSize, getRTLOffsetType } from './domHelpers';
 
 import type { TimeoutID } from './timer';
 
@@ -46,6 +46,22 @@ type OnScrollCallback = ({
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 type ItemStyleCache = { [key: string]: Object };
 
+type OuterProps = {|
+  children: React$Node,
+  className: string | void,
+  onScroll: ScrollEvent => void,
+  style: {
+    [string]: mixed,
+  },
+|};
+
+type InnerProps = {|
+  children: React$Node,
+  style: {
+    [string]: mixed,
+  },
+|};
+
 export type Props<T> = {|
   children: RenderComponent<T>,
   className?: string,
@@ -56,7 +72,7 @@ export type Props<T> = {|
   initialScrollLeft?: number,
   initialScrollTop?: number,
   innerRef?: any,
-  innerElementType?: React$ElementType,
+  innerElementType?: string | React$AbstractComponent<InnerProps, any>,
   innerTagName?: string, // deprecated
   itemData: T,
   itemKey?: (params: {|
@@ -67,7 +83,7 @@ export type Props<T> = {|
   onItemsRendered?: OnItemsRenderedCallback,
   onScroll?: OnScrollCallback,
   outerRef?: any,
-  outerElementType?: React$ElementType,
+  outerElementType?: string | React$AbstractComponent<OuterProps, any>,
   outerTagName?: string, // deprecated
   overscanColumnCount?: number,
   overscanColumnsCount?: number, // deprecated
@@ -348,12 +364,17 @@ export default function createGridComponent({
         // So we need to determine which browser behavior we're dealing with, and mimic it.
         const outerRef = ((this._outerRef: any): HTMLElement);
         if (direction === 'rtl') {
-          const isNegative = isRTLOffsetNegative();
-          if (isNegative) {
-            outerRef.scrollLeft = -scrollLeft;
-          } else {
-            const { clientWidth, scrollWidth } = outerRef;
-            outerRef.scrollLeft = scrollWidth - clientWidth - scrollLeft;
+          switch (getRTLOffsetType()) {
+            case 'negative':
+              outerRef.scrollLeft = -scrollLeft;
+              break;
+            case 'positive-ascending':
+              outerRef.scrollLeft = scrollLeft;
+              break;
+            default:
+              const { clientWidth, scrollWidth } = outerRef;
+              outerRef.scrollLeft = scrollWidth - clientWidth - scrollLeft;
+              break;
           }
         } else {
           outerRef.scrollLeft = Math.max(0, scrollLeft);
@@ -726,18 +747,20 @@ export default function createGridComponent({
 
         const { direction } = this.props;
 
+        // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
+        // This is not the case for all browsers though (e.g. Chrome reports values as positive, measured relative to the left).
+        // It's also easier for this component if we convert offsets to the same format as they would be in for ltr.
+        // So the simplest solution is to determine which browser behavior we're dealing with, and convert based on it.
         let calculatedScrollLeft = scrollLeft;
         if (direction === 'rtl') {
-          const isNegative = isRTLOffsetNegative();
-
-          // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
-          // This is not the case for all browsers though (e.g. Chrome reports values as positive, measured relative to the left).
-          // It's also easier for this component if we convert offsets to the same format as they would be in for ltr.
-          // So the simplest solution is to determine which browser behavior we're dealing with, and convert based on it.
-          if (isNegative) {
-            calculatedScrollLeft = -scrollLeft;
-          } else {
-            calculatedScrollLeft = scrollWidth - clientWidth - scrollLeft;
+          // eslint-disable-next-line default-case
+          switch (getRTLOffsetType()) {
+            case 'negative':
+              calculatedScrollLeft = -scrollLeft;
+              break;
+            case 'positive-descending':
+              calculatedScrollLeft = scrollWidth - clientWidth - scrollLeft;
+              break;
           }
         }
 

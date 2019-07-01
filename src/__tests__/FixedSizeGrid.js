@@ -29,6 +29,7 @@ describe('FixedSizeGrid', () => {
 
     // JSdom does not do actual layout and so doesn't return meaningful values here.
     // For the purposes of our tests though, we can mock out semi-meaningful values.
+    // This mock is required for e.g. "onScroll" tests to work properly.
     Object.defineProperties(HTMLElement.prototype, {
       clientWidth: {
         configurable: true,
@@ -86,7 +87,7 @@ describe('FixedSizeGrid', () => {
 
   it('should render a grid of items', () => {
     ReactTestRenderer.create(<FixedSizeGrid {...defaultProps} />);
-    expect(itemRenderer).toHaveBeenCalledTimes(24);
+    expect(itemRenderer).toHaveBeenCalledTimes(15);
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
@@ -493,9 +494,9 @@ describe('FixedSizeGrid', () => {
       expect(onItemsRendered).toHaveBeenLastCalledWith(
         expect.objectContaining({
           visibleColumnStartIndex: 1,
-          visibleColumnStopIndex: 3,
+          visibleColumnStopIndex: 2,
           visibleRowStartIndex: 4,
-          visibleRowStopIndex: 8,
+          visibleRowStopIndex: 7,
         })
       );
 
@@ -505,7 +506,7 @@ describe('FixedSizeGrid', () => {
       expect(onItemsRendered).toHaveBeenLastCalledWith(
         expect.objectContaining({
           visibleColumnStartIndex: 1,
-          visibleColumnStopIndex: 3,
+          visibleColumnStopIndex: 2,
         })
       );
 
@@ -515,7 +516,7 @@ describe('FixedSizeGrid', () => {
       expect(onItemsRendered).toHaveBeenLastCalledWith(
         expect.objectContaining({
           visibleRowStartIndex: 8,
-          visibleRowStopIndex: 12,
+          visibleRowStopIndex: 11,
         })
       );
     });
@@ -567,6 +568,126 @@ describe('FixedSizeGrid', () => {
       // Scroll left to column 0, without changing scrollTop
       rendered.getInstance().scrollToItem({ columnIndex: 0, align: 'auto' });
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('scroll with align = "auto" should work with partially-visible items', () => {
+      const rendered = ReactTestRenderer.create(
+        // Create list where items don't fit exactly into container.
+        // The container has space for 3 1/3 items.
+        <FixedSizeGrid {...defaultProps} columnWidth={70} rowHeight={30} />
+      );
+      // Scroll down enough to show row 10 at the bottom a nd column 10 at the right.
+      // Should show 4 rows: 3 full and one partial at the beginning
+      // Should show 3 columns: 2 full and one partial at the beginning
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 10, rowIndex: 10, align: 'auto' });
+      // No need to scroll again; row and column 9 are already visible.
+      // Because there's no scrolling, it won't call onItemsRendered.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 9, rowIndex: 9, align: 'auto' });
+      // Scroll to near the end. row 96 and column 97 will be partly visible.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 99, rowIndex: 99, align: 'auto' });
+      // Scroll back to row 91 and column 97.
+      // This will cause row 99 and column 99 to be partly viisble
+      // Even though a scroll happened,  none of the items rendered have changed.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 97, rowIndex: 96, align: 'auto' });
+      // Scroll forward again. Because row and column #99 were already partly visible,
+      // all props of the onItemsRendered will be the same.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 99, rowIndex: 99, align: 'auto' });
+      // Scroll to the second row and column.
+      // This should leave row 4 and column 3 partly visible.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 1, rowIndex: 1, align: 'auto' });
+      // Scroll to the first row and column.
+      // This should leave row 3 and column 2 partly visible.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 0, rowIndex: 0, align: 'auto' });
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should scroll to the correct item for align = "auto" at the bottom of the grid', () => {
+      getScrollbarSize.mockImplementation(() => 20);
+
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid {...defaultProps} rowCount={20} rowHeight={30} />
+      );
+      onItemsRendered.mockClear();
+
+      // Scroll down to the last row in the list.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 5, rowIndex: 19, align: 'auto' });
+
+      expect(onItemsRendered).toHaveBeenCalledTimes(1);
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleRowStartIndex: 17,
+          visibleRowStopIndex: 19,
+        })
+      );
+      // Repeat the previous scrollToItem call.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 5, rowIndex: 19, align: 'auto' });
+
+      // Shouldn't have been called again
+      expect(onItemsRendered).toHaveBeenCalledTimes(1);
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleRowStartIndex: 17,
+          visibleRowStopIndex: 19,
+        })
+      );
+    });
+
+    it('should scroll to the correct item for align = "auto" at the right hand side of the grid', () => {
+      getScrollbarSize.mockImplementation(() => 20);
+
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeGrid
+          {...defaultProps}
+          columnCount={20}
+          columnWidth={50}
+          width={120}
+        />
+      );
+      onItemsRendered.mockClear();
+
+      // Scroll across to the last row in the list.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 19, rowIndex: 19, align: 'auto' });
+
+      expect(onItemsRendered).toHaveBeenCalledTimes(1);
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleColumnStartIndex: 18,
+          visibleColumnStopIndex: 19,
+        })
+      );
+      // Repeat the previous scrollToItem call.
+      rendered
+        .getInstance()
+        .scrollToItem({ columnIndex: 19, rowIndex: 19, align: 'auto' });
+
+      // Shouldn't have been called again
+      expect(onItemsRendered).toHaveBeenCalledTimes(1);
+      expect(onItemsRendered).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          visibleColumnStartIndex: 18,
+          visibleColumnStopIndex: 19,
+        })
+      );
     });
 
     it('should scroll to the correct item for align = "start"', () => {
@@ -872,6 +993,45 @@ describe('FixedSizeGrid', () => {
       onScroll.mockClear();
       simulateScroll(instance, { scrollLeft: 200, scrollTop: 200 });
       expect(onScroll.mock.calls[0][0].scrollUpdateWasRequested).toBe(false);
+    });
+
+    it('scrolling should report partial items correctly in onItemsRendered', () => {
+      // Use ReactDOM renderer so the container ref works correctly.
+      const instance = ReactDOM.render(
+        <FixedSizeGrid
+          {...defaultProps}
+          initialScrollLeft={20}
+          initialScrollTop={10}
+        />,
+        document.createElement('div')
+      );
+      // grid 200w x 100h
+      // columnWidth: 100, rowHeight: 25,
+      // columnCount: 100, rowCount: 100
+      // Scroll 2 items fwd, but thanks to the initialScrollOffset, we should
+      // still be showing partials on both ends.
+      instance.scrollTo({ scrollLeft: 150, scrollTop: 40 });
+      // Scroll a little fwd to cause partials to be hidden
+      instance.scrollTo({ scrollLeft: 200, scrollTop: 50 });
+      // Scroll backwards to show partials again
+      instance.scrollTo({ scrollLeft: 150, scrollTop: 40 });
+      // Scroll near the end so that the last item is shown
+      // as a partial.
+      instance.scrollTo({
+        scrollLeft: 98 * 100 - 5,
+        scrollTop: 96 * 25 - 5,
+      });
+      // Scroll to the end. No partials.
+      instance.scrollTo({
+        scrollLeft: 98 * 100,
+        scrollTop: 96 * 25,
+      });
+      // Verify that backwards scrolling near the end works OK.
+      instance.scrollTo({
+        scrollLeft: 98 * 100 - 5,
+        scrollTop: 96 * 25 - 5,
+      });
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
   });
 
