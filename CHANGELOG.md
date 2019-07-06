@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.8.5
+* ✨ Added UMD (dev and prod) build - ([emmanueltouzery](https://github.com/emmanueltouzery) - [#281](https://github.com/bvaughn/react-window/pull/281))
+
 ### 1.8.4
 * 🐛 Fixed size list and grid components now accurately report `visibleStopIndex` in `onItemsRendered`. (Previously this value was incorrectly reported as one index higher.) - ([justingrant](https://github.com/justingrant) - [#274](https://github.com/bvaughn/react-window/pull/274))
 * 🐛 Fixed size list and grid components `scrollToItem` "center" mode when the item being scrolled to is near the viewport edge. - ([justingrant](https://github.com/justingrant) - [#274](https://github.com/bvaughn/react-window/pull/274))
