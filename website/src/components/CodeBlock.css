@@ -14,3 +14,8 @@
 .cm-s-material .cm-comment {
   color: #647e8a;
 }
+
+/* Need this extra little bit of selectivity (div) */
+div.cm-s-material .cm-tag {
+  color:#FF7588;
+}
