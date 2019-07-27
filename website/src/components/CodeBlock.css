@@ -14,3 +14,8 @@
 .cm-s-material .cm-comment {
   color: #647e8a;
 }
+
+/* Accessibility/Lighthouse tweak */
+div.cm-s-material .cm-tag {
+  color:#FF7588;
+}

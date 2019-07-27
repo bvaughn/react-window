@@ -8,6 +8,7 @@ export const MobileGitHubButton = () => (
     href="https://github.com/bvaughn/react-window"
   >
     <svg className={styles.MobileGitHubButtonIcon} viewBox="0 0 24 24">
+      <title>Github Icon</title>
       <path d="M0 0h24v24H0z" fill="none" />
       <path
         d="
