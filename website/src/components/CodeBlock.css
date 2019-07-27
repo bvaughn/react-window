@@ -15,7 +15,7 @@
   color: #647e8a;
 }
 
-/* Need this extra little bit of selectivity (div) */
+/* Accessibility/Lighthouse tweak */
 div.cm-s-material .cm-tag {
   color:#FF7588;
 }
