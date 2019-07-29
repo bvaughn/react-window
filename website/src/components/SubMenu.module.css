@@ -29,7 +29,7 @@
 .SideNavLinkActiveDark {
   display: block;
   position: relative;
-  color: #D21922;
+  color: #d21922;
 }
 
 .SideNavLinkActiveLight:after,
