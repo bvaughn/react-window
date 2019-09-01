@@ -22,6 +22,7 @@ Learn more at [react-window.now.sh](https://react-window.now.sh/):
 
 * [`react-virtualized-auto-sizer`](https://npmjs.com/package/react-virtualized-auto-sizer): HOC that grows to fit all of the available space and passes the width and height values to its child.
 * [`react-window-infinite-loader`](https://npmjs.com/package/react-window-infinite-loader): Helps break large data sets down into chunks that can be just-in-time loaded as they are scrolled into view. It can also be used to create infinite loading lists (e.g. Facebook or Twitter).
+* [`react-vtree`](https://www.npmjs.com/package/react-vtree): Lightweight and flexible solution to render large tree structures (e.g., file system).
 
 ## Frequently asked questions
 
