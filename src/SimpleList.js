@@ -2,6 +2,8 @@
 
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
+// $FlowFixMe Cannot import flushSync because there is no flushSync export in react-dom.
+import { flushSync as maybeFlushSync } from 'react-dom';
 import { cancelTimeout, requestTimeout } from './timer';
 
 import type { TimeoutID } from './timer';
@@ -35,6 +37,12 @@ type InnerProps = {|
   children: React$Node,
   style: Style,
 |};
+
+// Polyfill flushSync for older React versions.
+const flushSync =
+  typeof maybeFlushSync === 'function'
+    ? maybeFlushSync
+    : callback => callback();
 
 export type Props = {|
   className?: string,
@@ -350,25 +358,32 @@ export default class List extends PureComponent<Props, State> {
     const { clientHeight, scrollHeight, scrollTop } = event.currentTarget;
     const { onScroll } = this.props;
 
-    if (typeof onScroll === 'function') {
-      onScroll(event);
-    }
-
-    this.setState(prevState => {
-      // Prevent Safari's elastic scrolling from causing visual shaking when scrolling past bounds.
-      const maxScrollOffset = Math.min(scrollTop, scrollHeight - clientHeight);
-      const safeScrollTop = Math.max(0, maxScrollOffset);
-
-      if (prevState.scrollTop === safeScrollTop) {
-        // Scroll position may have been updated by cDM/cDU,
-        // In which case we don't need to trigger another render,
-        return null;
+    // Scroll events should be processed as quickly as possible, even in concurrent mode, to avoid checkerboarding.
+    // Wrapping the onScroll callback as well ensures that any rendering it schedules is included in this batch.
+    flushSync(() => {
+      if (typeof onScroll === 'function') {
+        onScroll(event);
       }
 
-      return {
-        scrollTop: safeScrollTop,
-        scrollUpdateWasRequested: false,
-      };
+      this.setState(prevState => {
+        // Prevent Safari's elastic scrolling from causing visual shaking when scrolling past bounds.
+        const maxScrollOffset = Math.min(
+          scrollTop,
+          scrollHeight - clientHeight
+        );
+        const safeScrollTop = Math.max(0, maxScrollOffset);
+
+        if (prevState.scrollTop === safeScrollTop) {
+          // Scroll position may have been updated by cDM/cDU,
+          // In which case we don't need to trigger another render,
+          return null;
+        }
+
+        return {
+          scrollTop: safeScrollTop,
+          scrollUpdateWasRequested: false,
+        };
+      });
     });
   };
 
