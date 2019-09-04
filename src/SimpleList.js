@@ -2,7 +2,7 @@
 
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
-// $FlowFixMe Cannot import flushSync because there is no flushSync export in react-dom.
+// $FlowFixMe
 import { flushSync as maybeFlushSync } from 'react-dom';
 import { cancelTimeout, requestTimeout } from './timer';
 

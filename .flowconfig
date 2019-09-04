@@ -8,6 +8,5 @@
 
 [options]
 include_warnings=true
-suppress_type=$FlowFixMe
 
 [strict]
