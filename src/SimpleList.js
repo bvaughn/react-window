@@ -57,8 +57,6 @@ export type Props = {|
 type State = {|
   scrollTop: number,
   scrollUpdateWasRequested: boolean,
-  startIndex: number,
-  stopIndex: number,
 |};
 
 const defaultItemKey = (index: number) => index;
@@ -81,13 +79,9 @@ export default class List extends PureComponent<Props, State> {
         ? this.props.initialScrollOffset
         : 0;
 
-    const [startIndex, stopIndex] = this._getRangeToRender(scrollTop);
-
     this.state = {
       scrollTop,
       scrollUpdateWasRequested: false,
-      startIndex,
-      stopIndex,
     };
   }
 
@@ -99,13 +93,9 @@ export default class List extends PureComponent<Props, State> {
         return null;
       }
 
-      const [startIndex, stopIndex] = this._getRangeToRender(scrollTop);
-
       return {
         scrollTop: scrollTop,
         scrollUpdateWasRequested: true,
-        startIndex,
-        stopIndex,
       };
     });
   }
@@ -162,33 +152,48 @@ export default class List extends PureComponent<Props, State> {
     }
   }
 
+  static getDerivedStateFromProps(
+    nextProps: Props,
+    prevState: State
+  ): $Shape<State> | null {
+    if (process.env.NODE_ENV !== 'production') {
+      validateProps(nextProps);
+    }
+    return null;
+  }
+
   componentDidMount() {
-    const { initialScrollOffset } = this.props;
-    const { startIndex, stopIndex } = this.state;
+    const { initialScrollOffset, itemCount } = this.props;
 
     if (typeof initialScrollOffset === 'number' && this._outerRef != null) {
       const outerRef = ((this._outerRef: any): HTMLElement);
       outerRef.scrollTop = initialScrollOffset;
     }
 
-    this._callOnItemsDisplayed(startIndex, stopIndex);
+    if (itemCount > 0) {
+      const [startIndex, stopIndex] = this._getRangeToRender();
+
+      this._callOnItemsDisplayed(startIndex, stopIndex);
+    }
+
     this._resetPointerEventsDebounced();
   }
 
   componentDidUpdate() {
-    const {
-      scrollTop,
-      scrollUpdateWasRequested,
-      startIndex,
-      stopIndex,
-    } = this.state;
+    const { itemCount } = this.props;
+    const { scrollTop, scrollUpdateWasRequested } = this.state;
 
     if (scrollUpdateWasRequested && this._outerRef != null) {
       const outerRef = ((this._outerRef: any): HTMLElement);
       outerRef.scrollTop = scrollTop;
     }
 
-    this._callOnItemsDisplayed(startIndex, stopIndex);
+    if (itemCount > 0) {
+      const [startIndex, stopIndex] = this._getRangeToRender();
+
+      this._callOnItemsDisplayed(startIndex, stopIndex);
+    }
+
     this._resetPointerEventsDebounced();
   }
 
@@ -211,7 +216,8 @@ export default class List extends PureComponent<Props, State> {
       style,
       width,
     } = this.props;
-    const { startIndex, stopIndex } = this.state;
+
+    const [startIndex, stopIndex] = this._getRangeToRender();
 
     const items = [];
     if (itemCount > 0) {
@@ -262,8 +268,12 @@ export default class List extends PureComponent<Props, State> {
         ref: this._innerRefSetter,
         style: {
           height: itemSize * itemCount,
-          pointerEvents: 'none',
           width: '100%',
+
+          // Note that it's easier to always render with pointer events disabled,
+          // and avoid tracking the extra bit of "is scrolling" state.
+          // After commit, we'll reset the style on a debounced.
+          pointerEvents: 'none',
         },
       })
     );
@@ -287,8 +297,9 @@ export default class List extends PureComponent<Props, State> {
   _getItemStyleCache: (itemSize: number) => ItemStyleCache;
   _getItemStyleCache = memoizeOne((itemSize: number) => ({}));
 
-  _getRangeToRender(scrollTop: number): [number, number] {
+  _getRangeToRender(): [number, number] {
     const { height, itemCount, itemSize } = this.props;
+    const { scrollTop } = this.state;
 
     if (itemCount === 0) {
       return [0, 0];
@@ -354,13 +365,9 @@ export default class List extends PureComponent<Props, State> {
         return null;
       }
 
-      const [startIndex, stopIndex] = this._getRangeToRender(safeScrollTop);
-
       return {
         scrollTop: safeScrollTop,
         scrollUpdateWasRequested: false,
-        startIndex,
-        stopIndex,
       };
     });
   };
@@ -407,5 +414,36 @@ export default class List extends PureComponent<Props, State> {
     // This enables us to cache during the most perfrormance sensitive times (when scrolling)
     // while also preventing the cache from growing unbounded.
     this._getItemStyleCache(-1);
+  };
+}
+
+let validateProps = ((null: any): (props: Props) => void);
+if (process.env.NODE_ENV !== 'production') {
+  validateProps = ({ height, itemRenderer, itemSize }: Props): void => {
+    if (typeof itemRenderer !== 'function') {
+      throw Error(
+        'An invalid "itemRenderer" prop has been specified. ' +
+          'Value should be a function that returns React elements. ' +
+          `"${
+            itemRenderer === null ? 'null' : typeof itemRenderer
+          }" was specified.`
+      );
+    }
+
+    if (typeof itemSize !== 'number') {
+      throw Error(
+        'An invalid "itemSize" prop has been specified. ' +
+          'Value should be a number. ' +
+          `"${itemSize === null ? 'null' : typeof itemSize}" was specified.`
+      );
+    }
+
+    if (typeof height !== 'number') {
+      throw Error(
+        'An invalid "height" prop has been specified. ' +
+          'Lists must specify a number for height. ' +
+          `"${height === null ? 'null' : typeof height}" was specified.`
+      );
+    }
   };
 }
