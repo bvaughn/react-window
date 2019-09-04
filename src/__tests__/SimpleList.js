@@ -113,6 +113,30 @@ describe('SimpleList', () => {
     expect(itemRenderer).toHaveBeenCalled();
   });
 
+  describe('initialScrollOffset', () => {
+    it('should render offset 0 if no initialScrollOffset prop is specified', () => {
+      const ref = React.createRef();
+      ReactDOM.render(
+        <SimpleList {...defaultProps} outerRef={ref} />,
+        document.createElement('div')
+      );
+      expect(ref.current.scrollTop).toBe(0);
+    });
+
+    it('should render and update the scroll offset based on initialScrollOffset', () => {
+      const ref = React.createRef();
+      ReactDOM.render(
+        <SimpleList
+          {...defaultProps}
+          initialScrollOffset={50}
+          outerRef={ref}
+        />,
+        document.createElement('div')
+      );
+      expect(ref.current.scrollTop).toBe(50);
+    });
+  });
+
   describe('scrollbar handling', () => {
     it('should set width to "100%" to avoid unnecessary horizontal scrollbar', () => {
       const innerRef = createRef();

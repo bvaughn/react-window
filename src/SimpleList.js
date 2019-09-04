@@ -82,14 +82,14 @@ export default class List extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
+    const { initialScrollOffset } = props;
+
     const scrollTop =
-      typeof this.props.initialScrollOffset === 'number'
-        ? this.props.initialScrollOffset
-        : 0;
+      typeof initialScrollOffset === 'number' ? initialScrollOffset : 0;
 
     this.state = {
       scrollTop,
-      scrollUpdateWasRequested: false,
+      scrollUpdateWasRequested: typeof initialScrollOffset === 'number',
     };
   }
 
@@ -171,38 +171,11 @@ export default class List extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { initialScrollOffset, itemCount } = this.props;
-
-    if (typeof initialScrollOffset === 'number' && this._outerRef != null) {
-      const outerRef = ((this._outerRef: any): HTMLElement);
-      outerRef.scrollTop = initialScrollOffset;
-    }
-
-    if (itemCount > 0) {
-      const [startIndex, stopIndex] = this._getRangeToRender();
-
-      this._callOnItemsDisplayed(startIndex, stopIndex);
-    }
-
-    this._resetPointerEventsDebounced();
+    this._commitHook();
   }
 
   componentDidUpdate() {
-    const { itemCount } = this.props;
-    const { scrollTop, scrollUpdateWasRequested } = this.state;
-
-    if (scrollUpdateWasRequested && this._outerRef != null) {
-      const outerRef = ((this._outerRef: any): HTMLElement);
-      outerRef.scrollTop = scrollTop;
-    }
-
-    if (itemCount > 0) {
-      const [startIndex, stopIndex] = this._getRangeToRender();
-
-      this._callOnItemsDisplayed(startIndex, stopIndex);
-    }
-
-    this._resetPointerEventsDebounced();
+    this._commitHook();
   }
 
   componentWillUnmount() {
@@ -297,11 +270,28 @@ export default class List extends PureComponent<Props, State> {
     }
   );
 
+  _commitHook() {
+    const { itemCount } = this.props;
+    const { scrollTop, scrollUpdateWasRequested } = this.state;
+
+    if (scrollUpdateWasRequested && this._outerRef != null) {
+      const outerRef = ((this._outerRef: any): HTMLElement);
+      outerRef.scrollTop = scrollTop;
+    }
+
+    if (itemCount > 0) {
+      const [startIndex, stopIndex] = this._getRangeToRender();
+
+      this._callOnItemsDisplayed(startIndex, stopIndex);
+    }
+
+    this._resetPointerEventsDebounced();
+  }
+
   // Lazily create and cache item styles while scrolling,
   // So that pure component sCU will prevent re-renders.
-  // We maintain this cache, and pass a style prop rather than index,
+  // We maintain this cache, and pass a size prop rather than index,
   // So that List can clear cached styles and force item re-render if necessary
-
   _getItemStyleCache: (itemSize: number) => ItemStyleCache;
   _getItemStyleCache = memoizeOne((itemSize: number) => ({}));
 

@@ -1,15 +1,24 @@
 import { SimpleList as List } from 'react-window';
 
-const Example = () => (
-  <List
-    height={150}
-    itemCount={1000}
-    itemRenderer={
-      ({ index, key, style }) => (
-        <div key={key} style={style}>Row {index}</div>
-      )
-    }
-    itemSize={35}
-    width={300}
-  />
-);
+// In this example "itemsArray" is an Array of strings
+// It could bea ny other type of data (e.g. Set, iterable, sparse list).
+function Example({ itemsArray }) {
+  return (
+    <List
+      height={150}
+      itemCount={itemsArray.length}
+      itemRenderer={({ index, key, style }) => {
+        // "key" is used by React to more efficiently update the row.
+        // "style" is provided by react-window to position the row.
+        // "index" specifies which item this row should render.
+        return (
+          <div key={key} style={style}>
+            {itemsArray[index]}
+          </div>
+        );
+      }}
+      itemSize={35}
+      width={300}
+    />
+  );
+}
