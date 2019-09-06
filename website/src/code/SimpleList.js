@@ -7,12 +7,13 @@ function Example({ itemsArray }) {
     <List
       height={150}
       itemCount={itemsArray.length}
-      itemRenderer={({ index, key, style }) => {
+      itemRenderer={({ domProperties, index, key, style }) => {
         // "key" is used by React to more efficiently update the row.
         // "style" is provided by react-window to position the row.
+        // "domProperties" sohuld be spread onto the top level DOM element(s).
         // "index" specifies which item this row should render.
         return (
-          <div key={key} style={style}>
+          <div key={key} style={style} {...domProperties}>
             {itemsArray[index]}
           </div>
         );

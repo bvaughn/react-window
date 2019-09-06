@@ -74,7 +74,7 @@ describe('SimpleList', () => {
 
   it('should render a list of rows', () => {
     ReactTestRenderer.create(<SimpleList {...defaultProps} />);
-    expect(itemRenderer).toHaveBeenCalledTimes(5);
+    expect(itemRenderer).toHaveBeenCalled();
     expect(onItemsDisplayed.mock.calls).toMatchSnapshot();
   });
 
@@ -94,7 +94,8 @@ describe('SimpleList', () => {
     expect(itemRenderer).toHaveBeenCalled();
   });
 
-  // TODO Deprecate direction "horizontal"
+  // TODO Add tests for pre-rendering and scrolling
+
   it('should re-render items if direction changes', () => {
     spyOn(console, 'warn'); // Ingore legacy prop warning
 

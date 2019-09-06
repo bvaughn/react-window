@@ -4,6 +4,12 @@ import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
 // $FlowFixMe
 import { flushSync as maybeFlushSync } from 'react-dom';
+// $FlowFixMe
+import {
+  unstable_IdlePriority as IdlePriority,
+  unstable_runWithPriority as runWithPriority,
+} from 'scheduler';
+import { detectDisplayLockingSupport } from './domHelpers';
 import { cancelTimeout, requestTimeout } from './timer';
 
 import type { TimeoutID } from './timer';
@@ -15,6 +21,7 @@ type Style = {
 };
 
 type itemRendererFn = ({|
+  domProperties: Object,
   index: number,
   key: string | number,
   style: Style,
@@ -38,11 +45,15 @@ type InnerProps = {|
   style: Style,
 |};
 
+type PrerenderMode = 'none' | 'idle' | 'idle+debounce';
+
 // Polyfill flushSync for older React versions.
 const flushSync =
   typeof maybeFlushSync === 'function'
     ? maybeFlushSync
     : callback => callback();
+
+const DEFAULT_MAX_NUM_PRERENDER_ROWS = 25;
 
 export type Props = {|
   className?: string,
@@ -54,10 +65,12 @@ export type Props = {|
   itemKey?: (index: number) => string | number,
   itemRenderer: itemRendererFn,
   itemSize: number,
+  maxNumPrerenderRows?: number,
   onItemsDisplayed?: onItemsDisplayedFn,
   onScroll?: ScrollEvent => void,
   outerRef?: any,
   outerElementType?: string | React$AbstractComponent<OuterProps, any>,
+  prerenderMode: PrerenderMode,
   style?: Object,
   width: number | string,
 |};
@@ -65,15 +78,32 @@ export type Props = {|
 type State = {|
   scrollTop: number,
   scrollUpdateWasRequested: boolean,
+  startIndex: number,
+  stopIndex: number,
 |};
 
 const defaultItemKey = (index: number) => index;
 
 const RESET_POINTER_EVENTS_DEBOUNCE_INTERVAL = 150;
 
+const hiddenDOMProperties = {
+  hidden: true,
+};
+
+const invisibleDOMProperties = {
+  hidden: true,
+  rendersubtree: 'invisible',
+};
+
+const visibleDOMProperties = {
+  rendersubtree: 'visible',
+};
+
 export default class List extends PureComponent<Props, State> {
   _innerRef: ?HTMLElement;
+  _isDisplayLockingSupported: boolean = detectDisplayLockingSupport();
   _outerRef: ?HTMLElement;
+  _prerenderOverscanRowsTimeoutID: TimeoutID | null = null;
   _resetPointerEventsTimeoutID: TimeoutID | null = null;
 
   // Always use explicit constructor for React components.
@@ -87,9 +117,13 @@ export default class List extends PureComponent<Props, State> {
     const scrollTop =
       typeof initialScrollOffset === 'number' ? initialScrollOffset : 0;
 
+    const [startIndex, stopIndex] = this._getVisibleIndicesForOffset(scrollTop);
+
     this.state = {
       scrollTop,
       scrollUpdateWasRequested: typeof initialScrollOffset === 'number',
+      startIndex,
+      stopIndex,
     };
   }
 
@@ -101,9 +135,18 @@ export default class List extends PureComponent<Props, State> {
         return null;
       }
 
+      const [startIndex, stopIndex] = this._getVisibleIndicesForOffset(
+        scrollTop
+      );
+
+      const isSubset =
+        startIndex >= prevState.startIndex && stopIndex <= prevState.stopIndex;
+
       return {
         scrollTop: scrollTop,
         scrollUpdateWasRequested: true,
+        startIndex: isSubset ? prevState.startIndex : startIndex,
+        stopIndex: isSubset ? prevState.stopIndex : stopIndex,
       };
     });
   }
@@ -182,6 +225,10 @@ export default class List extends PureComponent<Props, State> {
     if (this._resetPointerEventsTimeoutID !== null) {
       cancelTimeout(this._resetPointerEventsTimeoutID);
     }
+
+    if (this._prerenderOverscanRowsTimeoutID !== null) {
+      cancelTimeout(this._prerenderOverscanRowsTimeoutID);
+    }
   }
 
   render() {
@@ -197,31 +244,61 @@ export default class List extends PureComponent<Props, State> {
       style,
       width,
     } = this.props;
+    const { scrollTop, startIndex, stopIndex } = this.state;
 
-    const [startIndex, stopIndex] = this._getRangeToRender();
+    const [
+      visibleStartIndex,
+      visibleStopIndex,
+    ] = this._getVisibleIndicesForOffset(scrollTop);
 
     const items = [];
     if (itemCount > 0) {
       const itemStyleCache = this._getItemStyleCache(itemSize);
 
       for (let index = startIndex; index <= stopIndex; index++) {
+        const isHidden = index < visibleStartIndex || index > visibleStopIndex;
+        const isDisplayLocked = this._isDisplayLockingSupported && isHidden;
+
+        const styleKey = isDisplayLocked ? `${index}!` : index;
+
         let style;
-        if (itemStyleCache.hasOwnProperty(index)) {
-          style = itemStyleCache[index];
+        if (itemStyleCache.hasOwnProperty(styleKey)) {
+          style = itemStyleCache[styleKey];
         } else {
-          itemStyleCache[index] = style = {
+          style = {
             position: 'absolute',
             left: 0,
             top: index * itemSize,
             height: itemSize,
             width: '100%',
           };
+
+          if (isDisplayLocked) {
+            // Override default hidden style of display:none,
+            // because it would interfere with the renderSubtree API.
+            style.display = 'block';
+          }
+
+          itemStyleCache[styleKey] = style;
+        }
+
+        let domProperties;
+        if (this._isDisplayLockingSupported) {
+          domProperties = isHidden
+            ? invisibleDOMProperties
+            : visibleDOMProperties;
+        } else {
+          domProperties = isHidden ? hiddenDOMProperties : null;
         }
 
         items.push(
           itemRenderer({
+            domProperties,
             key: itemKey(index),
             index,
+            ref: isDisplayLocked
+              ? this._refSetterForDisplayLockingOnly
+              : undefined,
             style,
           })
         );
@@ -251,8 +328,8 @@ export default class List extends PureComponent<Props, State> {
           height: itemSize * itemCount,
           width: '100%',
 
-          // Note that it's easier to always render with pointer events disabled,
-          // and avoid tracking the extra bit of "is scrolling" state.
+          // Note that it's more efficient to always render with pointer events disabled,
+          // and avoid tracking an extra bit of "is scrolling" state.
           // After commit, we'll reset the style on a debounced.
           pointerEvents: 'none',
         },
@@ -271,7 +348,7 @@ export default class List extends PureComponent<Props, State> {
   );
 
   _commitHook() {
-    const { itemCount } = this.props;
+    const { itemCount, prerenderMode } = this.props;
     const { scrollTop, scrollUpdateWasRequested } = this.state;
 
     if (scrollUpdateWasRequested && this._outerRef != null) {
@@ -280,12 +357,24 @@ export default class List extends PureComponent<Props, State> {
     }
 
     if (itemCount > 0) {
-      const [startIndex, stopIndex] = this._getRangeToRender();
+      const [startIndex, stopIndex] = this._getVisibleIndicesForOffset(
+        scrollTop
+      );
 
       this._callOnItemsDisplayed(startIndex, stopIndex);
     }
 
     this._resetPointerEventsDebounced();
+
+    // Schedule an update to pre-render rows at idle priority.
+    // This will make the list more responsive to subsequent scrolling.
+    if (typeof runWithPriority === 'function') {
+      if (prerenderMode === 'idle') {
+        this._prerenderOverscanRows();
+      } else if (prerenderMode === 'idle+debounce') {
+        this._prerenderOverscanRowsDebounced();
+      }
+    }
   }
 
   // Lazily create and cache item styles while scrolling,
@@ -295,9 +384,8 @@ export default class List extends PureComponent<Props, State> {
   _getItemStyleCache: (itemSize: number) => ItemStyleCache;
   _getItemStyleCache = memoizeOne((itemSize: number) => ({}));
 
-  _getRangeToRender(): [number, number] {
+  _getVisibleIndicesForOffset(scrollTop: number): [number, number] {
     const { height, itemCount, itemSize } = this.props;
-    const { scrollTop } = this.state;
 
     if (itemCount === 0) {
       return [0, 0];
@@ -369,9 +457,19 @@ export default class List extends PureComponent<Props, State> {
           return null;
         }
 
+        const [startIndex, stopIndex] = this._getVisibleIndicesForOffset(
+          safeScrollTop
+        );
+
+        const isSubset =
+          startIndex >= prevState.startIndex &&
+          stopIndex <= prevState.stopIndex;
+
         return {
           scrollTop: safeScrollTop,
-          scrollUpdateWasRequested: false,
+          scrollUpdateWasRequested: true,
+          startIndex: isSubset ? prevState.startIndex : startIndex,
+          stopIndex: isSubset ? prevState.stopIndex : stopIndex,
         };
       });
     });
@@ -393,7 +491,69 @@ export default class List extends PureComponent<Props, State> {
     }
   };
 
-  _resetPointerEventsDebounced = () => {
+  _prerenderOverscanRowsDebounced() {
+    if (this._prerenderOverscanRowsTimeoutID !== null) {
+      cancelTimeout(this._prerenderOverscanRowsTimeoutID);
+    }
+
+    this._prerenderOverscanRowsTimeoutID = requestTimeout(
+      this._prerenderOverscanRows,
+      RESET_POINTER_EVENTS_DEBOUNCE_INTERVAL
+    );
+  }
+
+  _prerenderOverscanRows = () => {
+    this._prerenderOverscanRowsTimeoutID = null;
+
+    runWithPriority(IdlePriority, () => {
+      this.setState(prevState => {
+        const {
+          itemCount,
+          maxNumPrerenderRows = DEFAULT_MAX_NUM_PRERENDER_ROWS,
+        } = this.props;
+
+        const [startIndex, stopIndex] = this._getVisibleIndicesForOffset(
+          prevState.scrollTop
+        );
+
+        const numRowsPerViewport = stopIndex - startIndex;
+        const numPrerenderRows = Math.min(
+          numRowsPerViewport,
+          maxNumPrerenderRows
+        );
+
+        const nextStartIndex = Math.max(0, startIndex - numPrerenderRows);
+        const nextStopIndex = Math.min(
+          itemCount - 1,
+          stopIndex + numPrerenderRows
+        );
+
+        if (
+          prevState.startIndex === nextStartIndex &&
+          prevState.stopIndex === nextStopIndex
+        ) {
+          return null;
+        }
+
+        return {
+          startIndex: nextStartIndex,
+          stopIndex: nextStopIndex,
+        };
+      });
+    });
+  };
+
+  _refSetterForDisplayLockingOnly = (ref: any): void => {
+    // If the browser supports the display locking API,
+    // tell it to do work in the background to prepare the display locked row.
+    if (this._isDisplayLockingSupported) {
+      if (ref != null && ref.hidden) {
+        ref.updateRendering();
+      }
+    }
+  };
+
+  _resetPointerEventsDebounced() {
     if (this._resetPointerEventsTimeoutID !== null) {
       cancelTimeout(this._resetPointerEventsTimeoutID);
     }
@@ -402,7 +562,7 @@ export default class List extends PureComponent<Props, State> {
       this._resetPointerEvents,
       RESET_POINTER_EVENTS_DEBOUNCE_INTERVAL
     );
-  };
+  }
 
   _resetPointerEvents = () => {
     this._resetPointerEventsTimeoutID = null;
