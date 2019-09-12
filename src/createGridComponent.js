@@ -50,6 +50,10 @@ type OuterProps = {|
   children: React$Node,
   className: string | void,
   onScroll: ScrollEvent => void,
+  columnStartIndex: number,
+  columnStopIndex: number,
+  rowStartIndex: number,
+  rowStopIndex: number,
   style: {
     [string]: mixed,
   },
@@ -462,6 +466,10 @@ export default function createGridComponent({
           className,
           onScroll: this._onScroll,
           ref: this._outerRefSetter,
+          columnStartIndex,
+          columnStopIndex,
+          rowStartIndex,
+          rowStopIndex,
           style: {
             position: 'relative',
             height,
