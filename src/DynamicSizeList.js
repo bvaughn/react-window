@@ -123,12 +123,13 @@ const getEstimatedTotalSize = (
     totalMeasuredSize,
   }: InstanceProps
 ) => {
-  const simpleEstimatedTotalSize = itemCount * estimatedItemSize
+  const simpleEstimatedTotalSize = itemCount * estimatedItemSize;
   const newEstimatedTotalSize = totalMeasuredSize + (itemCount - lastMeasuredIndex - 1) * estimatedItemSize;
+
   if (newEstimatedTotalSize < 0) {
-    return simpleEstimatedTotalSize
+    return simpleEstimatedTotalSize;
   } else {
-    return newEstimatedTotalSize
+    return newEstimatedTotalSize;
   }
 }
   
