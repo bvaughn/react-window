@@ -66,7 +66,7 @@ export type Props<T> = {|
   innerTagName?: string, // deprecated
   itemCount: number,
   itemData: T,
-  itemKey?: (index: number, data: T) => any,
+  itemKey: (index: number, data: T) => any,
   itemSize: itemSize,
   layout: Layout,
   onItemsRendered?: onItemsRenderedCallback,
