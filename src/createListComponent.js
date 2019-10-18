@@ -167,6 +167,7 @@ export default function createListComponent({
       layout: 'vertical',
       overscanCount: 2,
       useIsScrolling: false,
+      itemKey: defaultItemKey,
     };
 
     state: State = {
@@ -298,7 +299,7 @@ export default function createListComponent({
         innerTagName,
         itemCount,
         itemData,
-        itemKey = defaultItemKey,
+        itemKey,
         layout,
         outerElementType,
         outerTagName,
