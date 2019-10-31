@@ -610,13 +610,16 @@ export default function createGridComponent({
       if (itemStyleCache.hasOwnProperty(key)) {
         style = itemStyleCache[key];
       } else {
+        const offset = getColumnOffset(
+          this.props,
+          columnIndex,
+          this._instanceProps
+        );
+        const isRtl = direction === 'rtl';
         itemStyleCache[key] = style = {
           position: 'absolute',
-          [direction === 'rtl' ? 'right' : 'left']: getColumnOffset(
-            this.props,
-            columnIndex,
-            this._instanceProps
-          ),
+          left: isRtl ? undefined : offset,
+          right: isRtl ? offset : undefined,
           top: getRowOffset(this.props, rowIndex, this._instanceProps),
           height: getRowHeight(this.props, rowIndex, this._instanceProps),
           width: getColumnWidth(this.props, columnIndex, this._instanceProps),
