@@ -466,9 +466,12 @@ export default function createListComponent({
         const isHorizontal =
           direction === 'horizontal' || layout === 'horizontal';
 
+        const isRtl = direction === 'rtl';
+        const offsetHorizontal = isHorizontal ? offset : 0;
         itemStyleCache[index] = style = {
           position: 'absolute',
-          [direction === 'rtl' ? 'right' : 'left']: isHorizontal ? offset : 0,
+          left: isRtl ? undefined : offsetHorizontal,
+          right: isRtl ? offsetHorizontal : undefined,
           top: !isHorizontal ? offset : 0,
           height: !isHorizontal ? size : '100%',
           width: isHorizontal ? size : '100%',
