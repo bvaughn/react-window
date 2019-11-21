@@ -37,6 +37,7 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "files": ["dist", "src/*.js"],
+  "sideEffects": false,
   "scripts": {
     "flow": "flow check --max-warnings=0 src && flow check website",
     "precommit": "lint-staged",
