@@ -7,7 +7,7 @@
   
 > 1) React window improves the responsiveness of your user interface by passing only a small portion of your data to the React reconciler.
 > 2) React window reduces the memory footprint of your application when displaying large datasets and prevent out of memory errors.
-> 3) React windows reduce the need for your web services to support a paging interface.
+> 3) React window reduce the need for your web services to support a paging interface.
 
 [![NPM registry](https://img.shields.io/npm/v/react-window.svg?style=for-the-badge)](https://yarnpkg.com/en/package/react-window) [![Travis](https://img.shields.io/badge/ci-travis-green.svg?style=for-the-badge)](https://travis-ci.org/bvaughn/react-window) [![NPM license](https://img.shields.io/badge/license-mit-red.svg?style=for-the-badge)](LICENSE.md)
 
