@@ -3,7 +3,7 @@
 > React components for efficiently rendering large lists and tabular data
 
 > React window will only display a portion of your data but enable the user to scroll effortlessly through large datasets by updating what is displayed in the window.
-> It solves 3 important problems that are frequently encountered in software development.
+> React windows  solves 3 important problems that are frequently encountered in software development.
   
 > 1) By passing only a small portion of your data to the React reconciler it will improve the responsiveness of your UX.
 > 2) It will reduce the memory footprint of your application when displaying large datasets and prevent out of memory errors.
