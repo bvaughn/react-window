@@ -3,11 +3,10 @@
 > React components for efficiently rendering large lists and tabular data
 
 > React window will display only a portion of your data and enable the user to scroll effortlessly through large datasets.
-> React window solves 3 important problems that are frequently encountered in software development.
+> React window solves 2 important problems that are frequently encountered in software development.
   
 > 1) React window improves the responsiveness of your user interface by passing only a small portion of your data to the React reconciler.
 > 2) React window reduces the memory footprint of your application when displaying large datasets and prevents out of memory errors.
-> 3) React window reduces the need for your web services to support a paging interface.
 
 [![NPM registry](https://img.shields.io/npm/v/react-window.svg?style=for-the-badge)](https://yarnpkg.com/en/package/react-window) [![Travis](https://img.shields.io/badge/ci-travis-green.svg?style=for-the-badge)](https://travis-ci.org/bvaughn/react-window) [![NPM license](https://img.shields.io/badge/license-mit-red.svg?style=for-the-badge)](LICENSE.md)
 
