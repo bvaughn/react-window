@@ -4,7 +4,7 @@
 
 React window基于仅渲染大数据中的部分数据（刚好填充满视窗）的方法，来帮助我们解决一些常见的的性能瓶颈问题：
 
-1. 它减少了初始渲染和处理更新是的耗时
+1. 它减少了初始渲染和处理更新时的耗时
 2. 减少内存占用，从而避免大量DOM节点引起的内存泄漏.
 
 [![NPM registry](https://img.shields.io/npm/v/react-window.svg?style=for-the-badge)](https://yarnpkg.com/en/package/react-window) [![Travis](https://img.shields.io/badge/ci-travis-green.svg?style=for-the-badge)](https://travis-ci.org/bvaughn/react-window) [![NPM license](https://img.shields.io/badge/license-mit-red.svg?style=for-the-badge)](LICENSE.md)
@@ -26,7 +26,7 @@ Learn more at [react-window.now.sh](https://react-window.now.sh/):
 ## 相关库信息
 
 * [`react-virtualized-auto-sizer`](https://npmjs.com/package/react-virtualized-auto-sizer): 高阶组件：动态适配可用的空间，并且支持传入width和height值到子组件
-* [`react-window-infinite-loader`](https://npmjs.com/package/react-window-infinite-loader): 帮助大数据分组和根据视图滚动实时加载。也可以被用于UC华UN构建无限加载的列表中(e.g. Facebook or Twitter).
+* [`react-window-infinite-loader`](https://npmjs.com/package/react-window-infinite-loader): 帮助大数据分组和根据视图滚动实时加载。也可以被用于无限加载的列表中(e.g. Facebook or Twitter).
 * [`react-vtree`](https://www.npmjs.com/package/react-vtree):
 一个轻量灵活的解决大数据目录结构渲染的库（比如文件系统目录结构）
 
@@ -65,7 +65,7 @@ PS: 添加一个`react-virtualized`列表到一个CRA(create-react-app)项目中
 
 ### 列表支持懒加载数据么?
 
-支持，我推荐使用 [`react-window-infinite-loader` package](https://npmjs.com/package/react-window-infinite-loader):
+支持，推荐使用 [`react-window-infinite-loader` package](https://npmjs.com/package/react-window-infinite-loader):
 
 <img width="368" alt="screen shot 2019-03-07 at 7 32 32 pm" src="https://user-images.githubusercontent.com/29597/54006733-653a1480-4113-11e9-907b-08ca5e27b3f9.png">
 
@@ -73,7 +73,7 @@ PS: 添加一个`react-virtualized`列表到一个CRA(create-react-app)项目中
 
 ### 可以绑定自定义属性和事件处理么?
 
-可以, using the `outerElementType` prop.
+可以, 使用 `outerElementType` 属性.
 
 <img width="412" alt="Screen Shot 2019-03-12 at 8 58 09 AM" src="https://user-images.githubusercontent.com/29597/54215333-f9ee9a80-44a4-11e9-9142-34c67026d950.png">
 
