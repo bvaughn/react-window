@@ -244,7 +244,12 @@ export default function createListComponent({
       }
 
       this._window = window;
-      if (this._outerRef != null && this._outerRef.parentNode && this._outerRef.parentNode.ownerDocument && this._outerRef.parentNode.ownerDocument.defaultView) {
+      if (
+        this._outerRef != null &&
+        this._outerRef.parentNode &&
+        this._outerRef.parentNode.ownerDocument &&
+        this._outerRef.parentNode.ownerDocument.defaultView
+      ) {
         this._window = this._outerRef.parentNode.ownerDocument.defaultView;
       }
 

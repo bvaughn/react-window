@@ -18,7 +18,11 @@ export function cancelTimeout(timeoutID: TimeoutID, hostWindow: any) {
   hostWindow.cancelAnimationFrame(timeoutID.id);
 }
 
-export function requestTimeout(callback: Function, delay: number, hostWindow: any): TimeoutID {
+export function requestTimeout(
+  callback: Function,
+  delay: number,
+  hostWindow: any
+): TimeoutID {
   const start = now();
 
   function tick() {

@@ -352,7 +352,11 @@ export default function createGridComponent({
           outerRef.scrollTop = initialScrollTop;
         }
 
-        if (this._outerRef.parentNode && this._outerRef.parentNode.ownerDocument && this._outerRef.parentNode.ownerDocument.defaultView) {
+        if (
+          this._outerRef.parentNode &&
+          this._outerRef.parentNode.ownerDocument &&
+          this._outerRef.parentNode.ownerDocument.defaultView
+        ) {
           this._window = this._outerRef.parentNode.ownerDocument.defaultView;
         }
       }
