@@ -160,6 +160,7 @@ export default function createListComponent({
     _instanceProps: any = initInstanceProps(this.props, this);
     _outerRef: ?HTMLDivElement;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
+    _window: ?any;
 
     static defaultProps = {
       direction: 'ltr',
@@ -242,6 +243,11 @@ export default function createListComponent({
         }
       }
 
+      this._window = window;
+      if (this._outerRef != null && this._outerRef.parentNode && this._outerRef.parentNode.ownerDocument && this._outerRef.parentNode.ownerDocument.defaultView) {
+        this._window = this._outerRef.parentNode.ownerDocument.defaultView;
+      }
+
       this._callPropsCallbacks();
     }
 
@@ -283,7 +289,7 @@ export default function createListComponent({
 
     componentWillUnmount() {
       if (this._resetIsScrollingTimeoutId !== null) {
-        cancelTimeout(this._resetIsScrollingTimeoutId);
+        cancelTimeout(this._resetIsScrollingTimeoutId, this._window);
       }
     }
 
@@ -611,12 +617,13 @@ export default function createListComponent({
 
     _resetIsScrollingDebounced = () => {
       if (this._resetIsScrollingTimeoutId !== null) {
-        cancelTimeout(this._resetIsScrollingTimeoutId);
+        cancelTimeout(this._resetIsScrollingTimeoutId, this._window);
       }
 
       this._resetIsScrollingTimeoutId = requestTimeout(
         this._resetIsScrolling,
-        IS_SCROLLING_DEBOUNCE_INTERVAL
+        IS_SCROLLING_DEBOUNCE_INTERVAL,
+        this._window
       );
     };
 

@@ -195,6 +195,7 @@ export default function createGridComponent({
     _instanceProps: any = initInstanceProps(this.props, this);
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _outerRef: ?HTMLDivElement;
+    _window: ?any;
 
     static defaultProps = {
       direction: 'ltr',
@@ -340,6 +341,7 @@ export default function createGridComponent({
 
     componentDidMount() {
       const { initialScrollLeft, initialScrollTop } = this.props;
+      this._window = window;
 
       if (this._outerRef != null) {
         const outerRef = ((this._outerRef: any): HTMLElement);
@@ -348,6 +350,10 @@ export default function createGridComponent({
         }
         if (typeof initialScrollTop === 'number') {
           outerRef.scrollTop = initialScrollTop;
+        }
+
+        if (this._outerRef.parentNode && this._outerRef.parentNode.ownerDocument && this._outerRef.parentNode.ownerDocument.defaultView) {
+          this._window = this._outerRef.parentNode.ownerDocument.defaultView;
         }
       }
 
@@ -388,7 +394,7 @@ export default function createGridComponent({
 
     componentWillUnmount() {
       if (this._resetIsScrollingTimeoutId !== null) {
-        cancelTimeout(this._resetIsScrollingTimeoutId);
+        cancelTimeout(this._resetIsScrollingTimeoutId, this._window);
       }
     }
 
@@ -807,12 +813,13 @@ export default function createGridComponent({
 
     _resetIsScrollingDebounced = () => {
       if (this._resetIsScrollingTimeoutId !== null) {
-        cancelTimeout(this._resetIsScrollingTimeoutId);
+        cancelTimeout(this._resetIsScrollingTimeoutId, this._window);
       }
 
       this._resetIsScrollingTimeoutId = requestTimeout(
         this._resetIsScrolling,
-        IS_SCROLLING_DEBOUNCE_INTERVAL
+        IS_SCROLLING_DEBOUNCE_INTERVAL,
+        this._window
       );
     };
 
