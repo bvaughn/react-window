@@ -269,7 +269,7 @@ export default function createListComponent({
             // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
             // This is not the case for all browsers though (e.g. Chrome reports values as positive, measured relative to the left).
             // So we need to determine which browser behavior we're dealing with, and mimic it.
-            switch (getRTLOffsetType()) {
+            switch (getRTLOffsetType(false, this._window)) {
               case 'negative':
                 outerRef.scrollLeft = -scrollOffset;
                 break;
@@ -552,7 +552,7 @@ export default function createListComponent({
           // This is not the case for all browsers though (e.g. Chrome reports values as positive, measured relative to the left).
           // It's also easier for this component if we convert offsets to the same format as they would be in for ltr.
           // So the simplest solution is to determine which browser behavior we're dealing with, and convert based on it.
-          switch (getRTLOffsetType()) {
+          switch (getRTLOffsetType(false, this._window)) {
             case 'negative':
               scrollOffset = -scrollLeft;
               break;
