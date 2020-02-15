@@ -58,8 +58,6 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
   _resizeObserver: ResizeObserver | null = null;
 
   componentDidMount() {
-    console.log('SKDJHFJKS');
-    console.log(ResizeObserver);
     if (process.env.NODE_ENV !== 'production') {
       if (!this._didProvideValidRef) {
         const { item } = this.props;
@@ -87,18 +85,12 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
     // This is necessary to support the DynamicSizeList layout logic.
     this._measureItem(true, true);
 
-    const Test =
+    const WorkingResizeObserver =
       typeof ResizeObserver !== 'undefined' ? ResizeObserver : Polyfill;
-    this._resizeObserver = new Test(this._onResize);
+    this._resizeObserver = new WorkingResizeObserver(this._onResize);
     if (this._node !== null) {
       this._resizeObserver.observe(this._node);
     }
-    // if (typeof ResizeObserver !== 'undefined') {
-    //   // Watch for resizes due to changed content,
-    //   // Or changes in the size of the parent container.
-    //
-    //
-    // }
   }
 
   componentWillUnmount() {
