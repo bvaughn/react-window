@@ -84,9 +84,11 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
     // Force sync measure for the initial mount.
     // This is necessary to support the DynamicSizeList layout logic.
     this._measureItem(true, true);
-
+  
     const WorkingResizeObserver =
       typeof ResizeObserver !== 'undefined' ? ResizeObserver : Polyfill;
+    // Watch for resizes due to changed content,
+    // Or changes in the size of the parent container.
     this._resizeObserver = new WorkingResizeObserver(this._onResize);
     if (this._node !== null) {
       this._resizeObserver.observe(this._node);
