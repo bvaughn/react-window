@@ -73,6 +73,7 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-flow": "^7.0.0",
+    "@juggle/resize-observer": "^3.0.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^9.0.0",
     "babel-plugin-annotate-pure-calls": "^0.3.0",
