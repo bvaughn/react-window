@@ -87,7 +87,8 @@ export default class ItemMeasurer extends Component<ItemMeasurerProps, void> {
     // This is necessary to support the DynamicSizeList layout logic.
     this._measureItem(true, true);
 
-    const Test = ResizeObserver || Polyfill;
+    const Test =
+      typeof ResizeObserver !== 'undefined' ? ResizeObserver : Polyfill;
     this._resizeObserver = new Test(this._onResize);
     if (this._node !== null) {
       this._resizeObserver.observe(this._node);
