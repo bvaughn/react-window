@@ -65,8 +65,8 @@
     "memoize-one": ">=3.1.1 <6"
   },
   "peerDependencies": {
-    "react": "^15.0.0 || ^16.0.0",
-    "react-dom": "^15.0.0 || ^16.0.0"
+    "react": "^15.0.0 || ^16.0.0 || ^17.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -96,11 +96,11 @@
     "gh-pages": "^1.1.0",
     "lint-staged": "^7.0.5",
     "prettier": "^1.12.1",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
-    "react-is": "^16.8.4",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-is": "^17.0.1",
     "react-scripts": "^1.1.1",
-    "react-test-renderer": "^16.7.0",
+    "react-test-renderer": "^17.0.1",
     "rollup": "^1.4.1",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^9.2.1",
