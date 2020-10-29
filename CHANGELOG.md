@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.8.6
+* ✨ Updated peer dependencies to include React v17.
+
 ### 1.8.5
 * ✨ Added UMD (dev and prod) build - ([emmanueltouzery](https://github.com/emmanueltouzery) - [#281](https://github.com/bvaughn/react-window/pull/281))
 
