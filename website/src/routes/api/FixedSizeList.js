@@ -387,6 +387,18 @@ const PROPS = [
     name: 'width',
     type: 'number | string',
   },
+  {
+    defaultValue: null,
+    description: (
+      <Fragment>
+        <p>Forces rendering of the items at the indices provided. This can be
+        useful to ensure something remains focused as it scrolls off-screen,
+        for example.</p>
+      </Fragment>
+    ),
+    name: 'mustRender',
+    type: 'number[]'
+  }
 ];
 
 const METHODS = [
