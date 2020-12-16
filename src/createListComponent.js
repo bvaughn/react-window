@@ -78,6 +78,7 @@ export type Props<T> = {|
   style?: Object,
   useIsScrolling: boolean,
   width: number | string,
+  mustRender?: Array<number>,
 |};
 
 type State = {|
@@ -305,6 +306,7 @@ export default function createListComponent({
         style,
         useIsScrolling,
         width,
+        mustRender,
       } = this.props;
       const { isScrolling } = this.state;
 
@@ -321,6 +323,20 @@ export default function createListComponent({
       const items = [];
       if (itemCount > 0) {
         for (let index = startIndex; index <= stopIndex; index++) {
+          items.push(
+            createElement(children, {
+              data: itemData,
+              key: itemKey(index, itemData),
+              index,
+              isScrolling: useIsScrolling ? isScrolling : undefined,
+              style: this._getItemStyle(index),
+            })
+          );
+        }
+      }
+
+      if (mustRender) {
+        for (let index of mustRender) {
           items.push(
             createElement(children, {
               data: itemData,

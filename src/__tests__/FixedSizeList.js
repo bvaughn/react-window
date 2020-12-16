@@ -82,6 +82,14 @@ describe('FixedSizeList', () => {
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
+  it('should render items marked must-render', () => {
+    ReactTestRenderer.create(
+      <FixedSizeList {...defaultProps} mustRender={[99]} />
+    );
+    expect(itemRenderer).toHaveBeenCalledTimes(7);
+    expect(onItemsRendered.mock.calls).toMatchSnapshot();
+  });
+
   it('should render a list of columns', () => {
     ReactTestRenderer.create(
       <FixedSizeList {...defaultProps} layout="horizontal" />
