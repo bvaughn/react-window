@@ -78,7 +78,7 @@ export type Props<T> = {|
   style?: Object,
   useIsScrolling: boolean,
   width: number | string,
-  mustRender?: Array<number>,
+  mustRender?: Array<number> | null,
 |};
 
 type State = {|
