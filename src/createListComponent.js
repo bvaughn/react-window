@@ -168,6 +168,7 @@ export default function createListComponent({
       layout: 'vertical',
       overscanCount: 2,
       useIsScrolling: false,
+      mustRender: null,
     };
 
     state: State = {
