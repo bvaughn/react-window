@@ -541,6 +541,19 @@ Array [
 ]
 `;
 
+exports[`FixedSizeList should not double-render items marked must-render 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 5,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 3,
+    },
+  ],
+]
+`;
+
 exports[`FixedSizeList should render a list of columns 1`] = `
 Array [
   Array [

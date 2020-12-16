@@ -338,6 +338,10 @@ export default function createListComponent({
 
       if (mustRender) {
         for (let index of mustRender) {
+          if (index >= startIndex && index <= stopIndex) {
+            continue;
+          }
+
           items.push(
             createElement(children, {
               data: itemData,
