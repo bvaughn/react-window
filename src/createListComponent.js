@@ -342,6 +342,10 @@ export default function createListComponent({
             continue;
           }
 
+          if (index < 0 || index + 1 > itemCount) {
+            throw new Error('Index in `mustRender` out of bounds');
+          }
+
           items.push(
             createElement(children, {
               data: itemData,

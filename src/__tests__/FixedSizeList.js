@@ -98,6 +98,25 @@ describe('FixedSizeList', () => {
     expect(onItemsRendered.mock.calls).toMatchSnapshot();
   });
 
+  it('should throw when must-render items are out of bounds', () => {
+    spyOn(console, 'error');
+
+    expect(() => {
+      ReactTestRenderer.create(
+        <FixedSizeList
+          {...defaultProps}
+          mustRender={[defaultProps.itemCount]}
+        />
+      );
+    }).toThrow('Index in `mustRender` out of bounds');
+
+    expect(() => {
+      ReactTestRenderer.create(
+        <FixedSizeList {...defaultProps} mustRender={[-1]} />
+      );
+    }).toThrow('Index in `mustRender` out of bounds');
+  });
+
   it('should render a list of columns', () => {
     ReactTestRenderer.create(
       <FixedSizeList {...defaultProps} layout="horizontal" />
