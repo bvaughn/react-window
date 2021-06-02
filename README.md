@@ -6,7 +6,75 @@ React window works by only rendering *part* of a large data set (just enough to 
 1. It reduces the amount of work (and time) required to render the initial view and to process updates.
 2. It reduces the memory footprint by avoiding over-allocation of DOM nodes.
 
-[![NPM registry](https://img.shields.io/npm/v/react-window.svg?style=for-the-badge)](https://yarnpkg.com/en/package/react-window) [![Travis](https://img.shields.io/badge/ci-travis-green.svg?style=for-the-badge)](https://travis-ci.org/bvaughn/react-window) [![NPM license](https://img.shields.io/badge/license-mit-red.svg?style=for-the-badge)](LICENSE.md)
+[![NPM registry](https://img.shields.io/npm/v/react-window.svg?style=for-the-badge)](https://yarnpkg.com/en/package/react-window) [![Travis](https://img.shields.io/badge/ci-travis-green.svg?style=for-the-badge)](https://travis-ci.org/bvaughn/react-window) [![NPM license](https://img.shields.io/badge/license-mit-red.svg?style=for-the-badge)](LICENSE.md) [![OpenCollective](https://opencollective.com/react-window/backers/badge.svg)](#backers) [![OpenCollective](https://opencollective.com/react-window/sponsors/badge.svg)](#sponsors)
+
+### Sponsors
+
+The following wonderful companies have sponsored react-window:
+
+<a href="https://opencollective.com/react-window/sponsor/0/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/1/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/2/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/3/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/4/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/5/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/6/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/7/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/8/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/9/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/9/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/10/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/10/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/11/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/11/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/12/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/12/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/13/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/13/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/14/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/14/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/15/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/15/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/16/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/16/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/17/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/17/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/18/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/18/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/19/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/19/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/20/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/20/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/21/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/21/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/22/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/22/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/23/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/23/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/24/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/24/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/25/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/25/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/26/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/26/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/27/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/27/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/28/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/28/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/sponsor/29/website" target="_blank"><img src="https://opencollective.com/react-window/sponsor/29/avatar.svg"></a>
+
+[Learn more about becoming a sponsor!](https://opencollective.com/react-window#sponsor)
+
+<a href="https://opencollective.com/react-window/backer/0/website" target="_blank"><img src="https://opencollective.com/react-window/backer/0/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/1/website" target="_blank"><img src="https://opencollective.com/react-window/backer/1/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/2/website" target="_blank"><img src="https://opencollective.com/react-window/backer/2/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/3/website" target="_blank"><img src="https://opencollective.com/react-window/backer/3/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/4/website" target="_blank"><img src="https://opencollective.com/react-window/backer/4/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/5/website" target="_blank"><img src="https://opencollective.com/react-window/backer/5/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/6/website" target="_blank"><img src="https://opencollective.com/react-window/backer/6/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/7/website" target="_blank"><img src="https://opencollective.com/react-window/backer/7/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/8/website" target="_blank"><img src="https://opencollective.com/react-window/backer/8/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/9/website" target="_blank"><img src="https://opencollective.com/react-window/backer/9/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/10/website" target="_blank"><img src="https://opencollective.com/react-window/backer/10/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/11/website" target="_blank"><img src="https://opencollective.com/react-window/backer/11/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/12/website" target="_blank"><img src="https://opencollective.com/react-window/backer/12/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/13/website" target="_blank"><img src="https://opencollective.com/react-window/backer/13/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/14/website" target="_blank"><img src="https://opencollective.com/react-window/backer/14/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/15/website" target="_blank"><img src="https://opencollective.com/react-window/backer/15/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/16/website" target="_blank"><img src="https://opencollective.com/react-window/backer/16/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/17/website" target="_blank"><img src="https://opencollective.com/react-window/backer/17/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/18/website" target="_blank"><img src="https://opencollective.com/react-window/backer/18/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/19/website" target="_blank"><img src="https://opencollective.com/react-window/backer/19/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/20/website" target="_blank"><img src="https://opencollective.com/react-window/backer/20/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/21/website" target="_blank"><img src="https://opencollective.com/react-window/backer/21/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/22/website" target="_blank"><img src="https://opencollective.com/react-window/backer/22/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/23/website" target="_blank"><img src="https://opencollective.com/react-window/backer/23/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/24/website" target="_blank"><img src="https://opencollective.com/react-window/backer/24/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/25/website" target="_blank"><img src="https://opencollective.com/react-window/backer/25/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/26/website" target="_blank"><img src="https://opencollective.com/react-window/backer/26/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/27/website" target="_blank"><img src="https://opencollective.com/react-window/backer/27/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/28/website" target="_blank"><img src="https://opencollective.com/react-window/backer/28/avatar.svg"></a>
+<a href="https://opencollective.com/react-window/backer/29/website" target="_blank"><img src="https://opencollective.com/react-window/backer/29/avatar.svg"></a>
 
 ## Install
 
