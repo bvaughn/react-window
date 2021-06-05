@@ -24,20 +24,20 @@ type RenderComponent<T> = React$ComponentType<$Shape<RenderComponentProps<T>>>;
 
 type ScrollDirection = 'forward' | 'backward';
 
-type onItemsRenderedCallback = ({
+type onItemsRenderedCallback = ({|
   overscanStartIndex: number,
   overscanStopIndex: number,
   visibleStartIndex: number,
   visibleStopIndex: number,
-}) => void;
-type onScrollCallback = ({
+|}) => void;
+type onScrollCallback = ({|
   scrollDirection: ScrollDirection,
   scrollOffset: number,
   scrollUpdateWasRequested: boolean,
-}) => void;
+|}) => void;
 
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
-type ItemStyleCache = { [index: number]: Object };
+type ItemStyleCache = { [index: number]: Object, ... };
 
 type OuterProps = {|
   children: React$Node,
@@ -45,6 +45,7 @@ type OuterProps = {|
   onScroll: ScrollEvent => void,
   style: {
     [string]: mixed,
+    ...
   },
 |};
 
@@ -52,6 +53,7 @@ type InnerProps = {|
   children: React$Node,
   style: {
     [string]: mixed,
+    ...
   },
 |};
 

@@ -25,7 +25,7 @@ export type RenderComponent<T> = React$ComponentType<
 
 type ScrollDirection = 'forward' | 'backward';
 
-type OnItemsRenderedCallback = ({
+type OnItemsRenderedCallback = ({|
   overscanColumnStartIndex: number,
   overscanColumnStopIndex: number,
   overscanRowStartIndex: number,
@@ -34,17 +34,17 @@ type OnItemsRenderedCallback = ({
   visibleColumnStopIndex: number,
   visibleRowStartIndex: number,
   visibleRowStopIndex: number,
-}) => void;
-type OnScrollCallback = ({
+|}) => void;
+type OnScrollCallback = ({|
   horizontalScrollDirection: ScrollDirection,
   scrollLeft: number,
   scrollTop: number,
   scrollUpdateWasRequested: boolean,
   verticalScrollDirection: ScrollDirection,
-}) => void;
+|}) => void;
 
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
-type ItemStyleCache = { [key: string]: Object };
+type ItemStyleCache = { [key: string]: Object, ... };
 
 type OuterProps = {|
   children: React$Node,
@@ -52,6 +52,7 @@ type OuterProps = {|
   onScroll: ScrollEvent => void,
   style: {
     [string]: mixed,
+    ...
   },
 |};
 
@@ -59,6 +60,7 @@ type InnerProps = {|
   children: React$Node,
   style: {
     [string]: mixed,
+    ...
   },
 |};
 
@@ -237,10 +239,10 @@ export default function createGridComponent({
     scrollTo({
       scrollLeft,
       scrollTop,
-    }: {
+    }: {|
       scrollLeft: number,
       scrollTop: number,
-    }): void {
+    |}): void {
       if (scrollLeft !== undefined) {
         scrollLeft = Math.max(0, scrollLeft);
       }
@@ -279,11 +281,11 @@ export default function createGridComponent({
       align = 'auto',
       columnIndex,
       rowIndex,
-    }: {
+    }: {|
       align: ScrollToAlign,
       columnIndex?: number,
       rowIndex?: number,
-    }): void {
+    |}): void {
       const { columnCount, height, rowCount, width } = this.props;
       const { scrollLeft, scrollTop } = this.state;
       const scrollbarSize = getScrollbarSize();

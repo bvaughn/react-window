@@ -61,7 +61,7 @@
     "**/*.js": "eslint --max-warnings 0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0",
+    "@babel/runtime": "^7.4.5",
     "memoize-one": ">=3.1.1 <6"
   },
   "peerDependencies": {
@@ -69,13 +69,13 @@
     "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
     "@babel/preset-flow": "^7.0.0",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "^9.0.0",
+    "babel-eslint": "^11.0.0-beta.0",
     "babel-plugin-annotate-pure-calls": "^0.3.0",
     "cross-env": "^5.1.4",
     "del-cli": "^1.1.0",
