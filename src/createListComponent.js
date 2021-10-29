@@ -160,6 +160,7 @@ export default function createListComponent({
     _instanceProps: any = initInstanceProps(this.props, this);
     _outerRef: ?HTMLDivElement;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
+    _isPerformingImperativeScrolling: boolean = false;
 
     static defaultProps = {
       direction: 'ltr',
@@ -198,6 +199,8 @@ export default function createListComponent({
 
     scrollTo(scrollOffset: number): void {
       scrollOffset = Math.max(0, scrollOffset);
+
+      this._isPerformingImperativeScrolling = true;
 
       this.setState(prevState => {
         if (prevState.scrollOffset === scrollOffset) {
@@ -524,6 +527,11 @@ export default function createListComponent({
     }
 
     _onScrollHorizontal = (event: ScrollEvent): void => {
+      if (this._isPerformingImperativeScrolling) {
+        this._isPerformingImperativeScrolling = false;
+        return;
+      }
+
       const { clientWidth, scrollLeft, scrollWidth } = event.currentTarget;
       this.setState(prevState => {
         if (prevState.scrollOffset === scrollLeft) {
@@ -568,6 +576,10 @@ export default function createListComponent({
     };
 
     _onScrollVertical = (event: ScrollEvent): void => {
+      if (this._isPerformingImperativeScrolling) {
+        this._isPerformingImperativeScrolling = false;
+        return;
+      }
       const { clientHeight, scrollHeight, scrollTop } = event.currentTarget;
       this.setState(prevState => {
         if (prevState.scrollOffset === scrollTop) {
