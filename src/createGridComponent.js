@@ -377,10 +377,14 @@ export default function createGridComponent({
               break;
           }
         } else {
-          outerRef.scrollLeft = Math.max(0, scrollLeft);
+          requestAnimationFrame(() => {
+            outerRef.scrollLeft = Math.max(0, scrollLeft);
+          })
         }
 
-        outerRef.scrollTop = Math.max(0, scrollTop);
+        requestAnimationFrame(() => {
+          outerRef.scrollTop = Math.max(0, scrollTop);
+        })
       }
 
       this._callPropsCallbacks();
