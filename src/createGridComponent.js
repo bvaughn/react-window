@@ -195,6 +195,8 @@ export default function createGridComponent({
     _instanceProps: any = initInstanceProps(this.props, this);
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _outerRef: ?HTMLDivElement;
+    _outerRefScrollLeftRafId = null;
+    _outerRefScrollTopRafId = null;
 
     static defaultProps = {
       direction: 'ltr',
@@ -377,12 +379,14 @@ export default function createGridComponent({
               break;
           }
         } else {
-          requestAnimationFrame(() => {
+          cancelAnimationFrame(this._outerRefScrollLeftRafId);
+          this._outerRefScrollLeftRafId = requestAnimationFrame(() => {
             outerRef.scrollLeft = Math.max(0, scrollLeft);
           })
         }
 
-        requestAnimationFrame(() => {
+        cancelAnimationFrame(this._outerRefScrollTopRafId);
+        this._outerRefScrollTopRafId = requestAnimationFrame(() => {
           outerRef.scrollTop = Math.max(0, scrollTop);
         })
       }
