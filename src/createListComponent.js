@@ -78,6 +78,7 @@ export type Props<T> = {|
   style?: Object,
   useIsScrolling: boolean,
   width: number | string,
+  additionalElements: React$AbstractComponent<T>,
 |};
 
 type State = {|
@@ -305,6 +306,7 @@ export default function createListComponent({
         style,
         useIsScrolling,
         width,
+        additionalElements
       } = this.props;
       const { isScrolling } = this.state;
 
@@ -357,7 +359,7 @@ export default function createListComponent({
             ...style,
           },
         },
-        createElement(innerElementType || innerTagName || 'div', {
+        [createElement(innerElementType || innerTagName || 'div', {
           children: items,
           ref: innerRef,
           style: {
@@ -365,7 +367,7 @@ export default function createListComponent({
             pointerEvents: isScrolling ? 'none' : undefined,
             width: isHorizontal ? estimatedTotalSize : '100%',
           },
-        })
+        }), additionalElements ? additionalElements : null]
       );
     }
 
