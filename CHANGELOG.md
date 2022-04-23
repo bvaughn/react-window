@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.8.7
+* ✨ Updated peer dependencies to include React v18.
+
 ### 1.8.6
 * ✨ Updated peer dependencies to include React v17.
 
