@@ -1,11 +1,11 @@
 // @flow
 
-import memoizeOne from 'memoize-one';
-import { createElement, PureComponent } from 'react';
+import { PureComponent, createElement } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
-import { getRTLOffsetType } from './domHelpers';
 
 import type { TimeoutID } from './timer';
+import { getRTLOffsetType } from './domHelpers';
+import memoizeOne from 'memoize-one';
 
 export type ScrollToAlign = 'auto' | 'smart' | 'center' | 'start' | 'end';
 
@@ -63,6 +63,7 @@ export type Props<T> = {|
   initialScrollOffset?: number,
   innerRef?: any,
   innerElementType?: string | React$AbstractComponent<InnerProps, any>,
+  innerElementRole?: React$AriaRole,
   innerTagName?: string, // deprecated
   itemCount: number,
   itemData: T,
@@ -295,6 +296,7 @@ export default function createListComponent({
         height,
         innerRef,
         innerElementType,
+        innerElementRole,
         innerTagName,
         itemCount,
         itemData,
@@ -360,6 +362,7 @@ export default function createListComponent({
         createElement(innerElementType || innerTagName || 'div', {
           children: items,
           ref: innerRef,
+          role: innerElementRole,
           style: {
             height: isHorizontal ? '100%' : estimatedTotalSize,
             pointerEvents: isScrolling ? 'none' : undefined,
