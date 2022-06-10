@@ -1,6 +1,6 @@
 {
   "description": "Demo of react-window with advanced memoization techniques",
-  "main": "src/index.js",
+  "main": "./index.js",
   "dependencies": {
     "memoize-one": "^5",
     "react": "^16.6",
