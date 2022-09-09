@@ -436,7 +436,13 @@ export default function createGridComponent({
                 columnIndex,
                 data: itemData,
                 isScrolling: useIsScrolling ? isScrolling : undefined,
-                key: itemKey({ columnIndex, data: itemData, rowIndex }),
+                key: itemKey({
+                  columnIndex,
+                  data: itemData,
+                  rowIndex,
+                  rowStartIndex,
+                  rowStopIndex,
+                }),
                 rowIndex,
                 style: this._getItemStyle(rowIndex, columnIndex),
               })

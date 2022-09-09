@@ -34,6 +34,7 @@
   ],
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
+  "types": "index.d.ts",
   "files": [
     "dist",
     "src/*.js"
