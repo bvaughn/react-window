@@ -1049,16 +1049,31 @@ describe('FixedSizeGrid', () => {
         />
       );
       expect(itemKey).toHaveBeenCalledTimes(6);
-      expect(itemKey.mock.calls[0][0]).toEqual({ columnIndex: 0, rowIndex: 0 });
-      expect(itemKey.mock.calls[1][0]).toEqual({ columnIndex: 1, rowIndex: 0 });
-      expect(itemKey.mock.calls[2][0]).toEqual({ columnIndex: 2, rowIndex: 0 });
-      expect(itemKey.mock.calls[3][0]).toEqual({ columnIndex: 0, rowIndex: 1 });
-      expect(itemKey.mock.calls[4][0]).toEqual({ columnIndex: 1, rowIndex: 1 });
-      expect(itemKey.mock.calls[5][0]).toEqual({ columnIndex: 2, rowIndex: 1 });
+      expect(itemKey.mock.calls[0][0]).toEqual(
+        expect.objectContaining({ columnIndex: 0, rowIndex: 0 })
+      );
+      expect(itemKey.mock.calls[1][0]).toEqual(
+        expect.objectContaining({ columnIndex: 1, rowIndex: 0 })
+      );
+      expect(itemKey.mock.calls[2][0]).toEqual(
+        expect.objectContaining({ columnIndex: 2, rowIndex: 0 })
+      );
+      expect(itemKey.mock.calls[3][0]).toEqual(
+        expect.objectContaining({ columnIndex: 0, rowIndex: 1 })
+      );
+      expect(itemKey.mock.calls[4][0]).toEqual(
+        expect.objectContaining({ columnIndex: 1, rowIndex: 1 })
+      );
+      expect(itemKey.mock.calls[5][0]).toEqual(
+        expect.objectContaining({ columnIndex: 2, rowIndex: 1 })
+      );
     });
 
     it('should allow items to be moved within the collection without causing caching problems', () => {
-      const keyMap = [['0:0', '0:1:', '0:2'], ['1:0', '1:1:', '1:2']];
+      const keyMap = [
+        ['0:0', '0:1:', '0:2'],
+        ['1:0', '1:1:', '1:2'],
+      ];
       const keyMapItemRenderer = jest.fn(({ index, style }) => (
         <div style={style}>{keyMap[index]}</div>
       ));
