@@ -272,6 +272,35 @@ Array [
 ]
 `;
 
+exports[`FixedSizeList scrollToItem method should account for scrollbar size 1`] = `
+Array [
+  Array [
+    Object {
+      "overscanStartIndex": 0,
+      "overscanStopIndex": 5,
+      "visibleStartIndex": 0,
+      "visibleStopIndex": 3,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 15,
+      "overscanStopIndex": 22,
+      "visibleStartIndex": 17,
+      "visibleStopIndex": 20,
+    },
+  ],
+  Array [
+    Object {
+      "overscanStartIndex": 15,
+      "overscanStopIndex": 23,
+      "visibleStartIndex": 17,
+      "visibleStopIndex": 21,
+    },
+  ],
+]
+`;
+
 exports[`FixedSizeList scrollToItem method should ignore indexes greater than itemCount 1`] = `
 Array [
   Array [

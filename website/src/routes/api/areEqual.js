@@ -13,7 +13,8 @@ export default () => (
       Custom comparison function for{' '}
       <a href="https://reactjs.org/docs/react-api.html#reactmemo">
         <code>React.memo</code>
-      </a>. If your item renderer is a class component, use the{' '}
+      </a>
+      . If your item renderer is a class component, use the{' '}
       <Link to="/api/shouldComponentUpdate">
         <code>shouldComponentUpdate</code>
       </Link>{' '}

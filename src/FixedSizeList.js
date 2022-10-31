@@ -4,6 +4,8 @@ import createListComponent from './createListComponent';
 
 import type { Props, ScrollToAlign } from './createListComponent';
 
+type InstanceProps = any;
+
 const FixedSizeList = createListComponent({
   getItemOffset: ({ itemSize }: Props<any>, index: number): number =>
     index * ((itemSize: any): number),
@@ -18,7 +20,9 @@ const FixedSizeList = createListComponent({
     { direction, height, itemCount, itemSize, layout, width }: Props<any>,
     index: number,
     align: ScrollToAlign,
-    scrollOffset: number
+    scrollOffset: number,
+    instanceProps: InstanceProps,
+    scrollbarSize: number
   ): number => {
     // TODO Deprecate direction "horizontal"
     const isHorizontal = direction === 'horizontal' || layout === 'horizontal';
@@ -33,7 +37,10 @@ const FixedSizeList = createListComponent({
     );
     const minOffset = Math.max(
       0,
-      index * ((itemSize: any): number) - size + ((itemSize: any): number)
+      index * ((itemSize: any): number) -
+        size +
+        ((itemSize: any): number) +
+        scrollbarSize
     );
 
     if (align === 'smart') {
