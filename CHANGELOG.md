@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.8.8
+* 🐛 `scrollToItem` accounts for scrollbar size in the uncommon case where a List component has scrolling in the non-dominant direction (e.g. a "vertical" layout list also scrolls horizontally).
+
 ### 1.8.7
 * ✨ Updated peer dependencies to include React v18.
 
