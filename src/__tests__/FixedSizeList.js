@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import ReactTestRenderer from 'react-test-renderer';
 import { Simulate } from 'react-dom/test-utils';
 import { FixedSizeList } from '..';
+import * as domHelpers from '../domHelpers';
 
 const simulateScroll = (instance, scrollOffset, direction = 'vertical') => {
   if (direction === 'horizontal') {
@@ -16,7 +17,10 @@ const simulateScroll = (instance, scrollOffset, direction = 'vertical') => {
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('FixedSizeList', () => {
-  let itemRenderer, defaultProps, onItemsRendered;
+  let itemRenderer, defaultProps, getScrollbarSize, onItemsRendered;
+
+  let mockedScrollHeight = Number.MAX_SAFE_INTEGER;
+  let mockedScrollWidth = Number.MAX_SAFE_INTEGER;
 
   // Use PureComponent to test memoization.
   // Pass through to itemRenderer mock for easier test assertions.
@@ -28,6 +32,9 @@ describe('FixedSizeList', () => {
 
   beforeEach(() => {
     jest.useFakeTimers();
+
+    mockedScrollHeight = Number.MAX_SAFE_INTEGER;
+    mockedScrollWidth = Number.MAX_SAFE_INTEGER;
 
     // JSdom does not do actual layout and so doesn't return meaningful values here.
     // For the purposes of our tests though, we can mock out semi-meaningful values.
@@ -47,13 +54,16 @@ describe('FixedSizeList', () => {
       },
       scrollHeight: {
         configurable: true,
-        get: () => Number.MAX_SAFE_INTEGER,
+        get: () => mockedScrollHeight,
       },
       scrollWidth: {
         configurable: true,
-        get: () => Number.MAX_SAFE_INTEGER,
+        get: () => mockedScrollWidth,
       },
     });
+
+    // Mock the DOM helper util for testing purposes.
+    getScrollbarSize = domHelpers.getScrollbarSize = jest.fn(() => 0);
 
     onItemsRendered = jest.fn();
 
@@ -582,6 +592,30 @@ describe('FixedSizeList', () => {
       );
       onItemsRendered.mockClear();
       instance.scrollToItem(defaultProps.itemCount * 2);
+      expect(onItemsRendered.mock.calls).toMatchSnapshot();
+    });
+
+    it('should account for scrollbar size', () => {
+      getScrollbarSize.mockImplementation(() => 20);
+
+      const ref = createRef();
+      ReactDOM.render(
+        <FixedSizeList {...defaultProps} ref={ref} />,
+        document.createElement('div'),
+      );
+
+      // Mimic the vertical list not being horizontally scrollable.
+      // To be clear, this would be typical.
+      mockedScrollWidth = 0;
+
+      ref.current.scrollToItem(20, 'auto');
+
+      // Now mimic the vertical list not being horizontally scrollable,
+      // and make sure the list accounts for the horizontal scrollbar height.
+      mockedScrollWidth = Number.MAX_SAFE_INTEGER;
+
+      ref.current.scrollToItem(20, 'auto');
+
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
   });

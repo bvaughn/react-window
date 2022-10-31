@@ -3,7 +3,7 @@
 import memoizeOne from 'memoize-one';
 import { createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
-import { getRTLOffsetType } from './domHelpers';
+import { getScrollbarSize, getRTLOffsetType } from './domHelpers';
 
 import type { TimeoutID } from './timer';
 
@@ -213,10 +213,29 @@ export default function createListComponent({
     }
 
     scrollToItem(index: number, align: ScrollToAlign = 'auto'): void {
-      const { itemCount } = this.props;
+      const { itemCount, layout } = this.props;
       const { scrollOffset } = this.state;
 
       index = Math.max(0, Math.min(index, itemCount - 1));
+
+      // The scrollbar size should be considered when scrolling an item into view, to ensure it's fully visible.
+      // But we only need to account for its size when it's actually visible.
+      // This is an edge case for lists; normally they only scroll in the dominant direction.
+      let scrollbarSize = 0;
+      if (this._outerRef) {
+        const outerRef = ((this._outerRef: any): HTMLElement);
+        if (layout === 'vertical') {
+          scrollbarSize =
+            outerRef.scrollWidth > outerRef.clientWidth
+              ? getScrollbarSize()
+              : 0;
+        } else {
+          scrollbarSize =
+            outerRef.scrollHeight > outerRef.clientHeight
+              ? getScrollbarSize()
+              : 0;
+        }
+      }
 
       this.scrollTo(
         getOffsetForIndexAndAlignment(
@@ -224,7 +243,8 @@ export default function createListComponent({
           index,
           align,
           scrollOffset,
-          this._instanceProps
+          this._instanceProps,
+          scrollbarSize
         )
       );
     }
