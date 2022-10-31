@@ -20,8 +20,8 @@ class Cell extends PureComponent {
               ? styles.GridItemOdd
               : styles.GridItemEven
             : rowIndex % 2
-              ? styles.GridItemOdd
-              : styles.GridItemEven
+            ? styles.GridItemOdd
+            : styles.GridItemEven
         }
         style={style}
       >

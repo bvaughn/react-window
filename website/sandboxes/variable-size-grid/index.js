@@ -21,8 +21,8 @@ const Cell = ({ columnIndex, rowIndex, style }) => (
           ? 'GridItemOdd'
           : 'GridItemEven'
         : rowIndex % 2
-          ? 'GridItemOdd'
-          : 'GridItemEven'
+        ? 'GridItemOdd'
+        : 'GridItemEven'
     }
     style={style}
   >

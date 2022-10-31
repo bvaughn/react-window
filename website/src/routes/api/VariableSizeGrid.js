@@ -16,7 +16,8 @@ export default () => (
         This component has the same methods as{' '}
         <Link to="/api/FixedSizeGrid#methods">
           <code>FixedSizeGrid</code>
-        </Link>, but with the following additions:
+        </Link>
+        , but with the following additions:
       </p>
     }
     name="VariableSizeGrid"
@@ -26,7 +27,8 @@ export default () => (
         This component has the same props as{' '}
         <Link to="/api/FixedSizeGrid#props">
           <code>FixedSizeGrid</code>
-        </Link>, but with the following additions:
+        </Link>
+        , but with the following additions:
       </p>
     }
   />

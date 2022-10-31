@@ -15,7 +15,8 @@ export default () => (
         This component has the same methods as{' '}
         <Link to="/api/FixedSizeList#methods">
           <code>FixedSizeList</code>
-        </Link>, but with the following additions:
+        </Link>
+        , but with the following additions:
       </p>
     }
     name="VariableSizeList"
@@ -25,7 +26,8 @@ export default () => (
         This component has the same props as{' '}
         <Link to="/api/FixedSizeList#props">
           <code>FixedSizeList</code>
-        </Link>, but with the following additions:
+        </Link>
+        , but with the following additions:
       </p>
     }
   />

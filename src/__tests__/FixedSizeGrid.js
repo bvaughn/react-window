@@ -1058,7 +1058,10 @@ describe('FixedSizeGrid', () => {
     });
 
     it('should allow items to be moved within the collection without causing caching problems', () => {
-      const keyMap = [['0:0', '0:1:', '0:2'], ['1:0', '1:1:', '1:2']];
+      const keyMap = [
+        ['0:0', '0:1:', '0:2'],
+        ['1:0', '1:1:', '1:2'],
+      ];
       const keyMapItemRenderer = jest.fn(({ index, style }) => (
         <div style={style}>{keyMap[index]}</div>
       ));

@@ -72,7 +72,7 @@ export default class ProfiledExample extends PureComponent<Props, void> {
     }
     if (this._averageTimeRef.current !== null) {
       this._averageTimeRef.current.textContent = `${Math.round(
-        this._totalActualTime / this._numCommits * 10
+        (this._totalActualTime / this._numCommits) * 10
       ) / 10}ms`;
     }
   }

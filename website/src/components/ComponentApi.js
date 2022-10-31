@@ -68,19 +68,21 @@ export default class ComponentApi extends Component<Props, State> {
           </h2>
           {propsIntro}
           <dl className={styles.ComponentApiPropList}>
-            {props.filter(prop => showAll || prop.isRequired).map(prop => (
-              <Fragment key={prop.name}>
-                <dt className={styles.ComponentApiPropType}>
-                  {prop.name}: {prop.type}{' '}
-                  {prop.defaultValue !== undefined
-                    ? ` = ${prop.defaultValue}`
-                    : null}
-                </dt>
-                <dd className={styles.ComponentApiPropDefinition}>
-                  {prop.description}
-                </dd>
-              </Fragment>
-            ))}
+            {props
+              .filter(prop => showAll || prop.isRequired)
+              .map(prop => (
+                <Fragment key={prop.name}>
+                  <dt className={styles.ComponentApiPropType}>
+                    {prop.name}: {prop.type}{' '}
+                    {prop.defaultValue !== undefined
+                      ? ` = ${prop.defaultValue}`
+                      : null}
+                  </dt>
+                  <dd className={styles.ComponentApiPropDefinition}>
+                    {prop.description}
+                  </dd>
+                </Fragment>
+              ))}
           </dl>
           <h2 id="methods" className={styles.ComponentApiSubHeader}>
             Methods
