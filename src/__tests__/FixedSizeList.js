@@ -163,6 +163,69 @@ describe('FixedSizeList', () => {
     });
   });
 
+  describe('slot elements', () => {
+    it('should render a slot element before the inner element', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList
+          {...defaultProps}
+          innerElementType="inner-element"
+          before={<div id="before-element">before</div>}
+        />
+      );
+
+      const beforeElement = rendered.root.findByProps({ id: 'before-element' });
+      const innerElement = rendered.root.findByType('inner-element');
+
+      expect(beforeElement).toBeDefined();
+      expect(beforeElement).toBeDefined();
+      expect(beforeElement.parent).toEqual(innerElement.parent);
+
+      const { children } = beforeElement.parent;
+      expect(children.at(0)).toEqual(beforeElement);
+      expect(children.at(1)).toEqual(innerElement);
+    });
+
+    it('should render a slot element after the inner element', () => {
+      const rendered = ReactTestRenderer.create(
+        <FixedSizeList
+          {...defaultProps}
+          innerElementType="inner-element"
+          after={<div id="after-element">after</div>}
+        />
+      );
+
+      const afterElement = rendered.root.findByProps({ id: 'after-element' });
+      const innerElement = rendered.root.findByType('inner-element');
+
+      expect(afterElement).toBeDefined();
+      expect(afterElement).toBeDefined();
+      expect(afterElement.parent).toEqual(innerElement.parent);
+
+      const { children } = afterElement.parent;
+      expect(children.at(0)).toEqual(innerElement);
+      expect(children.at(1)).toEqual(afterElement);
+    });
+  });
+
+  it('should render slot elements for callbacks', () => {
+    const renderBefore = jest.fn(() => <div id="before-element">before</div>);
+    const renderAfter = jest.fn(() => <div id="after-element">after</div>);
+    const rendered = ReactTestRenderer.create(
+      <FixedSizeList
+        {...defaultProps}
+        innerElementType="inner-element"
+        before={renderBefore}
+        after={renderAfter}
+      />
+    );
+
+    expect(renderBefore).toHaveBeenCalled();
+    expect(rendered.root.findByProps({ id: 'before-element' })).toBeDefined();
+
+    expect(renderAfter).toHaveBeenCalled();
+    expect(rendered.root.findByProps({ id: 'after-element' })).toBeDefined();
+  });
+
   describe('style caching', () => {
     it('should cache styles while scrolling to avoid breaking pure sCU for items', () => {
       const rendered = ReactTestRenderer.create(
@@ -601,7 +664,7 @@ describe('FixedSizeList', () => {
       const ref = createRef();
       ReactDOM.render(
         <FixedSizeList {...defaultProps} ref={ref} />,
-        document.createElement('div'),
+        document.createElement('div')
       );
 
       // Mimic the vertical list not being horizontally scrollable.

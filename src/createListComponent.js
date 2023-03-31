@@ -6,6 +6,8 @@ import { cancelTimeout, requestTimeout } from './timer';
 import { getScrollbarSize, getRTLOffsetType } from './domHelpers';
 
 import type { TimeoutID } from './timer';
+import { create } from "domain";
+import { getSlot } from './getSlot';
 
 export type ScrollToAlign = 'auto' | 'smart' | 'center' | 'start' | 'end';
 
@@ -55,8 +57,12 @@ type InnerProps = {|
   },
 |};
 
+type SlotRenderer = () => React$Node;
+
 export type Props<T> = {|
   children: RenderComponent<T>,
+  before?: SlotRenderer | React$Node,
+  after?: SlotRenderer | React$Node,
   className?: string,
   direction: Direction,
   height: number | string,
@@ -310,6 +316,8 @@ export default function createListComponent({
     render() {
       const {
         children,
+        before,
+        after,
         className,
         direction,
         height,
@@ -377,6 +385,7 @@ export default function createListComponent({
             ...style,
           },
         },
+        getSlot(before),
         createElement(innerElementType || innerTagName || 'div', {
           children: items,
           ref: innerRef,
@@ -385,7 +394,8 @@ export default function createListComponent({
             pointerEvents: isScrolling ? 'none' : undefined,
             width: isHorizontal ? estimatedTotalSize : '100%',
           },
-        })
+        }),
+        getSlot(after),
       );
     }
 

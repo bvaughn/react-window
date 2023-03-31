@@ -6,6 +6,7 @@ import { cancelTimeout, requestTimeout } from './timer';
 import { getScrollbarSize, getRTLOffsetType } from './domHelpers';
 
 import type { TimeoutID } from './timer';
+import { getSlot } from './getSlot';
 
 type Direction = 'ltr' | 'rtl';
 export type ScrollToAlign = 'auto' | 'smart' | 'center' | 'start' | 'end';
@@ -62,8 +63,12 @@ type InnerProps = {|
   },
 |};
 
+type SlotRenderer = () => React$Node;
+
 export type Props<T> = {|
   children: RenderComponent<T>,
+  before?: SlotRenderer | React$Node,
+  after?: SlotRenderer | React$Node,
   className?: string,
   columnCount: number,
   columnWidth: itemSize,
@@ -395,6 +400,8 @@ export default function createGridComponent({
     render() {
       const {
         children,
+        before,
+        after,
         className,
         columnCount,
         direction,
@@ -473,6 +480,7 @@ export default function createGridComponent({
             ...style,
           },
         },
+        getSlot(before),
         createElement(innerElementType || innerTagName || 'div', {
           children: items,
           ref: innerRef,
@@ -481,7 +489,8 @@ export default function createGridComponent({
             pointerEvents: isScrolling ? 'none' : undefined,
             width: estimatedTotalWidth,
           },
-        })
+        }),
+        getSlot(after),
       );
     }
 
