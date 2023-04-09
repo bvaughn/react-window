@@ -1,8 +1,8 @@
-import React, { createRef, PureComponent } from 'react';
-import { render } from 'react-dom';
-import { Simulate } from 'react-dom/test-utils';
-import ReactTestRenderer from 'react-test-renderer';
-import { VariableSizeList } from '..';
+import React, { createRef, PureComponent } from "react";
+import { render } from "react-dom";
+import { Simulate } from "react-dom/test-utils";
+import ReactTestRenderer from "react-test-renderer";
+import { VariableSizeList } from "..";
 
 const simulateScroll = (instance, scrollOffset, direction = 'vertical') => {
   if (direction === 'horizontal') {
@@ -10,54 +10,54 @@ const simulateScroll = (instance, scrollOffset, direction = 'vertical') => {
   } else {
     instance._outerRef.scrollTop = scrollOffset;
   }
+
   Simulate.scroll(instance._outerRef);
 };
 
 const findScrollContainer = rendered => rendered.root.children[0].children[0];
 
 describe('VariableSizeList', () => {
-  let itemRenderer, itemSize, defaultProps, onItemsRendered;
-
-  // Use PureComponent to test memoization.
+  let itemRenderer, itemSize, defaultProps, onItemsRendered; // Use PureComponent to test memoization.
   // Pass through to itemRenderer mock for easier test assertions.
+
   class PureItemRenderer extends PureComponent {
     render() {
       return itemRenderer(this.props);
     }
+
   }
 
   beforeEach(() => {
     jest.useFakeTimers();
-
     // JSdom does not do actual layout and so doesn't return meaningful values here.
     // For the purposes of our tests though, we can mock out semi-meaningful values.
     // This mock is required for e.g. "onScroll" tests to work properly.
     Object.defineProperties(HTMLElement.prototype, {
       clientWidth: {
         configurable: true,
-        get: function() {
+        get: function () {
           return parseInt(this.style.width, 10) || 0;
-        },
+        }
       },
       clientHeight: {
         configurable: true,
-        get: function() {
+        get: function () {
           return parseInt(this.style.height, 10) || 0;
-        },
+        }
       },
       scrollHeight: {
         configurable: true,
-        get: () => Number.MAX_SAFE_INTEGER,
+        get: () => Number.MAX_SAFE_INTEGER
       },
       scrollWidth: {
         configurable: true,
-        get: () => Number.MAX_SAFE_INTEGER,
-      },
+        get: () => Number.MAX_SAFE_INTEGER
+      }
     });
-
-    itemRenderer = jest.fn(({ style, ...rest }) => (
-      <div style={style}>{JSON.stringify(rest, null, 2)}</div>
-    ));
+    itemRenderer = jest.fn(({
+      style,
+      ...rest
+    }) => <div style={style}>{JSON.stringify(rest, null, 2)}</div>);
     itemSize = jest.fn(index => 25 + index);
     onItemsRendered = jest.fn();
     defaultProps = {
@@ -67,50 +67,27 @@ describe('VariableSizeList', () => {
       itemCount: 20,
       itemSize,
       onItemsRendered,
-      width: 50,
+      width: 50
     };
   });
-
   // Much of the shared List functionality is already tested by FixedSizeList tests.
   // This test covers functionality that is unique to VariableSizeList.
-
   it('should render an empty list', () => {
-    ReactTestRenderer.create(
-      <VariableSizeList {...defaultProps} itemCount={0} />
-    );
+    ReactTestRenderer.create(<VariableSizeList {...defaultProps} itemCount={0} />);
     expect(itemSize).not.toHaveBeenCalled();
     expect(itemRenderer).not.toHaveBeenCalled();
     expect(onItemsRendered).not.toHaveBeenCalled();
   });
-
   it('changing itemSize does not impact the rendered items', () => {
-    const rendered = ReactTestRenderer.create(
-      <VariableSizeList {...defaultProps} />
-    );
+    const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} />);
     itemRenderer.mockClear();
-    rendered.update(
-      <VariableSizeList
-        {...defaultProps}
-        itemSize={index => 50}
-        onItemsRendered={onItemsRendered}
-      />
-    );
+    rendered.update(<VariableSizeList {...defaultProps} itemSize={index => 50} onItemsRendered={onItemsRendered} />);
     expect(itemRenderer).not.toHaveBeenCalled();
   });
-
   describe('estimatedItemSize', () => {
     it('should estimate an initial scrollable size based on this value', () => {
       const itemSize = jest.fn(() => 25);
-      const rendered = ReactTestRenderer.create(
-        <VariableSizeList
-          {...defaultProps}
-          estimatedItemSize={50}
-          height={100}
-          itemCount={100}
-          itemSize={itemSize}
-          overscanCount={0}
-        />
-      );
+      const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} estimatedItemSize={50} height={100} itemCount={100} itemSize={itemSize} overscanCount={0} />);
       // We'll render 5 rows initially, each at 25px tall (125px total).
       // The remaining 95 rows will be estimated at 50px tall (4,750px total).
       // This means an initial height estimate of 4,875px.
@@ -118,18 +95,9 @@ describe('VariableSizeList', () => {
       const scrollContainer = findScrollContainer(rendered);
       expect(scrollContainer.props.style.height).toEqual(4875);
     });
-
     it('should udpate the scrollable size as more items are measured', () => {
       const itemSize = jest.fn(() => 25);
-      const rendered = ReactTestRenderer.create(
-        <VariableSizeList
-          {...defaultProps}
-          estimatedItemSize={50}
-          itemCount={100}
-          itemSize={itemSize}
-          overscanCount={0}
-        />
-      );
+      const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} estimatedItemSize={50} itemCount={100} itemSize={itemSize} overscanCount={0} />);
       rendered.getInstance().scrollToItem(18);
       // Including the additional 1 (minimum) overscan row,
       // We've now measured 20 rows, each at 25px tall (500px total).
@@ -140,24 +108,18 @@ describe('VariableSizeList', () => {
       expect(scrollContainer.props.style.height).toEqual(4500);
     });
   });
-
   describe('scrollToItem method', () => {
     it('should not set invalid offsets when the list contains few items', () => {
       const onScroll = jest.fn();
-      const rendered = ReactTestRenderer.create(
-        <VariableSizeList {...defaultProps} itemCount={3} onScroll={onScroll} />
-      );
+      const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} itemCount={3} onScroll={onScroll} />);
       expect(onItemsRendered).toMatchSnapshot();
       onItemsRendered.mockClear();
       rendered.getInstance().scrollToItem(0);
       expect(onItemsRendered).not.toHaveBeenCalled();
     });
-
     it('should scroll to the correct item for align = "auto"', () => {
       const onItemsRendered = jest.fn();
-      const rendered = ReactTestRenderer.create(
-        <VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />
-      );
+      const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />);
       // Scroll down enough to show item 10 at the bottom.
       rendered.getInstance().scrollToItem(10, 'auto');
       // No need to scroll again; item 9 is already visible.
@@ -167,17 +129,10 @@ describe('VariableSizeList', () => {
       rendered.getInstance().scrollToItem(2, 'auto');
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
-
     it('scroll with align = "auto" should work with partially-visible items', () => {
-      const rendered = ReactTestRenderer.create(
-        // Create list where items don't fit exactly into container.
-        // The container has space for 3 1/3 items.
-        <VariableSizeList
-          {...defaultProps}
-          itemCount={100}
-          itemSize={() => 30}
-        />
-      );
+      const rendered = ReactTestRenderer.create( // Create list where items don't fit exactly into container.
+      // The container has space for 3 1/3 items.
+      <VariableSizeList {...defaultProps} itemCount={100} itemSize={() => 30} />);
       // Scroll down enough to show item 10 at the bottom.
       // Should show 4 items: 3 full and one partial at the beginning
       rendered.getInstance().scrollToItem(10, 'auto');
@@ -201,12 +156,9 @@ describe('VariableSizeList', () => {
       rendered.getInstance().scrollToItem(0, 'auto');
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
-
     it('should scroll to the correct item for align = "start"', () => {
       const onItemsRendered = jest.fn();
-      const rendered = ReactTestRenderer.create(
-        <VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />
-      );
+      const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />);
       // Scroll down enough to show item 10 at the top.
       rendered.getInstance().scrollToItem(10, 'start');
       // Scroll back up so that item 9 is at the top.
@@ -218,12 +170,9 @@ describe('VariableSizeList', () => {
       rendered.getInstance().scrollToItem(19, 'start');
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
-
     it('should scroll to the correct item for align = "end"', () => {
       const onItemsRendered = jest.fn();
-      const rendered = ReactTestRenderer.create(
-        <VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />
-      );
+      const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />);
       // Scroll down enough to show item 10 at the bottom.
       rendered.getInstance().scrollToItem(10, 'end');
       // Scroll back up so that item 9 is at the bottom.
@@ -235,12 +184,9 @@ describe('VariableSizeList', () => {
       rendered.getInstance().scrollToItem(1, 'end');
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
-
     it('should scroll to the correct item for align = "center"', () => {
       const onItemsRendered = jest.fn();
-      const rendered = ReactTestRenderer.create(
-        <VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />
-      );
+      const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />);
       // Scroll down enough to show item 10 in the middle.
       rendered.getInstance().scrollToItem(10, 'center');
       // Scroll back up so that item 9 is in the middle.
@@ -257,12 +203,9 @@ describe('VariableSizeList', () => {
       rendered.getInstance().scrollToItem(19, 'center');
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
-
     it('should scroll to the correct item for align = "smart"', () => {
       const onItemsRendered = jest.fn();
-      const rendered = ReactTestRenderer.create(
-        <VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />
-      );
+      const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} onItemsRendered={onItemsRendered} />);
       // Scroll down enough to show item 10 in the middle.
       rendered.getInstance().scrollToItem(10, 'smart');
       // Scrolldn't scroll at all because it's close enough.
@@ -275,19 +218,10 @@ describe('VariableSizeList', () => {
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
   });
-
   describe('onScroll', () => {
     it('scrolling should report partial items correctly in onItemsRendered', () => {
       // Use ReactDOM renderer so the container ref works correctly.
-      const instance = render(
-        <VariableSizeList
-          {...defaultProps}
-          initialScrollOffset={20}
-          itemCount={100}
-          itemSize={() => 25}
-        />,
-        document.createElement('div')
-      );
+      const instance = render(<VariableSizeList {...defaultProps} initialScrollOffset={20} itemCount={100} itemSize={() => 25} />, document.createElement('div'));
       // Scroll 2 items fwd, but thanks to the initialScrollOffset, we should
       // still be showing partials on both ends.
       simulateScroll(instance, 70);
@@ -305,21 +239,16 @@ describe('VariableSizeList', () => {
       expect(onItemsRendered.mock.calls).toMatchSnapshot();
     });
   });
-
   describe('resetAfterIndex method', () => {
     it('should recalculate the estimated total size', () => {
       const itemSize = jest.fn(() => 75);
-      const rendered = ReactTestRenderer.create(
-        <VariableSizeList {...defaultProps} itemSize={index => 25} />
-      );
+      const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} itemSize={index => 25} />);
       rendered.getInstance().scrollToItem(19);
       // We've measured every item initially.
       const scrollContainer = findScrollContainer(rendered);
       expect(scrollContainer.props.style.height).toEqual(500);
       // Supplying a new itemSize alone should not impact anything.
-      rendered.update(
-        <VariableSizeList {...defaultProps} itemSize={itemSize} />
-      );
+      rendered.update(<VariableSizeList {...defaultProps} itemSize={itemSize} />);
       expect(scrollContainer.props.style.height).toEqual(500);
       // Reset styles after index 15,
       // And verify that the new estimated total takes this into account.
@@ -328,64 +257,33 @@ describe('VariableSizeList', () => {
       expect(itemSize).toHaveBeenCalledTimes(5);
       expect(scrollContainer.props.style.height).toEqual(750);
     });
-
     it('should delay the recalculation of the estimated total size if shouldForceUpdate is false', () => {
-      const rendered = ReactTestRenderer.create(
-        <VariableSizeList
-          {...defaultProps}
-          estimatedItemSize={30}
-          overscanCount={1}
-          itemSize={index => 25}
-        />
-      );
+      const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} estimatedItemSize={30} overscanCount={1} itemSize={index => 25} />);
       const scrollContainer = findScrollContainer(rendered);
       // The estimated total size should be (100 + 25 * 1 + 30 * 15)px = 575px.
       expect(scrollContainer.props.style.height).toEqual(575);
       // Supplying a new itemSize alone should not impact anything.
       // Although the list get re-rendered by passing inline functions,
       // but it still use the cached metrics to calculate the estimated size.
-      rendered.update(
-        <VariableSizeList
-          {...defaultProps}
-          estimatedItemSize={30}
-          overscanCount={1}
-          itemSize={index => 20}
-        />
-      );
+      rendered.update(<VariableSizeList {...defaultProps} estimatedItemSize={30} overscanCount={1} itemSize={index => 20} />);
       expect(scrollContainer.props.style.height).toEqual(575);
       // Reset calculation cache but don't re-render the list,
       // the estimated total size should stay the same.
       rendered.getInstance().resetAfterIndex(0, false);
       expect(scrollContainer.props.style.height).toEqual(575);
       // Pass inline function to make the list re-render.
-      rendered.update(
-        <VariableSizeList
-          {...defaultProps}
-          estimatedItemSize={30}
-          overscanCount={1}
-          itemSize={index => 20}
-        />
-      );
+      rendered.update(<VariableSizeList {...defaultProps} estimatedItemSize={30} overscanCount={1} itemSize={index => 20} />);
       // The estimated total height should be (100 + 20 * 1 + 30 * 14)px = 540px.
       expect(scrollContainer.props.style.height).toEqual(540);
     });
-
     it('should re-render items after the specified index with updated styles', () => {
       const itemSize = jest.fn(() => 75);
-      const rendered = ReactTestRenderer.create(
-        <VariableSizeList
-          {...defaultProps}
-          itemCount={5}
-          itemSize={index => 25}
-        />
-      );
+      const rendered = ReactTestRenderer.create(<VariableSizeList {...defaultProps} itemCount={5} itemSize={index => 25} />);
       // We've rendered 5 rows initially.
       expect(itemRenderer).toHaveBeenCalledTimes(5);
       expect(itemRenderer.mock.calls[3][0].style.height).toBe(25);
       // Supplying a new itemSize alone should not impact anything.
-      rendered.update(
-        <VariableSizeList {...defaultProps} itemCount={5} itemSize={itemSize} />
-      );
+      rendered.update(<VariableSizeList {...defaultProps} itemCount={5} itemSize={itemSize} />);
       // Reset styles for rows 4 and 5.
       // And verify that the affected rows are re-rendered with new styles.
       itemRenderer.mockClear();
@@ -394,49 +292,36 @@ describe('VariableSizeList', () => {
       expect(itemRenderer.mock.calls[3][0].style.height).toBe(75);
     });
   });
-
   describe('props validation', () => {
     beforeEach(() => spyOn(console, 'error'));
-
     it('should fail if non-function itemSize is provided', () => {
-      expect(() =>
-        ReactTestRenderer.create(
-          <VariableSizeList {...defaultProps} itemSize={123} />
-        )
-      ).toThrow(
-        'An invalid "itemSize" prop has been specified. ' +
-          'Value should be a function. "number" was specified.'
-      );
+      expect(() => ReactTestRenderer.create(<VariableSizeList {...defaultProps} itemSize={123} />)).toThrow('An invalid "itemSize" prop has been specified. ' + 'Value should be a function. "number" was specified.');
     });
   });
-
   // https://github.com/bvaughn/react-window/pull/138
   it('should descrease scroll size when itemCount decreases', () => {
     const innerRef = createRef();
     const listRef = createRef();
 
     class Wrapper extends PureComponent {
-      state = { itemCount: 100 };
+      state = {
+        itemCount: 100
+      };
+
       render() {
-        return (
-          <VariableSizeList
-            {...defaultProps}
-            itemCount={this.state.itemCount}
-            innerRef={innerRef}
-            ref={listRef}
-          />
-        );
+        return <VariableSizeList {...defaultProps} itemCount={this.state.itemCount} innerRef={innerRef} ref={listRef} />;
       }
-    }
 
-    // Use ReactDOM renderer so "scroll" events work correctly.
+    } // Use ReactDOM renderer so "scroll" events work correctly.
+
+
     const instance = render(<Wrapper />, document.createElement('div'));
-
     // Simulate scrolling past several rows.
     simulateScroll(listRef.current, 3000);
-
     // Decrease itemCount a lot and verify the scroll height is descreased as well.
-    instance.setState({ itemCount: 3 });
+    instance.setState({
+      itemCount: 3
+    });
     expect(innerRef.current.style.height).toEqual('78px');
   });
 });

@@ -1,24 +1,14 @@
-// @flow
-
 // Animation frame based implementation of setTimeout.
 // Inspired by Joe Lambert, https://gist.github.com/joelambert/1002116#file-requesttimeout-js
-
-const hasNativePerformanceNow =
-  typeof performance === 'object' && typeof performance.now === 'function';
-
-const now = hasNativePerformanceNow
-  ? () => performance.now()
-  : () => Date.now();
-
-export type TimeoutID = {|
-  id: AnimationFrameID,
-|};
-
+const hasNativePerformanceNow = typeof performance === 'object' && typeof performance.now === 'function';
+const now = hasNativePerformanceNow ? () => performance.now() : () => Date.now();
+export type TimeoutID = {
+  id: AnimationFrameID;
+};
 export function cancelTimeout(timeoutID: TimeoutID) {
   cancelAnimationFrame(timeoutID.id);
 }
-
-export function requestTimeout(callback: Function, delay: number): TimeoutID {
+export function requestTimeout(callback: (...args: Array<any>) => any, delay: number): TimeoutID {
   const start = now();
 
   function tick() {
@@ -30,8 +20,7 @@ export function requestTimeout(callback: Function, delay: number): TimeoutID {
   }
 
   const timeoutID: TimeoutID = {
-    id: requestAnimationFrame(tick),
+    id: requestAnimationFrame(tick)
   };
-
   return timeoutID;
 }
