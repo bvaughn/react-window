@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "lib": ["DOM", "ES2015", "ES2021.WeakRef"],
+    "module": "es2020",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "es2018",
+    "typeRoots": ["node_modules/@types"],
+    "types": ["jest", "node"]
+  },
+  "exclude": ["node_modules", "src/__tests__/__snapshots__"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ]
+}
