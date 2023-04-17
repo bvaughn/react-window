@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.8.9
+* Readme changes
+
 ### 1.8.8
 * 🐛 `scrollToItem` accounts for scrollbar size in the uncommon case where a List component has scrolling in the non-dominant direction (e.g. a "vertical" layout list also scrolls horizontally).
 
