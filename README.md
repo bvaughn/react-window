@@ -2,11 +2,13 @@
 
 > React components for efficiently rendering large lists and tabular data
 
+### If you like this project, 🎉 [become a sponsor](https://github.com/sponsors/bvaughn/) or ☕ [buy me a coffee](http://givebrian.coffee/)
+
+---
+
 React window works by only rendering *part* of a large data set (just enough to fill the viewport). This helps address some common performance bottlenecks:
 1. It reduces the amount of work (and time) required to render the initial view and to process updates.
 2. It reduces the memory footprint by avoiding over-allocation of DOM nodes.
-
-[![NPM registry](https://img.shields.io/npm/v/react-window.svg?style=for-the-badge)](https://yarnpkg.com/en/package/react-window) [![Travis](https://img.shields.io/badge/ci-travis-green.svg?style=for-the-badge)](https://travis-ci.org/bvaughn/react-window) [![NPM license](https://img.shields.io/badge/license-mit-red.svg?style=for-the-badge)](LICENSE.md) [![OpenCollective](https://img.shields.io/opencollective/backers/react-window?logo=open-collective&style=for-the-badge)](#backers) [![OpenCollective](https://img.shields.io/opencollective/sponsors/react-window?logo=open-collective&style=for-the-badge)](#sponsors)
 
 ### Sponsors
 
