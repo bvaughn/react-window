@@ -601,7 +601,7 @@ describe('FixedSizeList', () => {
       const ref = createRef();
       ReactDOM.render(
         <FixedSizeList {...defaultProps} ref={ref} />,
-        document.createElement('div'),
+        document.createElement('div')
       );
 
       // Mimic the vertical list not being horizontally scrollable.
