@@ -1,6 +1,6 @@
 {
   "name": "react-window",
-  "version": "1.8.9",
+  "version": "1.8.10",
   "description": "React components for efficiently rendering large, scrollable lists and tabular data",
   "author": "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)",
   "contributors": [

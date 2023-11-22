@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.8.10
+* Fix scrollDirection when direction is RTL (#690)
+
 ### 1.8.9
 * Readme changes
 
