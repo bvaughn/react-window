@@ -195,6 +195,7 @@ export default function createGridComponent({
     _instanceProps: any = initInstanceProps(this.props, this);
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
     _outerRef: ?HTMLDivElement;
+    _isPerformingImperativeScrolling: boolean = false;
 
     static defaultProps = {
       direction: 'ltr',
@@ -247,6 +248,8 @@ export default function createGridComponent({
       if (scrollTop !== undefined) {
         scrollTop = Math.max(0, scrollTop);
       }
+
+      this._isPerformingImperativeScrolling = true;
 
       this.setState(prevState => {
         if (scrollLeft === undefined) {
@@ -737,6 +740,12 @@ export default function createGridComponent({
         scrollHeight,
         scrollWidth,
       } = event.currentTarget;
+
+      if (this._isPerformingImperativeScrolling) {
+        this._isPerformingImperativeScrolling = false;
+        return;
+      }
+
       this.setState(prevState => {
         if (
           prevState.scrollLeft === scrollLeft &&
