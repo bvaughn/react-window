@@ -68,6 +68,7 @@ export type Props<T> = {|
   itemData: T,
   itemKey?: (index: number, data: T) => any,
   itemSize: itemSize,
+  itemSticky?: (index: number) => { top?: number } | undefined,
   layout: Layout,
   onItemsRendered?: onItemsRenderedCallback,
   onScroll?: onScrollCallback,
@@ -325,6 +326,7 @@ export default function createListComponent({
         style,
         useIsScrolling,
         width,
+        itemSticky,
       } = this.props;
       const { isScrolling } = this.state;
 
@@ -336,20 +338,91 @@ export default function createListComponent({
         ? this._onScrollHorizontal
         : this._onScrollVertical;
 
-      const [startIndex, stopIndex] = this._getRangeToRender();
+      const [
+        overscanStartIndex,
+        overscanStopIndex,
+        visibleStartIndex,
+      ] = this._getRangeToRender();
 
-      const items = [];
-      if (itemCount > 0) {
-        for (let index = startIndex; index <= stopIndex; index++) {
-          items.push(
-            createElement(children, {
-              data: itemData,
-              key: itemKey(index, itemData),
-              index,
-              isScrolling: useIsScrolling ? isScrolling : undefined,
-              style: this._getItemStyle(index),
-            })
-          );
+      let items = [];
+
+      if (itemSticky != null) {
+        if (itemCount > 0) {
+          const stickyIndex = this._getStickyItem(visibleStartIndex);
+
+          for (
+            let index = overscanStartIndex;
+            index <= overscanStopIndex;
+            index++
+          ) {
+            const style = this._getItemStyle(index);
+            items.push(
+              createElement(children, {
+                data: itemData,
+                key: itemKey(index, itemData),
+                index,
+                isScrolling: useIsScrolling ? isScrolling : undefined,
+                style: style
+                  ? {
+                      width: style.width,
+                      height: style.height,
+                    }
+                  : undefined,
+              })
+            );
+          }
+
+          if (stickyIndex != null) {
+            const stickyStyle = itemSticky(stickyIndex, itemData);
+            const style = this._getItemStyle(stickyIndex);
+            items = [
+              createElement(children, {
+                data: itemData,
+                key: `sticky-${itemKey(stickyIndex, itemData)}`,
+                index: stickyIndex,
+                isScrolling: useIsScrolling ? isScrolling : undefined,
+                style: {
+                  position: 'sticky',
+                  ...stickyStyle,
+                  width: style ? style.width : undefined,
+                  height: style ? style.height : undefined,
+                },
+              }),
+              ...items,
+            ];
+          }
+
+          const fillingItemStyle = this._getItemStyle(overscanStartIndex);
+          items = [
+            createElement('div', {
+              key: 'filling',
+              style: fillingItemStyle
+                ? {
+                    width: fillingItemStyle.width,
+                    height: fillingItemStyle.top,
+                  }
+                : undefined,
+            }),
+            ...items,
+          ];
+        }
+      } else {
+        if (itemCount > 0) {
+          for (
+            let index = overscanStartIndex;
+            index <= overscanStopIndex;
+            index++
+          ) {
+            items.push(
+              createElement(children, {
+                data: itemData,
+                key: itemKey(index, itemData),
+                index,
+                isScrolling: useIsScrolling ? isScrolling : undefined,
+                style: this._getItemStyle(index),
+              })
+            );
+          }
         }
       }
 
@@ -541,6 +614,19 @@ export default function createListComponent({
         startIndex,
         stopIndex,
       ];
+    }
+
+    _getStickyItem(visibleStartIndex: number): number {
+      const { itemSticky } = this.props;
+
+      for (let index = visibleStartIndex; index >= 0; index--) {
+        const sticky = itemSticky(index);
+        if (sticky) {
+          return index;
+        }
+      }
+
+      return undefined;
     }
 
     _onScrollHorizontal = (event: ScrollEvent): void => {
