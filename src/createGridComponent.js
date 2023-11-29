@@ -95,6 +95,8 @@ export type Props<T> = {|
   style?: Object,
   useIsScrolling: boolean,
   width: number,
+  getEstimatedTotalHeight: getEstimatedTotalSize,
+  getEstimatedTotalWidth: getEstimatedTotalSize,
 |};
 
 type State = {|
@@ -234,6 +236,16 @@ export default function createGridComponent({
       return null;
     }
 
+    calculateEstimatedTotalHeight(): number {
+      const calculateFunc = this.props.getEstimatedTotalHeight || getEstimatedTotalHeight;
+      return calculateFunc(this.props, this._instanceProps)
+    }
+
+    calculateEstimatedTotalWidth(): number {
+      const calculateFunc = this.props.getEstimatedTotalWidth || getEstimatedTotalWidth;
+      return calculateFunc(this.props, this._instanceProps)
+    }
+
     scrollTo({
       scrollLeft,
       scrollTop,
@@ -295,14 +307,8 @@ export default function createGridComponent({
         rowIndex = Math.max(0, Math.min(rowIndex, rowCount - 1));
       }
 
-      const estimatedTotalHeight = getEstimatedTotalHeight(
-        this.props,
-        this._instanceProps
-      );
-      const estimatedTotalWidth = getEstimatedTotalWidth(
-        this.props,
-        this._instanceProps
-      );
+      const estimatedTotalHeight = this.calculateEstimatedTotalHeight();
+      const estimatedTotalWidth = this.calculateEstimatedTotalWidth();
 
       // The scrollbar size should be considered when scrolling an item into view,
       // to ensure it's fully visible.
@@ -447,14 +453,8 @@ export default function createGridComponent({
 
       // Read this value AFTER items have been created,
       // So their actual sizes (if variable) are taken into consideration.
-      const estimatedTotalHeight = getEstimatedTotalHeight(
-        this.props,
-        this._instanceProps
-      );
-      const estimatedTotalWidth = getEstimatedTotalWidth(
-        this.props,
-        this._instanceProps
-      );
+      const estimatedTotalHeight = this.calculateEstimatedTotalHeight();
+      const estimatedTotalWidth = this.calculateEstimatedTotalWidth();
 
       return createElement(
         outerElementType || outerTagName || 'div',
