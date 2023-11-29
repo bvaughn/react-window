@@ -1,6 +1,6 @@
 {
   "description": "Demo of react-window scrolling indicators",
-  "main": "src/index.js",
+  "main": "./index.js",
   "dependencies": {
     "react": "^16",
     "react-dom": "^16",
