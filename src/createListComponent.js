@@ -663,12 +663,15 @@ export default function createListComponent({
     };
 
     _resetIsScrollingDebounced = () => {
-      if (this.props.manualScrollEndDetection === true) {
+      const outerElementIsCustomElement = this._outerElementIsCustomElement();
+      if (
+        this.props.manualScrollEndDetection === true &&
+        outerElementIsCustomElement
+      ) {
         return;
       }
-      const useScrollEndEventInsteadOfTimer =
-        scrollEndIsSupported && !this._outerElementIsCustomElement();
-      if (useScrollEndEventInsteadOfTimer) {
+
+      if (scrollEndIsSupported && !outerElementIsCustomElement) {
         return;
       }
 
