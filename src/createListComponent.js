@@ -666,6 +666,11 @@ export default function createListComponent({
       if (this.props.manualScrollEndDetection === true) {
         return;
       }
+      const useScrollEndEventInsteadOfTimer =
+        scrollEndIsSupported && !this._outerElementIsCustomElement();
+      if (useScrollEndEventInsteadOfTimer) {
+        return;
+      }
 
       if (this._resetIsScrollingTimeoutId !== null) {
         cancelTimeout(this._resetIsScrollingTimeoutId);
