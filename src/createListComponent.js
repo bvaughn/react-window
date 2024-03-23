@@ -37,12 +37,14 @@ type onScrollCallback = ({
 }) => void;
 
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
+type ScrollEndEvent = SyntheticEvent<HTMLDivElement>;
 type ItemStyleCache = { [index: number]: Object };
 
 type OuterProps = {|
   children: React$Node,
   className: string | void,
   onScroll: ScrollEvent => void,
+  onScrollEnd?: ScrollEndEvent => void,
   style: {
     [string]: mixed,
   },
@@ -77,6 +79,7 @@ export type Props<T> = {|
   overscanCount: number,
   style?: Object,
   useIsScrolling: boolean,
+  manualScrollEndDetection?: boolean,
   width: number | string,
 |};
 
@@ -123,6 +126,8 @@ type ValidateProps = (props: Props<any>) => void;
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
 const defaultItemKey = (index: number, data: any) => index;
+const scrollEndIsSupported =
+  window !== undefined ? window.hasOwnProperty('onscrollend') : false;
 
 // In DEV mode, this Set helps us only log a warning once per component instance.
 // This avoids spamming the console every time a render happens.
@@ -167,6 +172,7 @@ export default function createListComponent({
       layout: 'vertical',
       overscanCount: 2,
       useIsScrolling: false,
+      manualScrollEndDetection: false,
     };
 
     state: State = {
@@ -324,6 +330,7 @@ export default function createListComponent({
         outerTagName,
         style,
         useIsScrolling,
+        manualScrollEndDetection,
         width,
       } = this.props;
       const { isScrolling } = this.state;
@@ -360,23 +367,32 @@ export default function createListComponent({
         this._instanceProps
       );
 
+      const outerElementProps = {
+        className,
+        onScroll,
+        ref: this._outerRefSetter,
+        style: {
+          position: 'relative',
+          height,
+          width,
+          overflow: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          willChange: 'transform',
+          direction,
+          ...style,
+        },
+      };
+
+      // 'onScrollEnd' doesn't exist yet in react for regular html elements.
+      // we therefore only supply it if the outer element is a custom element
+      // and the user will handle it manually.
+      const outerElementIsCustomElement = this._outerElementIsCustomElement();
+      if (manualScrollEndDetection && outerElementIsCustomElement) {
+        outerElementProps.onScrollEnd = this._onScrollEnd;
+      }
       return createElement(
         outerElementType || outerTagName || 'div',
-        {
-          className,
-          onScroll,
-          ref: this._outerRefSetter,
-          style: {
-            position: 'relative',
-            height,
-            width,
-            overflow: 'auto',
-            WebkitOverflowScrolling: 'touch',
-            willChange: 'transform',
-            direction,
-            ...style,
-          },
-        },
+        outerElementProps,
         createElement(innerElementType || innerTagName || 'div', {
           children: items,
           ref: innerRef,
@@ -387,6 +403,12 @@ export default function createListComponent({
           },
         })
       );
+    }
+
+    _outerElementIsCustomElement() {
+      const outerElement =
+        this.props.outerElementType || this.props.outerTagName || 'div';
+      return typeof outerElement !== 'string';
     }
 
     _callOnItemsRendered: (
@@ -613,6 +635,10 @@ export default function createListComponent({
       }, this._resetIsScrollingDebounced);
     };
 
+    _onScrollEnd = (): void => {
+      this._resetIsScrolling();
+    };
+
     _outerRefSetter = (ref: any): void => {
       const { outerRef } = this.props;
 
@@ -627,9 +653,20 @@ export default function createListComponent({
       ) {
         outerRef.current = ref;
       }
+
+      // 'onScrollEnd' doesn't exist yet in react for regular html elements.
+      // we therefore attach the event listener manually.
+      const outerElementIsCustomElement = this._outerElementIsCustomElement();
+      if (scrollEndIsSupported && !outerElementIsCustomElement) {
+        ref.addEventListener('scrollend', this._onScrollEnd);
+      }
     };
 
     _resetIsScrollingDebounced = () => {
+      if (this.props.manualScrollEndDetection === true) {
+        return;
+      }
+
       if (this._resetIsScrollingTimeoutId !== null) {
         cancelTimeout(this._resetIsScrollingTimeoutId);
       }
