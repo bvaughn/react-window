@@ -79,7 +79,7 @@ export type Props<T> = {|
   overscanCount: number,
   style?: Object,
   useIsScrolling: boolean,
-  manualScrollEndDetection?: boolean,
+  useScrollEndEvent?: boolean,
   width: number | string,
 |};
 
@@ -172,7 +172,7 @@ export default function createListComponent({
       layout: 'vertical',
       overscanCount: 2,
       useIsScrolling: false,
-      manualScrollEndDetection: false,
+      useScrollEndEvent: false,
     };
 
     state: State = {
@@ -330,7 +330,7 @@ export default function createListComponent({
         outerTagName,
         style,
         useIsScrolling,
-        manualScrollEndDetection,
+        useScrollEndEvent,
         width,
       } = this.props;
       const { isScrolling } = this.state;
@@ -386,8 +386,11 @@ export default function createListComponent({
       // 'onScrollEnd' doesn't exist yet in react for regular html elements.
       // we therefore only supply it if the outer element is a custom element
       // and the user will handle it manually.
-      const outerElementIsCustomElement = this._outerElementIsCustomElement();
-      if (manualScrollEndDetection && outerElementIsCustomElement) {
+      if (
+        scrollEndIsSupported &&
+        useScrollEndEvent &&
+        this._outerElementIsCustomElement()
+      ) {
         outerElementProps.onScrollEnd = this._onScrollEnd;
       }
       return createElement(
@@ -664,15 +667,13 @@ export default function createListComponent({
 
     _resetIsScrollingDebounced = () => {
       const outerElementIsCustomElement = this._outerElementIsCustomElement();
-      if (
-        this.props.manualScrollEndDetection === true &&
-        outerElementIsCustomElement
-      ) {
-        return;
-      }
-
-      if (scrollEndIsSupported && !outerElementIsCustomElement) {
-        return;
+      if (scrollEndIsSupported) {
+        if (
+          (outerElementIsCustomElement && this.props.useScrollEndEvent) ||
+          !outerElementIsCustomElement
+        ) {
+          return;
+        }
       }
 
       if (this._resetIsScrollingTimeoutId !== null) {
