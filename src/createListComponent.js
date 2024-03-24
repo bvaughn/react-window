@@ -386,6 +386,8 @@ export default function createListComponent({
       // 'onScrollEnd' doesn't exist yet in react for regular html elements.
       // we therefore only supply it if the outer element is a custom element
       // and the user will handle it manually.
+      // This property is not set inline because even if it is set to undefined,
+      // react would still warn that it is an unknown property.
       if (
         scrollEndIsSupported &&
         useScrollEndEvent &&
@@ -666,8 +668,8 @@ export default function createListComponent({
     };
 
     _resetIsScrollingDebounced = () => {
-      const outerElementIsCustomElement = this._outerElementIsCustomElement();
       if (scrollEndIsSupported) {
+        const outerElementIsCustomElement = this._outerElementIsCustomElement();
         if (
           (outerElementIsCustomElement && this.props.useScrollEndEvent) ||
           !outerElementIsCustomElement
