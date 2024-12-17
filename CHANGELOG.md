@@ -1,6 +1,9 @@
 Changelog
 ------------
 
+### 1.8.11
+* Dependencies updated to include React 19
+
 ### 1.8.10
 * Fix scrollDirection when direction is RTL (#690)
 
