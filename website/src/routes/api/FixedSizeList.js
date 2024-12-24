@@ -34,8 +34,11 @@ const PROPS = [
           <CodeBlock value={CODE_CHILDREN_FUNCTION} />
         </div>
         <p>
+          {/* "DOM re-creation" refers to
+          https://github.com/bvaughn/react-window/issues/413#issuecomment-597876562 */}
           To render more complex items, you may wish to extend{' '}
-          <code>PureComponent</code> to avoid unnecessary re-renders:
+          <code>PureComponent</code> to avoid unnecessary re-renders
+          and DOM re-creation:
         </p>
         <div className={styles.CodeBlockWrapper}>
           <CodeBlock value={CODE_CHILDREN_CLASS} />
