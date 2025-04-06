@@ -30,53 +30,29 @@ type InstanceProps = {|
 |};
 
 const getEstimatedTotalHeight = (
-  { rowCount }: Props<any>,
-  { rowMetadataMap, estimatedRowHeight, lastMeasuredRowIndex }: InstanceProps
+  props: Props<any>,
+  instanceProps: InstanceProps
 ) => {
-  let totalSizeOfMeasuredRows = 0;
-
-  // Edge case check for when the number of items decreases while a scroll is in progress.
-  // https://github.com/bvaughn/react-window/pull/138
-  if (lastMeasuredRowIndex >= rowCount) {
-    lastMeasuredRowIndex = rowCount - 1;
-  }
-
-  if (lastMeasuredRowIndex >= 0) {
-    const itemMetadata = rowMetadataMap[lastMeasuredRowIndex];
-    totalSizeOfMeasuredRows = itemMetadata.offset + itemMetadata.size;
-  }
-
-  const numUnmeasuredItems = rowCount - lastMeasuredRowIndex - 1;
-  const totalSizeOfUnmeasuredItems = numUnmeasuredItems * estimatedRowHeight;
-
-  return totalSizeOfMeasuredRows + totalSizeOfUnmeasuredItems;
+  const itemMetadata = getItemMetadata(
+    'row',
+    props,
+    props.rowCount - 1,
+    instanceProps
+  );
+  return itemMetadata.offset + itemMetadata.size;
 };
 
 const getEstimatedTotalWidth = (
-  { columnCount }: Props<any>,
-  {
-    columnMetadataMap,
-    estimatedColumnWidth,
-    lastMeasuredColumnIndex,
-  }: InstanceProps
+  props: Props<any>,
+  instanceProps: InstanceProps
 ) => {
-  let totalSizeOfMeasuredRows = 0;
-
-  // Edge case check for when the number of items decreases while a scroll is in progress.
-  // https://github.com/bvaughn/react-window/pull/138
-  if (lastMeasuredColumnIndex >= columnCount) {
-    lastMeasuredColumnIndex = columnCount - 1;
-  }
-
-  if (lastMeasuredColumnIndex >= 0) {
-    const itemMetadata = columnMetadataMap[lastMeasuredColumnIndex];
-    totalSizeOfMeasuredRows = itemMetadata.offset + itemMetadata.size;
-  }
-
-  const numUnmeasuredItems = columnCount - lastMeasuredColumnIndex - 1;
-  const totalSizeOfUnmeasuredItems = numUnmeasuredItems * estimatedColumnWidth;
-
-  return totalSizeOfMeasuredRows + totalSizeOfUnmeasuredItems;
+  const itemMetadata = getItemMetadata(
+    'column',
+    props,
+    props.columnCount - 1,
+    instanceProps
+  );
+  return itemMetadata.offset + itemMetadata.size;
 };
 
 const getItemMetadata = (

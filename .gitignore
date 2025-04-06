@@ -1,4 +1,3 @@
-
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
@@ -6,9 +5,9 @@ node_modules
 
 # builds
 build
-dist
 
 # misc
+.idea
 .DS_Store
 .env
 .env.local
