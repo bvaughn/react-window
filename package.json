@@ -49,7 +49,7 @@
     "test:watch": "react-scripts test --env=jsdom",
     "build:flow": "cp flow-template dist/index.cjs.js.flow && cp flow-template dist/index.esm.js.flow",
     "build:source": "rollup -c",
-    "build": "mkdir dist && yarn build:flow && yarn build:source",
+    "build": "del dist && mkdir dist && yarn build:flow && yarn build:source",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
     "website:build": "cd website && yarn build",

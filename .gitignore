@@ -5,7 +5,6 @@ node_modules
 
 # builds
 build
-dist
 
 # misc
 .idea
