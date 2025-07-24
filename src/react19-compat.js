@@ -5,7 +5,10 @@ import React from 'react';
 // that mimics PureComponent behavior
 export class PureComponent extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
-    return !this.shallowEqual(this.props, nextProps) || !this.shallowEqual(this.state, nextState);
+    return (
+      !this.shallowEqual(this.props, nextProps) ||
+      !this.shallowEqual(this.state, nextState)
+    );
   }
 
   shallowEqual(objA, objB) {
@@ -13,7 +16,12 @@ export class PureComponent extends React.Component {
       return true;
     }
 
-    if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+    if (
+      typeof objA !== 'object' ||
+      objA === null ||
+      typeof objB !== 'object' ||
+      objB === null
+    ) {
       return false;
     }
 
@@ -34,4 +42,4 @@ export class PureComponent extends React.Component {
   }
 }
 
-export const { createElement } = React; 
+export const { createElement } = React;
