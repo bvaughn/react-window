@@ -2,7 +2,7 @@
 
 import memoizeOne from 'memoize-one';
 import React from 'react';
-import { createElement } from './react19-compat';
+import { createElement, PureComponent } from './react19-compat';
 import { cancelTimeout, requestTimeout } from './timer';
 import { getScrollbarSize, getRTLOffsetType } from './domHelpers';
 
@@ -157,7 +157,7 @@ export default function createListComponent({
   shouldResetStyleCacheOnItemSizeChange: boolean,
   validateProps: ValidateProps,
 |}) {
-  return class List<T> extends React.Component<Props<T>, State> {
+  return class List<T> extends PureComponent<Props<T>, State> {
     _instanceProps: any = initInstanceProps(this.props, this);
     _outerRef: ?HTMLDivElement;
     _resetIsScrollingTimeoutId: TimeoutID | null = null;
