@@ -1,5 +1,5 @@
 import memoizeOne from 'memoize-one';
-import { ComponentType, createElement, PureComponent } from 'react';
+import { ComponentType, createElement, CSSProperties, PureComponent, ReactNode, SyntheticEvent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
 import { getScrollbarSize, getRTLOffsetType } from './domHelpers';
 
@@ -8,7 +8,7 @@ import type { TimeoutID } from './timer';
 type Direction = 'ltr' | 'rtl';
 export type ScrollToAlign = 'auto' | 'smart' | 'center' | 'start' | 'end';
 
-type itemSize = number | ((index: number) => number);
+type ItemSize = number | ((index: number) => number);
 
 type RenderComponentProps<T> = {
   columnIndex: number,
@@ -21,76 +21,70 @@ type RenderComponent<T> = ComponentType<RenderComponentProps<T>>;
 
 type ScrollDirection = 'forward' | 'backward';
 
-type OnItemsRenderedCallback = ({
-  overscanColumnStartIndex: number,
-  overscanColumnStopIndex: number,
-  overscanRowStartIndex: number,
-  overscanRowStopIndex: number,
-  visibleColumnStartIndex: number,
-  visibleColumnStopIndex: number,
-  visibleRowStartIndex: number,
-  visibleRowStopIndex: number,
+type OnItemsRenderedCallback = (args:{
+  overscanColumnStartIndex: number;
+  overscanColumnStopIndex: number;
+  overscanRowStartIndex: number;
+  overscanRowStopIndex: number;
+  visibleColumnStartIndex: number;
+  visibleColumnStopIndex: number;
+  visibleRowStartIndex: number;
+  visibleRowStopIndex: number;
 }) => void;
-type OnScrollCallback = ({
-  horizontalScrollDirection: ScrollDirection,
-  scrollLeft: number,
-  scrollTop: number,
-  scrollUpdateWasRequested: boolean,
-  verticalScrollDirection: ScrollDirection,
+type OnScrollCallback = (args:{
+  horizontalScrollDirection: ScrollDirection;
+  scrollLeft: number;
+  scrollTop: number;
+  scrollUpdateWasRequested: boolean;
+  verticalScrollDirection: ScrollDirection;
 }) => void;
 
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 type ItemStyleCache = { [key: string]: Object };
 
 type OuterProps = {
-  children: ReactNode,
-  className: string | void,
-  onScroll: ScrollEvent => void,
-  style: {
-    [string]: mixed,
-  },
+  children: ReactNode;
+  className: string | void;
+  onScroll: (event:ScrollEvent) => void;
+  style:CSSProperties
 };
 
 type InnerProps = {
-  children: ReactNode,
-  style: {
-    [string]: mixed,
-  },
+  children: ReactNode;
+  style: CSSProperties;
 };
 
 export type Props<T> = {
-  children: RenderComponent<T>,
-  className?: string,
-  columnCount: number,
-  columnWidth: itemSize,
-  direction: Direction,
-  height: number,
-  initialScrollLeft?: number,
-  initialScrollTop?: number,
-  innerRef?: any,
-  innerElementType?: string | ComponentType<InnerProps, any>,
-  innerTagName?: string, // deprecated
-  itemData: T,
+  children: RenderComponent<T>;
+  className?: string;
+  columnCount: number;
+  columnWidth: ItemSize;
+  direction: Direction;
+  height: number;
+  initialScrollLeft?: number;
+  initialScrollTop?: number;
+  innerRef?: any;
+  innerElementType?: string | ComponentType<InnerProps>;
+  itemData: T;
   itemKey?: (params: {
-    columnIndex: number,
-    data: T,
-    rowIndex: number,
-  }) => any,
-  onItemsRendered?: OnItemsRenderedCallback,
-  onScroll?: OnScrollCallback,
-  outerRef?: any,
-  outerElementType?: string | ComponentType<OuterProps, any>,
-  outerTagName?: string, // deprecated
-  overscanColumnCount?: number,
+    columnIndex: number;
+    data: T;
+    rowIndex: number;
+  }) => any;
+  onItemsRendered?: OnItemsRenderedCallback;
+  onScroll?: OnScrollCallback;
+  outerRef?: any;
+  outerElementType?: string | ComponentType<OuterProps>;
+  overscanColumnCount?: number;
   overscanColumnsCount?: number, // deprecated
   overscanCount?: number, // deprecated
-  overscanRowCount?: number,
+  overscanRowCount?: number;
   overscanRowsCount?: number, // deprecated
-  rowCount: number,
-  rowHeight: itemSize,
-  style?: Object,
-  useIsScrolling: boolean,
-  width: number,
+  rowCount: number;
+  rowHeight: ItemSize;
+  style?: Object;
+  useIsScrolling: boolean;
+  width: number;
 };
 
 type State = {
@@ -138,7 +132,10 @@ type ValidateProps = (props: Props<any>) => void;
 
 const IS_SCROLLING_DEBOUNCE_INTERVAL = 150;
 
-const defaultItemKey = ({ columnIndex, data, rowIndex }) =>
+const defaultItemKey = ({ columnIndex, rowIndex }: {
+  columnIndex: number;
+  rowIndex: number;
+}) =>
   `${rowIndex}:${columnIndex}`;
 
 // In DEV mode, this Set helps us only log a warning once per component instance.
@@ -397,11 +394,9 @@ export default function createGridComponent({
         height,
         innerRef,
         innerElementType,
-        innerTagName,
         itemData,
         itemKey = defaultItemKey,
         outerElementType,
-        outerTagName,
         rowCount,
         style,
         useIsScrolling,
@@ -453,7 +448,7 @@ export default function createGridComponent({
       );
 
       return createElement(
-        outerElementType || outerTagName || 'div',
+        outerElementType || 'div',
         {
           className,
           onScroll: this._onScroll,
@@ -469,7 +464,7 @@ export default function createGridComponent({
             ...style,
           },
         },
-        createElement(innerElementType || innerTagName || 'div', {
+        createElement(innerElementType || 'div', {
           children: items,
           ref: innerRef,
           style: {
@@ -829,8 +824,6 @@ const validateSharedProps = (
     children,
     direction,
     height,
-    innerTagName,
-    outerTagName,
     overscanColumnsCount,
     overscanCount,
     overscanRowsCount,
@@ -861,16 +854,6 @@ const validateSharedProps = (
         console.warn(
           'The overscanColumnsCount and overscanRowsCount props have been deprecated. ' +
             'Please use the overscanColumnCount and overscanRowCount props instead.'
-        );
-      }
-    }
-
-    if (innerTagName != null || outerTagName != null) {
-      if (devWarningsTagName && !devWarningsTagName.has(instance)) {
-        devWarningsTagName.add(instance);
-        console.warn(
-          'The innerTagName and outerTagName props have been deprecated. ' +
-            'Please use the innerElementType and outerElementType props instead.'
         );
       }
     }
