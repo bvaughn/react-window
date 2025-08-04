@@ -1,27 +1,25 @@
-// @flow
-
 import createListComponent from './createListComponent';
 
 import type { Props, ScrollToAlign } from './createListComponent';
 
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
-type VariableSizeProps = {|
+type VariableSizeProps = {
   estimatedItemSize: number,
   ...Props<any>,
-|};
+};
 
 type itemSizeGetter = (index: number) => number;
 
-type ItemMetadata = {|
+type ItemMetadata = {
   offset: number,
   size: number,
-|};
-type InstanceProps = {|
+};
+type InstanceProps = {
   itemMetadataMap: { [index: number]: ItemMetadata },
   estimatedItemSize: number,
   lastMeasuredIndex: number,
-|};
+};
 
 const getItemMetadata = (
   props: Props<any>,

@@ -1,7 +1,5 @@
-// @flow
-
 import memoizeOne from 'memoize-one';
-import { createElement, PureComponent } from 'react';
+import { ComponentType, createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
 import { getScrollbarSize, getRTLOffsetType } from './domHelpers';
 
@@ -12,16 +10,14 @@ export type ScrollToAlign = 'auto' | 'smart' | 'center' | 'start' | 'end';
 
 type itemSize = number | ((index: number) => number);
 
-type RenderComponentProps<T> = {|
+type RenderComponentProps<T> = {
   columnIndex: number,
   data: T,
   isScrolling?: boolean,
   rowIndex: number,
   style: Object,
-|};
-export type RenderComponent<T> = React$ComponentType<
-  $Shape<RenderComponentProps<T>>
->;
+};
+type RenderComponent<T> = ComponentType<RenderComponentProps<T>>;
 
 type ScrollDirection = 'forward' | 'backward';
 
@@ -46,23 +42,23 @@ type OnScrollCallback = ({
 type ScrollEvent = SyntheticEvent<HTMLDivElement>;
 type ItemStyleCache = { [key: string]: Object };
 
-type OuterProps = {|
-  children: React$Node,
+type OuterProps = {
+  children: ReactNode,
   className: string | void,
   onScroll: ScrollEvent => void,
   style: {
     [string]: mixed,
   },
-|};
+};
 
-type InnerProps = {|
-  children: React$Node,
+type InnerProps = {
+  children: ReactNode,
   style: {
     [string]: mixed,
   },
-|};
+};
 
-export type Props<T> = {|
+export type Props<T> = {
   children: RenderComponent<T>,
   className?: string,
   columnCount: number,
@@ -72,18 +68,18 @@ export type Props<T> = {|
   initialScrollLeft?: number,
   initialScrollTop?: number,
   innerRef?: any,
-  innerElementType?: string | React$AbstractComponent<InnerProps, any>,
+  innerElementType?: string | ComponentType<InnerProps, any>,
   innerTagName?: string, // deprecated
   itemData: T,
-  itemKey?: (params: {|
+  itemKey?: (params: {
     columnIndex: number,
     data: T,
     rowIndex: number,
-  |}) => any,
+  }) => any,
   onItemsRendered?: OnItemsRenderedCallback,
   onScroll?: OnScrollCallback,
   outerRef?: any,
-  outerElementType?: string | React$AbstractComponent<OuterProps, any>,
+  outerElementType?: string | ComponentType<OuterProps, any>,
   outerTagName?: string, // deprecated
   overscanColumnCount?: number,
   overscanColumnsCount?: number, // deprecated
@@ -95,9 +91,9 @@ export type Props<T> = {|
   style?: Object,
   useIsScrolling: boolean,
   width: number,
-|};
+};
 
-type State = {|
+type State = {
   instance: any,
   isScrolling: boolean,
   horizontalScrollDirection: ScrollDirection,
@@ -105,7 +101,7 @@ type State = {|
   scrollTop: number,
   scrollUpdateWasRequested: boolean,
   verticalScrollDirection: ScrollDirection,
-|};
+};
 
 type getItemOffset = (
   props: Props<any>,
@@ -174,7 +170,7 @@ export default function createGridComponent({
   initInstanceProps,
   shouldResetStyleCacheOnItemSizeChange,
   validateProps,
-}: {|
+}: {
   getColumnOffset: getItemOffset,
   getColumnStartIndexForOffset: GetStartIndexForOffset,
   getColumnStopIndexForStartIndex: GetStopIndexForStartIndex,
@@ -190,7 +186,7 @@ export default function createGridComponent({
   initInstanceProps: InitInstanceProps,
   shouldResetStyleCacheOnItemSizeChange: boolean,
   validateProps: ValidateProps,
-|}) {
+}) {
   return class Grid<T> extends PureComponent<Props<T>, State> {
     _instanceProps: any = initInstanceProps(this.props, this);
     _resetIsScrollingTimeoutId: TimeoutID | null = null;

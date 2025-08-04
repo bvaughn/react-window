@@ -1,9 +1,7 @@
-// @flow
-
 let size: number = -1;
 
 // This utility copied from "dom-helpers" package.
-export function getScrollbarSize(recalculate?: boolean = false): number {
+export function getScrollbarSize(recalculate: boolean = false): number {
   if (size === -1 || recalculate) {
     const div = document.createElement('div');
     const style = div.style;
@@ -11,11 +9,11 @@ export function getScrollbarSize(recalculate?: boolean = false): number {
     style.height = '50px';
     style.overflow = 'scroll';
 
-    ((document.body: any): HTMLBodyElement).appendChild(div);
+    document.body.appendChild(div);
 
     size = div.offsetWidth - div.clientWidth;
 
-    ((document.body: any): HTMLBodyElement).removeChild(div);
+    document.body.removeChild(div);
   }
 
   return size;
@@ -34,7 +32,7 @@ let cachedRTLResult: RTLOffsetType | null = null;
 // The safest way to check this is to intentionally set a negative offset,
 // and then verify that the subsequent "scroll" event matches the negative offset.
 // If it does not match, then we can assume a non-standard RTL scroll implementation.
-export function getRTLOffsetType(recalculate?: boolean = false): RTLOffsetType {
+export function getRTLOffsetType(recalculate: boolean = false): RTLOffsetType {
   if (cachedRTLResult === null || recalculate) {
     const outerDiv = document.createElement('div');
     const outerStyle = outerDiv.style;
@@ -50,7 +48,7 @@ export function getRTLOffsetType(recalculate?: boolean = false): RTLOffsetType {
 
     outerDiv.appendChild(innerDiv);
 
-    ((document.body: any): HTMLBodyElement).appendChild(outerDiv);
+    document.body.appendChild(outerDiv);
 
     if (outerDiv.scrollLeft > 0) {
       cachedRTLResult = 'positive-descending';
@@ -63,7 +61,7 @@ export function getRTLOffsetType(recalculate?: boolean = false): RTLOffsetType {
       }
     }
 
-    ((document.body: any): HTMLBodyElement).removeChild(outerDiv);
+    document.body.removeChild(outerDiv);
 
     return cachedRTLResult;
   }

@@ -7,10 +7,10 @@ import CodeSandboxLink from '../components/CodeSandboxLink';
 
 import styles from './ProfiledExample.module.css';
 
-type Props = {|
+type Props = {
   className?: string,
   sandbox?: string,
-|};
+};
 
 const isProfilingEnabled = window.location.hash.indexOf('profile=true') >= 0;
 

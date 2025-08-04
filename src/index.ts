@@ -1,5 +1,3 @@
-// @flow
-
 export { default as VariableSizeGrid } from './VariableSizeGrid';
 export { default as VariableSizeList } from './VariableSizeList';
 export { default as FixedSizeGrid } from './FixedSizeGrid';

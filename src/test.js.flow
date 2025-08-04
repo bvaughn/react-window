@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import {
   FixedSizeList,
@@ -8,10 +6,10 @@ import {
   VariableSizeGrid,
 } from './';
 
-type ItemData = {|
+type ItemData = {
   num: number,
   str: string,
-|};
+};
 
 const assertVoid = (value: void) => {};
 const assertEmpty = (value: empty) => {};
@@ -45,7 +43,14 @@ const assertCustomType = (value: ItemData) => {};
     assertString(data);
     return index;
   };
-  <FixedSizeList width={0} height={0} itemSize={0} itemCount={0} itemData={1} itemKey={itemKey}>
+  <FixedSizeList
+    width={0}
+    height={0}
+    itemSize={0}
+    itemCount={0}
+    itemData={1}
+    itemKey={itemKey}
+  >
     {Item}
   </FixedSizeList>;
 }
@@ -92,7 +97,13 @@ const assertCustomType = (value: ItemData) => {};
     assertString(data);
     return index;
   };
-  <FixedSizeList width={0} height={0} itemSize={0} itemCount={0} itemKey={itemKey}>
+  <FixedSizeList
+    width={0}
+    height={0}
+    itemSize={0}
+    itemCount={0}
+    itemKey={itemKey}
+  >
     {Item}
   </FixedSizeList>;
 }
@@ -165,7 +176,13 @@ const assertCustomType = (value: ItemData) => {};
     assertString(data);
     return index;
   };
-  <VariableSizeList width={0} height={0} itemSize={0} itemCount={0} itemKey={itemKey}>
+  <VariableSizeList
+    width={0}
+    height={0}
+    itemSize={0}
+    itemCount={0}
+    itemKey={itemKey}
+  >
     {Item}
   </VariableSizeList>;
 }
@@ -186,7 +203,13 @@ const assertCustomType = (value: ItemData) => {};
     assertString(data);
     return index;
   };
-  <VariableSizeList width={0} height={0} itemSize={0} itemCount={0} itemKey={itemKey}>
+  <VariableSizeList
+    width={0}
+    height={0}
+    itemSize={0}
+    itemCount={0}
+    itemKey={itemKey}
+  >
     {Item}
   </VariableSizeList>;
 }

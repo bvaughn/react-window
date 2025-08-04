@@ -1,5 +1,4 @@
-// @flow
-
+import { Component } from 'react';
 import areEqual from './areEqual';
 import shallowDiffers from './shallowDiffers';
 
@@ -7,10 +6,12 @@ import shallowDiffers from './shallowDiffers';
 // It knows to compare individual style props and ignore the wrapper object.
 // See https://reactjs.org/docs/react-component.html#shouldcomponentupdate
 export default function shouldComponentUpdate(
+  instance: Component,
   nextProps: Object,
   nextState: Object
 ): boolean {
   return (
-    !areEqual(this.props, nextProps) || shallowDiffers(this.state, nextState)
+    !areEqual(instance.props, nextProps) ||
+    shallowDiffers(instance.state, nextState)
   );
 }

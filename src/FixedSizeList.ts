@@ -1,5 +1,3 @@
-// @flow
-
 import createListComponent from './createListComponent';
 
 import type { Props, ScrollToAlign } from './createListComponent';

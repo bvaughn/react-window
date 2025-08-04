@@ -2,29 +2,29 @@ import React, { Component, Fragment } from 'react';
 
 import styles from './ComponentApi.module.css';
 
-type Method = {|
+type Method = {
   description: string,
   signature: string,
-|};
+};
 
-type Prop = {|
+type Prop = {
   defaultValue?: any,
-  description: React$Node,
+  description: ReactNode,
   isRequired?: boolean,
   name: string,
   type: string,
-|};
+};
 
-type Props = {|
+type Props = {
   name: string,
   methods: Array<Method>,
-  methodsIntro?: React$Node,
+  methodsIntro?: ReactNode,
   props: Array<Prop>,
-  propsIntro?: React$Node,
-|};
-type State = {|
+  propsIntro?: ReactNode,
+};
+type State = {
   showAll: boolean,
-|};
+};
 
 export default class ComponentApi extends Component<Props, State> {
   state = {

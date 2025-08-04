@@ -1,33 +1,31 @@
-// @flow
-
 import createGridComponent from './createGridComponent';
 
 import type { Props, ScrollToAlign } from './createGridComponent';
 
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50;
 
-type VariableSizeProps = {|
+type VariableSizeProps = {
   estimatedColumnWidth: number,
   estimatedRowHeight: number,
   ...Props<any>,
-|};
+};
 
 type itemSizeGetter = (index: number) => number;
 type ItemType = 'column' | 'row';
 
-type ItemMetadata = {|
+type ItemMetadata = {
   offset: number,
   size: number,
-|};
+};
 type ItemMetadataMap = { [index: number]: ItemMetadata };
-type InstanceProps = {|
+type InstanceProps = {
   columnMetadataMap: ItemMetadataMap,
   estimatedColumnWidth: number,
   estimatedRowHeight: number,
   lastMeasuredColumnIndex: number,
   lastMeasuredRowIndex: number,
   rowMetadataMap: ItemMetadataMap,
-|};
+};
 
 const getEstimatedTotalHeight = (
   { rowCount }: Props<any>,

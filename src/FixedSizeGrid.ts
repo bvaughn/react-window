@@ -1,5 +1,3 @@
-// @flow
-
 import createGridComponent from './createGridComponent';
 
 import type { Props, ScrollToAlign } from './createGridComponent';
