@@ -1,8 +1,7 @@
 // @flow
 
 import memoizeOne from 'memoize-one';
-import React from 'react';
-import { createElement, PureComponent } from './react19-compat';
+import { createElement, PureComponent } from 'react';
 import { cancelTimeout, requestTimeout } from './timer';
 import { getScrollbarSize, getRTLOffsetType } from './domHelpers';
 
