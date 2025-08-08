@@ -1,0 +1,153 @@
+{
+  "tags": {},
+  "filePath": "lib/components/list/createListComponent.ts",
+  "description": "",
+  "displayName": "createListComponent",
+  "methods": [],
+  "props": {
+    "getItemOffset": {
+      "defaultValue": null,
+      "description": "",
+      "name": "getItemOffset",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/createListComponent.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "GetItemOffset"
+      }
+    },
+    "getEstimatedTotalSize": {
+      "defaultValue": null,
+      "description": "",
+      "name": "getEstimatedTotalSize",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/createListComponent.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "GetEstimatedTotalSize"
+      }
+    },
+    "getItemSize": {
+      "defaultValue": null,
+      "description": "",
+      "name": "getItemSize",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/createListComponent.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "GetItemSize"
+      }
+    },
+    "getOffsetForIndexAndAlignment": {
+      "defaultValue": null,
+      "description": "",
+      "name": "getOffsetForIndexAndAlignment",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/createListComponent.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "GetOffsetForIndexAndAlignment"
+      }
+    },
+    "getStartIndexForOffset": {
+      "defaultValue": null,
+      "description": "",
+      "name": "getStartIndexForOffset",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/createListComponent.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "GetStartIndexForOffset"
+      }
+    },
+    "getStopIndexForStartIndex": {
+      "defaultValue": null,
+      "description": "",
+      "name": "getStopIndexForStartIndex",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/createListComponent.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "GetStopIndexForStartIndex"
+      }
+    },
+    "initInstanceProps": {
+      "defaultValue": null,
+      "description": "",
+      "name": "initInstanceProps",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/createListComponent.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "InitInstanceProps"
+      }
+    },
+    "shouldResetStyleCacheOnItemSizeChange": {
+      "defaultValue": null,
+      "description": "",
+      "name": "shouldResetStyleCacheOnItemSizeChange",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/createListComponent.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "enum",
+        "raw": "boolean",
+        "value": [
+          {
+            "value": "false"
+          },
+          {
+            "value": "true"
+          }
+        ]
+      }
+    },
+    "validateProps": {
+      "defaultValue": null,
+      "description": "",
+      "name": "validateProps",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/createListComponent.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "ValidateProps"
+      }
+    }
+  }
+}

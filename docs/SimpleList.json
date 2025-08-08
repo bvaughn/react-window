@@ -1,0 +1,185 @@
+{
+  "tags": {},
+  "filePath": "lib/components/list/SimpleList.tsx",
+  "description": "",
+  "displayName": "SimpleList",
+  "methods": [],
+  "props": {
+    "className": {
+      "defaultValue": null,
+      "description": "CSS class name.",
+      "name": "className",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "string"
+      }
+    },
+    "defaultHeight": {
+      "defaultValue": {
+        "value": "0"
+      },
+      "description": "Default height of list for initial render.\nThis value is important for server rendering.",
+      "name": "defaultHeight",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "number"
+      }
+    },
+    "length": {
+      "defaultValue": null,
+      "description": "Number of items to be rendered in the list.",
+      "name": "length",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "listRef": {
+      "defaultValue": null,
+      "description": "Ref used to interact with this component's imperative API.\n\nThis API has imperative methods for scrolling and a getter for the outermost DOM element.",
+      "name": "listRef",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "Ref<SimpleListImperativeAPI>",
+        "value": [
+          {
+            "value": "(instance: SimpleListImperativeAPI) => void | (() => VoidOrUndefinedOnly)",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          },
+          {
+            "value": "RefObject<SimpleListImperativeAPI>",
+            "description": "Created by {@link createRef}, or {@link useRef} when passed `null`.",
+            "fullComment": "Created by {@link createRef}, or {@link useRef} when passed `null`.\n@template T The type of the ref's value.\n@example ```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```",
+            "tags": {
+              "template": "T The type of the ref's value.",
+              "example": "```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```"
+            }
+          }
+        ]
+      }
+    },
+    "rowComponent": {
+      "defaultValue": null,
+      "description": "React component responsible for rendering a row.\n\nThis component will receive an `index` and `style` prop by default.\nAdditionally it will receive prop values passed to `rowProps`.",
+      "name": "rowComponent",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "enum",
+        "raw": "RowComponent<ExtraProps>",
+        "value": [
+          {
+            "value": "ComponentClass<RowProps<ExtraProps>, any>",
+            "description": "Represents a component class in React.",
+            "fullComment": "Represents a component class in React.\n@template P The props the component accepts.\n@template S The internal state of the component.",
+            "tags": {
+              "template": "P The props the component accepts.\nS The internal state of the component."
+            }
+          },
+          {
+            "value": "FunctionComponent<RowProps<ExtraProps>>",
+            "description": "Represents the type of a function component. Can optionally\nreceive a type argument that represents the props the component\naccepts.",
+            "fullComment": "Represents the type of a function component. Can optionally\nreceive a type argument that represents the props the component\naccepts.\n@template P The props the component accepts.\n@see {@link https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components React TypeScript Cheatsheet}\n@example ```tsx\n// With props:\ntype Props = { name: string }\n\nconst MyComponent: FunctionComponent<Props> = (props) => {\n return <div>{props.name}</div>\n}\n```\n@example ```tsx\n// Without props:\nconst MyComponentWithoutProps: FunctionComponent = () => {\n  return <div>MyComponentWithoutProps</div>\n}\n```",
+            "tags": {
+              "template": "P The props the component accepts.",
+              "see": "{@link https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components React TypeScript Cheatsheet}",
+              "example": "```tsx\n// With props:\ntype Props = { name: string }\n\nconst MyComponent: FunctionComponent<Props> = (props) => {\n return <div>{props.name}</div>\n}\n```\n```tsx\n// Without props:\nconst MyComponentWithoutProps: FunctionComponent = () => {\n  return <div>MyComponentWithoutProps</div>\n}\n```"
+            }
+          }
+        ]
+      }
+    },
+    "rowProps": {
+      "defaultValue": null,
+      "description": "Additional props to be passed to the rowComponent.\n\nThis object must not contain either an `index` or `style` prop.\nRefer to the example for more information.",
+      "name": "rowProps",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "ExcludeForbiddenKeys<ExtraProps>"
+      }
+    },
+    "onRowsRendered": {
+      "defaultValue": null,
+      "description": "Callback notified when the range of visible rows changes.",
+      "name": "onRowsRendered",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "OnRowsRendered"
+      }
+    },
+    "style": {
+      "defaultValue": null,
+      "description": "Optional CSS properties.\nThe list of rows will fill the height defined by this style.",
+      "name": "style",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "CSSProperties"
+      }
+    },
+    "rowHeight": {
+      "defaultValue": null,
+      "description": "Fixed row height (in pixels).",
+      "name": "rowHeight",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/SimpleList.tsx",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    }
+  }
+}

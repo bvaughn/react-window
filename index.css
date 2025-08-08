@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-size: 16px;
+
+  color-scheme: dark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100vh;
+  overflow: auto;
+  background-color: var(--color-neutral-950);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-700) transparent;
+  transition: all 250ms;
+}
+
+a {
+  color: var(--color-blue-500);
+
+  &:hover {
+    color: var(--color-blue-400);
+  }
+}
