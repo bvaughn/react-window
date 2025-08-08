@@ -1,11 +1,13 @@
-const dispatcher = new EventTarget();
+import EventEmitter from "node:events";
+
+const emitter = new EventEmitter();
 
 let entrySize: DOMRectReadOnly = new DOMRect(0, 0, 0, 0);
 
 export function updateMockResizeObserver(value: DOMRect): void {
   entrySize = value;
 
-  dispatcher.dispatchEvent(new Event("change"));
+  emitter.emit("change");
 }
 
 export function mockResizeObserver() {
@@ -17,7 +19,7 @@ export function mockResizeObserver() {
     constructor(callback: ResizeObserverCallback) {
       this.#callback = callback;
 
-      dispatcher.addEventListener("change", this.#notify);
+      emitter.addListener("change", this.#onChange);
     }
 
     observe(element: HTMLElement) {
@@ -36,7 +38,7 @@ export function mockResizeObserver() {
     disconnect() {
       this.#disconnected = true;
 
-      dispatcher.removeEventListener("change", this.#notify);
+      emitter.removeListener("change", this.#onChange);
     }
 
     #notify() {
@@ -51,5 +53,9 @@ export function mockResizeObserver() {
         this,
       );
     }
+
+    #onChange = () => {
+      this.#notify();
+    };
   };
 }

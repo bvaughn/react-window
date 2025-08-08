@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, test } from "vitest";
 import { SimpleList } from "./SimpleList";
 import { updateMockResizeObserver } from "../../utils/test/mockResizeObserver";
@@ -18,9 +18,18 @@ describe("SimpleList", () => {
       />,
     );
 
-    const items = screen.queryAllByRole("listitem");
+    let items = screen.queryAllByRole("listitem");
     expect(items).toHaveLength(4);
     expect(items[0]).toHaveTextContent("Row 0");
     expect(items[3]).toHaveTextContent("Row 3");
+
+    act(() => {
+      updateMockResizeObserver(new DOMRect(0, 0, 50, 75));
+    });
+
+    items = screen.queryAllByRole("listitem");
+    expect(items).toHaveLength(3);
+    expect(items[0]).toHaveTextContent("Row 0");
+    expect(items[2]).toHaveTextContent("Row 2");
   });
 });

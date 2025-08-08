@@ -26,6 +26,7 @@ export function useResizeObserver({
   const [resizeObserver] = useState(
     () =>
       new ResizeObserver((entries) => {
+        console.log("on ResizeObserver:", entries[0]?.contentRect);
         for (const entry of entries) {
           setSize(entry.contentRect);
         }
