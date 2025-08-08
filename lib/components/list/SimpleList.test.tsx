@@ -1,18 +1,26 @@
 import { render, screen } from "@testing-library/react";
-import { describe, test } from "vitest";
+import { beforeEach, describe, expect, test } from "vitest";
 import { SimpleList } from "./SimpleList";
+import { updateMockResizeObserver } from "../../utils/test/mockResizeObserver";
 
 describe("SimpleList", () => {
-  test("should render rows", () => {
+  beforeEach(() => {
+    updateMockResizeObserver(new DOMRect(0, 0, 50, 100));
+  });
+
+  test("should render enough rows to fill the available height", () => {
     render(
       <SimpleList
-        length={3}
-        rowComponent={({ index }) => <div>Row {index}</div>}
+        length={10}
+        rowComponent={({ index }) => <div role="listitem">Row {index}</div>}
         rowHeight={25}
         rowProps={{}}
       />,
     );
 
-    screen.debug();
+    const items = screen.queryAllByRole("listitem");
+    expect(items).toHaveLength(4);
+    expect(items[0]).toHaveTextContent("Row 0");
+    expect(items[3]).toHaveTextContent("Row 3");
   });
 });

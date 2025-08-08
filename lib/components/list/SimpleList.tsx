@@ -128,6 +128,7 @@ export function SimpleList<ExtraProps extends object>({
           scrollTop: nextScrollTop,
         });
       }}
+      role="list"
       style={{
         ...style,
         maxHeight: "100%",
