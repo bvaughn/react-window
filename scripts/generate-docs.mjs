@@ -1,6 +1,6 @@
 import { mkdir, readdir, writeFile } from "fs/promises";
 import { stat } from "node:fs/promises";
-import { extname, join } from "node:path";
+import { extname, join, relative } from "node:path";
 import { cwd } from "node:process";
 import { withCustomConfig } from "react-docgen-typescript";
 
@@ -26,6 +26,8 @@ async function main() {
 
     const components = parser.parse(file);
     for (let component of components) {
+      component.filePath = relative(cwd(), file);
+
       const filePath = join(docsDir, `${component.displayName}.json`);
       await writeFile(filePath, JSON.stringify(component, null, 2));
     }

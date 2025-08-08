@@ -3,6 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)",
+  "contributors": [
+    "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)"
+  ],
+  "license": "MIT",
+  "homepage": "http://react-window.now.sh/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bvaughn/react-window.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "pnpm run build:tsc && pnpm run build:docs && pnpm run build:vite",
