@@ -1,5 +1,5 @@
-import { Block } from "../components/Block";
+import { Callout } from "../components/Callout";
 
 export function PageNotFound() {
-  return <Block>Page not found</Block>;
+  return <Callout intent="danger">Page not found</Callout>;
 }

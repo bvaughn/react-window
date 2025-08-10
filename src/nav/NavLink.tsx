@@ -1,7 +1,11 @@
 import type { PropsWithChildren } from "react";
 import { NavLink as NavLinkExternal } from "react-router-dom";
+import type { routeMap } from "../routes";
 
-export function NavLink({ to, children }: PropsWithChildren<{ to: string }>) {
+export function NavLink({
+  to,
+  children,
+}: PropsWithChildren<{ to: keyof typeof routeMap }>) {
   return (
     <NavLinkExternal to={to}>
       {({ isActive }) => (

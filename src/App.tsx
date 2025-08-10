@@ -1,38 +1,24 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ScrollRestoration } from "./components/ScrollRestoration";
 import { MobileHeader } from "./nav/MobileHeader";
 import { Nav } from "./nav/Nav";
-import { PageNotFound } from "./routes/PageNotFound";
-import { SimpleListExampleRoute } from "./routes/simple-list/SimpleListExample";
-import { SimpleListImperativeApiRoute } from "./routes/simple-list/SimpleListImperativeApi";
-import { SimpleListPropsRoute } from "./routes/simple-list/SimpleListProps";
+import { routeMap } from "./routes";
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
+      <ScrollRestoration />
       <MobileHeader />
-      <div className="pt-10 md:pt-0 h-full flex flex-row">
+      <div className="pt-12 md:pt-0 h-full flex flex-row">
         <Nav />
-        <div className="w-full py-3 px-4 overflow-y-auto">
+        <main className="w-full py-3 px-4 overflow-y-auto">
           <Routes>
-            <Route path="*" element={<PageNotFound />} />
-            <Route path="/" element={<SimpleListExampleRoute />} />
-            <Route
-              path="/simple-list/example"
-              element={<SimpleListExampleRoute />}
-            />
-            <Route
-              path="/simple-list/props"
-              element={<SimpleListPropsRoute />}
-            />
-            <Route
-              path="/simple-list/imperative-api"
-              element={<SimpleListImperativeApiRoute />}
-            />
+            {Object.entries(routeMap).map(([path, Component]) => (
+              <Route Component={Component} key={path} path={path} />
+            ))}
           </Routes>
-        </div>
+        </main>
       </div>
     </BrowserRouter>
   );
 }
-
-export default App;
