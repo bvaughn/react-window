@@ -94,7 +94,7 @@ export function SimpleListImperativeApiRoute() {
               length={100}
               listRef={listRef}
               rowComponent={Row}
-              rowHeight={20}
+              rowHeight={25}
             />
           </Block>
         </div>

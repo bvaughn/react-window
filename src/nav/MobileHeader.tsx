@@ -13,8 +13,8 @@ export function MobileHeader() {
   const { toggle } = useNavStore();
 
   return (
-    <div className="md:hidden h-10 absolute w-full z-10 flex items-center px-2 py-1 text-xl flex flex-row flex-wrap items-center gap-2 bg-neutral-900 border-b border-b-neutral-800">
-      <NavLink className={primaryLink} to="/">
+    <div className="md:hidden h-10 absolute w-full z-10 flex items-center px-3 py-2 flex flex-row flex-wrap items-center gap-2 bg-neutral-900 border-b border-b-neutral-800">
+      <NavLink className={`${primaryLink} text-lg`} to="/">
         react-window
       </NavLink>
       <div className="grow" />
@@ -22,17 +22,17 @@ export function MobileHeader() {
         className={secondaryLink}
         href="https://www.npmjs.com/package/react-window"
       >
-        <NpmHubIcon className="w-6 h-6 " />
+        <NpmHubIcon className="w-8 h-8 " />
       </ExternalLink>
       <ExternalLink
         className={secondaryLink}
         href="https://github.com/bvaughn/react-window"
       >
-        <GitHubIcon className="w-4 h-4 " />
+        <GitHubIcon className="w-6 h-6 " />
       </ExternalLink>
 
       <button className={`${primaryLink} cursor-pointer`} onClick={toggle}>
-        <Bars3Icon className="w-4 h-4 fill-current" />
+        <Bars3Icon className="w-6 h-6 fill-current" />
       </button>
     </div>
   );
