@@ -22,6 +22,7 @@ const libraryConfig: UserConfig = {
 };
 
 const websiteConfig: UserConfig = {
+  base: "/",
   plugins: [react(), svgr(), tailwindcss()],
   resolve: {
     alias: {
