@@ -2,7 +2,12 @@ import EventEmitter from "node:events";
 
 const emitter = new EventEmitter();
 
+let disabled: boolean = false;
 let entrySize: DOMRectReadOnly = new DOMRect(0, 0, 0, 0);
+
+export function disableForCurrentTest() {
+  disabled = true;
+}
 
 export function updateMockResizeObserver({
   height,
@@ -24,6 +29,8 @@ export function updateMockResizeObserver({
 }
 
 export function mockResizeObserver() {
+  disabled = false;
+
   const originalResizeObserver = window.ResizeObserver;
 
   window.ResizeObserver = class implements ResizeObserver {
@@ -58,6 +65,10 @@ export function mockResizeObserver() {
     }
 
     #notify(target: HTMLElement) {
+      if (disabled) {
+        return;
+      }
+
       this.#callback(
         [
           {

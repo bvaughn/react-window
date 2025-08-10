@@ -4,6 +4,7 @@ import {
   useMemo,
   useState,
   type ComponentProps,
+  type HTMLAttributes,
   type ReactNode,
 } from "react";
 import { useResizeObserver } from "../../hooks/useResizeObserver";
@@ -19,12 +20,14 @@ export function SimpleList<ExtraProps extends object>({
   rowHeight,
   rowProps,
   style,
-}: Omit<CommonListProps<ExtraProps>, "rowHeight"> & {
-  /**
-   * Fixed row height (in pixels).
-   */
-  rowHeight: number;
-}) {
+  ...rest
+}: Omit<CommonListProps<ExtraProps>, "rowHeight"> &
+  HTMLAttributes<HTMLDivElement> & {
+    /**
+     * Fixed row height (in pixels).
+     */
+    rowHeight: number;
+  }) {
   const [element, setElement] = useState<HTMLDivElement | null>(null);
 
   const { height = 0 } = useResizeObserver({
@@ -111,6 +114,7 @@ export function SimpleList<ExtraProps extends object>({
 
   return (
     <div
+      {...rest}
       className={className}
       ref={setElement}
       onScroll={(event) => {
