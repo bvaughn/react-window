@@ -17,7 +17,16 @@
       ],
       "required": false,
       "type": {
-        "name": "string"
+        "name": "enum",
+        "raw": "string | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "string"
+          }
+        ]
       }
     },
     "defaultHeight": {
@@ -34,7 +43,16 @@
       ],
       "required": false,
       "type": {
-        "name": "number"
+        "name": "enum",
+        "raw": "number | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "number"
+          }
+        ]
       }
     },
     "length": {
@@ -65,16 +83,22 @@
       "required": false,
       "type": {
         "name": "enum",
-        "raw": "Ref<SimpleListImperativeAPI>",
+        "raw": "Ref<SimpleListImperativeAPI> | undefined",
         "value": [
           {
-            "value": "(instance: SimpleListImperativeAPI) => void | (() => VoidOrUndefinedOnly)",
+            "value": "undefined"
+          },
+          {
+            "value": "null"
+          },
+          {
+            "value": "(instance: SimpleListImperativeAPI | null) => void | (() => VoidOrUndefinedOnly)",
             "description": "",
             "fullComment": "",
             "tags": {}
           },
           {
-            "value": "RefObject<SimpleListImperativeAPI>",
+            "value": "RefObject<SimpleListImperativeAPI | null>",
             "description": "Created by {@link createRef}, or {@link useRef} when passed `null`.",
             "fullComment": "Created by {@link createRef}, or {@link useRef} when passed `null`.\n@template T The type of the ref's value.\n@example ```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```",
             "tags": {
@@ -133,7 +157,19 @@
       ],
       "required": false,
       "type": {
-        "name": "ExcludeForbiddenKeys<ExtraProps>"
+        "name": "enum",
+        "raw": "ExcludeForbiddenKeys<ExtraProps> | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "ExcludeForbiddenKeys<ExtraProps>",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          }
+        ]
       }
     },
     "onRowsRendered": {
@@ -148,7 +184,19 @@
       ],
       "required": false,
       "type": {
-        "name": "OnRowsRendered"
+        "name": "enum",
+        "raw": "OnRowsRendered | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "OnRowsRendered",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          }
+        ]
       }
     },
     "style": {
@@ -163,7 +211,19 @@
       ],
       "required": false,
       "type": {
-        "name": "CSSProperties"
+        "name": "enum",
+        "raw": "CSSProperties | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "CSSProperties",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          }
+        ]
       }
     },
     "rowHeight": {

@@ -1,5 +1,6 @@
 import type { HTMLAttributes, PropsWithChildren } from "react";
 import type { Intent } from "../types";
+import { Button as HeadlessButton } from "@headlessui/react";
 
 export function Button({
   children,
@@ -13,12 +14,12 @@ export function Button({
   }
 >) {
   return (
-    <button
+    <HeadlessButton
       className={`rounded-sm text-sm font-bold cursor-pointer py-1 px-2 ${getClassNames(intent)} ${className}`}
       {...rest}
     >
       {children}
-    </button>
+    </HeadlessButton>
   );
 }
 

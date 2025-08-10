@@ -32,6 +32,15 @@ importers:
       "@eslint/js":
         specifier: ^9.30.1
         version: 9.30.1
+      "@headlessui/react":
+        specifier: ^2.2.4
+        version: 2.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      "@headlessui/tailwindcss":
+        specifier: ^0.2.2
+        version: 0.2.2(tailwindcss@4.1.11)
+      "@heroicons/react":
+        specifier: ^2.2.0
+        version: 2.2.0(react@19.1.0)
       "@lezer/highlight":
         specifier: latest
         version: 1.2.1
@@ -61,7 +70,10 @@ importers:
         version: 19.1.6(@types/react@19.1.8)
       "@vitejs/plugin-react-swc":
         specifier: ^3.10.2
-        version: 3.10.2(vite@7.0.6(@types/node@24.2.0)(jiti@2.4.2)(lightningcss@1.30.1)(yaml@2.8.0))
+        version: 3.10.2(@swc/helpers@0.5.17)(vite@7.0.6(@types/node@24.2.0)(jiti@2.4.2)(lightningcss@1.30.1)(yaml@2.8.0))
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       eslint:
         specifier: ^9.30.1
         version: 9.30.1(jiti@2.4.2)
@@ -98,6 +110,9 @@ importers:
       react-router-dom:
         specifier: ^7.6.3
         version: 7.6.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      tailwind-merge:
+        specifier: ^3.3.1
+        version: 3.3.1
       tailwindcss:
         specifier: ^4.1.11
         version: 4.1.11
@@ -109,7 +124,7 @@ importers:
         version: 8.35.1(eslint@9.30.1(jiti@2.4.2))(typescript@5.8.3)
       typescript-json-schema:
         specifier: ^0.65.1
-        version: 0.65.1(@swc/core@1.12.9)
+        version: 0.65.1(@swc/core@1.12.9(@swc/helpers@0.5.17))
       vite:
         specifier: ^7.0.4
         version: 7.0.6(@types/node@24.2.0)(jiti@2.4.2)(lightningcss@1.30.1)(yaml@2.8.0)
@@ -119,6 +134,9 @@ importers:
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.2.0)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.30.1)(yaml@2.8.0)
+      zustand:
+        specifier: ^5.0.7
+        version: 5.0.7(@types/react@19.1.8)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0))
 
 packages:
   "@adobe/css-tools@4.4.3":
@@ -663,6 +681,69 @@ packages:
       }
     engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
 
+  "@floating-ui/core@1.7.2":
+    resolution:
+      {
+        integrity: sha512-wNB5ooIKHQc+Kui96jE/n69rHFWAVoxn5CAzL1Xdd8FG03cgY3MLO+GF9U3W737fYDSgPWA6MReKhBQBop6Pcw==,
+      }
+
+  "@floating-ui/dom@1.7.2":
+    resolution:
+      {
+        integrity: sha512-7cfaOQuCS27HD7DX+6ib2OrnW+b4ZBwDNnCcT0uTyidcmyWb03FnQqJybDBoCnpdxwBSfA94UAYlRCt7mV+TbA==,
+      }
+
+  "@floating-ui/react-dom@2.1.4":
+    resolution:
+      {
+        integrity: sha512-JbbpPhp38UmXDDAu60RJmbeme37Jbgsm7NrHGgzYYFKmblzRUh6Pa641dII6LsjwF4XlScDrde2UAzDo/b9KPw==,
+      }
+    peerDependencies:
+      react: ">=16.8.0"
+      react-dom: ">=16.8.0"
+
+  "@floating-ui/react@0.26.28":
+    resolution:
+      {
+        integrity: sha512-yORQuuAtVpiRjpMhdc0wJj06b9JFjrYF4qp96j++v2NBpbi6SEGF7donUJ3TMieerQ6qVkAv1tgr7L4r5roTqw==,
+      }
+    peerDependencies:
+      react: ">=16.8.0"
+      react-dom: ">=16.8.0"
+
+  "@floating-ui/utils@0.2.10":
+    resolution:
+      {
+        integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==,
+      }
+
+  "@headlessui/react@2.2.4":
+    resolution:
+      {
+        integrity: sha512-lz+OGcAH1dK93rgSMzXmm1qKOJkBUqZf1L4M8TWLNplftQD3IkoEDdUFNfAn4ylsN6WOTVtWaLmvmaHOUk1dTA==,
+      }
+    engines: { node: ">=10" }
+    peerDependencies:
+      react: ^18 || ^19 || ^19.0.0-rc
+      react-dom: ^18 || ^19 || ^19.0.0-rc
+
+  "@headlessui/tailwindcss@0.2.2":
+    resolution:
+      {
+        integrity: sha512-xNe42KjdyA4kfUKLLPGzME9zkH7Q3rOZ5huFihWNWOQFxnItxPB3/67yBI8/qBfY8nwBRx5GHn4VprsoluVMGw==,
+      }
+    engines: { node: ">=10" }
+    peerDependencies:
+      tailwindcss: ^3.0 || ^4.0
+
+  "@heroicons/react@2.2.0":
+    resolution:
+      {
+        integrity: sha512-LMcepvRaS9LYHJGsF0zzmgKCUim/X3N/DQKc4jepAXJ7l8QxJ1PmxJzqplF2Z3FE4PqBAIGyJAQ/w4B5dsqbtQ==,
+      }
+    peerDependencies:
+      react: ">= 16 || ^19.0.0-rc"
+
   "@humanfs/core@0.19.1":
     resolution:
       {
@@ -804,6 +885,64 @@ packages:
         integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==,
       }
     engines: { node: ">= 8" }
+
+  "@react-aria/focus@3.20.5":
+    resolution:
+      {
+        integrity: sha512-JpFtXmWQ0Oca7FcvkqgjSyo6xEP7v3oQOLUId6o0xTvm4AD5W0mU2r3lYrbhsJ+XxdUUX4AVR5473sZZ85kU4A==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  "@react-aria/interactions@3.25.3":
+    resolution:
+      {
+        integrity: sha512-J1bhlrNtjPS/fe5uJQ+0c7/jiXniwa4RQlP+Emjfc/iuqpW2RhbF9ou5vROcLzWIyaW8tVMZ468J68rAs/aZ5A==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  "@react-aria/ssr@3.9.9":
+    resolution:
+      {
+        integrity: sha512-2P5thfjfPy/np18e5wD4WPt8ydNXhij1jwA8oehxZTFqlgVMGXzcWKxTb4RtJrLFsqPO7RUQTiY8QJk0M4Vy2g==,
+      }
+    engines: { node: ">= 12" }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  "@react-aria/utils@3.29.1":
+    resolution:
+      {
+        integrity: sha512-yXMFVJ73rbQ/yYE/49n5Uidjw7kh192WNN9PNQGV0Xoc7EJUlSOxqhnpHmYTyO0EotJ8fdM1fMH8durHjUSI8g==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+      react-dom: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  "@react-stately/flags@3.1.2":
+    resolution:
+      {
+        integrity: sha512-2HjFcZx1MyQXoPqcBGALwWWmgFVUk2TuKVIQxCbRq7fPyWXIl6VHcakCLurdtYC2Iks7zizvz0Idv48MQ38DWg==,
+      }
+
+  "@react-stately/utils@3.10.7":
+    resolution:
+      {
+        integrity: sha512-cWvjGAocvy4abO9zbr6PW6taHgF24Mwy/LbQ4TC4Aq3tKdKDntxyD+sh7AkSRfJRT2ccMVaHVv2+FfHThd3PKQ==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  "@react-types/shared@3.30.0":
+    resolution:
+      {
+        integrity: sha512-COIazDAx1ncDg046cTJ8SFYsX8aS3lB/08LDnbkH/SkdYrFPWDlXMrO/sUam8j1WWM+PJ+4d1mj7tODIKNiFog==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
   "@rolldown/pluginutils@1.0.0-beta.11":
     resolution:
@@ -1195,6 +1334,12 @@ packages:
         integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==,
       }
 
+  "@swc/helpers@0.5.17":
+    resolution:
+      {
+        integrity: sha512-5IKx/Y13RsYd+sauPb2x+U/xZikHjolzfuDgTAl/Tdf3Q8rslRvC19NKDLgAJQ6wsqADk10ntlv08nPFw/gO/A==,
+      }
+
   "@swc/types@0.1.23":
     resolution:
       {
@@ -1340,6 +1485,21 @@ packages:
     resolution:
       {
         integrity: sha512-Qwid2wofBbkB0tRNxlNgfcuICta3QITi558B349nLUPtW8E4sOxhu5NUpw6IpuO2NuIglWxrCw8u7Zfvmhv6jg==,
+      }
+
+  "@tanstack/react-virtual@3.13.12":
+    resolution:
+      {
+        integrity: sha512-Gd13QdxPSukP8ZrkbgS2RwoZseTTbQPLnQEn7HY/rqtM+8Zt95f7xKC7N0EsKs7aoz0WzZ+fditZux+F8EzYxA==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  "@tanstack/virtual-core@3.13.12":
+    resolution:
+      {
+        integrity: sha512-1YBOJfRHV4sXUmWsFSf5rQor4Ss82G8dQWLRbnk3GA4jeP8hQt1hxXh0tmflpC0dz3VgEv/1+qwPyLeWkQuPFA==,
       }
 
   "@testing-library/dom@10.4.0":
@@ -1835,6 +1995,13 @@ packages:
         integrity: sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==,
       }
     engines: { node: ">=12" }
+
+  clsx@2.1.1:
+    resolution:
+      {
+        integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==,
+      }
+    engines: { node: ">=6" }
 
   color-convert@2.0.1:
     resolution:
@@ -3384,6 +3551,18 @@ packages:
         integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==,
       }
 
+  tabbable@6.2.0:
+    resolution:
+      {
+        integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==,
+      }
+
+  tailwind-merge@3.3.1:
+    resolution:
+      {
+        integrity: sha512-gBXpgUm/3rp1lMZZrM/w7D8GKqshif0zAymAhbCyIt8KMe+0v9DQ7cdYLR4FHH/cKpdTXb+A/tKKU3eolfsI+g==,
+      }
+
   tailwindcss@4.1.11:
     resolution:
       {
@@ -3576,6 +3755,14 @@ packages:
       {
         integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==,
       }
+
+  use-sync-external-store@1.5.0:
+    resolution:
+      {
+        integrity: sha512-Rb46I4cGGVBmjamjphe8L/UnvJD+uPPtTkNvX5mZgqdbavhI4EbgIWJiIHXJ8bc/i9EQGPRh4DwEURJ552Do0A==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   v8-compile-cache-lib@3.0.1:
     resolution:
@@ -3840,6 +4027,27 @@ packages:
         integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==,
       }
     engines: { node: ">=10" }
+
+  zustand@5.0.7:
+    resolution:
+      {
+        integrity: sha512-Ot6uqHDW/O2VdYsKLLU8GQu8sCOM1LcoE8RwvLv9uuRT9s6SOHCKs0ZEOhxg+I1Ld+A1Q5lwx+UlKXXUoCZITg==,
+      }
+    engines: { node: ">=12.20.0" }
+    peerDependencies:
+      "@types/react": ">=18.0.0"
+      immer: ">=9.0.6"
+      react: ">=18.0.0"
+      use-sync-external-store: ">=1.2.0"
+    peerDependenciesMeta:
+      "@types/react":
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
 
 snapshots:
   "@adobe/css-tools@4.4.3": {}
@@ -4179,6 +4387,49 @@ snapshots:
       "@eslint/core": 0.15.1
       levn: 0.4.1
 
+  "@floating-ui/core@1.7.2":
+    dependencies:
+      "@floating-ui/utils": 0.2.10
+
+  "@floating-ui/dom@1.7.2":
+    dependencies:
+      "@floating-ui/core": 1.7.2
+      "@floating-ui/utils": 0.2.10
+
+  "@floating-ui/react-dom@2.1.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)":
+    dependencies:
+      "@floating-ui/dom": 1.7.2
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  "@floating-ui/react@0.26.28(react-dom@19.1.0(react@19.1.0))(react@19.1.0)":
+    dependencies:
+      "@floating-ui/react-dom": 2.1.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      "@floating-ui/utils": 0.2.10
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+      tabbable: 6.2.0
+
+  "@floating-ui/utils@0.2.10": {}
+
+  "@headlessui/react@2.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)":
+    dependencies:
+      "@floating-ui/react": 0.26.28(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      "@react-aria/focus": 3.20.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      "@react-aria/interactions": 3.25.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      "@tanstack/react-virtual": 3.13.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+      use-sync-external-store: 1.5.0(react@19.1.0)
+
+  "@headlessui/tailwindcss@0.2.2(tailwindcss@4.1.11)":
+    dependencies:
+      tailwindcss: 4.1.11
+
+  "@heroicons/react@2.2.0(react@19.1.0)":
+    dependencies:
+      react: 19.1.0
+
   "@humanfs/core@0.19.1": {}
 
   "@humanfs/node@0.16.6":
@@ -4261,6 +4512,55 @@ snapshots:
     dependencies:
       "@nodelib/fs.scandir": 2.1.5
       fastq: 1.19.1
+
+  "@react-aria/focus@3.20.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)":
+    dependencies:
+      "@react-aria/interactions": 3.25.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      "@react-aria/utils": 3.29.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      "@react-types/shared": 3.30.0(react@19.1.0)
+      "@swc/helpers": 0.5.17
+      clsx: 2.1.1
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  "@react-aria/interactions@3.25.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)":
+    dependencies:
+      "@react-aria/ssr": 3.9.9(react@19.1.0)
+      "@react-aria/utils": 3.29.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      "@react-stately/flags": 3.1.2
+      "@react-types/shared": 3.30.0(react@19.1.0)
+      "@swc/helpers": 0.5.17
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  "@react-aria/ssr@3.9.9(react@19.1.0)":
+    dependencies:
+      "@swc/helpers": 0.5.17
+      react: 19.1.0
+
+  "@react-aria/utils@3.29.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)":
+    dependencies:
+      "@react-aria/ssr": 3.9.9(react@19.1.0)
+      "@react-stately/flags": 3.1.2
+      "@react-stately/utils": 3.10.7(react@19.1.0)
+      "@react-types/shared": 3.30.0(react@19.1.0)
+      "@swc/helpers": 0.5.17
+      clsx: 2.1.1
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  "@react-stately/flags@3.1.2":
+    dependencies:
+      "@swc/helpers": 0.5.17
+
+  "@react-stately/utils@3.10.7(react@19.1.0)":
+    dependencies:
+      "@swc/helpers": 0.5.17
+      react: 19.1.0
+
+  "@react-types/shared@3.30.0(react@19.1.0)":
+    dependencies:
+      react: 19.1.0
 
   "@rolldown/pluginutils@1.0.0-beta.11": {}
 
@@ -4432,7 +4732,7 @@ snapshots:
   "@swc/core-win32-x64-msvc@1.12.9":
     optional: true
 
-  "@swc/core@1.12.9":
+  "@swc/core@1.12.9(@swc/helpers@0.5.17)":
     dependencies:
       "@swc/counter": 0.1.3
       "@swc/types": 0.1.23
@@ -4447,8 +4747,13 @@ snapshots:
       "@swc/core-win32-arm64-msvc": 1.12.9
       "@swc/core-win32-ia32-msvc": 1.12.9
       "@swc/core-win32-x64-msvc": 1.12.9
+      "@swc/helpers": 0.5.17
 
   "@swc/counter@0.1.3": {}
+
+  "@swc/helpers@0.5.17":
+    dependencies:
+      tslib: 2.8.1
 
   "@swc/types@0.1.23":
     dependencies:
@@ -4526,6 +4831,14 @@ snapshots:
       vite: 7.0.6(@types/node@24.2.0)(jiti@2.4.2)(lightningcss@1.30.1)(yaml@2.8.0)
 
   "@tailwindplus/elements@1.0.5": {}
+
+  "@tanstack/react-virtual@3.13.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0)":
+    dependencies:
+      "@tanstack/virtual-core": 3.13.12
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  "@tanstack/virtual-core@3.13.12": {}
 
   "@testing-library/dom@10.4.0":
     dependencies:
@@ -4690,10 +5003,10 @@ snapshots:
       "@typescript-eslint/types": 8.35.1
       eslint-visitor-keys: 4.2.1
 
-  "@vitejs/plugin-react-swc@3.10.2(vite@7.0.6(@types/node@24.2.0)(jiti@2.4.2)(lightningcss@1.30.1)(yaml@2.8.0))":
+  "@vitejs/plugin-react-swc@3.10.2(@swc/helpers@0.5.17)(vite@7.0.6(@types/node@24.2.0)(jiti@2.4.2)(lightningcss@1.30.1)(yaml@2.8.0))":
     dependencies:
       "@rolldown/pluginutils": 1.0.0-beta.11
-      "@swc/core": 1.12.9
+      "@swc/core": 1.12.9(@swc/helpers@0.5.17)
       vite: 7.0.6(@types/node@24.2.0)(jiti@2.4.2)(lightningcss@1.30.1)(yaml@2.8.0)
     transitivePeerDependencies:
       - "@swc/helpers"
@@ -4850,6 +5163,8 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       wrap-ansi: 7.0.0
+
+  clsx@2.1.1: {}
 
   color-convert@2.0.1:
     dependencies:
@@ -5674,6 +5989,10 @@ snapshots:
 
   symbol-tree@3.2.4: {}
 
+  tabbable@6.2.0: {}
+
+  tailwind-merge@3.3.1: {}
+
   tailwindcss@4.1.11: {}
 
   tapable@2.2.2: {}
@@ -5724,7 +6043,7 @@ snapshots:
     dependencies:
       typescript: 5.8.3
 
-  ts-node@10.9.2(@swc/core@1.12.9)(@types/node@18.19.121)(typescript@5.5.4):
+  ts-node@10.9.2(@swc/core@1.12.9(@swc/helpers@0.5.17))(@types/node@18.19.121)(typescript@5.5.4):
     dependencies:
       "@cspotcode/source-map-support": 0.8.1
       "@tsconfig/node10": 1.0.11
@@ -5742,7 +6061,7 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optionalDependencies:
-      "@swc/core": 1.12.9
+      "@swc/core": 1.12.9(@swc/helpers@0.5.17)
 
   tslib@2.8.1: {}
 
@@ -5760,14 +6079,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  typescript-json-schema@0.65.1(@swc/core@1.12.9):
+  typescript-json-schema@0.65.1(@swc/core@1.12.9(@swc/helpers@0.5.17)):
     dependencies:
       "@types/json-schema": 7.0.15
       "@types/node": 18.19.121
       glob: 7.2.3
       path-equal: 1.2.5
       safe-stable-stringify: 2.5.0
-      ts-node: 10.9.2(@swc/core@1.12.9)(@types/node@18.19.121)(typescript@5.5.4)
+      ts-node: 10.9.2(@swc/core@1.12.9(@swc/helpers@0.5.17))(@types/node@18.19.121)(typescript@5.5.4)
       typescript: 5.5.4
       yargs: 17.7.2
     transitivePeerDependencies:
@@ -5791,6 +6110,10 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
+
+  use-sync-external-store@1.5.0(react@19.1.0):
+    dependencies:
+      react: 19.1.0
 
   v8-compile-cache-lib@3.0.1: {}
 
@@ -5956,3 +6279,9 @@ snapshots:
   yn@3.1.1: {}
 
   yocto-queue@0.1.0: {}
+
+  zustand@5.0.7(@types/react@19.1.8)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0)):
+    optionalDependencies:
+      "@types/react": 19.1.8
+      react: 19.1.0
+      use-sync-external-store: 1.5.0(react@19.1.0)

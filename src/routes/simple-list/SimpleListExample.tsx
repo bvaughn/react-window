@@ -7,9 +7,9 @@ import { names } from "../../data";
 export function SimpleListExampleRoute() {
   return (
     <ExampleLayout
-      code={<Code code={CODE} transparent />}
+      code={<Code code={CODE} />}
       demo={
-        <Block className="h-75">
+        <Block className="h-35">
           <SimpleList
             length={names.length}
             rowComponent={Row}
@@ -46,7 +46,7 @@ function ListOfNames({ names }) {
       rowComponent={Row}
       rowHeight={25}
       rowProps={{ names }}
-      style={{ height: 300 }}
+      style={{ height: 140 }}
     />
   );
 }

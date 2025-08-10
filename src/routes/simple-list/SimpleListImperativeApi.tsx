@@ -10,100 +10,70 @@ import { Button } from "../../components/Button";
 import Code from "../../components/code/Code";
 import { ExampleLayout } from "../../components/ExampleLayout";
 import { Input } from "../../components/Input";
-import { Radio } from "../../components/Radio";
+import { Select, type Option } from "../../components/Select";
+
+const ALIGNMENTS: Option<Align>[] = (
+  ["auto", "center", "end", "smart", "start"] satisfies Align[]
+).map((value) => ({
+  label: `align: ${value}`,
+  value,
+}));
+const BEHAVIORS: Option<ScrollBehavior>[] = (
+  ["auto", "instant", "smooth"] satisfies ScrollBehavior[]
+).map((value) => ({
+  label: `behavior: ${value}`,
+  value,
+}));
 
 export function SimpleListImperativeApiRoute() {
   const [rowIndex, setRowIndex] = useState<number | undefined>(undefined);
-  const [align, setAlign] = useState<Align>("auto");
-  const [behavior, setBehavior] = useState<ScrollBehavior>("auto");
+  const [align, setAlign] = useState<Option<Align> | undefined>();
+  const [behavior, setBehavior] = useState<
+    Option<ScrollBehavior> | undefined
+  >();
   const listRef = useSimpleListRef(null);
 
   const scrollToRow = () => {
-    listRef.current?.scrollToRow(rowIndex ?? 0, align, behavior);
+    listRef.current?.scrollToRow({
+      align: align?.value,
+      behavior: behavior?.value,
+      index: rowIndex ?? 0,
+    });
   };
 
   return (
     <ExampleLayout
-      code={<Code code={CODE} transparent />}
+      code={<Code code={CODE} />}
       demo={
         <div className="flex flex-col gap-4">
           <Block className="flex flex-col gap-2">
-            <div className="flex gap-2 text-sm">
-              Align:
-              <Radio
-                checked={align === "auto"}
-                name="align"
+            <div className="flex gap-2 text-sm gap-2">
+              <Select
+                className="flex-1"
                 onChange={setAlign}
-                value="auto"
-              >
-                auto
-              </Radio>
-              <Radio
-                checked={align === "center"}
-                name="align"
-                onChange={setAlign}
-                value="center"
-              >
-                center
-              </Radio>
-              <Radio
-                checked={align === "end"}
-                name="align"
-                onChange={setAlign}
-                value="end"
-              >
-                end
-              </Radio>
-              <Radio
-                checked={align === "smart"}
-                name="align"
-                onChange={setAlign}
-                value="smart"
-              >
-                smart
-              </Radio>
-              <Radio
-                checked={align === "start"}
-                name="align"
-                onChange={setAlign}
-                value="start"
-              >
-                start
-              </Radio>
+                options={ALIGNMENTS}
+                placeholder="Align"
+                value={align}
+              />
+              <Select
+                className="flex-1"
+                onChange={setBehavior}
+                options={BEHAVIORS}
+                placeholder="Scroll behavior"
+                value={behavior}
+              />
             </div>
-            <div className="flex gap-2 text-sm">
-              Scroll behavior:
-              <Radio
-                checked={behavior === "auto"}
-                name="behavior"
-                onChange={setBehavior}
-                value="auto"
-              >
-                auto
-              </Radio>
-              <Radio
-                checked={behavior === "instant"}
-                name="behavior"
-                onChange={setBehavior}
-                value="instant"
-              >
-                instant
-              </Radio>
-              <Radio
-                checked={behavior === "smooth"}
-                name="behavior"
-                onChange={setBehavior}
-                value="smooth"
-              >
-                smooth
-              </Radio>
-            </div>
-            <div className="flex gap-2 text-sm">
+            <div className="flex gap-2 text-sm gap-2">
               <Input
                 className="w-full"
-                max={99}
-                min={0}
-                onChange={(value) => setRowIndex(parseInt(value))}
+                onChange={(text) => {
+                  const parsed = parseInt(text);
+                  setRowIndex(
+                    isNaN(parsed)
+                      ? undefined
+                      : Math.max(0, Math.min(99, parsed)),
+                  );
+                }}
                 onKeyDown={(event) => {
                   switch (event.key) {
                     case "Enter": {
@@ -112,16 +82,14 @@ export function SimpleListImperativeApiRoute() {
                   }
                 }}
                 placeholder="Row index"
-                step={1}
-                type="number"
-                value={"" + rowIndex}
+                value={rowIndex === undefined ? "" : "" + rowIndex}
               />
               <Button className="shrink-0" onClick={scrollToRow}>
-                Scroll to row
+                Scroll
               </Button>
             </div>
           </Block>
-          <Block className="h-50">
+          <Block className="h-35">
             <SimpleList
               length={100}
               listRef={listRef}
@@ -144,15 +112,16 @@ function Row({ index, style }: RowProps<null>) {
 }
 
 const CODE = `
-import { SimpleList, useSimpleListRef } from "react-window";
+// Attaching it using the "listRef" prop
 
-// Attaching a ref
+import { useSimpleListRef } from "react-window";
 
 const listRef = useSimpleListRef(null);
 
-return <SimpleList ref={listRef} {...props} />}
+return <SimpleList listRef={listRef} {...props} />}
 
-// Scrolling to a row
+// Then use it to interact with the list
+// e.g. Scroll to the 50th row
 
-listRef.current.scrollToRow(100, "auto", "smooth");
+listRef.current.scrollToRow({ index: 49 });
 `;

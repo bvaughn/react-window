@@ -8,7 +8,7 @@ export default function Code({
   code,
   language = "JSX",
   title,
-  transparent,
+  transparent = true,
 }: {
   className?: string;
   code: string;

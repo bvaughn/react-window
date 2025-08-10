@@ -44,11 +44,15 @@ export function SimpleList<ExtraProps extends object>({
         return element;
       },
 
-      scrollToRow(
-        index: number,
-        align: Align = "auto",
-        behavior: ScrollBehavior = "auto",
-      ) {
+      scrollToRow({
+        align = "auto",
+        behavior = "auto",
+        index,
+      }: {
+        align?: Align;
+        behavior?: ScrollBehavior;
+        index: number;
+      }) {
         const scrollTop = getScrollTopForIndex({
           align,
           height,

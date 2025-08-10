@@ -5,7 +5,15 @@ export type Align = "auto" | "center" | "end" | "smart" | "start";
 export type SimpleListImperativeAPI = {
   get element(): HTMLDivElement | null;
 
-  scrollToRow(index: number, align?: Align, behavior?: ScrollBehavior): void;
+  scrollToRow({
+    align,
+    behavior,
+    index,
+  }: {
+    align?: Align;
+    behavior?: ScrollBehavior;
+    index: number;
+  }): void;
 };
 
 export type GetRowKey<ExtraProps> = (

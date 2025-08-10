@@ -1,5 +1,5 @@
+import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
 import type { HTMLAttributes, PropsWithChildren } from "react";
-import AlertIcon from "../../public/svgs/alert.svg?react";
 import type { Intent } from "../types";
 
 export function Callout({
@@ -20,7 +20,7 @@ export function Callout({
       {...rest}
     >
       <div className="flex flex-row gap-2">
-        <AlertIcon className="w-6 h-6 shrink-0" />
+        <ExclamationTriangleIcon className="w-6 h-6 shrink-0" />
         <div>{children}</div>
       </div>
     </div>
