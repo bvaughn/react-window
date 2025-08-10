@@ -4,6 +4,5 @@ import type { SimpleListImperativeAPI } from "..";
 /**
  * Convenience hook to return a properly typed ref for the SimpleList component.
  */
-export function useSimpleListRef() {
-  return useRef<SimpleListImperativeAPI>(null);
-}
+export const useSimpleListRef =
+  useRef as typeof useRef<SimpleListImperativeAPI>;

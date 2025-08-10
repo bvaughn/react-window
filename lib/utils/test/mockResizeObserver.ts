@@ -4,13 +4,28 @@ const emitter = new EventEmitter();
 
 let entrySize: DOMRectReadOnly = new DOMRect(0, 0, 0, 0);
 
-export function updateMockResizeObserver(value: DOMRect): void {
-  entrySize = value;
+export function updateMockResizeObserver({
+  height,
+  target,
+  width,
+}: {
+  height?: number;
+  target?: HTMLElement;
+  width?: number;
+}): void {
+  entrySize = new DOMRect(
+    0,
+    0,
+    width ?? entrySize.width,
+    height ?? entrySize.height,
+  );
 
-  emitter.emit("change");
+  emitter.emit("change", target);
 }
 
 export function mockResizeObserver() {
+  const originalResizeObserver = window.ResizeObserver;
+
   window.ResizeObserver = class implements ResizeObserver {
     readonly #callback: ResizeObserverCallback;
     #disconnected: boolean = false;
@@ -28,7 +43,7 @@ export function mockResizeObserver() {
       }
 
       this.#elements.add(element);
-      this.#notify();
+      this.#notify(element);
     }
 
     unobserve(element: HTMLElement) {
@@ -37,25 +52,36 @@ export function mockResizeObserver() {
 
     disconnect() {
       this.#disconnected = true;
+      this.#elements.clear();
 
       emitter.removeListener("change", this.#onChange);
     }
 
-    #notify() {
+    #notify(target: HTMLElement) {
       this.#callback(
-        Array.from(this.#elements).map((element) => ({
-          borderBoxSize: [],
-          contentBoxSize: [],
-          contentRect: entrySize,
-          devicePixelContentBoxSize: [],
-          target: element,
-        })),
+        [
+          {
+            borderBoxSize: [],
+            contentBoxSize: [],
+            contentRect: entrySize,
+            devicePixelContentBoxSize: [],
+            target,
+          },
+        ],
         this,
       );
     }
 
-    #onChange = () => {
-      this.#notify();
+    #onChange = (target?: HTMLElement) => {
+      if (target) {
+        this.#notify(target);
+      } else {
+        this.#elements.forEach((element) => this.#notify(element));
+      }
     };
+  };
+
+  return function unmockResizeObserver() {
+    window.ResizeObserver = originalResizeObserver;
   };
 }

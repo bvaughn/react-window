@@ -22,28 +22,37 @@ export function useResizeObserver({
     width: defaultWidth,
   });
 
-  // Stable ResizeObserver even if element or box option change
-  const [resizeObserver] = useState(
-    () =>
-      new ResizeObserver((entries) => {
-        console.log("on ResizeObserver:", entries[0]?.contentRect);
-        for (const entry of entries) {
-          setSize(entry.contentRect);
-        }
-      }),
-  );
-
   useIsomorphicLayoutEffect(() => {
     if (element === null || disabled) {
       return;
     }
 
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { contentRect, target } = entry;
+        if (element === target) {
+          setSize((prevSize) => {
+            if (
+              prevSize.height === contentRect.height &&
+              prevSize.width === contentRect.width
+            ) {
+              return prevSize;
+            }
+
+            return {
+              height: contentRect.height,
+              width: contentRect.width,
+            };
+          });
+        }
+      }
+    });
     resizeObserver.observe(element, { box });
 
     return () => {
-      resizeObserver.unobserve(element);
+      resizeObserver?.unobserve(element);
     };
-  }, [box, disabled, element, resizeObserver]);
+  }, [box, disabled, element]);
 
   return size;
 }

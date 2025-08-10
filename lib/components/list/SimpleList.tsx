@@ -31,7 +31,6 @@ export function SimpleList<ExtraProps extends object>({
     defaultHeight,
     element,
   });
-  console.log("SimpleList height:", height);
 
   const [scrollState, setScrollState] = useState<ScrollState>({
     prevScrollTop: 0,

@@ -16,7 +16,7 @@ export function SimpleListImperativeApiRoute() {
   const [rowIndex, setRowIndex] = useState<number | undefined>(undefined);
   const [align, setAlign] = useState<Align>("auto");
   const [behavior, setBehavior] = useState<ScrollBehavior>("auto");
-  const listRef = useSimpleListRef();
+  const listRef = useSimpleListRef(null);
 
   const scrollToRow = () => {
     listRef.current?.scrollToRow(rowIndex ?? 0, align, behavior);
@@ -148,7 +148,7 @@ import { SimpleList, useSimpleListRef } from "react-window";
 
 // Attaching a ref
 
-const listRef = useSimpleListRef();
+const listRef = useSimpleListRef(null);
 
 return <SimpleList ref={listRef} {...props} />}
 
