@@ -1,5 +1,5 @@
 import { now } from "./now";
-import { TimeoutID } from "./types";
+import type { TimeoutID } from "./types";
 
 export function requestTimeout(callback: () => void, delay: number): TimeoutID {
   const start = now();
