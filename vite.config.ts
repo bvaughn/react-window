@@ -19,17 +19,9 @@ const libraryConfig: UserConfig = {
     },
   },
   plugins: [react()],
-  resolve: {
-    alias: {
-      "react-window": resolve(__dirname, "lib"),
-    },
-  },
 };
 
 const websiteConfig: UserConfig = {
-  // build: {
-  //   outDir: "dist/docs",
-  // },
   plugins: [react(), svgr(), tailwindcss()],
   resolve: {
     alias: {
