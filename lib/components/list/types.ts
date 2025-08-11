@@ -2,7 +2,7 @@ import type { ComponentType, CSSProperties, Ref } from "react";
 
 export type Align = "auto" | "center" | "end" | "smart" | "start";
 
-export type SimpleListImperativeAPI = {
+export type ListImperativeAPI = {
   get element(): HTMLDivElement | null;
 
   scrollToRow({
@@ -65,7 +65,7 @@ export type CommonListProps<ExtraProps extends object> = {
    *
    * This API has imperative methods for scrolling and a getter for the outermost DOM element.
    */
-  listRef?: Ref<SimpleListImperativeAPI>;
+  listRef?: Ref<ListImperativeAPI>;
 
   /**
    * React component responsible for rendering a row.

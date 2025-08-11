@@ -4,14 +4,13 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 12px;
 
   @media only screen and (max-width: 600px) {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   color-scheme: dark;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,21 +18,35 @@
 }
 
 #root {
+  width: 100vw;
   height: 100vh;
   overflow: auto;
-  background-color: var(--color-neutral-950);
+  background-color: var(--color-sky-500);
+  background: linear-gradient(
+    to right,
+    var(--color-sky-500),
+    var(--color-emerald-400)
+  );
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-neutral-700) transparent;
+  scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
   transition: all 250ms;
+
+  outline: none;
 }
 
-a {
-  color: var(--color-blue-500);
+*[data-focus] {
+  border: 2px solid transparent;
+  &:focus {
+    border: 2px solid var(--color-teal-300);
+  }
+}
 
-  &:hover {
-    color: var(--color-blue-400);
+*[data-focus-within] {
+  border: 2px solid transparent;
+  &:focus-within {
+    border: 2px solid var(--color-teal-300);
   }
 }

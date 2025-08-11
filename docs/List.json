@@ -1,8 +1,8 @@
 {
   "tags": {},
-  "filePath": "lib/components/list/SimpleList.tsx",
+  "filePath": "lib/components/list/List.tsx",
   "description": "",
-  "displayName": "SimpleList",
+  "displayName": "List",
   "methods": [],
   "props": {
     "className": {
@@ -13,6 +13,10 @@
         {
           "fileName": "react-window/lib/components/list/types.ts",
           "name": "TypeLiteral"
+        },
+        {
+          "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+          "name": "HTMLAttributes"
         }
       ],
       "required": false,
@@ -83,7 +87,7 @@
       "required": false,
       "type": {
         "name": "enum",
-        "raw": "Ref<SimpleListImperativeAPI> | undefined",
+        "raw": "Ref<ListImperativeAPI> | undefined",
         "value": [
           {
             "value": "undefined"
@@ -92,13 +96,13 @@
             "value": "null"
           },
           {
-            "value": "(instance: SimpleListImperativeAPI | null) => void | (() => VoidOrUndefinedOnly)",
+            "value": "(instance: ListImperativeAPI | null) => void | (() => VoidOrUndefinedOnly)",
             "description": "",
             "fullComment": "",
             "tags": {}
           },
           {
-            "value": "RefObject<SimpleListImperativeAPI | null>",
+            "value": "RefObject<ListImperativeAPI | null>",
             "description": "Created by {@link createRef}, or {@link useRef} when passed `null`.",
             "fullComment": "Created by {@link createRef}, or {@link useRef} when passed `null`.\n@template T The type of the ref's value.\n@example ```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```",
             "tags": {
@@ -207,6 +211,10 @@
         {
           "fileName": "react-window/lib/components/list/types.ts",
           "name": "TypeLiteral"
+        },
+        {
+          "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+          "name": "HTMLAttributes"
         }
       ],
       "required": false,
@@ -232,7 +240,7 @@
       "name": "rowHeight",
       "declarations": [
         {
-          "fileName": "react-window/lib/components/list/SimpleList.tsx",
+          "fileName": "react-window/lib/components/list/List.tsx",
           "name": "TypeLiteral"
         }
       ],

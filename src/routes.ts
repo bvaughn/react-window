@@ -1,29 +1,27 @@
 import { ComingSoon } from "./routes/ComingSoon";
 import { PageNotFound } from "./routes/PageNotFound";
-import { SimpleListExampleRoute } from "./routes/simple-list/SimpleListExample";
-import { SimpleListImperativeApiRoute } from "./routes/simple-list/SimpleListImperativeApi";
-import { SimpleListPropsRoute } from "./routes/simple-list/SimpleListProps";
+import { ListFixedRowHeightRoute } from "./routes/list/ListFixedRowHeight";
+import { ListImperativeApiRoute } from "./routes/list/ListImperativeApi";
+import { ListPropsRoute } from "./routes/list/ListProps";
 
 export const routeMap = {
   "*": PageNotFound,
 
   // Home page
-  "/": SimpleListExampleRoute,
+  "/": ComingSoon,
 
-  // SimpleList
-  "/simple-list/example": SimpleListExampleRoute,
-  "/simple-list/props": SimpleListPropsRoute,
-  "/simple-list/api": SimpleListImperativeApiRoute,
-
-  // DynamicList
-  "/dynamic-list/example": ComingSoon,
-  "/dynamic-list/props": ComingSoon,
-  "/dynamic-list/api": ComingSoon,
+  // List
+  "/list/getting-started": ComingSoon,
+  "/list/fixed-row-heights": ListFixedRowHeightRoute,
+  "/list/variable-row-heights": ComingSoon,
+  "/list/dynamic-row-heights": ComingSoon,
+  "/list/props": ListPropsRoute,
+  "/list/api": ListImperativeApiRoute,
 
   // SimpleGrid
-  "/simple-grid/example": ComingSoon,
-  "/simple-grid/props": ComingSoon,
-  "/simple-grid/api": ComingSoon,
+  "/grid/example": ComingSoon,
+  "/grid/props": ComingSoon,
+  "/grid/api": ComingSoon,
 
   // Other
   "/other/memoization": ComingSoon,

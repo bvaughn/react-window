@@ -1,7 +1,7 @@
-export { SimpleList, type SimpleListProps } from "./components/list/SimpleList";
+export { List as List, type ListProps } from "./components/list/List";
 export {
   type Align,
   type RowProps,
-  type SimpleListImperativeAPI,
+  type ListImperativeAPI,
 } from "./components/list/types";
-export { useSimpleListRef } from "./hooks/useSimpleListRef";
+export { useListRef } from "./hooks/useListRef";

@@ -38,7 +38,8 @@ export function Checkbox({
 
   return (
     <label
-      className={`text-sm cursor-pointer flex flex-row gap-2 outline-none group ${className}`}
+      className={`cursor-pointer flex flex-row gap-2 outline-none group ${className}`}
+      data-focus
       {...rest}
     >
       <input
@@ -50,7 +51,7 @@ export function Checkbox({
         type="checkbox"
       />
       <IconElement
-        className={`${iconClassName} rounded-sm outline-2 outline-transparent group-focus-within:outline-blue-600`}
+        className={`${iconClassName} rounded-md outline-2 outline-transparent group-focus-within:outline-blue-600`}
       />
       {children}
     </label>

@@ -5,10 +5,10 @@ import {
   disableForCurrentTest,
   updateMockResizeObserver,
 } from "../../utils/test/mockResizeObserver";
-import { SimpleList } from "./SimpleList";
-import { type SimpleListImperativeAPI, type RowProps } from "./types";
+import { List } from "./List";
+import { type ListImperativeAPI, type RowProps } from "./types";
 
-describe("SimpleList", () => {
+describe("List", () => {
   function Row(props: { index: number; style: CSSProperties }) {
     const { index, style } = props;
 
@@ -35,9 +35,7 @@ describe("SimpleList", () => {
   });
 
   test("should render an empty list", () => {
-    render(
-      <SimpleList length={0} rowComponent={Row} rowHeight={25} rowProps={{}} />,
-    );
+    render(<List length={0} rowComponent={Row} rowHeight={25} rowProps={{}} />);
 
     const items = screen.queryAllByRole("listitem");
     expect(items).toHaveLength(0);
@@ -45,12 +43,7 @@ describe("SimpleList", () => {
 
   test("should render enough rows to fill the available height", () => {
     render(
-      <SimpleList
-        length={10}
-        rowComponent={Row}
-        rowHeight={25}
-        rowProps={{}}
-      />,
+      <List length={10} rowComponent={Row} rowHeight={25} rowProps={{}} />,
     );
 
     let items = screen.queryAllByRole("listitem");
@@ -70,7 +63,7 @@ describe("SimpleList", () => {
 
   test("should pass rowProps to the rowComponent", () => {
     render(
-      <SimpleList
+      <List
         length={10}
         rowComponent={Row}
         rowHeight={25}
@@ -90,30 +83,30 @@ describe("SimpleList", () => {
 
   test("should re-render items if rowComponent changes", () => {
     const { rerender } = render(
-      <SimpleList length={10} rowComponent={Row} rowHeight={25} />,
+      <List length={10} rowComponent={Row} rowHeight={25} />,
     );
 
     const NewRow = vi.fn(() => null);
 
-    rerender(<SimpleList length={10} rowComponent={NewRow} rowHeight={25} />);
+    rerender(<List length={10} rowComponent={NewRow} rowHeight={25} />);
 
     expect(NewRow).toHaveBeenCalled();
   });
 
   test("should re-render items if rowHeight changes", () => {
     const { rerender } = render(
-      <SimpleList length={10} rowComponent={Row} rowHeight={25} />,
+      <List length={10} rowComponent={Row} rowHeight={25} />,
     );
     expect(mountedRows).toHaveLength(4);
 
-    rerender(<SimpleList length={10} rowComponent={Row} rowHeight={50} />);
+    rerender(<List length={10} rowComponent={Row} rowHeight={50} />);
     expect(mountedRows).toHaveLength(2);
     expect(mountedRows.get(1)?.index).toEqual(1);
   });
 
   test("should re-render items if rowProps change", () => {
     const { rerender } = render(
-      <SimpleList
+      <List
         length={10}
         rowComponent={Row}
         rowHeight={25}
@@ -128,7 +121,7 @@ describe("SimpleList", () => {
     });
 
     rerender(
-      <SimpleList
+      <List
         length={10}
         rowComponent={Row}
         rowHeight={25}
@@ -149,12 +142,7 @@ describe("SimpleList", () => {
     disableForCurrentTest();
 
     render(
-      <SimpleList
-        defaultHeight={75}
-        length={4}
-        rowComponent={Row}
-        rowHeight={25}
-      />,
+      <List defaultHeight={75} length={4} rowComponent={Row} rowHeight={25} />,
     );
 
     const items = screen.queryAllByRole("listitem");
@@ -165,7 +153,7 @@ describe("SimpleList", () => {
     const onRowsRendered = vi.fn();
 
     const { rerender } = render(
-      <SimpleList
+      <List
         defaultHeight={100}
         length={2}
         onRowsRendered={onRowsRendered}
@@ -180,7 +168,7 @@ describe("SimpleList", () => {
     });
 
     rerender(
-      <SimpleList
+      <List
         length={4}
         onRowsRendered={onRowsRendered}
         rowComponent={Row}
@@ -196,7 +184,7 @@ describe("SimpleList", () => {
 
   test("should support custom className and style props", () => {
     render(
-      <SimpleList
+      <List
         className="foo"
         length={4}
         rowComponent={Row}
@@ -214,12 +202,7 @@ describe("SimpleList", () => {
 
   test("should spread HTML rest attributes", () => {
     render(
-      <SimpleList
-        data-testid="foo"
-        length={4}
-        rowComponent={Row}
-        rowHeight={25}
-      />,
+      <List data-testid="foo" length={4} rowComponent={Row} rowHeight={25} />,
     );
 
     expect(screen.queryByTestId("foo")).toHaveRole("list");
@@ -227,34 +210,24 @@ describe("SimpleList", () => {
 
   describe("imperative API", () => {
     test("should return the root element", () => {
-      const listRef = createRef<SimpleListImperativeAPI>();
+      const listRef = createRef<ListImperativeAPI>();
 
       render(
-        <SimpleList
-          length={4}
-          listRef={listRef}
-          rowComponent={Row}
-          rowHeight={25}
-        />,
+        <List length={4} listRef={listRef} rowComponent={Row} rowHeight={25} />,
       );
 
       expect(listRef.current?.element).toEqual(screen.queryByRole("list"));
     });
 
     test("should scroll to rows", () => {
-      const listRef = createRef<SimpleListImperativeAPI>();
+      const listRef = createRef<ListImperativeAPI>();
 
       const scrollTo = vi.fn();
 
       Element.prototype.scrollTo = scrollTo;
 
       render(
-        <SimpleList
-          length={4}
-          listRef={listRef}
-          rowComponent={Row}
-          rowHeight={25}
-        />,
+        <List length={4} listRef={listRef} rowComponent={Row} rowHeight={25} />,
       );
       expect(scrollTo).not.toHaveBeenCalled();
 

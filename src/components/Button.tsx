@@ -15,7 +15,7 @@ export function Button({
 >) {
   return (
     <HeadlessButton
-      className={`rounded-sm text-sm font-bold cursor-pointer py-1 px-2 ${getClassNames(intent)} ${className}`}
+      className={`rounded-md font-bold cursor-pointer py-1 px-2 ${getClassNames(intent)} ${className}`}
       {...rest}
     >
       {children}
@@ -26,19 +26,17 @@ export function Button({
 function getClassNames(intent: Intent) {
   switch (intent) {
     case "danger": {
-      return "bg-red-200 hover:bg-red-300 text-red-600 hover:text-red-700";
+      return "bg-red-400 hover:bg-red-500 text-red-800 hover:text-red-950 focus:text-black";
     }
     case "none": {
-      return "bg-neutral-300 hover:bg-neutral-400 text-neutral-600 hover:text-neutral-700";
+      return "bg-emerald-400 hover:bg-emerald-500 text-emerald-800 hover:text-emerald-950 focus:text-black";
     }
+    case "success":
     case "primary": {
-      return "bg-blue-200 hover:bg-blue-300 text-blue-600 hover:text-blue-700";
-    }
-    case "success": {
-      return "bg-teal-200 hover:bg-teal-300 text-teal-600 hover:text-teal-700";
+      return "bg-sky-400 hover:bg-sky-500 text-sky-800 hover:text-sky-950 focus:text-black";
     }
     case "warning": {
-      return "bg-amber-200 hover:bg-amber-300 text-amber-600 hover:text-amber-700";
+      return "bg-amber-400 hover:bg-amber-500 text-amber-800 hover:text-amber-950 focus:text-black";
     }
   }
 }

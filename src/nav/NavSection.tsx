@@ -1,13 +1,28 @@
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+} from "@headlessui/react";
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import type { PropsWithChildren } from "react";
+import { NavButton } from "./NavButton";
 
 export function NavSection({
   children,
-  header,
-}: PropsWithChildren<{ header: string }>) {
+  label,
+}: PropsWithChildren<{ label: string }>) {
   return (
-    <section>
-      <div className="text-xs text-neutral-500 mb-2">{header}</div>
-      <ul role="list">{children}</ul>
-    </section>
+    <Disclosure as="section" defaultOpen={true}>
+      <DisclosureButton className="w-full group">
+        <NavButton>
+          <div className="text-white/50 uppercase text-sm font-bold">
+            {label}
+          </div>
+          <div className="grow" />
+          <ChevronRightIcon className="size-4 fill-white/60 group-data-hover:fill-white/50 group-data-open:rotate-90" />
+        </NavButton>
+      </DisclosureButton>
+      <DisclosurePanel className="">{children}</DisclosurePanel>
+    </Disclosure>
   );
 }

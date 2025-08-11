@@ -1,0 +1,24 @@
+import type { PropsWithChildren } from "react";
+import { Box } from "../components/Box";
+import { cn } from "../utils/cn";
+
+export function NavButton({
+  children,
+  className,
+  disabled,
+}: PropsWithChildren<{ className?: string; disabled?: boolean }>) {
+  return (
+    <Box
+      align="center"
+      className={cn(
+        "px-4 h-7 cursor-pointer text-white/90 hover:text-white",
+        { "pointer-events-none text-white/50": disabled },
+        className,
+      )}
+      direction="row"
+      gap={1}
+    >
+      {children}
+    </Box>
+  );
+}

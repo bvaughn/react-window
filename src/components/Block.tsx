@@ -1,12 +1,14 @@
-import type { PropsWithChildren } from "react";
+import type { HTMLAttributes, PropsWithChildren } from "react";
 
 export function Block({
   children,
   className,
-}: PropsWithChildren<{ className?: string }>) {
+  ...rest
+}: PropsWithChildren<HTMLAttributes<HTMLDivElement> & { className?: string }>) {
   return (
     <div
-      className={`border-lg bg-neutral-900 text-neutral-300 rounded-md p-2 ${className}`}
+      className={`border-lg bg-black/30 text-neutral-300 rounded-lg p-2 ${className}`}
+      {...rest}
     >
       {children}
     </div>

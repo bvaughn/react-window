@@ -33,7 +33,7 @@ export function PropsBlock({
       <div>{header}</div>
       <dl>
         {props.map((prop) => (
-          <div className="text-xs" key={prop.name}>
+          <div key={prop.name}>
             <dt className="mt-2">
               <code>
                 {prop.name}

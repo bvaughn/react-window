@@ -7,6 +7,7 @@ import {
 } from "@headlessui/react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { Fragment } from "react";
+import { cn } from "../utils/cn";
 
 export type Option<Value extends string> = {
   label: string;
@@ -30,8 +31,11 @@ export function Select<Value extends string>({
 }) {
   return (
     <Listbox value={value ?? defaultValue} onChange={onChange}>
-      <div className={`relative text-sm ${className}`}>
-        <ListboxButton className="w-full cursor-default bg-neutral-900 border border-neutral-700 rounded-sm py-1 pl-2 pr-6 text-left outline-none focus:border-blue-300">
+      <div className={`relative ${className}`}>
+        <ListboxButton
+          className="w-full text-left rounded-md bg-black/30 border border-2 border-transparent py-1 px-2 outline-none focus:border-teal-300"
+          data-focus
+        >
           {value ? (
             <span className="block truncate">{value.label}</span>
           ) : (
@@ -52,11 +56,18 @@ export function Select<Value extends string>({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <ListboxOptions className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-sm py-1 bg-neutral-900 outline-none border border-neutral-700 focus:border-blue-300">
+          <ListboxOptions
+            className="absolute z-10 mt-1 max-h-50 w-full overflow-auto rounded-md py-1 bg-black/90"
+            data-focus
+          >
             {options.map((option, index) => (
               <ListboxOption
                 key={index}
-                className="relative cursor-default select-none py-1 px-2 text-neutral-300 data-active:text-white data-active:bg-neutral-800 data-selected:text-blue-500"
+                className={cn(
+                  "relative cursor-default select-none py-1 px-2 text-neutral-300",
+                  "data-active:text-teal-300 data-active:bg-black",
+                  "data-selected:text-teal-300 data-selected:font-bold",
+                )}
                 value={option}
               >
                 {option.label}

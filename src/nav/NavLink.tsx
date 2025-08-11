@@ -1,19 +1,28 @@
 import type { PropsWithChildren } from "react";
 import { NavLink as NavLinkExternal } from "react-router-dom";
 import type { routeMap } from "../routes";
+import { cn } from "../utils/cn";
+import { NavButton } from "./NavButton";
 
 export function NavLink({
-  to,
   children,
-}: PropsWithChildren<{ to: keyof typeof routeMap }>) {
+  className,
+  to,
+}: PropsWithChildren<{ className?: string; to: keyof typeof routeMap }>) {
   return (
     <NavLinkExternal to={to}>
       {({ isActive }) => (
-        <li
-          className={`cursor-pointer text-sm text-neutral-300 hover:text-white pl-4 border-l ${isActive ? "text-white border-l-neutral-300" : "border-l-neutral-800"}`}
+        <NavButton
+          className={cn(
+            "px-4 cursor-pointer",
+            {
+              "hover:text-white": isActive,
+            },
+            className,
+          )}
         >
           {children}
-        </li>
+        </NavButton>
       )}
     </NavLinkExternal>
   );

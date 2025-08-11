@@ -26,7 +26,20 @@ async function main() {
 
     const components = parser.parse(file);
     for (let component of components) {
+      // Convert to local paths
       component.filePath = relative(cwd(), file);
+
+      // Filter inherited HTML attributes
+      for (let key in component.props) {
+        const prop = component.props[key];
+        if (
+          prop.declarations.filter(
+            (declaration) => !declaration.fileName.includes("node_modules"),
+          ).length === 0
+        ) {
+          delete component.props[key];
+        }
+      }
 
       const filePath = join(docsDir, `${component.displayName}.json`);
       await writeFile(filePath, JSON.stringify(component, null, 2));

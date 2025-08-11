@@ -15,7 +15,7 @@ export function Callout({
 >) {
   return (
     <div
-      className={`rounded p-2 ${getClassNames(intent)} ${className}`}
+      className={`rounded-md rounded-tr-xl p-2 px-3 ${getClassNames(intent)} ${className}`}
       role="alert"
       {...rest}
     >
@@ -30,19 +30,19 @@ export function Callout({
 function getClassNames(intent: Intent) {
   switch (intent) {
     case "danger": {
-      return "bg-red-950 text-red-400 [&>div>svg]:text-red-200";
+      return "bg-black/10 bg-border border-2 border-red-400 text-white [&>div>svg]:text-red-400";
     }
     case "none": {
-      return "bg-neutral-900 text-neutral-400 [&>div>svg]:text-neutral-300";
+      return "bg-black/10 bg-border border-2 border-neutral-400 text-white [&>div>svg]:text-neutral-400";
     }
     case "primary": {
-      return "bg-blue-950 text-blue-500 [&>div>svg]:text-blue-200";
+      return "bg-black/10 bg-border border-2 border-sky-400 text-white [&>div>svg]:text-sky-400";
     }
     case "success": {
-      return "bg-teal-950 text-teal-500 [&>div>svg]:text-teal-200";
+      return "bg-black/10 bg-border border-2 border-emerald-400 text-white [&>div>svg]:text-emerald-400";
     }
     case "warning": {
-      return "bg-amber-900 text-amber-200 [&>div>svg]:text-amber-100";
+      return "bg-black/10 bg-border border-2 border-amber-400 text-white [&>div>svg]:text-amber-400";
     }
   }
 }

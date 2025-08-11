@@ -1,7 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { useIsomorphicLayoutEffect } from "../../lib/hooks/useIsomorphicLayoutEffect";
+import { useNavStore } from "../hooks/useNavStore";
 
-export function ScrollRestoration() {
+export function RouteChangeHandler() {
+  const { hide } = useNavStore();
+
   const { pathname } = useLocation();
 
   useIsomorphicLayoutEffect(() => {
@@ -9,6 +12,8 @@ export function ScrollRestoration() {
     if (main) {
       main.scrollTo(0, 0);
     }
+
+    hide();
   }, [pathname]);
 
   return null;

@@ -10,7 +10,7 @@ import {
 import { useResizeObserver } from "../../hooks/useResizeObserver";
 import type { Align, CommonListProps, ScrollState } from "./types";
 
-export function SimpleList<ExtraProps extends object>({
+export function List<ExtraProps extends object>({
   className,
   defaultHeight = 0,
   length,
@@ -158,7 +158,7 @@ export function SimpleList<ExtraProps extends object>({
   );
 }
 
-export type SimpleListProps = ComponentProps<typeof SimpleList>;
+export type ListProps = ComponentProps<typeof List>;
 
 function getIndicesToRender({
   height,

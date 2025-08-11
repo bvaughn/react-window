@@ -18,7 +18,7 @@
     "build": "pnpm run build:lib && pnpm run build:docs",
     "build:docs": "TARGET=docs vite build",
     "build:lib": "TARGET=lib vite build",
-    "docs": "node ./scripts/generate-docs.mjs",
+    "docs": "rm -rf docs && node ./scripts/generate-docs.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky",

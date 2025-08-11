@@ -1,5 +1,5 @@
 .tok-comment {
-  color: var(--color-slate-600);
+  color: var(--color-slate-500);
 }
 .tok-definition {
 }
@@ -16,16 +16,16 @@
   color: var(--color-slate-400);
 }
 .tok-propertyName {
-  color: var(--color-violet-400);
+  color: var(--color-sky-300);
 }
 .tok-punctuation {
   color: var(--color-slate-400);
 }
 .tok-string {
-  color: var(--color-sky-300);
+  color: var(--color-teal-300);
 }
 .tok-string2 {
-  color: var(--color-violet-400);
+  color: var(--color-sky-300);
 }
 .tok-typeName {
   color: var(--color-pink-400);

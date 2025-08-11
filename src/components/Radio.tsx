@@ -35,7 +35,8 @@ export function Radio<Value extends string>({
 
   return (
     <label
-      className={`text-sm cursor-pointer flex flex-row gap-2 outline-none group ${className}`}
+      className={`cursor-pointer flex flex-row gap-2 outline-none group ${className}`}
+      data-focus
       {...rest}
     >
       <input
