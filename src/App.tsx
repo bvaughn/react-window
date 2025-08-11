@@ -70,15 +70,17 @@ export default function App() {
             <Nav />
           </section>
           <main
-            className={cn("w-full p-4 bg-black/90 overflow-auto", {
+            className={cn("w-full bg-black/90 relative", {
               hidden: visible,
             })}
           >
-            <Routes>
-              {Object.entries(routeMap).map(([path, Component]) => (
-                <Route Component={Component} key={path} path={path} />
-              ))}
-            </Routes>
+            <div className="h-full p-4 overflow-auto [mask-image:linear-gradient(to_bottom,transparent,black_2rem)]">
+              <Routes>
+                {Object.entries(routeMap).map(([path, Component]) => (
+                  <Route Component={Component} key={path} path={path} />
+                ))}
+              </Routes>
+            </div>
           </main>
         </div>
       </div>
