@@ -1,4 +1,8 @@
-import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
+import {
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/20/solid";
 import type { HTMLAttributes, PropsWithChildren } from "react";
 import type { Intent } from "../types";
 
@@ -13,14 +17,27 @@ export function Callout({
     intent?: Intent;
   }
 >) {
+  let Icon = ExclamationTriangleIcon;
+  switch (intent) {
+    case "none":
+    case "primary": {
+      Icon = InformationCircleIcon;
+      break;
+    }
+    case "success": {
+      Icon = CheckCircleIcon;
+      break;
+    }
+  }
+
   return (
     <div
-      className={`rounded-md rounded-tr-xl p-2 px-3 ${getClassNames(intent)} ${className}`}
+      className={`rounded-b-md rounded-t-xl md:rounded-tl-md p-2 px-3 ${getClassNames(intent)} ${className}`}
       role="alert"
       {...rest}
     >
       <div className="flex flex-row gap-2">
-        <ExclamationTriangleIcon className="w-6 h-6 shrink-0" />
+        <Icon className="w-6 h-6 shrink-0" />
         <div>{children}</div>
       </div>
     </div>
@@ -33,7 +50,7 @@ function getClassNames(intent: Intent) {
       return "bg-black/10 bg-border border-2 border-red-400 text-white [&_svg]:text-red-400";
     }
     case "none": {
-      return "bg-black/10 bg-border border-2 border-neutral-400 text-white [&_svg]:text-neutral-400";
+      return "bg-black/10 bg-border border-2 border-white/40 text-white [&_svg]:text-white/60";
     }
     case "primary": {
       return "bg-black/10 bg-border border-2 border-sky-400 text-white [&_svg]:text-sky-400";

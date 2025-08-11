@@ -15,7 +15,8 @@ export function Button({
 >) {
   return (
     <HeadlessButton
-      className={`rounded-md font-bold cursor-pointer py-1 px-2 ${getClassNames(intent)} ${className}`}
+      className={`rounded-md font-bold cursor-pointer px-2 ${getClassNames(intent)} ${className}`}
+      data-focus
       {...rest}
     >
       {children}

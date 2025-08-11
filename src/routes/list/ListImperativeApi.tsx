@@ -77,13 +77,16 @@ export function ListImperativeApiRoute() {
         <Button className="shrink-0" onClick={scrollToRow}>
           Scroll
         </Button>
+        <Button className="shrink-0" onClick={scrollToRow}>
+          Scroll
+        </Button>
       </Box>
-      <Block className="h-50" data-focus-within>
+      <Block className="h-50" data-focus-within="bold">
         <List
           length={100}
           listRef={listRef}
           rowComponent={Row}
-          rowHeight={30}
+          rowHeight={25}
         />
       </Block>
     </Box>

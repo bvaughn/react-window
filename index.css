@@ -58,4 +58,11 @@ main {
   &:focus-within {
     border: 2px solid var(--color-teal-300);
   }
+
+  &[data-focus-within="bold"] {
+    border-color: var(--color-teal-600);
+    &:focus-within {
+      border: 2px solid var(--color-teal-300);
+    }
+  }
 }

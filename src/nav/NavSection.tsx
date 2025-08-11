@@ -13,9 +13,9 @@ export function NavSection({
 }: PropsWithChildren<{ label: string }>) {
   return (
     <Disclosure as="section" defaultOpen={true}>
-      <DisclosureButton className="w-full group">
+      <DisclosureButton className="w-full group border-none! data-focus:bg-white/10">
         <NavButton>
-          <div className="text-white/50 uppercase text-sm font-bold">
+          <div className="uppercase text-sm font-bold text-white/50">
             {label}
           </div>
           <div className="grow" />

@@ -11,7 +11,7 @@ export function NavButton({
     <Box
       align="center"
       className={cn(
-        "px-4 h-7 cursor-pointer text-white/90 hover:text-white",
+        "px-4 h-7 cursor-pointer text-white/90 hover:text-white focus:bg-white/10 focus-within:bg-white/10",
         { "pointer-events-none text-white/50": disabled },
         className,
       )}

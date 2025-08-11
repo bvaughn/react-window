@@ -35,17 +35,26 @@ export function PropsBlock({
         {props.map((prop) => (
           <div key={prop.name}>
             <dt className="mt-2">
-              <code>
-                {prop.name}
+              <code className="tok-operator">
+                <span className="tok-propertyName">{prop.name}</span>
                 {prop.required || "?"}:{" "}
                 {"raw" in prop.type ? prop.type.raw : prop.type.name}
-                {prop.defaultValue && ` = ${prop.defaultValue.value}`}
+                {prop.defaultValue && (
+                  <>
+                    {" = "}
+                    <span className="text-white">
+                      {prop.defaultValue.value}
+                    </span>
+                  </>
+                )}
               </code>
             </dt>
             <dd
-              className="ml-4 text-neutral-400"
+              className="ml-4 [&_code]:text-sky-300"
               dangerouslySetInnerHTML={{
-                __html: prop.description.replace("\n\n", "<br/><br/>"),
+                __html: prop.description
+                  .replace("\n\n", "<br/><br/>")
+                  .replace(/`([^`]+)`/g, "<code>$1</code>"),
               }}
             ></dd>
           </div>
