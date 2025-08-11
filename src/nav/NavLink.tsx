@@ -16,7 +16,7 @@ export function NavLink({
           className={cn(
             "px-4 cursor-pointer",
             {
-              "hover:text-white": isActive,
+              "font-bold text-emerald-200 hover:text-white": isActive,
             },
             className,
           )}

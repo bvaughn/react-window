@@ -45,8 +45,8 @@ export default function App() {
             </ExternalLink>
             <button
               className={cn("block md:hidden cursor-pointer rounded-lg p-1", {
-                "bg-white/30": !visible,
-                "bg-black/30 text-white": visible,
+                "bg-black/40": !visible,
+                "bg-black/50 text-white": visible,
               })}
               onClick={toggle}
             >
