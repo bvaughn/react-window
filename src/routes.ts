@@ -1,4 +1,5 @@
 import { ComingSoon } from "./routes/ComingSoon";
+import { GettingStartedRoute } from "./routes/GettingStarted";
 import { PageNotFound } from "./routes/PageNotFound";
 import { ListFixedRowHeightRoute } from "./routes/list/ListFixedRowHeight";
 import { ListImperativeApiRoute } from "./routes/list/ListImperativeApi";
@@ -8,10 +9,10 @@ export const routeMap = {
   "*": PageNotFound,
 
   // Home page
-  "/": ComingSoon,
+  "/": GettingStartedRoute,
 
   // List
-  "/list/getting-started": ComingSoon,
+  "/list/types": ComingSoon,
   "/list/fixed-row-heights": ListFixedRowHeightRoute,
   "/list/variable-row-heights": ComingSoon,
   "/list/dynamic-row-heights": ComingSoon,

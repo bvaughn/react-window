@@ -9,10 +9,10 @@ import { NavSection } from "./NavSection";
 
 export function Nav() {
   return (
-    <div className="w-full shrink-0 flex flex-col gap-4 py-3 overflow-y-auto">
+    <div className="w-full shrink-0 flex flex-col gap-4 py-4 overflow-y-auto">
+      <NavLink to="/">Getting started</NavLink>
       <NavSection label="Lists">
-        <NavLink to="/list/getting-started">Getting started</NavLink>
-        <NavButton disabled>Types of rows</NavButton>
+        <NavLink to="/list/types">Types of lists</NavLink>
         <NavLink to="/list/fixed-row-heights">
           <ArrowTurnDownRightIcon className="size-3 ml-1 text-white/50" /> Fixed
           height

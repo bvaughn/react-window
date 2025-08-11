@@ -37,6 +37,15 @@
   outline: none;
 }
 
+main {
+  a {
+    color: var(--color-teal-400);
+    &:hover {
+      color: var(--color-teal-300);
+    }
+  }
+}
+
 *[data-focus] {
   border: 2px solid transparent;
   &:focus {

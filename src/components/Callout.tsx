@@ -30,19 +30,19 @@ export function Callout({
 function getClassNames(intent: Intent) {
   switch (intent) {
     case "danger": {
-      return "bg-black/10 bg-border border-2 border-red-400 text-white [&>div>svg]:text-red-400";
+      return "bg-black/10 bg-border border-2 border-red-400 text-white [&_svg]:text-red-400";
     }
     case "none": {
-      return "bg-black/10 bg-border border-2 border-neutral-400 text-white [&>div>svg]:text-neutral-400";
+      return "bg-black/10 bg-border border-2 border-neutral-400 text-white [&_svg]:text-neutral-400";
     }
     case "primary": {
-      return "bg-black/10 bg-border border-2 border-sky-400 text-white [&>div>svg]:text-sky-400";
+      return "bg-black/10 bg-border border-2 border-sky-400 text-white [&_svg]:text-sky-400";
     }
     case "success": {
-      return "bg-black/10 bg-border border-2 border-emerald-400 text-white [&>div>svg]:text-emerald-400";
+      return "bg-black/10 bg-border border-2 border-emerald-400 text-white [&_svg]:text-emerald-400";
     }
     case "warning": {
-      return "bg-black/10 bg-border border-2 border-amber-400 text-white [&>div>svg]:text-amber-400";
+      return "bg-black/10 bg-border border-2 border-amber-400 text-white [&_svg]:text-amber-400";
     }
   }
 }

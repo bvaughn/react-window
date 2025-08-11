@@ -64,7 +64,8 @@ export function Select<Value extends string>({
               <ListboxOption
                 key={index}
                 className={cn(
-                  "relative cursor-default select-none py-1 px-2 text-neutral-300",
+                  "relative cursor-pointer select-none py-1 px-2 text-neutral-300 border-none!",
+                  "data-focus:text-teal-300 data-focus:bg-black",
                   "data-active:text-teal-300 data-active:bg-black",
                   "data-selected:text-teal-300 data-selected:font-bold",
                 )}

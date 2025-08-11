@@ -60,9 +60,12 @@ export default function App() {
         </Box>
         <div className="grow flex flex-row shadow-lg mx-2 rounded-t-3xl overflow-hidden">
           <section
-            className={cn("w-full md:block md:w-60 bg-black/80 overflow-auto", {
-              hidden: !visible,
-            })}
+            className={cn(
+              "w-full bg-black/90 md:block md:w-60 md:bg-black/80 overflow-auto",
+              {
+                hidden: !visible,
+              },
+            )}
           >
             <Nav />
           </section>
