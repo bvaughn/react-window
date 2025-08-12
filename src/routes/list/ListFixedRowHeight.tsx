@@ -3,6 +3,9 @@ import { Box } from "../../components/Box";
 import Code from "../../components/code/Code";
 import { names } from "../../data";
 import { Block } from "../../components/Block";
+import { Callout } from "../../components/Callout";
+import { ExternalLink } from "../../components/ExternalLink";
+import { Link } from "react-router-dom";
 
 export function ListFixedRowHeightRoute() {
   return (
@@ -18,26 +21,32 @@ export function ListFixedRowHeightRoute() {
           rowProps={{ names }}
         />
       </Block>
+      <div>This type of list requires the following props:</div>
+      <ul className="pl-6">
+        <li className="list-disc">
+          Number of rows to render (<code>length</code>)
+        </li>
+        <li className="list-disc">
+          Row height in pixels (<code>rowHeight</code>)
+        </li>
+        <li className="list-disc">
+          Row component (<code>rowComponent</code>)
+        </li>
+      </ul>
+      <Code code={CODE} transparent={false} />
+      <Callout intent="primary">
+        Lists will automatically render enough rows to fill their height
+        (calculated using a{" "}
+        <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">
+          <code>ResizeObserver</code>
+        </ExternalLink>
+        ). The example above uses an inline style to set height, but it could
+        also be set by <code>className</code> or as determined by the parent
+        component's layout.
+      </Callout>
       <div>
-        Row height is controlled by the <code>rowHeight</code> prop.
-      </div>
-      <Code code={CODE_LIST} transparent={false} />
-      <div>
-        Individual rows are rendered by the function component passed to the{" "}
-        <code>RowComponent</code> prop.
-      </div>
-      <Code code={CODE_ROW} transparent={false} />
-      <div>This component receives two special props:</div>
-      <dl className="pl-4">
-        <dt className="font-bold">index</dt>
-        <dl className="pl-4">specifies which row (data) to render</dl>
-        <dt className="font-bold">style</dt>
-        <dl className="pl-4">positions the row within the larger list</dl>
-      </dl>
-      <div>
-        The component also receives additional values passed to{" "}
-        <code>rowProps</code>. (In the example above, the parent list uses this
-        prop to share the <code>names</code> array with the row component.)
+        For lists of rows with different sizes,{" "}
+        <Link to="/list/variable-row-heights">keep reading</Link>...
       </div>
     </Box>
   );
@@ -57,7 +66,7 @@ function Row({
   );
 }
 
-const CODE_LIST = `
+const CODE = `
 import { List } from 'react-window';
 
 function ListOfNames({ names }) {
@@ -71,9 +80,9 @@ function ListOfNames({ names }) {
     />
   );
 }
-`;
 
-const CODE_ROW = `
+// This component accepts a "names" prop
+// because it was passed to the List "rowProps" object
 function Row({ index, names, style }) {
   return (
     <div style={style}>
