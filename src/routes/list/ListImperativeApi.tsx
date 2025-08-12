@@ -83,9 +83,9 @@ export function ListImperativeApiRoute() {
       </Box>
       <Block className="h-50" data-focus-within="bold">
         <List
-          length={100}
           listRef={listRef}
           rowComponent={Row}
+          rowCount={100}
           rowHeight={25}
         />
       </Block>

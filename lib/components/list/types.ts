@@ -56,11 +56,6 @@ export type CommonListProps<ExtraProps extends object> = {
   defaultHeight?: number;
 
   /**
-   * Number of items to be rendered in the list.
-   */
-  length: number;
-
-  /**
    * Ref used to interact with this component's imperative API.
    *
    * This API has imperative methods for scrolling and a getter for the outermost DOM element.
@@ -74,6 +69,11 @@ export type CommonListProps<ExtraProps extends object> = {
    * Additionally it will receive prop values passed to `rowProps`.
    */
   rowComponent: RowComponent<ExtraProps>;
+
+  /**
+   * Number of items to be rendered in the list.
+   */
+  rowCount: number;
 
   /**
    * Additional props to be passed to the rowComponent.

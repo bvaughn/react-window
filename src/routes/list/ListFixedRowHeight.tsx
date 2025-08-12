@@ -15,8 +15,8 @@ export function ListFixedRowHeightRoute() {
       </div>
       <Block className="h-50" data-focus-within="bold">
         <List
-          length={names.length}
           rowComponent={Row}
+          rowCount={names.length}
           rowHeight={25}
           rowProps={{ names }}
         />
@@ -24,13 +24,13 @@ export function ListFixedRowHeightRoute() {
       <div>This type of list requires the following props:</div>
       <ul className="pl-6">
         <li className="list-disc">
-          Number of rows to render (<code>length</code>)
+          Number of rows to render (<code>rowCount</code>)
         </li>
         <li className="list-disc">
-          A component to render rows (<code>rowComponent</code>)
+          A component that renders individual rows (<code>rowComponent</code>)
         </li>
         <li className="list-disc">
-          Row height in pixels (<code>rowHeight</code>)
+          The height of a row, in pixels (<code>rowHeight</code>)
         </li>
       </ul>
       <Code code={CODE_BASE} transparent={false} />
@@ -80,11 +80,13 @@ import { List } from 'react-window';
 
 function Example() {
   return (
-    <List
-      length={100}
-      rowComponent={Row}
-      rowHeight={25}
-    />
+    <div style={{ height: 150px }}>
+      <List
+        rowComponent={Row}
+        rowCount={100}
+        rowHeight={25}
+      />
+    </div>
   );
 }
 

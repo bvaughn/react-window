@@ -29,8 +29,8 @@ export function PropsBlock({
   }
 
   return (
-    <Block>
-      <div>{header}</div>
+    <div>
+      <div className="text-lg font-bold">{header}</div>
       <dl>
         {props.map((prop) => (
           <div key={prop.name}>
@@ -60,6 +60,6 @@ export function PropsBlock({
           </div>
         ))}
       </dl>
-    </Block>
+    </div>
   );
 }

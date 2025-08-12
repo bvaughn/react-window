@@ -59,21 +59,6 @@
         ]
       }
     },
-    "length": {
-      "defaultValue": null,
-      "description": "Number of items to be rendered in the list.",
-      "name": "length",
-      "declarations": [
-        {
-          "fileName": "react-window/lib/components/list/types.ts",
-          "name": "TypeLiteral"
-        }
-      ],
-      "required": true,
-      "type": {
-        "name": "number"
-      }
-    },
     "listRef": {
       "defaultValue": null,
       "description": "Ref used to interact with this component's imperative API.\n\nThis API has imperative methods for scrolling and a getter for the outermost DOM element.",
@@ -147,6 +132,21 @@
             }
           }
         ]
+      }
+    },
+    "rowCount": {
+      "defaultValue": null,
+      "description": "Number of items to be rendered in the list.",
+      "name": "rowCount",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
       }
     },
     "rowProps": {

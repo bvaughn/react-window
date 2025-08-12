@@ -35,7 +35,9 @@ describe("List", () => {
   });
 
   test("should render an empty list", () => {
-    render(<List length={0} rowComponent={Row} rowHeight={25} rowProps={{}} />);
+    render(
+      <List rowCount={0} rowComponent={Row} rowHeight={25} rowProps={{}} />,
+    );
 
     const items = screen.queryAllByRole("listitem");
     expect(items).toHaveLength(0);
@@ -43,7 +45,7 @@ describe("List", () => {
 
   test("should render enough rows to fill the available height", () => {
     render(
-      <List length={10} rowComponent={Row} rowHeight={25} rowProps={{}} />,
+      <List rowCount={10} rowComponent={Row} rowHeight={25} rowProps={{}} />,
     );
 
     let items = screen.queryAllByRole("listitem");
@@ -64,7 +66,7 @@ describe("List", () => {
   test("should pass rowProps to the rowComponent", () => {
     render(
       <List
-        length={10}
+        rowCount={10}
         rowComponent={Row}
         rowHeight={25}
         rowProps={{
@@ -83,23 +85,23 @@ describe("List", () => {
 
   test("should re-render items if rowComponent changes", () => {
     const { rerender } = render(
-      <List length={10} rowComponent={Row} rowHeight={25} />,
+      <List rowCount={10} rowComponent={Row} rowHeight={25} />,
     );
 
     const NewRow = vi.fn(() => null);
 
-    rerender(<List length={10} rowComponent={NewRow} rowHeight={25} />);
+    rerender(<List rowCount={10} rowComponent={NewRow} rowHeight={25} />);
 
     expect(NewRow).toHaveBeenCalled();
   });
 
   test("should re-render items if rowHeight changes", () => {
     const { rerender } = render(
-      <List length={10} rowComponent={Row} rowHeight={25} />,
+      <List rowCount={10} rowComponent={Row} rowHeight={25} />,
     );
     expect(mountedRows).toHaveLength(4);
 
-    rerender(<List length={10} rowComponent={Row} rowHeight={50} />);
+    rerender(<List rowCount={10} rowComponent={Row} rowHeight={50} />);
     expect(mountedRows).toHaveLength(2);
     expect(mountedRows.get(1)?.index).toEqual(1);
   });
@@ -107,7 +109,7 @@ describe("List", () => {
   test("should re-render items if rowProps change", () => {
     const { rerender } = render(
       <List
-        length={10}
+        rowCount={10}
         rowComponent={Row}
         rowHeight={25}
         rowProps={{
@@ -122,7 +124,7 @@ describe("List", () => {
 
     rerender(
       <List
-        length={10}
+        rowCount={10}
         rowComponent={Row}
         rowHeight={25}
         rowProps={{
@@ -142,7 +144,12 @@ describe("List", () => {
     disableForCurrentTest();
 
     render(
-      <List defaultHeight={75} length={4} rowComponent={Row} rowHeight={25} />,
+      <List
+        defaultHeight={75}
+        rowCount={4}
+        rowComponent={Row}
+        rowHeight={25}
+      />,
     );
 
     const items = screen.queryAllByRole("listitem");
@@ -155,7 +162,7 @@ describe("List", () => {
     const { rerender } = render(
       <List
         defaultHeight={100}
-        length={2}
+        rowCount={2}
         onRowsRendered={onRowsRendered}
         rowComponent={Row}
         rowHeight={25}
@@ -169,7 +176,7 @@ describe("List", () => {
 
     rerender(
       <List
-        length={4}
+        rowCount={4}
         onRowsRendered={onRowsRendered}
         rowComponent={Row}
         rowHeight={25}
@@ -186,7 +193,7 @@ describe("List", () => {
     render(
       <List
         className="foo"
-        length={4}
+        rowCount={4}
         rowComponent={Row}
         rowHeight={25}
         style={{
@@ -202,7 +209,7 @@ describe("List", () => {
 
   test("should spread HTML rest attributes", () => {
     render(
-      <List data-testid="foo" length={4} rowComponent={Row} rowHeight={25} />,
+      <List data-testid="foo" rowCount={4} rowComponent={Row} rowHeight={25} />,
     );
 
     expect(screen.queryByTestId("foo")).toHaveRole("list");
@@ -213,7 +220,12 @@ describe("List", () => {
       const listRef = createRef<ListImperativeAPI>();
 
       render(
-        <List length={4} listRef={listRef} rowComponent={Row} rowHeight={25} />,
+        <List
+          rowCount={4}
+          listRef={listRef}
+          rowComponent={Row}
+          rowHeight={25}
+        />,
       );
 
       expect(listRef.current?.element).toEqual(screen.queryByRole("list"));
@@ -227,7 +239,12 @@ describe("List", () => {
       Element.prototype.scrollTo = scrollTo;
 
       render(
-        <List length={4} listRef={listRef} rowComponent={Row} rowHeight={25} />,
+        <List
+          rowCount={4}
+          listRef={listRef}
+          rowComponent={Row}
+          rowHeight={25}
+        />,
       );
       expect(scrollTo).not.toHaveBeenCalled();
 

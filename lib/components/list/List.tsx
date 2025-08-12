@@ -13,10 +13,10 @@ import type { Align, CommonListProps, ScrollState } from "./types";
 export function List<ExtraProps extends object>({
   className,
   defaultHeight = 0,
-  length,
   listRef,
   onRowsRendered,
   rowComponent: Row,
+  rowCount,
   rowHeight,
   rowProps,
   style,
@@ -60,7 +60,7 @@ export function List<ExtraProps extends object>({
           align,
           height,
           index,
-          length,
+          length: rowCount,
           prevScrollTop: scrollState.scrollTop,
           rowHeight,
         });
@@ -71,19 +71,19 @@ export function List<ExtraProps extends object>({
         });
       },
     }),
-    [element, height, length, scrollState.scrollTop, rowHeight],
+    [element, height, rowCount, scrollState.scrollTop, rowHeight],
   );
 
   const [startIndex, stopIndex] = getIndicesToRender({
     height,
-    length,
+    length: rowCount,
     rowHeight,
     scrollTop: scrollState.scrollTop,
   });
 
   const rows = useMemo(() => {
     const children: ReactNode[] = [];
-    if (length > 0) {
+    if (rowCount > 0) {
       for (let index = startIndex; index <= stopIndex; index++) {
         children.push(
           <Row
@@ -101,7 +101,7 @@ export function List<ExtraProps extends object>({
       }
     }
     return children;
-  }, [length, Row, rowHeight, rowProps, startIndex, stopIndex]);
+  }, [rowCount, Row, rowHeight, rowProps, startIndex, stopIndex]);
 
   useEffect(() => {
     if (onRowsRendered) {
@@ -147,7 +147,7 @@ export function List<ExtraProps extends object>({
       <div
         className={className}
         style={{
-          height: length * rowHeight,
+          height: rowCount * rowHeight,
           position: "relative",
           width: "100%",
         }}
