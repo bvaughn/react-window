@@ -77,7 +77,7 @@ export default function App() {
               hidden: visible,
             })}
           >
-            <div className="h-full p-4 overflow-auto [mask-image:linear-gradient(to_bottom,transparent,black_2rem)]">
+            <div className="h-full p-4 py-4 overflow-auto [mask-image:linear-gradient(to_bottom,transparent,black_1.5rem)]">
               <Routes>
                 {Object.entries(routeMap).map(([path, Component]) => (
                   <Route Component={Component} key={path} path={path} />
