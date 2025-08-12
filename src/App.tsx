@@ -25,11 +25,14 @@ export default function App() {
           justify="between"
           gap={4}
         >
-          <Link
-            children="react-window"
-            className="text-xl text-white! text-shadow-black/20 text-shadow-sm font-bold"
-            to="/"
-          />
+          <Box align="center" direction="row" gap={4}>
+            <Link
+              children="react-window"
+              className="text-xl text-white! text-shadow-black/20 text-shadow-sm font-bold"
+              to="/"
+            />
+            <div className="hidden md:block text-black">render everything</div>
+          </Box>
           <Box align="center" direction="row" gap={4}>
             <ExternalLink
               className="text-white! drop-shadow-black/20 drop-shadow-sm"
