@@ -27,23 +27,32 @@ export function ListFixedRowHeightRoute() {
           Number of rows to render (<code>length</code>)
         </li>
         <li className="list-disc">
-          Row height in pixels (<code>rowHeight</code>)
+          A component to render rows (<code>rowComponent</code>)
         </li>
         <li className="list-disc">
-          Row component (<code>rowComponent</code>)
+          Row height in pixels (<code>rowHeight</code>)
         </li>
       </ul>
-      <Code code={CODE} transparent={false} />
+      <Code code={CODE_BASE} transparent={false} />
       <Callout intent="primary">
         Lists will automatically render enough rows to fill their height
         (calculated using a{" "}
         <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">
           <code>ResizeObserver</code>
         </ExternalLink>
-        ). The example above uses an inline style to set height, but it could
-        also be set by <code>className</code> or as determined by the parent
+        ). Height can be controlled using <code>style</code> or{" "}
+        <code>className</code> props, or it can be determined by the parent
         component's layout.
       </Callout>
+      <div>
+        Rows often require more data to render. You can use{" "}
+        <ExternalLink href="https://react.dev/learn/passing-data-deeply-with-context">
+          React Context
+        </ExternalLink>{" "}
+        for this, but it's often easier and more performant to use{" "}
+        <code>rowProps</code>:
+      </div>
+      <Code code={CODE_MORE} transparent={false} />
       <div>
         For lists of rows with different sizes,{" "}
         <Link to="/list/variable-row-heights">keep reading</Link>...
@@ -66,23 +75,41 @@ function Row({
   );
 }
 
-const CODE = `
+const CODE_BASE = `
 import { List } from 'react-window';
 
-function ListOfNames({ names }) {
+function Example() {
   return (
     <List
-      length={names.length}
+      length={100}
       rowComponent={Row}
       rowHeight={25}
-      rowProps={{ names }}
-      style={{ height: 150 }}
     />
   );
 }
 
-// This component accepts a "names" prop
-// because it was passed to the List "rowProps" object
+function Row({ index, style }) {
+  return (
+    <div style={style}>
+      Row {index}
+    </div>
+  )
+}
+`;
+
+const CODE_MORE = `
+function Example() {
+  return (
+    <List
+      rowComponent={Row}
+      rowProps={{ names }}
+      {...rest}
+    />
+  );
+}
+
+// This component receives an additional "names" prop
+// because it was passed to List as part of the "rowProps" object
 function Row({ index, names, style }) {
   return (
     <div style={style}>
