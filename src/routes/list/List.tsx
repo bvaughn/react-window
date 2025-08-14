@@ -1,13 +1,13 @@
-import { List, type RowProps } from "react-window";
+import { List, type RowComponentProps } from "react-window";
 import { Box } from "../../components/Box";
 import Code from "../../components/code/Code";
 import { names } from "../../data";
 import { Block } from "../../components/Block";
 import { Callout } from "../../components/Callout";
 import { ExternalLink } from "../../components/ExternalLink";
-import { Link } from "react-router-dom";
+import { Link } from "../../components/Link";
 
-export function ListFixedRowHeightRoute() {
+export function ListRoute() {
   return (
     <Box direction="column" gap={4}>
       <div>
@@ -15,7 +15,7 @@ export function ListFixedRowHeightRoute() {
       </div>
       <Block className="h-50" data-focus-within="bold">
         <List
-          rowComponent={Row}
+          rowComponent={RowComponent}
           rowCount={names.length}
           rowHeight={25}
           rowProps={{ names }}
@@ -33,7 +33,7 @@ export function ListFixedRowHeightRoute() {
           The height of a row, in pixels (<code>rowHeight</code>)
         </li>
       </ul>
-      <Code code={CODE_BASE} transparent={false} />
+      <Code code={CODE_BASE} />
       <Callout intent="primary">
         Lists will automatically render enough rows to fill their height
         (calculated using a{" "}
@@ -52,20 +52,24 @@ export function ListFixedRowHeightRoute() {
         for this, but it's often easier and more performant to use{" "}
         <code>rowProps</code>:
       </div>
-      <Code code={CODE_MORE} transparent={false} />
+      <Code code={CODE_MORE} language="TSX" />
+      <Callout intent="primary">
+        The example above shows how to use the included TypeScript definitions
+        to strongly type row component props.
+      </Callout>
       <div>
         For lists of rows with different sizes,{" "}
-        <Link to="/list/variable-row-heights">keep reading</Link>...
+        <Link to="/list/variable-row-height">keep reading</Link>...
       </div>
     </Box>
   );
 }
 
-function Row({
+function RowComponent({
   index,
   names,
   style,
-}: RowProps<{
+}: RowComponentProps<{
   names: string[];
 }>) {
   return (
@@ -82,7 +86,7 @@ function Example() {
   return (
     <div style={{ height: 150px }}>
       <List
-        rowComponent={Row}
+        rowComponent={RowComponent}
         rowCount={100}
         rowHeight={25}
       />
@@ -90,7 +94,7 @@ function Example() {
   );
 }
 
-function Row({ index, style }) {
+function RowComponent({ index, style }) {
   return (
     <div style={style}>
       Row {index}
@@ -100,19 +104,26 @@ function Row({ index, style }) {
 `;
 
 const CODE_MORE = `
-function Example() {
+import { List, type RowComponentProps } from 'react-window';
+
+type RowProps = {
+  names: string[];
+};
+
+function Example({ names }: { names: string[] }) {
   return (
     <List
       rowComponent={Row}
-      rowProps={{ names }}
-      {...rest}
+      rowCount={names.length}
+      rowHeight={25}
+      rowProps={{ names } satisfies RowProps}
     />
   );
 }
 
 // This component receives an additional "names" prop
 // because it was passed to List as part of the "rowProps" object
-function Row({ index, names, style }) {
+function RowComponent({ index, names, style }: RowComponentProps<RowProps>) {
   return (
     <div style={style}>
       {names[index]}

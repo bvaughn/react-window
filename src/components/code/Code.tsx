@@ -8,7 +8,7 @@ export default function Code({
   code,
   language = "JSX",
   title,
-  transparent = true,
+  transparent,
 }: {
   className?: string;
   code: string;
@@ -18,7 +18,9 @@ export default function Code({
 }) {
   const html = useParser({ code, language });
 
-  const classNames = ["text-xs md:text-sm block text-left whitespace-pre-wrap"];
+  const classNames = [
+    "text-xs md:text-sm block text-left whitespace-pre-wrap text-white!",
+  ];
   if (!transparent) {
     classNames.push("rounded-md p-3 bg-black");
   }

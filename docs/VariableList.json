@@ -1,8 +1,8 @@
 {
   "tags": {},
-  "filePath": "lib/components/list/fixed/List.tsx",
+  "filePath": "lib/components/list/variable/VariableList.tsx",
   "description": "",
-  "displayName": "List",
+  "displayName": "VariableList",
   "methods": [],
   "props": {
     "className": {
@@ -238,17 +238,17 @@
     },
     "rowHeight": {
       "defaultValue": null,
-      "description": "Row height (in pixels).",
+      "description": "Function that returns the height of a row given its index (and `rowProps` data).",
       "name": "rowHeight",
       "declarations": [
         {
-          "fileName": "react-window/lib/components/list/fixed/List.tsx",
+          "fileName": "react-window/lib/components/list/variable/VariableList.tsx",
           "name": "TypeLiteral"
         }
       ],
       "required": true,
       "type": {
-        "name": "number"
+        "name": "RowHeight<RowProps>"
       }
     }
   }

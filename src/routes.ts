@@ -1,10 +1,11 @@
 import { ComingSoon } from "./routes/ComingSoon";
 import { GettingStartedRoute } from "./routes/GettingStarted";
 import { PageNotFound } from "./routes/PageNotFound";
-import { ListFixedRowHeightRoute } from "./routes/list/ListFixedRowHeight";
-import { ListImperativeApiRoute } from "./routes/list/ListImperativeApi";
+import { ImperativeApiRoute } from "./routes/list/ImperativeApi";
+import { ListRoute } from "./routes/list/List";
 import { ListPropsRoute } from "./routes/list/ListProps";
-import { ListTypesRoute } from "./routes/list/ListTypes";
+import { VariableListRoute } from "./routes/list/VariableList";
+import { VariableListPropsRoute } from "./routes/list/VariableListProps";
 
 export const routeMap = {
   "*": PageNotFound,
@@ -13,17 +14,16 @@ export const routeMap = {
   "/": GettingStartedRoute,
 
   // List
-  "/list/types": ListTypesRoute,
-  "/list/fixed-row-heights": ListFixedRowHeightRoute,
-  "/list/variable-row-heights": ComingSoon,
-  "/list/dynamic-row-heights": ComingSoon,
-  "/list/props": ListPropsRoute,
-  "/list/api": ListImperativeApiRoute,
+  "/list/fixed-row-height": ListRoute,
+  "/list/fixed-row-height-props": ListPropsRoute,
+  "/list/variable-row-height": VariableListRoute,
+  "/list/variable-row-height-props": VariableListPropsRoute,
+  "/list/imperative-api": ImperativeApiRoute,
 
   // SimpleGrid
-  "/grid/example": ComingSoon,
-  "/grid/props": ComingSoon,
-  "/grid/api": ComingSoon,
+  "/grid/grid": ComingSoon,
+  "/grid/grid-props": ComingSoon,
+  "/grid/imperative-api": ComingSoon,
 
   // Other
   "/other/memoization": ComingSoon,

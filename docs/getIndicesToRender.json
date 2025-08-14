@@ -1,0 +1,99 @@
+{
+  "tags": {},
+  "filePath": "lib/components/list/variable/getIndicesToRender.ts",
+  "description": "",
+  "displayName": "getIndicesToRender",
+  "methods": [],
+  "props": {
+    "cachedBounds": {
+      "defaultValue": null,
+      "description": "",
+      "name": "cachedBounds",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getIndicesToRender.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "CachedBounds"
+      }
+    },
+    "height": {
+      "defaultValue": null,
+      "description": "",
+      "name": "height",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getIndicesToRender.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "rowCount": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowCount",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getIndicesToRender.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "rowHeight": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowHeight",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getIndicesToRender.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "RowHeight<RowProps>"
+      }
+    },
+    "rowProps": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowProps",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getIndicesToRender.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "object"
+      }
+    },
+    "scrollTop": {
+      "defaultValue": null,
+      "description": "",
+      "name": "scrollTop",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getIndicesToRender.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    }
+  }
+}

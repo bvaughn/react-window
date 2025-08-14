@@ -4,9 +4,9 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import {
   disableForCurrentTest,
   updateMockResizeObserver,
-} from "../../utils/test/mockResizeObserver";
+} from "../../../utils/test/mockResizeObserver";
 import { List } from "./List";
-import { type ListImperativeAPI, type RowProps } from "./types";
+import { type ListImperativeAPI, type RowComponentProps } from "../types";
 
 describe("List", () => {
   function Row(props: { index: number; style: CSSProperties }) {
@@ -26,7 +26,7 @@ describe("List", () => {
     );
   }
 
-  let mountedRows: Map<number, RowProps<unknown>> = new Map();
+  let mountedRows: Map<number, RowComponentProps<unknown>> = new Map();
 
   beforeEach(() => {
     updateMockResizeObserver(new DOMRect(0, 0, 50, 100));

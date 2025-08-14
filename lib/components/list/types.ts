@@ -16,34 +16,24 @@ export type ListImperativeAPI = {
   }): void;
 };
 
-export type GetRowKey<ExtraProps> = (
-  index: number,
-  extraProps: ExtraProps,
-) => string | number;
-
-export type GetRowHeight<ExtraProps> = (
-  index: number,
-  extraProps: ExtraProps,
-) => number;
-
 type ForbiddenKeys = "index" | "style";
 type ExcludeForbiddenKeys<Type> = {
   [Key in keyof Type]: Key extends ForbiddenKeys ? never : Type[Key];
 };
 
-export type RowProps<ExtraProps> = ExtraProps & {
+export type RowComponentProps<RowProps> = RowProps & {
   index: number;
   style: CSSProperties;
 };
 
-export type RowComponent<ExtraProps> = ComponentType<RowProps<ExtraProps>>;
+export type RowComponent<RowProps> = ComponentType<RowComponentProps<RowProps>>;
 
 export type OnRowsRendered = (args: {
   startIndex: number;
   stopIndex: number;
 }) => void;
 
-export type CommonListProps<ExtraProps extends object> = {
+export type CommonListProps<RowProps extends object> = {
   /**
    * CSS class name.
    */
@@ -68,7 +58,7 @@ export type CommonListProps<ExtraProps extends object> = {
    * This component will receive an `index` and `style` prop by default.
    * Additionally it will receive prop values passed to `rowProps`.
    */
-  rowComponent: RowComponent<ExtraProps>;
+  rowComponent: RowComponent<RowProps>;
 
   /**
    * Number of items to be rendered in the list.
@@ -81,7 +71,7 @@ export type CommonListProps<ExtraProps extends object> = {
    * This object must not contain either an `index` or `style` prop.
    * Refer to the example for more information.
    */
-  rowProps?: ExcludeForbiddenKeys<ExtraProps>;
+  rowProps?: ExcludeForbiddenKeys<RowProps>;
 
   /**
    * Callback notified when the range of visible rows changes.
@@ -99,3 +89,11 @@ export type ScrollState = {
   prevScrollTop: number;
   scrollTop: number;
 };
+
+export type CachedBounds = Map<
+  number,
+  {
+    height: number;
+    scrollTop: number;
+  }
+>;

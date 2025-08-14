@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { type ComponentDoc, type PropItem } from "react-docgen-typescript";
 import { processPropsJSON } from "../utils/processPropsJSON";
-import { Block } from "./Block";
 
 export function PropsBlocks({ json }: { json: ComponentDoc }) {
   const { optionalProps, requiredProps } = useMemo(
@@ -30,11 +29,11 @@ export function PropsBlock({
 
   return (
     <div>
-      <div className="text-lg font-bold">{header}</div>
+      <div className="text-lg font-bold mt-2">{header}</div>
       <dl>
         {props.map((prop) => (
           <div key={prop.name}>
-            <dt className="mt-2">
+            <dt className="mt-2 pl-4 indent-[-1rem]">
               <code className="tok-operator">
                 <span className="tok-propertyName">{prop.name}</span>
                 {prop.required || "?"}:{" "}

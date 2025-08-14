@@ -1,4 +1,8 @@
-import { jsxLanguage, typescriptLanguage } from "@codemirror/lang-javascript";
+import {
+  jsxLanguage,
+  typescriptLanguage,
+  tsxLanguage,
+} from "@codemirror/lang-javascript";
 import type { Extension } from "@codemirror/state";
 import { useEffect, useState } from "react";
 import { escapeHtmlEntities, parsedTokensToHtml, parser } from "./parser";
@@ -28,6 +32,10 @@ export function useParser({
         }
         case "TypeScript": {
           extension = typescriptLanguage;
+          break;
+        }
+        case "TSX": {
+          extension = tsxLanguage;
           break;
         }
       }

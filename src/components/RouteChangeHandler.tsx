@@ -8,12 +8,18 @@ export function RouteChangeHandler() {
   const { pathname } = useLocation();
 
   useIsomorphicLayoutEffect(() => {
-    const main = document.body.querySelector("main");
-    if (main) {
-      main.scrollTo(0, 0);
-    }
-
     hide();
+
+    const main = document.body.querySelector("[data-main-scrollable]");
+    if (main) {
+      const timeout = setTimeout(() => {
+        main.scrollTo(0, 0);
+      }, 1);
+
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
   }, [pathname]);
 
   return null;

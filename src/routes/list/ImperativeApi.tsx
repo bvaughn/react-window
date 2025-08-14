@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { List, useListRef, type Align, type RowProps } from "react-window";
+import {
+  List,
+  useListRef,
+  type Align,
+  type RowComponentProps,
+} from "react-window";
 import { Block } from "../../components/Block";
 import { Button } from "../../components/Button";
 import Code from "../../components/code/Code";
@@ -20,7 +25,7 @@ const BEHAVIORS: Option<ScrollBehavior>[] = (
   value,
 }));
 
-export function ListImperativeApiRoute() {
+export function ImperativeApiRoute() {
   const [rowIndex, setRowIndex] = useState<number | undefined>(undefined);
   const [align, setAlign] = useState<Option<Align> | undefined>();
   const [behavior, setBehavior] = useState<
@@ -93,7 +98,7 @@ export function ListImperativeApiRoute() {
   );
 }
 
-function Row({ index, style }: RowProps<null>) {
+function Row({ index, style }: RowComponentProps<null>) {
   return (
     <div className="flex items-center gap-2" style={style}>
       Row index {index}

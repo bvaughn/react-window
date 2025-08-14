@@ -1,9 +1,10 @@
 import { Bars4Icon, XMarkIcon } from "@heroicons/react/20/solid";
-import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GitHubIcon from "../public/svgs/github.svg?react";
 import NpmHubIcon from "../public/svgs/npm.svg?react";
 import { Box } from "./components/Box";
 import { ExternalLink } from "./components/ExternalLink";
+import { Link } from "./components/Link";
 import { RouteChangeHandler } from "./components/RouteChangeHandler";
 import { useNavStore } from "./hooks/useNavStore";
 import { Nav } from "./nav/Nav";
@@ -31,7 +32,9 @@ export default function App() {
               className="text-xl text-white! text-shadow-black/20 text-shadow-sm font-bold"
               to="/"
             />
-            <div className="hidden md:block text-black">render everything</div>
+            <div className="hidden md:block text-black text-shadow-white/50 text-shadow-xs">
+              render everything
+            </div>
           </Box>
           <Box align="center" direction="row" gap={4}>
             <ExternalLink
@@ -64,7 +67,7 @@ export default function App() {
         <div className="grow shrink flex flex-row shadow-lg mx-2 rounded-t-3xl overflow-hidden">
           <section
             className={cn(
-              "w-full bg-black/90 md:block md:w-60 md:bg-black/80 overflow-auto",
+              "w-full bg-black/90 md:block md:w-80 md:bg-black/80 overflow-auto",
               {
                 hidden: !visible,
               },
@@ -77,7 +80,10 @@ export default function App() {
               hidden: visible,
             })}
           >
-            <div className="h-full p-4 py-4 overflow-auto [mask-image:linear-gradient(to_bottom,transparent,black_1.5rem)]">
+            <div
+              className="h-full p-4 py-4 overflow-auto [mask-image:linear-gradient(to_bottom,transparent,black_1.5rem)]"
+              data-main-scrollable
+            >
               <Routes>
                 {Object.entries(routeMap).map(([path, Component]) => (
                   <Route Component={Component} key={path} path={path} />

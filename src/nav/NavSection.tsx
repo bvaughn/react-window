@@ -4,13 +4,13 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import type { PropsWithChildren } from "react";
+import type { PropsWithChildren, ReactNode } from "react";
 import { NavButton } from "./NavButton";
 
 export function NavSection({
   children,
   label,
-}: PropsWithChildren<{ label: string }>) {
+}: PropsWithChildren<{ label: ReactNode }>) {
   return (
     <Disclosure as="section" defaultOpen={true}>
       <DisclosureButton className="w-full group border-none! data-focus:bg-white/10">

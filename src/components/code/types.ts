@@ -1,1 +1,1 @@
-export type Language = "JSX" | "TypeScript";
+export type Language = "JSX" | "TypeScript" | "TSX";
