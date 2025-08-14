@@ -82,9 +82,6 @@ export function ImperativeApiRoute() {
         <Button className="shrink-0" onClick={scrollToRow}>
           Scroll
         </Button>
-        <Button className="shrink-0" onClick={scrollToRow}>
-          Scroll
-        </Button>
       </Box>
       <Block className="h-50" data-focus-within="bold">
         <List
