@@ -35,14 +35,18 @@ export function ListRoute() {
       </ul>
       <Code code={CODE_BASE} />
       <Callout intent="primary">
-        Lists will automatically render enough rows to fill their height
-        (calculated using a{" "}
-        <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">
-          <code>ResizeObserver</code>
-        </ExternalLink>
-        ). Height can be controlled using <code>style</code> or{" "}
+        Lists will automatically render enough rows to fill the available
+        height. Height can be controlled using <code>style</code> or{" "}
         <code>className</code> props, or it can be determined by the parent
         component's layout.
+      </Callout>
+      <Callout intent="warning">
+        Unless an explicit pixel height is provided (using the using{" "}
+        <code>style</code> prop), a{" "}
+        <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">
+          ResizeObserver
+        </ExternalLink>{" "}
+        will be used to calculate the available space.
       </Callout>
       <div>
         Rows often require more data to render. That data needs to somehow be

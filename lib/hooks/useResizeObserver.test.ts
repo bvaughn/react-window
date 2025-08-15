@@ -1,6 +1,9 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, test } from "vitest";
-import { updateMockResizeObserver } from "../utils/test/mockResizeObserver";
+import {
+  simulateUnsupportedEnvironmentForTest,
+  updateMockResizeObserver,
+} from "../utils/test/mockResizeObserver";
 import { useResizeObserver } from "./useResizeObserver";
 
 describe("useResizeObserver", () => {
@@ -9,6 +12,8 @@ describe("useResizeObserver", () => {
   });
 
   test("should use default width/height if disabled", () => {
+    simulateUnsupportedEnvironmentForTest();
+
     const element = document.createElement("div");
 
     const { result, unmount } = renderHook(() =>
@@ -107,5 +112,70 @@ describe("useResizeObserver", () => {
     });
 
     unmount();
+  });
+
+  describe("skip ResizeObserver", () => {
+    test("if an explicit pixel height is specified", () => {
+      simulateUnsupportedEnvironmentForTest();
+
+      const element = document.createElement("div");
+
+      const { result } = renderHook(() =>
+        useResizeObserver({
+          element,
+          mode: "only-height",
+          style: {
+            height: "25px",
+          },
+        }),
+      );
+
+      expect(result.current).toEqual({
+        height: 25,
+        width: undefined,
+      });
+    });
+
+    test("if an explicit pixel width is specified", () => {
+      simulateUnsupportedEnvironmentForTest();
+
+      const element = document.createElement("div");
+
+      const { result } = renderHook(() =>
+        useResizeObserver({
+          element,
+          mode: "only-width",
+          style: {
+            width: "15px",
+          },
+        }),
+      );
+
+      expect(result.current).toEqual({
+        height: undefined,
+        width: 15,
+      });
+    });
+
+    test("if an explicit pixel width and height are specified", () => {
+      simulateUnsupportedEnvironmentForTest();
+
+      const element = document.createElement("div");
+
+      const { result } = renderHook(() =>
+        useResizeObserver({
+          element,
+          style: {
+            height: "25px",
+            width: "15px",
+          },
+        }),
+      );
+
+      expect(result.current).toEqual({
+        height: 25,
+        width: 15,
+      });
+    });
   });
 });

@@ -51,6 +51,8 @@ export function List<RowProps extends object>({
   const { height = 0 } = useResizeObserver({
     defaultHeight,
     element,
+    mode: "only-height",
+    style,
   });
 
   const { onScroll, scrollState } = useScrollState();

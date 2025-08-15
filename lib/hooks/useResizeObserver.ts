@@ -1,26 +1,45 @@
-import { useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
+import { parseNumericStyleValue } from "../utils/dom/parseNumericStyleValue";
 import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect";
 
 export function useResizeObserver({
   box,
   defaultHeight,
   defaultWidth,
-  disabled,
+  disabled: disabledProp,
   element,
+  mode,
+  style,
 }: {
   box?: ResizeObserverBoxOptions;
   defaultHeight?: number;
   defaultWidth?: number;
   disabled?: boolean;
   element: HTMLElement | null;
+  mode?: "only-height" | "only-width";
+  style?: CSSProperties;
 }) {
-  const [size, setSize] = useState<{
+  const { styleHeight, styleWidth } = useMemo(
+    () => ({
+      styleHeight: parseNumericStyleValue(style?.height),
+      styleWidth: parseNumericStyleValue(style?.width),
+    }),
+    [style?.height, style?.width],
+  );
+
+  const [state, setState] = useState<{
     height: number | undefined;
     width: number | undefined;
   }>({
     height: defaultHeight,
     width: defaultWidth,
   });
+
+  const disabled =
+    disabledProp ||
+    (mode === "only-height" && styleHeight !== undefined) ||
+    (mode === "only-width" && styleWidth !== undefined) ||
+    (styleHeight !== undefined && styleWidth !== undefined);
 
   useIsomorphicLayoutEffect(() => {
     if (element === null || disabled) {
@@ -31,12 +50,12 @@ export function useResizeObserver({
       for (const entry of entries) {
         const { contentRect, target } = entry;
         if (element === target) {
-          setSize((prevSize) => {
+          setState((prevState) => {
             if (
-              prevSize.height === contentRect.height &&
-              prevSize.width === contentRect.width
+              prevState.height === contentRect.height &&
+              prevState.width === contentRect.width
             ) {
-              return prevSize;
+              return prevState;
             }
 
             return {
@@ -52,7 +71,13 @@ export function useResizeObserver({
     return () => {
       resizeObserver?.unobserve(element);
     };
-  }, [box, disabled, element]);
+  }, [box, disabled, element, styleHeight, styleWidth]);
 
-  return size;
+  return useMemo(
+    () => ({
+      height: styleHeight ?? state.height,
+      width: styleWidth ?? state.width,
+    }),
+    [state, styleHeight, styleWidth],
+  );
 }

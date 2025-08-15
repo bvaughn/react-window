@@ -4,6 +4,8 @@ import { Box } from "../../components/Box";
 import Code from "../../components/code/Code";
 import { names } from "../../data";
 import { cn } from "../../utils/cn";
+import { Callout } from "../../components/Callout";
+import { ExternalLink } from "../../components/ExternalLink";
 
 type Item = { type: "header"; value: string } | { type: "item"; value: string };
 
@@ -44,7 +46,15 @@ export function VariableListRoute() {
         This list requires a <code>rowHeight</code> function that tells it what
         height a row should be based on the type of data it contains.
       </div>
-      <Code code={CODE_BASE} language="TSX" />
+      <Code code={CODE_BASE} language="TSX" />{" "}
+      <Callout intent="warning">
+        As with the <code>List</code> component, unless an explicit pixel height
+        is provided (using the using <code>style</code> prop), a{" "}
+        <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">
+          ResizeObserver
+        </ExternalLink>{" "}
+        will be used to calculate the available space.
+      </Callout>
     </Box>
   );
 }

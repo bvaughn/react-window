@@ -9,6 +9,11 @@ export function disableForCurrentTest() {
   disabled = true;
 }
 
+export function simulateUnsupportedEnvironmentForTest() {
+  // @ts-expect-error Simulate API being unsupported
+  window.ResizeObserver = null;
+}
+
 export function updateMockResizeObserver({
   height,
   target,

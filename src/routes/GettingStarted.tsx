@@ -1,5 +1,4 @@
 import { Box } from "../components/Box";
-import { Callout } from "../components/Callout";
 import { ExternalLink } from "../components/ExternalLink";
 import { Link } from "../components/Link";
 
@@ -45,13 +44,6 @@ export function GettingStartedRoute() {
           <Link to="/grid/grid">Grids</Link> (horizontal and vertical scrolling)
         </li>
       </ul>
-      <Callout className="mt-4" intent="warning">
-        Note this library require the{" "}
-        <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">
-          <code>ResizeObserver</code> API
-        </ExternalLink>{" "}
-        (or polyfill).
-      </Callout>
     </Box>
   );
 }
