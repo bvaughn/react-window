@@ -12,6 +12,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --recursive
       - name: Build NPM package
-        run: pnpm prerelease
+        run: pnpm build
       - name: Run TypeScript
         run: pnpm tsc

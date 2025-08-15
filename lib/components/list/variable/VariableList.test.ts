@@ -1,5 +1,7 @@
-import { describe } from "vitest";
+import { describe, test } from "vitest";
 
 describe("VariableList", () => {
-  // TODO Write tests
+  test("have tests", () => {
+    // TODO Write tests
+  });
 });
