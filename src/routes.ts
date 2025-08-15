@@ -1,6 +1,7 @@
 import { ComingSoon } from "./routes/ComingSoon";
 import { GettingStartedRoute } from "./routes/GettingStarted";
 import { PageNotFound } from "./routes/PageNotFound";
+import { SupportRoute } from "./routes/Support";
 import { ListRoute } from "./routes/list/List";
 import { ListImperativeApiRoute } from "./routes/list/ListImperativeApi";
 import { ListPropsRoute } from "./routes/list/ListProps";
@@ -28,5 +29,6 @@ export const routeMap = {
   "/grid/grid-imperative-api": ComingSoon,
 
   // Other
-  "/other/memoization": ComingSoon,
+  "/support": SupportRoute,
+  "/tips/memoization": ComingSoon,
 } as const;

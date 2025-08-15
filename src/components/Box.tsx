@@ -11,6 +11,7 @@ export function Box({
   justify,
   shrink,
   style,
+  wrap,
 }: PropsWithChildren<{
   align?: "center" | "end" | "start" | "stretch";
   className?: string;
@@ -20,6 +21,7 @@ export function Box({
   justify?: "around" | "between" | "center" | "end" | "start" | "stretch";
   shrink?: 0 | 1;
   style?: CSSProperties;
+  wrap?: boolean;
 }>) {
   return (
     <div
@@ -57,6 +59,9 @@ export function Box({
           // shrink
           "shrink-0": shrink === 0,
           "shrink-1": shrink === 1,
+
+          // wrap
+          "flex-wrap": wrap,
         },
         className,
       )}

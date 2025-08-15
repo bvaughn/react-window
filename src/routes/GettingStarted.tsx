@@ -6,22 +6,37 @@ import { Link } from "../components/Link";
 export function GettingStartedRoute() {
   return (
     <Box direction="column" gap={4}>
-      <Callout intent="warning">
-        This library require the{" "}
-        <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">
-          <code>ResizeObserver</code> API
+      <div>
+        <strong>react-window</strong> is a component library that helps render
+        large lists of data quickly (and without the performance problems that
+        often go along with rendering a lot of data). It's used in a lot of
+        places, from{" "}
+        <ExternalLink href="https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en">
+          React DevTools
         </ExternalLink>{" "}
-        (or polyfill).
-      </Callout>
-      <div>To install from NPM:</div>
-      <code className="text-xs md:text-sm block text-left whitespace-pre-wrap rounded-md p-3 bg-black text-white!">
+        to the{" "}
+        <ExternalLink href="https://github.com/replayio/devtools">
+          Replace browser
+        </ExternalLink>
+        .
+      </div>
+      <div>
+        This website has documentation and examples to help you get started with
+        the library. Check out the <Link to="/support">Support</Link> page if
+        you need help.
+      </div>
+      <div>Begin by installing the library from NPM:</div>
+      <code className="grow text-xs md:text-sm block text-left whitespace-pre-wrap rounded-md p-3 bg-black text-white!">
         npm install <span className="tok-keyword">react-window</span>
       </code>
       <div>
         TypeScript definitions and component documentation are both included
         within the published <code>dist</code> folder.
       </div>
-      <div>There are two types of components to choose from:</div>
+      <div>
+        This library provides two basic types of components; choose one below to
+        learn more:
+      </div>
       <ul className="pl-8">
         <li className="list-disc">
           <Link to="/list/fixed-row-height">Lists</Link> (vertical scrolling)
@@ -30,15 +45,13 @@ export function GettingStartedRoute() {
           <Link to="/grid/grid">Grids</Link> (horizontal and vertical scrolling)
         </li>
       </ul>
-      <div>
-        You'll find examples and documentation for both types of components
-        here. If you have questions you can ask on GitHub, (but please search
-        through the{" "}
-        <ExternalLink href="https://github.com/bvaughn/react-window/issues?q=is%3Aissue%20state%3Aclosed">
-          issues that have already been answered
+      <Callout className="mt-4" intent="warning">
+        Note this library require the{" "}
+        <ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">
+          <code>ResizeObserver</code> API
         </ExternalLink>{" "}
-        before opening a new one).
-      </div>
+        (or polyfill).
+      </Callout>
     </Box>
   );
 }

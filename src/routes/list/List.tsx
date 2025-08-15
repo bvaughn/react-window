@@ -45,12 +45,18 @@ export function ListRoute() {
         component's layout.
       </Callout>
       <div>
-        Rows often require more data to render. You can use{" "}
+        Rows often require more data to render. That data needs to somehow be
+        passed from the parent (list) component to the row level component. You
+        could use the{" "}
         <ExternalLink href="https://react.dev/learn/passing-data-deeply-with-context">
-          React Context
+          Context API
         </ExternalLink>{" "}
-        for this, but it's often easier and more performant to use{" "}
-        <code>rowProps</code>:
+        or the{" "}
+        <ExternalLink href="https://react.dev/reference/react/useCallback">
+          useCallback
+        </ExternalLink>{" "}
+        hook for this, but it's easier to use <code>rowProps</code> as shown in
+        the example below:
       </div>
       <Code code={CODE_MORE} language="TSX" />
       <Callout intent="primary">

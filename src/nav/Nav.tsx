@@ -1,6 +1,3 @@
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
-import { ExternalLink } from "../components/ExternalLink";
-import { NavButton } from "./NavButton";
 import { NavLink } from "./NavLink";
 import { NavSection } from "./NavSection";
 
@@ -27,27 +24,7 @@ export function Nav() {
         <NavLink to="/grid/grid-props">Component props</NavLink>
         <NavLink to="/grid/grid-imperative-api">Imperative API</NavLink>
       </NavSection>
-      <NavSection label="Other">
-        <NavLink to="/other/memoization">Memoization</NavLink>
-        <NavButton>
-          <ExternalLink
-            className="text-inherit"
-            href="https://www.npmjs.com/package/react-window"
-          >
-            Installation{" "}
-            <ArrowTopRightOnSquareIcon className="inline-block size-4 text-white/50" />
-          </ExternalLink>
-        </NavButton>
-        <NavButton>
-          <ExternalLink
-            className="text-inherit"
-            href="https://github.com/bvaughn/react-window"
-          >
-            Support{" "}
-            <ArrowTopRightOnSquareIcon className="inline-block size-4 text-white/50" />
-          </ExternalLink>
-        </NavButton>
-      </NavSection>
+      <NavLink to="/support">Support</NavLink>
     </div>
   );
 }

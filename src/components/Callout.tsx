@@ -32,7 +32,7 @@ export function Callout({
 
   return (
     <div
-      className={`rounded-b-md rounded-t-xl md:rounded-tl-md p-2 px-3 ${getClassNames(intent)} ${className}`}
+      className={`w-fit rounded-md p-2 px-3 ${getClassNames(intent)} ${className}`}
       role="alert"
       {...rest}
     >
