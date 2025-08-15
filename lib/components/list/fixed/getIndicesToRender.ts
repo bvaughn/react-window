@@ -1,10 +1,12 @@
 export function getIndicesToRender({
   height,
+  overscanCount = 0,
   rowCount,
   rowHeight,
   scrollTop,
 }: {
   height: number;
+  overscanCount?: number;
   rowCount: number;
   rowHeight: number;
   scrollTop: number;
@@ -22,5 +24,8 @@ export function getIndicesToRender({
     startIndex + numVisibleItems - 1, // -1 is because stop index is inclusive
   );
 
-  return [startIndex, stopIndex];
+  return [
+    Math.max(0, startIndex - overscanCount),
+    Math.min(rowCount - 1, stopIndex + overscanCount),
+  ];
 }

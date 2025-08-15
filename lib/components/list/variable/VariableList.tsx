@@ -45,6 +45,7 @@ export function VariableList<RowProps extends object>({
   defaultHeight = 0,
   listRef,
   onRowsRendered,
+  overscanCount = 1,
   rowComponent: RowComponentProp,
   rowCount,
   rowHeight,
@@ -86,6 +87,7 @@ export function VariableList<RowProps extends object>({
   const [startIndex, stopIndex] = getIndicesToRender({
     cachedBounds,
     height,
+    overscanCount,
     rowCount,
     rowHeight,
     rowProps,

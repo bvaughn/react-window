@@ -82,7 +82,6 @@ function RowComponent({
 }: RowComponentProps<{
   names: string[];
 }>) {
-  console.log("RowComponent", index);
   return (
     <div className="flex items-center" style={style}>
       {names[index]}

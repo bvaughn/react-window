@@ -5,6 +5,7 @@ import type { RowHeight } from "./VariableList";
 export function getIndicesToRender<RowProps extends object>({
   cachedBounds,
   height,
+  overscanCount = 0,
   rowCount,
   rowHeight,
   rowProps,
@@ -12,6 +13,7 @@ export function getIndicesToRender<RowProps extends object>({
 }: {
   cachedBounds: CachedBounds;
   height: number;
+  overscanCount?: number;
   rowCount: number;
   rowHeight: RowHeight<RowProps>;
   rowProps: RowProps;
@@ -57,5 +59,8 @@ export function getIndicesToRender<RowProps extends object>({
 
   stopIndex = Math.min(maxIndex, currentIndex);
 
-  return [startIndex, stopIndex];
+  return [
+    Math.max(0, startIndex - overscanCount),
+    Math.min(rowCount - 1, stopIndex + overscanCount),
+  ];
 }

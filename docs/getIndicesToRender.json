@@ -35,6 +35,32 @@
         "name": "number"
       }
     },
+    "overscanCount": {
+      "defaultValue": {
+        "value": "0"
+      },
+      "description": "",
+      "name": "overscanCount",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getIndicesToRender.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "number | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "number"
+          }
+        ]
+      }
+    },
     "rowCount": {
       "defaultValue": null,
       "description": "",

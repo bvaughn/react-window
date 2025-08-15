@@ -67,6 +67,12 @@ export type CommonListProps<RowProps extends object> = {
   onRowsRendered?: (args: { startIndex: number; stopIndex: number }) => void;
 
   /**
+   * How many additional rows to render outside of the visible area.
+   * This can reduce visual flickering near the edges of a list when scrolling.
+   */
+  overscanCount?: number;
+
+  /**
    * Optional CSS properties.
    * The list of rows will fill the height defined by this style.
    */

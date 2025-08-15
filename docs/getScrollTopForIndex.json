@@ -112,6 +112,21 @@
       "type": {
         "name": "number"
       }
+    },
+    "rowHeight": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowHeight",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/getScrollTopForIndex.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "(index: number) => number"
+      }
     }
   }
 }

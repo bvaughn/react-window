@@ -145,6 +145,32 @@
         ]
       }
     },
+    "overscanCount": {
+      "defaultValue": {
+        "value": "1"
+      },
+      "description": "How many additional rows to render outside of the visible area.\nThis can reduce visual flickering near the edges of a list when scrolling.",
+      "name": "overscanCount",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "number | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "number"
+          }
+        ]
+      }
+    },
     "style": {
       "defaultValue": null,
       "description": "Optional CSS properties.\nThe list of rows will fill the height defined by this style.",

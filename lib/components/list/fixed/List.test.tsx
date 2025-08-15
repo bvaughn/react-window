@@ -45,7 +45,13 @@ describe("List", () => {
 
   test("should render enough rows to fill the available height", () => {
     render(
-      <List rowCount={10} rowComponent={Row} rowHeight={25} rowProps={{}} />,
+      <List
+        overscanCount={0}
+        rowCount={10}
+        rowComponent={Row}
+        rowHeight={25}
+        rowProps={{}}
+      />,
     );
 
     let items = screen.queryAllByRole("listitem");
@@ -63,6 +69,32 @@ describe("List", () => {
     expect(items[2]).toHaveTextContent("Row 2");
   });
 
+  test("should render enough rows to fill the available height with overscan", () => {
+    render(
+      <List
+        overscanCount={2}
+        rowCount={10}
+        rowComponent={Row}
+        rowHeight={25}
+        rowProps={{}}
+      />,
+    );
+
+    let items = screen.queryAllByRole("listitem");
+    expect(items).toHaveLength(6);
+    expect(items[0]).toHaveTextContent("Row 0");
+    expect(items[5]).toHaveTextContent("Row 5");
+
+    act(() => {
+      updateMockResizeObserver(new DOMRect(0, 0, 50, 75));
+    });
+
+    items = screen.queryAllByRole("listitem");
+    expect(items).toHaveLength(5);
+    expect(items[0]).toHaveTextContent("Row 0");
+    expect(items[4]).toHaveTextContent("Row 4");
+  });
+
   test("should pass rowProps to the rowComponent", () => {
     render(
       <List
@@ -76,7 +108,7 @@ describe("List", () => {
       />,
     );
 
-    expect(mountedRows.size).toEqual(4);
+    expect(mountedRows.size).toEqual(5);
     expect(mountedRows.get(0)).toMatchObject({
       foo: "abc",
       bar: 123,
@@ -99,10 +131,10 @@ describe("List", () => {
     const { rerender } = render(
       <List rowCount={10} rowComponent={Row} rowHeight={25} />,
     );
-    expect(mountedRows).toHaveLength(4);
+    expect(mountedRows).toHaveLength(5);
 
     rerender(<List rowCount={10} rowComponent={Row} rowHeight={50} />);
-    expect(mountedRows).toHaveLength(2);
+    expect(mountedRows).toHaveLength(3);
     expect(mountedRows.get(1)?.index).toEqual(1);
   });
 
@@ -117,7 +149,7 @@ describe("List", () => {
         }}
       />,
     );
-    expect(mountedRows).toHaveLength(4);
+    expect(mountedRows).toHaveLength(5);
     expect(mountedRows.get(0)).toMatchObject({
       foo: "abc",
     });
@@ -132,7 +164,7 @@ describe("List", () => {
         }}
       />,
     );
-    expect(mountedRows).toHaveLength(4);
+    expect(mountedRows).toHaveLength(5);
     expect(mountedRows.get(1)?.index).toEqual(1);
     expect(mountedRows.get(0)).toMatchObject({
       bar: 123,
@@ -145,6 +177,7 @@ describe("List", () => {
 
     render(
       <List
+        overscanCount={0}
         defaultHeight={75}
         rowCount={4}
         rowComponent={Row}
@@ -161,6 +194,7 @@ describe("List", () => {
 
     const { rerender } = render(
       <List
+        overscanCount={0}
         defaultHeight={100}
         rowCount={2}
         onRowsRendered={onRowsRendered}
@@ -176,6 +210,7 @@ describe("List", () => {
 
     rerender(
       <List
+        overscanCount={0}
         rowCount={4}
         onRowsRendered={onRowsRendered}
         rowComponent={Row}
@@ -192,6 +227,7 @@ describe("List", () => {
   test("should support custom className and style props", () => {
     render(
       <List
+        overscanCount={0}
         className="foo"
         rowCount={4}
         rowComponent={Row}
@@ -209,7 +245,13 @@ describe("List", () => {
 
   test("should spread HTML rest attributes", () => {
     render(
-      <List data-testid="foo" rowCount={4} rowComponent={Row} rowHeight={25} />,
+      <List
+        overscanCount={0}
+        data-testid="foo"
+        rowCount={4}
+        rowComponent={Row}
+        rowHeight={25}
+      />,
     );
 
     expect(screen.queryByTestId("foo")).toHaveRole("list");
@@ -269,13 +311,13 @@ describe("List", () => {
       />,
     );
 
-    expect(mountedRows).toHaveLength(4);
+    expect(mountedRows).toHaveLength(5);
     expect(mountedRows.get(0)).toMatchObject({
       foo: "abc",
       abc: 123,
     });
 
-    expect(RowSpy).toHaveBeenCalledTimes(4);
+    expect(RowSpy).toHaveBeenCalledTimes(5);
 
     rerender(
       <List
@@ -288,7 +330,7 @@ describe("List", () => {
         }}
       />,
     );
-    expect(RowSpy).toHaveBeenCalledTimes(4);
+    expect(RowSpy).toHaveBeenCalledTimes(5);
 
     rerender(
       <List
@@ -301,6 +343,6 @@ describe("List", () => {
         }}
       />,
     );
-    expect(RowSpy).toHaveBeenCalledTimes(8);
+    expect(RowSpy).toHaveBeenCalledTimes(10);
   });
 });

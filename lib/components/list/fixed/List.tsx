@@ -38,6 +38,7 @@ export function List<RowProps extends object>({
   defaultHeight = 0,
   listRef,
   onRowsRendered,
+  overscanCount = 1,
   rowComponent: RowComponentProp,
   rowCount,
   rowHeight,
@@ -74,6 +75,7 @@ export function List<RowProps extends object>({
 
   const [startIndex, stopIndex] = getIndicesToRender({
     height,
+    overscanCount,
     rowCount,
     rowHeight,
     scrollTop: scrollState.scrollTop,
