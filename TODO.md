@@ -1,0 +1,2 @@
+- Run TSC and Lint on CI
+- Figure out why VSCode isn't importing certain things (e.g. expect, assert)

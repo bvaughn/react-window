@@ -26,7 +26,7 @@ describe("List", () => {
     );
   }
 
-  let mountedRows: Map<number, RowComponentProps<unknown>> = new Map();
+  let mountedRows: Map<number, RowComponentProps<object>> = new Map();
 
   beforeEach(() => {
     updateMockResizeObserver(new DOMRect(0, 0, 50, 100));
@@ -256,4 +256,6 @@ describe("List", () => {
     // Test More variations of "align"
     // This is probably better done by directly testing the method used to compute scroll offsets
   });
+
+  // TODO Test row props auto-memoization
 });

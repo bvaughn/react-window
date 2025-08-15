@@ -7,6 +7,7 @@ export function getScrollTopForIndex({
   index,
   prevScrollTop,
   rowCount,
+  rowHeight,
 }: {
   align: Align;
   getRowOffset: (index: number) => number;
@@ -14,15 +15,17 @@ export function getScrollTopForIndex({
   index: number;
   prevScrollTop: number;
   rowCount: number;
+  rowHeight: (index: number) => number;
 }) {
   const lastRowTop = getRowOffset(rowCount - 1);
-  const minScrollTop = Math.max(0, getRowOffset(index + 1) - height);
-  const maxScrollTop = Math.min(lastRowTop, getRowOffset(index));
+  const maxScrollTop = lastRowTop + rowHeight(rowCount - 1) - height;
+  const alignEndScrollTop = Math.max(0, getRowOffset(index + 1) - height);
+  const alignStartScrollTop = Math.min(lastRowTop, getRowOffset(index));
 
   if (align === "smart") {
     if (
-      prevScrollTop >= minScrollTop - height &&
-      prevScrollTop <= maxScrollTop + height
+      prevScrollTop >= alignEndScrollTop &&
+      prevScrollTop <= alignStartScrollTop
     ) {
       align = "auto";
     } else {
@@ -32,31 +35,36 @@ export function getScrollTopForIndex({
 
   switch (align) {
     case "start":
-      return maxScrollTop;
+      return Math.min(maxScrollTop, alignStartScrollTop);
     case "end":
-      return minScrollTop;
+      return alignEndScrollTop;
     case "center": {
       // "Centered" offset is usually the average of the min and max.
       // But near the edges of the list, this doesn't hold true.
       const middleOffset = Math.round(
-        minScrollTop + (maxScrollTop - minScrollTop) / 2,
+        alignEndScrollTop + (alignStartScrollTop - alignEndScrollTop) / 2,
       );
       if (middleOffset < Math.ceil(height / 2)) {
-        return 0; // near the beginning
-      } else if (middleOffset > lastRowTop + Math.floor(height / 2)) {
-        return lastRowTop; // near the end
+        // Too near the beginning to center align
+        return 0;
+      } else if (middleOffset > maxScrollTop) {
+        // Too near the end to center align
+        return maxScrollTop;
       } else {
         return middleOffset;
       }
     }
     case "auto":
     default:
-      if (prevScrollTop >= minScrollTop && prevScrollTop <= maxScrollTop) {
+      if (
+        prevScrollTop >= alignEndScrollTop &&
+        prevScrollTop <= alignStartScrollTop
+      ) {
         return prevScrollTop;
-      } else if (prevScrollTop < minScrollTop) {
-        return minScrollTop;
+      } else if (prevScrollTop < alignEndScrollTop) {
+        return alignEndScrollTop;
       } else {
-        return maxScrollTop;
+        return alignStartScrollTop;
       }
   }
 }
