@@ -8,7 +8,7 @@ jobs:
       - uses: actions/setup-node@v3
       - uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 10
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --recursive
       - name: Build NPM package
