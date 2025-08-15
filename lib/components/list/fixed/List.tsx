@@ -1,4 +1,5 @@
 import {
+  memo,
   useEffect,
   useMemo,
   useState,
@@ -13,6 +14,7 @@ import { useScrollState } from "../hooks/useScrollState";
 import type { CommonListProps, ListImperativeAPI } from "../types";
 import { getIndicesToRender } from "./getIndicesToRender";
 import { useListImperativeApi } from "./useListImperativeHandle";
+import { arePropsEqual } from "../../../utils/arePropsEqual";
 
 export type ListProps<RowProps extends object> = CommonListProps<RowProps> &
   HTMLAttributes<HTMLDivElement> & {
@@ -36,7 +38,7 @@ export function List<RowProps extends object>({
   defaultHeight = 0,
   listRef,
   onRowsRendered,
-  rowComponent: Row,
+  rowComponent: RowComponentProp,
   rowCount,
   rowHeight,
   // @ts-expect-error Find a way to cast this
@@ -45,6 +47,10 @@ export function List<RowProps extends object>({
   ...rest
 }: ListProps<RowProps>) {
   const rowProps = useRowProps(rowPropsUnstable);
+  const RowComponent = useMemo(
+    () => memo(RowComponentProp, arePropsEqual),
+    [RowComponentProp],
+  );
 
   const [element, setElement] = useState<HTMLDivElement | null>(null);
 
@@ -78,7 +84,7 @@ export function List<RowProps extends object>({
     if (rowCount > 0) {
       for (let index = startIndex; index <= stopIndex; index++) {
         children.push(
-          <Row
+          <RowComponent
             {...(rowProps as RowProps)}
             key={index}
             index={index}
@@ -93,7 +99,7 @@ export function List<RowProps extends object>({
       }
     }
     return children;
-  }, [rowCount, Row, rowHeight, rowProps, startIndex, stopIndex]);
+  }, [rowCount, RowComponent, rowHeight, rowProps, startIndex, stopIndex]);
 
   useEffect(() => {
     if (onRowsRendered) {

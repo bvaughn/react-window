@@ -1,4 +1,5 @@
 import {
+  memo,
   useEffect,
   useMemo,
   useState,
@@ -8,6 +9,7 @@ import {
 } from "react";
 import { EMPTY_OBJECT } from "../../../../src/constants";
 import { useResizeObserver } from "../../../hooks/useResizeObserver";
+import { arePropsEqual } from "../../../utils/arePropsEqual";
 import { useRowProps } from "../hooks/useRowProps";
 import { useScrollState } from "../hooks/useScrollState";
 import type { CommonListProps, ListImperativeAPI } from "../types";
@@ -43,7 +45,7 @@ export function VariableList<RowProps extends object>({
   defaultHeight = 0,
   listRef,
   onRowsRendered,
-  rowComponent: Row,
+  rowComponent: RowComponentProp,
   rowCount,
   rowHeight,
   // @ts-expect-error Find a way to cast this
@@ -52,6 +54,10 @@ export function VariableList<RowProps extends object>({
   ...rest
 }: VariableListProps<RowProps>) {
   const rowProps = useRowProps(rowPropsUnstable);
+  const RowComponent = useMemo(
+    () => memo(RowComponentProp, arePropsEqual),
+    [RowComponentProp],
+  );
 
   const cachedBounds = useCachedBounds({ rowHeight, rowProps });
 
@@ -100,7 +106,7 @@ export function VariableList<RowProps extends object>({
         });
 
         children.push(
-          <Row
+          <RowComponent
             {...(rowProps as RowProps)}
             key={index}
             index={index}
@@ -115,7 +121,15 @@ export function VariableList<RowProps extends object>({
       }
     }
     return children;
-  }, [cachedBounds, rowCount, Row, rowHeight, rowProps, startIndex, stopIndex]);
+  }, [
+    cachedBounds,
+    rowCount,
+    RowComponent,
+    rowHeight,
+    rowProps,
+    startIndex,
+    stopIndex,
+  ]);
 
   useEffect(() => {
     if (onRowsRendered) {

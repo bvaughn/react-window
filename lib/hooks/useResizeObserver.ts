@@ -1,5 +1,5 @@
 import { useMemo, useState, type CSSProperties } from "react";
-import { parseNumericStyleValue } from "../utils/dom/parseNumericStyleValue";
+import { parseNumericStyleValue } from "../utils/parseNumericStyleValue";
 import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect";
 
 export function useResizeObserver({

@@ -1,11 +1,11 @@
 import { List, type RowComponentProps } from "react-window";
-import { Box } from "../../components/Box";
-import Code from "../../components/code/Code";
-import { names } from "../../data";
 import { Block } from "../../components/Block";
+import { Box } from "../../components/Box";
 import { Callout } from "../../components/Callout";
+import Code from "../../components/code/Code";
 import { ExternalLink } from "../../components/ExternalLink";
 import { Link } from "../../components/Link";
+import { names } from "../../data";
 
 export function ListRoute() {
   return (
@@ -82,6 +82,7 @@ function RowComponent({
 }: RowComponentProps<{
   names: string[];
 }>) {
+  console.log("RowComponent", index);
   return (
     <div className="flex items-center" style={style}>
       {names[index]}
