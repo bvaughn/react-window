@@ -3,6 +3,7 @@ import { NavLink as NavLinkExternal } from "react-router-dom";
 import type { routeMap } from "../routes";
 import { cn } from "../utils/cn";
 import { NavButton } from "./NavButton";
+import { Box } from "../components/Box";
 
 export function NavLink({
   children,
@@ -21,7 +22,9 @@ export function NavLink({
             className,
           )}
         >
-          {children}
+          <Box align="center" direction="row" gap={2}>
+            {children}
+          </Box>
         </NavButton>
       )}
     </NavLinkExternal>

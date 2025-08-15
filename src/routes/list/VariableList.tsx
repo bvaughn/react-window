@@ -35,7 +35,7 @@ export function VariableListRoute() {
       <Block className="h-50" data-focus-within="bold">
         <VariableList
           rowComponent={RowComponent}
-          rowCount={names.length}
+          rowCount={items.length}
           rowHeight={rowHeight}
           rowProps={{ items }}
         />
@@ -50,7 +50,7 @@ export function VariableListRoute() {
 }
 
 function rowHeight(index: number, { items }: RowProps) {
-  return items[index].type === "header" ? 40 : 25;
+  return items[index].type === "header" ? 35 : 25;
 }
 
 function RowComponent({
@@ -95,7 +95,7 @@ function Example({ items }) {
 }
 
 function rowHeight(index: number, { items }: RowProps) {
-  return items[index].type === "header" ? 40 : 25;
+  return items[index].type === "header" ? 35 : 25;
 }
 
 function RowComponent({ index, items, style }: RowComponentProps<RowProps>) {

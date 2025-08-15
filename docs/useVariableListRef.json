@@ -1,0 +1,51 @@
+{
+  "tags": {},
+  "filePath": "lib/components/list/variable/useVariableListRef.ts",
+  "description": "Convenience hook to return a properly typed ref for the VariableList component.",
+  "displayName": "useVariableListRef",
+  "methods": [],
+  "props": {
+    "element": {
+      "defaultValue": null,
+      "description": "",
+      "name": "element",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "enum",
+        "raw": "HTMLDivElement | null",
+        "value": [
+          {
+            "value": "null"
+          },
+          {
+            "value": "HTMLDivElement",
+            "description": "Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <div> elements.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDivElement)",
+            "fullComment": "Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <div> elements.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDivElement)",
+            "tags": {}
+          }
+        ]
+      }
+    },
+    "scrollToRow": {
+      "defaultValue": null,
+      "description": "",
+      "name": "scrollToRow",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "({ align, behavior, index, }: { align?: Align | undefined; behavior?: ScrollBehavior | undefined; index: number; }) => void"
+      }
+    }
+  }
+}

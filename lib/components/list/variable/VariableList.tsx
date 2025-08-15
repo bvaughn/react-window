@@ -4,12 +4,13 @@ import {
   useState,
   type HTMLAttributes,
   type ReactNode,
+  type Ref,
 } from "react";
 import { EMPTY_OBJECT } from "../../../../src/constants";
 import { useResizeObserver } from "../../../hooks/useResizeObserver";
 import { useRowProps } from "../hooks/useRowProps";
 import { useScrollState } from "../hooks/useScrollState";
-import type { CommonListProps } from "../types";
+import type { CommonListProps, ListImperativeAPI } from "../types";
 import { getCachedRowBounds } from "./getCachedRowBounds";
 import { getEstimatedHeight } from "./getEstimatedHeight";
 import { getIndicesToRender } from "./getIndicesToRender";
@@ -19,6 +20,15 @@ import { useVariableListImperativeApi } from "./useVariableListImperativeApi";
 export type VariableListProps<RowProps extends object> =
   CommonListProps<RowProps> &
     HTMLAttributes<HTMLDivElement> & {
+      /**
+       * Ref used to interact with this component's imperative API.
+       *
+       * This API has imperative methods for scrolling and a getter for the outermost DOM element.
+       *
+       * ⚠️ The `useVariableListRef` hook is exported for convenience use in TypeScript projects.
+       */
+      listRef?: Ref<ListImperativeAPI>;
+
       /**
        * Function that returns the height of a row given its index (and `rowProps` data).
        */

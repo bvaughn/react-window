@@ -12,5 +12,8 @@ export function processPropsJSON(json: ComponentDoc) {
     }
   });
 
+  optionalProps.sort((a, b) => a.name.localeCompare(b.name));
+  requiredProps.sort((a, b) => a.name.localeCompare(b.name));
+
   return { optionalProps, requiredProps };
 }

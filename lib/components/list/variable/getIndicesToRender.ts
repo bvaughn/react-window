@@ -38,7 +38,7 @@ export function getIndicesToRender<RowProps extends object>({
     currentIndex++;
   }
 
-  startIndex = Math.min(maxIndex, currentIndex);
+  startIndex = currentIndex;
 
   while (currentIndex < maxIndex) {
     const bounds = getCachedRowBounds({

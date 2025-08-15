@@ -17,12 +17,9 @@ export function getIndicesToRender({
   const numVisibleItems = Math.ceil(
     (height + scrollTop - startIndex * rowHeight) / rowHeight,
   );
-  const stopIndex = Math.max(
-    0,
-    Math.min(
-      rowCount - 1,
-      startIndex + numVisibleItems - 1, // -1 is because stop index is inclusive
-    ),
+  const stopIndex = Math.min(
+    rowCount - 1,
+    startIndex + numVisibleItems - 1, // -1 is because stop index is inclusive
   );
 
   return [startIndex, stopIndex];

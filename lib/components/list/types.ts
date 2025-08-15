@@ -1,4 +1,4 @@
-import type { ComponentProps, CSSProperties, ReactNode, Ref } from "react";
+import type { ComponentProps, CSSProperties, ReactNode } from "react";
 
 export type Align = "auto" | "center" | "end" | "smart" | "start";
 
@@ -32,13 +32,6 @@ export type CommonListProps<RowProps extends object> = {
    * This value is important for server rendering.
    */
   defaultHeight?: number;
-
-  /**
-   * Ref used to interact with this component's imperative API.
-   *
-   * This API has imperative methods for scrolling and a getter for the outermost DOM element.
-   */
-  listRef?: Ref<ListImperativeAPI>;
 
   /**
    * React component responsible for rendering a row.

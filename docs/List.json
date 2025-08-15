@@ -59,45 +59,6 @@
         ]
       }
     },
-    "listRef": {
-      "defaultValue": null,
-      "description": "Ref used to interact with this component's imperative API.\n\nThis API has imperative methods for scrolling and a getter for the outermost DOM element.",
-      "name": "listRef",
-      "declarations": [
-        {
-          "fileName": "react-window/lib/components/list/types.ts",
-          "name": "TypeLiteral"
-        }
-      ],
-      "required": false,
-      "type": {
-        "name": "enum",
-        "raw": "Ref<ListImperativeAPI> | undefined",
-        "value": [
-          {
-            "value": "undefined"
-          },
-          {
-            "value": "null"
-          },
-          {
-            "value": "(instance: ListImperativeAPI | null) => void | (() => VoidOrUndefinedOnly)",
-            "description": "",
-            "fullComment": "",
-            "tags": {}
-          },
-          {
-            "value": "RefObject<ListImperativeAPI | null>",
-            "description": "Created by {@link createRef}, or {@link useRef} when passed `null`.",
-            "fullComment": "Created by {@link createRef}, or {@link useRef} when passed `null`.\n@template T The type of the ref's value.\n@example ```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```",
-            "tags": {
-              "template": "T The type of the ref's value.",
-              "example": "```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```"
-            }
-          }
-        ]
-      }
-    },
     "rowComponent": {
       "defaultValue": null,
       "description": "React component responsible for rendering a row.\n\nThis component will receive an `index` and `style` prop by default.\nAdditionally it will receive prop values passed to `rowProps`.\n\n⚠️ The prop types for this component are exported as `RowComponentProps`",
@@ -211,6 +172,45 @@
             "description": "",
             "fullComment": "",
             "tags": {}
+          }
+        ]
+      }
+    },
+    "listRef": {
+      "defaultValue": null,
+      "description": "Ref used to interact with this component's imperative API.\n\nThis API has imperative methods for scrolling and a getter for the outermost DOM element.\n\n⚠️ The `useListRef` hook is exported for convenience use in TypeScript projects.",
+      "name": "listRef",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/fixed/List.tsx",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "Ref<ListImperativeAPI> | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "null"
+          },
+          {
+            "value": "(instance: ListImperativeAPI | null) => void | (() => VoidOrUndefinedOnly)",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          },
+          {
+            "value": "RefObject<ListImperativeAPI | null>",
+            "description": "Created by {@link createRef}, or {@link useRef} when passed `null`.",
+            "fullComment": "Created by {@link createRef}, or {@link useRef} when passed `null`.\n@template T The type of the ref's value.\n@example ```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```",
+            "tags": {
+              "template": "T The type of the ref's value.",
+              "example": "```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```"
+            }
           }
         ]
       }

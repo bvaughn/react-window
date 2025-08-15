@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import type { ListImperativeAPI } from "..";
+import type { ListImperativeAPI } from "../../..";
 
 /**
  * Convenience hook to return a properly typed ref for the List component.

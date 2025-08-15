@@ -1,21 +1,30 @@
 import {
   useEffect,
-  useImperativeHandle,
   useMemo,
   useState,
   type HTMLAttributes,
   type ReactNode,
+  type Ref,
 } from "react";
 import { EMPTY_OBJECT } from "../../../../src/constants";
 import { useResizeObserver } from "../../../hooks/useResizeObserver";
-import { getScrollTopForIndex } from "../getScrollTopForIndex";
 import { useRowProps } from "../hooks/useRowProps";
 import { useScrollState } from "../hooks/useScrollState";
-import type { Align, CommonListProps } from "../types";
+import type { CommonListProps, ListImperativeAPI } from "../types";
 import { getIndicesToRender } from "./getIndicesToRender";
+import { useListImperativeApi } from "./useListImperativeHandle";
 
 export type ListProps<RowProps extends object> = CommonListProps<RowProps> &
   HTMLAttributes<HTMLDivElement> & {
+    /**
+     * Ref used to interact with this component's imperative API.
+     *
+     * This API has imperative methods for scrolling and a getter for the outermost DOM element.
+     *
+     * ⚠️ The `useListRef` hook is exported for convenience use in TypeScript projects.
+     */
+    listRef?: Ref<ListImperativeAPI>;
+
     /**
      * Row height (in pixels).
      */
@@ -46,39 +55,14 @@ export function List<RowProps extends object>({
 
   const { onScroll, scrollState } = useScrollState();
 
-  useImperativeHandle(
+  useListImperativeApi({
+    element,
+    height,
     listRef,
-    () => ({
-      get element() {
-        return element;
-      },
-
-      scrollToRow({
-        align = "auto",
-        behavior = "auto",
-        index,
-      }: {
-        align?: Align;
-        behavior?: ScrollBehavior;
-        index: number;
-      }) {
-        const scrollTop = getScrollTopForIndex({
-          align,
-          getRowOffset: (index: number) => index * rowHeight,
-          height,
-          index,
-          rowCount,
-          prevScrollTop: scrollState.scrollTop,
-        });
-
-        element?.scrollTo({
-          top: scrollTop,
-          behavior,
-        });
-      },
-    }),
-    [element, height, rowCount, scrollState.scrollTop, rowHeight],
-  );
+    rowCount,
+    rowHeight,
+    scrollTop: scrollState.prevScrollTop,
+  });
 
   const [startIndex, stopIndex] = getIndicesToRender({
     height,

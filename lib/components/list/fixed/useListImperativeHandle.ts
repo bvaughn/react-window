@@ -1,26 +1,20 @@
 import { useImperativeHandle, type Ref } from "react";
 import { getScrollTopForIndex } from "../getScrollTopForIndex";
-import type { Align, CachedBounds, ListImperativeAPI } from "../types";
-import type { RowHeight } from "./VariableList";
-import { getCachedRowBounds } from "./getCachedRowBounds";
+import type { Align, ListImperativeAPI } from "../types";
 
-export function useVariableListImperativeApi<RowProps extends object>({
-  cachedBounds,
+export function useListImperativeApi({
   element,
   height,
   listRef,
   rowCount,
   rowHeight,
-  rowProps,
   scrollTop: prevScrollTop,
 }: {
-  cachedBounds: CachedBounds;
   element: HTMLDivElement | null;
   height: number;
   listRef: Ref<ListImperativeAPI> | undefined;
   rowCount: number;
-  rowHeight: RowHeight<RowProps>;
-  rowProps: RowProps;
+  rowHeight: number;
   scrollTop: number;
 }) {
   return useImperativeHandle(
@@ -39,36 +33,21 @@ export function useVariableListImperativeApi<RowProps extends object>({
         behavior?: ScrollBehavior;
         index: number;
       }) {
-        const nextScrollTop = getScrollTopForIndex({
+        const scrollTop = getScrollTopForIndex({
           align,
-          getRowOffset: (index) => {
-            return getCachedRowBounds({
-              cachedBounds,
-              index,
-              rowHeight,
-              rowProps,
-            }).scrollTop;
-          },
+          getRowOffset: (index: number) => index * rowHeight,
           height,
           index,
-          prevScrollTop,
           rowCount,
+          prevScrollTop,
         });
 
         element?.scrollTo({
-          top: nextScrollTop,
+          top: scrollTop,
           behavior,
         });
       },
     }),
-    [
-      cachedBounds,
-      element,
-      height,
-      prevScrollTop,
-      rowCount,
-      rowHeight,
-      rowProps,
-    ],
+    [element, height, prevScrollTop, rowCount, rowHeight],
   );
 }

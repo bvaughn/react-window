@@ -1,8 +1,8 @@
 import { useCallback, useRef } from "react";
 import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect";
 
-// Forked from usehooks-ts
-export function useEventCallback<Args, Return>(
+// Forked from useEventCallback (usehooks-ts)
+export function useStableCallback<Args, Return>(
   fn: (args: Args) => Return,
 ): (args: Args) => Return {
   const ref = useRef<typeof fn>(() => {

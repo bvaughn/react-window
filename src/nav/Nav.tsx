@@ -1,8 +1,4 @@
-import {
-  ArrowTopRightOnSquareIcon,
-  CodeBracketIcon,
-} from "@heroicons/react/20/solid";
-import { Box } from "../components/Box";
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
 import { ExternalLink } from "../components/ExternalLink";
 import { NavButton } from "./NavButton";
 import { NavLink } from "./NavLink";
@@ -12,38 +8,24 @@ export function Nav() {
   return (
     <div className="w-full shrink-0 flex flex-col gap-4 py-4 overflow-y-auto">
       <NavLink to="/">Getting started</NavLink>
-      <NavSection label="Lists">
-        <Box align="center" direction="row" gap={4} justify="between">
-          <NavLink to="/list/fixed-row-height">Fixed height</NavLink>
-          <NavLink to="/list/fixed-row-height-props">
-            <small>
-              <CodeBracketIcon className="inline-block size-4 text-white/50" />{" "}
-              props
-            </small>
-          </NavLink>
-        </Box>
-        <Box align="center" direction="row" gap={4} justify="between">
-          <NavLink to="/list/variable-row-height">Variable height</NavLink>
-          <NavLink to="/list/variable-row-height-props">
-            <small>
-              <CodeBracketIcon className="inline-block size-4 text-white/50" />{" "}
-              props
-            </small>
-          </NavLink>
-        </Box>
-        <NavLink to="/list/imperative-api">Imperative API</NavLink>
+      <NavSection label="List">
+        <NavLink to="/list/fixed-row-height">Introduction</NavLink>
+        <NavLink to="/list/fixed-row-height-props">Props</NavLink>
+        <NavLink to="/list/fixed-row-height-imperative-api">
+          Imperative API
+        </NavLink>
       </NavSection>
-      <NavSection label="Grids">
-        <Box align="center" direction="row" gap={4} justify="between">
-          <NavLink to="/grid/grid">Grid</NavLink>
-          <NavLink to="/grid/grid-props">
-            <small>
-              <CodeBracketIcon className="inline-block size-4 text-white/50" />{" "}
-              props
-            </small>
-          </NavLink>
-        </Box>
-        <NavLink to="/grid/imperative-api">Imperative API</NavLink>
+      <NavSection label="VariableList">
+        <NavLink to="/list/variable-row-height">Introduction</NavLink>
+        <NavLink to="/list/variable-row-height-props">Props</NavLink>
+        <NavLink to="/list/variable-row-height-imperative-api">
+          Imperative API
+        </NavLink>
+      </NavSection>
+      <NavSection label="Grid">
+        <NavLink to="/grid/grid">Introduction</NavLink>
+        <NavLink to="/grid/grid-props">Props</NavLink>
+        <NavLink to="/grid/grid-imperative-api">Imperative API</NavLink>
       </NavSection>
       <NavSection label="Other">
         <NavLink to="/other/memoization">Memoization</NavLink>
@@ -53,7 +35,7 @@ export function Nav() {
             href="https://www.npmjs.com/package/react-window"
           >
             Installation{" "}
-            <ArrowTopRightOnSquareIcon className="inline-block w-3 h-3 text-white/50" />
+            <ArrowTopRightOnSquareIcon className="inline-block size-4 text-white/50" />
           </ExternalLink>
         </NavButton>
         <NavButton>
@@ -62,7 +44,7 @@ export function Nav() {
             href="https://github.com/bvaughn/react-window"
           >
             Support{" "}
-            <ArrowTopRightOnSquareIcon className="inline-block w-3 h-3 text-white/50" />
+            <ArrowTopRightOnSquareIcon className="inline-block size-4 text-white/50" />
           </ExternalLink>
         </NavButton>
       </NavSection>

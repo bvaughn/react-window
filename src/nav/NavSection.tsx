@@ -22,7 +22,7 @@ export function NavSection({
           <ChevronRightIcon className="size-4 fill-white/60 group-data-hover:fill-white/50 group-data-open:rotate-90" />
         </NavButton>
       </DisclosureButton>
-      <DisclosurePanel className="">{children}</DisclosurePanel>
+      <DisclosurePanel className="pl-4">{children}</DisclosurePanel>
     </Disclosure>
   );
 }
