@@ -1,4 +1,4 @@
-import type { ComponentType, CSSProperties, Ref } from "react";
+import type { ComponentProps, CSSProperties, ReactNode, Ref } from "react";
 
 export type Align = "auto" | "center" | "end" | "smart" | "start";
 
@@ -20,18 +20,6 @@ type ForbiddenKeys = "index" | "style";
 type ExcludeForbiddenKeys<Type> = {
   [Key in keyof Type]: Key extends ForbiddenKeys ? never : Type[Key];
 };
-
-export type RowComponentProps<RowProps> = RowProps & {
-  index: number;
-  style: CSSProperties;
-};
-
-export type RowComponent<RowProps> = ComponentType<RowComponentProps<RowProps>>;
-
-export type OnRowsRendered = (args: {
-  startIndex: number;
-  stopIndex: number;
-}) => void;
 
 export type CommonListProps<RowProps extends object> = {
   /**
@@ -58,7 +46,12 @@ export type CommonListProps<RowProps extends object> = {
    * This component will receive an `index` and `style` prop by default.
    * Additionally it will receive prop values passed to `rowProps`.
    */
-  rowComponent: RowComponent<RowProps>;
+  rowComponent: (
+    props: {
+      index: number;
+      style: CSSProperties;
+    } & RowProps,
+  ) => ReactNode;
 
   /**
    * Number of items to be rendered in the list.
@@ -76,7 +69,7 @@ export type CommonListProps<RowProps extends object> = {
   /**
    * Callback notified when the range of visible rows changes.
    */
-  onRowsRendered?: OnRowsRendered;
+  onRowsRendered?: (args: { startIndex: number; stopIndex: number }) => void;
 
   /**
    * Optional CSS properties.
@@ -85,10 +78,19 @@ export type CommonListProps<RowProps extends object> = {
   style?: CSSProperties;
 };
 
+export type RowComponent<RowProps extends object> =
+  CommonListProps<RowProps>["rowComponent"];
+export type RowComponentProps<RowProps extends object = object> =
+  ComponentProps<RowComponent<RowProps>>;
+
 export type ScrollState = {
   prevScrollTop: number;
   scrollTop: number;
 };
+
+export type OnRowsRendered = NonNullable<
+  CommonListProps<object>["onRowsRendered"]
+>;
 
 export type CachedBounds = Map<
   number,

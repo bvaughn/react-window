@@ -14,8 +14,8 @@ export function VariableListPropsRoute() {
         props. Refer to the example for more information.
       </Callout>
       <Callout intent="primary">
-        The only difference between this and the <code>List</code> component are
-        the <code>rowHeight*</code> props.
+        The only difference between this and the (fixed row height){" "}
+        <code>List</code> component is the <code>rowHeight</code> prop.
       </Callout>
       <PropsBlocks json={json} />
     </Box>

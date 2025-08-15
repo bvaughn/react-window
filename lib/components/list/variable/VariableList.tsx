@@ -16,19 +16,17 @@ import { getIndicesToRender } from "./getIndicesToRender";
 import { useCachedBounds } from "./useCachedBounds";
 import { useVariableListImperativeApi } from "./useVariableListImperativeApi";
 
-export type RowHeight<RowProps extends object> = (
-  index: number,
-  rowProps: RowProps,
-) => number;
-
 export type VariableListProps<RowProps extends object> =
   CommonListProps<RowProps> &
     HTMLAttributes<HTMLDivElement> & {
       /**
        * Function that returns the height of a row given its index (and `rowProps` data).
        */
-      rowHeight: RowHeight<RowProps>;
+      rowHeight: (index: number, rowProps: RowProps) => number;
     };
+
+export type RowHeight<RowProps extends object> =
+  VariableListProps<RowProps>["rowHeight"];
 
 export function VariableList<RowProps extends object>({
   className,

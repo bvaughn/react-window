@@ -95,7 +95,7 @@ export function ImperativeApiRoute() {
   );
 }
 
-function Row({ index, style }: RowComponentProps<null>) {
+function Row({ index, style }: RowComponentProps) {
   return (
     <div className="flex items-center gap-2" style={style}>
       Row index {index}
