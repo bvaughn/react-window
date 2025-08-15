@@ -9,7 +9,7 @@ export function Nav() {
   const { pathname } = useLocation();
   useLayoutEffect(() => {
     hide();
-  }, [pathname]);
+  }, [hide, pathname]);
 
   return (
     <div

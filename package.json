@@ -22,7 +22,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky",
+    "prettier": "prettier --write \"**/*.{css,html,js,json,jsx,ts,tsx}\"",
+    "prettier:ci": "prettier --check \"**/*.{css,html,js,json,jsx,ts,tsx}\"",
     "test": "vitest",
+    "test:ci": "vitest run",
     "tsc": "tsc -b"
   },
   "lint-staged": {

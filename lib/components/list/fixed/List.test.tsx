@@ -5,8 +5,8 @@ import {
   disableForCurrentTest,
   updateMockResizeObserver,
 } from "../../../utils/test/mockResizeObserver";
-import { List } from "./List";
 import { type ListImperativeAPI, type RowComponentProps } from "../types";
+import { List } from "./List";
 
 describe("List", () => {
   function Row(props: { index: number; style: CSSProperties }) {
@@ -252,10 +252,55 @@ describe("List", () => {
       expect(scrollTo).toHaveBeenCalledTimes(1);
       expect(scrollTo).not.toHaveBeenLastCalledWith(8, "auto");
     });
-
-    // Test More variations of "align"
-    // This is probably better done by directly testing the method used to compute scroll offsets
   });
 
-  // TODO Test row props auto-memoization
+  test("should auto-memoize rowProps object using shallow equality", () => {
+    const RowSpy = vi.fn(Row);
+
+    const { rerender } = render(
+      <List
+        rowCount={10}
+        rowComponent={RowSpy}
+        rowHeight={25}
+        rowProps={{
+          foo: "abc",
+          abc: 123,
+        }}
+      />,
+    );
+
+    expect(mountedRows).toHaveLength(4);
+    expect(mountedRows.get(0)).toMatchObject({
+      foo: "abc",
+      abc: 123,
+    });
+
+    expect(RowSpy).toHaveBeenCalledTimes(4);
+
+    rerender(
+      <List
+        rowCount={10}
+        rowComponent={RowSpy}
+        rowHeight={25}
+        rowProps={{
+          foo: "abc",
+          abc: 123,
+        }}
+      />,
+    );
+    expect(RowSpy).toHaveBeenCalledTimes(4);
+
+    rerender(
+      <List
+        rowCount={10}
+        rowComponent={RowSpy}
+        rowHeight={25}
+        rowProps={{
+          foo: "abc",
+          abc: 234,
+        }}
+      />,
+    );
+    expect(RowSpy).toHaveBeenCalledTimes(8);
+  });
 });
