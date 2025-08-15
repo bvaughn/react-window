@@ -52,8 +52,8 @@ export function PropsBlock({
               className="ml-4 [&_code]:text-sky-300"
               dangerouslySetInnerHTML={{
                 __html: prop.description
-                  .replace("\n\n", "<br/><br/>")
-                  .replace(/`([^`]+)`/g, "<code>$1</code>"),
+                  .replaceAll("\n\n", "<br/><br/>")
+                  .replaceAll(/`([^`]+)`/g, "<code>$1</code>"),
               }}
             ></dd>
           </div>

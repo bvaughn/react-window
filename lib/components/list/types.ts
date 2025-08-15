@@ -45,6 +45,8 @@ export type CommonListProps<RowProps extends object> = {
    *
    * This component will receive an `index` and `style` prop by default.
    * Additionally it will receive prop values passed to `rowProps`.
+   *
+   * ⚠️ The prop types for this component are exported as `RowComponentProps`
    */
   rowComponent: (
     props: {

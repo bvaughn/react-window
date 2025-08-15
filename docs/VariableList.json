@@ -100,7 +100,7 @@
     },
     "rowComponent": {
       "defaultValue": null,
-      "description": "React component responsible for rendering a row.\n\nThis component will receive an `index` and `style` prop by default.\nAdditionally it will receive prop values passed to `rowProps`.",
+      "description": "React component responsible for rendering a row.\n\nThis component will receive an `index` and `style` prop by default.\nAdditionally it will receive prop values passed to `rowProps`.\n\n⚠️ The prop types for this component are exported as `RowComponentProps`",
       "name": "rowComponent",
       "declarations": [
         {
