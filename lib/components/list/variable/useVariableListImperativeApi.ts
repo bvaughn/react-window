@@ -53,6 +53,7 @@ export function useVariableListImperativeApi<RowProps extends object>({
           index,
           prevScrollTop,
           rowCount,
+          rowHeight: (index: number) => rowHeight(index, rowProps),
         });
 
         element?.scrollTo({

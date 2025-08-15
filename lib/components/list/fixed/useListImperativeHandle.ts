@@ -40,6 +40,7 @@ export function useListImperativeApi({
           index,
           rowCount,
           prevScrollTop,
+          rowHeight: () => rowHeight,
         });
 
         element?.scrollTo({
