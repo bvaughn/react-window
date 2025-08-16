@@ -17,16 +17,30 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@keyframes background-gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 #root {
   width: 100dvw;
   height: 100dvh;
   overflow: auto;
-  background-color: var(--color-sky-500);
   background: linear-gradient(
-    to right,
+    -45deg,
+    var(--color-pink-500),
     var(--color-sky-500),
     var(--color-emerald-400)
   );
+  background-size: 400% 400%;
+  animation: background-gradient-animation 30s ease infinite;
 }
 
 * {
