@@ -1,0 +1,39 @@
+{
+  "tags": {},
+  "filePath": "lib/components/list/variable/useCachedBounds.ts",
+  "description": "",
+  "displayName": "useCachedBounds",
+  "methods": [],
+  "props": {
+    "rowHeight": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowHeight",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/useCachedBounds.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "RowHeight<RowProps>"
+      }
+    },
+    "rowProps": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowProps",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/useCachedBounds.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "object"
+      }
+    }
+  }
+}

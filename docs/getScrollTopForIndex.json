@@ -1,0 +1,132 @@
+{
+  "tags": {},
+  "filePath": "lib/components/list/getScrollTopForIndex.ts",
+  "description": "",
+  "displayName": "getScrollTopForIndex",
+  "methods": [],
+  "props": {
+    "align": {
+      "defaultValue": null,
+      "description": "",
+      "name": "align",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/getScrollTopForIndex.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "enum",
+        "raw": "Align",
+        "value": [
+          {
+            "value": "\"auto\""
+          },
+          {
+            "value": "\"center\""
+          },
+          {
+            "value": "\"end\""
+          },
+          {
+            "value": "\"smart\""
+          },
+          {
+            "value": "\"start\""
+          }
+        ]
+      }
+    },
+    "getRowOffset": {
+      "defaultValue": null,
+      "description": "",
+      "name": "getRowOffset",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/getScrollTopForIndex.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "(index: number) => number"
+      }
+    },
+    "height": {
+      "defaultValue": null,
+      "description": "",
+      "name": "height",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/getScrollTopForIndex.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "index": {
+      "defaultValue": null,
+      "description": "",
+      "name": "index",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/getScrollTopForIndex.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "prevScrollTop": {
+      "defaultValue": null,
+      "description": "",
+      "name": "prevScrollTop",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/getScrollTopForIndex.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "rowCount": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowCount",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/getScrollTopForIndex.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "rowHeight": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowHeight",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/getScrollTopForIndex.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "(index: number) => number"
+      }
+    }
+  }
+}

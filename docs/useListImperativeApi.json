@@ -1,0 +1,135 @@
+{
+  "tags": {},
+  "filePath": "lib/components/list/fixed/useListImperativeHandle.ts",
+  "description": "",
+  "displayName": "useListImperativeApi",
+  "methods": [],
+  "props": {
+    "element": {
+      "defaultValue": null,
+      "description": "",
+      "name": "element",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/fixed/useListImperativeHandle.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "enum",
+        "raw": "HTMLDivElement | null",
+        "value": [
+          {
+            "value": "null"
+          },
+          {
+            "value": "HTMLDivElement",
+            "description": "Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <div> elements.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDivElement)",
+            "fullComment": "Provides special properties (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating <div> elements.\n\n[MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLDivElement)",
+            "tags": {}
+          }
+        ]
+      }
+    },
+    "height": {
+      "defaultValue": null,
+      "description": "",
+      "name": "height",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/fixed/useListImperativeHandle.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "listRef": {
+      "defaultValue": null,
+      "description": "",
+      "name": "listRef",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/fixed/useListImperativeHandle.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "enum",
+        "raw": "Ref<ListImperativeAPI> | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "null"
+          },
+          {
+            "value": "(instance: ListImperativeAPI | null) => void | (() => VoidOrUndefinedOnly)",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          },
+          {
+            "value": "RefObject<ListImperativeAPI | null>",
+            "description": "Created by {@link createRef}, or {@link useRef} when passed `null`.",
+            "fullComment": "Created by {@link createRef}, or {@link useRef} when passed `null`.\n@template T The type of the ref's value.\n@example ```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```",
+            "tags": {
+              "template": "T The type of the ref's value.",
+              "example": "```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```"
+            }
+          }
+        ]
+      }
+    },
+    "rowCount": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowCount",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/fixed/useListImperativeHandle.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "rowHeight": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowHeight",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/fixed/useListImperativeHandle.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "scrollTop": {
+      "defaultValue": null,
+      "description": "",
+      "name": "scrollTop",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/fixed/useListImperativeHandle.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    }
+  }
+}

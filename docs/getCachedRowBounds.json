@@ -1,0 +1,69 @@
+{
+  "tags": {},
+  "filePath": "lib/components/list/variable/getCachedRowBounds.ts",
+  "description": "",
+  "displayName": "getCachedRowBounds",
+  "methods": [],
+  "props": {
+    "cachedBounds": {
+      "defaultValue": null,
+      "description": "",
+      "name": "cachedBounds",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getCachedRowBounds.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "CachedBounds"
+      }
+    },
+    "index": {
+      "defaultValue": null,
+      "description": "",
+      "name": "index",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getCachedRowBounds.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "rowHeight": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowHeight",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getCachedRowBounds.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "RowHeight<RowProps>"
+      }
+    },
+    "rowProps": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowProps",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getCachedRowBounds.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "object"
+      }
+    }
+  }
+}

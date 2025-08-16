@@ -1,0 +1,39 @@
+{
+  "tags": {},
+  "filePath": "lib/components/list/variable/getEstimatedHeight.ts",
+  "description": "",
+  "displayName": "getEstimatedHeight",
+  "methods": [],
+  "props": {
+    "cachedBounds": {
+      "defaultValue": null,
+      "description": "",
+      "name": "cachedBounds",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getEstimatedHeight.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "CachedBounds"
+      }
+    },
+    "rowCount": {
+      "defaultValue": null,
+      "description": "",
+      "name": "rowCount",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/list/variable/getEstimatedHeight.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    }
+  }
+}
