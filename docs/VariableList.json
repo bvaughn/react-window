@@ -147,7 +147,7 @@
     },
     "overscanCount": {
       "defaultValue": {
-        "value": "1"
+        "value": "3"
       },
       "description": "How many additional rows to render outside of the visible area.\nThis can reduce visual flickering near the edges of a list when scrolling.",
       "name": "overscanCount",

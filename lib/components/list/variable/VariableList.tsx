@@ -45,7 +45,7 @@ export function VariableList<RowProps extends object>({
   defaultHeight = 0,
   listRef,
   onRowsRendered,
-  overscanCount = 1,
+  overscanCount = 3,
   rowComponent: RowComponentProp,
   rowCount,
   rowHeight,
@@ -114,7 +114,9 @@ export function VariableList<RowProps extends object>({
             index={index}
             style={{
               position: "absolute",
-              top: scrollTop,
+              left: 0,
+              top: 0,
+              transform: `translateY(${scrollTop}px)`,
               height,
               width: "100%",
             }}

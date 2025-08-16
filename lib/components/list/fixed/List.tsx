@@ -38,7 +38,7 @@ export function List<RowProps extends object>({
   defaultHeight = 0,
   listRef,
   onRowsRendered,
-  overscanCount = 1,
+  overscanCount = 3,
   rowComponent: RowComponentProp,
   rowCount,
   rowHeight,
@@ -92,7 +92,9 @@ export function List<RowProps extends object>({
             index={index}
             style={{
               position: "absolute",
-              top: index * rowHeight,
+              left: 0,
+              top: 0,
+              transform: `translateY(${index * rowHeight}px)`,
               height: rowHeight,
               width: "100%",
             }}
