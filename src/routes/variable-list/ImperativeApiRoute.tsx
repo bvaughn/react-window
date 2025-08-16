@@ -1,16 +1,17 @@
 import { useState } from "react";
 import {
-  List,
-  useListRef,
+  VariableList,
+  useVariableListRef,
   type Align,
   type RowComponentProps,
 } from "react-window";
 import { Block } from "../../components/Block";
+import { Box } from "../../components/Box";
 import { Button } from "../../components/Button";
-import Code from "../../components/code/Code";
+import { Code } from "../../components/code/Code";
 import { Input } from "../../components/Input";
 import { Select, type Option } from "../../components/Select";
-import { Box } from "../../components/Box";
+import { cn } from "../../utils/cn";
 
 const ALIGNMENTS: Option<Align>[] = (
   ["auto", "center", "end", "smart", "start"] satisfies Align[]
@@ -25,13 +26,13 @@ const BEHAVIORS: Option<ScrollBehavior>[] = (
   value,
 }));
 
-export function ListImperativeApiRoute() {
+export function VariableListImperativeApiRoute() {
   const [rowIndex, setRowIndex] = useState<number | undefined>(undefined);
   const [align, setAlign] = useState<Option<Align> | undefined>();
   const [behavior, setBehavior] = useState<
     Option<ScrollBehavior> | undefined
   >();
-  const listRef = useListRef(null);
+  const listRef = useVariableListRef(null);
 
   const scrollToRow = () => {
     listRef.current?.scrollToRow({
@@ -84,21 +85,30 @@ export function ListImperativeApiRoute() {
         </Button>
       </Box>
       <Block className="h-50" data-focus-within="bold">
-        <List
+        <VariableList
           listRef={listRef}
-          rowComponent={Row}
+          rowComponent={RowComponent}
           rowCount={100}
-          rowHeight={25}
+          rowHeight={rowHeight}
         />
       </Block>
     </Box>
   );
 }
 
-function Row({ index, style }: RowComponentProps) {
+function rowHeight(index: number) {
+  return index % 10 === 0 ? 35 : 25;
+}
+
+function RowComponent({ index, style }: RowComponentProps<object>) {
   return (
-    <div className="flex items-center gap-2" style={style}>
-      Row index {index}
+    <div
+      className={cn("flex items-center", {
+        "text-3xl text-sky-300": index % 10 === 0,
+      })}
+      style={style}
+    >
+      {index % 10 === 0 ? `Section ${index / 10 + 1}` : `Row index ${index}`}
     </div>
   );
 }
@@ -106,11 +116,11 @@ function Row({ index, style }: RowComponentProps) {
 const CODE = `
 // Attaching it using the "listRef" prop
 
-import { useListRef } from "react-window";
+import { useVariableListRef } from "react-window";
 
-const listRef = useListRef(null);
+const listRef = useVariableListRef(null);
 
-return <List listRef={listRef} {...props} />}
+return <VariableList listRef={listRef} {...props} />}
 
 // Then use it to interact with the list
 // e.g. Scroll to the 50th row

@@ -3,7 +3,7 @@ import "./code-mirror.css";
 import type { Language } from "./types";
 import { useParser } from "./useParser";
 
-export default function Code({
+export function Code({
   className = "",
   code,
   language = "JSX",

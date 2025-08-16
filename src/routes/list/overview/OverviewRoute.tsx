@@ -1,13 +1,16 @@
 import { List, type RowComponentProps } from "react-window";
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Callout } from "../../components/Callout";
-import Code from "../../components/code/Code";
-import { ExternalLink } from "../../components/ExternalLink";
-import { Link } from "../../components/Link";
-import { names } from "../../data";
+import exampleJS from "../../../../examples/List.example.jsx?raw";
+import exampleTS from "../../../../examples/List.example.tsx?raw";
+import exampleTwoJS from "../../../../examples/ListRowProps.example.jsx?raw";
+import exampleTwoTS from "../../../../examples/ListRowProps.example.tsx?raw";
+import { Block } from "../../../components/Block";
+import { Box } from "../../../components/Box";
+import { Callout } from "../../../components/Callout";
+import { CodeTabs } from "../../../components/code/CodeTabs";
+import { ExternalLink } from "../../../components/ExternalLink";
+import { names } from "../../../data";
 
-export function ListRoute() {
+export function ListOverviewRoute() {
   return (
     <Box direction="column" gap={4}>
       <div>
@@ -33,12 +36,11 @@ export function ListRoute() {
           The height of a row, in pixels (<code>rowHeight</code>)
         </li>
       </ul>
-      <Code code={CODE_BASE} />
+      <CodeTabs codeJavaScript={exampleJS} codeTypeScript={exampleTS} />
       <Callout intent="primary">
-        Lists will automatically render enough rows to fill the available
-        height. Height can be controlled using <code>style</code> or{" "}
-        <code>className</code> props, or it can be determined by the parent
-        component's layout.
+        Lists will automatically render enough rows to fill their parent
+        container, but an explicit height can also be set using the{" "}
+        <code>className</code> or <code>style</code> props.
       </Callout>
       <Callout intent="warning">
         Unless an explicit pixel height is provided (using the using{" "}
@@ -62,15 +64,7 @@ export function ListRoute() {
         hook for this, but it's easier to use <code>rowProps</code> as shown in
         the example below:
       </div>
-      <Code code={CODE_MORE} language="TSX" />
-      <Callout intent="primary">
-        The example above shows how to use the included TypeScript definitions
-        to strongly type row component props.
-      </Callout>
-      <div>
-        For lists of rows with different sizes,{" "}
-        <Link to="/list/variable-row-height">keep reading</Link>...
-      </div>
+      <CodeTabs codeJavaScript={exampleTwoJS} codeTypeScript={exampleTwoTS} />
     </Box>
   );
 }
@@ -88,56 +82,3 @@ function RowComponent({
     </div>
   );
 }
-
-const CODE_BASE = `
-import { List } from 'react-window';
-
-function Example() {
-  return (
-    <div style={{ height: 150px }}>
-      <List
-        rowComponent={RowComponent}
-        rowCount={100}
-        rowHeight={25}
-      />
-    </div>
-  );
-}
-
-function RowComponent({ index, style }) {
-  return (
-    <div style={style}>
-      Row {index}
-    </div>
-  )
-}
-`;
-
-const CODE_MORE = `
-import { List, type RowComponentProps } from 'react-window';
-
-type RowProps = {
-  names: string[];
-};
-
-function Example({ names }: { names: string[] }) {
-  return (
-    <List
-      rowComponent={Row}
-      rowCount={names.length}
-      rowHeight={25}
-      rowProps={{ names } satisfies RowProps}
-    />
-  );
-}
-
-// This component receives an additional "names" prop
-// because it was passed to List as part of the "rowProps" object
-function RowComponent({ index, names, style }: RowComponentProps<RowProps>) {
-  return (
-    <div style={style}>
-      {names[index]}
-    </div>
-  )
-}
-`;

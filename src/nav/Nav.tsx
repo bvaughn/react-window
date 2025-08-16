@@ -12,7 +12,7 @@ export function Nav() {
           Imperative API
         </NavLink>
       </NavSection>
-      <NavSection label="VariableList">
+      <NavSection label="Variable List">
         <NavLink to="/list/variable-row-height">Overview</NavLink>
         <NavLink to="/list/variable-row-height-props">Component props</NavLink>
         <NavLink to="/list/variable-row-height-imperative-api">

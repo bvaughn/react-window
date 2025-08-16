@@ -2,12 +2,12 @@ import { ComingSoon } from "./routes/ComingSoon";
 import { GettingStartedRoute } from "./routes/GettingStarted";
 import { PageNotFound } from "./routes/PageNotFound";
 import { SupportRoute } from "./routes/Support";
-import { ListRoute } from "./routes/list/List";
-import { ListImperativeApiRoute } from "./routes/list/ListImperativeApi";
-import { ListPropsRoute } from "./routes/list/ListProps";
-import { VariableListRoute } from "./routes/list/VariableList";
-import { VariableListImperativeApiRoute } from "./routes/list/VariableListImperativeApi";
-import { VariableListPropsRoute } from "./routes/list/VariableListProps";
+import { ListImperativeApiRoute } from "./routes/list/ImperativeApiRoute";
+import { ListPropsRoute } from "./routes/list/PropsRoute";
+import { ListOverviewRoute } from "./routes/list/overview/OverviewRoute";
+import { VariableListImperativeApiRoute } from "./routes/variable-list/ImperativeApiRoute";
+import { VariableListPropsRoute } from "./routes/variable-list/PropsRoute";
+import { VariableListRoute } from "./routes/variable-list/overview/OverviewRoute";
 
 export const routeMap = {
   "*": PageNotFound,
@@ -16,7 +16,7 @@ export const routeMap = {
   "/": GettingStartedRoute,
 
   // List
-  "/list/fixed-row-height": ListRoute,
+  "/list/fixed-row-height": ListOverviewRoute,
   "/list/fixed-row-height-imperative-api": ListImperativeApiRoute,
   "/list/fixed-row-height-props": ListPropsRoute,
   "/list/variable-row-height": VariableListRoute,
