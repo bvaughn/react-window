@@ -1,3 +1,4 @@
+import { cn } from "../../utils/cn";
 import { Block } from "../Block";
 import "./code-mirror.css";
 import type { Language } from "./types";
@@ -8,29 +9,20 @@ export function Code({
   code,
   language = "JSX",
   title,
-  transparent,
 }: {
   className?: string;
   code: string;
   language?: Language;
   title?: string;
-  transparent?: boolean;
 }) {
   const html = useParser({ code, language });
 
-  const classNames = [
-    "text-xs md:text-sm block text-left whitespace-pre-wrap text-white!",
-  ];
-  if (!transparent) {
-    classNames.push("rounded-md p-3 bg-black");
-  }
-  if (className) {
-    classNames.push(className);
-  }
-
   const children = (
     <code
-      className={classNames.join(" ")}
+      className={cn(
+        "text-xs md:text-sm block text-left whitespace-pre-wrap text-white! rounded-md p-3 bg-black",
+        className,
+      )}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
