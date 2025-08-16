@@ -98,6 +98,7 @@ describe("List", () => {
   test("should pass rowProps to the rowComponent", () => {
     render(
       <List
+        overscanCount={1}
         rowCount={10}
         rowComponent={Row}
         rowHeight={25}
@@ -129,11 +130,23 @@ describe("List", () => {
 
   test("should re-render items if rowHeight changes", () => {
     const { rerender } = render(
-      <List rowCount={10} rowComponent={Row} rowHeight={25} />,
+      <List
+        overscanCount={1}
+        rowCount={10}
+        rowComponent={Row}
+        rowHeight={25}
+      />,
     );
     expect(mountedRows).toHaveLength(5);
 
-    rerender(<List rowCount={10} rowComponent={Row} rowHeight={50} />);
+    rerender(
+      <List
+        overscanCount={1}
+        rowCount={10}
+        rowComponent={Row}
+        rowHeight={50}
+      />,
+    );
     expect(mountedRows).toHaveLength(3);
     expect(mountedRows.get(1)?.index).toEqual(1);
   });
@@ -141,6 +154,7 @@ describe("List", () => {
   test("should re-render items if rowProps change", () => {
     const { rerender } = render(
       <List
+        overscanCount={1}
         rowCount={10}
         rowComponent={Row}
         rowHeight={25}
@@ -156,6 +170,7 @@ describe("List", () => {
 
     rerender(
       <List
+        overscanCount={1}
         rowCount={10}
         rowComponent={Row}
         rowHeight={25}
@@ -301,6 +316,7 @@ describe("List", () => {
 
     const { rerender } = render(
       <List
+        overscanCount={1}
         rowCount={10}
         rowComponent={RowSpy}
         rowHeight={25}
@@ -321,6 +337,7 @@ describe("List", () => {
 
     rerender(
       <List
+        overscanCount={1}
         rowCount={10}
         rowComponent={RowSpy}
         rowHeight={25}
@@ -334,6 +351,7 @@ describe("List", () => {
 
     rerender(
       <List
+        overscanCount={1}
         rowCount={10}
         rowComponent={RowSpy}
         rowHeight={25}
