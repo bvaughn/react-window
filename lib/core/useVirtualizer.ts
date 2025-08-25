@@ -9,17 +9,21 @@ import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { useResizeObserver } from "../hooks/useResizeObserver";
 import { useStableCallback } from "../hooks/useStableCallback";
 import type { Align } from "../types";
+import { assert } from "../utils/assert";
 import { getEstimatedHeight as getEstimatedHeightUtil } from "./getEstimatedHeight";
 import { getOffsetForIndex } from "./getOffsetForIndex";
 import { getStartStopIndices as getStartStopIndicesUtil } from "./getStartStopIndices";
 import type { Direction, SizeFunction } from "./types";
 import { useCachedBounds } from "./useCachedBounds";
 
+const DATA_ATTRIBUTE = "data-react-window-index";
+
 export function useVirtualizer<Props extends object>({
   containerElement,
   containerStyle,
   defaultContainerSize = 0,
   direction,
+  estimatedItemSize = 25,
   itemCount,
   itemProps,
   itemSize,
@@ -30,9 +34,10 @@ export function useVirtualizer<Props extends object>({
   containerStyle?: CSSProperties;
   defaultContainerSize?: number;
   direction: Direction;
+  estimatedItemSize?: number;
   itemCount: number;
   itemProps: Props;
-  itemSize: SizeFunction<Props> | number;
+  itemSize: SizeFunction<Props> | number | undefined;
   onResize:
     | ((
         size: { height: number; width: number },
@@ -82,24 +87,27 @@ export function useVirtualizer<Props extends object>({
   const containerSize = direction === "vertical" ? height : width;
 
   const cachedBounds = useCachedBounds({
+    estimatedItemSize,
     itemCount,
     itemProps,
     itemSize
   });
-
-  const getCellBounds = useCallback(
-    (index: number) => cachedBounds.get(index),
-    [cachedBounds]
+  console.log(
+    "useVirtualizer: [%o, %o]",
+    startIndex,
+    stopIndex,
+    cachedBounds.toString()
   );
 
   const getEstimatedHeight = useCallback(
     () =>
       getEstimatedHeightUtil({
         cachedBounds,
+        estimatedItemSize,
         itemCount,
         itemSize
       }),
-    [cachedBounds, itemCount, itemSize]
+    [cachedBounds, estimatedItemSize, itemCount, itemSize]
   );
 
   const getStartStopIndices = useCallback(
@@ -157,8 +165,94 @@ export function useVirtualizer<Props extends object>({
     }
   );
 
+  const resizeObserverCallback = useStableCallback(
+    (entries: ResizeObserverEntry[]) => {
+      if (entries.length === 0) {
+        return;
+      }
+
+      entries.forEach((entry) => {
+        const { borderBoxSize, target } = entry;
+
+        const attribute = target.getAttribute(DATA_ATTRIBUTE);
+        assert(
+          attribute !== null,
+          "Invalidate data-react-window-index attribute"
+        );
+
+        const index = parseInt(attribute);
+
+        const { inlineSize: width, blockSize: height } = borderBoxSize[0];
+        const size = direction === "horizontal" ? width : height;
+        console.log(
+          "useVirtualizer: resizeObserverCallback: %o -> %o",
+          index,
+          size,
+          cachedBounds.toString()
+        );
+
+        cachedBounds.set(index, size);
+
+        // const bounds = cachedBounds.get(index);
+        // if (bounds) {
+        //   if (direction === "vertical") {
+        //     (target as HTMLElement).style.transform =
+        //       `translateY(${bounds.scrollOffset}px)`;
+        //   } else {
+        //     (target as HTMLElement).style.transform =
+        //       `translateX(${bounds.scrollOffset}px)`;
+        //   }
+        // }
+      });
+
+      // Schedule an update with new bounds information
+      const scrollOffset =
+        direction === "vertical"
+          ? containerElement?.scrollTop
+          : containerElement?.scrollLeft;
+
+      setIndices(getStartStopIndices(scrollOffset ?? 0));
+    }
+  );
+
+  const [resizeObserver] = useState(() => {
+    if (itemSize === undefined) {
+      return new ResizeObserver(resizeObserverCallback);
+    }
+  });
+
+  useLayoutEffect(() => {
+    if (!containerElement || !resizeObserver) {
+      return;
+    }
+
+    const innerElement = containerElement.children[0];
+
+    console.group("useVirtualizer: useEffect:");
+    const items = Array.from(innerElement.children);
+    items.forEach((item, index) => {
+      const attribute = `${startIndex + index}`;
+      console.log("observe item:", attribute);
+      item.setAttribute(DATA_ATTRIBUTE, attribute);
+
+      resizeObserver.observe(item);
+    });
+    console.groupEnd();
+
+    return () => {
+      console.group("useVirtualizer: useEffect: cleanup");
+      items.forEach((item) => {
+        console.log("unobserve item:", item.getAttribute(DATA_ATTRIBUTE));
+        resizeObserver.unobserve(item);
+
+        item.removeAttribute(DATA_ATTRIBUTE);
+      });
+      console.groupEnd();
+    };
+  }, [containerElement, resizeObserver, startIndex, stopIndex]);
+
   return {
-    getCellBounds,
+    cachedBounds,
     getEstimatedHeight,
     onScroll: () => {
       const next = getStartStopIndices(

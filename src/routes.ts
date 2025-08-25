@@ -2,6 +2,7 @@ import { GettingStartedRoute } from "./routes/GettingStartedRoute";
 import { GridImperativeApiRoute } from "./routes/grid/ImperativeApiRoute";
 import { GridPropsRoute } from "./routes/grid/PropsRoute";
 import { RenderingGridRoute } from "./routes/grid/RenderingGridRoute";
+import { DynamicRowHeightsRoute } from "./routes/list/DynamicRowHeightsRoute";
 import { FixedRowHeightsRoute } from "./routes/list/FixedRowHeightsRoute";
 import { ListImperativeApiRoute } from "./routes/list/ImperativeApiRoute";
 import { ListPropsRoute } from "./routes/list/PropsRoute";
@@ -21,6 +22,7 @@ export const routeMap = {
   // List
   "/list/fixed-row-height": FixedRowHeightsRoute,
   "/list/variable-row-height": VariableRowHeightsRoute,
+  "/list/dynamic-row-height": DynamicRowHeightsRoute,
   "/list/imperative-api": ListImperativeApiRoute,
   "/list/props": ListPropsRoute,
   "/list/tabular-data": TabularDataRoute,

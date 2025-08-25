@@ -2,6 +2,8 @@ import { describe, expect, test } from "vitest";
 import { createCachedBounds } from "./createCachedBounds";
 import { getStartStopIndices } from "./getStartStopIndices";
 
+// TODO Test dynamic size
+
 describe("getStartStopIndices", () => {
   function getIndices({
     containerScrollOffset,

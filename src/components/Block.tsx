@@ -9,7 +9,7 @@ export function Block({
   return (
     <ErrorBoundary>
       <div
-        className={`border-lg bg-black/30 text-slate-300 rounded-lg p-2 ${className}`}
+        className={`border-lg bg-black/30 text-slate-300 rounded-lg p-2 overflow-hidden ${className}`}
         {...rest}
       >
         {children}

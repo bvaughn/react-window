@@ -4,9 +4,12 @@ export type Bounds = {
 };
 
 export type CachedBounds = {
-  get(index: number): Bounds;
-  set(index: number, bounds: Bounds): void;
-  size: number;
+  averageSize: number;
+  has(index: number): boolean;
+  get(index: number): Bounds | undefined;
+  length: number;
+  set(index: number, size: number): void;
+  toString(): string;
 };
 
 export type Direction = "horizontal" | "vertical";

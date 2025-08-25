@@ -4,6 +4,7 @@ import {
   useImperativeHandle,
   useMemo,
   useState,
+  type CSSProperties,
   type ReactNode
 } from "react";
 import { NOOP_FUNCTION } from "../../../src/constants";
@@ -37,7 +38,7 @@ export function List<RowProps extends object>({
   const [element, setElement] = useState<HTMLDivElement | null>(null);
 
   const {
-    getCellBounds,
+    cachedBounds,
     getEstimatedHeight,
     onScroll,
     scrollToIndex,
@@ -90,30 +91,55 @@ export function List<RowProps extends object>({
     }
   }, [onRowsRendered, startIndex, stopIndex]);
 
+  const hasRowHeight = rowHeight !== undefined;
+
   const rows = useMemo(() => {
     const children: ReactNode[] = [];
     if (rowCount > 0) {
       for (let index = startIndex; index <= stopIndex; index++) {
-        const bounds = getCellBounds(index);
+        const bounds = cachedBounds.get(index);
+
+        let style: CSSProperties = {};
+        if (bounds) {
+          style = {
+            position: "absolute",
+            left: 0,
+            transform: `translateY(${bounds.scrollOffset}px)`,
+            height: hasRowHeight ? bounds.size : undefined,
+            width: "100%"
+          };
+        } else {
+          style = {
+            position: "absolute",
+            left: 0,
+            width: "100%"
+          };
+        }
+        style = {};
 
         children.push(
           <RowComponent
             {...(rowProps as RowProps)}
             key={index}
             index={index}
-            style={{
-              position: "absolute",
-              left: 0,
-              transform: `translateY(${bounds.scrollOffset}px)`,
-              height: bounds.size,
-              width: "100%"
-            }}
+            style={style}
           />
         );
       }
     }
     return children;
-  }, [RowComponent, getCellBounds, rowCount, rowProps, startIndex, stopIndex]);
+  }, [
+    RowComponent,
+    cachedBounds,
+    hasRowHeight,
+    rowCount,
+    rowProps,
+    startIndex,
+    stopIndex
+  ]);
+
+  const offset =
+    startIndex >= 0 ? (cachedBounds.get(startIndex)?.scrollOffset ?? 0) : 0;
 
   return (
     <div
@@ -137,6 +163,7 @@ export function List<RowProps extends object>({
         style={{
           height: getEstimatedHeight(),
           position: "relative",
+          paddingTop: `${offset}px`,
           width: "100%"
         }}
       >

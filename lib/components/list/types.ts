@@ -75,8 +75,11 @@ export type ListProps<RowProps extends object> =
 
     /**
      * Row height (in pixels) or a function that returns a row height (in pixels) given its index and `rowProps` data.
+     * If this property is not provided, a ResizeObserver will be used to measure the height of a row's content.
+     *
+     * ⚠️ Row height should be provided if it is known ahead of time as that is the most efficient way to render the list.
      */
-    rowHeight: number | ((index: number, rowProps: RowProps) => number);
+    rowHeight?: number | ((index: number, rowProps: RowProps) => number);
 
     /**
      * Additional props to be passed to the rowComponent.
