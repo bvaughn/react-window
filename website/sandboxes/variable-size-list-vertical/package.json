@@ -1,9 +1,0 @@
-{
-  "description": "Demo of react-window vertical VariableSizeList",
-  "main": "src/index.js",
-  "dependencies": {
-    "react": "^16",
-    "react-dom": "^16",
-    "react-window": "^1"
-  }
-}
