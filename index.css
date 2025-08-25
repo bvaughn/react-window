@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-size: 12px;
+
+  @media only screen and (max-width: 600px) {
+    font-size: 16px;
+  }
+
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes background-gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+#root {
+  width: 100dvw;
+  height: 100dvh;
+  overflow: auto;
+  background: linear-gradient(
+    -45deg,
+    var(--color-pink-500),
+    var(--color-sky-500),
+    var(--color-emerald-400)
+  );
+  background-size: 400% 400%;
+  animation: background-gradient-animation 20s ease infinite;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
+  outline: none;
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    outline-color 0.25s ease;
+}
+
+main {
+  a {
+    color: var(--color-teal-400);
+    &:hover {
+      color: var(--color-teal-300);
+    }
+  }
+}
+
+*[data-focus] {
+  border: 2px solid transparent;
+  &:focus {
+    border: 2px solid var(--color-teal-300);
+  }
+}
+
+*[data-focus-within] {
+  border: 2px solid transparent;
+  &:focus-within {
+    border: 2px solid var(--color-teal-300);
+  }
+
+  &[data-focus-within="bold"] {
+    border-color: var(--color-teal-600);
+    &:focus-within {
+      border: 2px solid var(--color-teal-300);
+    }
+  }
+}
+
+code {
+  color: var(--color-slate-300);
+}

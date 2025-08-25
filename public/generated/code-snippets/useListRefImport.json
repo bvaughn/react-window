@@ -1,0 +1,3 @@
+{
+  "javaScript": "<div style=\"min-height: 1rem; padding-left: 2ch; text-indent: -2ch;\"><span class=\"tok-keyword\">import</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-variableName tok-definition\">useListRef</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"\"> </span><span class=\"tok-keyword\">from</span><span class=\"\"> </span><span class=\"tok-string\">\"react-window\"</span><span class=\"tok-punctuation\">;</span></div>"
+}

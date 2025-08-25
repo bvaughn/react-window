@@ -1,0 +1,62 @@
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react-swc";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { defineConfig, type UserConfig } from "vite";
+import dts from "vite-plugin-dts";
+import svgr from "vite-plugin-svgr";
+import { visualizer } from "rollup-plugin-visualizer";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const libraryConfig: UserConfig = {
+  build: {
+    lib: {
+      entry: resolve(__dirname, "lib/index.ts"),
+      name: "react-window",
+      fileName: "react-window",
+      formats: ["cjs", "es"]
+    },
+    rollupOptions: {
+      external: ["react", "react-dom", "react/jsx-runtime"]
+    }
+  },
+  plugins: [react(), dts({ rollupTypes: true })],
+  publicDir: false
+};
+
+const websiteConfig: UserConfig = {
+  base: "/",
+  build: {
+    outDir: "docs"
+  },
+  plugins: [
+    react(),
+    svgr(),
+    tailwindcss(),
+    visualizer({
+      emitFile: true,
+      filename: "stats.html"
+    })
+  ],
+  resolve: {
+    alias: {
+      "react-window": resolve(__dirname, "lib")
+    }
+  }
+};
+
+let config: UserConfig = {};
+switch (process.env.TARGET) {
+  case "lib": {
+    config = libraryConfig;
+    break;
+  }
+  default: {
+    config = websiteConfig;
+    break;
+  }
+}
+
+// https://vite.dev/config/
+export default defineConfig(config);
