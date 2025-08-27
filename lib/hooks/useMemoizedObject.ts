@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-export function useStableObject<Type extends object>(
+export function useMemoizedObject<Type extends object>(
   unstableObject: Type
 ): Type {
   return useMemo(() => {

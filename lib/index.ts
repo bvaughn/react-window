@@ -15,3 +15,4 @@ export {
 export { useListCallbackRef } from "./components/list/useListCallbackRef";
 export { useListRef } from "./components/list/useListRef";
 export { type Align } from "./types";
+export { getScrollbarSize } from "./utils/getScrollbarSize";

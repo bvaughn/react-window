@@ -19,10 +19,17 @@ export function createCachedBounds<Props extends object>({
       while (cache.size - 1 < index) {
         const currentIndex = cache.size;
 
-        const size =
-          typeof itemSize === "number"
-            ? itemSize
-            : itemSize(currentIndex, itemProps);
+        let size: number;
+        switch (typeof itemSize) {
+          case "function": {
+            size = itemSize(currentIndex, itemProps);
+            break;
+          }
+          case "number": {
+            size = itemSize;
+            break;
+          }
+        }
 
         if (currentIndex === 0) {
           cache.set(currentIndex, {

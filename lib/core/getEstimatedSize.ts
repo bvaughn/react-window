@@ -1,7 +1,7 @@
 import type { CachedBounds, SizeFunction } from "./types";
 import { assert } from "../utils/assert";
 
-export function getEstimatedHeight<Props extends object>({
+export function getEstimatedSize<Props extends object>({
   cachedBounds,
   itemCount,
   itemSize
@@ -10,17 +10,19 @@ export function getEstimatedHeight<Props extends object>({
   itemCount: number;
   itemSize: number | SizeFunction<Props>;
 }) {
-  if (typeof itemSize === "number") {
+  if (itemCount === 0) {
+    return 0;
+  } else if (typeof itemSize === "number") {
     return itemCount * itemSize;
-  } else if (cachedBounds.size > 0) {
-    const bounds = cachedBounds.get(cachedBounds.size - 1);
+  } else {
+    const bounds = cachedBounds.get(
+      cachedBounds.size === 0 ? 0 : cachedBounds.size - 1
+    );
     assert(bounds !== undefined, "Unexpected bounds cache miss");
 
     const averageItemSize =
       (bounds.scrollOffset + bounds.size) / cachedBounds.size;
 
     return itemCount * averageItemSize;
-  } else {
-    return 0;
   }
 }

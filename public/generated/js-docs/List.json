@@ -249,7 +249,7 @@
     },
     "rowHeight": {
       "defaultValue": null,
-      "description": "Row height (in pixels) or a function that returns a row height (in pixels) given its index and `rowProps` data.",
+      "description": "Row height; the following formats are supported:\n- number of pixels (number)\n- percentage of the grid's current height (string)\n- function that returns the row height (in pixels) given an index and `cellProps`",
       "name": "rowHeight",
       "declarations": [
         {
@@ -260,13 +260,16 @@
       "required": true,
       "type": {
         "name": "enum",
-        "raw": "number | ((index: number, rowProps: RowProps) => number)",
+        "raw": "string | number | ((index: number, cellProps: RowProps) => number)",
         "value": [
+          {
+            "value": "string"
+          },
           {
             "value": "number"
           },
           {
-            "value": "(index: number, rowProps: RowProps) => number",
+            "value": "(index: number, cellProps: RowProps) => number",
             "description": "",
             "fullComment": "",
             "tags": {}

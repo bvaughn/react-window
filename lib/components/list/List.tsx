@@ -6,9 +6,8 @@ import {
   useState,
   type ReactNode
 } from "react";
-import { NOOP_FUNCTION } from "../../../src/constants";
 import { useVirtualizer } from "../../core/useVirtualizer";
-import { useStableObject } from "../../hooks/useStableObject";
+import { useMemoizedObject } from "../../hooks/useMemoizedObject";
 import type { Align } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import type { ListProps } from "./types";
@@ -19,7 +18,6 @@ export function List<RowProps extends object>({
   listRef,
   onResize,
   onRowsRendered,
-  onScroll: onScrollProp = NOOP_FUNCTION,
   overscanCount = 3,
   rowComponent: RowComponentProp,
   rowCount,
@@ -28,7 +26,7 @@ export function List<RowProps extends object>({
   style,
   ...rest
 }: ListProps<RowProps>) {
-  const rowProps = useStableObject(rowPropsUnstable);
+  const rowProps = useMemoizedObject(rowPropsUnstable);
   const RowComponent = useMemo(
     () => memo(RowComponentProp, arePropsEqual),
     [RowComponentProp]
@@ -38,8 +36,7 @@ export function List<RowProps extends object>({
 
   const {
     getCellBounds,
-    getEstimatedHeight,
-    onScroll,
+    getEstimatedSize,
     scrollToIndex,
     startIndex,
     stopIndex
@@ -120,10 +117,6 @@ export function List<RowProps extends object>({
       role="list"
       {...rest}
       className={className}
-      onScroll={(event) => {
-        onScroll();
-        onScrollProp(event);
-      }}
       ref={setElement}
       style={{
         ...style,
@@ -135,7 +128,7 @@ export function List<RowProps extends object>({
       <div
         className={className}
         style={{
-          height: getEstimatedHeight(),
+          height: getEstimatedSize(),
           position: "relative",
           width: "100%"
         }}

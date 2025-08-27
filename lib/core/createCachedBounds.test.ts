@@ -1,6 +1,6 @@
 import { describe, test } from "vitest";
 
-describe("getEstimatedHeight", () => {
+describe("createCachedBounds", () => {
   test("have tests", () => {
     // TODO Write tests
   });

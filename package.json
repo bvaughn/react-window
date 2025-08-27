@@ -1,6 +1,6 @@
 {
   "name": "react-window",
-  "version": "2.0.0-alpha.5",
+  "version": "2.0.0-alpha.6",
   "type": "module",
   "author": "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)",
   "contributors": [
@@ -34,6 +34,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ci": "vitest run",
+    "test:debug": "vitest --inspect-brk=127.0.0.1:3000 --no-file-parallelism",
     "tsc": "tsc -b"
   },
   "lint-staged": {

@@ -1,11 +1,13 @@
 import type { Align } from "../types";
-import type { CachedBounds } from "./types";
+import { getEstimatedSize } from "./getEstimatedSize";
+import type { CachedBounds, SizeFunction } from "./types";
 
-export function getOffsetForIndex({
+export function getOffsetForIndex<Props extends object>({
   align,
   cachedBounds,
   index,
   itemCount,
+  itemSize,
   containerScrollOffset,
   containerSize
 }: {
@@ -13,25 +15,30 @@ export function getOffsetForIndex({
   cachedBounds: CachedBounds;
   index: number;
   itemCount: number;
+  itemSize: number | SizeFunction<Props>;
   containerScrollOffset: number;
   containerSize: number;
 }) {
-  const lastCellOffset = cachedBounds.get(itemCount - 1).scrollOffset;
+  const estimatedTotalSize = getEstimatedSize({
+    cachedBounds,
+    itemCount,
+    itemSize
+  });
 
-  const maxScrollOffset = lastCellOffset + lastCellOffset - containerSize;
-  const alignEndScrollOffset = Math.max(
+  const bounds = cachedBounds.get(index);
+  const maxOffset = Math.max(
     0,
-    cachedBounds.get(index + 1).scrollOffset - containerSize
+    Math.min(estimatedTotalSize - containerSize, bounds.scrollOffset)
   );
-  const alignStartScrollOffset = Math.min(
-    lastCellOffset,
-    cachedBounds.get(index).scrollOffset
+  const minOffset = Math.max(
+    0,
+    bounds.scrollOffset - containerSize + bounds.size
   );
 
   if (align === "smart") {
     if (
-      containerScrollOffset >= alignEndScrollOffset &&
-      containerScrollOffset <= alignStartScrollOffset
+      containerScrollOffset >= minOffset &&
+      containerScrollOffset <= maxOffset
     ) {
       align = "auto";
     } else {
@@ -40,38 +47,38 @@ export function getOffsetForIndex({
   }
 
   switch (align) {
-    case "start":
-      return Math.min(maxScrollOffset, alignStartScrollOffset);
-    case "end":
-      return alignEndScrollOffset;
+    case "start": {
+      return maxOffset;
+    }
+    case "end": {
+      return minOffset;
+    }
     case "center": {
-      // "Centered" offset is usually the average of the min and max.
-      // But near the edges of the list, this doesn't hold true.
-      const middleOffset = Math.round(
-        alignEndScrollOffset +
-          (alignStartScrollOffset - alignEndScrollOffset) / 2
-      );
-      if (middleOffset < Math.ceil(containerSize / 2)) {
-        // Too near the beginning to center align
+      if (bounds.scrollOffset <= containerSize / 2) {
+        // Too near the beginning to center-align
         return 0;
-      } else if (middleOffset > maxScrollOffset) {
-        // Too near the end to center align
-        return maxScrollOffset;
+      } else if (
+        bounds.scrollOffset + bounds.size / 2 >=
+        estimatedTotalSize - containerSize / 2
+      ) {
+        // Too near the end to center-align
+        return estimatedTotalSize - containerSize;
       } else {
-        return middleOffset;
+        return bounds.scrollOffset + bounds.size / 2 - containerSize / 2;
       }
     }
     case "auto":
-    default:
+    default: {
       if (
-        containerScrollOffset >= alignEndScrollOffset &&
-        containerScrollOffset <= alignStartScrollOffset
+        containerScrollOffset >= minOffset &&
+        containerScrollOffset <= maxOffset
       ) {
         return containerScrollOffset;
-      } else if (containerScrollOffset < alignEndScrollOffset) {
-        return alignEndScrollOffset;
+      } else if (containerScrollOffset < minOffset) {
+        return minOffset;
       } else {
-        return alignStartScrollOffset;
+        return maxOffset;
       }
+    }
   }
 }

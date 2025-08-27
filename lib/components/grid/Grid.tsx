@@ -7,11 +7,13 @@ import {
   type ReactNode
 } from "react";
 import { useVirtualizer } from "../../core/useVirtualizer";
-import { useStableObject } from "../../hooks/useStableObject";
+import { useMemoizedObject } from "../../hooks/useMemoizedObject";
 import type { Align } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import type { GridProps } from "./types";
-import { NOOP_FUNCTION } from "../../../src/constants";
+
+// TODO Handle dir=rtl (onScroll, scrollToCell, scrollOffset)
+// TODO Handle scrollbar sizes (add width/height if necessary)
 
 export function Grid<CellProps extends object>({
   cellComponent: CellComponentProp,
@@ -24,14 +26,13 @@ export function Grid<CellProps extends object>({
   gridRef,
   onCellsRendered,
   onResize,
-  onScroll: onScrollProp = NOOP_FUNCTION,
   overscanCount = 3,
   rowCount,
   rowHeight,
   style,
   ...rest
 }: GridProps<CellProps>) {
-  const cellProps = useStableObject(cellPropsUnstable);
+  const cellProps = useMemoizedObject(cellPropsUnstable);
   const CellComponent = useMemo(
     () => memo(CellComponentProp, arePropsEqual),
     [CellComponentProp]
@@ -39,7 +40,13 @@ export function Grid<CellProps extends object>({
 
   const [element, setElement] = useState<HTMLDivElement | null>(null);
 
-  const columnVirtualizer = useVirtualizer({
+  const {
+    getCellBounds: getColumnBounds,
+    getEstimatedSize: getEstimatedWidth,
+    startIndex: columnStartIndex,
+    scrollToIndex: scrollToColumnIndex,
+    stopIndex: columnStopIndex
+  } = useVirtualizer({
     containerElement: element,
     defaultContainerSize: defaultWidth,
     direction: "horizontal",
@@ -50,7 +57,13 @@ export function Grid<CellProps extends object>({
     overscanCount
   });
 
-  const rowVirtualizer = useVirtualizer({
+  const {
+    getCellBounds: getRowBounds,
+    getEstimatedSize: getEstimatedHeight,
+    startIndex: rowStartIndex,
+    scrollToIndex: scrollToRowIndex,
+    stopIndex: rowStopIndex
+  } = useVirtualizer({
     containerElement: element,
     defaultContainerSize: defaultHeight,
     direction: "vertical",
@@ -60,11 +73,6 @@ export function Grid<CellProps extends object>({
     onResize,
     overscanCount
   });
-
-  const { startIndex: columnStartIndex, stopIndex: columnStopIndex } =
-    columnVirtualizer;
-
-  const { startIndex: rowStartIndex, stopIndex: rowStopIndex } = rowVirtualizer;
 
   useImperativeHandle(
     gridRef,
@@ -86,13 +94,13 @@ export function Grid<CellProps extends object>({
         rowAlign?: Align;
         rowIndex: number;
       }) {
-        rowVirtualizer?.scrollToIndex({
+        scrollToRowIndex({
           align: rowAlign,
           behavior,
           containerScrollOffset: element?.scrollTop ?? 0,
           index: rowIndex
         });
-        columnVirtualizer?.scrollToIndex({
+        scrollToColumnIndex({
           align: columnAlign,
           behavior,
           containerScrollOffset: element?.scrollLeft ?? 0,
@@ -109,7 +117,7 @@ export function Grid<CellProps extends object>({
         behavior?: ScrollBehavior;
         index: number;
       }) {
-        columnVirtualizer?.scrollToIndex({
+        scrollToColumnIndex({
           align,
           behavior,
           containerScrollOffset: element?.scrollLeft ?? 0,
@@ -126,7 +134,7 @@ export function Grid<CellProps extends object>({
         behavior?: ScrollBehavior;
         index: number;
       }) {
-        rowVirtualizer?.scrollToIndex({
+        scrollToRowIndex({
           align,
           behavior,
           containerScrollOffset: element?.scrollTop ?? 0,
@@ -134,7 +142,7 @@ export function Grid<CellProps extends object>({
         });
       }
     }),
-    [columnVirtualizer, element, rowVirtualizer]
+    [element, scrollToColumnIndex, scrollToRowIndex]
   );
 
   useEffect(() => {
@@ -162,20 +170,15 @@ export function Grid<CellProps extends object>({
 
   const cells = useMemo(() => {
     const children: ReactNode[] = [];
-    if (
-      columnVirtualizer &&
-      columnCount > 0 &&
-      rowVirtualizer &&
-      rowCount > 0
-    ) {
+    if (columnCount > 0 && rowCount > 0) {
       for (let rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
-        const rowBounds = rowVirtualizer.getCellBounds(rowIndex);
+        const rowBounds = getRowBounds(rowIndex);
         for (
           let columnIndex = columnStartIndex;
           columnIndex <= columnStopIndex;
           columnIndex++
         ) {
-          const columnBounds = columnVirtualizer.getCellBounds(columnIndex);
+          const columnBounds = getColumnBounds(columnIndex);
 
           children.push(
             <CellComponent
@@ -187,7 +190,7 @@ export function Grid<CellProps extends object>({
                 position: "absolute",
                 left: 0,
                 transform: `translate(${columnBounds.scrollOffset}px, ${rowBounds.scrollOffset}px)`,
-                height: rowBounds.size,
+                height: rowCount > 1 ? rowBounds.size : "100%",
                 width: columnBounds.size
               }}
             />
@@ -202,11 +205,11 @@ export function Grid<CellProps extends object>({
     columnCount,
     columnStartIndex,
     columnStopIndex,
-    columnVirtualizer,
+    getColumnBounds,
+    getRowBounds,
     rowCount,
     rowStartIndex,
-    rowStopIndex,
-    rowVirtualizer
+    rowStopIndex
   ]);
 
   return (
@@ -214,13 +217,10 @@ export function Grid<CellProps extends object>({
       role="grid"
       {...rest}
       className={className}
-      onScroll={(event) => {
-        columnVirtualizer.onScroll();
-        rowVirtualizer.onScroll();
-        onScrollProp(event);
-      }}
       ref={setElement}
       style={{
+        width: "100%",
+        height: "100%",
         ...style,
         maxHeight: "100%",
         maxWidth: "100%",
@@ -232,8 +232,8 @@ export function Grid<CellProps extends object>({
         className={className}
         style={{
           position: "relative",
-          height: rowVirtualizer?.getEstimatedHeight(),
-          width: columnVirtualizer?.getEstimatedHeight()
+          height: getEstimatedHeight(),
+          width: getEstimatedWidth()
         }}
       >
         {cells}

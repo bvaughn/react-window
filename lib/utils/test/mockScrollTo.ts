@@ -14,7 +14,14 @@ export function mockScrollTo() {
     if (top !== undefined) {
       this.scrollTop = top;
     }
-    this.dispatchEvent(new Event("scroll"));
+
+    const event = new Event("scroll", {
+      bubbles: true,
+      cancelable: true,
+      composed: false
+    });
+
+    this.dispatchEvent(event);
   };
 
   // @ts-expect-error Support subset of the API for testing

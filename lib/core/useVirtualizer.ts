@@ -9,11 +9,12 @@ import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { useResizeObserver } from "../hooks/useResizeObserver";
 import { useStableCallback } from "../hooks/useStableCallback";
 import type { Align } from "../types";
-import { getEstimatedHeight as getEstimatedHeightUtil } from "./getEstimatedHeight";
+import { getEstimatedSize as getEstimatedSizeUtil } from "./getEstimatedSize";
 import { getOffsetForIndex } from "./getOffsetForIndex";
 import { getStartStopIndices as getStartStopIndicesUtil } from "./getStartStopIndices";
 import type { Direction, SizeFunction } from "./types";
 import { useCachedBounds } from "./useCachedBounds";
+import { useItemSize } from "./useItemSize";
 
 export function useVirtualizer<Props extends object>({
   containerElement,
@@ -22,7 +23,7 @@ export function useVirtualizer<Props extends object>({
   direction,
   itemCount,
   itemProps,
-  itemSize,
+  itemSize: itemSizeProp,
   onResize,
   overscanCount
 }: {
@@ -32,7 +33,7 @@ export function useVirtualizer<Props extends object>({
   direction: Direction;
   itemCount: number;
   itemProps: Props;
-  itemSize: SizeFunction<Props> | number;
+  itemSize: number | string | SizeFunction<Props>;
   onResize:
     | ((
         size: { height: number; width: number },
@@ -66,6 +67,10 @@ export function useVirtualizer<Props extends object>({
     width: 0
   });
 
+  const containerSize = direction === "vertical" ? height : width;
+
+  const itemSize = useItemSize({ containerSize, itemSize: itemSizeProp });
+
   useLayoutEffect(() => {
     if (typeof onResize === "function") {
       const prevSize = prevSizeRef.current;
@@ -79,8 +84,6 @@ export function useVirtualizer<Props extends object>({
     }
   }, [height, onResize, width]);
 
-  const containerSize = direction === "vertical" ? height : width;
-
   const cachedBounds = useCachedBounds({
     itemCount,
     itemProps,
@@ -92,9 +95,9 @@ export function useVirtualizer<Props extends object>({
     [cachedBounds]
   );
 
-  const getEstimatedHeight = useCallback(
+  const getEstimatedSize = useCallback(
     () =>
-      getEstimatedHeightUtil({
+      getEstimatedSizeUtil({
         cachedBounds,
         itemCount,
         itemSize
@@ -122,6 +125,48 @@ export function useVirtualizer<Props extends object>({
     setIndices(getStartStopIndices(scrollOffset));
   }, [containerElement, direction, getStartStopIndices]);
 
+  useIsomorphicLayoutEffect(() => {
+    if (!containerElement) {
+      return;
+    }
+
+    const onScroll = () => {
+      setIndices((prev) => {
+        const scrollOffset =
+          direction === "vertical"
+            ? containerElement.scrollTop
+            : containerElement.scrollLeft;
+
+        const next = getStartStopIndicesUtil({
+          cachedBounds,
+          containerScrollOffset: scrollOffset,
+          containerSize,
+          itemCount,
+          overscanCount
+        });
+
+        if (next[0] === prev[0] && next[1] === prev[1]) {
+          return prev;
+        }
+
+        return next;
+      });
+    };
+
+    containerElement.addEventListener("scroll", onScroll);
+
+    return () => {
+      containerElement.removeEventListener("scroll", onScroll);
+    };
+  }, [
+    cachedBounds,
+    containerElement,
+    containerSize,
+    direction,
+    itemCount,
+    overscanCount
+  ]);
+
   const scrollToIndex = useStableCallback(
     ({
       align = "auto",
@@ -140,37 +185,37 @@ export function useVirtualizer<Props extends object>({
         containerScrollOffset,
         containerSize,
         index,
-        itemCount
+        itemCount,
+        itemSize
       });
 
-      if (direction === "horizontal") {
-        containerElement?.scrollTo({
-          left: scrollOffset,
-          behavior: behavior || undefined
-        });
-      } else {
-        containerElement?.scrollTo({
-          behavior: behavior || undefined,
-          top: scrollOffset
-        });
+      if (containerElement) {
+        if (typeof containerElement.scrollTo === "function") {
+          if (direction === "horizontal") {
+            containerElement.scrollTo({
+              left: scrollOffset,
+              behavior: behavior || undefined
+            });
+          } else {
+            containerElement.scrollTo({
+              behavior: behavior || undefined,
+              top: scrollOffset
+            });
+          }
+        } else {
+          // Special case for environments like jsdom that don't implement scrollTo
+          const next = getStartStopIndices(scrollOffset);
+          if (next[0] !== startIndex || next[1] !== stopIndex) {
+            setIndices(next);
+          }
+        }
       }
     }
   );
 
   return {
     getCellBounds,
-    getEstimatedHeight,
-    onScroll: () => {
-      const next = getStartStopIndices(
-        (direction === "vertical"
-          ? containerElement?.scrollTop
-          : containerElement?.scrollLeft) ?? 0
-      );
-
-      if (next[0] !== startIndex || next[1] !== stopIndex) {
-        setIndices(next);
-      }
-    },
+    getEstimatedSize,
     scrollToIndex,
     startIndex,
     stopIndex

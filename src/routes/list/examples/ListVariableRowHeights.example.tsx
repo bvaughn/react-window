@@ -49,11 +49,11 @@ function RowComponent({ index, items, style }: RowComponentProps<RowProps>) {
       {item.type === "state" ? (
         <span>{item.state}</span>
       ) : (
-        <>
-          <span>{item.zip}</span>
-          <small>{item.city}</small>
-        </>
+        <span>
+          {item.city}, {item.zip}
+        </span>
       )}
+      <div className="text-slate-500 text-xs">{`${index + 1} of ${items.length}`}</div>
     </div>
   );
 }
@@ -79,7 +79,7 @@ function ExampleWithRef({
 }
 
 function getClassName(item: Item) {
-  return cn("flex items-center gap-2", {
+  return cn("flex items-center justify-between gap-2", {
     "text-3xl text-sky-300": item.type === "state"
   });
 }

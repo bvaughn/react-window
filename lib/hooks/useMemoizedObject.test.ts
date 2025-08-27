@@ -1,11 +1,11 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
-import { useStableObject } from "./useStableObject";
+import { useMemoizedObject } from "./useMemoizedObject";
 
-describe("useStableObject", () => {
+describe("useMemoizedObject", () => {
   test("should memoize", () => {
     const { result, rerender } = renderHook((props: object) =>
-      useStableObject({
+      useMemoizedObject({
         foo: 123,
         bar: "abc",
         ...props
@@ -29,7 +29,7 @@ describe("useStableObject", () => {
 
   test("should recreate object when a value changes", () => {
     const { result, rerender } = renderHook((props: object) =>
-      useStableObject({
+      useMemoizedObject({
         foo: 123,
         bar: "abc",
         ...props

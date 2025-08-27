@@ -37,6 +37,38 @@
         ]
       }
     },
+    "dir": {
+      "defaultValue": null,
+      "description": "Corresponds to the HTML dir attribute:\nhttps://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir",
+      "name": "dir",
+      "parent": {
+        "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+        "name": "HTMLAttributes"
+      },
+      "declarations": [
+        {
+          "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+          "name": "HTMLAttributes"
+        },
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "string | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "string"
+          }
+        ]
+      }
+    },
     "style": {
       "defaultValue": null,
       "description": "Optional CSS properties.\nThe grid of cells will fill the height and width defined by this style.",
@@ -65,6 +97,81 @@
           },
           {
             "value": "CSSProperties",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          }
+        ]
+      }
+    },
+    "cellComponent": {
+      "defaultValue": null,
+      "description": "React component responsible for rendering a cell.\n\nThis component will receive an `index` and `style` prop by default.\nAdditionally it will receive prop values passed to `cellProps`.\n\n⚠️ The prop types for this component are exported as `CellComponentProps`",
+      "name": "cellComponent",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "(props: { columnIndex: number; rowIndex: number; style: CSSProperties; } & CellProps) => ReactNode"
+      }
+    },
+    "cellProps": {
+      "defaultValue": null,
+      "description": "Additional props to be passed to the cell-rendering component.\nGrid will automatically re-render cells when values in this object change.\n\n⚠️ This object must not contain either an `index` or `style` prop.",
+      "name": "cellProps",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "ExcludeForbiddenKeys<CellProps>"
+      }
+    },
+    "columnCount": {
+      "defaultValue": null,
+      "description": "Number of columns to be rendered in the grid.",
+      "name": "columnCount",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "columnWidth": {
+      "defaultValue": null,
+      "description": "Column width; the following formats are supported:\n- number of pixels (number)\n- percentage of the grid's current width (string)\n- function that returns the row width (in pixels) given an index and `cellProps`",
+      "name": "columnWidth",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "enum",
+        "raw": "string | number | ((index: number, cellProps: CellProps) => number)",
+        "value": [
+          {
+            "value": "string"
+          },
+          {
+            "value": "number"
+          },
+          {
+            "value": "(index: number, cellProps: CellProps) => number",
             "description": "",
             "fullComment": "",
             "tags": {}
@@ -120,78 +227,6 @@
           },
           {
             "value": "number"
-          }
-        ]
-      }
-    },
-    "cellComponent": {
-      "defaultValue": null,
-      "description": "React component responsible for rendering a cell.\n\nThis component will receive an `index` and `style` prop by default.\nAdditionally it will receive prop values passed to `cellProps`.\n\n⚠️ The prop types for this component are exported as `CellComponentProps`",
-      "name": "cellComponent",
-      "declarations": [
-        {
-          "fileName": "react-window/lib/components/grid/types.ts",
-          "name": "TypeLiteral"
-        }
-      ],
-      "required": true,
-      "type": {
-        "name": "(props: { columnIndex: number; rowIndex: number; style: CSSProperties; } & CellProps) => ReactNode"
-      }
-    },
-    "cellProps": {
-      "defaultValue": null,
-      "description": "Additional props to be passed to the cell-rendering component.\nGrid will automatically re-render cells when values in this object change.\n\n⚠️ This object must not contain either an `index` or `style` prop.",
-      "name": "cellProps",
-      "declarations": [
-        {
-          "fileName": "react-window/lib/components/grid/types.ts",
-          "name": "TypeLiteral"
-        }
-      ],
-      "required": true,
-      "type": {
-        "name": "ExcludeForbiddenKeys<CellProps>"
-      }
-    },
-    "columnCount": {
-      "defaultValue": null,
-      "description": "Number of columns to be rendered in the grid.",
-      "name": "columnCount",
-      "declarations": [
-        {
-          "fileName": "react-window/lib/components/grid/types.ts",
-          "name": "TypeLiteral"
-        }
-      ],
-      "required": true,
-      "type": {
-        "name": "number"
-      }
-    },
-    "columnWidth": {
-      "defaultValue": null,
-      "description": "Column width (in pixels) or a function that returns a column width (in pixels) given an index and `cellProps`.",
-      "name": "columnWidth",
-      "declarations": [
-        {
-          "fileName": "react-window/lib/components/grid/types.ts",
-          "name": "TypeLiteral"
-        }
-      ],
-      "required": true,
-      "type": {
-        "name": "enum",
-        "raw": "number | ((index: number, cellProps: CellProps) => number)",
-        "value": [
-          {
-            "value": "number"
-          },
-          {
-            "value": "(index: number, cellProps: CellProps) => number",
-            "description": "",
-            "fullComment": "",
-            "tags": {}
           }
         ]
       }
@@ -332,7 +367,7 @@
     },
     "rowHeight": {
       "defaultValue": null,
-      "description": "Row height (in pixels) or a function that returns a row height (in pixels) given an index and `cellProps`.",
+      "description": "Row height; the following formats are supported:\n- number of pixels (number)\n- percentage of the grid's current height (string)\n- function that returns the row height (in pixels) given an index and `cellProps`",
       "name": "rowHeight",
       "declarations": [
         {
@@ -343,8 +378,11 @@
       "required": true,
       "type": {
         "name": "enum",
-        "raw": "number | ((index: number, cellProps: CellProps) => number)",
+        "raw": "string | number | ((index: number, cellProps: CellProps) => number)",
         "value": [
+          {
+            "value": "string"
+          },
           {
             "value": "number"
           },

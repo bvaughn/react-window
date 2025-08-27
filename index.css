@@ -45,7 +45,7 @@
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
+  scrollbar-color: var(--color-slate-600) transparent;
   outline: none;
   transition:
     color 0.25s ease,

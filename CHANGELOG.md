@@ -5,8 +5,8 @@
 Version 2 is a major rewrite that offers the following benefits:
 
 - More ergonomic props API
-- `ResizeObserver` will automatically resize to fill the parent element (no more need for `AutoSizer`)
-- Automatic memoization of row/cell renderers and props
+- Automatic memoization of row/cell renderers and props/context
+- Automatically sizing for `List` and `Grid` (no more need for `AutoSizer`)
 - Native TypeScript support (no more need for `@types/react-window`)
 - Smaller bundle size
 
