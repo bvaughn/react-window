@@ -1,7 +1,0 @@
-dist
-website/build
-website/node_modules
-website/src/code
-node_modules
-package-lock.json
-yarn.lock

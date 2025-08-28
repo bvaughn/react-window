@@ -1,0 +1,399 @@
+{
+  "tags": {},
+  "filePath": "lib/components/grid/Grid.tsx",
+  "description": "",
+  "displayName": "Grid",
+  "methods": [],
+  "props": {
+    "className": {
+      "defaultValue": null,
+      "description": "CSS class name.",
+      "name": "className",
+      "parent": {
+        "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+        "name": "HTMLAttributes"
+      },
+      "declarations": [
+        {
+          "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+          "name": "HTMLAttributes"
+        },
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "string | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "string"
+          }
+        ]
+      }
+    },
+    "dir": {
+      "defaultValue": null,
+      "description": "Corresponds to the HTML dir attribute:\nhttps://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir",
+      "name": "dir",
+      "parent": {
+        "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+        "name": "HTMLAttributes"
+      },
+      "declarations": [
+        {
+          "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+          "name": "HTMLAttributes"
+        },
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "string | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "string"
+          }
+        ]
+      }
+    },
+    "style": {
+      "defaultValue": null,
+      "description": "Optional CSS properties.\nThe grid of cells will fill the height and width defined by this style.",
+      "name": "style",
+      "parent": {
+        "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+        "name": "HTMLAttributes"
+      },
+      "declarations": [
+        {
+          "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+          "name": "HTMLAttributes"
+        },
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "CSSProperties | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "CSSProperties",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          }
+        ]
+      }
+    },
+    "cellComponent": {
+      "defaultValue": null,
+      "description": "React component responsible for rendering a cell.\n\nThis component will receive an `index` and `style` prop by default.\nAdditionally it will receive prop values passed to `cellProps`.\n\n⚠️ The prop types for this component are exported as `CellComponentProps`",
+      "name": "cellComponent",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "(props: { columnIndex: number; rowIndex: number; style: CSSProperties; } & CellProps) => ReactNode"
+      }
+    },
+    "cellProps": {
+      "defaultValue": null,
+      "description": "Additional props to be passed to the cell-rendering component.\nGrid will automatically re-render cells when values in this object change.\n\n⚠️ This object must not contain either an `index` or `style` prop.",
+      "name": "cellProps",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "ExcludeForbiddenKeys<CellProps>"
+      }
+    },
+    "columnCount": {
+      "defaultValue": null,
+      "description": "Number of columns to be rendered in the grid.",
+      "name": "columnCount",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "columnWidth": {
+      "defaultValue": null,
+      "description": "Column width; the following formats are supported:\n- number of pixels (number)\n- percentage of the grid's current width (string)\n- function that returns the row width (in pixels) given an index and `cellProps`",
+      "name": "columnWidth",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "enum",
+        "raw": "string | number | ((index: number, cellProps: CellProps) => number)",
+        "value": [
+          {
+            "value": "string"
+          },
+          {
+            "value": "number"
+          },
+          {
+            "value": "(index: number, cellProps: CellProps) => number",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          }
+        ]
+      }
+    },
+    "defaultHeight": {
+      "defaultValue": {
+        "value": "0"
+      },
+      "description": "Default height of grid for initial render.\nThis value is important for server rendering.",
+      "name": "defaultHeight",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "number | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "number"
+          }
+        ]
+      }
+    },
+    "defaultWidth": {
+      "defaultValue": {
+        "value": "0"
+      },
+      "description": "Default width of grid for initial render.\nThis value is important for server rendering.",
+      "name": "defaultWidth",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "number | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "number"
+          }
+        ]
+      }
+    },
+    "gridRef": {
+      "defaultValue": null,
+      "description": "Ref used to interact with this component's imperative API.\n\nThis API has imperative methods for scrolling and a getter for the outermost DOM element.\n\n⚠️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience use in TypeScript projects.",
+      "name": "gridRef",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "Ref<GridImperativeAPI> | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "null"
+          },
+          {
+            "value": "(instance: GridImperativeAPI | null) => void | (() => VoidOrUndefinedOnly)",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          },
+          {
+            "value": "RefObject<GridImperativeAPI | null>",
+            "description": "Created by {@link createRef}, or {@link useRef} when passed `null`.",
+            "fullComment": "Created by {@link createRef}, or {@link useRef} when passed `null`.\n@template T The type of the ref's value.\n@example ```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```",
+            "tags": {
+              "template": "T The type of the ref's value.",
+              "example": "```tsx\nconst ref = createRef<HTMLDivElement>();\n\nref.current = document.createElement('div'); // Error\n```"
+            }
+          }
+        ]
+      }
+    },
+    "onCellsRendered": {
+      "defaultValue": null,
+      "description": "Callback notified when the range of rendered cells changes.",
+      "name": "onCellsRendered",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "((args: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }) => void) | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "(args: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }) => void",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          }
+        ]
+      }
+    },
+    "onResize": {
+      "defaultValue": null,
+      "description": "Callback notified when the Grid's outermost HTMLElement resizes.\nThis may be used to (re)scroll a cell into view.",
+      "name": "onResize",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "((size: { height: number; width: number; }, prevSize: { height: number; width: number; }) => void) | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "(size: { height: number; width: number; }, prevSize: { height: number; width: number; }) => void",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          }
+        ]
+      }
+    },
+    "overscanCount": {
+      "defaultValue": {
+        "value": "3"
+      },
+      "description": "How many additional rows/columns to render outside of the visible area.\nThis can reduce visual flickering near the edges of a grid when scrolling.",
+      "name": "overscanCount",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "number | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "number"
+          }
+        ]
+      }
+    },
+    "rowCount": {
+      "defaultValue": null,
+      "description": "Number of rows to be rendered in the grid.",
+      "name": "rowCount",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "number"
+      }
+    },
+    "rowHeight": {
+      "defaultValue": null,
+      "description": "Row height; the following formats are supported:\n- number of pixels (number)\n- percentage of the grid's current height (string)\n- function that returns the row height (in pixels) given an index and `cellProps`",
+      "name": "rowHeight",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": true,
+      "type": {
+        "name": "enum",
+        "raw": "string | number | ((index: number, cellProps: CellProps) => number)",
+        "value": [
+          {
+            "value": "string"
+          },
+          {
+            "value": "number"
+          },
+          {
+            "value": "(index: number, cellProps: CellProps) => number",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          }
+        ]
+      }
+    }
+  }
+}

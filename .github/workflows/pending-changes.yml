@@ -1,0 +1,16 @@
+name: "Pending changes"
+on: [pull_request]
+jobs:
+  tests-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 10
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --recursive
+      - uses: nickcharlton/diff-check@main
+        with:
+          command: pnpm run compile

@@ -1,0 +1,36 @@
+.tok-comment {
+  color: var(--color-slate-500);
+}
+.tok-definition {
+}
+.tok-local {
+}
+.tok-keyword {
+  color: var(--color-pink-400);
+}
+.tok-meta {
+}
+.tok-number {
+}
+.tok-operator {
+  color: var(--color-slate-400);
+}
+.tok-propertyName {
+  color: var(--color-sky-300);
+}
+.tok-punctuation {
+  color: var(--color-slate-400);
+}
+.tok-string {
+  color: var(--color-teal-300);
+}
+.tok-string2 {
+  color: var(--color-sky-300);
+}
+.tok-typeName {
+  color: var(--color-pink-400);
+}
+.tok-variableName:not(.tok-definition) {
+}
+.tok-variableName2 {
+}
