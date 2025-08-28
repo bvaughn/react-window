@@ -7,12 +7,14 @@ describe("getStartStopIndices", () => {
     containerScrollOffset,
     containerSize,
     itemCount,
-    itemSize
+    itemSize,
+    overscanCount = 0
   }: {
     containerScrollOffset: number;
     containerSize: number;
     itemCount: number;
     itemSize: number;
+    overscanCount?: number;
   }) {
     const cachedBounds = createCachedBounds({
       itemCount: itemCount,
@@ -25,7 +27,7 @@ describe("getStartStopIndices", () => {
       containerScrollOffset,
       containerSize,
       itemCount,
-      overscanCount: 0
+      overscanCount
     });
   }
 
@@ -40,7 +42,7 @@ describe("getStartStopIndices", () => {
     ).toEqual([0, -1]);
   });
 
-  test("not enough rows to fill available height", () => {
+  test("edge case: not enough rows to fill available height", () => {
     expect(
       getIndices({
         containerScrollOffset: 0,
@@ -106,5 +108,53 @@ describe("getStartStopIndices", () => {
     ).toEqual([8, 9]);
   });
 
-  // TODO Test overscanCount
+  describe("with overscan", () => {
+    test("edge case: not enough rows to fill available height", () => {
+      expect(
+        getIndices({
+          containerScrollOffset: 0,
+          containerSize: 100,
+          itemCount: 2,
+          itemSize: 25,
+          overscanCount: 2
+        })
+      ).toEqual([0, 1]);
+    });
+
+    test("edge case: no rows before", () => {
+      expect(
+        getIndices({
+          containerScrollOffset: 0,
+          containerSize: 100,
+          itemCount: 100,
+          itemSize: 25,
+          overscanCount: 2
+        })
+      ).toEqual([0, 5]);
+    });
+
+    test("edge case: no rows after", () => {
+      expect(
+        getIndices({
+          containerScrollOffset: 2400,
+          containerSize: 100,
+          itemCount: 100,
+          itemSize: 25,
+          overscanCount: 2
+        })
+      ).toEqual([94, 99]);
+    });
+
+    test("rows before and after", () => {
+      expect(
+        getIndices({
+          containerScrollOffset: 100,
+          containerSize: 100,
+          itemCount: 100,
+          itemSize: 25,
+          overscanCount: 2
+        })
+      ).toEqual([2, 9]);
+    });
+  });
 });

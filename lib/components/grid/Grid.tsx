@@ -13,8 +13,6 @@ import type { Align } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import type { GridProps } from "./types";
 
-// TODO Handle scrollbar sizes (add width/height if necessary)
-
 export function Grid<CellProps extends object>({
   cellComponent: CellComponentProp,
   cellProps: cellPropsUnstable,

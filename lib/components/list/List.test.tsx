@@ -1,5 +1,5 @@
 import { act, render, screen } from "@testing-library/react";
-import { createRef, useLayoutEffect, type CSSProperties } from "react";
+import { createRef, useLayoutEffect } from "react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
 import {
@@ -8,12 +8,10 @@ import {
 } from "../../utils/test/mockResizeObserver";
 import { List } from "./List";
 import { type ListImperativeAPI, type RowComponentProps } from "./types";
+import { useListCallbackRef } from "./useListCallbackRef";
 
 describe("List", () => {
-  const RowComponent = vi.fn(function Row(props: {
-    index: number;
-    style: CSSProperties;
-  }) {
+  const RowComponent = vi.fn(function Row(props: RowComponentProps<object>) {
     const { index, style } = props;
 
     useLayoutEffect(() => {
@@ -361,11 +359,12 @@ describe("List", () => {
       expect(HTMLElement.prototype.scrollTo).not.toHaveBeenCalled();
 
       listRef.current?.scrollToRow({ index: 8 });
+
       expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledTimes(1);
-      expect(HTMLElement.prototype.scrollTo).not.toHaveBeenLastCalledWith(
-        8,
-        "auto"
-      );
+      expect(HTMLElement.prototype.scrollTo).toHaveBeenLastCalledWith({
+        behavior: "auto",
+        top: 125
+      });
     });
   });
 
@@ -421,7 +420,7 @@ describe("List", () => {
   });
 
   describe("edge cases", () => {
-    test("should restore scroll indicates if rowProps changes", () => {
+    test("should restore scroll indices if rowProps changes", () => {
       const listRef = createRef<ListImperativeAPI>();
       const onRowsRendered = vi.fn();
 
@@ -527,6 +526,31 @@ describe("List", () => {
         />
       );
       expect(container.textContent).toEqual("AB");
+    });
+
+    test("should not cause a cycle of List callback ref is passed in rowProps", () => {
+      function RowComponentWithRowProps({
+        index,
+        style
+      }: RowComponentProps<{ listRef: ListImperativeAPI | null }>) {
+        return <div style={style}>{index}</div>;
+      }
+
+      function Test() {
+        const [listRef, setListRef] = useListCallbackRef(null);
+
+        return (
+          <List
+            listRef={setListRef}
+            rowComponent={RowComponentWithRowProps}
+            rowCount={10}
+            rowHeight={25}
+            rowProps={{ listRef }}
+          />
+        );
+      }
+
+      render(<Test />);
     });
   });
 });

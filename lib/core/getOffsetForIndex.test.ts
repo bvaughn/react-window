@@ -32,7 +32,7 @@ describe("getOffsetForIndex", () => {
     function createTestHelper(align: Align) {
       return function testHelperAuto(
         index: number,
-        expectedIndex: number,
+        expectedOffset: number,
         containerScrollOffset: number = 0
       ) {
         expect(
@@ -42,7 +42,7 @@ describe("getOffsetForIndex", () => {
             index,
             containerScrollOffset
           })
-        ).toBe(expectedIndex);
+        ).toBe(expectedOffset);
       };
     }
 
@@ -112,8 +112,10 @@ describe("getOffsetForIndex", () => {
 
       // Shouldn't scroll if already visible
       testHelper(0, 0);
-      testHelper(2, 0);
-      testHelper(7, 50, 100);
+      testHelper(3, 0);
+      testHelper(3, 30, 30);
+      testHelper(7, 30, 30);
+      testHelper(7, 50, 50);
       testHelper(9, 50, 100);
 
       // Should center align if not visible
