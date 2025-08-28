@@ -128,6 +128,7 @@ function CellComponent({
   return (
     <div
       className={cn("flex items-center justify-center text-xs", {
+        "bg-slate-900": columnIndex % 2 === rowIndex % 2,
         "bg-slate-800":
           columnIndex === focusedColumnIndex || rowIndex === focusedRowIndex
       })}
