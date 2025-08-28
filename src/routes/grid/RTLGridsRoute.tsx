@@ -1,7 +1,6 @@
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { FormattedCode } from "../../components/code/FormattedCode";
-import { ContinueLink } from "../../components/ContinueLink";
 import { ExternalLink } from "../../components/ExternalLink";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { RtlExample } from "./examples/RtlGrid.example";
@@ -29,7 +28,6 @@ export function RTLGridsRoute() {
         <RtlExample contacts={contacts} />
       </Block>
       <FormattedCode url="/generated/code-snippets/RtlGrid.json" />
-      <ContinueLink to="/grid/horizontal-lists" title="horizontal lists" />
     </Box>
   );
 }

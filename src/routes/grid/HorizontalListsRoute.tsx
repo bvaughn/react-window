@@ -1,7 +1,6 @@
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { FormattedCode } from "../../components/code/FormattedCode";
-import { ContinueLink } from "../../components/ContinueLink";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { HorizontalList } from "./examples/HorizontalList.example";
 import { useEmails } from "./hooks/useEmails";
@@ -21,7 +20,6 @@ export function HorizontalListsRoute() {
       <FormattedCode url="/generated/code-snippets/HorizontalList.json" />
       <div>And here's the cell renderer:</div>
       <FormattedCode url="/generated/code-snippets/HorizontalListCellRenderer.json" />
-      <ContinueLink to="/grid/props" title="component props" />
     </Box>
   );
 }

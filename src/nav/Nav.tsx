@@ -11,15 +11,15 @@ export function Nav() {
         <NavLink to="/list/props">Component props</NavLink>
         <NavLink to="/list/imperative-api">Imperative API</NavLink>
       </NavSection>
-      <NavSection label="Tables">
-        <NavLink to="/list/tabular-data">Rendering tabular data</NavLink>
-      </NavSection>
       <NavSection label="Grids">
         <NavLink to="/grid/grid">Rendering a grid</NavLink>
-        <NavLink to="/grid/rtl-grids">RTL grids</NavLink>
-        <NavLink to="/grid/horizontal-lists">Horizontal lists</NavLink>
         <NavLink to="/grid/props">Component props</NavLink>
         <NavLink to="/grid/imperative-api">Imperative API</NavLink>
+      </NavSection>
+      <NavSection label="Other">
+        <NavLink to="/list/tabular-data">Tabular data</NavLink>
+        <NavLink to="/grid/rtl-grids">Right to left content</NavLink>
+        <NavLink to="/grid/horizontal-lists">Horizontal lists</NavLink>
       </NavSection>
       <div>
         <NavLink to="/platform-requirements">Requirements</NavLink>

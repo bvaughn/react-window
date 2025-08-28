@@ -56,7 +56,7 @@ export function RenderingGridRoute() {
           </div>
         </Box>
       </Callout>
-      <ContinueLink to="/grid/rtl-grids" title="RTL grids" />
+      <ContinueLink to="/grid/props" title="component props" />
     </Box>
   );
 }
