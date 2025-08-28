@@ -6,13 +6,13 @@ import {
   useState,
   type ReactNode
 } from "react";
+import { useIsRtl } from "../../core/useIsRtl";
 import { useVirtualizer } from "../../core/useVirtualizer";
 import { useMemoizedObject } from "../../hooks/useMemoizedObject";
 import type { Align } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import type { GridProps } from "./types";
 
-// TODO Handle dir=rtl (onScroll, scrollToCell, scrollOffset)
 // TODO Handle scrollbar sizes (add width/height if necessary)
 
 export function Grid<CellProps extends object>({
@@ -23,6 +23,7 @@ export function Grid<CellProps extends object>({
   columnWidth,
   defaultHeight = 0,
   defaultWidth = 0,
+  dir,
   gridRef,
   onCellsRendered,
   onResize,
@@ -40,6 +41,8 @@ export function Grid<CellProps extends object>({
 
   const [element, setElement] = useState<HTMLDivElement | null>(null);
 
+  const isRtl = useIsRtl(element, dir);
+
   const {
     getCellBounds: getColumnBounds,
     getEstimatedSize: getEstimatedWidth,
@@ -50,6 +53,7 @@ export function Grid<CellProps extends object>({
     containerElement: element,
     defaultContainerSize: defaultWidth,
     direction: "horizontal",
+    isRtl,
     itemCount: columnCount,
     itemProps: cellProps,
     itemSize: columnWidth,
@@ -188,8 +192,9 @@ export function Grid<CellProps extends object>({
               rowIndex={rowIndex}
               style={{
                 position: "absolute",
-                left: 0,
-                transform: `translate(${columnBounds.scrollOffset}px, ${rowBounds.scrollOffset}px)`,
+                left: isRtl ? undefined : 0,
+                right: isRtl ? 0 : undefined,
+                transform: `translate(${isRtl ? -columnBounds.scrollOffset : columnBounds.scrollOffset}px, ${rowBounds.scrollOffset}px)`,
                 height: rowCount > 1 ? rowBounds.size : "100%",
                 width: columnBounds.size
               }}
@@ -207,6 +212,7 @@ export function Grid<CellProps extends object>({
     columnStopIndex,
     getColumnBounds,
     getRowBounds,
+    isRtl,
     rowCount,
     rowStartIndex,
     rowStopIndex
@@ -217,6 +223,7 @@ export function Grid<CellProps extends object>({
       role="grid"
       {...rest}
       className={className}
+      dir={dir}
       ref={setElement}
       style={{
         width: "100%",

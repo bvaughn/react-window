@@ -123,8 +123,8 @@ export function ListImperativeApiRoute() {
         />
       </Block>
       <Callout intent="primary">
-        <strong>NOTE</strong> If you are passing the ref to another component or
-        hook, use the ref callback function instead.
+        <strong className="text-sky-300">Note</strong> If you are passing the
+        ref to another component or hook, use the ref callback function instead.
       </Callout>
       <FormattedCode url="/generated/code-snippets/useListCallbackRef.json" />
     </Box>

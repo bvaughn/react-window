@@ -9,6 +9,7 @@ import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { useResizeObserver } from "../hooks/useResizeObserver";
 import { useStableCallback } from "../hooks/useStableCallback";
 import type { Align } from "../types";
+import { adjustScrollOffsetForRtl } from "../utils/adjustScrollOffsetForRtl";
 import { getEstimatedSize as getEstimatedSizeUtil } from "./getEstimatedSize";
 import { getOffsetForIndex } from "./getOffsetForIndex";
 import { getStartStopIndices as getStartStopIndicesUtil } from "./getStartStopIndices";
@@ -21,6 +22,7 @@ export function useVirtualizer<Props extends object>({
   containerStyle,
   defaultContainerSize = 0,
   direction,
+  isRtl = false,
   itemCount,
   itemProps,
   itemSize: itemSizeProp,
@@ -31,6 +33,7 @@ export function useVirtualizer<Props extends object>({
   containerStyle?: CSSProperties;
   defaultContainerSize?: number;
   direction: Direction;
+  isRtl?: boolean;
   itemCount: number;
   itemProps: Props;
   itemSize: number | string | SizeFunction<Props>;
@@ -106,15 +109,31 @@ export function useVirtualizer<Props extends object>({
   );
 
   const getStartStopIndices = useCallback(
-    (containerScrollOffset: number) =>
-      getStartStopIndicesUtil({
+    (scrollOffset: number) => {
+      const containerScrollOffset = adjustScrollOffsetForRtl({
+        containerElement,
+        direction,
+        isRtl,
+        scrollOffset
+      });
+
+      return getStartStopIndicesUtil({
         cachedBounds,
         containerScrollOffset,
         containerSize,
         itemCount,
         overscanCount
-      }),
-    [cachedBounds, containerSize, itemCount, overscanCount]
+      });
+    },
+    [
+      cachedBounds,
+      containerElement,
+      containerSize,
+      direction,
+      isRtl,
+      itemCount,
+      overscanCount
+    ]
   );
 
   useIsomorphicLayoutEffect(() => {
@@ -122,6 +141,7 @@ export function useVirtualizer<Props extends object>({
       (direction === "vertical"
         ? containerElement?.scrollTop
         : containerElement?.scrollLeft) ?? 0;
+
     setIndices(getStartStopIndices(scrollOffset));
   }, [containerElement, direction, getStartStopIndices]);
 
@@ -132,10 +152,14 @@ export function useVirtualizer<Props extends object>({
 
     const onScroll = () => {
       setIndices((prev) => {
-        const scrollOffset =
-          direction === "vertical"
-            ? containerElement.scrollTop
-            : containerElement.scrollLeft;
+        const { scrollLeft, scrollTop } = containerElement;
+
+        const scrollOffset = adjustScrollOffsetForRtl({
+          containerElement,
+          direction,
+          isRtl,
+          scrollOffset: direction === "vertical" ? scrollTop : scrollLeft
+        });
 
         const next = getStartStopIndicesUtil({
           cachedBounds,
@@ -179,7 +203,7 @@ export function useVirtualizer<Props extends object>({
       containerScrollOffset: number;
       index: number;
     }) => {
-      const scrollOffset = getOffsetForIndex({
+      let scrollOffset = getOffsetForIndex({
         align,
         cachedBounds,
         containerScrollOffset,
@@ -190,6 +214,13 @@ export function useVirtualizer<Props extends object>({
       });
 
       if (containerElement) {
+        scrollOffset = adjustScrollOffsetForRtl({
+          containerElement,
+          direction,
+          isRtl,
+          scrollOffset
+        });
+
         if (typeof containerElement.scrollTo === "function") {
           if (direction === "horizontal") {
             containerElement.scrollTo({

@@ -83,7 +83,7 @@ export function GridImperativeApiRoute() {
         ? COLUMN_KEYS.indexOf(column.value as keyof Contact)
         : undefined;
 
-      const rowIndex = title
+      const rowIndex = title?.value
         ? contacts.findIndex((row) => row.title === title.value)
         : undefined;
 
@@ -91,9 +91,9 @@ export function GridImperativeApiRoute() {
         grid.scrollToCell({
           behavior: behavior?.value,
           columnAlign: align?.value,
-          columnIndex: columnIndex,
+          columnIndex,
           rowAlign: align?.value,
-          rowIndex: rowIndex
+          rowIndex
         });
       } else if (columnIndex !== undefined) {
         grid.scrollToColumn({
@@ -180,8 +180,8 @@ export function GridImperativeApiRoute() {
         <code>scrollToRow</code> methods for single-axis scrolling.
       </div>
       <Callout intent="primary">
-        <strong>NOTE</strong> If you are passing the ref to another component or
-        hook, use the ref callback function instead.
+        <strong className="text-sky-300">Note</strong> If you are passing the
+        ref to another component or hook, use the ref callback function instead.
       </Callout>
       <FormattedCode url="/generated/code-snippets/useGridCallbackRef.json" />
     </Box>

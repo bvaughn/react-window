@@ -38,8 +38,8 @@ export function Checkbox({
 
   return (
     <label
-      className={`cursor-pointer flex flex-row gap-2 outline-none group ${className}`}
-      data-focus
+      className={`cursor-pointer rounded-lg flex flex-row items-center outline-none group ${className}`}
+      data-focus-within
       {...rest}
     >
       <input
@@ -50,10 +50,8 @@ export function Checkbox({
         }}
         type="checkbox"
       />
-      <IconElement
-        className={`${iconClassName} rounded-md outline-2 outline-transparent group-focus-within:outline-blue-600`}
-      />
-      {children}
+      <IconElement className={iconClassName} />
+      {children && <>&nbsp;{children}</>}
     </label>
   );
 }

@@ -56,7 +56,7 @@ export function RenderingGridRoute() {
           </div>
         </Box>
       </Callout>
-      <ContinueLink to="/grid/horizontal-lists" title="horizontal lists" />
+      <ContinueLink to="/grid/rtl-grids" title="RTL grids" />
     </Box>
   );
 }

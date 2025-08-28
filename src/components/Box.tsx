@@ -1,4 +1,4 @@
-import type { CSSProperties, PropsWithChildren } from "react";
+import type { CSSProperties, HTMLAttributes } from "react";
 import { cn } from "../utils/cn";
 
 export function Box({
@@ -11,8 +11,9 @@ export function Box({
   justify,
   shrink,
   style,
-  wrap
-}: PropsWithChildren<{
+  wrap,
+  ...rest
+}: HTMLAttributes<HTMLDivElement> & {
   align?: "center" | "end" | "start" | "stretch";
   className?: string;
   direction: "column" | "row";
@@ -22,7 +23,7 @@ export function Box({
   shrink?: 0 | 1;
   style?: CSSProperties;
   wrap?: boolean;
-}>) {
+}) {
   return (
     <div
       className={cn(
@@ -66,6 +67,7 @@ export function Box({
         className
       )}
       style={style}
+      {...rest}
     >
       {children}
     </div>

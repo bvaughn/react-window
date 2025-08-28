@@ -35,8 +35,8 @@ export function Radio<Value extends string>({
 
   return (
     <label
-      className={`cursor-pointer flex flex-row gap-2 outline-none group ${className}`}
-      data-focus
+      className={`cursor-pointer rounded-full flex flex-row items-center outline-none group ${className}`}
+      data-focus-within
       {...rest}
     >
       <input
@@ -49,10 +49,8 @@ export function Radio<Value extends string>({
         type="radio"
         value={value}
       />
-      <IconElement
-        className={`${iconClassName} rounded-full outline-2 outline-transparent group-focus-within:outline-blue-600`}
-      />
-      {children}
+      <IconElement className={iconClassName} />
+      {children && <>&nbsp;{children}</>}
     </label>
   );
 }

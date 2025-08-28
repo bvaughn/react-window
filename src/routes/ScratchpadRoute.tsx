@@ -1,15 +1,16 @@
 import { useState } from "react";
 import {
-  List,
-  useListCallbackRef,
+  Grid,
+  useGridCallbackRef,
   type Align,
-  type RowComponentProps
+  type CellComponentProps
 } from "react-window";
-import { cn } from "../utils/cn";
 import { Block } from "../components/Block";
+import { Box } from "../components/Box";
+import { Checkbox } from "../components/Checkbox";
+import { Input } from "../components/Input";
 import { Select, type Option } from "../components/Select";
-
-const rowHeight = () => 10;
+import { cn } from "../utils/cn";
 
 const ALIGNMENTS: Option<Align>[] = (
   ["auto", "center", "end", "smart", "start"] satisfies Align[]
@@ -19,77 +20,120 @@ const ALIGNMENTS: Option<Align>[] = (
 }));
 
 export function ScratchpadRoute() {
-  const [focusIndex, setFocusIndex] = useState(0);
-  const [listRefA, setListRefA] = useListCallbackRef(null);
-  const [listRefB, setListRefB] = useListCallbackRef(null);
+  const [rtl, setRtl] = useState(false);
+  const [columnIndex, setColumnIndex] = useState<number | undefined>();
+  const [rowIndex, setRowIndex] = useState<number | undefined>();
+  const [gridRef, setGridRef] = useGridCallbackRef(null);
   const [align, setAlign] = useState(ALIGNMENTS[0]);
 
   return (
-    <div>
-      <Select
-        className="flex-1"
-        onChange={setAlign}
-        options={ALIGNMENTS}
-        placeholder="Align"
-        value={align}
-      />
-      <input
-        autoFocus
-        className="w-full"
-        min={0}
-        max={9}
-        step={1}
-        type="number"
+    <Box direction="column" gap={4}>
+      <Box
+        align="center"
+        direction="row"
+        gap={4}
         onKeyDown={(event) => {
           switch (event.key) {
             case "Enter": {
-              const index = parseInt(event.currentTarget.value);
-              setFocusIndex(index);
-
-              listRefA?.scrollToRow({ align: align.value, index });
-              listRefB?.scrollToRow({ align: align.value, index });
+              if (columnIndex !== undefined && rowIndex !== undefined) {
+                gridRef?.scrollToCell({
+                  columnAlign: align.value,
+                  columnIndex,
+                  rowAlign: align.value,
+                  rowIndex
+                });
+              } else if (columnIndex !== undefined) {
+                gridRef?.scrollToColumn({
+                  align: align.value,
+                  index: columnIndex
+                });
+              } else if (rowIndex !== undefined) {
+                gridRef?.scrollToRow({
+                  align: align.value,
+                  index: rowIndex
+                });
+              }
+              break;
             }
           }
         }}
-        defaultValue="0"
-      />
-      <Block data-focus-within="bold">
-        <List
-          listRef={setListRefA}
-          rowComponent={RowComponent}
-          rowCount={10}
-          rowHeight={rowHeight}
-          rowProps={{ focusIndex }}
-          style={{ height: "50px" }}
+      >
+        <Select
+          className="flex-1"
+          onChange={setAlign}
+          options={ALIGNMENTS}
+          placeholder="Align"
+          value={align}
+        />
+        <Checkbox checked={rtl} onChange={setRtl} />
+        <Input
+          autoFocus
+          className="grow"
+          min={0}
+          max={99}
+          onChange={(value) => {
+            const parsed = parseInt(value);
+            setColumnIndex(isNaN(parsed) ? undefined : parsed);
+          }}
+          placeholder="Column"
+          step={1}
+          type="number"
+          value={columnIndex === undefined ? "" : "" + columnIndex}
+        />
+        <Input
+          autoFocus
+          className="grow"
+          min={0}
+          max={99}
+          onChange={(value) => {
+            const parsed = parseInt(value);
+            setRowIndex(isNaN(parsed) ? undefined : parsed);
+          }}
+          placeholder="Row"
+          step={1}
+          type="number"
+          value={rowIndex === undefined ? "" : "" + rowIndex}
+        />
+      </Box>
+      <Block className="w-full h-100" data-focus-within="bold">
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={{
+            focusedColumnIndex: columnIndex,
+            focusedRowIndex: rowIndex
+          }}
+          columnCount={100}
+          columnWidth={75}
+          dir={rtl ? "rtl" : undefined}
+          key={rtl ? "rtl" : "ltr"}
+          gridRef={setGridRef}
+          rowCount={100}
+          rowHeight={35}
         />
       </Block>
-      <Block data-focus-within="bold">
-        <List
-          listRef={setListRefB}
-          rowComponent={RowComponent}
-          rowCount={10}
-          rowHeight={rowHeight}
-          rowProps={{ focusIndex }}
-          style={{ height: "40px" }}
-        />
-      </Block>
-    </div>
+    </Box>
   );
 }
 
-function RowComponent({
-  index,
-  focusIndex,
+function CellComponent({
+  columnIndex,
+  focusedColumnIndex,
+  focusedRowIndex,
+  rowIndex,
   style
-}: RowComponentProps<{ focusIndex: number }>) {
+}: CellComponentProps<{
+  focusedColumnIndex: number | undefined;
+  focusedRowIndex: number | undefined;
+}>) {
   return (
     <div
-      className={cn("text-xs", {
-        "bg-slate-800 font-bold": focusIndex === index
+      className={cn("flex items-center justify-center text-xs", {
+        "bg-slate-800":
+          columnIndex === focusedColumnIndex || rowIndex === focusedRowIndex
       })}
       style={style}
     >
-      Row {index}
+      row {rowIndex}, col {columnIndex}
     </div>
   );
 }

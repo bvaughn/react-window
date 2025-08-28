@@ -16,6 +16,7 @@ export function Nav() {
       </NavSection>
       <NavSection label="Grids">
         <NavLink to="/grid/grid">Rendering a grid</NavLink>
+        <NavLink to="/grid/rtl-grids">RTL grids</NavLink>
         <NavLink to="/grid/horizontal-lists">Horizontal lists</NavLink>
         <NavLink to="/grid/props">Component props</NavLink>
         <NavLink to="/grid/imperative-api">Imperative API</NavLink>
