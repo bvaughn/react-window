@@ -1,4 +1,8 @@
-import { Bars4Icon, XMarkIcon } from "@heroicons/react/20/solid";
+import {
+  ArrowTopRightOnSquareIcon,
+  Bars4Icon,
+  XMarkIcon
+} from "@heroicons/react/20/solid";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GitHubIcon from "../public/svgs/github.svg?react";
 import NpmHubIcon from "../public/svgs/npm.svg?react";
@@ -38,6 +42,12 @@ export default function App() {
             </div>
           </Box>
           <Box align="center" direction="row" gap={4}>
+            <ExternalLink
+              className="text-xs font-bold text-white! drop-shadow-black/20 drop-shadow-sm"
+              href="https://react-window-v1.vercel.app/"
+            >
+              v1.x
+            </ExternalLink>
             <ExternalLink
               className="text-white! drop-shadow-black/20 drop-shadow-sm"
               href="https://www.npmjs.com/package/react-window"
