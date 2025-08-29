@@ -14,6 +14,6 @@ TypeScript definitions are included within the published dist folder and documen
 
 ## Documentation
 
-Documentation for this project is available at [react-window.vercel.app](https://react-window.vercel.app/).
+Documentation for this project is available at [react-window.vercel.app](https://react-window.vercel.app/). (Version 1.x documentation can be found at [react-window-v1.vercel.app](https://react-window-v1.vercel.app/) or on the NPM page for a specific version, e.g. [1.8.11](https://www.npmjs.com/package/react-window/v/1.8.11).)
 
 TypeScript definitions and version-specific documentation are also included with each published build.
