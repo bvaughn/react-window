@@ -11,6 +11,8 @@ import { type ListImperativeAPI, type RowComponentProps } from "./types";
 import { useListCallbackRef } from "./useListCallbackRef";
 
 describe("List", () => {
+  let mountedRows: Map<number, RowComponentProps<object>> = new Map();
+
   const RowComponent = vi.fn(function Row(props: RowComponentProps<object>) {
     const { index, style } = props;
 
@@ -27,8 +29,6 @@ describe("List", () => {
       </div>
     );
   });
-
-  let mountedRows: Map<number, RowComponentProps<object>> = new Map();
 
   beforeEach(() => {
     RowComponent.mockReset();
@@ -417,6 +417,52 @@ describe("List", () => {
       />
     );
     expect(RowComponent).toHaveBeenCalledTimes(10);
+  });
+
+  describe("rowHeight", () => {
+    test("type: number (px)", () => {
+      const { container } = render(
+        <List
+          overscanCount={0}
+          rowCount={50}
+          rowComponent={RowComponent}
+          rowHeight={50}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(2);
+    });
+
+    test("type: function (px)", () => {
+      const rowHeight = (index: number) => 25 + index * 25;
+
+      const { container } = render(
+        <List
+          overscanCount={0}
+          rowCount={50}
+          rowComponent={RowComponent}
+          rowHeight={rowHeight}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(3);
+    });
+
+    test("type: string (%)", () => {
+      const { container } = render(
+        <List
+          overscanCount={0}
+          rowCount={50}
+          rowComponent={RowComponent}
+          rowHeight="25%"
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(4);
+    });
   });
 
   describe("edge cases", () => {
