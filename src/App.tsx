@@ -1,8 +1,4 @@
-import {
-  ArrowTopRightOnSquareIcon,
-  Bars4Icon,
-  XMarkIcon
-} from "@heroicons/react/20/solid";
+import { Bars4Icon, XMarkIcon } from "@heroicons/react/20/solid";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GitHubIcon from "../public/svgs/github.svg?react";
 import NpmHubIcon from "../public/svgs/npm.svg?react";
