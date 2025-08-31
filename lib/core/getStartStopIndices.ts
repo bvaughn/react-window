@@ -18,11 +18,20 @@ export function getStartStopIndices({
   let startIndex = 0;
   let stopIndex = -1;
   let currentIndex = 0;
+  let currentOffset = 0;
 
   while (currentIndex < maxIndex) {
-    const bounds = cachedBounds.get(currentIndex);
+    const bounds = cachedBounds.getItemBounds(currentIndex);
 
-    if (bounds.scrollOffset + bounds.size > containerScrollOffset) {
+    if (bounds) {
+      currentOffset = bounds.scrollOffset + bounds.size;
+    } else {
+      const estimatedSize = cachedBounds.getEstimatedSize() ?? 25;
+
+      currentOffset += estimatedSize;
+    }
+
+    if (currentOffset >= containerScrollOffset) {
       break;
     }
 
@@ -33,12 +42,16 @@ export function getStartStopIndices({
   startIndex = Math.max(0, startIndex - overscanCount);
 
   while (currentIndex < maxIndex) {
-    const bounds = cachedBounds.get(currentIndex);
+    const bounds = cachedBounds.getItemBounds(currentIndex);
+    if (bounds) {
+      currentOffset = bounds.scrollOffset + bounds.size;
+    } else {
+      const estimatedSize = cachedBounds.getEstimatedSize() ?? 25;
 
-    if (
-      bounds.scrollOffset + bounds.size >=
-      containerScrollOffset + containerSize
-    ) {
+      currentOffset += estimatedSize;
+    }
+
+    if (currentOffset >= containerScrollOffset + containerSize) {
       break;
     }
 
