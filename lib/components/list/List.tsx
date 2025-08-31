@@ -114,7 +114,6 @@ export function List<RowProps extends object>({
 
   return (
     <div
-      role="list"
       {...rest}
       className={className}
       ref={setElement}

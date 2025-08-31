@@ -29,7 +29,14 @@ const libraryConfig: UserConfig = {
 const websiteConfig: UserConfig = {
   base: "/",
   build: {
-    outDir: "docs"
+    minify: "terser",
+    outDir: "docs",
+    sourcemap: true,
+    terserOptions: {
+      format: {
+        comments: false
+      }
+    }
   },
   plugins: [
     react(),

@@ -9,7 +9,7 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Example } from "./examples/Grid.example";
 import { useContacts } from "./hooks/useContacts";
 
-export function RenderingGridRoute() {
+export default function RenderingGridRoute() {
   const contacts = useContacts();
 
   return (

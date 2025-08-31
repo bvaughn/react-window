@@ -7,7 +7,7 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Example } from "./examples/ListVariableRowHeights.example";
 import { useCitiesByState } from "./hooks/useCitiesByState";
 
-export function VariableRowHeightsRoute() {
+export default function VariableRowHeightsRoute() {
   const citiesByState = useCitiesByState();
 
   return (

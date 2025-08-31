@@ -4,7 +4,7 @@ import { ExternalLink } from "../components/ExternalLink";
 import { Header } from "../components/Header";
 import { Link } from "../components/Link";
 
-export function GettingStartedRoute() {
+export default function GettingStartedRoute() {
   return (
     <Box direction="column" gap={4}>
       <Header title="Getting started" />

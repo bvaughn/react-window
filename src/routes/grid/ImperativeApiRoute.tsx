@@ -40,7 +40,7 @@ const COLUMNS: Option<string>[] = COLUMN_KEYS.map((key) => ({
   value: key
 })).sort((a, b) => a.label.localeCompare(b.label));
 
-export function GridImperativeApiRoute() {
+export default function GridImperativeApiRoute() {
   const contacts = useContacts();
 
   const titleOptions = useMemo<Option<string>[]>(() => {

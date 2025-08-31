@@ -33,7 +33,7 @@ const BEHAVIORS: Option<ScrollBehavior>[] = (
 }));
 BEHAVIORS.unshift(EMPTY_OPTION as Option<ScrollBehavior>);
 
-export function ListImperativeApiRoute() {
+export default function ListImperativeApiRoute() {
   const [align, setAlign] = useState<Option<Align> | undefined>();
   const [behavior, setBehavior] = useState<
     Option<ScrollBehavior> | undefined

@@ -5,7 +5,7 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { HorizontalList } from "./examples/HorizontalList.example";
 import { useEmails } from "./hooks/useEmails";
 
-export function HorizontalListsRoute() {
+export default function HorizontalListsRoute() {
   const emails = useEmails();
 
   return (

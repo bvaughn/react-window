@@ -6,7 +6,7 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { RtlExample } from "./examples/RtlGrid.example";
 import { useContacts } from "./hooks/useContacts";
 
-export function RTLGridsRoute() {
+export default function RTLGridsRoute() {
   const contacts = useContacts();
 
   return (

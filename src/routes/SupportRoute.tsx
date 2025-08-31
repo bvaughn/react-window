@@ -2,7 +2,7 @@ import { Box } from "../components/Box";
 import { ExternalLink } from "../components/ExternalLink";
 import { Header } from "../components/Header";
 
-export function SupportRoute() {
+export default function SupportRoute() {
   return (
     <Box direction="column" gap={4}>
       <Header title="Support" />

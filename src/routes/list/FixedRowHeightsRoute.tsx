@@ -9,7 +9,7 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Example } from "./examples/FixedHeightList.example";
 import { useNames } from "./hooks/useNames";
 
-export function FixedRowHeightsRoute() {
+export default function FixedRowHeightsRoute() {
   const names = useNames();
 
   return (

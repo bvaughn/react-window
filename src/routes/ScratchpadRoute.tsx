@@ -19,7 +19,7 @@ const ALIGNMENTS: Option<Align>[] = (
   value
 }));
 
-export function ScratchpadRoute() {
+export default function ScratchpadRoute() {
   const [rtl, setRtl] = useState(false);
   const [columnIndex, setColumnIndex] = useState<number | undefined>();
   const [rowIndex, setRowIndex] = useState<number | undefined>();

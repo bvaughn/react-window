@@ -8,7 +8,7 @@ import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Example } from "./examples/FlexboxLayout.example";
 import { useAddresses } from "./hooks/useAddresses";
 
-export function TabularDataRoute() {
+export default function TabularDataRoute() {
   const addresses = useAddresses();
 
   return (

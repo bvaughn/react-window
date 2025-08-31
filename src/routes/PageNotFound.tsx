@@ -3,7 +3,7 @@ import { Callout } from "../components/Callout";
 import { ExternalLink } from "../components/ExternalLink";
 import { Header } from "../components/Header";
 
-export function PageNotFound() {
+export default function PageNotFound() {
   return (
     <Box direction="column" gap={4}>
       <Header title="Page not found" />

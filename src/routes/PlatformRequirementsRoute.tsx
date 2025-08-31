@@ -3,7 +3,7 @@ import { Callout } from "../components/Callout";
 import { ExternalLink } from "../components/ExternalLink";
 import { Header } from "../components/Header";
 
-export function PlatformRequirementsRoute() {
+export default function PlatformRequirementsRoute() {
   return (
     <Box direction="column" gap={4}>
       <Header title="Requirements" />

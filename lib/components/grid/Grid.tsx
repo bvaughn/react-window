@@ -218,7 +218,6 @@ export function Grid<CellProps extends object>({
 
   return (
     <div
-      role="grid"
       {...rest}
       className={className}
       dir={dir}

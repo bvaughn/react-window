@@ -39,24 +39,28 @@ export default function App() {
           </Box>
           <Box align="center" direction="row" gap={4}>
             <ExternalLink
+              aria-label="Documentation for library version 1.x"
               className="text-xs font-bold text-white! drop-shadow-black/20 drop-shadow-sm"
               href="https://react-window-v1.vercel.app/"
             >
               v1.x
             </ExternalLink>
             <ExternalLink
+              aria-label="NPM project page"
               className="text-white! drop-shadow-black/20 drop-shadow-sm"
               href="https://www.npmjs.com/package/react-window"
             >
               <NpmHubIcon className="w-8 h-8" />
             </ExternalLink>
             <ExternalLink
+              aria-label="GitHub project page"
               className="text-white! drop-shadow-black/20 drop-shadow-sm"
               href="https://github.com/bvaughn/react-window"
             >
               <GitHubIcon className="w-6 h-6" />
             </ExternalLink>
             <button
+              aria-label="Site navigation menu"
               className={cn("block md:hidden cursor-pointer rounded-lg p-1", {
                 "bg-black/40": !visible,
                 "bg-black/50 text-white": visible
