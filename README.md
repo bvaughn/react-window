@@ -19,7 +19,11 @@ Documentation for this project is available at [react-window.vercel.app](https:/
 Each release also ships with its own copy of the documentation (in the `docs` folder) which can be viewed by running:
 
 ```sh
+# From the package directory
 npx serve -s docs
+
+# Or as an NPM-installed dependency
+npx serve -s ./node_modules/react-window/docs
 ```
 
 > [!NOTE]
