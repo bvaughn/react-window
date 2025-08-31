@@ -297,6 +297,7 @@ describe("List", () => {
       <List
         overscanCount={0}
         className="foo"
+        role="list"
         rowCount={4}
         rowComponent={RowComponent}
         rowHeight={25}
@@ -317,6 +318,7 @@ describe("List", () => {
       <List
         overscanCount={0}
         data-testid="foo"
+        role="list"
         rowCount={4}
         rowComponent={RowComponent}
         rowHeight={25}
@@ -333,9 +335,10 @@ describe("List", () => {
 
       render(
         <List
-          rowCount={4}
           listRef={listRef}
+          role="list"
           rowComponent={RowComponent}
+          rowCount={4}
           rowHeight={25}
           rowProps={EMPTY_OBJECT}
         />

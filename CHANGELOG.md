@@ -1,5 +1,27 @@
 # Changelog
 
+## 2.0.1
+
+- Remove ARIA `role` attribute from `List` and `Grid`. This resulted in potentially invalid configurations (e.g. a ARIA _list_ should contain at least one _listitem_ but that was not enforced by this library). Users of this library should specify the `role` attribute that makes the most sense to them [based on mdn guidelines](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/list_role#best_practices). For example:
+
+```tsx
+<List
+  role="list"
+  rowComponent={RowComponent}
+  rowCount={names.length}
+  rowHeight={25}
+  rowProps={{ names }}
+/>;
+
+function RowComponent({ index, style, ...rest }: RowComponentProps<object>) {
+  return (
+    <div role="listitem" style={style}>
+      ...
+    </div>
+  );
+}
+```
+
 ## 2.0.0
 
 Version 2 is a major rewrite that offers the following benefits:
