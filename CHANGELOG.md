@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+Fixed edge-case bug with `Grid` imperative API `scrollToCell` method and "smooth" scrolling behavior.
+
 ## 2.0.1
 
 - Remove ARIA `role` attribute from `List` and `Grid`. This resulted in potentially invalid configurations (e.g. a ARIA _list_ should contain at least one _listitem_ but that was not enforced by this library). Users of this library should specify the `role` attribute that makes the most sense to them [based on mdn guidelines](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/list_role#best_practices). For example:
