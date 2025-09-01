@@ -20,7 +20,7 @@ describe("useVirtualizer", () => {
     updateMockResizeObserver(new DOMRect(0, 0, 50, 100));
   });
 
-  describe("getCellBounds", () => {
+  describe("cachedBounds", () => {
     test("itemSize type: number", () => {
       const { result } = renderHook(() =>
         useVirtualizer({
@@ -29,11 +29,11 @@ describe("useVirtualizer", () => {
           itemSize: 25
         })
       );
-      expect(result.current.getCellBounds(0)).toEqual({
+      expect(result.current.cachedBounds.getItemBounds(0)).toEqual({
         scrollOffset: 0,
         size: 25
       });
-      expect(result.current.getCellBounds(24)).toEqual({
+      expect(result.current.cachedBounds.getItemBounds(24)).toEqual({
         scrollOffset: 600,
         size: 25
       });
@@ -47,11 +47,11 @@ describe("useVirtualizer", () => {
           itemSize: "50%"
         })
       );
-      expect(result.current.getCellBounds(0)).toEqual({
+      expect(result.current.cachedBounds.getItemBounds(0)).toEqual({
         scrollOffset: 0,
         size: 50
       });
-      expect(result.current.getCellBounds(24)).toEqual({
+      expect(result.current.cachedBounds.getItemBounds(24)).toEqual({
         scrollOffset: 1200,
         size: 50
       });
@@ -68,11 +68,11 @@ describe("useVirtualizer", () => {
           itemSize
         })
       );
-      expect(result.current.getCellBounds(0)).toEqual({
+      expect(result.current.cachedBounds.getItemBounds(0)).toEqual({
         scrollOffset: 0,
         size: 20
       });
-      expect(result.current.getCellBounds(9)).toEqual({
+      expect(result.current.cachedBounds.getItemBounds(9)).toEqual({
         scrollOffset: 900,
         size: 200
       });
@@ -119,7 +119,7 @@ describe("useVirtualizer", () => {
       expect(result.current.getEstimatedSize()).toBe(400);
 
       // Finish measuring the rows and the actual size should be returned now
-      result.current.getCellBounds(9);
+      result.current.cachedBounds.getItemBounds(9);
       expect(result.current.getEstimatedSize()).toBe(1100);
     });
   });

@@ -6,9 +6,9 @@ export function useItemSize<Props extends object>({
   itemSize: itemSizeProp
 }: {
   containerSize: number;
-  itemSize: number | string | SizeFunction<Props>;
+  itemSize: number | string | SizeFunction<Props> | undefined;
 }) {
-  let itemSize: number | SizeFunction<Props>;
+  let itemSize: number | SizeFunction<Props> | undefined;
   switch (typeof itemSizeProp) {
     case "string": {
       assert(

@@ -8,6 +8,7 @@ export function Nav() {
       <NavSection label="Lists">
         <NavLink to="/list/fixed-row-height">Fixed row heights</NavLink>
         <NavLink to="/list/variable-row-height">Variable row heights</NavLink>
+        <NavLink to="/list/dynamic-row-height">Dynamic row heights</NavLink>
         <NavLink to="/list/props">Component props</NavLink>
         <NavLink to="/list/imperative-api">Imperative API</NavLink>
       </NavSection>
