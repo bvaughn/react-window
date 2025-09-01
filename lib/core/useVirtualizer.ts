@@ -194,12 +194,10 @@ export function useVirtualizer<Props extends object>({
   const scrollToIndex = useStableCallback(
     ({
       align = "auto",
-      behavior = "auto",
       containerScrollOffset,
       index
     }: {
       align?: Align;
-      behavior?: ScrollBehavior;
       containerScrollOffset: number;
       index: number;
     }) => {
@@ -221,25 +219,15 @@ export function useVirtualizer<Props extends object>({
           scrollOffset
         });
 
-        if (typeof containerElement.scrollTo === "function") {
-          if (direction === "horizontal") {
-            containerElement.scrollTo({
-              left: scrollOffset,
-              behavior: behavior || undefined
-            });
-          } else {
-            containerElement.scrollTo({
-              behavior: behavior || undefined,
-              top: scrollOffset
-            });
-          }
-        } else {
+        if (typeof containerElement.scrollTo !== "function") {
           // Special case for environments like jsdom that don't implement scrollTo
           const next = getStartStopIndices(scrollOffset);
           if (next[0] !== startIndex || next[1] !== stopIndex) {
             setIndices(next);
           }
         }
+
+        return scrollOffset;
       }
     }
   );

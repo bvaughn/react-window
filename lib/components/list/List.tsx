@@ -67,12 +67,18 @@ export function List<RowProps extends object>({
         behavior?: ScrollBehavior;
         index: number;
       }) {
-        scrollToIndex({
+        const top = scrollToIndex({
           align,
-          behavior,
           containerScrollOffset: element?.scrollTop ?? 0,
           index
         });
+
+        if (typeof element?.scrollTo === "function") {
+          element.scrollTo({
+            behavior,
+            top
+          });
+        }
       }
     }),
     [element, scrollToIndex]

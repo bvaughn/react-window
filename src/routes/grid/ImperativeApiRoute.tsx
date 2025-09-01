@@ -76,7 +76,7 @@ export default function GridImperativeApiRoute() {
 
   const gridRef = useGridRef(null);
 
-  const scrollToRow = () => {
+  const scrollToCell = () => {
     const grid = gridRef.current;
     if (grid) {
       const columnIndex = column?.value
@@ -158,7 +158,7 @@ export default function GridImperativeApiRoute() {
         <Button
           className="shrink-0"
           disabled={!column.value && !title.value}
-          onClick={scrollToRow}
+          onClick={scrollToCell}
         >
           Scroll
         </Button>

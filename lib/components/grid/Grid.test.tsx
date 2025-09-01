@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import { useLayoutEffect } from "react";
+import { createRef, useLayoutEffect } from "react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
 import { updateMockResizeObserver } from "../../utils/test/mockResizeObserver";
 import { Grid } from "./Grid";
-import type { CellComponentProps } from "./types";
+import type { CellComponentProps, GridImperativeAPI } from "./types";
 
 describe("Grid", () => {
   let mountedCells: Map<string, CellComponentProps<object>> = new Map();
@@ -164,8 +164,83 @@ describe("Grid", () => {
       // TODO
     });
 
-    test.skip("should scroll to cells", () => {
-      // TODO
+    test("should scroll to cell", () => {
+      const gridRef = createRef<GridImperativeAPI>();
+
+      render(
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={EMPTY_OBJECT}
+          columnCount={25}
+          columnWidth={25}
+          gridRef={gridRef}
+          overscanCount={0}
+          rowCount={25}
+          rowHeight={20}
+        />
+      );
+      expect(HTMLElement.prototype.scrollTo).not.toHaveBeenCalled();
+
+      gridRef.current?.scrollToCell({ columnIndex: 4, rowIndex: 8 });
+
+      expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledTimes(1);
+      expect(HTMLElement.prototype.scrollTo).toHaveBeenLastCalledWith({
+        behavior: "auto",
+        left: 25,
+        top: 140
+      });
+    });
+
+    test("should scroll to column", () => {
+      const gridRef = createRef<GridImperativeAPI>();
+
+      render(
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={EMPTY_OBJECT}
+          columnCount={25}
+          columnWidth={25}
+          gridRef={gridRef}
+          overscanCount={0}
+          rowCount={25}
+          rowHeight={20}
+        />
+      );
+      expect(HTMLElement.prototype.scrollTo).not.toHaveBeenCalled();
+
+      gridRef.current?.scrollToColumn({ index: 4 });
+
+      expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledTimes(1);
+      expect(HTMLElement.prototype.scrollTo).toHaveBeenLastCalledWith({
+        behavior: "auto",
+        left: 25
+      });
+    });
+
+    test("should scroll to row", () => {
+      const gridRef = createRef<GridImperativeAPI>();
+
+      render(
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={EMPTY_OBJECT}
+          columnCount={25}
+          columnWidth={25}
+          gridRef={gridRef}
+          overscanCount={0}
+          rowCount={25}
+          rowHeight={20}
+        />
+      );
+      expect(HTMLElement.prototype.scrollTo).not.toHaveBeenCalled();
+
+      gridRef.current?.scrollToRow({ index: 8 });
+
+      expect(HTMLElement.prototype.scrollTo).toHaveBeenCalledTimes(1);
+      expect(HTMLElement.prototype.scrollTo).toHaveBeenLastCalledWith({
+        behavior: "auto",
+        top: 140
+      });
     });
   });
 
