@@ -96,18 +96,24 @@ export function Grid<CellProps extends object>({
         rowAlign?: Align;
         rowIndex: number;
       }) {
-        scrollToRowIndex({
-          align: rowAlign,
-          behavior,
-          containerScrollOffset: element?.scrollTop ?? 0,
-          index: rowIndex
-        });
-        scrollToColumnIndex({
+        const left = scrollToColumnIndex({
           align: columnAlign,
-          behavior,
           containerScrollOffset: element?.scrollLeft ?? 0,
           index: columnIndex
         });
+        const top = scrollToRowIndex({
+          align: rowAlign,
+          containerScrollOffset: element?.scrollTop ?? 0,
+          index: rowIndex
+        });
+
+        if (typeof element?.scrollTo === "function") {
+          element.scrollTo({
+            behavior,
+            left,
+            top
+          });
+        }
       },
 
       scrollToColumn({
@@ -119,12 +125,18 @@ export function Grid<CellProps extends object>({
         behavior?: ScrollBehavior;
         index: number;
       }) {
-        scrollToColumnIndex({
+        const left = scrollToColumnIndex({
           align,
-          behavior,
           containerScrollOffset: element?.scrollLeft ?? 0,
           index
         });
+
+        if (typeof element?.scrollTo === "function") {
+          element.scrollTo({
+            behavior,
+            left
+          });
+        }
       },
 
       scrollToRow({
@@ -136,12 +148,18 @@ export function Grid<CellProps extends object>({
         behavior?: ScrollBehavior;
         index: number;
       }) {
-        scrollToRowIndex({
+        const top = scrollToRowIndex({
           align,
-          behavior,
           containerScrollOffset: element?.scrollTop ?? 0,
           index
         });
+
+        if (typeof element?.scrollTo === "function") {
+          element.scrollTo({
+            behavior,
+            top
+          });
+        }
       }
     }),
     [element, scrollToColumnIndex, scrollToRowIndex]
