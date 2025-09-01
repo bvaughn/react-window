@@ -9,7 +9,7 @@ import { Link } from "./components/Link";
 import { RouteChangeHandler } from "./components/RouteChangeHandler";
 import { useNavStore } from "./hooks/useNavStore";
 import { Nav } from "./nav/Nav";
-import { routeMap } from "./routes";
+import { routes } from "./routes";
 import { cn } from "./utils/cn";
 
 export default function App() {
@@ -95,13 +95,19 @@ export default function App() {
               className="h-full p-4 py-4 overflow-auto [mask-image:linear-gradient(to_bottom,transparent,black_1.5rem)]"
               data-main-scrollable
             >
-              <ErrorBoundary>
-                <Routes>
-                  {Object.entries(routeMap).map(([path, Component]) => (
-                    <Route Component={Component} key={path} path={path} />
-                  ))}
-                </Routes>
-              </ErrorBoundary>
+              <Routes>
+                {Object.entries(routes).map(([path, Component]) => (
+                  <Route
+                    element={
+                      <ErrorBoundary key={path}>
+                        <Component />
+                      </ErrorBoundary>
+                    }
+                    key={path}
+                    path={path}
+                  />
+                ))}
+              </Routes>
             </div>
           </main>
         </div>

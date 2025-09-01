@@ -1,6 +1,8 @@
-import { lazy } from "react";
+import { lazy, type ComponentType, type LazyExoticComponent } from "react";
 
-export const routeMap = {
+export type Route = LazyExoticComponent<ComponentType<unknown>>;
+
+export const routes = {
   "*": lazy(() => import("./routes/PageNotFound")),
 
   // Home page
@@ -36,4 +38,7 @@ export const routeMap = {
   ),
   "/support": lazy(() => import("./routes/SupportRoute")),
   "/test": lazy(() => import("./routes/ScratchpadRoute"))
-} as const;
+} satisfies Record<string, Route>;
+
+export type Routes = Record<keyof typeof routes, Route>;
+export type Path = keyof Routes;

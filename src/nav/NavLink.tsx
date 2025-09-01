@@ -1,17 +1,20 @@
-import type { PropsWithChildren } from "react";
+import { type PropsWithChildren } from "react";
 import { NavLink as NavLinkExternal } from "react-router-dom";
-import type { routeMap } from "../routes";
+import { Box } from "../components/Box";
+import { type Path } from "../routes";
 import { cn } from "../utils/cn";
 import { NavButton } from "./NavButton";
-import { Box } from "../components/Box";
 
 export function NavLink({
   children,
   className,
-  to
-}: PropsWithChildren<{ className?: string; to: keyof typeof routeMap }>) {
+  path
+}: PropsWithChildren<{
+  className?: string;
+  path: Path;
+}>) {
   return (
-    <NavLinkExternal to={to}>
+    <NavLinkExternal to={path}>
       {({ isActive }) => (
         <NavButton
           className={cn(
