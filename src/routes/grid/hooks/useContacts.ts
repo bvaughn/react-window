@@ -1,12 +1,9 @@
 import { useMemo } from "react";
-import type json from "../../../../public/data/contacts.json";
-import { useJSONData } from "../../../hooks/useJSONData";
+import json from "../../../../public/data/contacts.json";
 
 type Contact = (typeof json)[0];
 
 export function useContacts(): Contact[] {
-  const json = useJSONData<Contact[]>("/data/contacts.json");
-
   return useMemo(() => {
     if (json) {
       return json.sort((a, b) => {
@@ -21,5 +18,5 @@ export function useContacts(): Contact[] {
     }
 
     return [];
-  }, [json]);
+  }, []);
 }

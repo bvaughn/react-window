@@ -1,3 +1,4 @@
+import RtlGridMarkdown from "../../../public/generated/code-snippets/RtlGrid.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { FormattedCode } from "../../components/code/FormattedCode";
@@ -27,7 +28,7 @@ export default function RTLGridsRoute() {
         {!contacts.length && <LoadingSpinner />}
         <RtlExample contacts={contacts} />
       </Block>
-      <FormattedCode url="/generated/code-snippets/RtlGrid.json" />
+      <FormattedCode markdown={RtlGridMarkdown} />
     </Box>
   );
 }

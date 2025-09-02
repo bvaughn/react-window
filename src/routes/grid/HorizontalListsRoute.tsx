@@ -1,3 +1,5 @@
+import HorizontalListMarkdown from "../../../public/generated/code-snippets/HorizontalList.json";
+import HorizontalListCellRendererMarkdown from "../../../public/generated/code-snippets/HorizontalListCellRenderer.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { FormattedCode } from "../../components/code/FormattedCode";
@@ -17,9 +19,9 @@ export default function HorizontalListsRoute() {
         <HorizontalList emails={emails} />
       </Block>
       <div>Here's what the configuration for the grid above looks like:</div>
-      <FormattedCode url="/generated/code-snippets/HorizontalList.json" />
+      <FormattedCode markdown={HorizontalListMarkdown} />
       <div>And here's the cell renderer:</div>
-      <FormattedCode url="/generated/code-snippets/HorizontalListCellRenderer.json" />
+      <FormattedCode markdown={HorizontalListCellRendererMarkdown} />
     </Box>
   );
 }

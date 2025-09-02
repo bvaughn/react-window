@@ -1,12 +1,12 @@
 import type { HTMLAttributes } from "react";
-import { Link as ReactRouterLink } from "react-router-dom";
 import type { Path } from "../routes";
+import { TransitionLink } from "./TransitionLink";
 
 export function Link({
   to,
   ...rest
-}: HTMLAttributes<HTMLAnchorElement> & {
+}: HTMLAttributes<HTMLSpanElement> & {
   to: Path;
 }) {
-  return <ReactRouterLink to={to} {...rest} />;
+  return <TransitionLink to={to} {...rest} />;
 }

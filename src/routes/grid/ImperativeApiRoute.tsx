@@ -1,18 +1,22 @@
 import { useMemo, useState } from "react";
 import { Grid, useGridRef, type Align } from "react-window";
+import gridRefClickEventHandlerMarkdown from "../../../public/generated/code-snippets/gridRefClickEventHandler.json";
+import useGridCallbackRefMarkdown from "../../../public/generated/code-snippets/useGridCallbackRef.json";
+import useGridRefMarkdown from "../../../public/generated/code-snippets/useGridRef.json";
+import useGridRefImportMarkdown from "../../../public/generated/code-snippets/useGridRefImport.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { Button } from "../../components/Button";
 import { Callout } from "../../components/Callout";
 import { FormattedCode } from "../../components/code/FormattedCode";
 import { Header } from "../../components/Header";
+import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Select, type Option } from "../../components/Select";
 import { CellComponent } from "./examples/CellComponent.example";
 import { columnWidth } from "./examples/columnWidth.example";
 import type { Contact } from "./examples/Grid.example";
 import { COLUMN_KEYS } from "./examples/shared";
 import { useContacts } from "./hooks/useContacts";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
 
 const EMPTY_OPTION: Option<string> = {
   label: "",
@@ -118,11 +122,11 @@ export default function GridImperativeApiRoute() {
         Grid provides an imperative API for responding to events. The
         recommended way to access this API is to use the exported ref hook:
       </div>
-      <FormattedCode url="/generated/code-snippets/useGridRefImport.json" />
+      <FormattedCode markdown={useGridRefImportMarkdown} />
       <div>Attach the ref during render:</div>
-      <FormattedCode url="/generated/code-snippets/useGridRef.json" />
+      <FormattedCode markdown={useGridRefMarkdown} />
       <div>And call API methods in an event handler:</div>
-      <FormattedCode url="/generated/code-snippets/gridRefClickEventHandler.json" />
+      <FormattedCode markdown={gridRefClickEventHandlerMarkdown} />
       <div>The form below uses the imperative API to scroll the list:</div>
       <Box direction="row" gap={4}>
         <Select
@@ -183,7 +187,7 @@ export default function GridImperativeApiRoute() {
         <strong className="text-sky-300">Note</strong> If you are passing the
         ref to another component or hook, use the ref callback function instead.
       </Callout>
-      <FormattedCode url="/generated/code-snippets/useGridCallbackRef.json" />
+      <FormattedCode markdown={useGridCallbackRefMarkdown} />
     </Box>
   );
 }

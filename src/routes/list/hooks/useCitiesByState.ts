@@ -1,16 +1,11 @@
 import { useMemo } from "react";
-import type json from "../../../../public/data/addresses.json";
-import { useJSONData } from "../../../hooks/useJSONData";
-
-type Address = (typeof json)[0];
+import json from "../../../../public/data/addresses.json";
 
 type Item =
   | { type: "state"; state: string }
   | { type: "zip"; city: string; zip: string };
 
 export function useCitiesByState(): Item[] {
-  const json = useJSONData<Address[]>("/data/addresses.json");
-
   return useMemo(() => {
     const items: Item[] = [];
 
@@ -46,5 +41,5 @@ export function useCitiesByState(): Item[] {
     }
 
     return items;
-  }, [json]);
+  }, []);
 }

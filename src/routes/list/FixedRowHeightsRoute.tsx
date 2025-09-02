@@ -1,3 +1,6 @@
+import json from "../../../public/data/names.json";
+import FixedHeightListMarkdown from "../../../public/generated/code-snippets/FixedHeightList.json";
+import FixedHeightRowComponentMarkdown from "../../../public/generated/code-snippets/FixedHeightRowComponent.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { Callout } from "../../components/Callout";
@@ -5,13 +8,9 @@ import { FormattedCode } from "../../components/code/FormattedCode";
 import { ContinueLink } from "../../components/ContinueLink";
 import { ExternalLink } from "../../components/ExternalLink";
 import { Header } from "../../components/Header";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Example } from "./examples/FixedHeightList.example";
-import { useNames } from "./hooks/useNames";
 
 export default function FixedRowHeightsRoute() {
-  const names = useNames();
-
   return (
     <Box direction="column" gap={4}>
       <Header section="Lists" title="Fixed row heights" />
@@ -19,8 +18,7 @@ export default function FixedRowHeightsRoute() {
         The simplest type of list to render is one with fixed row heights.
       </div>
       <Block className="h-50" data-focus-within="bold">
-        {!names.length && <LoadingSpinner />}
-        <Example names={names} />
+        <Example names={json} />
       </Block>
       <div>
         To render this type of list, you need to specify how many rows it
@@ -28,13 +26,13 @@ export default function FixedRowHeightsRoute() {
         <code>rowComponent</code>), and the height of each row (
         <code>rowHeight</code>):
       </div>
-      <FormattedCode url="/generated/code-snippets/FixedHeightList.json" />
+      <FormattedCode markdown={FixedHeightListMarkdown} />
       <div>
         The <code>rowProps</code> object can also be used to share between
         components. Values passed in <code>rowProps</code> will also be passed
         as props to the row component:
       </div>
-      <FormattedCode url="/generated/code-snippets/FixedHeightRowComponent.json" />
+      <FormattedCode markdown={FixedHeightRowComponentMarkdown} />
       <Callout intent="warning">
         <Box direction="column" gap={4}>
           <div>

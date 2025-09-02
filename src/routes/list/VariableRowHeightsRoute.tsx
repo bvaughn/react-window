@@ -1,3 +1,4 @@
+import ListVariableRowHeightsMarkdown from "../../../public/generated/code-snippets/ListVariableRowHeights.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { FormattedCode } from "../../components/code/FormattedCode";
@@ -29,7 +30,7 @@ export default function VariableRowHeightsRoute() {
         This list requires a <code>rowHeight</code> function that tells it what
         height a row should be based on the type of data it contains.
       </div>
-      <FormattedCode url="/generated/code-snippets/ListVariableRowHeights.json" />
+      <FormattedCode markdown={ListVariableRowHeightsMarkdown} />
       <ContinueLink to="/list/props" title="component props" />
     </Box>
   );

@@ -1,5 +1,9 @@
 import { useMemo, useState } from "react";
 import { List, useListRef, type Align } from "react-window";
+import listRefClickEventHandlerMarkdown from "../../../public/generated/code-snippets/listRefClickEventHandler.json";
+import useListCallbackRefMarkdown from "../../../public/generated/code-snippets/useListCallbackRef.json";
+import useListRefMarkdown from "../../../public/generated/code-snippets/useListRef.json";
+import useListRefImportMarkdown from "../../../public/generated/code-snippets/useListRefImport.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { Button } from "../../components/Button";
@@ -74,11 +78,11 @@ export default function ListImperativeApiRoute() {
         List provides an imperative API for responding to events. The
         recommended way to access this API is to use the exported ref hook:
       </div>
-      <FormattedCode url="/generated/code-snippets/useListRefImport.json" />
+      <FormattedCode markdown={useListRefImportMarkdown} />
       <div>Attach the ref during render:</div>
-      <FormattedCode url="/generated/code-snippets/useListRef.json" />
+      <FormattedCode markdown={useListRefMarkdown} />
       <div>And call API methods in an event handler:</div>
-      <FormattedCode url="/generated/code-snippets/listRefClickEventHandler.json" />
+      <FormattedCode markdown={listRefClickEventHandlerMarkdown} />
       <div>The form below uses the imperative API to scroll the list:</div>
       <Box direction="row" gap={4}>
         <Select
@@ -126,7 +130,7 @@ export default function ListImperativeApiRoute() {
         <strong className="text-sky-300">Note</strong> If you are passing the
         ref to another component or hook, use the ref callback function instead.
       </Callout>
-      <FormattedCode url="/generated/code-snippets/useListCallbackRef.json" />
+      <FormattedCode markdown={useListCallbackRefMarkdown} />
     </Box>
   );
 }

@@ -1,3 +1,4 @@
+import FlexboxLayoutMarkdown from "../../../public/generated/code-snippets/FlexboxLayout.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { Callout } from "../../components/Callout";
@@ -29,7 +30,7 @@ export default function TabularDataRoute() {
       <div>
         The example above uses Flexbox layout to position columns and headers.
       </div>
-      <FormattedCode url="/generated/code-snippets/FlexboxLayout.json" />
+      <FormattedCode markdown={FlexboxLayoutMarkdown} />
       <Callout intent="primary">
         It may be more efficient to render data with many columns using the{" "}
         <Link to="/grid/grid">Grid</Link> component.

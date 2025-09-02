@@ -1,3 +1,6 @@
+import CellComponentMarkdown from "../../../public/generated/code-snippets/CellComponent.json";
+import columnWidthMarkdown from "../../../public/generated/code-snippets/FixedHeightList.json";
+import GridMarkdown from "../../../public/generated/code-snippets/Grid.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { Callout } from "../../components/Callout";
@@ -27,18 +30,18 @@ export default function RenderingGridRoute() {
         Grids require you to specify the number of rows and columns as well as
         the width and height of each:
       </div>
-      <FormattedCode url="/generated/code-snippets/Grid.json" />
+      <FormattedCode markdown={GridMarkdown} />
       <div>
         Column widths and row heights can be either numbers or functions. In the
         example above, row height is fixed and column width is variable.
       </div>
-      <FormattedCode url="/generated/code-snippets/columnWidth.json" />
+      <FormattedCode markdown={columnWidthMarkdown} />
       <div>
         Lastly grids require a component to render cell, given a column and row
         index. As with lists, this component receives additional props specified
         as part of <code>cellProps</code>:
       </div>
-      <FormattedCode url="/generated/code-snippets/CellComponent.json" />
+      <FormattedCode markdown={CellComponentMarkdown} />
       <Callout intent="warning">
         <Box direction="column" gap={4}>
           <div>

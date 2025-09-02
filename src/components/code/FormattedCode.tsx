@@ -1,8 +1,5 @@
-import { useJSONData } from "../../hooks/useJSONData";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { cn } from "../../utils/cn";
-import { ErrorBoundary } from "../ErrorBoundary";
-import { LoadingSpinner } from "../LoadingSpinner";
 import { Code } from "./Code";
 
 type Markdown = {
@@ -10,28 +7,18 @@ type Markdown = {
   typeScript?: string;
 };
 
-export function FormattedCode({ url }: { url: string }) {
-  return (
-    <ErrorBoundary>
-      <FormattedCodeLoader url={url} />
-    </ErrorBoundary>
-  );
-}
-
-export function FormattedCodeLoader({ url }: { url: string }) {
+export function FormattedCode({ markdown }: { markdown: Markdown }) {
   const [ts, setTS] = useLocalStorage("CodeTabs::tab", true);
 
-  const json = useJSONData<Markdown>(url);
-
-  if (json === undefined) {
-    return <LoadingSpinner />;
-  }
-
   const code = (
-    <Code html={ts ? (json.typeScript ?? json.javaScript) : json.javaScript} />
+    <Code
+      html={
+        ts ? (markdown.typeScript ?? markdown.javaScript) : markdown.javaScript
+      }
+    />
   );
 
-  if (!json.typeScript) {
+  if (!markdown.typeScript) {
     return code;
   }
 
