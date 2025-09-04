@@ -229,7 +229,7 @@
       ],
       "required": true,
       "type": {
-        "name": "(props: { index: number; style: CSSProperties; } & RowProps) => ReactNode"
+        "name": "(props: { ariaAttributes: { \"aria-posinset\": number; \"aria-setsize\": number; role: \"listitem\"; }; index: number; style: CSSProperties; } & RowProps) => ReactNode"
       }
     },
     "rowCount": {

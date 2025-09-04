@@ -30,6 +30,10 @@ export type GridProps<CellProps extends object> = Omit<
    */
   cellComponent: (
     props: {
+      ariaAttributes: {
+        "aria-colindex": number;
+        role: "gridcell";
+      };
       columnIndex: number;
       rowIndex: number;
       style: CSSProperties;

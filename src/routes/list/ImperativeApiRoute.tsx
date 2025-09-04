@@ -15,6 +15,7 @@ import { Select, type Option } from "../../components/Select";
 import { RowComponent } from "./examples/ListVariableRowHeights.example";
 import { rowHeight } from "./examples/rowHeight.example";
 import { useCitiesByState } from "./hooks/useCitiesByState";
+import { ContinueLink } from "../../components/ContinueLink";
 
 const EMPTY_OPTION: Option<string> = {
   label: "",
@@ -131,6 +132,7 @@ export default function ListImperativeApiRoute() {
         ref to another component or hook, use the ref callback function instead.
       </Callout>
       <FormattedCode markdown={useListCallbackRefMarkdown} />
+      <ContinueLink to="/list/aria-roles" title="ARIA roles" />
     </Box>
   );
 }

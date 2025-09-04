@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.0.3
+
+Additional `ariaAttributes` prop pass to row and cell renderers. Suggested usage is as follows:
+
+```tsx
+function RowComponent({
+  ariaAttributes,
+  index,
+  style,
+  ...rest
+}: RowComponentProps<object>) {
+  return (
+    <div style={style} {...ariaAttributes}>
+      ...
+    </div>
+  );
+}
+```
+
 ## 2.0.2
 
 Fixed edge-case bug with `Grid` imperative API `scrollToCell` method and "smooth" scrolling behavior.

@@ -116,7 +116,7 @@
       ],
       "required": true,
       "type": {
-        "name": "(props: { columnIndex: number; rowIndex: number; style: CSSProperties; } & CellProps) => ReactNode"
+        "name": "(props: { ariaAttributes: { \"aria-colindex\": number; role: \"gridcell\"; }; columnIndex: number; rowIndex: number; style: CSSProperties; } & CellProps) => ReactNode"
       }
     },
     "cellProps": {

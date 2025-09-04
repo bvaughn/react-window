@@ -19,7 +19,11 @@ export const routes = {
     () => import("./routes/list/ImperativeApiRoute")
   ),
   "/list/props": lazy(() => import("./routes/list/PropsRoute")),
+  "/list/aria-roles": lazy(() => import("./routes/list/AriaRolesRoute")),
   "/list/tabular-data": lazy(() => import("./routes/tables/TabularDataRoute")),
+  "/list/tabular-data-aria-roles": lazy(
+    () => import("./routes/tables/AriaRolesRoute")
+  ),
 
   // SimpleGrid
   "/grid/grid": lazy(() => import("./routes/grid/RenderingGridRoute")),
@@ -31,6 +35,7 @@ export const routes = {
   "/grid/imperative-api": lazy(
     () => import("./routes/grid/ImperativeApiRoute")
   ),
+  "/grid/aria-roles": lazy(() => import("./routes/grid/AriaRolesRoute")),
 
   // Other
   "/platform-requirements": lazy(

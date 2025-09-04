@@ -14,7 +14,7 @@ describe("List", () => {
   let mountedRows: Map<number, RowComponentProps<object>> = new Map();
 
   const RowComponent = vi.fn(function Row(props: RowComponentProps<object>) {
-    const { index, style } = props;
+    const { ariaAttributes, index, style } = props;
 
     useLayoutEffect(() => {
       mountedRows.set(index, props);
@@ -24,7 +24,7 @@ describe("List", () => {
     });
 
     return (
-      <div role="listitem" style={style}>
+      <div {...ariaAttributes} style={style}>
         Row {index}
       </div>
     );
@@ -600,6 +600,70 @@ describe("List", () => {
       }
 
       render(<Test />);
+    });
+  });
+
+  describe("aria attributes", () => {
+    test("should be set by default", () => {
+      render(
+        <List
+          rowCount={3}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      expect(screen.queryAllByRole("list")).toHaveLength(1);
+
+      const rows = screen.queryAllByRole("listitem");
+      expect(rows).toHaveLength(3);
+      expect(rows[0].getAttribute("aria-posinset")).toBe("1");
+      expect(rows[0].getAttribute("aria-setsize")).toBe("3");
+      expect(rows[1].getAttribute("aria-posinset")).toBe("2");
+      expect(rows[1].getAttribute("aria-setsize")).toBe("3");
+      expect(rows[2].getAttribute("aria-posinset")).toBe("3");
+      expect(rows[2].getAttribute("aria-setsize")).toBe("3");
+    });
+
+    test("should support overrides for use cases like tabular data", () => {
+      const TableRowComponent = (props: RowComponentProps<object>) => {
+        const { index, style } = props;
+
+        return (
+          <div aria-rowindex={index + 1} role="row" style={style}>
+            <div role="cell" aria-colindex={1} />
+            <div role="cell" aria-colindex={2} />
+            <div role="cell" aria-colindex={3} />
+          </div>
+        );
+      };
+
+      render(
+        <List
+          role="table"
+          aria-colcount={3}
+          aria-rowcount={2}
+          rowCount={2}
+          rowComponent={TableRowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      const tables = screen.queryAllByRole("table");
+      expect(tables).toHaveLength(1);
+      expect(tables[0].getAttribute("aria-colcount")).toBe("3");
+      expect(tables[0].getAttribute("aria-rowcount")).toBe("2");
+
+      const rows = screen.queryAllByRole("row");
+      expect(rows).toHaveLength(2);
+
+      const columns = rows[0].querySelectorAll('[role="cell"]');
+      expect(columns).toHaveLength(3);
+      expect(columns[0].getAttribute("aria-colindex")).toBe("1");
+      expect(columns[1].getAttribute("aria-colindex")).toBe("2");
+      expect(columns[2].getAttribute("aria-colindex")).toBe("3");
     });
   });
 });

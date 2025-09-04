@@ -6,7 +6,7 @@ import type {
   Ref
 } from "react";
 
-type ForbiddenKeys = "index" | "style";
+type ForbiddenKeys = "ariaAttributes" | "index" | "style";
 type ExcludeForbiddenKeys<Type> = {
   [Key in keyof Type]: Key extends ForbiddenKeys ? never : Type[Key];
 };
@@ -65,6 +65,11 @@ export type ListProps<RowProps extends object> = Omit<
    */
   rowComponent: (
     props: {
+      ariaAttributes: {
+        "aria-posinset": number;
+        "aria-setsize": number;
+        role: "listitem";
+      };
       index: number;
       style: CSSProperties;
     } & RowProps

@@ -102,6 +102,11 @@ export function List<RowProps extends object>({
         children.push(
           <RowComponent
             {...(rowProps as RowProps)}
+            ariaAttributes={{
+              "aria-posinset": index + 1,
+              "aria-setsize": rowCount,
+              role: "listitem"
+            }}
             key={index}
             index={index}
             style={{
@@ -120,26 +125,28 @@ export function List<RowProps extends object>({
 
   return (
     <div
+      role="list"
       {...rest}
       className={className}
       ref={setElement}
       style={{
-        ...style,
+        position: "relative",
         maxHeight: "100%",
         flexGrow: 1,
-        overflowY: "auto"
+        overflowY: "auto",
+        ...style
       }}
     >
+      {rows}
+
       <div
-        className={className}
+        aria-hidden
         style={{
           height: getEstimatedSize(),
-          position: "relative",
-          width: "100%"
+          width: "100%",
+          zIndex: -1
         }}
-      >
-        {rows}
-      </div>
+      ></div>
     </div>
   );
 }

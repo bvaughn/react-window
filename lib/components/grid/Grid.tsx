@@ -193,6 +193,9 @@ export function Grid<CellProps extends object>({
     if (columnCount > 0 && rowCount > 0) {
       for (let rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
         const rowBounds = getRowBounds(rowIndex);
+
+        const columns: ReactNode[] = [];
+
         for (
           let columnIndex = columnStartIndex;
           columnIndex <= columnStopIndex;
@@ -200,11 +203,15 @@ export function Grid<CellProps extends object>({
         ) {
           const columnBounds = getColumnBounds(columnIndex);
 
-          children.push(
+          columns.push(
             <CellComponent
               {...(cellProps as CellProps)}
+              ariaAttributes={{
+                "aria-colindex": columnIndex + 1,
+                role: "gridcell"
+              }}
               columnIndex={columnIndex}
-              key={`${rowIndex}-${columnIndex}`}
+              key={columnIndex}
               rowIndex={rowIndex}
               style={{
                 position: "absolute",
@@ -217,6 +224,12 @@ export function Grid<CellProps extends object>({
             />
           );
         }
+
+        children.push(
+          <div key={rowIndex} role="row" aria-rowindex={rowIndex + 1}>
+            {columns}
+          </div>
+        );
       }
     }
     return children;
@@ -236,30 +249,34 @@ export function Grid<CellProps extends object>({
 
   return (
     <div
+      aria-colcount={columnCount}
+      aria-rowcount={rowCount}
+      role="grid"
       {...rest}
       className={className}
       dir={dir}
       ref={setElement}
       style={{
+        position: "relative",
         width: "100%",
         height: "100%",
-        ...style,
         maxHeight: "100%",
         maxWidth: "100%",
         flexGrow: 1,
-        overflow: "auto"
+        overflow: "auto",
+        ...style
       }}
     >
+      {cells}
+
       <div
-        className={className}
+        aria-hidden
         style={{
-          position: "relative",
           height: getEstimatedHeight(),
-          width: getEstimatedWidth()
+          width: getEstimatedWidth(),
+          zIndex: -1
         }}
-      >
-        {cells}
-      </div>
+      ></div>
     </div>
   );
 }

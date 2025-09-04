@@ -17,6 +17,7 @@ import { columnWidth } from "./examples/columnWidth.example";
 import type { Contact } from "./examples/Grid.example";
 import { COLUMN_KEYS } from "./examples/shared";
 import { useContacts } from "./hooks/useContacts";
+import { ContinueLink } from "../../components/ContinueLink";
 
 const EMPTY_OPTION: Option<string> = {
   label: "",
@@ -188,6 +189,7 @@ export default function GridImperativeApiRoute() {
         ref to another component or hook, use the ref callback function instead.
       </Callout>
       <FormattedCode markdown={useGridCallbackRefMarkdown} />
+      <ContinueLink to="/grid/aria-roles" title="ARIA roles" />
     </Box>
   );
 }

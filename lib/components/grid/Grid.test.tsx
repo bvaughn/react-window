@@ -10,7 +10,7 @@ describe("Grid", () => {
   let mountedCells: Map<string, CellComponentProps<object>> = new Map();
 
   const CellComponent = vi.fn(function Cell(props: CellComponentProps<object>) {
-    const { columnIndex, rowIndex, style } = props;
+    const { ariaAttributes, columnIndex, rowIndex, style } = props;
 
     const key = `${rowIndex},${columnIndex}`;
 
@@ -22,7 +22,7 @@ describe("Grid", () => {
     });
 
     return (
-      <div role="listitem" style={style}>
+      <div {...ariaAttributes} style={style}>
         Cell {key}
       </div>
     );
@@ -49,7 +49,7 @@ describe("Grid", () => {
       />
     );
 
-    const items = screen.queryAllByRole("listitem");
+    const items = screen.queryAllByRole("gridcell");
     expect(items).toHaveLength(0);
   });
 
@@ -67,7 +67,7 @@ describe("Grid", () => {
     );
 
     // 4 columns (+2) by 2 rows (+2)
-    const items = screen.queryAllByRole("listitem");
+    const items = screen.queryAllByRole("gridcell");
     expect(items).toHaveLength(24);
   });
 
@@ -86,7 +86,7 @@ describe("Grid", () => {
       );
 
       // 4 columns by 2 rows
-      expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(8);
+      expect(container.querySelectorAll('[role="gridcell"]')).toHaveLength(8);
     });
 
     test("type: function (px)", () => {
@@ -106,7 +106,7 @@ describe("Grid", () => {
       );
 
       // 2 columns by 2 rows
-      expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(4);
+      expect(container.querySelectorAll('[role="gridcell"]')).toHaveLength(4);
     });
 
     test("type: string (%)", () => {
@@ -123,7 +123,7 @@ describe("Grid", () => {
       );
 
       // 4 columns by 4 rows
-      expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(16);
+      expect(container.querySelectorAll('[role="gridcell"]')).toHaveLength(16);
     });
   });
 
@@ -251,6 +251,45 @@ describe("Grid", () => {
   describe("edge cases", () => {
     test.skip("should not cause a cycle of Grid callback ref is passed in cellProps", () => {
       // TODO
+    });
+  });
+
+  describe("aria attributes", () => {
+    test("should adhere to the best recommended practices", () => {
+      render(
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={EMPTY_OBJECT}
+          columnCount={2}
+          columnWidth={25}
+          overscanCount={0}
+          rowCount={2}
+          rowHeight={20}
+        />
+      );
+
+      expect(screen.queryAllByRole("grid")).toHaveLength(1);
+
+      const rows = screen.queryAllByRole("row");
+      expect(rows).toHaveLength(2);
+      expect(rows[0].getAttribute("aria-rowindex")).toBe("1");
+      expect(rows[1].getAttribute("aria-rowindex")).toBe("2");
+
+      expect(screen.queryAllByRole("gridcell")).toHaveLength(4);
+
+      {
+        const cells = rows[0].querySelectorAll('[role="gridcell"]');
+        expect(cells).toHaveLength(2);
+        expect(cells[0].getAttribute("aria-colindex")).toBe("1");
+        expect(cells[1].getAttribute("aria-colindex")).toBe("2");
+      }
+
+      {
+        const cells = rows[1].querySelectorAll('[role="gridcell"]');
+        expect(cells).toHaveLength(2);
+        expect(cells[0].getAttribute("aria-colindex")).toBe("1");
+        expect(cells[1].getAttribute("aria-colindex")).toBe("2");
+      }
     });
   });
 });

@@ -3,6 +3,7 @@ import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { Callout } from "../../components/Callout";
 import { FormattedCode } from "../../components/code/FormattedCode";
+import { ContinueLink } from "../../components/ContinueLink";
 import { Header } from "../../components/Header";
 import { Link } from "../../components/Link";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
@@ -35,6 +36,7 @@ export default function TabularDataRoute() {
         It may be more efficient to render data with many columns using the{" "}
         <Link to="/grid/grid">Grid</Link> component.
       </Callout>
+      <ContinueLink to="/list/tabular-data-aria-roles" title="ARIA roles" />
     </Box>
   );
 }
