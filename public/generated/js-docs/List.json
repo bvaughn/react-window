@@ -251,13 +251,13 @@
       "required": false,
       "type": {
         "name": "enum",
-        "raw": "((args: { startIndex: number; stopIndex: number; }) => void) | undefined",
+        "raw": "((visibleRows: { startIndex: number; stopIndex: number; }, allRows: { startIndex: number; stopIndex: number; }) => void) | undefined",
         "value": [
           {
             "value": "undefined"
           },
           {
-            "value": "(args: { startIndex: number; stopIndex: number; }) => void",
+            "value": "(visibleRows: { startIndex: number; stopIndex: number; }, allRows: { startIndex: number; stopIndex: number; }) => void",
             "description": "",
             "fullComment": "",
             "tags": {}

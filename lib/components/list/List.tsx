@@ -44,8 +44,10 @@ export function List<
     getCellBounds,
     getEstimatedSize,
     scrollToIndex,
-    startIndex,
-    stopIndex
+    startIndexOverscan,
+    startIndexVisible,
+    stopIndexOverscan,
+    stopIndexVisible
   } = useVirtualizer({
     containerElement: element,
     defaultContainerSize: defaultHeight,
@@ -91,18 +93,34 @@ export function List<
   );
 
   useEffect(() => {
-    if (startIndex >= 0 && stopIndex >= 0 && onRowsRendered) {
-      onRowsRendered({
-        startIndex,
-        stopIndex
-      });
+    if (startIndexOverscan >= 0 && stopIndexOverscan >= 0 && onRowsRendered) {
+      onRowsRendered(
+        {
+          startIndex: startIndexVisible,
+          stopIndex: stopIndexVisible
+        },
+        {
+          startIndex: startIndexOverscan,
+          stopIndex: stopIndexOverscan
+        }
+      );
     }
-  }, [onRowsRendered, startIndex, stopIndex]);
+  }, [
+    onRowsRendered,
+    startIndexOverscan,
+    startIndexVisible,
+    stopIndexOverscan,
+    stopIndexVisible
+  ]);
 
   const rows = useMemo(() => {
     const children: ReactNode[] = [];
     if (rowCount > 0) {
-      for (let index = startIndex; index <= stopIndex; index++) {
+      for (
+        let index = startIndexOverscan;
+        index <= stopIndexOverscan;
+        index++
+      ) {
         const bounds = getCellBounds(index);
 
         children.push(
@@ -127,7 +145,14 @@ export function List<
       }
     }
     return children;
-  }, [RowComponent, getCellBounds, rowCount, rowProps, startIndex, stopIndex]);
+  }, [
+    RowComponent,
+    getCellBounds,
+    rowCount,
+    rowProps,
+    startIndexOverscan,
+    stopIndexOverscan
+  ]);
 
   const sizingElement = (
     <div

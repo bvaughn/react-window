@@ -357,13 +357,13 @@
       "required": false,
       "type": {
         "name": "enum",
-        "raw": "((args: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }) => void) | undefined",
+        "raw": "((visibleCells: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }, allCells: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }) => void) | undefined",
         "value": [
           {
             "value": "undefined"
           },
           {
-            "value": "(args: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }) => void",
+            "value": "(visibleCells: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }, allCells: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }) => void",
             "description": "",
             "fullComment": "",
             "tags": {}

@@ -132,11 +132,14 @@ describe("useVirtualizer", () => {
         useVirtualizer({
           ...DEFAULT_ARGS,
           defaultContainerSize: 100,
-          itemSize: 25
+          itemSize: 25,
+          overscanCount: 2
         })
       );
-      expect(result.current.startIndex).toBe(0);
-      expect(result.current.stopIndex).toBe(3);
+      expect(result.current.startIndexOverscan).toBe(0);
+      expect(result.current.startIndexVisible).toBe(0);
+      expect(result.current.stopIndexOverscan).toBe(5);
+      expect(result.current.stopIndexVisible).toBe(3);
     });
 
     test("itemSize type: string", () => {
@@ -144,11 +147,14 @@ describe("useVirtualizer", () => {
         useVirtualizer({
           ...DEFAULT_ARGS,
           defaultContainerSize: 100,
+          overscanCount: 2,
           itemSize: "50%"
         })
       );
-      expect(result.current.startIndex).toBe(0);
-      expect(result.current.stopIndex).toBe(1);
+      expect(result.current.startIndexOverscan).toBe(0);
+      expect(result.current.startIndexVisible).toBe(0);
+      expect(result.current.stopIndexOverscan).toBe(3);
+      expect(result.current.stopIndexVisible).toBe(1);
     });
 
     test("itemSize type: function", () => {
@@ -158,11 +164,14 @@ describe("useVirtualizer", () => {
         useVirtualizer({
           ...DEFAULT_ARGS,
           defaultContainerSize: 100,
-          itemSize
+          itemSize,
+          overscanCount: 2
         })
       );
-      expect(result.current.startIndex).toBe(0);
-      expect(result.current.stopIndex).toBe(2);
+      expect(result.current.startIndexOverscan).toBe(0);
+      expect(result.current.startIndexVisible).toBe(0);
+      expect(result.current.stopIndexOverscan).toBe(4);
+      expect(result.current.stopIndexVisible).toBe(2);
     });
   });
 

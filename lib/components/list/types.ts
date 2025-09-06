@@ -54,7 +54,10 @@ export type ListProps<
   /**
    * Callback notified when the range of visible rows changes.
    */
-  onRowsRendered?: (args: { startIndex: number; stopIndex: number }) => void;
+  onRowsRendered?: (
+    visibleRows: { startIndex: number; stopIndex: number },
+    allRows: { startIndex: number; stopIndex: number }
+  ) => void;
 
   /**
    * How many additional rows to render outside of the visible area.

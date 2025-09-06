@@ -50,9 +50,11 @@ export function Grid<
   const {
     getCellBounds: getColumnBounds,
     getEstimatedSize: getEstimatedWidth,
-    startIndex: columnStartIndex,
+    startIndexOverscan: columnStartIndexOverscan,
+    startIndexVisible: columnStartIndexVisible,
     scrollToIndex: scrollToColumnIndex,
-    stopIndex: columnStopIndex
+    stopIndexOverscan: columnStopIndexOverscan,
+    stopIndexVisible: columnStopIndexVisible
   } = useVirtualizer({
     containerElement: element,
     defaultContainerSize: defaultWidth,
@@ -68,9 +70,11 @@ export function Grid<
   const {
     getCellBounds: getRowBounds,
     getEstimatedSize: getEstimatedHeight,
-    startIndex: rowStartIndex,
+    startIndexOverscan: rowStartIndexOverscan,
+    startIndexVisible: rowStartIndexVisible,
     scrollToIndex: scrollToRowIndex,
-    stopIndex: rowStopIndex
+    stopIndexOverscan: rowStopIndexOverscan,
+    stopIndexVisible: rowStopIndexVisible
   } = useVirtualizer({
     containerElement: element,
     defaultContainerSize: defaultHeight,
@@ -173,38 +177,54 @@ export function Grid<
 
   useEffect(() => {
     if (
-      columnStartIndex >= 0 &&
-      columnStopIndex >= 0 &&
-      rowStartIndex >= 0 &&
-      rowStopIndex >= 0 &&
+      columnStartIndexOverscan >= 0 &&
+      columnStopIndexOverscan >= 0 &&
+      rowStartIndexOverscan >= 0 &&
+      rowStopIndexOverscan >= 0 &&
       onCellsRendered
     ) {
-      onCellsRendered({
-        columnStartIndex,
-        columnStopIndex,
-        rowStartIndex,
-        rowStopIndex
-      });
+      onCellsRendered(
+        {
+          columnStartIndex: columnStartIndexVisible,
+          columnStopIndex: columnStopIndexVisible,
+          rowStartIndex: rowStartIndexVisible,
+          rowStopIndex: rowStopIndexVisible
+        },
+        {
+          columnStartIndex: columnStartIndexOverscan,
+          columnStopIndex: columnStopIndexOverscan,
+          rowStartIndex: rowStartIndexOverscan,
+          rowStopIndex: rowStopIndexOverscan
+        }
+      );
     }
   }, [
     onCellsRendered,
-    columnStartIndex,
-    columnStopIndex,
-    rowStartIndex,
-    rowStopIndex
+    columnStartIndexOverscan,
+    columnStartIndexVisible,
+    columnStopIndexOverscan,
+    columnStopIndexVisible,
+    rowStartIndexOverscan,
+    rowStartIndexVisible,
+    rowStopIndexOverscan,
+    rowStopIndexVisible
   ]);
 
   const cells = useMemo(() => {
     const children: ReactNode[] = [];
     if (columnCount > 0 && rowCount > 0) {
-      for (let rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
+      for (
+        let rowIndex = rowStartIndexOverscan;
+        rowIndex <= rowStopIndexOverscan;
+        rowIndex++
+      ) {
         const rowBounds = getRowBounds(rowIndex);
 
         const columns: ReactNode[] = [];
 
         for (
-          let columnIndex = columnStartIndex;
-          columnIndex <= columnStopIndex;
+          let columnIndex = columnStartIndexOverscan;
+          columnIndex <= columnStopIndexOverscan;
           columnIndex++
         ) {
           const columnBounds = getColumnBounds(columnIndex);
@@ -243,14 +263,14 @@ export function Grid<
     CellComponent,
     cellProps,
     columnCount,
-    columnStartIndex,
-    columnStopIndex,
+    columnStartIndexOverscan,
+    columnStopIndexOverscan,
     getColumnBounds,
     getRowBounds,
     isRtl,
     rowCount,
-    rowStartIndex,
-    rowStopIndex
+    rowStartIndexOverscan,
+    rowStopIndexOverscan
   ]);
 
   const sizingElement = (

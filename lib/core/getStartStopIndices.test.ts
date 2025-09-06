@@ -39,7 +39,12 @@ describe("getStartStopIndices", () => {
         itemCount: 0,
         itemSize: 25
       })
-    ).toEqual([0, -1]);
+    ).toEqual({
+      startIndexVisible: 0,
+      startIndexOverscan: 0,
+      stopIndexVisible: -1,
+      stopIndexOverscan: -1
+    });
   });
 
   test("edge case: not enough rows to fill available height", () => {
@@ -50,7 +55,12 @@ describe("getStartStopIndices", () => {
         itemCount: 2,
         itemSize: 25
       })
-    ).toEqual([0, 1]);
+    ).toEqual({
+      startIndexVisible: 0,
+      startIndexOverscan: 0,
+      stopIndexVisible: 1,
+      stopIndexOverscan: 1
+    });
   });
 
   test("initial set of rows", () => {
@@ -61,7 +71,12 @@ describe("getStartStopIndices", () => {
         itemCount: 10,
         itemSize: 25
       })
-    ).toEqual([0, 3]);
+    ).toEqual({
+      startIndexVisible: 0,
+      startIndexOverscan: 0,
+      stopIndexVisible: 3,
+      stopIndexOverscan: 3
+    });
   });
 
   test("middle set of list", () => {
@@ -72,7 +87,12 @@ describe("getStartStopIndices", () => {
         itemCount: 10,
         itemSize: 25
       })
-    ).toEqual([4, 7]);
+    ).toEqual({
+      startIndexVisible: 4,
+      startIndexOverscan: 4,
+      stopIndexVisible: 7,
+      stopIndexOverscan: 7
+    });
   });
 
   test("final set of rows", () => {
@@ -83,7 +103,12 @@ describe("getStartStopIndices", () => {
         itemCount: 10,
         itemSize: 25
       })
-    ).toEqual([6, 9]);
+    ).toEqual({
+      startIndexVisible: 6,
+      startIndexOverscan: 6,
+      stopIndexVisible: 9,
+      stopIndexOverscan: 9
+    });
   });
 
   test("should not under-scroll", () => {
@@ -94,7 +119,12 @@ describe("getStartStopIndices", () => {
         itemCount: 10,
         itemSize: 25
       })
-    ).toEqual([0, 1]);
+    ).toEqual({
+      startIndexVisible: 0,
+      startIndexOverscan: 0,
+      stopIndexVisible: 1,
+      stopIndexOverscan: 1
+    });
   });
 
   test("should not over-scroll", () => {
@@ -105,7 +135,12 @@ describe("getStartStopIndices", () => {
         itemCount: 10,
         itemSize: 25
       })
-    ).toEqual([8, 9]);
+    ).toEqual({
+      startIndexVisible: 8,
+      startIndexOverscan: 8,
+      stopIndexVisible: 9,
+      stopIndexOverscan: 9
+    });
   });
 
   describe("with overscan", () => {
@@ -118,7 +153,12 @@ describe("getStartStopIndices", () => {
           itemSize: 25,
           overscanCount: 2
         })
-      ).toEqual([0, 1]);
+      ).toEqual({
+        startIndexVisible: 0,
+        startIndexOverscan: 0,
+        stopIndexVisible: 1,
+        stopIndexOverscan: 1
+      });
     });
 
     test("edge case: no rows before", () => {
@@ -130,7 +170,12 @@ describe("getStartStopIndices", () => {
           itemSize: 25,
           overscanCount: 2
         })
-      ).toEqual([0, 5]);
+      ).toEqual({
+        startIndexVisible: 0,
+        startIndexOverscan: 0,
+        stopIndexVisible: 3,
+        stopIndexOverscan: 5
+      });
     });
 
     test("edge case: no rows after", () => {
@@ -142,7 +187,12 @@ describe("getStartStopIndices", () => {
           itemSize: 25,
           overscanCount: 2
         })
-      ).toEqual([94, 99]);
+      ).toEqual({
+        startIndexVisible: 96,
+        startIndexOverscan: 94,
+        stopIndexVisible: 99,
+        stopIndexOverscan: 99
+      });
     });
 
     test("rows before and after", () => {
@@ -154,7 +204,12 @@ describe("getStartStopIndices", () => {
           itemSize: 25,
           overscanCount: 2
         })
-      ).toEqual([2, 9]);
+      ).toEqual({
+        startIndexVisible: 4,
+        startIndexOverscan: 2,
+        stopIndexVisible: 7,
+        stopIndexOverscan: 9
+      });
     });
   });
 });

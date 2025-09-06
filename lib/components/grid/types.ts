@@ -101,12 +101,20 @@ export type GridProps<
   /**
    * Callback notified when the range of rendered cells changes.
    */
-  onCellsRendered?: (args: {
-    columnStartIndex: number;
-    columnStopIndex: number;
-    rowStartIndex: number;
-    rowStopIndex: number;
-  }) => void;
+  onCellsRendered?: (
+    visibleCells: {
+      columnStartIndex: number;
+      columnStopIndex: number;
+      rowStartIndex: number;
+      rowStopIndex: number;
+    },
+    allCells: {
+      columnStartIndex: number;
+      columnStopIndex: number;
+      rowStartIndex: number;
+      rowStopIndex: number;
+    }
+  ) => void;
 
   /**
    * Callback notified when the Grid's outermost HTMLElement resizes.

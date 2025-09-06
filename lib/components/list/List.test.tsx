@@ -162,18 +162,18 @@ describe("List", () => {
       />
     );
 
-    const NewRow = vi.fn(() => null);
+    const NewRowComponent = vi.fn(() => null);
 
     rerender(
       <List
         rowCount={100}
-        rowComponent={NewRow}
+        rowComponent={NewRowComponent}
         rowHeight={25}
         rowProps={EMPTY_OBJECT}
       />
     );
 
-    expect(NewRow).toHaveBeenCalled();
+    expect(NewRowComponent).toHaveBeenCalled();
   });
 
   test("should re-render items if rowHeight changes", () => {
@@ -270,14 +270,20 @@ describe("List", () => {
       />
     );
     expect(onRowsRendered).toHaveBeenCalledTimes(1);
-    expect(onRowsRendered).toHaveBeenLastCalledWith({
-      startIndex: 0,
-      stopIndex: 1
-    });
+    expect(onRowsRendered).toHaveBeenLastCalledWith(
+      {
+        startIndex: 0,
+        stopIndex: 1
+      },
+      {
+        startIndex: 0,
+        stopIndex: 1
+      }
+    );
 
     rerender(
       <List
-        overscanCount={0}
+        overscanCount={2}
         rowCount={4}
         onRowsRendered={onRowsRendered}
         rowComponent={RowComponent}
@@ -286,10 +292,38 @@ describe("List", () => {
       />
     );
     expect(onRowsRendered).toHaveBeenCalledTimes(2);
-    expect(onRowsRendered).toHaveBeenLastCalledWith({
-      startIndex: 0,
-      stopIndex: 3
-    });
+    expect(onRowsRendered).toHaveBeenLastCalledWith(
+      {
+        startIndex: 0,
+        stopIndex: 3
+      },
+      {
+        startIndex: 0,
+        stopIndex: 3
+      }
+    );
+
+    rerender(
+      <List
+        overscanCount={2}
+        rowCount={10}
+        onRowsRendered={onRowsRendered}
+        rowComponent={RowComponent}
+        rowHeight={25}
+        rowProps={EMPTY_OBJECT}
+      />
+    );
+    expect(onRowsRendered).toHaveBeenCalledTimes(3);
+    expect(onRowsRendered).toHaveBeenLastCalledWith(
+      {
+        startIndex: 0,
+        stopIndex: 3
+      },
+      {
+        startIndex: 0,
+        stopIndex: 5
+      }
+    );
   });
 
   test("should support custom className and style props", () => {
@@ -526,10 +560,16 @@ describe("List", () => {
       );
 
       expect(onRowsRendered).toHaveBeenCalled();
-      expect(onRowsRendered).toHaveBeenLastCalledWith({
-        startIndex: 0,
-        stopIndex: 3
-      });
+      expect(onRowsRendered).toHaveBeenLastCalledWith(
+        {
+          startIndex: 0,
+          stopIndex: 3
+        },
+        {
+          startIndex: 0,
+          stopIndex: 3
+        }
+      );
 
       onRowsRendered.mockReset();
 
@@ -537,10 +577,16 @@ describe("List", () => {
         listRef.current?.scrollToRow({ index: 10 });
       });
       expect(onRowsRendered).toHaveBeenCalledTimes(1);
-      expect(onRowsRendered).toHaveBeenLastCalledWith({
-        startIndex: 7,
-        stopIndex: 10
-      });
+      expect(onRowsRendered).toHaveBeenLastCalledWith(
+        {
+          startIndex: 7,
+          stopIndex: 10
+        },
+        {
+          startIndex: 7,
+          stopIndex: 10
+        }
+      );
 
       expect(RowComponent).toHaveBeenLastCalledWith(
         expect.objectContaining({
