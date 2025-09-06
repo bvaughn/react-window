@@ -1,4 +1,5 @@
 import {
+  createElement,
   memo,
   useEffect,
   useImperativeHandle,
@@ -8,11 +9,15 @@ import {
 } from "react";
 import { useVirtualizer } from "../../core/useVirtualizer";
 import { useMemoizedObject } from "../../hooks/useMemoizedObject";
-import type { Align } from "../../types";
+import type { Align, TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import type { ListProps } from "./types";
 
-export function List<RowProps extends object>({
+export function List<
+  RowProps extends object,
+  TagName extends TagNames = "div"
+>({
+  children,
   className,
   defaultHeight = 0,
   listRef,
@@ -23,9 +28,10 @@ export function List<RowProps extends object>({
   rowCount,
   rowHeight,
   rowProps: rowPropsUnstable,
+  tagName = "div" as TagName,
   style,
   ...rest
-}: ListProps<RowProps>) {
+}: ListProps<RowProps, TagName>) {
   const rowProps = useMemoizedObject(rowPropsUnstable);
   const RowComponent = useMemo(
     () => memo(RowComponentProp, arePropsEqual),
@@ -123,30 +129,34 @@ export function List<RowProps extends object>({
     return children;
   }, [RowComponent, getCellBounds, rowCount, rowProps, startIndex, stopIndex]);
 
-  return (
+  const sizingElement = (
     <div
-      role="list"
-      {...rest}
-      className={className}
-      ref={setElement}
+      aria-hidden
       style={{
+        height: getEstimatedSize(),
+        width: "100%",
+        zIndex: -1
+      }}
+    ></div>
+  );
+
+  return createElement(
+    tagName,
+    {
+      role: "list",
+      ...rest,
+      className,
+      ref: setElement,
+      style: {
         position: "relative",
         maxHeight: "100%",
         flexGrow: 1,
         overflowY: "auto",
         ...style
-      }}
-    >
-      {rows}
-
-      <div
-        aria-hidden
-        style={{
-          height: getEstimatedSize(),
-          width: "100%",
-          zIndex: -1
-        }}
-      ></div>
-    </div>
+      }
+    },
+    rows,
+    children,
+    sizingElement
   );
 }

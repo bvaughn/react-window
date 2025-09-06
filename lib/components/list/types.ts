@@ -5,16 +5,23 @@ import type {
   ReactNode,
   Ref
 } from "react";
+import type { TagNames } from "../../types";
 
 type ForbiddenKeys = "ariaAttributes" | "index" | "style";
 type ExcludeForbiddenKeys<Type> = {
   [Key in keyof Type]: Key extends ForbiddenKeys ? never : Type[Key];
 };
 
-export type ListProps<RowProps extends object> = Omit<
-  HTMLAttributes<HTMLDivElement>,
-  "onResize"
-> & {
+export type ListProps<
+  RowProps extends object,
+  TagName extends TagNames = "div"
+> = Omit<HTMLAttributes<HTMLDivElement>, "onResize"> & {
+  /**
+   * Additional content to be rendered within the list (above cells).
+   * This property can be used to render things like overlays or tooltips.
+   */
+  children?: ReactNode;
+
   /**
    * CSS class name.
    */
@@ -101,6 +108,14 @@ export type ListProps<RowProps extends object> = Omit<
    * The list of rows will fill the height defined by this style.
    */
   style?: CSSProperties;
+
+  /**
+   * Can be used to override the root HTML element rendered by the List component.
+   * The default value is "div", meaning that List renders an HTMLDivElement as its root.
+   *
+   * ⚠️ In most use cases the default ARIA roles are sufficient and this prop is not needed.
+   */
+  tagName?: TagName;
 };
 
 export type RowComponent<RowProps extends object> =

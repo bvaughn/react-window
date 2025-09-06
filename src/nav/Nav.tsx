@@ -25,6 +25,7 @@ export function Nav() {
       <NavSection label="Other">
         <NavLink path="/grid/rtl-grids">Right to left content</NavLink>
         <NavLink path="/grid/horizontal-lists">Horizontal lists</NavLink>
+        <NavLink path="/list/sticky-rows">Sticky rows</NavLink>
       </NavSection>
       <div>
         <NavLink path="/platform-requirements">Requirements</NavLink>

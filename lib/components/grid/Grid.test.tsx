@@ -159,6 +159,48 @@ describe("Grid", () => {
     // TODO
   });
 
+  test("custom tagName and attributes", () => {
+    function CustomCellComponent({ style }: CellComponentProps<object>) {
+      return <span style={style}>Cell</span>;
+    }
+
+    const { container } = render(
+      <Grid
+        cellComponent={CustomCellComponent}
+        cellProps={EMPTY_OBJECT}
+        columnCount={100}
+        columnWidth={25}
+        overscanCount={0}
+        rowCount={100}
+        rowHeight={20}
+        tagName="main"
+      />
+    );
+
+    expect(container.firstElementChild?.tagName).toBe("MAIN");
+    expect(container.querySelectorAll("SPAN")).toHaveLength(8);
+  });
+
+  test("children", () => {
+    const { container } = render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={EMPTY_OBJECT}
+        columnCount={100}
+        columnWidth={25}
+        overscanCount={0}
+        rowCount={100}
+        rowHeight={20}
+      >
+        <div id="custom">Overlay or tooltip</div>
+      </Grid>
+    );
+
+    expect(container.querySelector("#custom")).toHaveTextContent(
+      "Overlay or tooltip"
+    );
+  });
+
   describe("imperative API", () => {
     test.skip("should return the root element", () => {
       // TODO

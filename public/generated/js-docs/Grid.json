@@ -104,6 +104,80 @@
         ]
       }
     },
+    "children": {
+      "defaultValue": null,
+      "description": "Additional content to be rendered within the grid (above cells).\nThis property can be used to render things like overlays or tooltips.",
+      "name": "children",
+      "parent": {
+        "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+        "name": "DOMAttributes"
+      },
+      "declarations": [
+        {
+          "fileName": "react-window/node_modules/.pnpm/@types+react@19.1.8/node_modules/@types/react/index.d.ts",
+          "name": "DOMAttributes"
+        },
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "ReactNode",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "null"
+          },
+          {
+            "value": "string"
+          },
+          {
+            "value": "number"
+          },
+          {
+            "value": "bigint"
+          },
+          {
+            "value": "false"
+          },
+          {
+            "value": "true"
+          },
+          {
+            "value": "ReactElement<unknown, string | JSXElementConstructor<any>>",
+            "description": "Represents a JSX element.\n\nWhere {@link ReactNode} represents everything that can be rendered, `ReactElement`\nonly represents JSX.",
+            "fullComment": "Represents a JSX element.\n\nWhere {@link ReactNode} represents everything that can be rendered, `ReactElement`\nonly represents JSX.\n@template P The type of the props object\n@template T The type of the component or tag\n@example ```tsx\nconst element: ReactElement = <div />;\n```",
+            "tags": {
+              "template": "P The type of the props object\nT The type of the component or tag",
+              "example": "```tsx\nconst element: ReactElement = <div />;\n```"
+            }
+          },
+          {
+            "value": "Iterable<ReactNode>",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          },
+          {
+            "value": "ReactPortal",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
+          },
+          {
+            "value": "Promise<AwaitedReactNode>",
+            "description": "Represents the completion of an asynchronous operation",
+            "fullComment": "Represents the completion of an asynchronous operation",
+            "tags": {}
+          }
+        ]
+      }
+    },
     "cellComponent": {
       "defaultValue": null,
       "description": "React component responsible for rendering a cell.\n\nThis component will receive an `index` and `style` prop by default.\nAdditionally it will receive prop values passed to `cellProps`.\n\n⚠️ The prop types for this component are exported as `CellComponentProps`",
@@ -391,6 +465,563 @@
             "description": "",
             "fullComment": "",
             "tags": {}
+          }
+        ]
+      }
+    },
+    "tagName": {
+      "defaultValue": {
+        "value": "\"div\" as TagName"
+      },
+      "description": "Can be used to override the root HTML element rendered by the List component.\nThe default value is \"div\", meaning that List renders an HTMLDivElement as its root.\n\n⚠️ In most use cases the default ARIA roles are sufficient and this prop is not needed.",
+      "name": "tagName",
+      "declarations": [
+        {
+          "fileName": "react-window/lib/components/grid/types.ts",
+          "name": "TypeLiteral"
+        }
+      ],
+      "required": false,
+      "type": {
+        "name": "enum",
+        "raw": "keyof IntrinsicElements | undefined",
+        "value": [
+          {
+            "value": "undefined"
+          },
+          {
+            "value": "\"symbol\""
+          },
+          {
+            "value": "\"object\""
+          },
+          {
+            "value": "\"slot\""
+          },
+          {
+            "value": "\"style\""
+          },
+          {
+            "value": "\"title\""
+          },
+          {
+            "value": "\"search\""
+          },
+          {
+            "value": "\"article\""
+          },
+          {
+            "value": "\"button\""
+          },
+          {
+            "value": "\"dialog\""
+          },
+          {
+            "value": "\"figure\""
+          },
+          {
+            "value": "\"form\""
+          },
+          {
+            "value": "\"img\""
+          },
+          {
+            "value": "\"link\""
+          },
+          {
+            "value": "\"main\""
+          },
+          {
+            "value": "\"menu\""
+          },
+          {
+            "value": "\"menuitem\""
+          },
+          {
+            "value": "\"option\""
+          },
+          {
+            "value": "\"switch\""
+          },
+          {
+            "value": "\"table\""
+          },
+          {
+            "value": "\"text\""
+          },
+          {
+            "value": "\"time\""
+          },
+          {
+            "value": "\"a\""
+          },
+          {
+            "value": "\"abbr\""
+          },
+          {
+            "value": "\"address\""
+          },
+          {
+            "value": "\"area\""
+          },
+          {
+            "value": "\"aside\""
+          },
+          {
+            "value": "\"audio\""
+          },
+          {
+            "value": "\"b\""
+          },
+          {
+            "value": "\"base\""
+          },
+          {
+            "value": "\"bdi\""
+          },
+          {
+            "value": "\"bdo\""
+          },
+          {
+            "value": "\"big\""
+          },
+          {
+            "value": "\"blockquote\""
+          },
+          {
+            "value": "\"body\""
+          },
+          {
+            "value": "\"br\""
+          },
+          {
+            "value": "\"canvas\""
+          },
+          {
+            "value": "\"caption\""
+          },
+          {
+            "value": "\"center\""
+          },
+          {
+            "value": "\"cite\""
+          },
+          {
+            "value": "\"code\""
+          },
+          {
+            "value": "\"col\""
+          },
+          {
+            "value": "\"colgroup\""
+          },
+          {
+            "value": "\"data\""
+          },
+          {
+            "value": "\"datalist\""
+          },
+          {
+            "value": "\"dd\""
+          },
+          {
+            "value": "\"del\""
+          },
+          {
+            "value": "\"details\""
+          },
+          {
+            "value": "\"dfn\""
+          },
+          {
+            "value": "\"div\""
+          },
+          {
+            "value": "\"dl\""
+          },
+          {
+            "value": "\"dt\""
+          },
+          {
+            "value": "\"em\""
+          },
+          {
+            "value": "\"embed\""
+          },
+          {
+            "value": "\"fieldset\""
+          },
+          {
+            "value": "\"figcaption\""
+          },
+          {
+            "value": "\"footer\""
+          },
+          {
+            "value": "\"h1\""
+          },
+          {
+            "value": "\"h2\""
+          },
+          {
+            "value": "\"h3\""
+          },
+          {
+            "value": "\"h4\""
+          },
+          {
+            "value": "\"h5\""
+          },
+          {
+            "value": "\"h6\""
+          },
+          {
+            "value": "\"head\""
+          },
+          {
+            "value": "\"header\""
+          },
+          {
+            "value": "\"hgroup\""
+          },
+          {
+            "value": "\"hr\""
+          },
+          {
+            "value": "\"html\""
+          },
+          {
+            "value": "\"i\""
+          },
+          {
+            "value": "\"iframe\""
+          },
+          {
+            "value": "\"input\""
+          },
+          {
+            "value": "\"ins\""
+          },
+          {
+            "value": "\"kbd\""
+          },
+          {
+            "value": "\"keygen\""
+          },
+          {
+            "value": "\"label\""
+          },
+          {
+            "value": "\"legend\""
+          },
+          {
+            "value": "\"li\""
+          },
+          {
+            "value": "\"map\""
+          },
+          {
+            "value": "\"mark\""
+          },
+          {
+            "value": "\"meta\""
+          },
+          {
+            "value": "\"meter\""
+          },
+          {
+            "value": "\"nav\""
+          },
+          {
+            "value": "\"noindex\""
+          },
+          {
+            "value": "\"noscript\""
+          },
+          {
+            "value": "\"ol\""
+          },
+          {
+            "value": "\"optgroup\""
+          },
+          {
+            "value": "\"output\""
+          },
+          {
+            "value": "\"p\""
+          },
+          {
+            "value": "\"param\""
+          },
+          {
+            "value": "\"picture\""
+          },
+          {
+            "value": "\"pre\""
+          },
+          {
+            "value": "\"progress\""
+          },
+          {
+            "value": "\"q\""
+          },
+          {
+            "value": "\"rp\""
+          },
+          {
+            "value": "\"rt\""
+          },
+          {
+            "value": "\"ruby\""
+          },
+          {
+            "value": "\"s\""
+          },
+          {
+            "value": "\"samp\""
+          },
+          {
+            "value": "\"script\""
+          },
+          {
+            "value": "\"section\""
+          },
+          {
+            "value": "\"select\""
+          },
+          {
+            "value": "\"small\""
+          },
+          {
+            "value": "\"source\""
+          },
+          {
+            "value": "\"span\""
+          },
+          {
+            "value": "\"strong\""
+          },
+          {
+            "value": "\"sub\""
+          },
+          {
+            "value": "\"summary\""
+          },
+          {
+            "value": "\"sup\""
+          },
+          {
+            "value": "\"template\""
+          },
+          {
+            "value": "\"tbody\""
+          },
+          {
+            "value": "\"td\""
+          },
+          {
+            "value": "\"textarea\""
+          },
+          {
+            "value": "\"tfoot\""
+          },
+          {
+            "value": "\"th\""
+          },
+          {
+            "value": "\"thead\""
+          },
+          {
+            "value": "\"tr\""
+          },
+          {
+            "value": "\"track\""
+          },
+          {
+            "value": "\"u\""
+          },
+          {
+            "value": "\"ul\""
+          },
+          {
+            "value": "\"var\""
+          },
+          {
+            "value": "\"video\""
+          },
+          {
+            "value": "\"wbr\""
+          },
+          {
+            "value": "\"webview\""
+          },
+          {
+            "value": "\"svg\""
+          },
+          {
+            "value": "\"animate\""
+          },
+          {
+            "value": "\"animateMotion\""
+          },
+          {
+            "value": "\"animateTransform\""
+          },
+          {
+            "value": "\"circle\""
+          },
+          {
+            "value": "\"clipPath\""
+          },
+          {
+            "value": "\"defs\""
+          },
+          {
+            "value": "\"desc\""
+          },
+          {
+            "value": "\"ellipse\""
+          },
+          {
+            "value": "\"feBlend\""
+          },
+          {
+            "value": "\"feColorMatrix\""
+          },
+          {
+            "value": "\"feComponentTransfer\""
+          },
+          {
+            "value": "\"feComposite\""
+          },
+          {
+            "value": "\"feConvolveMatrix\""
+          },
+          {
+            "value": "\"feDiffuseLighting\""
+          },
+          {
+            "value": "\"feDisplacementMap\""
+          },
+          {
+            "value": "\"feDistantLight\""
+          },
+          {
+            "value": "\"feDropShadow\""
+          },
+          {
+            "value": "\"feFlood\""
+          },
+          {
+            "value": "\"feFuncA\""
+          },
+          {
+            "value": "\"feFuncB\""
+          },
+          {
+            "value": "\"feFuncG\""
+          },
+          {
+            "value": "\"feFuncR\""
+          },
+          {
+            "value": "\"feGaussianBlur\""
+          },
+          {
+            "value": "\"feImage\""
+          },
+          {
+            "value": "\"feMerge\""
+          },
+          {
+            "value": "\"feMergeNode\""
+          },
+          {
+            "value": "\"feMorphology\""
+          },
+          {
+            "value": "\"feOffset\""
+          },
+          {
+            "value": "\"fePointLight\""
+          },
+          {
+            "value": "\"feSpecularLighting\""
+          },
+          {
+            "value": "\"feSpotLight\""
+          },
+          {
+            "value": "\"feTile\""
+          },
+          {
+            "value": "\"feTurbulence\""
+          },
+          {
+            "value": "\"filter\""
+          },
+          {
+            "value": "\"foreignObject\""
+          },
+          {
+            "value": "\"g\""
+          },
+          {
+            "value": "\"image\""
+          },
+          {
+            "value": "\"line\""
+          },
+          {
+            "value": "\"linearGradient\""
+          },
+          {
+            "value": "\"marker\""
+          },
+          {
+            "value": "\"mask\""
+          },
+          {
+            "value": "\"metadata\""
+          },
+          {
+            "value": "\"mpath\""
+          },
+          {
+            "value": "\"path\""
+          },
+          {
+            "value": "\"pattern\""
+          },
+          {
+            "value": "\"polygon\""
+          },
+          {
+            "value": "\"polyline\""
+          },
+          {
+            "value": "\"radialGradient\""
+          },
+          {
+            "value": "\"rect\""
+          },
+          {
+            "value": "\"set\""
+          },
+          {
+            "value": "\"stop\""
+          },
+          {
+            "value": "\"textPath\""
+          },
+          {
+            "value": "\"tspan\""
+          },
+          {
+            "value": "\"use\""
+          },
+          {
+            "value": "\"view\""
           }
         ]
       }

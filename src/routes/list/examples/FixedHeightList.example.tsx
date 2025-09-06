@@ -11,6 +11,7 @@ function Example({ names }: { names: string[] }) {
       rowCount={names.length}
       rowHeight={25}
       rowProps={{ names }}
+      tagName="ul"
     />
   );
 }

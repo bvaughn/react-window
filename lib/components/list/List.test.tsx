@@ -329,6 +329,44 @@ describe("List", () => {
     expect(screen.queryByTestId("foo")).toHaveRole("list");
   });
 
+  test("custom tagName and attributes", () => {
+    function CustomRowComponent({ index, style }: RowComponentProps<object>) {
+      return <li style={style}>Row {index + 1}</li>;
+    }
+
+    const { container } = render(
+      <List
+        overscanCount={0}
+        rowCount={4}
+        rowComponent={CustomRowComponent}
+        rowHeight={25}
+        rowProps={EMPTY_OBJECT}
+        tagName="ul"
+      />
+    );
+
+    expect(container.firstElementChild?.tagName).toBe("UL");
+    expect(container.querySelectorAll("LI")).toHaveLength(4);
+  });
+
+  test("children", () => {
+    const { container } = render(
+      <List
+        overscanCount={0}
+        rowCount={100}
+        rowComponent={RowComponent}
+        rowHeight={25}
+        rowProps={EMPTY_OBJECT}
+      >
+        <div id="custom">Overlay or tooltip</div>
+      </List>
+    );
+
+    expect(container.querySelector("#custom")).toHaveTextContent(
+      "Overlay or tooltip"
+    );
+  });
+
   describe("imperative API", () => {
     test("should return the root element", () => {
       const listRef = createRef<ListImperativeAPI>();

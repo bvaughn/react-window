@@ -24,6 +24,7 @@ export const routes = {
   "/list/tabular-data-aria-roles": lazy(
     () => import("./routes/tables/AriaRolesRoute")
   ),
+  "/list/sticky-rows": lazy(() => import("./routes/list/StickyRowsRoute")),
 
   // SimpleGrid
   "/grid/grid": lazy(() => import("./routes/grid/RenderingGridRoute")),

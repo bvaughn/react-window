@@ -1,4 +1,5 @@
 import {
+  createElement,
   memo,
   useEffect,
   useImperativeHandle,
@@ -9,13 +10,17 @@ import {
 import { useIsRtl } from "../../core/useIsRtl";
 import { useVirtualizer } from "../../core/useVirtualizer";
 import { useMemoizedObject } from "../../hooks/useMemoizedObject";
-import type { Align } from "../../types";
+import type { Align, TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import type { GridProps } from "./types";
 
-export function Grid<CellProps extends object>({
+export function Grid<
+  CellProps extends object,
+  TagName extends TagNames = "div"
+>({
   cellComponent: CellComponentProp,
   cellProps: cellPropsUnstable,
+  children,
   className,
   columnCount,
   columnWidth,
@@ -29,8 +34,9 @@ export function Grid<CellProps extends object>({
   rowCount,
   rowHeight,
   style,
+  tagName = "div" as TagName,
   ...rest
-}: GridProps<CellProps>) {
+}: GridProps<CellProps, TagName>) {
   const cellProps = useMemoizedObject(cellPropsUnstable);
   const CellComponent = useMemo(
     () => memo(CellComponentProp, arePropsEqual),
@@ -247,16 +253,28 @@ export function Grid<CellProps extends object>({
     rowStopIndex
   ]);
 
-  return (
+  const sizingElement = (
     <div
-      aria-colcount={columnCount}
-      aria-rowcount={rowCount}
-      role="grid"
-      {...rest}
-      className={className}
-      dir={dir}
-      ref={setElement}
+      aria-hidden
       style={{
+        height: getEstimatedHeight(),
+        width: getEstimatedWidth(),
+        zIndex: -1
+      }}
+    ></div>
+  );
+
+  return createElement(
+    tagName,
+    {
+      "aria-colcount": columnCount,
+      "aria-rowcount": rowCount,
+      role: "grid",
+      ...rest,
+      className,
+      dir,
+      ref: setElement,
+      style: {
         position: "relative",
         width: "100%",
         height: "100%",
@@ -265,18 +283,10 @@ export function Grid<CellProps extends object>({
         flexGrow: 1,
         overflow: "auto",
         ...style
-      }}
-    >
-      {cells}
-
-      <div
-        aria-hidden
-        style={{
-          height: getEstimatedHeight(),
-          width: getEstimatedWidth(),
-          zIndex: -1
-        }}
-      ></div>
-    </div>
+      }
+    },
+    cells,
+    children,
+    sizingElement
   );
 }
