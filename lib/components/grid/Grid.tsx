@@ -1,4 +1,5 @@
 import {
+  createElement,
   memo,
   useEffect,
   useImperativeHandle,
@@ -9,13 +10,17 @@ import {
 import { useIsRtl } from "../../core/useIsRtl";
 import { useVirtualizer } from "../../core/useVirtualizer";
 import { useMemoizedObject } from "../../hooks/useMemoizedObject";
-import type { Align } from "../../types";
+import type { Align, TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import type { GridProps } from "./types";
 
-export function Grid<CellProps extends object>({
+export function Grid<
+  CellProps extends object,
+  TagName extends TagNames = "div"
+>({
   cellComponent: CellComponentProp,
   cellProps: cellPropsUnstable,
+  children,
   className,
   columnCount,
   columnWidth,
@@ -29,8 +34,9 @@ export function Grid<CellProps extends object>({
   rowCount,
   rowHeight,
   style,
+  tagName = "div" as TagName,
   ...rest
-}: GridProps<CellProps>) {
+}: GridProps<CellProps, TagName>) {
   const cellProps = useMemoizedObject(cellPropsUnstable);
   const CellComponent = useMemo(
     () => memo(CellComponentProp, arePropsEqual),
@@ -44,9 +50,11 @@ export function Grid<CellProps extends object>({
   const {
     getCellBounds: getColumnBounds,
     getEstimatedSize: getEstimatedWidth,
-    startIndex: columnStartIndex,
+    startIndexOverscan: columnStartIndexOverscan,
+    startIndexVisible: columnStartIndexVisible,
     scrollToIndex: scrollToColumnIndex,
-    stopIndex: columnStopIndex
+    stopIndexOverscan: columnStopIndexOverscan,
+    stopIndexVisible: columnStopIndexVisible
   } = useVirtualizer({
     containerElement: element,
     defaultContainerSize: defaultWidth,
@@ -62,9 +70,11 @@ export function Grid<CellProps extends object>({
   const {
     getCellBounds: getRowBounds,
     getEstimatedSize: getEstimatedHeight,
-    startIndex: rowStartIndex,
+    startIndexOverscan: rowStartIndexOverscan,
+    startIndexVisible: rowStartIndexVisible,
     scrollToIndex: scrollToRowIndex,
-    stopIndex: rowStopIndex
+    stopIndexOverscan: rowStopIndexOverscan,
+    stopIndexVisible: rowStopIndexVisible
   } = useVirtualizer({
     containerElement: element,
     defaultContainerSize: defaultHeight,
@@ -167,44 +177,67 @@ export function Grid<CellProps extends object>({
 
   useEffect(() => {
     if (
-      columnStartIndex >= 0 &&
-      columnStopIndex >= 0 &&
-      rowStartIndex >= 0 &&
-      rowStopIndex >= 0 &&
+      columnStartIndexOverscan >= 0 &&
+      columnStopIndexOverscan >= 0 &&
+      rowStartIndexOverscan >= 0 &&
+      rowStopIndexOverscan >= 0 &&
       onCellsRendered
     ) {
-      onCellsRendered({
-        columnStartIndex,
-        columnStopIndex,
-        rowStartIndex,
-        rowStopIndex
-      });
+      onCellsRendered(
+        {
+          columnStartIndex: columnStartIndexVisible,
+          columnStopIndex: columnStopIndexVisible,
+          rowStartIndex: rowStartIndexVisible,
+          rowStopIndex: rowStopIndexVisible
+        },
+        {
+          columnStartIndex: columnStartIndexOverscan,
+          columnStopIndex: columnStopIndexOverscan,
+          rowStartIndex: rowStartIndexOverscan,
+          rowStopIndex: rowStopIndexOverscan
+        }
+      );
     }
   }, [
     onCellsRendered,
-    columnStartIndex,
-    columnStopIndex,
-    rowStartIndex,
-    rowStopIndex
+    columnStartIndexOverscan,
+    columnStartIndexVisible,
+    columnStopIndexOverscan,
+    columnStopIndexVisible,
+    rowStartIndexOverscan,
+    rowStartIndexVisible,
+    rowStopIndexOverscan,
+    rowStopIndexVisible
   ]);
 
   const cells = useMemo(() => {
     const children: ReactNode[] = [];
     if (columnCount > 0 && rowCount > 0) {
-      for (let rowIndex = rowStartIndex; rowIndex <= rowStopIndex; rowIndex++) {
+      for (
+        let rowIndex = rowStartIndexOverscan;
+        rowIndex <= rowStopIndexOverscan;
+        rowIndex++
+      ) {
         const rowBounds = getRowBounds(rowIndex);
+
+        const columns: ReactNode[] = [];
+
         for (
-          let columnIndex = columnStartIndex;
-          columnIndex <= columnStopIndex;
+          let columnIndex = columnStartIndexOverscan;
+          columnIndex <= columnStopIndexOverscan;
           columnIndex++
         ) {
           const columnBounds = getColumnBounds(columnIndex);
 
-          children.push(
+          columns.push(
             <CellComponent
               {...(cellProps as CellProps)}
+              ariaAttributes={{
+                "aria-colindex": columnIndex + 1,
+                role: "gridcell"
+              }}
               columnIndex={columnIndex}
-              key={`${rowIndex}-${columnIndex}`}
+              key={columnIndex}
               rowIndex={rowIndex}
               style={{
                 position: "absolute",
@@ -217,6 +250,12 @@ export function Grid<CellProps extends object>({
             />
           );
         }
+
+        children.push(
+          <div key={rowIndex} role="row" aria-rowindex={rowIndex + 1}>
+            {columns}
+          </div>
+        );
       }
     }
     return children;
@@ -224,42 +263,50 @@ export function Grid<CellProps extends object>({
     CellComponent,
     cellProps,
     columnCount,
-    columnStartIndex,
-    columnStopIndex,
+    columnStartIndexOverscan,
+    columnStopIndexOverscan,
     getColumnBounds,
     getRowBounds,
     isRtl,
     rowCount,
-    rowStartIndex,
-    rowStopIndex
+    rowStartIndexOverscan,
+    rowStopIndexOverscan
   ]);
 
-  return (
+  const sizingElement = (
     <div
-      {...rest}
-      className={className}
-      dir={dir}
-      ref={setElement}
+      aria-hidden
       style={{
+        height: getEstimatedHeight(),
+        width: getEstimatedWidth(),
+        zIndex: -1
+      }}
+    ></div>
+  );
+
+  return createElement(
+    tagName,
+    {
+      "aria-colcount": columnCount,
+      "aria-rowcount": rowCount,
+      role: "grid",
+      ...rest,
+      className,
+      dir,
+      ref: setElement,
+      style: {
+        position: "relative",
         width: "100%",
         height: "100%",
-        ...style,
         maxHeight: "100%",
         maxWidth: "100%",
         flexGrow: 1,
-        overflow: "auto"
-      }}
-    >
-      <div
-        className={className}
-        style={{
-          position: "relative",
-          height: getEstimatedHeight(),
-          width: getEstimatedWidth()
-        }}
-      >
-        {cells}
-      </div>
-    </div>
+        overflow: "auto",
+        ...style
+      }
+    },
+    cells,
+    children,
+    sizingElement
   );
 }

@@ -1,5 +1,68 @@
 # Changelog
 
+## 2.1.0
+
+Improved ARIA support:
+
+- Add better default ARIA attributes for outer `HTMLDivElement`
+- Add optional `ariaAttributes` prop to row and cell renderers to simplify better ARIA attributes for user-rendered cells
+- Remove intermediate `HTMLDivElement` from `List` and `Grid`
+  - This may enable more/better custom CSS styling
+  - This may also enable adding an optional `children` prop to `List` and `Grid` for e.g. overlays/tooltips
+- Add optional `tagName` prop; defaults to `"div"` but can be changed to e.g. `"ul"`
+
+```tsx
+// Example of how to use new `ariaAttributes` prop
+function RowComponent({
+  ariaAttributes,
+  index,
+  style,
+  ...rest
+}: RowComponentProps<object>) {
+  return (
+    <div style={style} {...ariaAttributes}>
+      ...
+    </div>
+  );
+}
+```
+
+Added optional `children` prop to better support edge cases like sticky rows.
+
+Minor changes to `onRowsRendered` and `onCellsRendered` callbacks to make it easier to differentiate between _visible_ items and items rendered due to overscan settings. These methods will now receive two params– the first for _visible_ rows and the second for _all_ rows (including overscan), e.g.:
+
+```ts
+function onRowsRendered(
+  visibleRows: {
+    startIndex: number;
+    stopIndex: number;
+  },
+  allRows: {
+    startIndex: number;
+    stopIndex: number;
+  }
+): void {
+  // ...
+}
+
+function onCellsRendered(
+  visibleCells: {
+    columnStartIndex: number;
+    columnStopIndex: number;
+    rowStartIndex: number;
+    rowStopIndex: number;
+  },
+  allCells: {
+    columnStartIndex: number;
+    columnStopIndex: number;
+    rowStartIndex: number;
+    rowStopIndex: number;
+  }
+): void {
+  // ...
+}
+```
+
 ## 2.0.2
 
 Fixed edge-case bug with `Grid` imperative API `scrollToCell` method and "smooth" scrolling behavior.

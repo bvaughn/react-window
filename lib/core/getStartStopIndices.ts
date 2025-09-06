@@ -12,11 +12,18 @@ export function getStartStopIndices({
   containerSize: number;
   itemCount: number;
   overscanCount: number;
-}): [number, number] {
+}): {
+  startIndexVisible: number;
+  stopIndexVisible: number;
+  startIndexOverscan: number;
+  stopIndexOverscan: number;
+} {
   const maxIndex = itemCount - 1;
 
-  let startIndex = 0;
-  let stopIndex = -1;
+  let startIndexVisible = 0;
+  let stopIndexVisible = -1;
+  let startIndexOverscan = 0;
+  let stopIndexOverscan = -1;
   let currentIndex = 0;
 
   while (currentIndex < maxIndex) {
@@ -29,8 +36,8 @@ export function getStartStopIndices({
     currentIndex++;
   }
 
-  startIndex = currentIndex;
-  startIndex = Math.max(0, startIndex - overscanCount);
+  startIndexVisible = currentIndex;
+  startIndexOverscan = Math.max(0, startIndexVisible - overscanCount);
 
   while (currentIndex < maxIndex) {
     const bounds = cachedBounds.get(currentIndex);
@@ -45,8 +52,20 @@ export function getStartStopIndices({
     currentIndex++;
   }
 
-  stopIndex = Math.min(maxIndex, currentIndex);
-  stopIndex = Math.min(itemCount - 1, stopIndex + overscanCount);
+  stopIndexVisible = Math.min(maxIndex, currentIndex);
+  stopIndexOverscan = Math.min(itemCount - 1, stopIndexVisible + overscanCount);
 
-  return startIndex < 0 ? [0, -1] : [startIndex, stopIndex];
+  if (startIndexVisible < 0) {
+    startIndexVisible = 0;
+    stopIndexVisible = -1;
+    startIndexOverscan = 0;
+    stopIndexOverscan = -1;
+  }
+
+  return {
+    startIndexVisible,
+    stopIndexVisible,
+    startIndexOverscan,
+    stopIndexOverscan
+  };
 }

@@ -2,15 +2,19 @@ import { render, screen } from "@testing-library/react";
 import { createRef, useLayoutEffect } from "react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
-import { updateMockResizeObserver } from "../../utils/test/mockResizeObserver";
+import {
+  disableForCurrentTest,
+  updateMockResizeObserver
+} from "../../utils/test/mockResizeObserver";
 import { Grid } from "./Grid";
 import type { CellComponentProps, GridImperativeAPI } from "./types";
+import { useGridCallbackRef } from "./useGridCallbackRef";
 
 describe("Grid", () => {
   let mountedCells: Map<string, CellComponentProps<object>> = new Map();
 
   const CellComponent = vi.fn(function Cell(props: CellComponentProps<object>) {
-    const { columnIndex, rowIndex, style } = props;
+    const { ariaAttributes, columnIndex, rowIndex, style } = props;
 
     const key = `${rowIndex},${columnIndex}`;
 
@@ -22,7 +26,7 @@ describe("Grid", () => {
     });
 
     return (
-      <div role="listitem" style={style}>
+      <div {...ariaAttributes} style={style}>
         Cell {key}
       </div>
     );
@@ -49,7 +53,7 @@ describe("Grid", () => {
       />
     );
 
-    const items = screen.queryAllByRole("listitem");
+    const items = screen.queryAllByRole("gridcell");
     expect(items).toHaveLength(0);
   });
 
@@ -67,7 +71,7 @@ describe("Grid", () => {
     );
 
     // 4 columns (+2) by 2 rows (+2)
-    const items = screen.queryAllByRole("listitem");
+    const items = screen.queryAllByRole("gridcell");
     expect(items).toHaveLength(24);
   });
 
@@ -86,7 +90,7 @@ describe("Grid", () => {
       );
 
       // 4 columns by 2 rows
-      expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(8);
+      expect(container.querySelectorAll('[role="gridcell"]')).toHaveLength(8);
     });
 
     test("type: function (px)", () => {
@@ -106,7 +110,7 @@ describe("Grid", () => {
       );
 
       // 2 columns by 2 rows
-      expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(4);
+      expect(container.querySelectorAll('[role="gridcell"]')).toHaveLength(4);
     });
 
     test("type: string (%)", () => {
@@ -123,45 +127,286 @@ describe("Grid", () => {
       );
 
       // 4 columns by 4 rows
-      expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(16);
+      expect(container.querySelectorAll('[role="gridcell"]')).toHaveLength(16);
     });
   });
 
-  test.skip("should pass cellProps to the cellComponent", () => {
+  test("should pass cellProps to the cellComponent", () => {
+    render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={{
+          foo: "abc",
+          bar: 123
+        }}
+        columnCount={100}
+        columnWidth="50%"
+        overscanCount={0}
+        rowCount={100}
+        rowHeight="25%"
+      />
+    );
+
+    expect(mountedCells.size).toEqual(8);
+    expect(mountedCells.get("0,0")).toMatchObject({
+      foo: "abc",
+      bar: 123
+    });
+  });
+
+  test("should re-render items if cellComponent changes", () => {
+    const { rerender } = render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={EMPTY_OBJECT}
+        columnCount={100}
+        columnWidth="50%"
+        overscanCount={0}
+        rowCount={100}
+        rowHeight="25%"
+      />
+    );
+
+    const NewCellComponent = vi.fn(() => null);
+
+    rerender(
+      <Grid
+        cellComponent={NewCellComponent}
+        cellProps={EMPTY_OBJECT}
+        columnCount={100}
+        columnWidth="50%"
+        overscanCount={0}
+        rowCount={100}
+        rowHeight="25%"
+      />
+    );
+
+    expect(NewCellComponent).toHaveBeenCalled();
+  });
+
+  test("should re-render items if cell size changes", () => {
+    const { rerender } = render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={EMPTY_OBJECT}
+        columnCount={100}
+        columnWidth="50%"
+        overscanCount={0}
+        rowCount={100}
+        rowHeight="25%"
+      />
+    );
+    expect(mountedCells).toHaveLength(8);
+
+    rerender(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={EMPTY_OBJECT}
+        columnCount={100}
+        columnWidth="50%"
+        overscanCount={0}
+        rowCount={100}
+        rowHeight="50%"
+      />
+    );
+    expect(mountedCells).toHaveLength(4);
+  });
+
+  test("should re-render items if cellProps change", () => {
+    const { rerender } = render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={{
+          foo: "abc"
+        }}
+        columnCount={100}
+        columnWidth="50%"
+        overscanCount={0}
+        rowCount={100}
+        rowHeight="50%"
+      />
+    );
+    expect(mountedCells).toHaveLength(4);
+    expect(mountedCells.get("0,0")).toMatchObject({
+      foo: "abc"
+    });
+
+    rerender(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={{
+          bar: 123
+        }}
+        columnCount={100}
+        columnWidth="50%"
+        overscanCount={0}
+        rowCount={100}
+        rowHeight="50%"
+      />
+    );
+    expect(mountedCells).toHaveLength(4);
+    expect(mountedCells.get("0,0")).toMatchObject({
+      bar: 123
+    });
+  });
+
+  test("should use default sizes for initial mount", () => {
+    // Mimic server rendering
+    disableForCurrentTest();
+
+    render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={{
+          bar: 123
+        }}
+        defaultHeight={100}
+        defaultWidth={300}
+        columnCount={100}
+        columnWidth={75}
+        overscanCount={0}
+        rowCount={100}
+        rowHeight={50}
+      />
+    );
+
+    const items = screen.queryAllByRole("gridcell");
+    expect(items).toHaveLength(8);
     // TODO
   });
 
-  test.skip("should re-render items if cellComponent changes", () => {
-    // TODO
+  test("should call onCellsRendered", () => {
+    const onCellsRendered = vi.fn();
+
+    render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={EMPTY_OBJECT}
+        columnCount={100}
+        columnWidth={25}
+        onCellsRendered={onCellsRendered}
+        overscanCount={2}
+        rowCount={100}
+        rowHeight={20}
+      />
+    );
+
+    expect(onCellsRendered).toHaveBeenCalled();
+    expect(onCellsRendered).toHaveBeenLastCalledWith(
+      {
+        columnStartIndex: 0,
+        columnStopIndex: 3,
+        rowStartIndex: 0,
+        rowStopIndex: 1
+      },
+      {
+        columnStartIndex: 0,
+        columnStopIndex: 5,
+        rowStartIndex: 0,
+        rowStopIndex: 3
+      }
+    );
   });
 
-  test.skip("should re-render items if cell size changes", () => {
-    // TODO
+  test("should support custom className and style props", () => {
+    render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={EMPTY_OBJECT}
+        className="foo"
+        columnCount={100}
+        columnWidth={25}
+        overscanCount={0}
+        rowCount={100}
+        rowHeight={20}
+        style={{
+          backgroundColor: "red"
+        }}
+      />
+    );
+
+    const grid = screen.queryByRole("grid");
+    expect(grid).toHaveClass("foo");
+    expect(grid?.style.backgroundColor).toBe("red");
   });
 
-  test.skip("should re-render items if cellProps change", () => {
-    // TODO
+  test("should spread HTML rest attributes", () => {
+    render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={EMPTY_OBJECT}
+        columnCount={100}
+        columnWidth={25}
+        data-testid="foo"
+        overscanCount={2}
+        rowCount={100}
+        rowHeight={20}
+      />
+    );
+
+    expect(screen.queryByTestId("foo")).toHaveRole("grid");
   });
 
-  test.skip("should use default sizes for initial mount", () => {
-    // TODO
+  test("custom tagName and attributes", () => {
+    function CustomCellComponent({ style }: CellComponentProps<object>) {
+      return <span style={style}>Cell</span>;
+    }
+
+    const { container } = render(
+      <Grid
+        cellComponent={CustomCellComponent}
+        cellProps={EMPTY_OBJECT}
+        columnCount={100}
+        columnWidth={25}
+        overscanCount={0}
+        rowCount={100}
+        rowHeight={20}
+        tagName="main"
+      />
+    );
+
+    expect(container.firstElementChild?.tagName).toBe("MAIN");
+    expect(container.querySelectorAll("SPAN")).toHaveLength(8);
   });
 
-  test.skip("should call onCellsRendered", () => {
-    // TODO
-  });
+  test("children", () => {
+    const { container } = render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={EMPTY_OBJECT}
+        columnCount={100}
+        columnWidth={25}
+        overscanCount={0}
+        rowCount={100}
+        rowHeight={20}
+      >
+        <div id="custom">Overlay or tooltip</div>
+      </Grid>
+    );
 
-  test.skip("should support custom className and style props", () => {
-    // TODO
-  });
-
-  test.skip("should spread HTML rest attributes", () => {
-    // TODO
+    expect(container.querySelector("#custom")).toHaveTextContent(
+      "Overlay or tooltip"
+    );
   });
 
   describe("imperative API", () => {
-    test.skip("should return the root element", () => {
-      // TODO
+    test("should return the root element", () => {
+      const gridRef = createRef<GridImperativeAPI>();
+
+      render(
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={EMPTY_OBJECT}
+          columnCount={100}
+          columnWidth={25}
+          gridRef={gridRef}
+          overscanCount={0}
+          rowCount={100}
+          rowHeight={20}
+        />
+      );
+
+      expect(gridRef.current?.element).toEqual(screen.queryByRole("grid"));
     });
 
     test("should scroll to cell", () => {
@@ -244,13 +489,134 @@ describe("Grid", () => {
     });
   });
 
-  test.skip("should auto-memoize cellProps object using shallow equality", () => {
-    // TODO
+  test("should auto-memoize cellProps object using shallow equality", () => {
+    const { rerender } = render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={{
+          foo: "abc",
+          abc: 123
+        }}
+        columnCount={100}
+        columnWidth={25}
+        overscanCount={0}
+        rowCount={100}
+        rowHeight={20}
+      />
+    );
+
+    expect(mountedCells).toHaveLength(8);
+    expect(mountedCells.get("0,0")).toMatchObject({
+      foo: "abc",
+      abc: 123
+    });
+
+    expect(CellComponent).toHaveBeenCalledTimes(8);
+
+    rerender(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={{
+          foo: "abc",
+          abc: 123
+        }}
+        columnCount={100}
+        columnWidth={25}
+        overscanCount={0}
+        rowCount={100}
+        rowHeight={20}
+      />
+    );
+    expect(CellComponent).toHaveBeenCalledTimes(8);
+
+    rerender(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={{
+          foo: "abc",
+          abc: 234
+        }}
+        columnCount={100}
+        columnWidth={25}
+        overscanCount={0}
+        rowCount={100}
+        rowHeight={20}
+      />
+    );
+    expect(CellComponent).toHaveBeenCalledTimes(16);
   });
 
   describe("edge cases", () => {
-    test.skip("should not cause a cycle of Grid callback ref is passed in cellProps", () => {
-      // TODO
+    test("should not cause a cycle of Grid callback ref is passed in cellProps", () => {
+      function CellComponentWithCellProps({
+        columnIndex,
+        rowIndex,
+        style
+      }: CellComponentProps<{ gridRef: GridImperativeAPI | null }>) {
+        return (
+          <div style={style}>
+            {rowIndex},{columnIndex}
+          </div>
+        );
+      }
+
+      function Test() {
+        const [gridRef, setGridRef] = useGridCallbackRef(null);
+
+        return (
+          <Grid
+            cellComponent={CellComponentWithCellProps}
+            cellProps={{ gridRef }}
+            columnCount={100}
+            columnWidth={25}
+            gridRef={setGridRef}
+            overscanCount={2}
+            rowCount={100}
+            rowHeight={20}
+          />
+        );
+      }
+
+      render(<Test />);
+    });
+  });
+
+  describe("aria attributes", () => {
+    test("should adhere to the best recommended practices", () => {
+      render(
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={EMPTY_OBJECT}
+          columnCount={2}
+          columnWidth={25}
+          overscanCount={0}
+          rowCount={2}
+          rowHeight={20}
+        />
+      );
+
+      expect(screen.queryAllByRole("grid")).toHaveLength(1);
+
+      const rows = screen.queryAllByRole("row");
+      expect(rows).toHaveLength(2);
+      expect(rows[0].getAttribute("aria-rowindex")).toBe("1");
+      expect(rows[1].getAttribute("aria-rowindex")).toBe("2");
+
+      expect(screen.queryAllByRole("gridcell")).toHaveLength(4);
+
+      {
+        const cells = rows[0].querySelectorAll('[role="gridcell"]');
+        expect(cells).toHaveLength(2);
+        expect(cells[0].getAttribute("aria-colindex")).toBe("1");
+        expect(cells[1].getAttribute("aria-colindex")).toBe("2");
+      }
+
+      {
+        const cells = rows[1].querySelectorAll('[role="gridcell"]');
+        expect(cells).toHaveLength(2);
+        expect(cells[0].getAttribute("aria-colindex")).toBe("1");
+        expect(cells[1].getAttribute("aria-colindex")).toBe("2");
+      }
     });
   });
 });

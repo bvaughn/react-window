@@ -10,6 +10,7 @@ import { useResizeObserver } from "../hooks/useResizeObserver";
 import { useStableCallback } from "../hooks/useStableCallback";
 import type { Align } from "../types";
 import { adjustScrollOffsetForRtl } from "../utils/adjustScrollOffsetForRtl";
+import { shallowCompare } from "../utils/shallowCompare";
 import { getEstimatedSize as getEstimatedSizeUtil } from "./getEstimatedSize";
 import { getOffsetForIndex } from "./getOffsetForIndex";
 import { getStartStopIndices as getStartStopIndicesUtil } from "./getStartStopIndices";
@@ -45,14 +46,31 @@ export function useVirtualizer<Props extends object>({
     | undefined;
   overscanCount: number;
 }) {
-  const [indices, setIndices] = useState([0, -1]);
+  const [indices, setIndices] = useState<{
+    startIndexVisible: number;
+    stopIndexVisible: number;
+    startIndexOverscan: number;
+    stopIndexOverscan: number;
+  }>({
+    startIndexVisible: 0,
+    startIndexOverscan: 0,
+    stopIndexVisible: -1,
+    stopIndexOverscan: -1
+  });
 
   // Guard against temporarily invalid indices that may occur when item count decreases
   // Cached bounds object will be re-created and a second render will restore things
-  const [startIndex, stopIndex] = [
-    Math.min(itemCount - 1, indices[0]),
-    Math.min(itemCount - 1, indices[1])
-  ];
+  const {
+    startIndexVisible,
+    startIndexOverscan,
+    stopIndexVisible,
+    stopIndexOverscan
+  } = {
+    startIndexVisible: Math.min(itemCount - 1, indices.startIndexVisible),
+    startIndexOverscan: Math.min(itemCount - 1, indices.startIndexOverscan),
+    stopIndexVisible: Math.min(itemCount - 1, indices.stopIndexVisible),
+    stopIndexOverscan: Math.min(itemCount - 1, indices.stopIndexOverscan)
+  };
 
   const { height = defaultContainerSize, width = defaultContainerSize } =
     useResizeObserver({
@@ -169,7 +187,7 @@ export function useVirtualizer<Props extends object>({
           overscanCount
         });
 
-        if (next[0] === prev[0] && next[1] === prev[1]) {
+        if (shallowCompare(next, prev)) {
           return prev;
         }
 
@@ -222,7 +240,7 @@ export function useVirtualizer<Props extends object>({
         if (typeof containerElement.scrollTo !== "function") {
           // Special case for environments like jsdom that don't implement scrollTo
           const next = getStartStopIndices(scrollOffset);
-          if (next[0] !== startIndex || next[1] !== stopIndex) {
+          if (!shallowCompare(indices, next)) {
             setIndices(next);
           }
         }
@@ -236,7 +254,9 @@ export function useVirtualizer<Props extends object>({
     getCellBounds,
     getEstimatedSize,
     scrollToIndex,
-    startIndex,
-    stopIndex
+    startIndexOverscan,
+    startIndexVisible,
+    stopIndexOverscan,
+    stopIndexVisible
   };
 }

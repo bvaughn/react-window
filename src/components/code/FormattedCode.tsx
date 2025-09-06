@@ -2,13 +2,21 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 import { cn } from "../../utils/cn";
 import { Code } from "./Code";
 
-type Markdown = {
-  javaScript: string;
-  typeScript?: string;
-};
+type Markdown =
+  | {
+      javaScript: string;
+      typeScript?: string;
+    }
+  | {
+      html: string;
+    };
 
 export function FormattedCode({ markdown }: { markdown: Markdown }) {
   const [ts, setTS] = useLocalStorage("CodeTabs::tab", true);
+
+  if ("html" in markdown) {
+    return <Code html={markdown.html} />;
+  }
 
   const code = (
     <Code

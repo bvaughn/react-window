@@ -3,6 +3,7 @@ import {
   tsxLanguage,
   typescriptLanguage
 } from "@codemirror/lang-javascript";
+import { htmlLanguage } from "@codemirror/lang-html";
 import { ensureSyntaxTree } from "@codemirror/language";
 import { EditorState } from "@codemirror/state";
 import { classHighlighter, highlightTree } from "@lezer/highlight";
@@ -13,6 +14,10 @@ export const DEFAULT_MAX_TIME = 5000;
 export async function syntaxHighlight(code, language) {
   let extension;
   switch (language) {
+    case "HTML": {
+      extension = htmlLanguage.configure({ dialect: "selfClosing" });
+      break;
+    }
     case "JSX": {
       extension = jsxLanguage;
       break;
@@ -185,9 +190,17 @@ function parsedTokensToHtml(tokens) {
   tokens = tokens.map((token, index) => {
     const className = token.type ? `tok-${token.type}` : "";
 
+    // Trim leading space and use CSS to indent instead;
+    // this allows for better line wrapping behavior on narrow screens
     if (index === 0 && !token.type) {
-      indent = token.value.length;
-      token.value = "";
+      const index = token.value.search(/[^\s]/);
+      if (index < 0) {
+        indent = token.value.length;
+        token.value = "";
+      } else {
+        indent = index;
+        token.value = token.value.substring(index);
+      }
     }
 
     const escapedValue = escapeHtmlEntities(token.value);

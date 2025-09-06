@@ -5,21 +5,17 @@ import type {
   ReactNode,
   Ref
 } from "react";
+import type { TagNames } from "../../types";
 
 type ForbiddenKeys = "columnIndex" | "rowIndex" | "style";
 type ExcludeForbiddenKeys<Type> = {
   [Key in keyof Type]: Key extends ForbiddenKeys ? never : Type[Key];
 };
 
-export type GridProps<CellProps extends object> = Omit<
-  HTMLAttributes<HTMLDivElement>,
-  "onResize"
-> & {
-  /**
-   * CSS class name.
-   */
-  className?: string;
-
+export type GridProps<
+  CellProps extends object,
+  TagName extends TagNames = "div"
+> = Omit<HTMLAttributes<HTMLDivElement>, "onResize"> & {
   /**
    * React component responsible for rendering a cell.
    *
@@ -30,6 +26,10 @@ export type GridProps<CellProps extends object> = Omit<
    */
   cellComponent: (
     props: {
+      ariaAttributes: {
+        "aria-colindex": number;
+        role: "gridcell";
+      };
       columnIndex: number;
       rowIndex: number;
       style: CSSProperties;
@@ -43,6 +43,17 @@ export type GridProps<CellProps extends object> = Omit<
    * ⚠️ This object must not contain either an `index` or `style` prop.
    */
   cellProps: ExcludeForbiddenKeys<CellProps>;
+
+  /**
+   * Additional content to be rendered within the grid (above cells).
+   * This property can be used to render things like overlays or tooltips.
+   */
+  children?: ReactNode;
+
+  /**
+   * CSS class name.
+   */
+  className?: string;
 
   /**
    * Number of columns to be rendered in the grid.
@@ -90,12 +101,20 @@ export type GridProps<CellProps extends object> = Omit<
   /**
    * Callback notified when the range of rendered cells changes.
    */
-  onCellsRendered?: (args: {
-    columnStartIndex: number;
-    columnStopIndex: number;
-    rowStartIndex: number;
-    rowStopIndex: number;
-  }) => void;
+  onCellsRendered?: (
+    visibleCells: {
+      columnStartIndex: number;
+      columnStopIndex: number;
+      rowStartIndex: number;
+      rowStopIndex: number;
+    },
+    allCells: {
+      columnStartIndex: number;
+      columnStopIndex: number;
+      rowStartIndex: number;
+      rowStopIndex: number;
+    }
+  ) => void;
 
   /**
    * Callback notified when the Grid's outermost HTMLElement resizes.
@@ -133,6 +152,14 @@ export type GridProps<CellProps extends object> = Omit<
    * The grid of cells will fill the height and width defined by this style.
    */
   style?: CSSProperties;
+
+  /**
+   * Can be used to override the root HTML element rendered by the List component.
+   * The default value is "div", meaning that List renders an HTMLDivElement as its root.
+   *
+   * ⚠️ In most use cases the default ARIA roles are sufficient and this prop is not needed.
+   */
+  tagName?: TagName;
 };
 
 export type CellComponent<CellProps extends object> =

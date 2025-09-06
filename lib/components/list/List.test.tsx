@@ -14,7 +14,7 @@ describe("List", () => {
   let mountedRows: Map<number, RowComponentProps<object>> = new Map();
 
   const RowComponent = vi.fn(function Row(props: RowComponentProps<object>) {
-    const { index, style } = props;
+    const { ariaAttributes, index, style } = props;
 
     useLayoutEffect(() => {
       mountedRows.set(index, props);
@@ -24,7 +24,7 @@ describe("List", () => {
     });
 
     return (
-      <div role="listitem" style={style}>
+      <div {...ariaAttributes} style={style}>
         Row {index}
       </div>
     );
@@ -162,18 +162,18 @@ describe("List", () => {
       />
     );
 
-    const NewRow = vi.fn(() => null);
+    const NewRowComponent = vi.fn(() => null);
 
     rerender(
       <List
         rowCount={100}
-        rowComponent={NewRow}
+        rowComponent={NewRowComponent}
         rowHeight={25}
         rowProps={EMPTY_OBJECT}
       />
     );
 
-    expect(NewRow).toHaveBeenCalled();
+    expect(NewRowComponent).toHaveBeenCalled();
   });
 
   test("should re-render items if rowHeight changes", () => {
@@ -270,14 +270,20 @@ describe("List", () => {
       />
     );
     expect(onRowsRendered).toHaveBeenCalledTimes(1);
-    expect(onRowsRendered).toHaveBeenLastCalledWith({
-      startIndex: 0,
-      stopIndex: 1
-    });
+    expect(onRowsRendered).toHaveBeenLastCalledWith(
+      {
+        startIndex: 0,
+        stopIndex: 1
+      },
+      {
+        startIndex: 0,
+        stopIndex: 1
+      }
+    );
 
     rerender(
       <List
-        overscanCount={0}
+        overscanCount={2}
         rowCount={4}
         onRowsRendered={onRowsRendered}
         rowComponent={RowComponent}
@@ -286,10 +292,38 @@ describe("List", () => {
       />
     );
     expect(onRowsRendered).toHaveBeenCalledTimes(2);
-    expect(onRowsRendered).toHaveBeenLastCalledWith({
-      startIndex: 0,
-      stopIndex: 3
-    });
+    expect(onRowsRendered).toHaveBeenLastCalledWith(
+      {
+        startIndex: 0,
+        stopIndex: 3
+      },
+      {
+        startIndex: 0,
+        stopIndex: 3
+      }
+    );
+
+    rerender(
+      <List
+        overscanCount={2}
+        rowCount={10}
+        onRowsRendered={onRowsRendered}
+        rowComponent={RowComponent}
+        rowHeight={25}
+        rowProps={EMPTY_OBJECT}
+      />
+    );
+    expect(onRowsRendered).toHaveBeenCalledTimes(3);
+    expect(onRowsRendered).toHaveBeenLastCalledWith(
+      {
+        startIndex: 0,
+        stopIndex: 3
+      },
+      {
+        startIndex: 0,
+        stopIndex: 5
+      }
+    );
   });
 
   test("should support custom className and style props", () => {
@@ -327,6 +361,44 @@ describe("List", () => {
     );
 
     expect(screen.queryByTestId("foo")).toHaveRole("list");
+  });
+
+  test("custom tagName and attributes", () => {
+    function CustomRowComponent({ index, style }: RowComponentProps<object>) {
+      return <li style={style}>Row {index + 1}</li>;
+    }
+
+    const { container } = render(
+      <List
+        overscanCount={0}
+        rowCount={4}
+        rowComponent={CustomRowComponent}
+        rowHeight={25}
+        rowProps={EMPTY_OBJECT}
+        tagName="ul"
+      />
+    );
+
+    expect(container.firstElementChild?.tagName).toBe("UL");
+    expect(container.querySelectorAll("LI")).toHaveLength(4);
+  });
+
+  test("children", () => {
+    const { container } = render(
+      <List
+        overscanCount={0}
+        rowCount={100}
+        rowComponent={RowComponent}
+        rowHeight={25}
+        rowProps={EMPTY_OBJECT}
+      >
+        <div id="custom">Overlay or tooltip</div>
+      </List>
+    );
+
+    expect(container.querySelector("#custom")).toHaveTextContent(
+      "Overlay or tooltip"
+    );
   });
 
   describe("imperative API", () => {
@@ -488,10 +560,16 @@ describe("List", () => {
       );
 
       expect(onRowsRendered).toHaveBeenCalled();
-      expect(onRowsRendered).toHaveBeenLastCalledWith({
-        startIndex: 0,
-        stopIndex: 3
-      });
+      expect(onRowsRendered).toHaveBeenLastCalledWith(
+        {
+          startIndex: 0,
+          stopIndex: 3
+        },
+        {
+          startIndex: 0,
+          stopIndex: 3
+        }
+      );
 
       onRowsRendered.mockReset();
 
@@ -499,10 +577,16 @@ describe("List", () => {
         listRef.current?.scrollToRow({ index: 10 });
       });
       expect(onRowsRendered).toHaveBeenCalledTimes(1);
-      expect(onRowsRendered).toHaveBeenLastCalledWith({
-        startIndex: 7,
-        stopIndex: 10
-      });
+      expect(onRowsRendered).toHaveBeenLastCalledWith(
+        {
+          startIndex: 7,
+          stopIndex: 10
+        },
+        {
+          startIndex: 7,
+          stopIndex: 10
+        }
+      );
 
       expect(RowComponent).toHaveBeenLastCalledWith(
         expect.objectContaining({
@@ -600,6 +684,70 @@ describe("List", () => {
       }
 
       render(<Test />);
+    });
+  });
+
+  describe("aria attributes", () => {
+    test("should be set by default", () => {
+      render(
+        <List
+          rowCount={3}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      expect(screen.queryAllByRole("list")).toHaveLength(1);
+
+      const rows = screen.queryAllByRole("listitem");
+      expect(rows).toHaveLength(3);
+      expect(rows[0].getAttribute("aria-posinset")).toBe("1");
+      expect(rows[0].getAttribute("aria-setsize")).toBe("3");
+      expect(rows[1].getAttribute("aria-posinset")).toBe("2");
+      expect(rows[1].getAttribute("aria-setsize")).toBe("3");
+      expect(rows[2].getAttribute("aria-posinset")).toBe("3");
+      expect(rows[2].getAttribute("aria-setsize")).toBe("3");
+    });
+
+    test("should support overrides for use cases like tabular data", () => {
+      const TableRowComponent = (props: RowComponentProps<object>) => {
+        const { index, style } = props;
+
+        return (
+          <div aria-rowindex={index + 1} role="row" style={style}>
+            <div role="cell" aria-colindex={1} />
+            <div role="cell" aria-colindex={2} />
+            <div role="cell" aria-colindex={3} />
+          </div>
+        );
+      };
+
+      render(
+        <List
+          role="table"
+          aria-colcount={3}
+          aria-rowcount={2}
+          rowCount={2}
+          rowComponent={TableRowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      const tables = screen.queryAllByRole("table");
+      expect(tables).toHaveLength(1);
+      expect(tables[0].getAttribute("aria-colcount")).toBe("3");
+      expect(tables[0].getAttribute("aria-rowcount")).toBe("2");
+
+      const rows = screen.queryAllByRole("row");
+      expect(rows).toHaveLength(2);
+
+      const columns = rows[0].querySelectorAll('[role="cell"]');
+      expect(columns).toHaveLength(3);
+      expect(columns[0].getAttribute("aria-colindex")).toBe("1");
+      expect(columns[1].getAttribute("aria-colindex")).toBe("2");
+      expect(columns[2].getAttribute("aria-colindex")).toBe("3");
     });
   });
 });

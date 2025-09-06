@@ -1,4 +1,5 @@
 import {
+  createElement,
   memo,
   useEffect,
   useImperativeHandle,
@@ -8,11 +9,15 @@ import {
 } from "react";
 import { useVirtualizer } from "../../core/useVirtualizer";
 import { useMemoizedObject } from "../../hooks/useMemoizedObject";
-import type { Align } from "../../types";
+import type { Align, TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import type { ListProps } from "./types";
 
-export function List<RowProps extends object>({
+export function List<
+  RowProps extends object,
+  TagName extends TagNames = "div"
+>({
+  children,
   className,
   defaultHeight = 0,
   listRef,
@@ -23,9 +28,10 @@ export function List<RowProps extends object>({
   rowCount,
   rowHeight,
   rowProps: rowPropsUnstable,
+  tagName = "div" as TagName,
   style,
   ...rest
-}: ListProps<RowProps>) {
+}: ListProps<RowProps, TagName>) {
   const rowProps = useMemoizedObject(rowPropsUnstable);
   const RowComponent = useMemo(
     () => memo(RowComponentProp, arePropsEqual),
@@ -38,8 +44,10 @@ export function List<RowProps extends object>({
     getCellBounds,
     getEstimatedSize,
     scrollToIndex,
-    startIndex,
-    stopIndex
+    startIndexOverscan,
+    startIndexVisible,
+    stopIndexOverscan,
+    stopIndexVisible
   } = useVirtualizer({
     containerElement: element,
     defaultContainerSize: defaultHeight,
@@ -85,23 +93,44 @@ export function List<RowProps extends object>({
   );
 
   useEffect(() => {
-    if (startIndex >= 0 && stopIndex >= 0 && onRowsRendered) {
-      onRowsRendered({
-        startIndex,
-        stopIndex
-      });
+    if (startIndexOverscan >= 0 && stopIndexOverscan >= 0 && onRowsRendered) {
+      onRowsRendered(
+        {
+          startIndex: startIndexVisible,
+          stopIndex: stopIndexVisible
+        },
+        {
+          startIndex: startIndexOverscan,
+          stopIndex: stopIndexOverscan
+        }
+      );
     }
-  }, [onRowsRendered, startIndex, stopIndex]);
+  }, [
+    onRowsRendered,
+    startIndexOverscan,
+    startIndexVisible,
+    stopIndexOverscan,
+    stopIndexVisible
+  ]);
 
   const rows = useMemo(() => {
     const children: ReactNode[] = [];
     if (rowCount > 0) {
-      for (let index = startIndex; index <= stopIndex; index++) {
+      for (
+        let index = startIndexOverscan;
+        index <= stopIndexOverscan;
+        index++
+      ) {
         const bounds = getCellBounds(index);
 
         children.push(
           <RowComponent
             {...(rowProps as RowProps)}
+            ariaAttributes={{
+              "aria-posinset": index + 1,
+              "aria-setsize": rowCount,
+              role: "listitem"
+            }}
             key={index}
             index={index}
             style={{
@@ -116,30 +145,43 @@ export function List<RowProps extends object>({
       }
     }
     return children;
-  }, [RowComponent, getCellBounds, rowCount, rowProps, startIndex, stopIndex]);
+  }, [
+    RowComponent,
+    getCellBounds,
+    rowCount,
+    rowProps,
+    startIndexOverscan,
+    stopIndexOverscan
+  ]);
 
-  return (
+  const sizingElement = (
     <div
-      {...rest}
-      className={className}
-      ref={setElement}
+      aria-hidden
       style={{
-        ...style,
+        height: getEstimatedSize(),
+        width: "100%",
+        zIndex: -1
+      }}
+    ></div>
+  );
+
+  return createElement(
+    tagName,
+    {
+      role: "list",
+      ...rest,
+      className,
+      ref: setElement,
+      style: {
+        position: "relative",
         maxHeight: "100%",
         flexGrow: 1,
-        overflowY: "auto"
-      }}
-    >
-      <div
-        className={className}
-        style={{
-          height: getEstimatedSize(),
-          position: "relative",
-          width: "100%"
-        }}
-      >
-        {rows}
-      </div>
-    </div>
+        overflowY: "auto",
+        ...style
+      }
+    },
+    rows,
+    children,
+    sizingElement
   );
 }
