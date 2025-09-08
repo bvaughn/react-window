@@ -1,8 +1,8 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { cwd } from "node:process";
-import { getFilesWithExtensions, rmFilesWithExtensions } from "../utils.mjs";
-import { syntaxHighlight } from "./syntax-highlight.mjs";
+import { getFilesWithExtensions, rmFilesWithExtensions } from "../utils.js";
+import { syntaxHighlight } from "./syntax-highlight.js";
 
 async function run() {
   const inputDir = join(cwd(), "src", "routes");
@@ -28,6 +28,7 @@ async function run() {
     let json;
 
     {
+      // Remove special comments and directives before syntax highlighting
       {
         const pieces = rawText.split("// <begin>");
         rawText = pieces[pieces.length - 1].trim();
@@ -48,19 +49,21 @@ async function run() {
         .join("\n");
     }
 
+    let html;
     if (file.endsWith(".html")) {
-      json = {
-        html: await syntaxHighlight(rawText, "HTML")
-      };
+      html = await syntaxHighlight(rawText, "HTML");
+    } else if (file.endsWith(".js") || file.endsWith(".jsx")) {
+      html = await syntaxHighlight(
+        rawText,
+        file.endsWith("jsx") ? "JSX" : "JS"
+      );
+    } else if (file.endsWith(".ts") || file.endsWith(".tsx")) {
+      html = await syntaxHighlight(
+        rawText,
+        file.endsWith("tsx") ? "TSX" : "TS"
+      );
     } else {
-      const typeScript = rawText;
-
-      json = {
-        html: await syntaxHighlight(
-          typeScript,
-          file.endsWith("tsx") ? "TSX" : "TS"
-        )
-      };
+      throw Error(`Unsupported file type: ${file}`);
     }
 
     const fileName = basename(file);
@@ -72,7 +75,7 @@ async function run() {
 
     console.debug("Writing to", outputFile);
 
-    await writeFile(outputFile, JSON.stringify(json, null, 2));
+    await writeFile(outputFile, JSON.stringify({ html }, null, 2));
   }
 }
 

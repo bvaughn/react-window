@@ -6,7 +6,7 @@ export default mergeConfig(
   defineConfig({
     test: {
       environment: "jsdom",
-      setupFiles: "./vitest.setup.mjs"
+      setupFiles: "./vitest.setup.js"
     }
   })
 );

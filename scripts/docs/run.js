@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join, relative } from "node:path";
 import { cwd } from "node:process";
 import { withCustomConfig } from "react-docgen-typescript";
-import { getFilesWithExtensions, rmFilesWithExtensions } from "../utils.mjs";
+import { getFilesWithExtensions, rmFilesWithExtensions } from "../utils.js";
 
 const parser = withCustomConfig("./tsconfig.json", {
   savePropValueAsString: true,
