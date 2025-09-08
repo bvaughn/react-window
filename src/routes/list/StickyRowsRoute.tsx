@@ -2,7 +2,7 @@ import ListWithStickyRowsMarkdown from "../../../public/generated/code-snippets/
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { Callout } from "../../components/Callout";
-import { TypeScriptCode } from "../../components/code/TypeScriptCode";
+import { Code } from "../../components/code/Code";
 import { ExternalLink } from "../../components/ExternalLink";
 import { Header } from "../../components/Header";
 import { Example } from "./examples/ListWithStickyRows.example";
@@ -28,7 +28,7 @@ export default function StickyRowsRoute() {
         <Example />
       </Block>
       <div>The example above was created using code like this:</div>
-      <TypeScriptCode markdown={ListWithStickyRowsMarkdown} />
+      <Code html={ListWithStickyRowsMarkdown.html} />
       <Callout intent="warning">
         <strong>Note</strong> the height of 0 in the example above prevents the
         sticky row from affecting the height of the parent list.

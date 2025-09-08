@@ -1,8 +1,7 @@
 import TableAriaAttributesMarkdown from "../../../public/generated/code-snippets/TableAriaAttributes.json";
 import TableAriaOverridePropsMarkdown from "../../../public/generated/code-snippets/TableAriaOverrideProps.json";
 import { Box } from "../../components/Box";
-import { HtmlCode } from "../../components/code/HtmlCode";
-import { TypeScriptCode } from "../../components/code/TypeScriptCode";
+import { Code } from "../../components/code/Code";
 import { ExternalLink } from "../../components/ExternalLink";
 import { Header } from "../../components/Header";
 
@@ -21,12 +20,12 @@ export default function AriaRolesRoute() {
         </ExternalLink>{" "}
         role is more appropriate for tabular data.
       </div>
-      <HtmlCode markdown={TableAriaAttributesMarkdown} />
+      <Code html={TableAriaAttributesMarkdown.html} />
       <div>
         The example on the previous page can be modified like so to assign the
         correct ARIA attributes:
       </div>
-      <TypeScriptCode markdown={TableAriaOverridePropsMarkdown} />
+      <Code html={TableAriaOverridePropsMarkdown.html} />
     </Box>
   );
 }

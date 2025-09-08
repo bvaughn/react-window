@@ -3,7 +3,6 @@ import { basename, join } from "node:path";
 import { cwd } from "node:process";
 import { getFilesWithExtensions, rmFilesWithExtensions } from "../utils.mjs";
 import { syntaxHighlight } from "./syntax-highlight.mjs";
-import { tsToJs } from "./ts-to-js.mjs";
 
 async function run() {
   const inputDir = join(cwd(), "src", "routes");
@@ -55,11 +54,9 @@ async function run() {
       };
     } else {
       const typeScript = rawText;
-      const javaScript = (await tsToJs(typeScript)).trim();
 
       json = {
-        javaScript: await syntaxHighlight(javaScript, "JSX"),
-        typeScript: await syntaxHighlight(
+        html: await syntaxHighlight(
           typeScript,
           file.endsWith("tsx") ? "TSX" : "TS"
         )

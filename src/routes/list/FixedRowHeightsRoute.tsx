@@ -4,7 +4,7 @@ import FixedHeightRowComponentMarkdown from "../../../public/generated/code-snip
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { Callout } from "../../components/Callout";
-import { TypeScriptCode } from "../../components/code/TypeScriptCode";
+import { Code } from "../../components/code/Code";
 import { ContinueLink } from "../../components/ContinueLink";
 import { ExternalLink } from "../../components/ExternalLink";
 import { Header } from "../../components/Header";
@@ -26,13 +26,13 @@ export default function FixedRowHeightsRoute() {
         <code>rowComponent</code>), and the height of each row (
         <code>rowHeight</code>):
       </div>
-      <TypeScriptCode markdown={FixedHeightListMarkdown} />
+      <Code html={FixedHeightListMarkdown.html} />
       <div>
         The <code>rowProps</code> object can also be used to share between
         components. Values passed in <code>rowProps</code> will also be passed
         as props to the row component:
       </div>
-      <TypeScriptCode markdown={FixedHeightRowComponentMarkdown} />
+      <Code html={FixedHeightRowComponentMarkdown.html} />
       <Callout intent="warning">
         <Box direction="column" gap={4}>
           <div>

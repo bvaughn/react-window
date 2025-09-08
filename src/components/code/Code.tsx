@@ -21,6 +21,7 @@ export function Code({
         )}
         dangerouslySetInnerHTML={{ __html: html }}
       />
+
       {children}
     </div>
   );
