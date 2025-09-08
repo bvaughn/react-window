@@ -1,7 +1,7 @@
 import ListVariableRowHeightsMarkdown from "../../../public/generated/code-snippets/ListVariableRowHeights.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
-import { FormattedCode } from "../../components/code/FormattedCode";
+import { TypeScriptCode } from "../../components/code/TypeScriptCode";
 import { ContinueLink } from "../../components/ContinueLink";
 import { Header } from "../../components/Header";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
@@ -30,7 +30,7 @@ export default function VariableRowHeightsRoute() {
         This list requires a <code>rowHeight</code> function that tells it what
         height a row should be based on the type of data it contains.
       </div>
-      <FormattedCode markdown={ListVariableRowHeightsMarkdown} />
+      <TypeScriptCode markdown={ListVariableRowHeightsMarkdown} />
       <ContinueLink to="/list/props" title="component props" />
     </Box>
   );

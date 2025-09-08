@@ -1,7 +1,8 @@
-import { Box } from "../../components/Box";
 import ListAriaRolesMarkdown from "../../../public/generated/code-snippets/ListAriaRoles.json";
 import RowComponentAriaRolesMarkdown from "../../../public/generated/code-snippets/RowComponentAriaRoles.json";
-import { FormattedCode } from "../../components/code/FormattedCode";
+import { Box } from "../../components/Box";
+import { HtmlCode } from "../../components/code/HtmlCode";
+import { TypeScriptCode } from "../../components/code/TypeScriptCode";
 import { ExternalLink } from "../../components/ExternalLink";
 import { Header } from "../../components/Header";
 
@@ -16,7 +17,7 @@ export default function AriaRolesRoute() {
         </ExternalLink>{" "}
         can be used to identify a list of items.
       </div>
-      <FormattedCode markdown={ListAriaRolesMarkdown} />
+      <HtmlCode markdown={ListAriaRolesMarkdown} />
       <div>
         The <code>List</code> component automatically adds this role to the root
         HTMLDivElement it renders, but because individual rows are rendered by
@@ -27,7 +28,7 @@ export default function AriaRolesRoute() {
         <code>rowComponent</code> in the form of the <code>ariaAttributes</code>{" "}
         prop. The easiest way to use them is just to pass them through like so:
       </div>
-      <FormattedCode markdown={RowComponentAriaRolesMarkdown} />
+      <TypeScriptCode markdown={RowComponentAriaRolesMarkdown} />
     </Box>
   );
 }

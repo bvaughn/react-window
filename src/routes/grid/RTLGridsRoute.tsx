@@ -1,7 +1,7 @@
 import RtlGridMarkdown from "../../../public/generated/code-snippets/RtlGrid.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
-import { FormattedCode } from "../../components/code/FormattedCode";
+import { TypeScriptCode } from "../../components/code/TypeScriptCode";
 import { ExternalLink } from "../../components/ExternalLink";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { RtlExample } from "./examples/RtlGrid.example";
@@ -28,7 +28,7 @@ export default function RTLGridsRoute() {
         {!contacts.length && <LoadingSpinner />}
         <RtlExample contacts={contacts} />
       </Block>
-      <FormattedCode markdown={RtlGridMarkdown} />
+      <TypeScriptCode markdown={RtlGridMarkdown} />
     </Box>
   );
 }

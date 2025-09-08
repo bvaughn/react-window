@@ -1,7 +1,8 @@
-import { Box } from "../../components/Box";
-import GridAriaRolesMarkdown from "../../../public/generated/code-snippets/GridAriaRoles.json";
 import CellComponentAriaRolesMarkdown from "../../../public/generated/code-snippets/CellComponentAriaRoles.json";
-import { FormattedCode } from "../../components/code/FormattedCode";
+import GridAriaRolesMarkdown from "../../../public/generated/code-snippets/GridAriaRoles.json";
+import { Box } from "../../components/Box";
+import { HtmlCode } from "../../components/code/HtmlCode";
+import { TypeScriptCode } from "../../components/code/TypeScriptCode";
 import { ExternalLink } from "../../components/ExternalLink";
 import { Header } from "../../components/Header";
 
@@ -17,7 +18,7 @@ export default function AriaRolesRoute() {
         can be used to identify an element that contains one or more rows of
         cells.
       </div>
-      <FormattedCode markdown={GridAriaRolesMarkdown} />
+      <HtmlCode markdown={GridAriaRolesMarkdown} />
       <div>
         The <code>Grid</code> component automatically adds this role to the root
         HTMLDivElement it renders, but because individual cells are rendered by
@@ -29,7 +30,7 @@ export default function AriaRolesRoute() {
         <code>ariaAttributes</code> prop. The easiest way to use them is just to
         pass them through like so:
       </div>
-      <FormattedCode markdown={CellComponentAriaRolesMarkdown} />
+      <TypeScriptCode markdown={CellComponentAriaRolesMarkdown} />
     </Box>
   );
 }

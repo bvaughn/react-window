@@ -8,7 +8,7 @@ import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { Button } from "../../components/Button";
 import { Callout } from "../../components/Callout";
-import { FormattedCode } from "../../components/code/FormattedCode";
+import { TypeScriptCode } from "../../components/code/TypeScriptCode";
 import { Header } from "../../components/Header";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Select, type Option } from "../../components/Select";
@@ -123,11 +123,11 @@ export default function GridImperativeApiRoute() {
         Grid provides an imperative API for responding to events. The
         recommended way to access this API is to use the exported ref hook:
       </div>
-      <FormattedCode markdown={useGridRefImportMarkdown} />
+      <TypeScriptCode markdown={useGridRefImportMarkdown} />
       <div>Attach the ref during render:</div>
-      <FormattedCode markdown={useGridRefMarkdown} />
+      <TypeScriptCode markdown={useGridRefMarkdown} />
       <div>And call API methods in an event handler:</div>
-      <FormattedCode markdown={gridRefClickEventHandlerMarkdown} />
+      <TypeScriptCode markdown={gridRefClickEventHandlerMarkdown} />
       <div>The form below uses the imperative API to scroll the list:</div>
       <Box direction="row" gap={4}>
         <Select
@@ -188,7 +188,7 @@ export default function GridImperativeApiRoute() {
         <strong className="text-sky-300">Note</strong> If you are passing the
         ref to another component or hook, use the ref callback function instead.
       </Callout>
-      <FormattedCode markdown={useGridCallbackRefMarkdown} />
+      <TypeScriptCode markdown={useGridCallbackRefMarkdown} />
       <ContinueLink to="/grid/aria-roles" title="ARIA roles" />
     </Box>
   );

@@ -8,7 +8,7 @@ import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { Button } from "../../components/Button";
 import { Callout } from "../../components/Callout";
-import { FormattedCode } from "../../components/code/FormattedCode";
+import { TypeScriptCode } from "../../components/code/TypeScriptCode";
 import { Header } from "../../components/Header";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Select, type Option } from "../../components/Select";
@@ -79,11 +79,11 @@ export default function ListImperativeApiRoute() {
         List provides an imperative API for responding to events. The
         recommended way to access this API is to use the exported ref hook:
       </div>
-      <FormattedCode markdown={useListRefImportMarkdown} />
+      <TypeScriptCode markdown={useListRefImportMarkdown} />
       <div>Attach the ref during render:</div>
-      <FormattedCode markdown={useListRefMarkdown} />
+      <TypeScriptCode markdown={useListRefMarkdown} />
       <div>And call API methods in an event handler:</div>
-      <FormattedCode markdown={listRefClickEventHandlerMarkdown} />
+      <TypeScriptCode markdown={listRefClickEventHandlerMarkdown} />
       <div>The form below uses the imperative API to scroll the list:</div>
       <Box direction="row" gap={4}>
         <Select
@@ -131,7 +131,7 @@ export default function ListImperativeApiRoute() {
         <strong className="text-sky-300">Note</strong> If you are passing the
         ref to another component or hook, use the ref callback function instead.
       </Callout>
-      <FormattedCode markdown={useListCallbackRefMarkdown} />
+      <TypeScriptCode markdown={useListCallbackRefMarkdown} />
       <ContinueLink to="/list/aria-roles" title="ARIA roles" />
     </Box>
   );

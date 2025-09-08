@@ -59,13 +59,10 @@ async function run() {
 
       json = {
         javaScript: await syntaxHighlight(javaScript, "JSX"),
-        typeScript:
-          typeScript !== javaScript
-            ? await syntaxHighlight(
-                typeScript,
-                file.endsWith("tsx") ? "TSX" : "TS"
-              )
-            : undefined
+        typeScript: await syntaxHighlight(
+          typeScript,
+          file.endsWith("tsx") ? "TSX" : "TS"
+        )
       };
     }
 

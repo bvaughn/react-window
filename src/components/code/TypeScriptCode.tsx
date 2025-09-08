@@ -2,37 +2,16 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 import { cn } from "../../utils/cn";
 import { Code } from "./Code";
 
-type Markdown =
-  | {
-      javaScript: string;
-      typeScript?: string;
-    }
-  | {
-      html: string;
-    };
+type Markdown = {
+  javaScript: string;
+  typeScript: string;
+};
 
-export function FormattedCode({ markdown }: { markdown: Markdown }) {
+export function TypeScriptCode({ markdown }: { markdown: Markdown }) {
   const [ts, setTS] = useLocalStorage("CodeTabs::tab", true);
 
-  if ("html" in markdown) {
-    return <Code html={markdown.html} />;
-  }
-
-  const code = (
-    <Code
-      html={
-        ts ? (markdown.typeScript ?? markdown.javaScript) : markdown.javaScript
-      }
-    />
-  );
-
-  if (!markdown.typeScript) {
-    return code;
-  }
-
   return (
-    <div className="relative">
-      {code}
+    <Code html={ts ? markdown.typeScript : markdown.javaScript}>
       <button
         className={cn(
           "absolute top-2 right-2 p-1 rounded-sm bg-white/10 cursor-pointer hover:text-sky-300 hover:bg-sky-950 text-xs flex flex-row items-center gap-1",
@@ -51,6 +30,6 @@ export function FormattedCode({ markdown }: { markdown: Markdown }) {
           })}
         />
       </button>
-    </div>
+    </Code>
   );
 }

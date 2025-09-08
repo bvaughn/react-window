@@ -2,7 +2,7 @@ import HorizontalListMarkdown from "../../../public/generated/code-snippets/Hori
 import HorizontalListCellRendererMarkdown from "../../../public/generated/code-snippets/HorizontalListCellRenderer.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
-import { FormattedCode } from "../../components/code/FormattedCode";
+import { TypeScriptCode } from "../../components/code/TypeScriptCode";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { HorizontalList } from "./examples/HorizontalList.example";
 import { useEmails } from "./hooks/useEmails";
@@ -19,9 +19,9 @@ export default function HorizontalListsRoute() {
         <HorizontalList emails={emails} />
       </Block>
       <div>Here's what the configuration for the grid above looks like:</div>
-      <FormattedCode markdown={HorizontalListMarkdown} />
+      <TypeScriptCode markdown={HorizontalListMarkdown} />
       <div>And here's the cell renderer:</div>
-      <FormattedCode markdown={HorizontalListCellRendererMarkdown} />
+      <TypeScriptCode markdown={HorizontalListCellRendererMarkdown} />
     </Box>
   );
 }
