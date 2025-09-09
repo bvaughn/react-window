@@ -4,20 +4,35 @@ import {
   typescriptLanguage
 } from "@codemirror/lang-javascript";
 import { htmlLanguage } from "@codemirror/lang-html";
-import { ensureSyntaxTree } from "@codemirror/language";
+import { ensureSyntaxTree, LRLanguage } from "@codemirror/language";
 import { EditorState } from "@codemirror/state";
 import { classHighlighter, highlightTree } from "@lezer/highlight";
+
+type TokenType = string;
+type Token = {
+  columnIndex: number;
+  type: TokenType | null;
+  value: string;
+};
+
+type Language = "HTML" | "JS" | "JSX" | "TS" | "TSX";
+
+type State = {
+  parsedTokens: Token[];
+  rawString: string;
+};
 
 export const DEFAULT_MAX_CHARACTERS = 500000;
 export const DEFAULT_MAX_TIME = 5000;
 
-export async function syntaxHighlight(code, language) {
-  let extension;
+export async function syntaxHighlight(code: string, language: Language) {
+  let extension: LRLanguage;
   switch (language) {
     case "HTML": {
       extension = htmlLanguage.configure({ dialect: "selfClosing" });
       break;
     }
+    case "JS":
     case "JSX": {
       extension = jsxLanguage;
       break;
@@ -40,9 +55,9 @@ export async function syntaxHighlight(code, language) {
   return tokens.map(parsedTokensToHtml).join("\n");
 }
 
-async function parser(code, languageExtension = jsxLanguage) {
-  const parsedTokens = [];
-  const currentLineState = {
+async function parser(code: string, languageExtension: LRLanguage) {
+  const parsedTokens: Token[][] = [];
+  const currentLineState: State = {
     parsedTokens: [],
     rawString: ""
   };
@@ -79,25 +94,29 @@ async function parser(code, languageExtension = jsxLanguage) {
 
   let characterIndex = 0;
   let parsedCharacterIndex = 0;
-  highlightTree(tree, classHighlighter, (from, to, className) => {
-    if (from > characterIndex) {
-      // No style applied to the token between position and from.
-      // This typically indicates white space or newline characters.
+  highlightTree(
+    tree,
+    classHighlighter,
+    (from: number, to: number, className: string) => {
+      if (from > characterIndex) {
+        // No style applied to the token between position and from.
+        // This typically indicates white space or newline characters.
+        processSection(
+          currentLineState,
+          parsedTokens,
+          code.slice(characterIndex, from),
+          ""
+        );
+      }
       processSection(
         currentLineState,
         parsedTokens,
-        code.slice(characterIndex, from),
-        ""
+        code.slice(from, to),
+        className
       );
+      characterIndex = to;
     }
-    processSection(
-      currentLineState,
-      parsedTokens,
-      code.slice(from, to),
-      className
-    );
-    characterIndex = to;
-  });
+  );
 
   const maxPosition = code.length - 1;
 
@@ -148,15 +167,18 @@ async function parser(code, languageExtension = jsxLanguage) {
   return parsedTokens;
 }
 
-function processSection(currentLineState, parsedTokens, section, className) {
-  var _a;
+function processSection(
+  currentLineState: State,
+  parsedTokens: Token[][],
+  section: string,
+  className: string
+) {
+  // Remove "tok-" prefix;
   const tokenType =
-    (_a =
-      className === null || className === void 0
-        ? void 0
-        : className.substring(4)) !== null && _a !== void 0
-      ? _a
-      : null; // Remove "tok-" prefix;
+    className === null || className === void 0
+      ? null
+      : className.substring(4) || null;
+
   let index = 0;
   let nextIndex = section.indexOf("\n");
   while (true) {
@@ -164,7 +186,7 @@ function processSection(currentLineState, parsedTokens, section, className) {
       nextIndex >= 0
         ? section.substring(index, nextIndex)
         : section.substring(index);
-    const token = {
+    const token: Token = {
       columnIndex: currentLineState.rawString.length,
       type: tokenType,
       value: substring
@@ -184,10 +206,10 @@ function processSection(currentLineState, parsedTokens, section, className) {
   }
 }
 
-function parsedTokensToHtml(tokens) {
+function parsedTokensToHtml(tokens: Token[]) {
   let indent = 0;
 
-  tokens = tokens.map((token, index) => {
+  const htmlStrings = tokens.map((token, index) => {
     const className = token.type ? `tok-${token.type}` : "";
 
     // Trim leading space and use CSS to indent instead;
@@ -207,10 +229,12 @@ function parsedTokensToHtml(tokens) {
     return `<span class="${className}">${escapedValue}</span>`;
   });
 
-  return `<div style="min-height: 1rem; padding-left: ${indent + 2}ch; text-indent: -2ch;">${tokens.join("")}</div>`;
+  return `<div style="min-height: 1rem; padding-left: ${
+    indent + 2
+  }ch; text-indent: -2ch;">${htmlStrings.join("")}</div>`;
 }
 
-function escapeHtmlEntities(rawString) {
+function escapeHtmlEntities(rawString: string) {
   return rawString.replace(
     /[\u00A0-\u9999<>&]/g,
     (substring) => "&#" + substring.charCodeAt(0) + ";"

@@ -1,8 +1,8 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { cwd } from "node:process";
-import { getFilesWithExtensions, rmFilesWithExtensions } from "../utils.js";
-import { syntaxHighlight } from "./syntax-highlight.js";
+import { getFilesWithExtensions, rmFilesWithExtensions } from "../utils.ts";
+import { syntaxHighlight } from "./syntax-highlight.ts";
 
 async function run() {
   const inputDir = join(cwd(), "src", "routes");
@@ -19,13 +19,12 @@ async function run() {
   ]);
   const exampleFiles = tsFiles.filter((file) => file.includes(".example."));
 
-  for (let file of exampleFiles) {
+  for (const file of exampleFiles) {
     console.debug("Extracting", file);
 
     const buffer = await readFile(file);
 
     let rawText = buffer.toString();
-    let json;
 
     {
       // Remove special comments and directives before syntax highlighting

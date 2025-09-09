@@ -1,8 +1,12 @@
 import { readdir, rm } from "fs/promises";
 import { extname, join } from "node:path";
 
-export async function getFilesWithExtensions(directory, extensions, filter) {
-  const files = [];
+export async function getFilesWithExtensions(
+  directory: string,
+  extensions: string[],
+  filter?: (path: string) => boolean
+) {
+  const files: string[] = [];
 
   const entries = await readdir(directory, { withFileTypes: true });
 
@@ -26,10 +30,13 @@ export async function getFilesWithExtensions(directory, extensions, filter) {
   return files;
 }
 
-export async function rmFilesWithExtensions(directory, extensions) {
+export async function rmFilesWithExtensions(
+  directory: string,
+  extensions: string[]
+) {
   const files = await getFilesWithExtensions(directory, extensions);
 
-  for (let file of files) {
+  for (const file of files) {
     await rm(file);
   }
 }

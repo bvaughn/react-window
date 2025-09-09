@@ -34,5 +34,5 @@
       "@testing-library/jest-dom/vitest"
     ]
   },
-  "include": ["lib", "scripts/**/*", "src", "index.tsx"]
+  "include": ["lib", "scripts", "src", "index.tsx"]
 }
