@@ -34,5 +34,13 @@
       "@testing-library/jest-dom/vitest"
     ]
   },
-  "include": ["lib", "scripts/**/*", "src", "index.tsx"]
+  "include": ["lib", "scripts", "src", "index.tsx"],
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "ESNext",
+      "esModuleInterop": true
+    },
+    "esm": true // <--- this is the most important part
+  }
 }

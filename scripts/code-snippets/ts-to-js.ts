@@ -1,7 +1,7 @@
 import prettier from "prettier";
 import tsBlankSpace from "ts-blank-space";
 
-export async function tsToJs(source) {
+export async function tsToJs(source: string) {
   source = tsBlankSpace(source);
   source = source.replace(/<Grid<[^>]+>/g, "<Grid");
   source = source.replace(/<List<[^>]+>/g, "<List");

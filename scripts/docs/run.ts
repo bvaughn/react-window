@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join, relative } from "node:path";
 import { cwd } from "node:process";
 import { withCustomConfig } from "react-docgen-typescript";
-import { getFilesWithExtensions, rmFilesWithExtensions } from "../utils.js";
+import { getFilesWithExtensions, rmFilesWithExtensions } from "../utils.ts";
 
 const parser = withCustomConfig("./tsconfig.json", {
   savePropValueAsString: true,
@@ -19,25 +19,25 @@ async function run() {
 
   await rmFilesWithExtensions(outputDir, [".json"]);
 
-  let files = await getFilesWithExtensions(
+  const files = await getFilesWithExtensions(
     inputDir,
     [".ts", ".tsx"],
     (file) => file.endsWith("/List.tsx") || file.endsWith("/Grid.tsx")
   );
 
-  for (let file of files) {
+  for (const file of files) {
     console.debug("Parsing", file);
 
     const components = parser.parse(file);
-    for (let component of components) {
+    for (const component of components) {
       // Convert to local paths
       component.filePath = relative(cwd(), file);
 
       // Filter inherited HTML attributes
-      for (let key in component.props) {
+      for (const key in component.props) {
         const prop = component.props[key];
         if (
-          prop.declarations.filter(
+          prop.declarations?.filter(
             (declaration) => !declaration.fileName.includes("node_modules")
           ).length === 0
         ) {
