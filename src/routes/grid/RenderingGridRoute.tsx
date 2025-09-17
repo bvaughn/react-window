@@ -1,5 +1,5 @@
 import CellComponentMarkdown from "../../../public/generated/code-snippets/CellComponent.json";
-import columnWidthMarkdown from "../../../public/generated/code-snippets/FixedHeightList.json";
+import columnWidthMarkdown from "../../../public/generated/code-snippets/columnWidth.json";
 import GridMarkdown from "../../../public/generated/code-snippets/Grid.json";
 import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
@@ -33,7 +33,8 @@ export default function RenderingGridRoute() {
       <Code html={GridMarkdown.html} />
       <div>
         Column widths and row heights can be either numbers or functions. In the
-        example above, row height is fixed and column width is variable.
+        example above, row height is fixed and column width is function that
+        determines the width of the column based on the column index:
       </div>
       <Code html={columnWidthMarkdown.html} />
       <div>
