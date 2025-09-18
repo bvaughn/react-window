@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1
+
+Grids with only one row no longer incorrectly set cell height to 100%.
+
 ## 2.1.0
 
 Improved ARIA support:
