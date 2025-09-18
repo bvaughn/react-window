@@ -244,7 +244,7 @@ export function Grid<
                 left: isRtl ? undefined : 0,
                 right: isRtl ? 0 : undefined,
                 transform: `translate(${isRtl ? -columnBounds.scrollOffset : columnBounds.scrollOffset}px, ${rowBounds.scrollOffset}px)`,
-                height: rowCount > 1 ? rowBounds.size : "100%",
+                height: rowBounds.size,
                 width: columnBounds.size
               }}
             />
