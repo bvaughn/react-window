@@ -93,7 +93,7 @@ function RowComponent({ index, style, ...rest }: RowComponentProps<object>) {
 }
 ```
 
-## 2.0.0
+# 2.0.0
 
 Version 2 is a major rewrite that offers the following benefits:
 
@@ -105,9 +105,11 @@ Version 2 is a major rewrite that offers the following benefits:
 
 ## Upgrade path
 
-See the [documentation](https://react-window.vercel.app/) for more details, but here is an example of what the v1 to v2 upgrade might look like:
+This section contains a couple of examples for common upgrade paths. Please refer to the [documentation](https://react-window.vercel.app/) for more information.
 
-### Before
+### Migrating `FixedSizeList`
+
+#### Before
 
 ```tsx
 import { FixedSizeList, type ListChildComponentProps } from "react-window";
@@ -140,12 +142,14 @@ function Row({
 }
 ```
 
-### After
+#### After
 
 ```tsx
 import { List, type RowComponentProps } from "react-window";
 
 function Example({ names }: { names: string[] }) {
+  // You don't need to useMemo for rowProps;
+  // List will automatically memoize them
   return (
     <List
       rowComponent={RowComponent}
@@ -165,6 +169,254 @@ function RowComponent({
 }>) {
   const name = names[index];
   return <div style={style}>{name}</div>;
+}
+```
+
+### Migrating `VariableSizedList`
+
+#### Before
+
+```tsx
+import { VariableSizeList, type ListChildComponentProps } from "react-window";
+
+function Example({ items }: { items: Item[] }) {
+  const itemData = useMemo<ItemData>(() => ({ items }), [items]);
+  const itemSize = useCallback(
+    (index: number) => {
+      const item = itemData.items[index];
+      return item.type === "header" ? 40 : 20;
+    },
+    [itemData]
+  );
+
+  return (
+    <VariableSizeList
+      children={Row}
+      height={150}
+      itemCount={1000}
+      itemData={itemData}
+      itemSize={itemSize}
+      width={300}
+    />
+  );
+}
+
+function itemSize();
+
+function Row({
+  data,
+  index,
+  style
+}: ListChildComponentProps<{
+  items: Item[];
+}>) {
+  const { items } = data;
+  const item = items[index];
+  return <div style={style}>{item.label}</div>;
+}
+```
+
+#### After
+
+```tsx
+import { List, type RowComponentProps } from "react-window";
+
+type RowProps = {
+  items: Item[];
+};
+
+function Example({ items }: { items: Item[] }) {
+  // You don't need to useMemo for rowProps;
+  // List will automatically memoize them
+  return (
+    <List
+      rowComponent={RowComponent}
+      rowCount={items.length}
+      rowHeight={rowHeight}
+      rowProps={{ items }}
+    />
+  );
+}
+
+// The rowHeight method also receives the extra props,
+// so it can be defined at the module level
+function rowHeight(index: number, { item }: RowProps) {
+  return item.type === "header" ? 40 : 20;
+}
+
+function RowComponent({ index, items, style }: RowComponentProps<RowProps>) {
+  const item = items[index];
+  return <div style={style}>{item.label}</div>;
+}
+```
+
+### Migrating `FixedSizeGrid`
+
+#### Before
+
+```tsx
+import { FixedSizeGrid, type GridChildComponentProps } from "react-window";
+
+function Example({ data }: { data: Data[] }) {
+  const itemData = useMemo<ItemData>(() => ({ data }), [data]);
+
+  return (
+    <FixedSizeGrid
+      children={Cell}
+      columnCount={data[0]?.length ?? 0}
+      columnWidth={100}
+      height={150}
+      itemData={itemData}
+      rowCount={data.length}
+      rowHeight={35}
+      width={300}
+    />
+  );
+}
+
+function Cell({
+  columnIndex,
+  data,
+  rowIndex,
+  style
+}: GridChildComponentProps<{
+  names: string[];
+}>) {
+  const { data } = data;
+  const datum = data[index];
+  return <div style={style}>...</div>;
+}
+```
+
+#### After
+
+```tsx
+import { FixedSizeGrid, type GridChildComponentProps } from "react-window";
+
+function Example({ data }: { data: Data[] }) {
+  // You don't need to useMemo for cellProps;
+  // Grid will automatically memoize them
+  return (
+    <Grid
+      cellComponent={Cell}
+      cellProps={{ data }}
+      columnCount={data[0]?.length ?? 0}
+      columnWidth={75}
+      rowCount={data.length}
+      rowHeight={25}
+    />
+  );
+}
+
+function Cell({
+  columnIndex,
+  data,
+  rowIndex,
+  style
+}: CellComponentProps<{
+  data: Data[];
+}>) {
+  const datum = data[rowIndex][columnIndex];
+  return <div style={style}>...</div>;
+}
+```
+
+### Migrating `VariableSizeGrid`
+
+#### Before
+
+```tsx
+import { VariableSizeGrid, type GridChildComponentProps } from "react-window";
+
+function Example({ data }: { data: Data[] }) {
+  const itemData = useMemo<ItemData>(() => ({ data }), [data]);
+
+  const columnWidth = useCallback(
+    (columnIndex: number) => {
+      // ...
+    },
+    [itemData]
+  );
+
+  const rowHeight = useCallback(
+    (rowIndex: number) => {
+      // ...
+    },
+    [itemData]
+  );
+
+  return (
+    <VariableSizeGrid
+      children={Cell}
+      columnCount={data[0]?.length ?? 0}
+      columnWidth={columnWidth}
+      height={150}
+      itemData={itemData}
+      rowCount={data.length}
+      rowHeight={rowHeight}
+      width={300}
+    />
+  );
+}
+
+function Cell({
+  columnIndex,
+  data,
+  rowIndex,
+  style
+}: GridChildComponentProps<{
+  names: string[];
+}>) {
+  const { data } = data;
+  const datum = data[index];
+  return <div style={style}>...</div>;
+}
+```
+
+#### After
+
+```tsx
+import { FixedSizeGrid, type GridChildComponentProps } from "react-window";
+
+type CellProps = {
+  data: Data[];
+};
+
+function Example({ data }: { data: Data[] }) {
+  // You don't need to useMemo for cellProps;
+  // Grid will automatically memoize them
+  return (
+    <Grid
+      cellComponent={Cell}
+      cellProps={{ data }}
+      columnCount={data[0]?.length ?? 0}
+      columnWidth={columnWidth}
+      rowCount={data.length}
+      rowHeight={rowHeight}
+    />
+  );
+}
+
+// The columnWidth method also receives the extra props,
+// so it can be defined at the module level
+function columnWidth(columnIndex: number, { data }: CellProps) {
+  // ...
+}
+
+// The rowHeight method also receives the extra props,
+// so it can be defined at the module level
+function rowHeight(rowIndex: number, { data }: CellProps) {
+  // ...
+}
+
+function Cell({
+  columnIndex,
+  data,
+  rowIndex,
+  style
+}: CellComponentProps<CellProps>) {
+  const datum = data[rowIndex][columnIndex];
+  return <div style={style}>...</div>;
 }
 ```
 
