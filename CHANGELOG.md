@@ -112,20 +112,25 @@ This section contains a couple of examples for common upgrade paths. Please refe
 #### Before
 
 ```tsx
+import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList, type ListChildComponentProps } from "react-window";
 
 function Example({ names }: { names: string[] }) {
   const itemData = useMemo<ItemData>(() => ({ names }), [names]);
 
   return (
-    <FixedSizeList
-      children={Row}
-      height={150}
-      itemCount={1000}
-      itemData={itemData}
-      itemSize={25}
-      width={300}
-    />
+    <AutoSizer>
+      {({ height, width }) => (
+        <FixedSizeList
+          children={Row}
+          height={height}
+          itemCount={names.length}
+          itemData={itemData}
+          itemSize={25}
+          width={width}
+        />
+      )}
+    </AutoSizer>
   );
 }
 
@@ -177,6 +182,7 @@ function RowComponent({
 #### Before
 
 ```tsx
+import AutoSizer from "react-virtualized-auto-sizer";
 import { VariableSizeList, type ListChildComponentProps } from "react-window";
 
 function Example({ items }: { items: Item[] }) {
@@ -190,14 +196,18 @@ function Example({ items }: { items: Item[] }) {
   );
 
   return (
-    <VariableSizeList
-      children={Row}
-      height={150}
-      itemCount={1000}
-      itemData={itemData}
-      itemSize={itemSize}
-      width={300}
-    />
+    <AutoSizer>
+      {({ height, width }) => (
+        <VariableSizeList
+          children={Row}
+          height={height}
+          itemCount={items.length}
+          itemData={itemData}
+          itemSize={itemSize}
+          width={width}
+        />
+      )}
+    </AutoSizer>
   );
 }
 
@@ -255,22 +265,27 @@ function RowComponent({ index, items, style }: RowComponentProps<RowProps>) {
 #### Before
 
 ```tsx
+import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeGrid, type GridChildComponentProps } from "react-window";
 
 function Example({ data }: { data: Data[] }) {
   const itemData = useMemo<ItemData>(() => ({ data }), [data]);
 
   return (
-    <FixedSizeGrid
-      children={Cell}
-      columnCount={data[0]?.length ?? 0}
-      columnWidth={100}
-      height={150}
-      itemData={itemData}
-      rowCount={data.length}
-      rowHeight={35}
-      width={300}
-    />
+    <AutoSizer>
+      {({ height, width }) => (
+        <FixedSizeGrid
+          children={Cell}
+          columnCount={data[0]?.length ?? 0}
+          columnWidth={100}
+          height={height}
+          itemData={itemData}
+          rowCount={data.length}
+          rowHeight={35}
+          width={width}
+        />
+      )}
+    </AutoSizer>
   );
 }
 
@@ -326,6 +341,7 @@ function Cell({
 #### Before
 
 ```tsx
+import AutoSizer from "react-virtualized-auto-sizer";
 import { VariableSizeGrid, type GridChildComponentProps } from "react-window";
 
 function Example({ data }: { data: Data[] }) {
@@ -346,16 +362,20 @@ function Example({ data }: { data: Data[] }) {
   );
 
   return (
-    <VariableSizeGrid
-      children={Cell}
-      columnCount={data[0]?.length ?? 0}
-      columnWidth={columnWidth}
-      height={150}
-      itemData={itemData}
-      rowCount={data.length}
-      rowHeight={rowHeight}
-      width={300}
-    />
+    <AutoSizer>
+      {({ height, width }) => (
+        <VariableSizeGrid
+          children={Cell}
+          columnCount={data[0]?.length ?? 0}
+          columnWidth={columnWidth}
+          height={height}
+          itemData={itemData}
+          rowCount={data.length}
+          rowHeight={rowHeight}
+          width={width}
+        />
+      )}
+    </AutoSizer>
   );
 }
 
