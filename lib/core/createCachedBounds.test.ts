@@ -62,6 +62,8 @@ describe("createCachedBounds", () => {
 
     expect(cachedBounds.size).toBe(0);
 
+    expect(cachedBounds.getEstimatedSize()).toEqual(0);
+
     expect(() => {
       cachedBounds.getItemBounds(1);
     }).toThrow("Invalid index 1");

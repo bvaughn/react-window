@@ -6,7 +6,6 @@ export type Bounds = {
 export type CachedBounds = {
   getEstimatedSize(): number;
   getItemBounds(index: number): Bounds;
-  hasItemBounds(index: number): boolean;
   size: number;
 };
 

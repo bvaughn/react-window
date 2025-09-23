@@ -1,5 +1,4 @@
 import type { CachedBounds, SizeFunction } from "./types";
-import { assert } from "../utils/assert";
 
 export function getEstimatedSize<Props extends object>({
   cachedBounds,
@@ -18,7 +17,6 @@ export function getEstimatedSize<Props extends object>({
         const bounds = cachedBounds.getItemBounds(
           cachedBounds.size === 0 ? 0 : cachedBounds.size - 1
         );
-        assert(bounds !== undefined, "Unexpected bounds cache miss");
 
         const averageItemSize =
           (bounds.scrollOffset + bounds.size) / cachedBounds.size;

@@ -14,12 +14,13 @@ export function createCachedBounds<Props extends object>({
 
   const api = {
     getEstimatedSize() {
-      const lastBounds = cache.get(cache.size - 1);
-      if (lastBounds) {
-        return (lastBounds.scrollOffset + lastBounds.size) / cache.size;
+      if (itemCount === 0) {
+        return 0;
       } else {
-        const firstBounds = api.getItemBounds(0);
-        return firstBounds.size * itemCount;
+        const bounds = api.getItemBounds(cache.size === 0 ? 0 : cache.size - 1);
+        assert(bounds, "Unexpected bounds cache miss");
+
+        return (bounds.scrollOffset + bounds.size) / cache.size;
       }
     },
     getItemBounds(index: number) {
@@ -67,9 +68,6 @@ export function createCachedBounds<Props extends object>({
       );
 
       return bounds;
-    },
-    hasItemBounds(index: number) {
-      return cache.has(index);
     },
     get size() {
       return cache.size;
