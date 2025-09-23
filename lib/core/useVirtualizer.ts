@@ -111,11 +111,6 @@ export function useVirtualizer<Props extends object>({
     itemSize
   });
 
-  const getCellBounds = useCallback(
-    (index: number) => cachedBounds.get(index),
-    [cachedBounds]
-  );
-
   const getEstimatedSize = useCallback(
     () =>
       getEstimatedSizeUtil({
@@ -251,7 +246,7 @@ export function useVirtualizer<Props extends object>({
   );
 
   return {
-    getCellBounds,
+    cachedBounds,
     getEstimatedSize,
     scrollToIndex,
     startIndexOverscan,

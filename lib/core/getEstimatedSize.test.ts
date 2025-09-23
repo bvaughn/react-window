@@ -41,7 +41,7 @@ describe("getEstimatedSize", () => {
         itemProps: EMPTY_OBJECT,
         itemSize
       });
-      cachedBounds.get(4);
+      cachedBounds.getItemBounds(4);
 
       expect(
         getEstimatedSize({
@@ -59,7 +59,7 @@ describe("getEstimatedSize", () => {
         itemSize
       });
 
-      cachedBounds.get(9);
+      cachedBounds.getItemBounds(9);
 
       expect(
         getEstimatedSize({

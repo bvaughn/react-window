@@ -5,6 +5,7 @@ import {
   useImperativeHandle,
   useMemo,
   useState,
+  type CSSProperties,
   type ReactNode
 } from "react";
 import { useVirtualizer } from "../../core/useVirtualizer";
@@ -41,7 +42,7 @@ export function List<
   const [element, setElement] = useState<HTMLDivElement | null>(null);
 
   const {
-    getCellBounds,
+    cachedBounds,
     getEstimatedSize,
     scrollToIndex,
     startIndexOverscan,
@@ -114,6 +115,13 @@ export function List<
     stopIndexVisible
   ]);
 
+  const hasRowHeight = rowHeight !== undefined;
+
+  const offset =
+    startIndexOverscan >= 0
+      ? cachedBounds.getItemBounds(startIndexOverscan).scrollOffset
+      : 0;
+
   const rows = useMemo(() => {
     const children: ReactNode[] = [];
     if (rowCount > 0) {
@@ -122,7 +130,15 @@ export function List<
         index <= stopIndexOverscan;
         index++
       ) {
-        const bounds = getCellBounds(index);
+        const bounds = cachedBounds.getItemBounds(index);
+        const style: CSSProperties = {
+          height: hasRowHeight ? bounds.size : undefined,
+          width: "100%"
+        };
+
+        if (index === startIndexOverscan) {
+          style.marginTop = `${offset}px`;
+        }
 
         children.push(
           <RowComponent
@@ -134,13 +150,7 @@ export function List<
             }}
             key={index}
             index={index}
-            style={{
-              position: "absolute",
-              left: 0,
-              transform: `translateY(${bounds.scrollOffset}px)`,
-              height: bounds.size,
-              width: "100%"
-            }}
+            style={style}
           />
         );
       }
@@ -148,7 +158,9 @@ export function List<
     return children;
   }, [
     RowComponent,
-    getCellBounds,
+    cachedBounds,
+    hasRowHeight,
+    offset,
     rowCount,
     rowProps,
     startIndexOverscan,

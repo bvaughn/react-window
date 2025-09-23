@@ -13,14 +13,14 @@ describe("createCachedBounds", () => {
     expect(itemSize).not.toHaveBeenCalled();
     expect(cachedBounds.size).toBe(0);
 
-    expect(cachedBounds.get(2)).toEqual({
+    expect(cachedBounds.getItemBounds(2)).toEqual({
       scrollOffset: 21,
       size: 12
     });
     expect(itemSize).toHaveBeenCalledTimes(3);
     expect(cachedBounds.size).toBe(3);
 
-    expect(cachedBounds.get(3)).toEqual({
+    expect(cachedBounds.getItemBounds(3)).toEqual({
       scrollOffset: 33,
       size: 13
     });
@@ -40,13 +40,13 @@ describe("createCachedBounds", () => {
     expect(itemSize).not.toHaveBeenCalled();
     expect(cachedBounds.size).toBe(0);
 
-    cachedBounds.get(9);
+    cachedBounds.getItemBounds(9);
 
     expect(itemSize).toHaveBeenCalledTimes(10);
     expect(cachedBounds.size).toBe(10);
 
     for (let index = 0; index < 10; index++) {
-      cachedBounds.get(index);
+      cachedBounds.getItemBounds(index);
     }
 
     expect(itemSize).toHaveBeenCalledTimes(10);
@@ -63,7 +63,7 @@ describe("createCachedBounds", () => {
     expect(cachedBounds.size).toBe(0);
 
     expect(() => {
-      cachedBounds.get(1);
+      cachedBounds.getItemBounds(1);
     }).toThrow("Invalid index 1");
   });
 });

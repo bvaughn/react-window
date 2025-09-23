@@ -4,7 +4,7 @@ import { EMPTY_OBJECT } from "../../src/constants";
 import { useCachedBounds } from "./useCachedBounds";
 
 describe("useCachedBounds", () => {
-  test("should cache the CachedBounds unless props change", () => {
+  test("should memoize CachedBounds value unless props change", () => {
     const { result, rerender } = renderHook(
       (props?: Partial<Parameters<typeof useCachedBounds>>[0]) =>
         useCachedBounds({
