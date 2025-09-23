@@ -2,10 +2,12 @@ import { act, render, screen } from "@testing-library/react";
 import { createRef, useLayoutEffect } from "react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
+import { assert } from "../../utils/assert";
 import {
   disableResizeObserverForCurrentTest,
-  simulateUnsupportedEnvironmentForTest,
-  updateMockResizeObserver
+  setDefaultElementSize,
+  setElementSize,
+  simulateUnsupportedEnvironmentForTest
 } from "../../utils/test/mockResizeObserver";
 import { List } from "./List";
 import { type ListImperativeAPI, type RowComponentProps } from "./types";
@@ -34,7 +36,7 @@ describe("List", () => {
   beforeEach(() => {
     RowComponent.mockReset();
 
-    updateMockResizeObserver(new DOMRect(0, 0, 50, 100));
+    setDefaultElementSize({ height: 100, width: 50 });
 
     mountedRows = new Map();
   });
@@ -56,7 +58,7 @@ describe("List", () => {
   test("should render enough rows to fill the available height", () => {
     const onResize = vi.fn();
 
-    render(
+    const { container } = render(
       <List
         onResize={onResize}
         overscanCount={0}
@@ -85,7 +87,14 @@ describe("List", () => {
     );
 
     act(() => {
-      updateMockResizeObserver(new DOMRect(0, 0, 50, 75));
+      const listElement = container.querySelector<HTMLElement>('[role="list"]');
+      assert(listElement !== null);
+
+      setElementSize({
+        element: listElement,
+        height: 75,
+        width: 50
+      });
     });
 
     items = screen.queryAllByRole("listitem");
@@ -107,7 +116,7 @@ describe("List", () => {
   });
 
   test("should render enough rows to fill the available height with overscan", () => {
-    render(
+    const { container } = render(
       <List
         overscanCount={2}
         rowCount={100}
@@ -123,7 +132,14 @@ describe("List", () => {
     expect(items[5]).toHaveTextContent("Row 5");
 
     act(() => {
-      updateMockResizeObserver(new DOMRect(0, 0, 50, 75));
+      const listElement = container.querySelector<HTMLElement>('[role="list"]');
+      assert(listElement !== null);
+
+      setElementSize({
+        element: listElement,
+        height: 75,
+        width: 50
+      });
     });
 
     items = screen.queryAllByRole("listitem");
