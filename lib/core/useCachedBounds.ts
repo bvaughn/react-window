@@ -9,7 +9,7 @@ export function useCachedBounds<Props extends object>({
 }: {
   itemCount: number;
   itemProps: Props;
-  itemSize: number | SizeFunction<Props>;
+  itemSize: number | SizeFunction<Props> | undefined;
 }): CachedBounds {
   return useMemo(
     () =>

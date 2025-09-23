@@ -15,6 +15,9 @@ export const routes = {
   "/list/variable-row-height": lazy(
     () => import("./routes/list/VariableRowHeightsRoute")
   ),
+  "/list/dynamic-row-height": lazy(
+    () => import("./routes/list/DynamicRowHeightsRoute")
+  ),
   "/list/imperative-api": lazy(
     () => import("./routes/list/ImperativeApiRoute")
   ),

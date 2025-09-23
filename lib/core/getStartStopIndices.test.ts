@@ -8,13 +8,15 @@ describe("getStartStopIndices", () => {
     containerSize,
     itemCount,
     itemSize,
-    overscanCount = 0
+    overscanCount = 0,
+    uncachedItemSizeDefault
   }: {
     containerScrollOffset: number;
     containerSize: number;
     itemCount: number;
-    itemSize: number;
+    itemSize: number | undefined;
     overscanCount?: number;
+    uncachedItemSizeDefault?: number;
   }) {
     const cachedBounds = createCachedBounds({
       itemCount: itemCount,
@@ -27,7 +29,8 @@ describe("getStartStopIndices", () => {
       containerScrollOffset,
       containerSize,
       itemCount,
-      overscanCount
+      overscanCount,
+      uncachedItemSizeDefault
     });
   }
 
@@ -210,6 +213,23 @@ describe("getStartStopIndices", () => {
         stopIndexVisible: 7,
         stopIndexOverscan: 9
       });
+    });
+  });
+
+  test("uncachedItemSizeDefault (lazily measured sizes)", () => {
+    expect(
+      getIndices({
+        containerScrollOffset: 0,
+        containerSize: 100,
+        itemCount: 10,
+        itemSize: undefined,
+        uncachedItemSizeDefault: 10
+      })
+    ).toEqual({
+      startIndexVisible: 0,
+      startIndexOverscan: 0,
+      stopIndexVisible: 9,
+      stopIndexOverscan: 9
     });
   });
 });

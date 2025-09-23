@@ -4,8 +4,10 @@ export type Bounds = {
 };
 
 export type CachedBounds = {
-  getEstimatedSize(): number;
-  getItemBounds(index: number): Bounds;
+  getEstimatedSize(): number | undefined;
+  getItemBounds(index: number): Bounds | undefined;
+  hasItemBounds(index: number): boolean;
+  setItemSize(index: number, size: number): void;
   size: number;
 };
 
