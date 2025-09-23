@@ -95,8 +95,15 @@ export type ListProps<
    * - number of pixels (number)
    * - percentage of the grid's current height (string)
    * - function that returns the row height (in pixels) given an index and `cellProps`
+   *
+   * If this property is not provided, a ResizeObserver will be used to measure the height of a row's content.
+   *
+   * ⚠️ Row height should be provided if it is known ahead of time as that is the most efficient way to render the list.
    */
-  rowHeight: number | string | ((index: number, cellProps: RowProps) => number);
+  rowHeight?:
+    | number
+    | string
+    | ((index: number, cellProps: RowProps) => number);
 
   /**
    * Additional props to be passed to the row-rendering component.

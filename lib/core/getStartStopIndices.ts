@@ -5,13 +5,15 @@ export function getStartStopIndices({
   containerScrollOffset,
   containerSize,
   itemCount,
-  overscanCount
+  overscanCount,
+  uncachedItemSizeDefault = 25
 }: {
   cachedBounds: CachedBounds;
   containerScrollOffset: number;
   containerSize: number;
   itemCount: number;
   overscanCount: number;
+  uncachedItemSizeDefault?: number;
 }): {
   startIndexVisible: number;
   stopIndexVisible: number;
@@ -25,11 +27,21 @@ export function getStartStopIndices({
   let startIndexOverscan = 0;
   let stopIndexOverscan = -1;
   let currentIndex = 0;
+  let currentOffset = 0;
 
   while (currentIndex < maxIndex) {
-    const bounds = cachedBounds.get(currentIndex);
+    const bounds = cachedBounds.getItemBounds(currentIndex);
 
-    if (bounds.scrollOffset + bounds.size > containerScrollOffset) {
+    if (bounds) {
+      currentOffset = bounds.scrollOffset + bounds.size;
+    } else {
+      const estimatedSize =
+        cachedBounds.getEstimatedSize() ?? uncachedItemSizeDefault;
+
+      currentOffset += estimatedSize;
+    }
+
+    if (currentOffset > containerScrollOffset) {
       break;
     }
 
@@ -40,12 +52,17 @@ export function getStartStopIndices({
   startIndexOverscan = Math.max(0, startIndexVisible - overscanCount);
 
   while (currentIndex < maxIndex) {
-    const bounds = cachedBounds.get(currentIndex);
+    const bounds = cachedBounds.getItemBounds(currentIndex);
+    if (bounds) {
+      currentOffset = bounds.scrollOffset + bounds.size;
+    } else if (currentIndex !== startIndexVisible) {
+      const estimatedSize =
+        cachedBounds.getEstimatedSize() ?? uncachedItemSizeDefault;
 
-    if (
-      bounds.scrollOffset + bounds.size >=
-      containerScrollOffset + containerSize
-    ) {
+      currentOffset += estimatedSize;
+    }
+
+    if (currentOffset >= containerScrollOffset + containerSize) {
       break;
     }
 

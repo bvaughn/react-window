@@ -2,13 +2,14 @@ import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, test } from "vitest";
 import {
   simulateUnsupportedEnvironmentForTest,
-  updateMockResizeObserver
+  setDefaultElementSize,
+  setElementSize
 } from "../utils/test/mockResizeObserver";
 import { useResizeObserver } from "./useResizeObserver";
 
 describe("useResizeObserver", () => {
   beforeEach(() => {
-    updateMockResizeObserver({ height: 100, width: 50 });
+    setDefaultElementSize({ height: 100, width: 50 });
   });
 
   test("should use default width/height if disabled", () => {
@@ -33,7 +34,7 @@ describe("useResizeObserver", () => {
 
     act(() => {
       // Updates should be ignored as well
-      updateMockResizeObserver({ height: 25, target: element });
+      setElementSize({ element, height: 25, width: 50 });
     });
 
     expect(result.current).toEqual({
@@ -76,9 +77,10 @@ describe("useResizeObserver", () => {
     });
 
     act(() => {
-      updateMockResizeObserver({
+      setElementSize({
+        element,
         height: 50,
-        target: element
+        width: 50
       });
     });
 
@@ -100,9 +102,10 @@ describe("useResizeObserver", () => {
     );
 
     act(() => {
-      updateMockResizeObserver({
+      setElementSize({
+        element: otherElement,
         height: 50,
-        target: otherElement
+        width: 50
       });
     });
 

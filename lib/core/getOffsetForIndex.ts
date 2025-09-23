@@ -1,4 +1,5 @@
 import type { Align } from "../types";
+import { assert } from "../utils/assert";
 import { getEstimatedSize } from "./getEstimatedSize";
 import type { CachedBounds, SizeFunction } from "./types";
 
@@ -15,7 +16,7 @@ export function getOffsetForIndex<Props extends object>({
   cachedBounds: CachedBounds;
   index: number;
   itemCount: number;
-  itemSize: number | SizeFunction<Props>;
+  itemSize: number | SizeFunction<Props> | undefined;
   containerScrollOffset: number;
   containerSize: number;
 }) {
@@ -24,8 +25,13 @@ export function getOffsetForIndex<Props extends object>({
     itemCount,
     itemSize
   });
+  if (estimatedTotalSize === undefined) {
+    return 0;
+  }
 
-  const bounds = cachedBounds.get(index);
+  const bounds = cachedBounds.getItemBounds(index);
+  assert(bounds, `Unexpected cache miss for index ${index}`);
+
   const maxOffset = Math.max(
     0,
     Math.min(estimatedTotalSize - containerSize, bounds.scrollOffset)

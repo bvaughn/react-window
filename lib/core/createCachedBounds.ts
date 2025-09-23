@@ -1,5 +1,5 @@
 import { assert } from "../utils/assert";
-import type { Bounds, CachedBounds, SizeFunction } from "./types";
+import type { CachedBounds, SizeFunction } from "./types";
 
 export function createCachedBounds<Props extends object>({
   itemCount,
@@ -8,62 +8,85 @@ export function createCachedBounds<Props extends object>({
 }: {
   itemCount: number;
   itemProps: Props;
-  itemSize: number | SizeFunction<Props>;
+  itemSize: number | SizeFunction<Props> | undefined;
 }): CachedBounds {
-  const cache = new Map<number, Bounds>();
+  const cache = new Map<number, number>();
 
-  return {
-    get(index: number) {
+  let lastContiguousMeasuredIndex = -1;
+  let totalSize = 0;
+
+  const api = {
+    getEstimatedSize() {
+      return cache.size === 0 ? undefined : totalSize / cache.size;
+    },
+    getItemBounds(index: number) {
       assert(index < itemCount, `Invalid index ${index}`);
 
-      while (cache.size - 1 < index) {
-        const currentIndex = cache.size;
+      let size: number | undefined = undefined;
 
-        let size: number;
-        switch (typeof itemSize) {
-          case "function": {
-            size = itemSize(currentIndex, itemProps);
-            break;
+      if (itemSize) {
+        while (cache.size <= index) {
+          const currentIndex = cache.size;
+
+          switch (typeof itemSize) {
+            case "function": {
+              size = itemSize(currentIndex, itemProps);
+              break;
+            }
+            case "number": {
+              size = itemSize;
+              break;
+            }
           }
-          case "number": {
-            size = itemSize;
-            break;
-          }
+
+          lastContiguousMeasuredIndex = currentIndex;
+          totalSize += size;
+
+          cache.set(currentIndex, size);
         }
 
-        if (currentIndex === 0) {
-          cache.set(currentIndex, {
-            size,
-            scrollOffset: 0
-          });
-        } else {
-          const previousRowBounds = cache.get(currentIndex - 1);
-          assert(
-            previousRowBounds !== undefined,
-            `Unexpected bounds cache miss for index ${index}`
-          );
-
-          cache.set(currentIndex, {
-            scrollOffset:
-              previousRowBounds.scrollOffset + previousRowBounds.size,
-            size
-          });
-        }
+        size = cache.get(index);
+      } else {
+        size = cache.get(index);
       }
 
-      const bounds = cache.get(index);
-      assert(
-        bounds !== undefined,
-        `Unexpected bounds cache miss for index ${index}`
-      );
+      if (size !== undefined) {
+        const averageSize = api.getEstimatedSize() ?? 0;
 
-      return bounds;
+        let scrollOffset = 0;
+
+        while (index > 0) {
+          index--;
+          scrollOffset += cache.get(index) ?? averageSize;
+        }
+
+        return {
+          scrollOffset,
+          size
+        };
+      }
     },
-    set(index: number, bounds: Bounds) {
-      cache.set(index, bounds);
+    hasItemBounds(index: number) {
+      return cache.has(index);
+    },
+    setItemSize(index: number, size: number) {
+      const prevSize = cache.get(index);
+      if (prevSize !== undefined) {
+        totalSize -= prevSize;
+      }
+
+      totalSize += size;
+
+      if (index === lastContiguousMeasuredIndex + 1) {
+        lastContiguousMeasuredIndex = index;
+      }
+
+      cache.set(index, size);
     },
     get size() {
       return cache.size;
     }
   };
+
+  return api;
 }

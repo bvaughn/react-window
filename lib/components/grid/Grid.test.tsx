@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
 import {
   disableForCurrentTest,
-  updateMockResizeObserver
+  setDefaultElementSize
 } from "../../utils/test/mockResizeObserver";
 import { Grid } from "./Grid";
 import type { CellComponentProps, GridImperativeAPI } from "./types";
@@ -35,7 +35,7 @@ describe("Grid", () => {
   beforeEach(() => {
     CellComponent.mockReset();
 
-    updateMockResizeObserver(new DOMRect(0, 0, 100, 40));
+    setDefaultElementSize({ height: 40, width: 100 });
 
     mountedCells = new Map();
   });
@@ -272,7 +272,6 @@ describe("Grid", () => {
 
     const items = screen.queryAllByRole("gridcell");
     expect(items).toHaveLength(8);
-    // TODO
   });
 
   test("should call onCellsRendered", () => {

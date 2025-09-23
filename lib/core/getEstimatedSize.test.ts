@@ -41,7 +41,7 @@ describe("getEstimatedSize", () => {
         itemProps: EMPTY_OBJECT,
         itemSize
       });
-      cachedBounds.get(4);
+      cachedBounds.getItemBounds(4);
 
       expect(
         getEstimatedSize({
@@ -59,7 +59,7 @@ describe("getEstimatedSize", () => {
         itemSize
       });
 
-      cachedBounds.get(9);
+      cachedBounds.getItemBounds(9);
 
       expect(
         getEstimatedSize({
@@ -84,6 +84,50 @@ describe("getEstimatedSize", () => {
           itemSize: 25
         })
       ).toBe(250);
+    });
+  });
+
+  describe("itemSize: undefined (lazily measured)", () => {
+    test("should return undefined if no measurements have been taken", () => {
+      expect(
+        getEstimatedSize({
+          cachedBounds: createCachedBounds({
+            itemCount: 10,
+            itemProps: EMPTY_OBJECT,
+            itemSize: undefined
+          }),
+          itemCount: 10,
+          itemSize: undefined
+        })
+      ).toBeUndefined();
+    });
+
+    test("should return an estimated size based on measurements that have been taken", () => {
+      const cachedBounds = createCachedBounds({
+        itemCount: 0,
+        itemProps: EMPTY_OBJECT,
+        itemSize: undefined
+      });
+      cachedBounds.setItemSize(0, 10);
+      cachedBounds.setItemSize(1, 20);
+
+      expect(
+        getEstimatedSize({
+          cachedBounds,
+          itemCount: 10,
+          itemSize: undefined
+        })
+      ).toBe(150);
+
+      cachedBounds.setItemSize(2, 30);
+
+      expect(
+        getEstimatedSize({
+          cachedBounds,
+          itemCount: 10,
+          itemSize: undefined
+        })
+      ).toBe(200);
     });
   });
 });

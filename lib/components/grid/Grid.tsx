@@ -48,7 +48,7 @@ export function Grid<
   const isRtl = useIsRtl(element, dir);
 
   const {
-    getCellBounds: getColumnBounds,
+    cachedBounds: cachedColumnBounds,
     getEstimatedSize: getEstimatedWidth,
     startIndexOverscan: columnStartIndexOverscan,
     startIndexVisible: columnStartIndexVisible,
@@ -68,7 +68,7 @@ export function Grid<
   });
 
   const {
-    getCellBounds: getRowBounds,
+    cachedBounds: cachedRowBounds,
     getEstimatedSize: getEstimatedHeight,
     startIndexOverscan: rowStartIndexOverscan,
     startIndexVisible: rowStartIndexVisible,
@@ -218,7 +218,8 @@ export function Grid<
         rowIndex <= rowStopIndexOverscan;
         rowIndex++
       ) {
-        const rowBounds = getRowBounds(rowIndex);
+        const rowBounds = cachedRowBounds.getItemBounds(rowIndex);
+        const rowOffset = rowBounds?.scrollOffset ?? 0;
 
         const columns: ReactNode[] = [];
 
@@ -227,7 +228,8 @@ export function Grid<
           columnIndex <= columnStopIndexOverscan;
           columnIndex++
         ) {
-          const columnBounds = getColumnBounds(columnIndex);
+          const columnBounds = cachedColumnBounds.getItemBounds(columnIndex);
+          const columnOffset = columnBounds?.scrollOffset ?? 0;
 
           columns.push(
             <CellComponent
@@ -243,9 +245,9 @@ export function Grid<
                 position: "absolute",
                 left: isRtl ? undefined : 0,
                 right: isRtl ? 0 : undefined,
-                transform: `translate(${isRtl ? -columnBounds.scrollOffset : columnBounds.scrollOffset}px, ${rowBounds.scrollOffset}px)`,
-                height: rowBounds.size,
-                width: columnBounds.size
+                transform: `translate(${isRtl ? -columnOffset : columnOffset}px, ${rowOffset}px)`,
+                height: rowBounds?.size,
+                width: columnBounds?.size
               }}
             />
           );
@@ -260,13 +262,13 @@ export function Grid<
     }
     return children;
   }, [
+    cachedColumnBounds,
+    cachedRowBounds,
     CellComponent,
     cellProps,
     columnCount,
     columnStartIndexOverscan,
     columnStopIndexOverscan,
-    getColumnBounds,
-    getRowBounds,
     isRtl,
     rowCount,
     rowStartIndexOverscan,

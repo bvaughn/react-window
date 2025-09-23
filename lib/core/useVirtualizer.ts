@@ -1,15 +1,10 @@
-import {
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type CSSProperties
-} from "react";
+import { useCallback, useRef, useState, type CSSProperties } from "react";
 import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { useResizeObserver } from "../hooks/useResizeObserver";
 import { useStableCallback } from "../hooks/useStableCallback";
 import type { Align } from "../types";
 import { adjustScrollOffsetForRtl } from "../utils/adjustScrollOffsetForRtl";
+import { assert } from "../utils/assert";
 import { shallowCompare } from "../utils/shallowCompare";
 import { getEstimatedSize as getEstimatedSizeUtil } from "./getEstimatedSize";
 import { getOffsetForIndex } from "./getOffsetForIndex";
@@ -17,6 +12,8 @@ import { getStartStopIndices as getStartStopIndicesUtil } from "./getStartStopIn
 import type { Direction, SizeFunction } from "./types";
 import { useCachedBounds } from "./useCachedBounds";
 import { useItemSize } from "./useItemSize";
+
+const DATA_ATTRIBUTE = "data-react-window-index";
 
 export function useVirtualizer<Props extends object>({
   containerElement,
@@ -28,7 +25,8 @@ export function useVirtualizer<Props extends object>({
   itemProps,
   itemSize: itemSizeProp,
   onResize,
-  overscanCount
+  overscanCount,
+  uncachedItemSizeDefault
 }: {
   containerElement: HTMLElement | null;
   containerStyle?: CSSProperties;
@@ -37,7 +35,7 @@ export function useVirtualizer<Props extends object>({
   isRtl?: boolean;
   itemCount: number;
   itemProps: Props;
-  itemSize: number | string | SizeFunction<Props>;
+  itemSize: number | string | SizeFunction<Props> | undefined;
   onResize:
     | ((
         size: { height: number; width: number },
@@ -45,6 +43,7 @@ export function useVirtualizer<Props extends object>({
       ) => void)
     | undefined;
   overscanCount: number;
+  uncachedItemSizeDefault?: number;
 }) {
   const [indices, setIndices] = useState<{
     startIndexVisible: number;
@@ -92,7 +91,7 @@ export function useVirtualizer<Props extends object>({
 
   const itemSize = useItemSize({ containerSize, itemSize: itemSizeProp });
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (typeof onResize === "function") {
       const prevSize = prevSizeRef.current;
 
@@ -110,11 +109,6 @@ export function useVirtualizer<Props extends object>({
     itemProps,
     itemSize
   });
-
-  const getCellBounds = useCallback(
-    (index: number) => cachedBounds.get(index),
-    [cachedBounds]
-  );
 
   const getEstimatedSize = useCallback(
     () =>
@@ -140,7 +134,8 @@ export function useVirtualizer<Props extends object>({
         containerScrollOffset,
         containerSize,
         itemCount,
-        overscanCount
+        overscanCount,
+        uncachedItemSizeDefault
       });
     },
     [
@@ -150,7 +145,8 @@ export function useVirtualizer<Props extends object>({
       direction,
       isRtl,
       itemCount,
-      overscanCount
+      overscanCount,
+      uncachedItemSizeDefault
     ]
   );
 
@@ -250,8 +246,75 @@ export function useVirtualizer<Props extends object>({
     }
   );
 
+  const resizeObserverCallback = useStableCallback(
+    (entries: ResizeObserverEntry[]) => {
+      if (entries.length === 0) {
+        return;
+      }
+
+      entries.forEach((entry) => {
+        const { borderBoxSize, target } = entry;
+
+        const attribute = target.getAttribute(DATA_ATTRIBUTE);
+        assert(
+          attribute !== null,
+          "Invalidate data-react-window-index attribute"
+        );
+
+        const index = parseInt(attribute);
+
+        const { inlineSize: width, blockSize: height } = borderBoxSize[0];
+        const size = direction === "horizontal" ? width : height;
+
+        cachedBounds.setItemSize(index, size);
+      });
+
+      // Schedule an update with new bounds information
+      const scrollOffset =
+        direction === "vertical"
+          ? containerElement?.scrollTop
+          : containerElement?.scrollLeft;
+
+      setIndices(getStartStopIndices(scrollOffset ?? 0));
+    }
+  );
+
+  const [resizeObserver] = useState(() => {
+    if (itemSize === undefined) {
+      // Only instantiate a ResizeObserver if items sizes are not provided
+      return new ResizeObserver(resizeObserverCallback);
+    }
+  });
+
+  useIsomorphicLayoutEffect(() => {
+    if (!containerElement || !resizeObserver) {
+      return;
+    }
+
+    const items = Array.from(containerElement.children);
+    items.forEach((item, index) => {
+      if (item.hasAttribute("aria-hidden")) {
+        // Ignore sizing element
+        return;
+      }
+
+      const attribute = `${startIndexOverscan + index}`;
+      item.setAttribute(DATA_ATTRIBUTE, attribute);
+
+      resizeObserver.observe(item);
+    });
+
+    return () => {
+      items.forEach((item) => {
+        resizeObserver.unobserve(item);
+
+        item.removeAttribute(DATA_ATTRIBUTE);
+      });
+    };
+  }, [containerElement, resizeObserver, startIndexOverscan, stopIndexOverscan]);
+
   return {
-    getCellBounds,
+    cachedBounds,
     getEstimatedSize,
     scrollToIndex,
     startIndexOverscan,
