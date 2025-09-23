@@ -21,6 +21,20 @@ describe("getEstimatedSize", () => {
       ).toBe(0);
     });
 
+    test("should return an estimate based on the first row if no sizes have yet been measured", () => {
+      expect(
+        getEstimatedSize({
+          cachedBounds: createCachedBounds({
+            itemCount: 1,
+            itemProps: EMPTY_OBJECT,
+            itemSize
+          }),
+          itemCount: 1,
+          itemSize
+        })
+      ).toBe(10);
+    });
+
     test("should return an average size based on the first item if no measurements have been taken", () => {
       expect(
         getEstimatedSize({
