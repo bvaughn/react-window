@@ -25,6 +25,7 @@ export const routes = {
     () => import("./routes/tables/AriaRolesRoute")
   ),
   "/list/sticky-rows": lazy(() => import("./routes/list/StickyRowsRoute")),
+  "/list/images": lazy(() => import("./routes/list/ImagesRoute")),
 
   // SimpleGrid
   "/grid/grid": lazy(() => import("./routes/grid/RenderingGridRoute")),

@@ -3,6 +3,7 @@ import { Block } from "../../components/Block";
 import { Box } from "../../components/Box";
 import { Code } from "../../components/code/Code";
 import { ExternalLink } from "../../components/ExternalLink";
+import { Header } from "../../components/Header";
 import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { RtlExample } from "./examples/RtlGrid.example";
 import { useContacts } from "./hooks/useContacts";
@@ -12,6 +13,7 @@ export default function RTLGridsRoute() {
 
   return (
     <Box direction="column" gap={4}>
+      <Header section="Other" title="Right to left content" />
       <div>
         Grids can also display right to left languages (like Arabic). The grid
         components check the{" "}
