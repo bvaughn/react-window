@@ -21,11 +21,12 @@ function RowComponent({
   const isCached = !!cache.getImageSize(index);
 
   return (
-    <div className="overflow-hidden" style={style}>
+    <div style={style}>
       {isCached || <LoadingSpinner />}
       <img
         className={isCached ? undefined : "opacity-0"}
         onLoad={(event) => {
+          // Update the cache with image dimensions once it's loaded
           cache.setImageSize(index, {
             height: event.currentTarget.naturalHeight,
             width: event.currentTarget.naturalWidth
