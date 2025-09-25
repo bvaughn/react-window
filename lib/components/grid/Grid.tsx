@@ -57,6 +57,7 @@ export function Grid<
     stopIndexVisible: columnStopIndexVisible
   } = useVirtualizer({
     containerElement: element,
+    containerStyle: style,
     defaultContainerSize: defaultWidth,
     direction: "horizontal",
     isRtl,
@@ -77,6 +78,7 @@ export function Grid<
     stopIndexVisible: rowStopIndexVisible
   } = useVirtualizer({
     containerElement: element,
+    containerStyle: style,
     defaultContainerSize: defaultHeight,
     direction: "vertical",
     itemCount: rowCount,
