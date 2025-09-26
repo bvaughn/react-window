@@ -21,7 +21,8 @@ describe("useResizeObserver", () => {
         defaultHeight: 50,
         defaultWidth: 50,
         element,
-        disabled: true
+        disabled: true,
+        style: undefined
       })
     );
 
@@ -49,7 +50,8 @@ describe("useResizeObserver", () => {
 
     const { result, unmount } = renderHook(() =>
       useResizeObserver({
-        element
+        element,
+        style: undefined
       })
     );
 
@@ -66,7 +68,8 @@ describe("useResizeObserver", () => {
 
     const { result, unmount } = renderHook(() =>
       useResizeObserver({
-        element
+        element,
+        style: undefined
       })
     );
 
@@ -95,7 +98,8 @@ describe("useResizeObserver", () => {
 
     const { result, unmount } = renderHook(() =>
       useResizeObserver({
-        element: document.createElement("div")
+        element: document.createElement("div"),
+        style: undefined
       })
     );
 

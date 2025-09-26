@@ -17,7 +17,7 @@ export function useResizeObserver({
   disabled?: boolean;
   element: HTMLElement | null;
   mode?: "only-height" | "only-width";
-  style?: CSSProperties;
+  style: CSSProperties | undefined;
 }) {
   const { styleHeight, styleWidth } = useMemo(
     () => ({
