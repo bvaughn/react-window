@@ -3,7 +3,7 @@ import { createRef, useLayoutEffect } from "react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
 import {
-  disableForCurrentTest,
+  disableResizeObserverForCurrentTest,
   simulateUnsupportedEnvironmentForTest,
   updateMockResizeObserver
 } from "../../utils/test/mockResizeObserver";
@@ -239,7 +239,7 @@ describe("List", () => {
 
   test("should use defaultHeight for initial mount", () => {
     // Mimic server rendering
-    disableForCurrentTest();
+    disableResizeObserverForCurrentTest();
 
     render(
       <List
@@ -688,8 +688,8 @@ describe("List", () => {
     });
 
     test("should not require ResizeObserver if height is provided", () => {
-      const originalResizeObserver = window.ResizeObserver;
       simulateUnsupportedEnvironmentForTest();
+
       render(
         <List
           overscanCount={0}
@@ -700,7 +700,6 @@ describe("List", () => {
           style={{ height: 42 }}
         />
       );
-      window.ResizeObserver = originalResizeObserver;
     });
   });
 

@@ -6,7 +6,7 @@ emitter.setMaxListeners(25);
 let disabled: boolean = false;
 let entrySize: DOMRectReadOnly = new DOMRect(0, 0, 0, 0);
 
-export function disableForCurrentTest() {
+export function disableResizeObserverForCurrentTest() {
   disabled = true;
 }
 

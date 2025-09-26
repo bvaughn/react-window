@@ -3,7 +3,7 @@ import { createRef, useLayoutEffect } from "react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
 import {
-  disableForCurrentTest,
+  disableResizeObserverForCurrentTest,
   simulateUnsupportedEnvironmentForTest,
   updateMockResizeObserver
 } from "../../utils/test/mockResizeObserver";
@@ -253,7 +253,7 @@ describe("Grid", () => {
 
   test("should use default sizes for initial mount", () => {
     // Mimic server rendering
-    disableForCurrentTest();
+    disableResizeObserverForCurrentTest();
 
     render(
       <Grid
@@ -582,7 +582,6 @@ describe("Grid", () => {
     });
 
     test("should not require ResizeObserver if size is provided", () => {
-      const originalResizeObserver = window.ResizeObserver;
       simulateUnsupportedEnvironmentForTest();
 
       render(
@@ -597,8 +596,6 @@ describe("Grid", () => {
           style={{ height: 42, width: 84 }}
         />
       );
-
-      window.ResizeObserver = originalResizeObserver;
     });
   });
 
