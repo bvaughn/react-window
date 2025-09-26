@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.2
+
+Prevent `ResizeObserver` API from being called at all if an explicit `List` height (or `Grid` width and height) is provided.
+
 ## 2.1.1
 
 Grids with only one row no longer incorrectly set cell height to 100%.
