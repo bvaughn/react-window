@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
 import {
   disableForCurrentTest,
+  simulateUnsupportedEnvironmentForTest,
   updateMockResizeObserver
 } from "../../utils/test/mockResizeObserver";
 import { List } from "./List";
@@ -684,6 +685,22 @@ describe("List", () => {
       }
 
       render(<Test />);
+    });
+
+    test("should not require ResizeObserver if height is provided", () => {
+      const originalResizeObserver = window.ResizeObserver;
+      simulateUnsupportedEnvironmentForTest();
+      render(
+        <List
+          overscanCount={0}
+          rowCount={100}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+          style={{ height: 42 }}
+        />
+      );
+      window.ResizeObserver = originalResizeObserver;
     });
   });
 

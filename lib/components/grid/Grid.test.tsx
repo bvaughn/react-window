@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
 import {
   disableForCurrentTest,
+  simulateUnsupportedEnvironmentForTest,
   updateMockResizeObserver
 } from "../../utils/test/mockResizeObserver";
 import { Grid } from "./Grid";
@@ -578,6 +579,26 @@ describe("Grid", () => {
       }
 
       render(<Test />);
+    });
+
+    test("should not require ResizeObserver if size is provided", () => {
+      const originalResizeObserver = window.ResizeObserver;
+      simulateUnsupportedEnvironmentForTest();
+
+      render(
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={EMPTY_OBJECT}
+          columnCount={100}
+          columnWidth={25}
+          overscanCount={2}
+          rowCount={100}
+          rowHeight={20}
+          style={{ height: 42, width: 84 }}
+        />
+      );
+
+      window.ResizeObserver = originalResizeObserver;
     });
   });
 

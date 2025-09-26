@@ -50,6 +50,7 @@ export function List<
     stopIndexVisible
   } = useVirtualizer({
     containerElement: element,
+    containerStyle: style,
     defaultContainerSize: defaultHeight,
     direction: "vertical",
     itemCount: rowCount,
