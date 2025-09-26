@@ -12,14 +12,24 @@ export function createCachedBounds<Props extends object>({
 }): CachedBounds {
   const cache = new Map<number, Bounds>();
 
-  return {
-    get(index: number) {
+  const api = {
+    getEstimatedSize() {
+      if (itemCount === 0) {
+        return 0;
+      } else {
+        const bounds = api.getItemBounds(cache.size === 0 ? 0 : cache.size - 1);
+        assert(bounds, "Unexpected bounds cache miss");
+
+        return (bounds.scrollOffset + bounds.size) / cache.size;
+      }
+    },
+    getItemBounds(index: number) {
       assert(index < itemCount, `Invalid index ${index}`);
 
       while (cache.size - 1 < index) {
         const currentIndex = cache.size;
 
-        let size: number;
+        let size: number = 0;
         switch (typeof itemSize) {
           case "function": {
             size = itemSize(currentIndex, itemProps);
@@ -33,8 +43,8 @@ export function createCachedBounds<Props extends object>({
 
         if (currentIndex === 0) {
           cache.set(currentIndex, {
-            size,
-            scrollOffset: 0
+            scrollOffset: 0,
+            size
           });
         } else {
           const previousRowBounds = cache.get(currentIndex - 1);
@@ -59,11 +69,10 @@ export function createCachedBounds<Props extends object>({
 
       return bounds;
     },
-    set(index: number, bounds: Bounds) {
-      cache.set(index, bounds);
-    },
     get size() {
       return cache.size;
     }
   };
+
+  return api;
 }

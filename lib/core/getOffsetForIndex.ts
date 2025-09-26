@@ -25,7 +25,8 @@ export function getOffsetForIndex<Props extends object>({
     itemSize
   });
 
-  const bounds = cachedBounds.get(index);
+  const bounds = cachedBounds.getItemBounds(index);
+
   const maxOffset = Math.max(
     0,
     Math.min(estimatedTotalSize - containerSize, bounds.scrollOffset)
