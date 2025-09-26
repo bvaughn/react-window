@@ -221,7 +221,7 @@ export function Grid<
         rowIndex++
       ) {
         const rowBounds = cachedRowBounds.getItemBounds(rowIndex);
-        const rowOffset = rowBounds?.scrollOffset;
+        const rowOffset = rowBounds?.scrollOffset ?? 0;
 
         const columns: ReactNode[] = [];
 
@@ -231,7 +231,7 @@ export function Grid<
           columnIndex++
         ) {
           const columnBounds = cachedColumnBounds.getItemBounds(columnIndex);
-          const columnOffset = columnBounds?.scrollOffset;
+          const columnOffset = columnBounds?.scrollOffset ?? 0;
 
           columns.push(
             <CellComponent

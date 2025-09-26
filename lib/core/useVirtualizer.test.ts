@@ -96,6 +96,27 @@ describe("useVirtualizer", () => {
         size: 200
       });
     });
+
+    test("itemSize type: undefined", () => {
+      const { result } = testHelper({
+        defaultContainerSize: 200,
+        itemCount: 10,
+        itemSize: undefined,
+        uncachedItemSizeDefault: 50
+      });
+
+      // Default size returned by mock ResizeObserver
+      expect(result.current.cachedBounds.getItemBounds(0)).toEqual({
+        scrollOffset: 0,
+        size: 25
+      });
+
+      // Not measured yet
+      expect(result.current.cachedBounds.getItemBounds(9)).toEqual({
+        scrollOffset: 225,
+        size: 25
+      });
+    });
   });
 
   describe("getEstimatedSize", () => {
@@ -133,6 +154,24 @@ describe("useVirtualizer", () => {
       // Finish measuring the rows and the actual size should be returned now
       result.current.cachedBounds.getItemBounds(9);
       expect(result.current.getEstimatedSize()).toBe(1100);
+    });
+
+    test("itemSize type: undefined", () => {
+      setElementSizeFunction(() => new DOMRect(0, 0, 100, 35));
+
+      const { result } = testHelper({
+        defaultContainerSize: 100,
+        itemCount: 10,
+        itemSize: undefined
+      });
+
+      // Size calculated as an average of measured items
+      expect(result.current.getEstimatedSize()).toBe(350);
+
+      setElementSizeFunction(() => new DOMRect(0, 0, 100, 50));
+
+      // Size should take into account the updated row heights
+      expect(result.current.getEstimatedSize()).toBe(500);
     });
   });
 
@@ -178,6 +217,19 @@ describe("useVirtualizer", () => {
       expect(result.current.startIndexVisible).toBe(0);
       expect(result.current.stopIndexOverscan).toBe(4);
       expect(result.current.stopIndexVisible).toBe(2);
+    });
+
+    test("itemSize type: undefined", () => {
+      const { result } = testHelper({
+        defaultContainerSize: 100,
+        itemSize: undefined,
+        overscanCount: 2
+      });
+
+      expect(result.current.startIndexOverscan).toBe(0);
+      expect(result.current.startIndexVisible).toBe(0);
+      expect(result.current.stopIndexOverscan).toBe(5);
+      expect(result.current.stopIndexVisible).toBe(3);
     });
   });
 
