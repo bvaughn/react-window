@@ -1,4 +1,5 @@
 import { Box } from "../../../components/Box";
+import { cn } from "../../../utils/cn";
 import type { Cache } from "./useImageSizeCache.example";
 
 // <begin>
@@ -24,7 +25,7 @@ function RowComponent({
     <div style={style}>
       {isCached || <LoadingSpinner />}
       <img
-        className={isCached ? undefined : "opacity-0"}
+        className={cn("w-full", isCached ? undefined : "opacity-0")}
         onLoad={(event) => {
           // Update the cache with image dimensions once it's loaded
           cache.setImageSize(index, {
