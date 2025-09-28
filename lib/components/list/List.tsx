@@ -119,7 +119,7 @@ export function List<
 
   const offset =
     startIndexOverscan >= 0
-      ? cachedBounds.getItemBounds(startIndexOverscan).scrollOffset
+      ? (cachedBounds.getItemBounds(startIndexOverscan)?.scrollOffset ?? 0)
       : 0;
 
   const rows = useMemo(() => {
@@ -131,10 +131,18 @@ export function List<
         index++
       ) {
         const bounds = cachedBounds.getItemBounds(index);
-        const style: CSSProperties = {
-          height: hasRowHeight ? bounds.size : undefined,
-          width: "100%"
-        };
+
+        let style: CSSProperties = {};
+        if (bounds) {
+          style = {
+            height: hasRowHeight ? bounds.size : undefined,
+            width: "100%"
+          };
+        } else {
+          style = {
+            width: "100%"
+          };
+        }
 
         if (index === startIndexOverscan) {
           style.marginTop = `${offset}px`;
@@ -171,6 +179,8 @@ export function List<
     <div
       aria-hidden
       style={{
+        position: "absolute",
+        top: "0",
         height: getEstimatedSize(),
         width: "100%",
         zIndex: -1

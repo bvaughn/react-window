@@ -7,6 +7,7 @@ import {
   disableResizeObserverForCurrentTest,
   setDefaultElementSize,
   setElementSize,
+  setElementSizeFunction,
   simulateUnsupportedEnvironmentForTest
 } from "../../utils/test/mockResizeObserver";
 import { List } from "./List";
@@ -554,6 +555,30 @@ describe("List", () => {
       );
 
       expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(4);
+    });
+
+    // Most dynamic size tests are in useVirtualizer
+    test("type: dynamic (lazily measured)", () => {
+      setElementSizeFunction((element) => {
+        const attribute = element.getAttribute("data-react-window-index");
+        if (attribute !== null) {
+          const index = parseInt(attribute);
+          if (!Number.isNaN(index)) {
+            return new DOMRect(0, 0, 100, (index + 1) * 5);
+          }
+        }
+      });
+
+      const { container } = render(
+        <List
+          overscanCount={0}
+          rowCount={50}
+          rowComponent={RowComponent}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(6);
     });
   });
 

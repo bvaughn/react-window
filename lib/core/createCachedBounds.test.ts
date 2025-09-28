@@ -68,4 +68,62 @@ describe("createCachedBounds", () => {
       cachedBounds.getItemBounds(1);
     }).toThrow("Invalid index 1");
   });
+
+  test("should gracefully handle undefined item sizes", () => {
+    const cachedBounds = createCachedBounds({
+      itemCount: 10,
+      itemProps: {},
+      itemSize: undefined
+    });
+
+    cachedBounds.setItemSize(0, 10);
+
+    expect(cachedBounds.size).toBe(1);
+    expect(cachedBounds.getItemBounds(0)).toEqual({
+      scrollOffset: 0,
+      size: 10
+    });
+
+    cachedBounds.setItemSize(1, 20);
+
+    expect(cachedBounds.size).toBe(2);
+    expect(cachedBounds.getItemBounds(1)).toEqual({
+      scrollOffset: 10,
+      size: 20
+    });
+  });
+
+  test("should gracefully handle sparsely populated cache", () => {
+    const cachedBounds = createCachedBounds({
+      itemCount: 5,
+      itemProps: {},
+      itemSize: undefined
+    });
+
+    expect(cachedBounds.getEstimatedSize()).toBeUndefined();
+
+    // Estimated average should be based on measured cells
+    cachedBounds.setItemSize(0, 10);
+    expect(cachedBounds.getEstimatedSize()).toBe(10);
+    cachedBounds.setItemSize(2, 20);
+    expect(cachedBounds.getEstimatedSize()).toBe(15);
+    cachedBounds.setItemSize(4, 30);
+    expect(cachedBounds.getEstimatedSize()).toBe(20);
+
+    // Bounds offsets based on measured cells; gaps should be filled in by averages
+    expect(cachedBounds.getItemBounds(0)).toEqual({
+      scrollOffset: 0,
+      size: 10
+    });
+    expect(cachedBounds.getItemBounds(1)).toBeUndefined();
+    expect(cachedBounds.getItemBounds(2)).toEqual({
+      scrollOffset: 30,
+      size: 20
+    });
+    expect(cachedBounds.getItemBounds(3)).toBeUndefined();
+    expect(cachedBounds.getItemBounds(4)).toEqual({
+      scrollOffset: 70,
+      size: 30
+    });
+  });
 });

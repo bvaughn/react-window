@@ -31,7 +31,7 @@ export default function VariableRowHeightsRoute() {
         height a row should be based on the type of data it contains.
       </div>
       <Code html={ListVariableRowHeightsMarkdown.html} />
-      <ContinueLink to="/list/props" title="component props" />
+      <ContinueLink to="/list/dynamic-row-height" title="dynamic row heights" />
     </Box>
   );
 }

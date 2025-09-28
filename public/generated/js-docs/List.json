@@ -323,7 +323,7 @@
     },
     "rowHeight": {
       "defaultValue": null,
-      "description": "Row height; the following formats are supported:\n- number of pixels (number)\n- percentage of the grid's current height (string)\n- function that returns the row height (in pixels) given an index and `cellProps`",
+      "description": "Row height; the following formats are supported:\n- number of pixels (number)\n- percentage of the grid's current height (string)\n- function that returns the row height (in pixels) given an index and `cellProps`\n\nIf this property is not provided, a ResizeObserver will be used to measure the height of a row's content.\n\n⚠️ Row height should be provided if it is known ahead of time as that is the most efficient way to render the list.",
       "name": "rowHeight",
       "declarations": [
         {
@@ -331,11 +331,14 @@
           "name": "TypeLiteral"
         }
       ],
-      "required": true,
+      "required": false,
       "type": {
         "name": "enum",
-        "raw": "string | number | ((index: number, cellProps: RowProps) => number)",
+        "raw": "string | number | ((index: number, cellProps: RowProps) => number) | undefined",
         "value": [
+          {
+            "value": "undefined"
+          },
           {
             "value": "string"
           },
