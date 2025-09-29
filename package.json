@@ -16,8 +16,7 @@
   "module": "dist/react-window.js",
   "types": "dist/react-window.d.ts",
   "files": [
-    "dist",
-    "docs"
+    "dist"
   ],
   "scripts": {
     "dev": "vite",
@@ -28,7 +27,7 @@
     "compile:code-snippets": "node --loader ts-node/esm ./scripts/code-snippets/run.ts",
     "compile:docs": "node --loader ts-node/esm ./scripts/docs/run.ts",
     "lint": "eslint .",
-    "prerelease": "rm -rf dist && rm -rf docs && pnpm run build",
+    "prerelease": "rm -rf dist && pnpm run build:lib",
     "prettier": "prettier --write \"**/*.{css,html,js,json,jsx,ts,tsx}\"",
     "prettier:ci": "prettier --check \"**/*.{css,html,js,json,jsx,ts,tsx}\"",
     "preview": "vite preview",
