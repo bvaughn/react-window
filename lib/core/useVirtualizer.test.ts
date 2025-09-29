@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, test } from "vitest";
 import { EMPTY_OBJECT, NOOP_FUNCTION } from "../../src/constants";
-import { updateMockResizeObserver } from "../utils/test/mockResizeObserver";
+import { setDefaultElementSize } from "../utils/test/mockResizeObserver";
 import { useVirtualizer } from "./useVirtualizer";
 
 describe("useVirtualizer", () => {
@@ -17,7 +17,10 @@ describe("useVirtualizer", () => {
   };
 
   beforeEach(() => {
-    updateMockResizeObserver(new DOMRect(0, 0, 50, 100));
+    setDefaultElementSize({
+      height: 100,
+      width: 50
+    });
   });
 
   describe("getCellBounds", () => {
