@@ -1,51 +1,31 @@
 import { Box } from "../../../components/Box";
-import { cn } from "../../../utils/cn";
-import type { Cache } from "./useImageSizeCache.example";
 
 // <begin>
 
 import { type RowComponentProps } from "react-window";
 
 type RowProps = {
-  cache: Cache;
   images: string[];
 };
 
-function RowComponent({
-  cache,
-  index,
-  images,
-  style
-}: RowComponentProps<RowProps>) {
+function RowComponent({ index, images, style }: RowComponentProps<RowProps>) {
   const url = images[index];
-
-  const isCached = !!cache.getImageSize(index);
 
   return (
     <div style={style}>
-      {isCached || <LoadingSpinner />}
-      <img
-        className={cn("w-full", isCached ? undefined : "opacity-0")}
-        onLoad={(event) => {
-          // Update the cache with image dimensions once it's loaded
-          cache.setImageSize(index, {
-            height: event.currentTarget.naturalHeight,
-            width: event.currentTarget.naturalWidth
-          });
-        }}
-        src={url}
-      />
+      <LoadingSpinner className="absolute z-[-1]" />
+      <img className="w-full" src={url} />
     </div>
   );
 }
 
 // <end>
 
-function LoadingSpinner() {
+function LoadingSpinner({ className }: { className: string }) {
   return (
     <Box
       align="center"
-      className="h-full color-slate-700"
+      className={`color-slate-700 ${className}`}
       direction="column"
       justify="center"
     >

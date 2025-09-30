@@ -28,16 +28,6 @@ npm install react-window
 
 Documentation for this project is available at [react-window.vercel.app](https://react-window.vercel.app/).
 
-Each release also ships with its own copy of the documentation (in the `docs` folder) which can be viewed by running:
-
-```sh
-# From the package directory
-npx serve -s docs
-
-# Or as an NPM-installed dependency
-npx serve -s ./node_modules/react-window/docs
-```
-
 > **Note**: Older version 1.x documentation can be found at [react-window-v1.vercel.app](https://react-window-v1.vercel.app/) or on the NPM page for a specific version, e.g. [1.8.11](https://www.npmjs.com/package/react-window/v/1.8.11).)
 
 ## TypeScript types

@@ -7,6 +7,13 @@ import type {
 } from "react";
 import type { TagNames } from "../../types";
 
+export type DynamicRowHeight = {
+  getAverageRowHeight(): number;
+  getRowHeight(index: number): number | undefined;
+  setRowHeight(index: number, size: number): void;
+  observeRowElements: (elements: Element[] | NodeListOf<Element>) => () => void;
+};
+
 type ForbiddenKeys = "ariaAttributes" | "index" | "style";
 type ExcludeForbiddenKeys<Type> = {
   [Key in keyof Type]: Key extends ForbiddenKeys ? never : Type[Key];
@@ -95,8 +102,16 @@ export type ListProps<
    * - number of pixels (number)
    * - percentage of the grid's current height (string)
    * - function that returns the row height (in pixels) given an index and `cellProps`
+   * - dynamic row height cache returned by the `useDynamicRowHeight` hook
+   *
+   * ⚠️ Dynamic row heights are not as efficient as predetermined sizes.
+   * It's recommended to provide your own height values if they can be determined ahead of time.
    */
-  rowHeight: number | string | ((index: number, cellProps: RowProps) => number);
+  rowHeight:
+    | number
+    | string
+    | ((index: number, cellProps: RowProps) => number)
+    | DynamicRowHeight;
 
   /**
    * Additional props to be passed to the row-rendering component.

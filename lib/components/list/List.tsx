@@ -8,10 +8,14 @@ import {
   type ReactNode
 } from "react";
 import { useVirtualizer } from "../../core/useVirtualizer";
+import { useIsomorphicLayoutEffect } from "../../hooks/useIsomorphicLayoutEffect";
 import { useMemoizedObject } from "../../hooks/useMemoizedObject";
 import type { Align, TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
+import { isDynamicRowHeight as isDynamicRowHeightUtil } from "./isDynamicRowHeight";
 import type { ListProps } from "./types";
+
+export const DATA_ATTRIBUTE_LIST_INDEX = "data-react-window-index";
 
 export function List<
   RowProps extends object,
@@ -26,7 +30,7 @@ export function List<
   overscanCount = 3,
   rowComponent: RowComponentProp,
   rowCount,
-  rowHeight,
+  rowHeight: rowHeightProp,
   rowProps: rowPropsUnstable,
   tagName = "div" as TagName,
   style,
@@ -39,6 +43,21 @@ export function List<
   );
 
   const [element, setElement] = useState<HTMLDivElement | null>(null);
+
+  const isDynamicRowHeight = isDynamicRowHeightUtil(rowHeightProp);
+
+  const rowHeight = useMemo(() => {
+    if (isDynamicRowHeight) {
+      return (index: number) => {
+        return (
+          rowHeightProp.getRowHeight(index) ??
+          rowHeightProp.getAverageRowHeight()
+        );
+      };
+    }
+
+    return rowHeightProp;
+  }, [isDynamicRowHeight, rowHeightProp]);
 
   const {
     getCellBounds,
@@ -93,6 +112,34 @@ export function List<
     [element, scrollToIndex]
   );
 
+  useIsomorphicLayoutEffect(() => {
+    if (!element) {
+      return;
+    }
+
+    const rows = Array.from(element.children).filter((item, index) => {
+      if (item.hasAttribute("aria-hidden")) {
+        // Ignore sizing element
+        return false;
+      }
+
+      const attribute = `${startIndexOverscan + index}`;
+      item.setAttribute(DATA_ATTRIBUTE_LIST_INDEX, attribute);
+
+      return true;
+    });
+
+    if (isDynamicRowHeight) {
+      return rowHeightProp.observeRowElements(rows);
+    }
+  }, [
+    element,
+    isDynamicRowHeight,
+    rowHeightProp,
+    startIndexOverscan,
+    stopIndexOverscan
+  ]);
+
   useEffect(() => {
     if (startIndexOverscan >= 0 && stopIndexOverscan >= 0 && onRowsRendered) {
       onRowsRendered(
@@ -138,7 +185,9 @@ export function List<
               position: "absolute",
               left: 0,
               transform: `translateY(${bounds.scrollOffset}px)`,
-              height: bounds.size,
+              // In case of dynamic row heights, don't specify a height style
+              // otherwise a default/estimated height would mask the actual height
+              height: isDynamicRowHeight ? undefined : bounds.size,
               width: "100%"
             }}
           />
@@ -149,6 +198,7 @@ export function List<
   }, [
     RowComponent,
     getCellBounds,
+    isDynamicRowHeight,
     rowCount,
     rowProps,
     startIndexOverscan,

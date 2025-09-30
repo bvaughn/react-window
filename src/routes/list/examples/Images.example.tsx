@@ -1,35 +1,25 @@
 import { RowComponent, type RowProps } from "./ImageRow.example";
-import type { Size } from "./useImageSizeCache.example";
-import { useImageSizeCache } from "./useImageSizeCache.example";
+
+type Size = {
+  height: number;
+  width: number;
+};
 
 // <begin>
 
-import { useCallback, useState } from "react";
-import { List } from "react-window";
+import { List, useDynamicRowHeight } from "react-window";
 
 function Example({ images }: { images: string[] }) {
-  const [listSize, setListSize] = useState<Size>({ height: 0, width: 0 });
-
-  // Rows will lazily register image sizes in this cache
-  const cache = useImageSizeCache();
-
-  const rowHeight = useCallback(
-    (index: number) => {
-      const size = cache.getImageSize(index) ?? cache.getAverageSize();
-
-      // Scale the image to fit within the list
-      return listSize.width * (size.height / size.width);
-    },
-    [cache, listSize]
-  );
+  const rowHeight = useDynamicRowHeight({
+    defaultRowHeight: 250
+  });
 
   return (
     <List<RowProps>
-      onResize={setListSize}
       rowComponent={RowComponent}
       rowCount={images.length}
       rowHeight={rowHeight}
-      rowProps={{ cache, images }}
+      rowProps={{ images }}
     />
   );
 }
