@@ -323,7 +323,7 @@
     },
     "rowHeight": {
       "defaultValue": null,
-      "description": "Row height; the following formats are supported:\n- number of pixels (number)\n- percentage of the grid's current height (string)\n- function that returns the row height (in pixels) given an index and `cellProps`",
+      "description": "Row height; the following formats are supported:\n- number of pixels (number)\n- percentage of the grid's current height (string)\n- function that returns the row height (in pixels) given an index and `cellProps`\n- dynamic row height cache returned by the `useDynamicRowHeight` hook\n\n⚠️ Dynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time.",
       "name": "rowHeight",
       "declarations": [
         {
@@ -334,13 +334,19 @@
       "required": true,
       "type": {
         "name": "enum",
-        "raw": "string | number | ((index: number, cellProps: RowProps) => number)",
+        "raw": "string | number | DynamicRowHeight | ((index: number, cellProps: RowProps) => number)",
         "value": [
           {
             "value": "string"
           },
           {
             "value": "number"
+          },
+          {
+            "value": "DynamicRowHeight",
+            "description": "",
+            "fullComment": "",
+            "tags": {}
           },
           {
             "value": "(index: number, cellProps: RowProps) => number",

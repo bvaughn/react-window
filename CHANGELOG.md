@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.2.0
+
+- Support for dynamic row heights via new `useDynamicRowHeight` hook.
+
+```tsx
+const rowHeight = useDynamicRowHeight({
+  defaultRowHeight: 50
+});
+
+return <List rowHeight={rowHeight} {...rest} />;
+```
+
+- Smaller NPM bundle; (docs are no longer included as part of the bundle due to the added size)
+
 ## 2.1.2
 
 Prevent `ResizeObserver` API from being called at all if an explicit `List` height (or `Grid` width and height) is provided.

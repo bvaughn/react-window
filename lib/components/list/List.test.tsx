@@ -7,10 +7,12 @@ import {
   disableResizeObserverForCurrentTest,
   setDefaultElementSize,
   setElementSize,
+  setElementSizeFunction,
   simulateUnsupportedEnvironmentForTest
 } from "../../utils/test/mockResizeObserver";
-import { List } from "./List";
+import { DATA_ATTRIBUTE_LIST_INDEX, List } from "./List";
 import { type ListImperativeAPI, type RowComponentProps } from "./types";
+import { useDynamicRowHeight } from "./useDynamicRowHeight";
 import { useListCallbackRef } from "./useListCallbackRef";
 
 describe("List", () => {
@@ -554,6 +556,126 @@ describe("List", () => {
       );
 
       expect(container.querySelectorAll('[role="listitem"]')).toHaveLength(4);
+    });
+
+    describe("type: DynamicRowHeight", () => {
+      let onRowsRendered: ReturnType<typeof vi.fn>;
+
+      function Example() {
+        const rowHeight = useDynamicRowHeight({
+          defaultRowHeight: 25
+        });
+        return (
+          <List
+            defaultHeight={100}
+            overscanCount={0}
+            onRowsRendered={onRowsRendered}
+            rowCount={10}
+            rowComponent={RowComponent}
+            rowHeight={rowHeight}
+            rowProps={EMPTY_OBJECT}
+          />
+        );
+      }
+
+      function setMockRowHeights(
+        indexToHeight: Map<number, number>,
+        defaultHeight: number = 25
+      ) {
+        setElementSizeFunction((element) => {
+          const attribute = element.getAttribute(DATA_ATTRIBUTE_LIST_INDEX);
+          if (attribute !== null) {
+            const index = parseInt(attribute);
+            const height = indexToHeight.get(index) ?? defaultHeight;
+            return new DOMRect(0, 0, 100, height);
+          }
+        });
+      }
+
+      beforeEach(() => {
+        onRowsRendered = vi.fn();
+      });
+
+      test("initial measuring", () => {
+        setMockRowHeights(
+          new Map([
+            [0, 20],
+            [1, 40],
+            [2, 60],
+            [3, 80]
+          ])
+        );
+
+        const { container } = render(<Example />);
+
+        // 4 rows based on initial estimate
+        // 3 rows after actual sizes have been measured
+        expect(onRowsRendered).toHaveBeenCalledTimes(2);
+        expect(onRowsRendered).nthCalledWith(
+          1,
+          {
+            startIndex: 0,
+            stopIndex: 3
+          },
+          {
+            startIndex: 0,
+            stopIndex: 3
+          }
+        );
+        expect(onRowsRendered).nthCalledWith(
+          2,
+          {
+            startIndex: 0,
+            stopIndex: 2
+          },
+          {
+            startIndex: 0,
+            stopIndex: 2
+          }
+        );
+
+        expect(
+          container.querySelector<HTMLDivElement>("[aria-hidden]")?.style.height
+        ).toBe("500px");
+      });
+
+      test("caching and invalidation", () => {
+        setMockRowHeights(
+          new Map([
+            [0, 20],
+            [1, 40],
+            [2, 60],
+            [3, 80]
+          ])
+        );
+
+        render(<Example />);
+
+        expect(RowComponent).toHaveBeenCalledTimes(4 + 3);
+
+        RowComponent.mockReset();
+
+        act(() => {
+          setMockRowHeights(
+            new Map([
+              [0, 20],
+              [1, 50], // Changed
+              [2, 60],
+              [3, 80]
+            ])
+          );
+        });
+
+        // Only the row that has been nudged down should be re-rendered;
+        // the other two should be memoized
+        expect(RowComponent).toHaveBeenCalledTimes(1);
+        expect(RowComponent).toHaveBeenLastCalledWith(
+          expect.objectContaining({
+            index: 2
+          }),
+          undefined
+        );
+      });
     });
   });
 

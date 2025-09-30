@@ -5,31 +5,29 @@ import { Header } from "../../components/Header";
 import { ExampleWithImages } from "./examples/Images.example";
 import ImageRowMarkdown from "../../../public/generated/code-snippets/ImageRow.json";
 import ImagesMarkdown from "../../../public/generated/code-snippets/Images.json";
-import useImageSizeCacheMarkdown from "../../../public/generated/code-snippets/useImageSizeCache.json";
+import { Link } from "../../components/Link";
 
 export default function ImagesRoute() {
   return (
     <Box direction="column" gap={4}>
-      <Header section="Other" title="Variable size images" />
+      <Header section="Other" title="Images" />
       <div>
-        Lists can be used to render content of unknown sizes, though it requires
-        a user-provided cache.
+        Images are example of{" "}
+        <Link to="/list/dynamic-row-height">dynamic row heights</Link>.
       </div>
-      <div>Here's an example of a list of images of varying sizes:</div>
       <Block className="h-150" data-focus-within="bold">
         <ExampleWithImages />
       </Block>
       <div>
-        First, let's look at the custom cache we'll use to store image sizes.
+        As with text, the <code>useDynamicRowHeight</code> hook can be used to
+        measure images.
       </div>
-      <Code html={useImageSizeCacheMarkdown.html} />
+      <Code html={ImagesMarkdown.html} />
       <div>
-        When a row is rendered for the first time, it should record the image
-        size in the cache.
+        A loading placeholder might be rendered until the image has been
+        measured for the first time.
       </div>
       <Code html={ImageRowMarkdown.html} />
-      <div>The list can use the cache to determine the size of each row.</div>
-      <Code html={ImagesMarkdown.html} />
     </Box>
   );
 }
