@@ -11,6 +11,7 @@ import { useNavStore } from "./hooks/useNavStore";
 import { Nav } from "./nav/Nav";
 import { routes } from "./routes";
 import { cn } from "./utils/cn";
+import TagsIcon from "../public/svgs/tags.svg?react";
 
 export default function App() {
   const { toggle, visible } = useNavStore();
@@ -30,7 +31,7 @@ export default function App() {
           <Box align="center" direction="row" gap={4}>
             <Link
               children="react-window"
-              className="text-xl text-white! text-shadow-black/20 text-shadow-sm font-bold"
+              className="text-xl text-white! text-shadow-black/20 text-shadow-sm font-bold cursor-pointer"
               to="/"
             />
             <div className="hidden md:block text-black text-shadow-white/50 text-shadow-xs">
@@ -38,17 +39,19 @@ export default function App() {
             </div>
           </Box>
           <Box align="center" direction="row" gap={4}>
-            <ExternalLink
-              aria-label="Documentation for library version 1.x"
-              className="text-xs font-bold text-white! drop-shadow-black/20 drop-shadow-sm"
-              href="https://react-window-v1.vercel.app/"
+            <Link
+              aria-label="Documentation for other versions"
+              className="text-xs font-bold text-white! drop-shadow-black/20 drop-shadow-sm cursor-pointer"
+              title="Past releases"
+              to="/versions"
             >
-              v1.x
-            </ExternalLink>
+              <TagsIcon className="w-6 h-6" />
+            </Link>
             <ExternalLink
               aria-label="NPM project page"
               className="text-white! drop-shadow-black/20 drop-shadow-sm"
               href="https://www.npmjs.com/package/react-window"
+              title="NPM package"
             >
               <NpmHubIcon className="w-8 h-8" />
             </ExternalLink>
@@ -56,6 +59,7 @@ export default function App() {
               aria-label="GitHub project page"
               className="text-white! drop-shadow-black/20 drop-shadow-sm"
               href="https://github.com/bvaughn/react-window"
+              title="Source code"
             >
               <GitHubIcon className="w-6 h-6" />
             </ExternalLink>

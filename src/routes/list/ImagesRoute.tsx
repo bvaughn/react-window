@@ -15,7 +15,7 @@ export default function ImagesRoute() {
         Images are example of{" "}
         <Link to="/list/dynamic-row-height">dynamic row heights</Link>.
       </div>
-      <Block className="h-150" data-focus-within="bold">
+      <Block className="h-150 max-h-[50vh]" data-focus-within="bold">
         <ExampleWithImages />
       </Block>
       <div>

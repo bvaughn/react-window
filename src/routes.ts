@@ -47,6 +47,7 @@ export const routes = {
     () => import("./routes/PlatformRequirementsRoute")
   ),
   "/support": lazy(() => import("./routes/SupportRoute")),
+  "/versions": lazy(() => import("./routes/VersionsRoute")),
   "/test": lazy(() => import("./routes/ScratchpadRoute"))
 } satisfies Record<string, Route>;
 
