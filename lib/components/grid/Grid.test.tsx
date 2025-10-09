@@ -409,6 +409,35 @@ describe("Grid", () => {
       expect(gridRef.current?.element).toEqual(screen.queryByRole("grid"));
     });
 
+    test("should return cell bounds", () => {
+      const gridRef = createRef<GridImperativeAPI>();
+
+      render(
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={EMPTY_OBJECT}
+          columnCount={100}
+          columnWidth={25}
+          gridRef={gridRef}
+          overscanCount={0}
+          rowCount={100}
+          rowHeight={20}
+        />
+      );
+
+      expect(
+        gridRef.current?.getCellBounds({
+          columnIndex: 4,
+          rowIndex: 8
+        })
+      ).toEqual({
+        height: 20,
+        left: 100,
+        top: 160,
+        width: 25
+      });
+    });
+
     test("should scroll to cell", () => {
       const gridRef = createRef<GridImperativeAPI>();
 

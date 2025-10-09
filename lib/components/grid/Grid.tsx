@@ -13,6 +13,7 @@ import { useMemoizedObject } from "../../hooks/useMemoizedObject";
 import type { Align, TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import type { GridProps } from "./types";
+import { useStableCallback } from "../../hooks/useStableCallback";
 
 export function Grid<
   CellProps extends object,
@@ -88,11 +89,32 @@ export function Grid<
     overscanCount
   });
 
+  const getColumnBoundsStable = useStableCallback(getColumnBounds);
+  const getRowBoundsStable = useStableCallback(getRowBounds);
+
   useImperativeHandle(
     gridRef,
     () => ({
       get element() {
         return element;
+      },
+
+      getCellBounds({
+        columnIndex,
+        rowIndex
+      }: {
+        columnIndex: number;
+        rowIndex: number;
+      }) {
+        const columnBounds = getColumnBoundsStable(columnIndex);
+        const rowBounds = getRowBoundsStable(rowIndex);
+
+        return {
+          height: rowBounds.size,
+          left: columnBounds.scrollOffset,
+          top: rowBounds.scrollOffset,
+          width: columnBounds.size
+        };
       },
 
       scrollToCell({
@@ -174,7 +196,13 @@ export function Grid<
         }
       }
     }),
-    [element, scrollToColumnIndex, scrollToRowIndex]
+    [
+      getColumnBoundsStable,
+      getRowBoundsStable,
+      element,
+      scrollToColumnIndex,
+      scrollToRowIndex
+    ]
   );
 
   useEffect(() => {

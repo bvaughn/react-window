@@ -155,6 +155,11 @@ export type CachedBounds = Map<
 export type ListImperativeAPI = {
   get element(): HTMLDivElement | null;
 
+  getRowBounds(index: number): {
+    height: number;
+    top: number;
+  };
+
   scrollToRow({
     align,
     behavior,

@@ -14,6 +14,7 @@ import type { Align, TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import { isDynamicRowHeight as isDynamicRowHeightUtil } from "./isDynamicRowHeight";
 import type { ListProps } from "./types";
+import { useStableCallback } from "../../hooks/useStableCallback";
 
 export const DATA_ATTRIBUTE_LIST_INDEX = "data-react-window-index";
 
@@ -79,11 +80,21 @@ export function List<
     overscanCount
   });
 
+  const getCellBoundsStable = useStableCallback(getCellBounds);
+
   useImperativeHandle(
     listRef,
     () => ({
       get element() {
         return element;
+      },
+
+      getRowBounds(index: number) {
+        const bounds = getCellBoundsStable(index);
+        return {
+          height: bounds.size,
+          top: bounds.scrollOffset
+        };
       },
 
       scrollToRow({
@@ -109,7 +120,7 @@ export function List<
         }
       }
     }),
-    [element, scrollToIndex]
+    [element, getCellBoundsStable, scrollToIndex]
   );
 
   useIsomorphicLayoutEffect(() => {

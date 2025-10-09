@@ -185,6 +185,19 @@ export type CachedBounds = Map<
 export type GridImperativeAPI = {
   get element(): HTMLDivElement | null;
 
+  getCellBounds({
+    columnIndex,
+    rowIndex
+  }: {
+    columnIndex: number;
+    rowIndex: number;
+  }): {
+    height: number;
+    left: number;
+    top: number;
+    width: number;
+  };
+
   scrollToCell({
     behavior,
     columnAlign,

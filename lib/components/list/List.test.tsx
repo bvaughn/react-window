@@ -438,6 +438,25 @@ describe("List", () => {
       expect(listRef.current?.element).toEqual(screen.queryByRole("list"));
     });
 
+    test("should return row bounds", () => {
+      const listRef = createRef<ListImperativeAPI>();
+
+      render(
+        <List
+          rowCount={25}
+          listRef={listRef}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      expect(listRef.current?.getRowBounds(8)).toEqual({
+        height: 25,
+        top: 200
+      });
+    });
+
     test("should scroll to rows", () => {
       const listRef = createRef<ListImperativeAPI>();
 
