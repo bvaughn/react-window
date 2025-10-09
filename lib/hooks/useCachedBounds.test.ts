@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { EMPTY_OBJECT } from "../../src/constants";
-import { useCachedBounds } from "./useCachedBounds";
+import { useCachedBounds } from "../hooks/useCachedBounds";
 
 describe("useCachedBounds", () => {
   test("should cache the CachedBounds unless props change", () => {

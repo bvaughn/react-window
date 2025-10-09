@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { createCachedBounds } from "./createCachedBounds";
-import type { CachedBounds, SizeFunction } from "./types";
+import { createCachedBounds } from "../core/createCachedBounds";
+import type { CachedBounds, SizeFunction } from "../core/types";
 
 export function useCachedBounds<Props extends object>({
   itemCount,

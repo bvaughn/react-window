@@ -13,6 +13,7 @@ export {
   type ListProps,
   type RowComponentProps
 } from "./components/list/types";
+export { useCachedBounds } from "./hooks/useCachedBounds";
 export { useDynamicRowHeight } from "./components/list/useDynamicRowHeight";
 export { useListCallbackRef } from "./components/list/useListCallbackRef";
 export { useListRef } from "./components/list/useListRef";

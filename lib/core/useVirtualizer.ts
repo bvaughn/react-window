@@ -5,6 +5,7 @@ import {
   useState,
   type CSSProperties
 } from "react";
+import { useCachedBounds } from "../hooks/useCachedBounds";
 import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { useResizeObserver } from "../hooks/useResizeObserver";
 import { useStableCallback } from "../hooks/useStableCallback";
@@ -15,7 +16,6 @@ import { getEstimatedSize as getEstimatedSizeUtil } from "./getEstimatedSize";
 import { getOffsetForIndex } from "./getOffsetForIndex";
 import { getStartStopIndices as getStartStopIndicesUtil } from "./getStartStopIndices";
 import type { Direction, SizeFunction } from "./types";
-import { useCachedBounds } from "./useCachedBounds";
 import { useItemSize } from "./useItemSize";
 
 export function useVirtualizer<Props extends object>({
