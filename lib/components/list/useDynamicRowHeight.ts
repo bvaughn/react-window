@@ -44,9 +44,19 @@ export function useDynamicRowHeight({
 
   const getRowHeight = useCallback(
     (index: number) => {
-      return map.get(index);
+      const measuredHeight = map.get(index);
+      if (measuredHeight !== undefined) {
+        return measuredHeight;
+      }
+
+      // Temporarily store default height in the cache map to avoid scroll jumps if rowProps change
+      // Else rowProps changes can impact the average height, and cause rows to shift up or down within the list
+      // see github.com/bvaughn/react-window/issues/863
+      map.set(index, defaultRowHeight);
+
+      return defaultRowHeight;
     },
-    [map]
+    [defaultRowHeight, map]
   );
 
   const setRowHeight = useCallback((index: number, size: number) => {
