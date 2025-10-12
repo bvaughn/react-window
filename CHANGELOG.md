@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.1
+
+- Fix possible scroll-jump scenario with `useDynamicRowHeight`
+
 ## 2.2.0
 
 - Support for dynamic row heights via new `useDynamicRowHeight` hook.
