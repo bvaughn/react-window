@@ -63,14 +63,14 @@ describe("useDynamicRowHeight", () => {
   });
 
   describe("getRowHeight", () => {
-    test("returns undefined for a row that has not yet been measured", () => {
+    test("returns estimated height for a row that has not yet been measured", () => {
       const { result } = renderHook(() =>
         useDynamicRowHeight({
           defaultRowHeight: 100
         })
       );
 
-      expect(result.current.getRowHeight(0)).toBeUndefined();
+      expect(result.current.getRowHeight(0)).toBe(100);
     });
 
     test("returns the most recently measured size", () => {
@@ -87,7 +87,7 @@ describe("useDynamicRowHeight", () => {
       });
       expect(result.current.getRowHeight(0)).toBe(15);
       expect(result.current.getRowHeight(1)).toBe(20);
-      expect(result.current.getRowHeight(2)).toBeUndefined();
+      expect(result.current.getRowHeight(2)).toBe(100);
       expect(result.current.getRowHeight(3)).toBe(25);
 
       act(() => {
@@ -113,7 +113,7 @@ describe("useDynamicRowHeight", () => {
       expect(result.current.getRowHeight(0)).toBe(10);
 
       rerender("b");
-      expect(result.current.getRowHeight(0)).toBeUndefined();
+      expect(result.current.getRowHeight(0)).toBe(100);
     });
   });
 
@@ -137,8 +137,8 @@ describe("useDynamicRowHeight", () => {
       act(() => {
         result.current.observeRowElements([elementA, elementB]);
       });
-      expect(result.current.getRowHeight(0)).toBeUndefined();
-      expect(result.current.getRowHeight(1)).toBeUndefined();
+      expect(result.current.getRowHeight(0)).toBe(100);
+      expect(result.current.getRowHeight(1)).toBe(100);
 
       act(() => {
         setElementSize({
@@ -147,7 +147,7 @@ describe("useDynamicRowHeight", () => {
           height: 20
         });
       });
-      expect(result.current.getRowHeight(0)).toBeUndefined();
+      expect(result.current.getRowHeight(0)).toBe(100);
       expect(result.current.getRowHeight(1)).toBe(20);
 
       act(() => {
