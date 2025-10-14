@@ -1,3 +1,4 @@
-dist
-docs
-generated
+/dist
+/docs
+/generated
+/public

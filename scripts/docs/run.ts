@@ -7,7 +7,7 @@ import { getFilesWithExtensions, rmFilesWithExtensions } from "../utils.ts";
 const parser = withCustomConfig("./tsconfig.json", {
   savePropValueAsString: true,
   shouldExtractLiteralValuesFromEnum: true,
-  shouldExtractValuesFromUnion: true,
+  shouldExtractValuesFromUnion: true
 });
 
 async function run() {

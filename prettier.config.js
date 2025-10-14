@@ -1,8 +1,7 @@
 export default {
   overrides: [
     {
-      files: "*.ts, *.tsx",
-      excludeFiles: "dist, docs, public"
+      files: "*.ts, *.tsx"
     }
   ],
   singleQuote: false,
