@@ -7,7 +7,7 @@ import type {
 } from "react";
 import type { TagNames } from "../../types";
 
-type ForbiddenKeys = "columnIndex" | "rowIndex" | "style";
+type ForbiddenKeys = "ariaAttributes" | "columnIndex" | "rowIndex" | "style";
 type ExcludeForbiddenKeys<Type> = {
   [Key in keyof Type]: Key extends ForbiddenKeys ? never : Type[Key];
 };
@@ -40,7 +40,7 @@ export type GridProps<
    * Additional props to be passed to the cell-rendering component.
    * Grid will automatically re-render cells when values in this object change.
    *
-   * ⚠️ This object must not contain either an `index` or `style` prop.
+   * ⚠️ This object must not contain `ariaAttributes`, `columnIndex`, `rowIndex`, or `style` props.
    */
   cellProps: ExcludeForbiddenKeys<CellProps>;
 

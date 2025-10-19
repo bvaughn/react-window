@@ -55,8 +55,6 @@ async function run() {
       for (const name in component.props) {
         const prop = component.props[name];
 
-        // TODO ExcludeForbiddenKeys
-
         let textToFormat = prop.type.raw;
         if (!textToFormat && prop.type.name.includes(":")) {
           // Edge case where some prop types aren't registered as containing raw TS
@@ -65,6 +63,11 @@ async function run() {
 
         if (!textToFormat) {
           textToFormat = `${prop.type.name}`;
+
+          const match = textToFormat.match(/ExcludeForbiddenKeys<([^>]+)>/);
+          if (match) {
+            textToFormat = match[1];
+          }
         }
 
         if (prop.defaultValue?.value) {

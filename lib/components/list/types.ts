@@ -125,7 +125,7 @@ export type ListProps<
    * Additional props to be passed to the row-rendering component.
    * List will automatically re-render rows when values in this object change.
    *
-   * ⚠️ This object must not contain either an `index` or `style` prop.
+   * ⚠️ This object must not contain `ariaAttributes`, `index`, or `style` props.
    */
   rowProps: ExcludeForbiddenKeys<RowProps>;
 

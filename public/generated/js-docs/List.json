@@ -73,10 +73,10 @@
     },
     "rowProps": {
       "description": "Additional props to be passed to the row-rendering component.\nList will automatically re-render rows when values in this object change.",
-      "html": "<div style=\"min-height: 1rem; padding-left: 2ch; text-indent: -2ch;\"><span class=\"tok-labelName\"><span class=\"tok-propertyName\">rowProps</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">ExcludeForbiddenKeys</span><span class=\"\">&#60;</span><span class=\"tok-typeName\">RowProps</span></div>",
+      "html": "<div style=\"min-height: 1rem; padding-left: 2ch; text-indent: -2ch;\"><span class=\"tok-labelName\"><span class=\"tok-propertyName\">rowProps</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">RowProps</span></div>",
       "name": "rowProps",
       "required": true,
-      "warning": "This object must not contain either an <code>index</code> or <code>style</code> prop."
+      "warning": "This object must not contain <code>ariaAttributes</code>, <code>index</code>, or <code>style</code> props."
     },
     "tagName": {
       "description": "Can be used to override the root HTML element rendered by the List component.\nThe default value is \"div\", meaning that List renders an HTMLDivElement as its root.",

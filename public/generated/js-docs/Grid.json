@@ -35,10 +35,10 @@
     },
     "cellProps": {
       "description": "Additional props to be passed to the cell-rendering component.\nGrid will automatically re-render cells when values in this object change.",
-      "html": "<div style=\"min-height: 1rem; padding-left: 2ch; text-indent: -2ch;\"><span class=\"tok-labelName\"><span class=\"tok-propertyName\">cellProps</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">ExcludeForbiddenKeys</span><span class=\"\">&#60;</span><span class=\"tok-typeName\">CellProps</span></div>",
+      "html": "<div style=\"min-height: 1rem; padding-left: 2ch; text-indent: -2ch;\"><span class=\"tok-labelName\"><span class=\"tok-propertyName\">cellProps</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">CellProps</span></div>",
       "name": "cellProps",
       "required": true,
-      "warning": "This object must not contain either an <code>index</code> or <code>style</code> prop."
+      "warning": "This object must not contain <code>ariaAttributes</code>, <code>columnIndex</code>, <code>rowIndex</code>, or <code>style</code> props."
     },
     "columnCount": {
       "description": "Number of columns to be rendered in the grid.",
