@@ -118,7 +118,7 @@ export default function GridImperativeApiRoute() {
 
   return (
     <Box direction="column" gap={4}>
-      <Header section="Grids" title="Imperative API" />
+      <Header section="Grids" title="Imperative methods" />
       <div>
         Grid provides an imperative API for responding to events. The
         recommended way to access this API is to use the exported ref hook:

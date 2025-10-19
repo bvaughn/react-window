@@ -1,13 +1,10 @@
-import type { ReactNode } from "react";
 import { cn } from "../../utils/cn";
 import "./code-mirror.css";
 
 export function Code({
-  children = null,
   className = "",
   html
 }: {
-  children?: ReactNode;
   className?: string;
   html: string;
 }) {
@@ -21,8 +18,6 @@ export function Code({
         )}
         dangerouslySetInnerHTML={{ __html: html }}
       />
-
-      {children}
     </div>
   );
 }

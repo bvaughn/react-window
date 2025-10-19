@@ -60,7 +60,7 @@ export default function RenderingGridRoute() {
           </div>
         </Box>
       </Callout>
-      <ContinueLink to="/grid/props" title="component props" />
+      <ContinueLink to="/list/imperative-methods" title="imperative methods" />
     </Box>
   );
 }

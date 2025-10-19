@@ -1,4 +1,4 @@
-import { readdir, rm } from "fs/promises";
+import { readdir } from "fs/promises";
 import { extname, join } from "node:path";
 
 export async function getFilesWithExtensions(
@@ -28,15 +28,4 @@ export async function getFilesWithExtensions(
   }
 
   return files;
-}
-
-export async function rmFilesWithExtensions(
-  directory: string,
-  extensions: string[]
-) {
-  const files = await getFilesWithExtensions(directory, extensions);
-
-  for (const file of files) {
-    await rm(file);
-  }
 }

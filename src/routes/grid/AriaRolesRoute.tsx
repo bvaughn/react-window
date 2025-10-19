@@ -2,6 +2,7 @@ import CellComponentAriaRolesMarkdown from "../../../public/generated/code-snipp
 import GridAriaRolesMarkdown from "../../../public/generated/code-snippets/GridAriaRoles.json";
 import { Box } from "../../components/Box";
 import { Code } from "../../components/code/Code";
+import { ContinueLink } from "../../components/ContinueLink";
 import { ExternalLink } from "../../components/ExternalLink";
 import { Header } from "../../components/Header";
 
@@ -30,6 +31,7 @@ export default function AriaRolesRoute() {
         pass them through like so:
       </div>
       <Code html={CellComponentAriaRolesMarkdown.html} />
+      <ContinueLink to="/grid/props" title="props and api" />
     </Box>
   );
 }

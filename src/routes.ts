@@ -18,7 +18,7 @@ export const routes = {
   "/list/dynamic-row-height": lazy(
     () => import("./routes/list/DynamicRowHeightsRoute")
   ),
-  "/list/imperative-api": lazy(
+  "/list/imperative-methods": lazy(
     () => import("./routes/list/ImperativeApiRoute")
   ),
   "/list/props": lazy(() => import("./routes/list/PropsRoute")),
@@ -37,7 +37,7 @@ export const routes = {
   ),
   "/grid/rtl-grids": lazy(() => import("./routes/grid/RTLGridsRoute")),
   "/grid/props": lazy(() => import("./routes/grid/PropsRoute")),
-  "/grid/imperative-api": lazy(
+  "/grid/imperative-methods": lazy(
     () => import("./routes/grid/ImperativeApiRoute")
   ),
   "/grid/aria-roles": lazy(() => import("./routes/grid/AriaRolesRoute")),

@@ -96,7 +96,29 @@ export type GridProps<
    *
    * ⚠️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience use in TypeScript projects.
    */
-  gridRef?: Ref<GridImperativeAPI>;
+  gridRef?: Ref<{
+    get element(): HTMLDivElement | null;
+
+    scrollToCell(config: {
+      behavior?: "auto" | "instant" | "smooth";
+      columnAlign?: "auto" | "center" | "end" | "smart" | "start";
+      columnIndex: number;
+      rowAlign?: "auto" | "center" | "end" | "smart" | "start";
+      rowIndex: number;
+    }): void;
+
+    scrollToColumn(config: {
+      align?: "auto" | "center" | "end" | "smart" | "start";
+      behavior?: "auto" | "instant" | "smooth";
+      index: number;
+    }): void;
+
+    scrollToRow(config: {
+      align?: "auto" | "center" | "end" | "smart" | "start";
+      behavior?: "auto" | "instant" | "smooth";
+      index: number;
+    }): void;
+  }>;
 
   /**
    * Callback notified when the range of rendered cells changes.

@@ -1,6 +1,6 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
-import type { ComponentDoc } from "react-docgen-typescript";
 import { repository } from "../../../package.json";
+import type { ComponentMetadata } from "../../types";
 import { Box } from "../Box";
 import { ExternalLink } from "../ExternalLink";
 import { Header } from "../Header";
@@ -10,13 +10,13 @@ export function ComponentProps({
   json,
   section
 }: {
-  json: ComponentDoc;
+  json: ComponentMetadata;
   section: string;
 }) {
   return (
     <>
       <Box align="center" direction="row" gap={2} wrap>
-        <Header section={section} title="Component props" />
+        <Header section={section} title="Props and API" />
         <ExternalLink
           className="text-sm text-emerald-300 hover:text-white"
           href={`${repository.url.replace(".git", "")}/blob/master/${json.filePath}`}

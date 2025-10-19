@@ -1,8 +1,10 @@
 import { useMemo } from "react";
-import type { ComponentDoc, PropItem } from "react-docgen-typescript";
+import type { ComponentMetadata, ComponentPropMetadata } from "../../types";
 import { processPropsJSON } from "../../utils/processPropsJSON";
+import { Callout } from "../Callout";
+import { Code } from "../code/Code";
 
-export function PropsBlocks({ json }: { json: ComponentDoc }) {
+export function PropsBlocks({ json }: { json: ComponentMetadata }) {
   const { optionalProps, requiredProps } = useMemo(
     () => processPropsJSON(json),
     [json]
@@ -21,7 +23,7 @@ export function PropsBlock({
   props
 }: {
   header: string;
-  props: PropItem[];
+  props: ComponentPropMetadata[];
 }) {
   if (props.length === 0) {
     return null;
@@ -33,30 +35,24 @@ export function PropsBlock({
       <dl>
         {props.map((prop) => (
           <div key={prop.name}>
-            <dt className="mt-2 pl-4 indent-[-1rem]">
-              <code className="tok-operator">
-                <span className="tok-propertyName">{prop.name}</span>
-                {prop.required || "?"}:{" "}
-                {"raw" in prop.type ? prop.type.raw : prop.type.name}
-                {prop.defaultValue && (
-                  <>
-                    {" = "}
-                    <span className="text-white">
-                      {prop.defaultValue.value}
-                    </span>
-                  </>
-                )}
-              </code>
+            <dt className="mt-4 mb-2 pl-4 indent-[-1rem]">
+              <Code
+                className="bg-transparent inline-block p-0"
+                html={prop.html}
+              />
             </dt>
-            <dd
-              className="ml-4 [&_code]:text-sky-300"
-              dangerouslySetInnerHTML={{
-                __html: prop.description
-                  .replaceAll("\n- ", "<br/>• ")
-                  .replaceAll("\n\n", "<br/><br/>")
-                  .replaceAll(/`([^`]+)`/g, "<code>$1</code>")
-              }}
-            ></dd>
+            <dd className="ml-4 [&_code]:text-sky-300">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: prop.description
+                }}
+              ></div>
+              {prop.warning && (
+                <Callout className="mt-4" html intent="warning">
+                  {prop.warning}
+                </Callout>
+              )}
+            </dd>
           </div>
         ))}
       </dl>

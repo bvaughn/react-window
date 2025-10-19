@@ -9,11 +9,13 @@ import type { Intent } from "../types";
 export function Callout({
   children,
   className,
+  html = false,
   intent = "none",
   ...rest
 }: PropsWithChildren<
   HTMLAttributes<HTMLDivElement> & {
     className?: string;
+    html?: boolean;
     intent?: Intent;
   }
 >) {
@@ -38,7 +40,11 @@ export function Callout({
     >
       <div className="flex flex-row gap-2">
         <Icon className="w-6 h-6 shrink-0" />
-        <div>{children}</div>
+        {html ? (
+          <div dangerouslySetInnerHTML={{ __html: children as string }} />
+        ) : (
+          <div>{children}</div>
+        )}
       </div>
     </div>
   );
