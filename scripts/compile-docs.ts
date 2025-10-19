@@ -55,6 +55,8 @@ async function run() {
       for (const name in component.props) {
         const prop = component.props[name];
 
+        // TODO ExcludeForbiddenKeys
+
         let textToFormat = prop.type.raw;
         if (!textToFormat && prop.type.name.includes(":")) {
           // Edge case where some prop types aren't registered as containing raw TS

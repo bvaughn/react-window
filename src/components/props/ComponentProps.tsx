@@ -4,7 +4,9 @@ import type { ComponentMetadata } from "../../types";
 import { Box } from "../Box";
 import { ExternalLink } from "../ExternalLink";
 import { Header } from "../Header";
-import { PropsBlocks } from "./PropsBlocks";
+import { ComponentPropsSection } from "./ComponentPropsSection";
+import { useMemo } from "react";
+import { processPropsJSON } from "../../utils/processPropsJSON";
 
 export function ComponentProps({
   json,
@@ -13,6 +15,11 @@ export function ComponentProps({
   json: ComponentMetadata;
   section: string;
 }) {
+  const { optionalProps, requiredProps } = useMemo(
+    () => processPropsJSON(json),
+    [json]
+  );
+
   return (
     <>
       <Box align="center" direction="row" gap={2} wrap>
@@ -24,7 +31,8 @@ export function ComponentProps({
           <ArrowTopRightOnSquareIcon className="inline-block size-4 fill-current" />
         </ExternalLink>
       </Box>
-      <PropsBlocks json={json} />
+      <ComponentPropsSection header="Required props" props={requiredProps} />
+      <ComponentPropsSection header="Optional props" props={optionalProps} />
     </>
   );
 }

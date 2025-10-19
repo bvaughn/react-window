@@ -1,24 +1,8 @@
-import { useMemo } from "react";
-import type { ComponentMetadata, ComponentPropMetadata } from "../../types";
-import { processPropsJSON } from "../../utils/processPropsJSON";
+import type { ComponentPropMetadata } from "../../types";
 import { Callout } from "../Callout";
 import { Code } from "../code/Code";
 
-export function PropsBlocks({ json }: { json: ComponentMetadata }) {
-  const { optionalProps, requiredProps } = useMemo(
-    () => processPropsJSON(json),
-    [json]
-  );
-
-  return (
-    <>
-      <PropsBlock header="Required props" props={requiredProps} />
-      <PropsBlock header="Optional props" props={optionalProps} />
-    </>
-  );
-}
-
-export function PropsBlock({
+export function ComponentPropsSection({
   header,
   props
 }: {
@@ -48,7 +32,7 @@ export function PropsBlock({
                 }}
               ></div>
               {prop.warning && (
-                <Callout className="mt-4" html intent="warning">
+                <Callout className="mt-4" html intent="warning" minimal>
                   {prop.warning}
                 </Callout>
               )}
