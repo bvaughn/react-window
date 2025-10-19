@@ -47,7 +47,15 @@ export type ListProps<
    *
    * ⚠️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience use in TypeScript projects.
    */
-  listRef?: Ref<ListImperativeAPI>;
+  listRef?: Ref<{
+    get element(): HTMLDivElement | null;
+
+    scrollToRow(config: {
+      align?: "auto" | "center" | "end" | "smart" | "start";
+      behavior?: "auto" | "instant" | "smooth";
+      index: number;
+    }): void;
+  }>;
 
   /**
    * Callback notified when the List's outermost HTMLElement resizes.

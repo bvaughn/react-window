@@ -2,6 +2,7 @@ import ListAriaRolesMarkdown from "../../../public/generated/code-snippets/ListA
 import RowComponentAriaRolesMarkdown from "../../../public/generated/code-snippets/RowComponentAriaRoles.json";
 import { Box } from "../../components/Box";
 import { Code } from "../../components/code/Code";
+import { ContinueLink } from "../../components/ContinueLink";
 import { ExternalLink } from "../../components/ExternalLink";
 import { Header } from "../../components/Header";
 
@@ -28,6 +29,7 @@ export default function AriaRolesRoute() {
         prop. The easiest way to use them is just to pass them through like so:
       </div>
       <Code html={RowComponentAriaRolesMarkdown.html} />
+      <ContinueLink to="/list/props" title="props and api" />
     </Box>
   );
 }

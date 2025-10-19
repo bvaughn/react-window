@@ -1,8 +1,8 @@
-import type { ComponentDoc, PropItem } from "react-docgen-typescript";
+import type { ComponentMetadata, ComponentPropMetadata } from "../types";
 
-export function processPropsJSON(json: ComponentDoc) {
-  const optionalProps: PropItem[] = [];
-  const requiredProps: PropItem[] = [];
+export function processPropsJSON(json: ComponentMetadata) {
+  const optionalProps: ComponentPropMetadata[] = [];
+  const requiredProps: ComponentPropMetadata[] = [];
 
   Object.values(json.props).forEach((prop) => {
     if (prop.required) {

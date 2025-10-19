@@ -1,23 +1,17 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
-import { cwd } from "node:process";
-import { getFilesWithExtensions, rmFilesWithExtensions } from "../utils.ts";
-import { syntaxHighlight } from "./syntax-highlight.ts";
+import { initialize } from "./utils/initialize.ts";
+import { syntaxHighlight } from "./utils/syntax-highlight.ts";
+import { trimExcludedText } from "./utils/trimExcludedText.ts";
 
 async function run() {
-  const inputDir = join(cwd(), "src", "routes");
-  const outputDir = join(cwd(), "public", "generated", "code-snippets");
+  const { files, outputDir } = await initialize({
+    fileExtensions: [".html", ".ts", ".tsx"],
+    inputPath: ["src", "routes"],
+    outputDirName: "code-snippets"
+  });
 
-  await mkdir(outputDir, { recursive: true });
-
-  await rmFilesWithExtensions(outputDir, [".json"]);
-
-  const tsFiles = await getFilesWithExtensions(inputDir, [
-    ".html",
-    ".ts",
-    ".tsx"
-  ]);
-  const exampleFiles = tsFiles.filter((file) => file.includes(".example."));
+  const exampleFiles = files.filter((file) => file.includes(".example."));
 
   for (const file of exampleFiles) {
     console.debug("Extracting", file);
@@ -28,14 +22,7 @@ async function run() {
 
     {
       // Remove special comments and directives before syntax highlighting
-      {
-        const pieces = rawText.split("// <begin>");
-        rawText = pieces[pieces.length - 1].trim();
-      }
-      {
-        const pieces = rawText.split("// <end>");
-        rawText = pieces[0].trim();
-      }
+      rawText = trimExcludedText(rawText);
 
       rawText = rawText
         .split("\n")

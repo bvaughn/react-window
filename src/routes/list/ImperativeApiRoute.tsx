@@ -74,7 +74,7 @@ export default function ListImperativeApiRoute() {
 
   return (
     <Box direction="column" gap={4}>
-      <Header section="Lists" title="Imperative API" />
+      <Header section="Lists" title="Imperative methods" />
       <div>
         List provides an imperative API for responding to events. The
         recommended way to access this API is to use the exported ref hook:
