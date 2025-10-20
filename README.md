@@ -33,3 +33,380 @@ Documentation for this project is available at [react-window.vercel.app](https:/
 ## TypeScript types
 
 TypeScript definitions are included within the published `dist` folder
+
+## Components
+
+### List
+
+<!-- List:begin -->
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Required?</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>className</td>
+      <td></td>
+      <td>
+        <code>string | undefined</code>
+      </td>
+      <td>
+CSS class name.
+      </td>
+    </tr>
+    <tr>
+      <td>style</td>
+      <td></td>
+      <td>
+        <code>CSSProperties | undefined</code>
+      </td>
+      <td>
+Optional CSS properties. The list of rows will fill the height defined by this style.
+      </td>
+    </tr>
+    <tr>
+      <td>children</td>
+      <td></td>
+      <td>
+        <code>ReactNode</code>
+      </td>
+      <td>
+Additional content to be rendered within the list (above cells). This property can be used to render things like overlays or tooltips.
+      </td>
+    </tr>
+    <tr>
+      <td>defaultHeight</td>
+      <td></td>
+      <td>
+        <code>number | undefined</code>
+      </td>
+      <td>
+Default height of list for initial render. This value is important for server rendering.
+      </td>
+    </tr>
+    <tr>
+      <td>listRef</td>
+      <td></td>
+      <td>
+        <code>Ref<{ readonly element: HTMLDivElement | null; scrollToRow(config: { align?: "auto" | "center" | "end" | "smart" | "start" | undefined; behavior?: "auto" | "instant" | "smooth" | undefined; index: number; }): void; }> | undefined</code>
+      </td>
+      <td>
+Ref used to interact with this component's imperative API.
+
+This API has imperative methods for scrolling and a getter for the outermost DOM element.
+ℹ️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience use in TypeScript projects.
+</td>
+</tr>
+<tr>
+<td>onResize</td>
+<td></td>
+<td>
+<code>((size: { height: number; width: number; }, prevSize: { height: number; width: number; }) => void) | undefined</code>
+</td>
+<td>
+Callback notified when the List's outermost HTMLElement resizes. This may be used to (re)scroll a row into view.
+</td>
+</tr>
+<tr>
+<td>onRowsRendered</td>
+<td></td>
+<td>
+<code>((visibleRows: { startIndex: number; stopIndex: number; }, allRows: { startIndex: number; stopIndex: number; }) => void) | undefined</code>
+</td>
+<td>
+Callback notified when the range of visible rows changes.
+</td>
+</tr>
+<tr>
+<td>overscanCount</td>
+<td></td>
+<td>
+<code>number | undefined</code>
+</td>
+<td>
+How many additional rows to render outside of the visible area. This can reduce visual flickering near the edges of a list when scrolling.
+</td>
+</tr>
+<tr>
+<td>rowComponent</td>
+<td>✓</td>
+<td>
+<code>(props: { ariaAttributes: { "aria-posinset": number; "aria-setsize": number; role: "listitem"; }; index: number; style: CSSProperties; } & RowProps) => ReactNode</code>
+</td>
+<td>
+React component responsible for rendering a row.
+
+This component will receive an `index` and `style` prop by default. Additionally it will receive prop values passed to `rowProps`.
+
+ℹ️ The prop types for this component are exported as `RowComponentProps`
+</td>
+</tr>
+<tr>
+<td>rowCount</td>
+<td>✓</td>
+<td>
+<code>number</code>
+</td>
+<td>
+Number of items to be rendered in the list.
+</td>
+</tr>
+<tr>
+<td>rowHeight</td>
+<td>✓</td>
+<td>
+<code>string | number | DynamicRowHeight | ((index: number, cellProps: RowProps) => number)</code>
+</td>
+<td>
+Row height; the following formats are supported: - number of pixels (number)
+
+- percentage of the grid's current height (string)
+- function that returns the row height (in pixels) given an index and `cellProps`
+- dynamic row height cache returned by the `useDynamicRowHeight` hook
+
+⚠️ Dynamic row heights are not as efficient as predetermined sizes.
+It's recommended to provide your own height values if they can be determined ahead of time.
+</td>
+</tr>
+<tr>
+<td>rowProps</td>
+<td>✓</td>
+<td>
+<code>RowProps</code>
+</td>
+<td>
+Additional props to be passed to the row-rendering component. List will automatically re-render rows when values in this object change.
+
+⚠️ This object must not contain `ariaAttributes`, `index`, or `style` props.
+</td>
+</tr>
+<tr>
+<td>tagName</td>
+<td></td>
+<td>
+<code>keyof IntrinsicElements | undefined</code>
+</td>
+<td>
+Can be used to override the root HTML element rendered by the List component. The default value is "div", meaning that List renders an HTMLDivElement as its root.
+
+⚠️ In most use cases the default ARIA roles are sufficient and this prop is not needed.
+</td>
+</tr>
+
+  </tbody>
+</table>
+
+<!-- List:end -->
+
+### Grid
+
+<!-- Grid:begin -->
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Required?</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>className</td>
+      <td></td>
+      <td>
+        <code>string | undefined</code>
+      </td>
+      <td>
+CSS class name.
+      </td>
+    </tr>
+    <tr>
+      <td>dir</td>
+      <td></td>
+      <td>
+        <code>string | undefined</code>
+      </td>
+      <td>
+Corresponds to the HTML dir attribute: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir
+      </td>
+    </tr>
+    <tr>
+      <td>style</td>
+      <td></td>
+      <td>
+        <code>CSSProperties | undefined</code>
+      </td>
+      <td>
+Optional CSS properties. The grid of cells will fill the height and width defined by this style.
+      </td>
+    </tr>
+    <tr>
+      <td>children</td>
+      <td></td>
+      <td>
+        <code>ReactNode</code>
+      </td>
+      <td>
+Additional content to be rendered within the grid (above cells). This property can be used to render things like overlays or tooltips.
+      </td>
+    </tr>
+    <tr>
+      <td>cellComponent</td>
+      <td>✓</td>
+      <td>
+        <code>(props: { ariaAttributes: { "aria-colindex": number; role: "gridcell"; }; columnIndex: number; rowIndex: number; style: CSSProperties; } & CellProps) => ReactNode</code>
+      </td>
+      <td>
+React component responsible for rendering a cell.
+
+This component will receive an `index` and `style` prop by default. Additionally it will receive prop values passed to `cellProps`.
+
+ℹ️ The prop types for this component are exported as `CellComponentProps`
+</td>
+</tr>
+<tr>
+<td>cellProps</td>
+<td>✓</td>
+<td>
+<code>CellProps</code>
+</td>
+<td>
+Additional props to be passed to the cell-rendering component. Grid will automatically re-render cells when values in this object change.
+
+⚠️ This object must not contain `ariaAttributes`, `columnIndex`, `rowIndex`, or `style` props.
+</td>
+</tr>
+<tr>
+<td>columnCount</td>
+<td>✓</td>
+<td>
+<code>number</code>
+</td>
+<td>
+Number of columns to be rendered in the grid.
+</td>
+</tr>
+<tr>
+<td>columnWidth</td>
+<td>✓</td>
+<td>
+<code>string | number | ((index: number, cellProps: CellProps) => number)</code>
+</td>
+<td>
+Column width; the following formats are supported: - number of pixels (number)
+
+- percentage of the grid's current width (string)
+- function that returns the row width (in pixels) given an index and `cellProps`
+  </td>
+  </tr>
+  <tr>
+  <td>defaultHeight</td>
+  <td></td>
+  <td>
+  <code>number | undefined</code>
+  </td>
+  <td>
+  Default height of grid for initial render. This value is important for server rendering.
+  </td>
+  </tr>
+  <tr>
+  <td>defaultWidth</td>
+  <td></td>
+  <td>
+  <code>number | undefined</code>
+  </td>
+  <td>
+  Default width of grid for initial render. This value is important for server rendering.
+  </td>
+  </tr>
+  <tr>
+  <td>gridRef</td>
+  <td></td>
+  <td>
+  <code>Ref<{ readonly element: HTMLDivElement | null; scrollToCell(config: { behavior?: "auto" | "instant" | "smooth" | undefined; columnAlign?: "auto" | "center" | "end" | "smart" | "start" | undefined; columnIndex: number; rowAlign?: "auto" | ... 4 more ... | undefined; rowIndex: number; }): void; scrollToColumn(config: ...</code>
+  </td>
+  <td>
+  Ref used to interact with this component's imperative API.
+
+This API has imperative methods for scrolling and a getter for the outermost DOM element.
+ℹ️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience use in TypeScript projects.
+</td>
+</tr>
+<tr>
+<td>onCellsRendered</td>
+<td></td>
+<td>
+<code>((visibleCells: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }, allCells: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }) => void) | undefined</code>
+</td>
+<td>
+Callback notified when the range of rendered cells changes.
+</td>
+</tr>
+<tr>
+<td>onResize</td>
+<td></td>
+<td>
+<code>((size: { height: number; width: number; }, prevSize: { height: number; width: number; }) => void) | undefined</code>
+</td>
+<td>
+Callback notified when the Grid's outermost HTMLElement resizes. This may be used to (re)scroll a cell into view.
+</td>
+</tr>
+<tr>
+<td>overscanCount</td>
+<td></td>
+<td>
+<code>number | undefined</code>
+</td>
+<td>
+How many additional rows/columns to render outside of the visible area. This can reduce visual flickering near the edges of a grid when scrolling.
+</td>
+</tr>
+<tr>
+<td>rowCount</td>
+<td>✓</td>
+<td>
+<code>number</code>
+</td>
+<td>
+Number of rows to be rendered in the grid.
+</td>
+</tr>
+<tr>
+<td>rowHeight</td>
+<td>✓</td>
+<td>
+<code>string | number | ((index: number, cellProps: CellProps) => number)</code>
+</td>
+<td>
+Row height; the following formats are supported: - number of pixels (number)
+
+- percentage of the grid's current height (string)
+- function that returns the row height (in pixels) given an index and `cellProps`
+  </td>
+  </tr>
+  <tr>
+  <td>tagName</td>
+  <td></td>
+  <td>
+  <code>keyof IntrinsicElements | undefined</code>
+  </td>
+  <td>
+  Can be used to override the root HTML element rendered by the List component. The default value is "div", meaning that List renders an HTMLDivElement as its root.
+
+⚠️ In most use cases the default ARIA roles are sufficient and this prop is not needed.
+</td>
+</tr>
+
+  </tbody>
+</table>
+
+<!-- Grid:end -->
