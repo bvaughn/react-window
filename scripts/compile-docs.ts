@@ -84,11 +84,26 @@ async function run() {
             `<span class="tok-propertyName">${name}</span>`
           );
 
-          const [description, warning = ""] = prop.description.split("⚠️");
+          let description = "";
+          let info = "";
+          let warning = "";
+
+          if (prop.description.includes("⚠️")) {
+            const pieces = prop.description.split("⚠️");
+            description = pieces[0];
+            warning = pieces[1] ?? "";
+          } else if (prop.description.includes("ℹ️")) {
+            const pieces = prop.description.split("ℹ️");
+            description = pieces[0];
+            info = pieces[1] ?? "";
+          } else {
+            description = prop.description;
+          }
 
           componentMetadata.props[name] = {
             description: formatDescriptionText(description.trim()),
             html,
+            info: info ? formatDescriptionText(info.trim()) : undefined,
             name,
             required: prop.required,
             warning: warning ? formatDescriptionText(warning.trim()) : undefined

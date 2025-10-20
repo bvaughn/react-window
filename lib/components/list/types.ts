@@ -45,7 +45,7 @@ export type ListProps<
    *
    * This API has imperative methods for scrolling and a getter for the outermost DOM element.
    *
-   * ⚠️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience use in TypeScript projects.
+   * ℹ️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience use in TypeScript projects.
    */
   listRef?: Ref<{
     get element(): HTMLDivElement | null;
@@ -86,7 +86,7 @@ export type ListProps<
    * This component will receive an `index` and `style` prop by default.
    * Additionally it will receive prop values passed to `rowProps`.
    *
-   * ⚠️ The prop types for this component are exported as `RowComponentProps`
+   * ℹ️ The prop types for this component are exported as `RowComponentProps`
    */
   rowComponent: (
     props: {

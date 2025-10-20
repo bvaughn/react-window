@@ -3,6 +3,7 @@ export type Intent = "danger" | "none" | "primary" | "success" | "warning";
 export type ComponentPropMetadata = {
   description: string;
   html: string;
+  info?: string;
   name: string;
   required: boolean;
   warning?: string;

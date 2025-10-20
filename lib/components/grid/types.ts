@@ -22,7 +22,7 @@ export type GridProps<
    * This component will receive an `index` and `style` prop by default.
    * Additionally it will receive prop values passed to `cellProps`.
    *
-   * ⚠️ The prop types for this component are exported as `CellComponentProps`
+   * ℹ️ The prop types for this component are exported as `CellComponentProps`
    */
   cellComponent: (
     props: {
@@ -94,7 +94,7 @@ export type GridProps<
    *
    * This API has imperative methods for scrolling and a getter for the outermost DOM element.
    *
-   * ⚠️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience use in TypeScript projects.
+   * ℹ️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience use in TypeScript projects.
    */
   gridRef?: Ref<{
     get element(): HTMLDivElement | null;

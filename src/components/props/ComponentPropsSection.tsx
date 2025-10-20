@@ -31,6 +31,11 @@ export function ComponentPropsSection({
                   __html: prop.description
                 }}
               ></div>
+              {prop.info && (
+                <Callout className="mt-4" html intent="primary" minimal>
+                  {prop.info}
+                </Callout>
+              )}
               {prop.warning && (
                 <Callout className="mt-4" html intent="warning" minimal>
                   {prop.warning}
