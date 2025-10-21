@@ -97,6 +97,9 @@ importers:
       lint-staged:
         specifier: ^16.1.4
         version: 16.1.4
+      marked:
+        specifier: ^16.4.1
+        version: 16.4.1
       postcss:
         specifier: ^8.5.6
         version: 8.5.6
@@ -3361,6 +3364,14 @@ packages:
         integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==
       }
 
+  marked@16.4.1:
+    resolution:
+      {
+        integrity: sha512-ntROs7RaN3EvWfy3EZi14H4YxmT6A5YvywfhO+0pm+cH/dnSQRmdAmoFIc3B9aiwTehyk7pESH4ofyBY+V5hZg==
+      }
+    engines: { node: ">= 20" }
+    hasBin: true
+
   merge-stream@2.0.0:
     resolution:
       {
@@ -6583,6 +6594,8 @@ snapshots:
       "@jridgewell/sourcemap-codec": 1.5.4
 
   make-error@1.3.6: {}
+
+  marked@16.4.1: {}
 
   merge-stream@2.0.0: {}
 
