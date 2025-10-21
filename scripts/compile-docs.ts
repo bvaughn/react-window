@@ -1,13 +1,14 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { join, relative } from "node:path";
 import { cwd } from "node:process";
-import { withCustomConfig } from "react-docgen-typescript";
+import { withCustomConfig, type PropItem } from "react-docgen-typescript";
 import type { ComponentMetadata } from "../src/types.ts";
 import { formatDescriptionText } from "./utils/formatDescriptionText.ts";
 import { getPropTypeText } from "./utils/getPropTypeText.ts";
 import { initialize } from "./utils/initialize.ts";
 import { propsToTable } from "./utils/propsToTable.ts";
 import { syntaxHighlight } from "./utils/syntax-highlight.ts";
+import { insertPropsMarkdown } from "./utils/insertPropsMarkdown.ts";
 
 const parser = withCustomConfig("./tsconfig.json", {
   savePropValueAsString: true,
@@ -118,20 +119,31 @@ async function run() {
 
       // Generate markdown for prop types
       {
-        const componentMarkdown = await propsToTable(component.props);
+        const requiredProps: PropItem[] = [];
+        const optionalProps: PropItem[] = [];
 
-        const startToken = `<!-- ${component.displayName}:begin -->`;
-        const stopToken = `<!-- ${component.displayName}:end -->`;
+        for (const propName in component.props) {
+          const prop = component.props[propName];
+          if (prop.required) {
+            requiredProps.push(prop);
+          } else {
+            optionalProps.push(prop);
+          }
+        }
 
-        const startIndex = markdown.indexOf(startToken) + startToken.length;
-        const stopIndex = markdown.indexOf(stopToken);
+        markdown = insertPropsMarkdown({
+          componentMarkdown: await propsToTable(requiredProps),
+          componentName: component.displayName,
+          markdown,
+          required: true
+        });
 
-        markdown =
-          markdown.substring(0, startIndex) +
-          "\n" +
-          componentMarkdown +
-          "\n" +
-          markdown.substring(stopIndex);
+        markdown = insertPropsMarkdown({
+          componentMarkdown: await propsToTable(optionalProps),
+          componentName: component.displayName,
+          markdown,
+          required: false
+        });
       }
     }
   }
