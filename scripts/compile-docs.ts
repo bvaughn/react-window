@@ -118,7 +118,7 @@ async function run() {
 
       // Generate markdown for prop types
       {
-        const componentMarkdown = propsToTable(component.props);
+        const componentMarkdown = await propsToTable(component.props);
 
         const startToken = `<!-- ${component.displayName}:begin -->`;
         const stopToken = `<!-- ${component.displayName}:end -->`;

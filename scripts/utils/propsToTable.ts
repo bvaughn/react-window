@@ -1,3 +1,4 @@
+import { marked } from "marked";
 import type { Props } from "react-docgen-typescript";
 import { getPropTypeText } from "./getPropTypeText.ts";
 
@@ -12,6 +13,7 @@ const TABLE_TAG_START = `
     </tr>
   </thead>
   <tbody>`;
+
 const TABLE_ROW = `
     <tr>
       <td>[[name]]</td>
@@ -19,9 +21,7 @@ const TABLE_ROW = `
       <td>
         <code>[[type]]</code>
       </td>
-      <td>
-[[description]]
-      </td>
+      <td>[[description]]</td>
     </tr>`;
 
 const TABLE_TAG_STOP = `
@@ -29,7 +29,7 @@ const TABLE_TAG_STOP = `
 </table>
 `;
 
-export function propsToTable(props: Props) {
+export async function propsToTable(props: Props) {
   const htmlStrings = [TABLE_TAG_START];
 
   for (const propName in props) {
@@ -37,10 +37,10 @@ export function propsToTable(props: Props) {
 
     const type = getPropTypeText(prop);
 
-    const description = prop.description
-      .replace("\n\n", "<br/><br/>")
-      .replace("\n", " ")
-      .replace("<br/><br/>", "\n\n");
+    // const description = prop.description
+    //   .replace("\n\n", "<br/><br/>")
+    //   .replace("\n", " ");
+    const description = await marked(prop.description);
 
     htmlStrings.push(
       TABLE_ROW.replace("[[name]]", propName)
