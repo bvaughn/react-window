@@ -5,6 +5,7 @@ import {
   useImperativeHandle,
   useMemo,
   useState,
+  type JSX,
   type ReactNode
 } from "react";
 import { useVirtualizer } from "../../core/useVirtualizer";
@@ -35,7 +36,7 @@ export function List<
   tagName = "div" as TagName,
   style,
   ...rest
-}: ListProps<RowProps, TagName>) {
+}: ListProps<RowProps, TagName>): JSX.Element {
   const rowProps = useMemoizedObject(rowPropsUnstable);
   const RowComponent = useMemo(
     () => memo(RowComponentProp, arePropsEqual),
