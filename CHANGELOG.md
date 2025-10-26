@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.2
+
+The return type of `List` and `Grid` components is explicitly annotated as `ReactElement`. The return type of `rowComponent` and `cellComponent` changed from `ReactNode` to `ReactElement`. This was done to fix TypeScript warnings for React versions 18.0 - 18.2. (See issue #875)
+
 ## 2.2.1
 
 - Fix possible scroll-jump scenario with `useDynamicRowHeight`
