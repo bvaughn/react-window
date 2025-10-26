@@ -5,6 +5,14 @@ export function getPropTypeText(prop: PropItem) {
   if (!textToFormat && prop.type.name.includes(":")) {
     // Edge case where some prop types aren't registered as containing raw TS
     textToFormat = prop.type.name;
+
+    // List/Grid and rowComponent/cellComponent are annotated with a return type of ReactElement instead of ReactNode
+    // As a result of this change the generated docs are significantly less readable, so tidy them up here
+    // See github.com/bvaughn/react-window/issues/875
+    textToFormat = textToFormat.replace(
+      "ReactElement<unknown, string | JSXElementConstructor<...>>",
+      "ReactNode"
+    );
   }
 
   if (!textToFormat) {
