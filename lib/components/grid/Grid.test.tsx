@@ -168,7 +168,7 @@ describe("Grid", () => {
       />
     );
 
-    const NewCellComponent = vi.fn(() => null);
+    const NewCellComponent = vi.fn(() => <div />);
 
     rerender(
       <Grid

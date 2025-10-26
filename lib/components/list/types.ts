@@ -2,6 +2,7 @@ import type {
   ComponentProps,
   CSSProperties,
   HTMLAttributes,
+  ReactElement,
   ReactNode,
   Ref
 } from "react";
@@ -98,7 +99,7 @@ export type ListProps<
       index: number;
       style: CSSProperties;
     } & RowProps
-  ) => ReactNode;
+  ) => ReactElement;
 
   /**
    * Number of items to be rendered in the list.

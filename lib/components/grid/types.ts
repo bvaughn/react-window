@@ -2,6 +2,7 @@ import type {
   ComponentProps,
   CSSProperties,
   HTMLAttributes,
+  ReactElement,
   ReactNode,
   Ref
 } from "react";
@@ -34,7 +35,7 @@ export type GridProps<
       rowIndex: number;
       style: CSSProperties;
     } & CellProps
-  ) => ReactNode;
+  ) => ReactElement;
 
   /**
    * Additional props to be passed to the cell-rendering component.
