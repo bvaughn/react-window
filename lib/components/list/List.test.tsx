@@ -181,7 +181,7 @@ describe("List", () => {
       />
     );
 
-    const NewRowComponent = vi.fn(() => null);
+    const NewRowComponent = vi.fn(() => <div />);
 
     rerender(
       <List
