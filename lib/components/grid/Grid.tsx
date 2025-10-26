@@ -5,7 +5,7 @@ import {
   useImperativeHandle,
   useMemo,
   useState,
-  type JSX,
+  type ReactElement,
   type ReactNode
 } from "react";
 import { useIsRtl } from "../../core/useIsRtl";
@@ -37,7 +37,7 @@ export function Grid<
   style,
   tagName = "div" as TagName,
   ...rest
-}: GridProps<CellProps, TagName>): JSX.Element {
+}: GridProps<CellProps, TagName>): ReactElement {
   const cellProps = useMemoizedObject(cellPropsUnstable);
   const CellComponent = useMemo(
     () => memo(CellComponentProp, arePropsEqual),
