@@ -1,12 +1,13 @@
+import { htmlLanguage } from "@codemirror/lang-html";
 import {
   jsxLanguage,
   tsxLanguage,
   typescriptLanguage
 } from "@codemirror/lang-javascript";
-import { htmlLanguage } from "@codemirror/lang-html";
 import { ensureSyntaxTree, LRLanguage } from "@codemirror/language";
 import { EditorState } from "@codemirror/state";
 import { classHighlighter, highlightTree } from "@lezer/highlight";
+import { type BuiltInParserName } from "prettier";
 
 type TokenType = string;
 type Token = {
@@ -27,22 +28,27 @@ export const DEFAULT_MAX_TIME = 5000;
 
 export async function syntaxHighlight(code: string, language: Language) {
   let extension: LRLanguage;
+  let prettierParser: BuiltInParserName;
   switch (language) {
     case "HTML": {
       extension = htmlLanguage.configure({ dialect: "selfClosing" });
+      prettierParser = "html";
       break;
     }
     case "JS":
     case "JSX": {
       extension = jsxLanguage;
+      prettierParser = "babel";
       break;
     }
     case "TS": {
       extension = typescriptLanguage;
+      prettierParser = "typescript";
       break;
     }
     case "TSX": {
       extension = tsxLanguage;
+      prettierParser = "typescript";
       break;
     }
   }
@@ -50,12 +56,19 @@ export async function syntaxHighlight(code: string, language: Language) {
     console.error("Unsupported language %o", language);
   }
 
-  const tokens = await parser(code, extension);
+  const tokens = await parser(code, extension, prettierParser);
 
   return tokens.map(parsedTokensToHtml).join("\n");
 }
 
-async function parser(code: string, languageExtension: LRLanguage) {
+async function parser(
+  code: string,
+  languageExtension: LRLanguage,
+
+  // @ts-expect-error TS6133
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  prettierParser: BuiltInParserName
+) {
   const parsedTokens: Token[][] = [];
   const currentLineState: State = {
     parsedTokens: [],
@@ -76,6 +89,15 @@ async function parser(code: string, languageExtension: LRLanguage) {
     }
     code = code.slice(0, index + 1);
   }
+
+  // In the future I may want to (re)format code examples for different screen widths
+  // code = await format(code, {
+  //   parser: prettierParser,
+  //   plugins: ["prettier-plugin-tailwindcss"],
+  //   printWidth: 100,
+  //   proseWrap: "always",
+  //   semi: true
+  // });
 
   const state = EditorState.create({
     doc: code,
@@ -207,31 +229,22 @@ function processSection(
 }
 
 function parsedTokensToHtml(tokens: Token[]) {
-  let indent = 0;
-
-  const htmlStrings = tokens.map((token, index) => {
+  const htmlStrings = tokens.map((token) => {
     const className = token.type ? `tok-${token.type}` : "";
-
-    // Trim leading space and use CSS to indent instead;
-    // this allows for better line wrapping behavior on narrow screens
-    if (index === 0 && !token.type) {
-      const index = token.value.search(/[^\s]/);
-      if (index < 0) {
-        indent = token.value.length;
-        token.value = "";
-      } else {
-        indent = index;
-        token.value = token.value.substring(index);
-      }
-    }
-
     const escapedValue = escapeHtmlEntities(token.value);
+
     return `<span class="${className}">${escapedValue}</span>`;
   });
 
-  return `<div style="min-height: 1rem; padding-left: ${
-    indent + 2
-  }ch; text-indent: -2ch;">${htmlStrings.join("")}</div>`;
+  // Edge case to avoid empty line
+  let htmlString = htmlStrings.join("");
+  if (tokens.length <= 1) {
+    if (!tokens[0].value) {
+      htmlString = "&nbsp;";
+    }
+  }
+
+  return `<div style="min-height: 1rem;">${htmlString}</div>`;
 }
 
 function escapeHtmlEntities(rawString: string) {
