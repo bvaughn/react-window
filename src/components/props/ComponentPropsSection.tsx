@@ -19,7 +19,7 @@ export function ComponentPropsSection({
       <dl>
         {props.map((prop) => (
           <div key={prop.name}>
-            <dt className="mt-4 mb-2 pl-4 indent-[-1rem]">
+            <dt className="mt-4 mb-2 pl-8 indent-[-1rem]">
               <Code
                 className="bg-transparent inline-block p-0"
                 html={prop.html}
