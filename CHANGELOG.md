@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.3
+
+- Update TS Doc comments for `List` and `Grid` imperative methods to specify when a method throws.
+- Throw a `RangeError` (instead of a regular `Error`) if an invalid index is passed to one of the imperative scroll-to methods.
+
 ## 2.2.2
 
 The return type of `List` and `Grid` components is explicitly annotated as `ReactElement`. The return type of `rowComponent` and `cellComponent` changed from `ReactNode` to `ReactElement`. This was done to fix TypeScript warnings for React versions 18.0 - 18.2. (See issue #875)
