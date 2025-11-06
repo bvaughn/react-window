@@ -487,6 +487,57 @@ describe("Grid", () => {
         top: 140
       });
     });
+
+    test("should throw a meaningful error if an invalid index is passed to scrollToRow", () => {
+      const gridRef = createRef<GridImperativeAPI>();
+
+      render(
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={EMPTY_OBJECT}
+          columnCount={25}
+          columnWidth={25}
+          gridRef={gridRef}
+          overscanCount={0}
+          rowCount={25}
+          rowHeight={20}
+        />
+      );
+
+      expect(() => {
+        gridRef.current?.scrollToRow({ index: -1 });
+      }).toThrowError("Invalid index specified: -1");
+
+      expect(() => {
+        gridRef.current?.scrollToRow({ index: 25 });
+      }).toThrowError("Invalid index specified: 25");
+
+      expect(() => {
+        gridRef.current?.scrollToColumn({ index: -1 });
+      }).toThrowError("Invalid index specified: -1");
+
+      expect(() => {
+        gridRef.current?.scrollToColumn({ index: 25 });
+      }).toThrowError("Invalid index specified: 25");
+
+      expect(() => {
+        gridRef.current?.scrollToCell({ columnIndex: -1, rowIndex: 0 });
+      }).toThrowError("Invalid index specified: -1");
+
+      expect(() => {
+        gridRef.current?.scrollToCell({ columnIndex: 25, rowIndex: 0 });
+      }).toThrowError("Invalid index specified: 25");
+
+      expect(() => {
+        gridRef.current?.scrollToCell({ columnIndex: 0, rowIndex: -1 });
+      }).toThrowError("Invalid index specified: -1");
+
+      expect(() => {
+        gridRef.current?.scrollToCell({ columnIndex: 0, rowIndex: 25 });
+      }).toThrowError("Invalid index specified: 25");
+
+      expect(HTMLElement.prototype.scrollTo).not.toHaveBeenCalled();
+    });
   });
 
   test("should auto-memoize cellProps object using shallow equality", () => {

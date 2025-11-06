@@ -98,8 +98,22 @@ export type GridProps<
    * ℹ️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience use in TypeScript projects.
    */
   gridRef?: Ref<{
+    /**
+     * Outermost HTML element for the grid if mounted and null (if not mounted.
+     */
     get element(): HTMLDivElement | null;
 
+    /**
+     * Scrolls the grid so that the specified row and column are visible.
+     *
+     * @param behavior Determines whether scrolling is instant or animates smoothly
+     * @param columnAlign Determines the horizontal alignment of the element within the list
+     * @param columnIndex Index of the column to scroll to (0-based)
+     * @param rowAlign Determines the vertical alignment of the element within the list
+     * @param rowIndex Index of the row to scroll to (0-based)
+     *
+     * @throws RangeError if an invalid row or column index is provided
+     */
     scrollToCell(config: {
       behavior?: "auto" | "instant" | "smooth";
       columnAlign?: "auto" | "center" | "end" | "smart" | "start";
@@ -108,12 +122,30 @@ export type GridProps<
       rowIndex: number;
     }): void;
 
+    /**
+     * Scrolls the grid so that the specified column is visible.
+     *
+     * @param align Determines the horizontal alignment of the element within the list
+     * @param behavior Determines whether scrolling is instant or animates smoothly
+     * @param index Index of the column to scroll to (0-based)
+     *
+     * @throws RangeError if an invalid column index is provided
+     */
     scrollToColumn(config: {
       align?: "auto" | "center" | "end" | "smart" | "start";
       behavior?: "auto" | "instant" | "smooth";
       index: number;
     }): void;
 
+    /**
+     * Scrolls the grid so that the specified row is visible.
+     *
+     * @param align Determines the vertical alignment of the element within the list
+     * @param behavior Determines whether scrolling is instant or animates smoothly
+     * @param index Index of the row to scroll to (0-based)
+     *
+     * @throws RangeError if an invalid row index is provided
+     */
     scrollToRow(config: {
       align?: "auto" | "center" | "end" | "smart" | "start";
       behavior?: "auto" | "instant" | "smooth";
@@ -205,9 +237,30 @@ export type CachedBounds = Map<
   }
 >;
 
+/**
+ * Ref used to interact with this component's imperative API.
+ *
+ * This API has imperative methods for scrolling and a getter for the outermost DOM element.
+ *
+ * ℹ️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience use in TypeScript projects.
+ */
 export type GridImperativeAPI = {
+  /**
+   * Outermost HTML element for the grid if mounted and null (if not mounted.
+   */
   get element(): HTMLDivElement | null;
 
+  /**
+   * Scrolls the grid so that the specified row and column are visible.
+   *
+   * @param behavior Determines whether scrolling is instant or animates smoothly
+   * @param columnAlign Determines the horizontal alignment of the element within the list
+   * @param columnIndex Index of the column to scroll to (0-based)
+   * @param rowAlign Determines the vertical alignment of the element within the list
+   * @param rowIndex Index of the row to scroll to (0-based)
+   *
+   * @throws RangeError if an invalid row or column index is provided
+   */
   scrollToCell({
     behavior,
     columnAlign,
@@ -222,6 +275,15 @@ export type GridImperativeAPI = {
     rowIndex: number;
   }): void;
 
+  /**
+   * Scrolls the grid so that the specified column is visible.
+   *
+   * @param align Determines the horizontal alignment of the element within the list
+   * @param behavior Determines whether scrolling is instant or animates smoothly
+   * @param index Index of the column to scroll to (0-based)
+   *
+   * @throws RangeError if an invalid column index is provided
+   */
   scrollToColumn({
     align,
     behavior,
@@ -232,6 +294,15 @@ export type GridImperativeAPI = {
     index: number;
   }): void;
 
+  /**
+   * Scrolls the grid so that the specified row is visible.
+   *
+   * @param align Determines the vertical alignment of the element within the list
+   * @param behavior Determines whether scrolling is instant or animates smoothly
+   * @param index Index of the row to scroll to (0-based)
+   *
+   * @throws RangeError if an invalid row index is provided
+   */
   scrollToRow({
     align,
     behavior,

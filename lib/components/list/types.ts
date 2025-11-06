@@ -49,8 +49,20 @@ export type ListProps<
    * ℹ️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience use in TypeScript projects.
    */
   listRef?: Ref<{
+    /**
+     * Outermost HTML element for the list if mounted and null (if not mounted.
+     */
     get element(): HTMLDivElement | null;
 
+    /**
+     * Scrolls the list so that the specified row is visible.
+     *
+     * @param align Determines the vertical alignment of the element within the list
+     * @param behavior Determines whether scrolling is instant or animates smoothly
+     * @param index Index of the row to scroll to (0-based)
+     *
+     * @throws RangeError if an invalid row index is provided
+     */
     scrollToRow(config: {
       align?: "auto" | "center" | "end" | "smart" | "start";
       behavior?: "auto" | "instant" | "smooth";
@@ -161,9 +173,28 @@ export type CachedBounds = Map<
   }
 >;
 
+/**
+ * Ref used to interact with this component's imperative API.
+ *
+ * This API has imperative methods for scrolling and a getter for the outermost DOM element.
+ *
+ * ℹ️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience use in TypeScript projects.
+ */
 export type ListImperativeAPI = {
+  /**
+   * Outermost HTML element for the list if mounted and null (if not mounted.
+   */
   get element(): HTMLDivElement | null;
 
+  /**
+   * Scrolls the list so that the specified row is visible.
+   *
+   * @param align Determines the vertical alignment of the element within the list
+   * @param behavior Determines whether scrolling is instant or animates smoothly
+   * @param index Index of the row to scroll to (0-based)
+   *
+   * @throws RangeError if an invalid row index is provided
+   */
   scrollToRow({
     align,
     behavior,

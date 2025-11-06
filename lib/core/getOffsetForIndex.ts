@@ -19,6 +19,12 @@ export function getOffsetForIndex<Props extends object>({
   containerScrollOffset: number;
   containerSize: number;
 }) {
+  if (index < 0 || index >= itemCount) {
+    throw RangeError(`Invalid index specified: ${index}`, {
+      cause: `Index ${index} is not within the range of 0 - ${itemCount - 1}`
+    });
+  }
+
   const estimatedTotalSize = getEstimatedSize({
     cachedBounds,
     itemCount,
