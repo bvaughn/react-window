@@ -460,6 +460,30 @@ describe("List", () => {
         top: 125
       });
     });
+
+    test("should throw a meaningful error if an invalid index is passed to scrollToRow", () => {
+      const listRef = createRef<ListImperativeAPI>();
+
+      render(
+        <List
+          rowCount={25}
+          listRef={listRef}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      expect(() => {
+        listRef.current?.scrollToRow({ index: -1 });
+      }).toThrowError("Invalid index specified: -1");
+
+      expect(() => {
+        listRef.current?.scrollToRow({ index: 25 });
+      }).toThrowError("Invalid index specified: 25");
+
+      expect(HTMLElement.prototype.scrollTo).not.toHaveBeenCalled();
+    });
   });
 
   test("should auto-memoize rowProps object using shallow equality", () => {
