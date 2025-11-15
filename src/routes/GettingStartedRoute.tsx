@@ -29,8 +29,7 @@ export default function GettingStartedRoute() {
       </code>
       <Callout intent="primary">
         TypeScript definitions are included within the published{" "}
-        <code>dist</code> folder and documentation is included within the{" "}
-        <code>docs</code> folder.
+        <code>dist</code> folder.
       </Callout>
       <div className="text-xl mt-4">Learn more</div>
       <div>
