@@ -10,6 +10,7 @@ export function Callout({
   children,
   className,
   html = false,
+  inline = false,
   intent = "none",
   minimal,
   ...rest
@@ -17,6 +18,7 @@ export function Callout({
   HTMLAttributes<HTMLDivElement> & {
     className?: string;
     html?: boolean;
+    inline?: boolean;
     intent?: Intent;
     minimal?: boolean;
   }
@@ -36,7 +38,7 @@ export function Callout({
 
   return (
     <div
-      className={`w-fit rounded-md p-2 px-3 ${getClassNames(intent, !!minimal)} ${className}`}
+      className={`${inline ? "w-fit" : "w-full"} rounded-md p-2 px-3 ${getClassNames(intent, !!minimal)} ${className}`}
       role="alert"
       {...rest}
     >
@@ -58,11 +60,11 @@ function getClassNames(intent: Intent, minimal: boolean) {
       if (minimal) {
         return "bg-red-950 text-red-300 [&_svg]:text-red-500";
       }
-      return "bg-black/10 bg-border border-2 border-red-500 text-white [&_svg]:text-red-500";
+      return "bg-black/10 bg-border border-2 border-red-500 text-white [&_svg]:text-red-500 [&_a]:text-red-400!";
     }
     case "none": {
       if (minimal) {
-        return "bg-slate-900 text-slate-300 [&_svg]:text-slate-400";
+        return "bg-white/10 text-slate-300 [&_svg]:text-slate-400";
       }
       return "bg-black/10 bg-border border-2 border-white/40 text-white [&_svg]:text-white/60";
     }
@@ -82,7 +84,7 @@ function getClassNames(intent: Intent, minimal: boolean) {
       if (minimal) {
         return "bg-amber-950/65 text-amber-200 [&_svg]:text-amber-300";
       }
-      return "bg-black/10 bg-border border-2 border-amber-400 text-white [&_svg]:text-amber-400";
+      return "bg-black/10 bg-border border-2 border-amber-400 text-white [&_svg]:text-amber-400 [&_a]:text-amber-400!";
     }
   }
 }
