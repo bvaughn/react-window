@@ -5,108 +5,146 @@
     "className": {
       "description": "CSS class name.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">className</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">string</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-variableName\">undefined</span></div>",
+      "infos": [],
       "name": "className",
-      "required": false
+      "required": false,
+      "warnings": []
     },
     "dir": {
       "description": "Corresponds to the HTML dir attribute:\nhttps://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">dir</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">string</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-variableName\">undefined</span></div>",
+      "infos": [],
       "name": "dir",
-      "required": false
+      "required": false,
+      "warnings": []
     },
     "style": {
       "description": "Optional CSS properties.\nThe grid of cells will fill the height and width defined by this style.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">style</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">CSSProperties</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-variableName\">undefined</span></div>",
+      "infos": [],
       "name": "style",
-      "required": false
+      "required": false,
+      "warnings": []
     },
     "children": {
       "description": "Additional content to be rendered within the grid (above cells).\nThis property can be used to render things like overlays or tooltips.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">children</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">ReactNode</span></div>",
+      "infos": [],
       "name": "children",
-      "required": false
+      "required": false,
+      "warnings": []
     },
     "cellComponent": {
       "description": "React component responsible for rendering a cell.<br/><br/>This component will receive an <code>index</code> and <code>style</code> prop by default.\nAdditionally it will receive prop values passed to <code>cellProps</code>.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-labelName\"><span class=\"tok-propertyName\">cellComponent</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">props</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">ariaAttributes</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-string\">\"aria-colindex\"</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">role</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-string\">\"gridcell\"</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">columnIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">rowIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">style</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">CSSProperties</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"\"> </span><span class=\"tok-operator\">&#38;</span><span class=\"\"> </span><span class=\"tok-typeName\">CellProps</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-variableName\">ReactNode</span></div>",
-      "info": "The prop types for this component are exported as <code>CellComponentProps</code>",
+      "infos": [
+        "The prop types for this component are exported as <code>CellComponentProps</code>"
+      ],
       "name": "cellComponent",
-      "required": true
+      "required": true,
+      "warnings": []
     },
     "cellProps": {
       "description": "Additional props to be passed to the cell-rendering component.\nGrid will automatically re-render cells when values in this object change.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-labelName\"><span class=\"tok-propertyName\">cellProps</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">CellProps</span></div>",
+      "infos": [],
       "name": "cellProps",
       "required": true,
-      "warning": "This object must not contain <code>ariaAttributes</code>, <code>columnIndex</code>, <code>rowIndex</code>, or <code>style</code> props."
+      "warnings": [
+        "This object must not contain <code>ariaAttributes</code>, <code>columnIndex</code>, <code>rowIndex</code>, or <code>style</code> props."
+      ]
     },
     "columnCount": {
       "description": "Number of columns to be rendered in the grid.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-labelName\"><span class=\"tok-propertyName\">columnCount</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span></div>",
+      "infos": [],
       "name": "columnCount",
-      "required": true
+      "required": true,
+      "warnings": []
     },
     "columnWidth": {
       "description": "Column width; the following formats are supported:<br/>• number of pixels (number)<br/>• percentage of the grid's current width (string)<br/>• function that returns the row width (in pixels) given an index and <code>cellProps</code>",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-labelName\"><span class=\"tok-propertyName\">columnWidth</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">string</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">index</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">,</span><span class=\"\"> </span><span class=\"tok-variableName tok-definition\">cellProps</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">CellProps</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"tok-punctuation\">)</span></div>",
+      "infos": [],
       "name": "columnWidth",
-      "required": true
+      "required": true,
+      "warnings": []
     },
     "defaultHeight": {
       "description": "Default height of grid for initial render.\nThis value is important for server rendering.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">defaultHeight</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-variableName\">undefined</span><span class=\"\"> </span><span class=\"tok-operator\">=</span><span class=\"\"> </span><span class=\"tok-number\">0</span></div>",
+      "infos": [],
       "name": "defaultHeight",
-      "required": false
+      "required": false,
+      "warnings": []
     },
     "defaultWidth": {
       "description": "Default width of grid for initial render.\nThis value is important for server rendering.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">defaultWidth</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-variableName\">undefined</span><span class=\"\"> </span><span class=\"tok-operator\">=</span><span class=\"\"> </span><span class=\"tok-number\">0</span></div>",
+      "infos": [],
       "name": "defaultWidth",
-      "required": false
+      "required": false,
+      "warnings": []
     },
     "gridRef": {
       "description": "Ref used to interact with this component's imperative API.<br/><br/>This API has imperative methods for scrolling and a getter for the outermost DOM element.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">gridRef</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">Ref</span><span class=\"\">&#60;</span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-keyword\">readonly</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">element</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">HTMLDivElement</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-keyword\">null</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">scrollToCell</span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">config</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">behavior</span><span class=\"\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-string\">\"auto\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"instant\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"smooth\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-typeName\">undefined</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">columnAlign</span><span class=\"\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-string\">\"auto\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"center\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"end\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"smart\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"start\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-typeName\">undefined</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">columnIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">rowAlign</span><span class=\"\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-string\">\"auto\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-operator\">.</span><span class=\"tok-operator\">.</span><span class=\"tok-operator\">.</span><span class=\"\"> </span><span class=\"tok-number\">4</span><span class=\"\"> </span><span class=\"tok-typeName\">more</span><span class=\"\"> </span><span class=\"tok-operator\">.</span><span class=\"tok-operator\">.</span><span class=\"tok-operator\">.</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-typeName\">undefined</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">rowIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">)</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-keyword\">void</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">scrollToColumn</span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">config</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-operator\">.</span><span class=\"tok-operator\">.</span><span class=\"tok-operator\">.</span></div>",
-      "info": "The <code>useGridRef</code> and <code>useGridCallbackRef</code> hooks are exported for convenience use in TypeScript projects.",
+      "infos": [
+        "The <code>useGridRef</code> and <code>useGridCallbackRef</code> hooks are exported for convenience use in TypeScript projects."
+      ],
       "name": "gridRef",
-      "required": false
+      "required": false,
+      "warnings": []
     },
     "onCellsRendered": {
       "description": "Callback notified when the range of rendered cells changes.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">onCellsRendered</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">visibleCells</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">columnStartIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">columnStopIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">rowStartIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">rowStopIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">,</span><span class=\"\"> </span><span class=\"tok-variableName tok-definition\">allCells</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">columnStartIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">columnStopIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">rowStartIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">rowStopIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-keyword\">void</span><span class=\"tok-punctuation\">)</span><span class=\"\"> | </span><span class=\"tok-variableName\">undefined</span></div>",
+      "infos": [],
       "name": "onCellsRendered",
-      "required": false
+      "required": false,
+      "warnings": []
     },
     "onResize": {
       "description": "Callback notified when the Grid's outermost HTMLElement resizes.\nThis may be used to (re)scroll a cell into view.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">onResize</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">size</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">height</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">width</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">,</span><span class=\"\"> </span><span class=\"tok-variableName tok-definition\">prevSize</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">height</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">width</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-keyword\">void</span><span class=\"tok-punctuation\">)</span><span class=\"\"> | </span><span class=\"tok-variableName\">undefined</span></div>",
+      "infos": [],
       "name": "onResize",
-      "required": false
+      "required": false,
+      "warnings": []
     },
     "overscanCount": {
       "description": "How many additional rows/columns to render outside of the visible area.\nThis can reduce visual flickering near the edges of a grid when scrolling.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">overscanCount</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-variableName\">undefined</span><span class=\"\"> </span><span class=\"tok-operator\">=</span><span class=\"\"> </span><span class=\"tok-number\">3</span></div>",
+      "infos": [],
       "name": "overscanCount",
-      "required": false
+      "required": false,
+      "warnings": []
     },
     "rowCount": {
       "description": "Number of rows to be rendered in the grid.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-labelName\"><span class=\"tok-propertyName\">rowCount</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span></div>",
+      "infos": [],
       "name": "rowCount",
-      "required": true
+      "required": true,
+      "warnings": []
     },
     "rowHeight": {
       "description": "Row height; the following formats are supported:<br/>• number of pixels (number)<br/>• percentage of the grid's current height (string)<br/>• function that returns the row height (in pixels) given an index and <code>cellProps</code>",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-labelName\"><span class=\"tok-propertyName\">rowHeight</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">string</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">index</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">,</span><span class=\"\"> </span><span class=\"tok-variableName tok-definition\">cellProps</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">CellProps</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"tok-punctuation\">)</span></div>",
+      "infos": [],
       "name": "rowHeight",
-      "required": true
+      "required": true,
+      "warnings": []
     },
     "tagName": {
       "description": "Can be used to override the root HTML element rendered by the List component.\nThe default value is \"div\", meaning that List renders an HTMLDivElement as its root.",
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">tagName</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">keyof </span><span class=\"\">IntrinsicElements </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-variableName\">undefined</span><span class=\"\"> </span><span class=\"tok-operator\">=</span><span class=\"\"> </span><span class=\"tok-string\">\"div\"</span><span class=\"\"> </span><span class=\"tok-keyword\">as</span><span class=\"\"> </span><span class=\"tok-typeName\">TagName</span></div>",
+      "infos": [],
       "name": "tagName",
       "required": false,
-      "warning": "In most use cases the default ARIA roles are sufficient and this prop is not needed."
+      "warnings": [
+        "In most use cases the default ARIA roles are sufficient and this prop is not needed."
+      ]
     }
   }
 }

@@ -32,16 +32,28 @@ export function ComponentPropsSection({
                   __html: prop.description
                 }}
               ></div>
-              {prop.info && (
-                <Callout className="mt-4" html intent="primary" minimal>
-                  {prop.info}
+              {prop.infos.map((info, index) => (
+                <Callout
+                  className="mt-4"
+                  key={index}
+                  html
+                  intent="primary"
+                  minimal
+                >
+                  {info}
                 </Callout>
-              )}
-              {prop.warning && (
-                <Callout className="mt-4" html intent="warning" minimal>
-                  {prop.warning}
+              ))}
+              {prop.warnings.map((warning, index) => (
+                <Callout
+                  className="mt-4"
+                  key={index}
+                  html
+                  intent="warning"
+                  minimal
+                >
+                  {warning}
                 </Callout>
-              )}
+              ))}
             </dd>
           </Fragment>
         ))}

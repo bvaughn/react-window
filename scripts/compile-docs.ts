@@ -22,7 +22,7 @@ async function run() {
   const { files, outputDir } = await initialize({
     fileExtensions: [".ts", ".tsx"],
     fileFilter: (file) =>
-      file.endsWith("/List.tsx") || file.endsWith("/Grid.tsx"),
+      file.endsWith("/Grid.tsx") || file.endsWith("/List.tsx"),
     inputPath: ["lib", "components"],
     outputDirName: "js-docs"
   });
@@ -80,17 +80,21 @@ async function run() {
             );
 
             let description = "";
-            let info = "";
-            let warning = "";
+            const infos: string[] = [];
+            const warnings: string[] = [];
 
             if (prop.description.includes("⚠️")) {
               const pieces = prop.description.split("⚠️");
               description = pieces[0];
-              warning = pieces[1] ?? "";
+              for (let index = 1; index < pieces.length; index++) {
+                warnings.push(pieces[index]);
+              }
             } else if (prop.description.includes("ℹ️")) {
               const pieces = prop.description.split("ℹ️");
               description = pieces[0];
-              info = pieces[1] ?? "";
+              for (let index = 1; index < pieces.length; index++) {
+                infos.push(pieces[index]);
+              }
             } else {
               description = prop.description;
             }
@@ -98,12 +102,12 @@ async function run() {
             componentMetadata.props[name] = {
               description: formatDescriptionText(description.trim()),
               html,
-              info: info ? formatDescriptionText(info.trim()) : undefined,
+              infos: infos.map((info) => formatDescriptionText(info.trim())),
               name,
               required: prop.required,
-              warning: warning
-                ? formatDescriptionText(warning.trim())
-                : undefined
+              warnings: warnings.map((warning) =>
+                formatDescriptionText(warning.trim())
+              )
             };
           } catch (error) {
             console.error(error);
