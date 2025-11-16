@@ -1,3 +1,4 @@
+import { Fragment } from "react/jsx-runtime";
 import type { ComponentPropMetadata } from "../../types";
 import { Callout } from "../Callout";
 import { Code } from "../code/Code";
@@ -16,10 +17,10 @@ export function ComponentPropsSection({
   return (
     <div>
       <div className="text-lg font-bold mt-2">{header}</div>
-      <dl>
+      <dl className="flex flex-col gap-2">
         {props.map((prop) => (
-          <div key={prop.name}>
-            <dt className="mt-4 mb-2 pl-8 indent-[-1rem]">
+          <Fragment key={prop.name}>
+            <dt className="mt-6 pl-8 indent-[-1rem]">
               <Code
                 className="bg-transparent inline-block p-0"
                 html={prop.html}
@@ -42,7 +43,7 @@ export function ComponentPropsSection({
                 </Callout>
               )}
             </dd>
-          </div>
+          </Fragment>
         ))}
       </dl>
     </div>
