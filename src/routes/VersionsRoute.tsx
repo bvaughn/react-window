@@ -35,7 +35,8 @@ const VERSIONS = {
     "2.0.2": "https://react-window-btpcws98u-brian-vaughns-projects.vercel.app"
   },
   "1": {
-    "1.8.11": "https://react-window-v1.vercel.app",
+    "1.8.11":
+      "https://web.archive.org/web/20241225003549/https://react-window.vercel.app/",
     "1.7.2": "",
     "1.6.2": "",
     "1.5.2": "",
