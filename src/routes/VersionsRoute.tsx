@@ -30,27 +30,27 @@ export default function VersionsRoute() {
 
 const VERSIONS = {
   "2": {
-    "2.2": "https://react-window-9gegorjnr-brian-vaughns-projects.vercel.app",
-    "2.1": "https://react-window-8cygyvomv-brian-vaughns-projects.vercel.app",
-    "2.0": "https://react-window-btpcws98u-brian-vaughns-projects.vercel.app"
+    "2.2.3": "https://react-window-9gegorjnr-brian-vaughns-projects.vercel.app",
+    "2.1.2": "https://react-window-8cygyvomv-brian-vaughns-projects.vercel.app",
+    "2.0.2": "https://react-window-btpcws98u-brian-vaughns-projects.vercel.app"
   },
   "1": {
-    "1.8": "https://react-window-v1.vercel.app",
-    "1.7": "",
-    "1.6": "",
-    "1.5": "",
-    "1.4": "",
-    "1.3": "",
-    "1.2": "",
-    "1.1": "",
-    "1.0": ""
+    "1.8.11": "https://react-window-v1.vercel.app",
+    "1.7.2": "",
+    "1.6.2": "",
+    "1.5.2": "",
+    "1.4.0": "",
+    "1.3.1": "",
+    "1.2.4": "",
+    "1.1.2": "",
+    "1.0.3": ""
   }
 };
 
 function VersionLink({ url, version }: { url: string; version: string }) {
   return (
     <li className="list-disc">
-      {version}
+      {version.split(".").slice(0, 2).join(".")}
       <span className="text-slate-400">.x</span>
       {url && (
         <ExternalLink
