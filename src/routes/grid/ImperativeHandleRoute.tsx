@@ -1,13 +1,13 @@
-import json from "../../../public/generated/js-docs/ListImperativeAPI.json";
+import { html as usePanelCallbackRefHTML } from "../../../public/generated/code-snippets/useGridCallbackRef.json";
+import { html as usePanelRefHTML } from "../../../public/generated/code-snippets/useGridRef.json";
+import json from "../../../public/generated/js-docs/GridImperativeAPI.json";
 import { Box } from "../../components/Box";
 import { Code } from "../../components/code/Code";
+import { ExternalLink } from "../../components/ExternalLink";
 import { ImperativeHandle } from "../../components/handles/ImperativeHandle";
 import type { ImperativeHandleMetadata } from "../../types";
-import { html as usePanelRefHTML } from "../../../public/generated/code-snippets/useListRef.json";
-import { html as usePanelCallbackRefHTML } from "../../../public/generated/code-snippets/useListCallbackRef.json";
-import { ExternalLink } from "../../components/ExternalLink";
 
-export default function ListImperativeApiRoute() {
+export default function GridImperativeHandleRoute() {
   return (
     <Box direction="column" gap={4}>
       <ImperativeHandle

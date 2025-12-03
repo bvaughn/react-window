@@ -2,7 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { initialize } from "./utils/initialize.ts";
 import { syntaxHighlight } from "./utils/syntax-highlight.ts";
-import { trimExcludedText } from "./utils/trimExcludedText.ts";
+import { trimExcludedText } from "./utils/code-snippets/trimExcludedText.ts";
 
 async function run() {
   const { files, outputDir } = await initialize({
@@ -14,8 +14,6 @@ async function run() {
   const exampleFiles = files.filter((file) => file.includes(".example."));
 
   for (const file of exampleFiles) {
-    console.debug("Extracting", file);
-
     const buffer = await readFile(file);
 
     let rawText = buffer.toString();

@@ -1,0 +1,24 @@
+{
+  "description": [
+    {
+      "content": "Imperative List API."
+    },
+    {
+      "content": "The <code>useListRef</code> and <code>useListCallbackRef</code> hooks are exported for convenience use in TypeScript projects.",
+      "intent": "primary"
+    }
+  ],
+  "filePath": "lib/components/list/types.ts",
+  "methods": [
+    {
+      "description": [
+        {
+          "content": "Scrolls the list so that the specified row is visible."
+        }
+      ],
+      "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-labelName\">scrollToRow</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-punctuation\">{</span><span class=\"\"></span></div>\n<div style=\"min-height: 1rem;\"><span class=\"\">    </span><span class=\"tok-propertyName\">align</span><span class=\"tok-punctuation\">,</span><span class=\"\"></span></div>\n<div style=\"min-height: 1rem;\"><span class=\"\">    </span><span class=\"tok-propertyName\">behavior</span><span class=\"tok-punctuation\">,</span><span class=\"\"></span></div>\n<div style=\"min-height: 1rem;\"><span class=\"\">    </span><span class=\"tok-propertyName\">index</span><span class=\"\"></span></div>\n<div style=\"min-height: 1rem;\"><span class=\"\">  </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"></span></div>\n<div style=\"min-height: 1rem;\"><span class=\"\">    </span><span class=\"tok-propertyName tok-definition\">align</span><span class=\"\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-string\">\"auto\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"center\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"end\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"smart\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"start\"</span><span class=\"tok-punctuation\">;</span><span class=\"\"></span></div>\n<div style=\"min-height: 1rem;\"><span class=\"\">    </span><span class=\"tok-propertyName tok-definition\">behavior</span><span class=\"\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-string\">\"auto\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"instant\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"smooth\"</span><span class=\"tok-punctuation\">;</span><span class=\"\"></span></div>\n<div style=\"min-height: 1rem;\"><span class=\"\">    </span><span class=\"tok-propertyName tok-definition\">index</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"></span></div>\n<div style=\"min-height: 1rem;\"><span class=\"\">  </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-keyword\">void</span><span class=\"tok-punctuation\">;</span></div>",
+      "name": "scrollToRow"
+    }
+  ],
+  "name": "ListImperativeAPI"
+}

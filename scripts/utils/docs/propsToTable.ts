@@ -24,21 +24,25 @@ const TABLE_TAG_STOP = `
 `;
 
 export async function propsToTable(props: PropItem[]) {
-  const htmlStrings = [TABLE_TAG_START];
+  const htmlStrings = [];
 
-  for (const prop of props) {
-    const type = getPropTypeText(prop);
+  if (props.length > 0) {
+    htmlStrings.push(TABLE_TAG_START);
 
-    const description = await marked(prop.description);
+    for (const prop of props) {
+      const type = getPropTypeText(prop);
 
-    htmlStrings.push(
-      PROP_ROW.replace("[[name]]", prop.name)
-        .replace("[[type]]", type)
-        .replace("[[description]]", description)
-    );
+      const description = await marked(prop.description);
+
+      htmlStrings.push(
+        PROP_ROW.replace("[[name]]", prop.name)
+          .replace("[[type]]", type)
+          .replace("[[description]]", description)
+      );
+    }
+
+    htmlStrings.push(TABLE_TAG_STOP);
   }
-
-  htmlStrings.push(TABLE_TAG_STOP);
 
   return htmlStrings.join("");
 }

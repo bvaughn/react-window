@@ -18,6 +18,9 @@ import type { ListProps } from "./types";
 
 export const DATA_ATTRIBUTE_LIST_INDEX = "data-react-window-index";
 
+/**
+ * Renders data with many rows.
+ */
 export function List<
   RowProps extends object,
   TagName extends TagNames = "div"

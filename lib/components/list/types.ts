@@ -174,13 +174,11 @@ export type CachedBounds = Map<
 >;
 
 /**
- * Ref used to interact with this component's imperative API.
- *
- * This API has imperative methods for scrolling and a getter for the outermost DOM element.
+ * Imperative List API.
  *
  * ℹ️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience use in TypeScript projects.
  */
-export type ListImperativeAPI = {
+export interface ListImperativeAPI {
   /**
    * Outermost HTML element for the list if mounted and null (if not mounted.
    */
@@ -195,7 +193,7 @@ export type ListImperativeAPI = {
    *
    * @throws RangeError if an invalid row index is provided
    */
-  scrollToRow({
+  scrollToRow: ({
     align,
     behavior,
     index
@@ -203,5 +201,5 @@ export type ListImperativeAPI = {
     align?: "auto" | "center" | "end" | "smart" | "start";
     behavior?: "auto" | "instant" | "smooth";
     index: number;
-  }): void;
-};
+  }) => void;
+}
