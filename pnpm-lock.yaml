@@ -61,6 +61,9 @@ importers:
       "@ts-ast-parser/core":
         specifier: ^0.8.0
         version: 0.8.0(typescript@5.8.3)
+      "@types/markdown-it":
+        specifier: ^14.1.2
+        version: 14.1.2
       "@types/node":
         specifier: ^24.2.0
         version: 24.2.0
@@ -100,6 +103,9 @@ importers:
       lint-staged:
         specifier: ^16.1.4
         version: 16.1.4
+      markdown-it:
+        specifier: ^14.1.0
+        version: 14.1.0
       marked:
         specifier: ^16.4.1
         version: 16.4.1
@@ -165,7 +171,7 @@ importers:
         version: 4.3.0(rollup@4.44.2)(typescript@5.8.3)(vite@7.0.6(@types/node@24.2.0)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.0))
       vitest:
         specifier: ^3.2.4
-        version: 3.2.4(@types/node@24.2.0)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.0)
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@24.2.0)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.0)
       zustand:
         specifier: ^5.0.7
         version: 5.0.7(@types/react@19.1.8)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0))
@@ -1763,6 +1769,12 @@ packages:
         integrity: sha512-8kB30R7Hwqf40JPiKhVzodJs2Qc1ZJ5zuT3uzw5Hq/dhNCl3G3l83jfpdI1e20BP348+fV7VIL/+FxaXkqBmWg==
       }
 
+  "@types/debug@4.1.12":
+    resolution:
+      {
+        integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==
+      }
+
   "@types/deep-eql@4.0.2":
     resolution:
       {
@@ -1779,6 +1791,30 @@ packages:
     resolution:
       {
         integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
+      }
+
+  "@types/linkify-it@5.0.0":
+    resolution:
+      {
+        integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==
+      }
+
+  "@types/markdown-it@14.1.2":
+    resolution:
+      {
+        integrity: sha512-promo4eFwuiW+TfGxhi+0x3czqTYJkG8qB17ZUJiVF10Xm7NLVRSLUsfRTU/6h1e24VvRnXCx+hG7li58lkzog==
+      }
+
+  "@types/mdurl@2.0.0":
+    resolution:
+      {
+        integrity: sha512-RGdgjQUZba5p6QEFAVx2OGb8rQDL/cPRG7GiedRzMcJ1tYnUANBncjbSB1NRGwbvjcPeikRABz2nshyPk1bhWg==
+      }
+
+  "@types/ms@2.1.0":
+    resolution:
+      {
+        integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==
       }
 
   "@types/node@18.19.121":
@@ -3302,6 +3338,12 @@ packages:
         integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
       }
 
+  linkify-it@5.0.0:
+    resolution:
+      {
+        integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==
+      }
+
   lint-staged@16.1.4:
     resolution:
       {
@@ -3400,6 +3442,13 @@ packages:
         integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==
       }
 
+  markdown-it@14.1.0:
+    resolution:
+      {
+        integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==
+      }
+    hasBin: true
+
   marked@16.4.1:
     resolution:
       {
@@ -3407,6 +3456,12 @@ packages:
       }
     engines: { node: ">= 20" }
     hasBin: true
+
+  mdurl@2.0.0:
+    resolution:
+      {
+        integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==
+      }
 
   merge-stream@2.0.0:
     resolution:
@@ -3800,6 +3855,13 @@ packages:
         integrity: sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ==
       }
     engines: { node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0 }
+
+  punycode.js@2.3.1:
+    resolution:
+      {
+        integrity: sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA==
+      }
+    engines: { node: ">=6" }
 
   punycode@2.3.1:
     resolution:
@@ -4447,6 +4509,12 @@ packages:
       }
     engines: { node: ">=14.17" }
     hasBin: true
+
+  uc.micro@2.1.0:
+    resolution:
+      {
+        integrity: sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==
+      }
 
   ufo@1.6.1:
     resolution:
@@ -5774,11 +5842,28 @@ snapshots:
     dependencies:
       "@types/deep-eql": 4.0.2
 
+  "@types/debug@4.1.12":
+    dependencies:
+      "@types/ms": 2.1.0
+    optional: true
+
   "@types/deep-eql@4.0.2": {}
 
   "@types/estree@1.0.8": {}
 
   "@types/json-schema@7.0.15": {}
+
+  "@types/linkify-it@5.0.0": {}
+
+  "@types/markdown-it@14.1.2":
+    dependencies:
+      "@types/linkify-it": 5.0.0
+      "@types/mdurl": 2.0.0
+
+  "@types/mdurl@2.0.0": {}
+
+  "@types/ms@2.1.0":
+    optional: true
 
   "@types/node@18.19.121":
     dependencies:
@@ -6662,6 +6747,10 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
+  linkify-it@5.0.0:
+    dependencies:
+      uc.micro: 2.1.0
+
   lint-staged@16.1.4:
     dependencies:
       chalk: 5.4.1
@@ -6732,7 +6821,18 @@ snapshots:
 
   make-error@1.3.6: {}
 
+  markdown-it@14.1.0:
+    dependencies:
+      argparse: 2.0.1
+      entities: 4.5.0
+      linkify-it: 5.0.0
+      mdurl: 2.0.0
+      punycode.js: 2.3.1
+      uc.micro: 2.1.0
+
   marked@16.4.1: {}
+
+  mdurl@2.0.0: {}
 
   merge-stream@2.0.0: {}
 
@@ -6900,6 +7000,8 @@ snapshots:
       ansi-regex: 5.0.1
       ansi-styles: 5.2.0
       react-is: 17.0.2
+
+  punycode.js@2.3.1: {}
 
   punycode@2.3.1: {}
 
@@ -7277,6 +7379,8 @@ snapshots:
 
   typescript@5.8.3: {}
 
+  uc.micro@2.1.0: {}
+
   ufo@1.6.1: {}
 
   undici-types@5.26.5: {}
@@ -7370,7 +7474,7 @@ snapshots:
       terser: 5.43.1
       yaml: 2.8.0
 
-  vitest@3.2.4(@types/node@24.2.0)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.0):
+  vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.2.0)(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.0):
     dependencies:
       "@types/chai": 5.2.2
       "@vitest/expect": 3.2.4
@@ -7396,6 +7500,7 @@ snapshots:
       vite-node: 3.2.4(@types/node@24.2.0)(jiti@2.4.2)(lightningcss@1.30.1)(terser@5.43.1)(yaml@2.8.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
+      "@types/debug": 4.1.12
       "@types/node": 24.2.0
       jsdom: 26.1.0
     transitivePeerDependencies:

@@ -30,9 +30,9 @@ export async function parseDescription(rawText: string) {
       content = formatDescriptionText(chunk.trim());
 
       for (const char in INTENT_FLAGS) {
-        if (content.startsWith(char)) {
+        if (content.startsWith(`<p>${char} `)) {
           intent = INTENT_FLAGS[char as keyof typeof INTENT_FLAGS] as Intent;
-          content = content.substring(char.length + 1);
+          content = content.replace(`<p>${char} `, "<p>");
         }
       }
     }

@@ -239,7 +239,7 @@ Grid will automatically re-render cells when values in this object change.</p>
     <tr>
       <td>dir</td>
       <td><p>Indicates the directionality of grid cells.</p>
-<p>ℹ️ See HTML <code>dir</code> <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir">global attribute</a>.</p>
+<p>ℹ️ See HTML <code>dir</code> <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir">global attribute</a> for more information.</p>
 </td>
     </tr>
     <tr>

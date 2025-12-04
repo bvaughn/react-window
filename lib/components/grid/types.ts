@@ -87,7 +87,7 @@ export type GridProps<
   /**
    * Indicates the directionality of grid cells.
    *
-   * ℹ️ See HTML `dir` [global attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir).
+   * ℹ️ See HTML `dir` [global attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir) for more information.
    */
   dir?: "ltr" | "rtl";
 

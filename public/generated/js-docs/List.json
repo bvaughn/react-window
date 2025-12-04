@@ -1,7 +1,7 @@
 {
   "description": [
     {
-      "content": "Renders data with many rows."
+      "content": "<p>Renders data with many rows.</p>\n"
     }
   ],
   "filePath": "lib/components/list/List.tsx",
@@ -10,7 +10,7 @@
     "className": {
       "description": [
         {
-          "content": "CSS class name."
+          "content": "<p>CSS class name.</p>\n"
         }
       ],
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">className</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">string</span></div>",
@@ -20,7 +20,7 @@
     "style": {
       "description": [
         {
-          "content": "Optional CSS properties.\nThe list of rows will fill the height defined by this style."
+          "content": "<p>Optional CSS properties.\nThe list of rows will fill the height defined by this style.</p>\n"
         }
       ],
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">style</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">CSSProperties</span></div>",
@@ -30,7 +30,7 @@
     "children": {
       "description": [
         {
-          "content": "Additional content to be rendered within the list (above cells).\nThis property can be used to render things like overlays or tooltips."
+          "content": "<p>Additional content to be rendered within the list (above cells).\nThis property can be used to render things like overlays or tooltips.</p>\n"
         }
       ],
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">children</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">ReactNode</span></div>",
@@ -40,7 +40,7 @@
     "defaultHeight": {
       "description": [
         {
-          "content": "Default height of list for initial render.\nThis value is important for server rendering."
+          "content": "<p>Default height of list for initial render.\nThis value is important for server rendering.</p>\n"
         }
       ],
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">defaultHeight</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"\"> </span><span class=\"tok-operator\">=</span><span class=\"\"> </span><span class=\"tok-number\">0</span></div>",
@@ -50,13 +50,13 @@
     "listRef": {
       "description": [
         {
-          "content": "Ref used to interact with this component's imperative API."
+          "content": "<p>Ref used to interact with this component's imperative API.</p>\n"
         },
         {
-          "content": "This API has imperative methods for scrolling and a getter for the outermost DOM element."
+          "content": "<p>This API has imperative methods for scrolling and a getter for the outermost DOM element.</p>\n"
         },
         {
-          "content": "The <code>useListRef</code> and <code>useListCallbackRef</code> hooks are exported for convenience use in TypeScript projects.",
+          "content": "<p>The <code>useListRef</code> and <code>useListCallbackRef</code> hooks are exported for convenience use in TypeScript projects.</p>\n",
           "intent": "primary"
         }
       ],
@@ -67,7 +67,7 @@
     "onResize": {
       "description": [
         {
-          "content": "Callback notified when the List's outermost HTMLElement resizes.\nThis may be used to (re)scroll a row into view."
+          "content": "<p>Callback notified when the List's outermost HTMLElement resizes.\nThis may be used to (re)scroll a row into view.</p>\n"
         }
       ],
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">onResize</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">size</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">height</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">width</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">,</span><span class=\"\"> </span><span class=\"tok-variableName tok-definition\">prevSize</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">height</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">width</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-keyword\">void</span><span class=\"tok-punctuation\">)</span></div>",
@@ -77,7 +77,7 @@
     "onRowsRendered": {
       "description": [
         {
-          "content": "Callback notified when the range of visible rows changes."
+          "content": "<p>Callback notified when the range of visible rows changes.</p>\n"
         }
       ],
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">onRowsRendered</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">visibleRows</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">startIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">stopIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">,</span><span class=\"\"> </span><span class=\"tok-variableName tok-definition\">allRows</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">startIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">stopIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-keyword\">void</span><span class=\"tok-punctuation\">)</span></div>",
@@ -87,7 +87,7 @@
     "overscanCount": {
       "description": [
         {
-          "content": "How many additional rows to render outside of the visible area.\nThis can reduce visual flickering near the edges of a list when scrolling."
+          "content": "<p>How many additional rows to render outside of the visible area.\nThis can reduce visual flickering near the edges of a list when scrolling.</p>\n"
         }
       ],
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-variableName\"><span class=\"tok-propertyName\">overscanCount</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"\"> </span><span class=\"tok-operator\">=</span><span class=\"\"> </span><span class=\"tok-number\">3</span></div>",
@@ -97,13 +97,13 @@
     "rowComponent": {
       "description": [
         {
-          "content": "React component responsible for rendering a row."
+          "content": "<p>React component responsible for rendering a row.</p>\n"
         },
         {
-          "content": "This component will receive an <code>index</code> and <code>style</code> prop by default.\nAdditionally it will receive prop values passed to <code>rowProps</code>."
+          "content": "<p>This component will receive an <code>index</code> and <code>style</code> prop by default.\nAdditionally it will receive prop values passed to <code>rowProps</code>.</p>\n"
         },
         {
-          "content": "The prop types for this component are exported as <code>RowComponentProps</code>",
+          "content": "<p>The prop types for this component are exported as <code>RowComponentProps</code></p>\n",
           "intent": "primary"
         }
       ],
@@ -114,7 +114,7 @@
     "rowCount": {
       "description": [
         {
-          "content": "Number of items to be rendered in the list."
+          "content": "<p>Number of items to be rendered in the list.</p>\n"
         }
       ],
       "html": "<div style=\"min-height: 1rem;\"><span class=\"tok-labelName\"><span class=\"tok-propertyName\">rowCount</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span></div>",
@@ -124,10 +124,10 @@
     "rowHeight": {
       "description": [
         {
-          "content": "Row height; the following formats are supported:<br/>• number of pixels (number)<br/>• percentage of the grid's current height (string)<br/>• function that returns the row height (in pixels) given an index and <code>cellProps</code><br/>• dynamic row height cache returned by the <code>useDynamicRowHeight</code> hook"
+          "content": "<p>Row height; the following formats are supported:</p>\n<ul>\n<li>number of pixels (number)</li>\n<li>percentage of the grid's current height (string)</li>\n<li>function that returns the row height (in pixels) given an index and <code>cellProps</code></li>\n<li>dynamic row height cache returned by the <code>useDynamicRowHeight</code> hook</li>\n</ul>\n"
         },
         {
-          "content": "Dynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time.",
+          "content": "<p>Dynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time.</p>\n",
           "intent": "warning"
         }
       ],
@@ -138,10 +138,10 @@
     "rowProps": {
       "description": [
         {
-          "content": "Additional props to be passed to the row-rendering component.\nList will automatically re-render rows when values in this object change."
+          "content": "<p>Additional props to be passed to the row-rendering component.\nList will automatically re-render rows when values in this object change.</p>\n"
         },
         {
-          "content": "This object must not contain <code>ariaAttributes</code>, <code>index</code>, or <code>style</code> props.",
+          "content": "<p>This object must not contain <code>ariaAttributes</code>, <code>index</code>, or <code>style</code> props.</p>\n",
           "intent": "warning"
         }
       ],
@@ -152,10 +152,10 @@
     "tagName": {
       "description": [
         {
-          "content": "Can be used to override the root HTML element rendered by the List component.\nThe default value is \"div\", meaning that List renders an HTMLDivElement as its root."
+          "content": "<p>Can be used to override the root HTML element rendered by the List component.\nThe default value is &quot;div&quot;, meaning that List renders an HTMLDivElement as its root.</p>\n"
         },
         {
-          "content": "In most use cases the default ARIA roles are sufficient and this prop is not needed.",
+          "content": "<p>In most use cases the default ARIA roles are sufficient and this prop is not needed.</p>\n",
           "intent": "warning"
         }
       ],
