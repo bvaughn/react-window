@@ -1,5 +1,4 @@
 import { type Ref } from "react";
-import { cn } from "../../../utils/cn";
 
 // <begin>
 
@@ -42,7 +41,10 @@ function rowHeight(index: number, { items }: RowProps) {
 function RowComponent({ index, items, style }: RowComponentProps<RowProps>) {
   const item = items[index];
 
-  const className = getClassName(item);
+  let className = "flex items-center justify-between gap-2";
+  if (item.type === "state") {
+    className += " text-3xl text-sky-300";
+  }
 
   return (
     <div className={className} style={style}>
@@ -76,12 +78,6 @@ function ExampleWithRef({
       rowProps={{ items }}
     />
   );
-}
-
-function getClassName(item: Item) {
-  return cn("flex items-center justify-between gap-2", {
-    "text-3xl text-sky-300": item.type === "state"
-  });
 }
 
 export { Example, ExampleWithRef, RowComponent };
