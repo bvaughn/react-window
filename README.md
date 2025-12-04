@@ -238,8 +238,8 @@ Grid will automatically re-render cells when values in this object change.</p>
     </tr>
     <tr>
       <td>dir</td>
-      <td><p>Corresponds to the HTML dir attribute:
-<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir">https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir</a></p>
+      <td><p>Indicates the directionality of grid cells.</p>
+<p>ℹ️ See HTML <code>dir</code> <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir">global attribute</a> for more information.</p>
 </td>
     </tr>
     <tr>
@@ -268,8 +268,7 @@ This value is important for server rendering.</p>
     </tr>
     <tr>
       <td>gridRef</td>
-      <td><p>Ref used to interact with this component&#39;s imperative API.</p>
-<p>This API has imperative methods for scrolling and a getter for the outermost DOM element.</p>
+      <td><p>Imperative Grid API.</p>
 <p>ℹ️ The <code>useGridRef</code> and <code>useGridCallbackRef</code> hooks are exported for convenience use in TypeScript projects.</p>
 </td>
     </tr>

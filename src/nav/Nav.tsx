@@ -9,9 +9,10 @@ export function Nav() {
         <NavLink path="/list/fixed-row-height">Fixed row heights</NavLink>
         <NavLink path="/list/variable-row-height">Variable row heights</NavLink>
         <NavLink path="/list/dynamic-row-height">Dynamic row heights</NavLink>
-        <NavLink path="/list/imperative-methods">Imperative methods</NavLink>
+        <NavLink path="/list/scroll-to-row">Scroll to row</NavLink>
         <NavLink path="/list/aria-roles">ARIA roles</NavLink>
-        <NavLink path="/list/props">Props and API</NavLink>
+        <NavLink path="/list/props">List props</NavLink>
+        <NavLink path="/list/imperative-handle">Imperative handle</NavLink>
       </NavSection>
       <NavSection label="Tables">
         <NavLink path="/list/tabular-data">Tabular data</NavLink>
@@ -19,9 +20,10 @@ export function Nav() {
       </NavSection>
       <NavSection label="Grids">
         <NavLink path="/grid/grid">Rendering a grid</NavLink>
-        <NavLink path="/grid/imperative-methods">Imperative methods</NavLink>
+        <NavLink path="/grid/scroll-to-cell">Scroll to cells</NavLink>
         <NavLink path="/grid/aria-roles">ARIA roles</NavLink>
-        <NavLink path="/grid/props">Props and API</NavLink>
+        <NavLink path="/grid/props">Grid props</NavLink>
+        <NavLink path="/grid/imperative-handle">Imperative handle</NavLink>
       </NavSection>
       <NavSection label="Other">
         <NavLink path="/grid/rtl-grids">Right to left content</NavLink>

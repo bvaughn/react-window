@@ -43,7 +43,7 @@ export default function DynamicRowHeightsRoute() {
         recommended to provide your own height values if they can be determined
         ahead of time.
       </Callout>
-      <ContinueLink to="/list/imperative-methods" title="imperative methods" />
+      <ContinueLink to="/list/imperative-handle" title="imperative methods" />
     </Box>
   );
 }

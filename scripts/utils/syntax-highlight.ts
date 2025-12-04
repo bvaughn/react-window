@@ -16,7 +16,7 @@ type Token = {
   value: string;
 };
 
-type Language = "HTML" | "JS" | "JSX" | "TS" | "TSX";
+export type Language = "HTML" | "JS" | "JSX" | "TS" | "TSX";
 
 type State = {
   parsedTokens: Token[];
@@ -140,7 +140,7 @@ async function parser(
     }
   );
 
-  const maxPosition = code.length - 1;
+  const maxPosition = code.length;
 
   if (characterIndex < maxPosition) {
     // No style applied on the trailing text.

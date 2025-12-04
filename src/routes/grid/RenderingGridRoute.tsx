@@ -60,7 +60,7 @@ export default function RenderingGridRoute() {
           </div>
         </Box>
       </Callout>
-      <ContinueLink to="/list/imperative-methods" title="imperative methods" />
+      <ContinueLink to="/list/imperative-handle" title="imperative methods" />
     </Box>
   );
 }

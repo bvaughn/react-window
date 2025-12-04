@@ -85,15 +85,14 @@ export type GridProps<
   defaultWidth?: number;
 
   /**
-   * Corresponds to the HTML dir attribute:
-   * https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir
+   * Indicates the directionality of grid cells.
+   *
+   * ℹ️ See HTML `dir` [global attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir) for more information.
    */
   dir?: "ltr" | "rtl";
 
   /**
-   * Ref used to interact with this component's imperative API.
-   *
-   * This API has imperative methods for scrolling and a getter for the outermost DOM element.
+   * Imperative Grid API.
    *
    * ℹ️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience use in TypeScript projects.
    */
@@ -244,7 +243,7 @@ export type CachedBounds = Map<
  *
  * ℹ️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience use in TypeScript projects.
  */
-export type GridImperativeAPI = {
+export interface GridImperativeAPI {
   /**
    * Outermost HTML element for the grid if mounted and null (if not mounted.
    */
@@ -261,7 +260,7 @@ export type GridImperativeAPI = {
    *
    * @throws RangeError if an invalid row or column index is provided
    */
-  scrollToCell({
+  scrollToCell: ({
     behavior,
     columnAlign,
     columnIndex,
@@ -273,7 +272,7 @@ export type GridImperativeAPI = {
     columnIndex: number;
     rowAlign?: "auto" | "center" | "end" | "smart" | "start";
     rowIndex: number;
-  }): void;
+  }) => void;
 
   /**
    * Scrolls the grid so that the specified column is visible.
@@ -284,7 +283,7 @@ export type GridImperativeAPI = {
    *
    * @throws RangeError if an invalid column index is provided
    */
-  scrollToColumn({
+  scrollToColumn: ({
     align,
     behavior,
     index
@@ -292,7 +291,7 @@ export type GridImperativeAPI = {
     align?: "auto" | "center" | "end" | "smart" | "start";
     behavior?: "auto" | "instant" | "smooth";
     index: number;
-  }): void;
+  }) => void;
 
   /**
    * Scrolls the grid so that the specified row is visible.
@@ -303,7 +302,7 @@ export type GridImperativeAPI = {
    *
    * @throws RangeError if an invalid row index is provided
    */
-  scrollToRow({
+  scrollToRow: ({
     align,
     behavior,
     index
@@ -311,5 +310,5 @@ export type GridImperativeAPI = {
     align?: "auto" | "center" | "end" | "smart" | "start";
     behavior?: "auto" | "instant" | "smooth";
     index: number;
-  }): void;
-};
+  }) => void;
+}

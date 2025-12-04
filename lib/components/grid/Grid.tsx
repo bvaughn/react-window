@@ -15,6 +15,9 @@ import type { Align, TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import type { GridProps } from "./types";
 
+/**
+ * Renders data with many rows and columns.
+ */
 export function Grid<
   CellProps extends object,
   TagName extends TagNames = "div"

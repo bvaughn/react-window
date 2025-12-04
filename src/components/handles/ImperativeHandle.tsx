@@ -1,30 +1,23 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/20/solid";
-import { useMemo } from "react";
 import { repository } from "../../../package.json";
-import type { ComponentMetadata } from "../../types";
-import { processPropsJSON } from "../../utils/processPropsJSON";
+import type { ImperativeHandleMetadata } from "../../types";
 import { Box } from "../Box";
 import { DocsSection } from "../DocsSection";
 import { ExternalLink } from "../ExternalLink";
 import { Header } from "../Header";
-import { ComponentPropsSection } from "./ComponentPropsSection";
+import { ImperativeHandleMethod } from "./ImperativeHandleMethod";
 
-export function ComponentProps({
+export function ImperativeHandle({
   json,
   section
 }: {
-  json: ComponentMetadata;
+  json: ImperativeHandleMetadata;
   section: string;
 }) {
-  const { optionalProps, requiredProps } = useMemo(
-    () => processPropsJSON(json),
-    [json]
-  );
-
   return (
     <Box direction="column" gap={4}>
       <Box align="center" direction="row" gap={2} wrap>
-        <Header section={section} title={`${json.name} component`} />
+        <Header section={section} title={`${json.name}`} />
         <ExternalLink
           className="text-sm text-emerald-300 hover:text-white"
           href={`${repository.url.replace(".git", "")}/blob/main/${json.filePath}`}
@@ -33,8 +26,13 @@ export function ComponentProps({
         </ExternalLink>
       </Box>
       <DocsSection sections={json.description} />
-      <ComponentPropsSection header="Required props" props={requiredProps} />
-      <ComponentPropsSection header="Optional props" props={optionalProps} />
+      <Box direction="column">
+        <dl className="flex flex-col gap-2">
+          {json.methods.map((method, index) => (
+            <ImperativeHandleMethod key={index} method={method} />
+          ))}
+        </dl>
+      </Box>
     </Box>
   );
 }

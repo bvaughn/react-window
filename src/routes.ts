@@ -18,10 +18,11 @@ export const routes = {
   "/list/dynamic-row-height": lazy(
     () => import("./routes/list/DynamicRowHeightsRoute")
   ),
-  "/list/imperative-methods": lazy(
+  "/list/scroll-to-row": lazy(() => import("./routes/list/ScrollToRowRoute")),
+  "/list/props": lazy(() => import("./routes/list/PropsRoute")),
+  "/list/imperative-handle": lazy(
     () => import("./routes/list/ImperativeApiRoute")
   ),
-  "/list/props": lazy(() => import("./routes/list/PropsRoute")),
   "/list/aria-roles": lazy(() => import("./routes/list/AriaRolesRoute")),
   "/list/tabular-data": lazy(() => import("./routes/tables/TabularDataRoute")),
   "/list/tabular-data-aria-roles": lazy(
@@ -37,9 +38,10 @@ export const routes = {
   ),
   "/grid/rtl-grids": lazy(() => import("./routes/grid/RTLGridsRoute")),
   "/grid/props": lazy(() => import("./routes/grid/PropsRoute")),
-  "/grid/imperative-methods": lazy(
-    () => import("./routes/grid/ImperativeApiRoute")
+  "/grid/imperative-handle": lazy(
+    () => import("./routes/grid/ImperativeHandleRoute")
   ),
+  "/grid/scroll-to-cell": lazy(() => import("./routes/grid/ScrollToCellRoute")),
   "/grid/aria-roles": lazy(() => import("./routes/grid/AriaRolesRoute")),
 
   // Other
