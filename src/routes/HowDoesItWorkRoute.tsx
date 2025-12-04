@@ -110,7 +110,7 @@ function Row({
   return (
     <div
       className={cn(
-        "h-6 p-2 flex items-center rounded text-sm",
+        "h-6 p-2 flex items-center rounded text-xs whitespace-nowrap",
         rendered
           ? getIntentClassNames("primary", true)
           : getIntentClassNames("none", true),
