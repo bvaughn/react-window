@@ -4,7 +4,10 @@ import { NavSection } from "./NavSection";
 export function Nav() {
   return (
     <div className="w-full shrink-0 flex flex-col gap-4 py-4 overflow-y-auto">
-      <NavLink path="/">Getting started</NavLink>
+      <div>
+        <NavLink path="/">Getting started</NavLink>
+        <NavLink path="/how-does-it-work">How does it work?</NavLink>
+      </div>
       <NavSection label="Lists">
         <NavLink path="/list/fixed-row-height">Fixed row heights</NavLink>
         <NavLink path="/list/variable-row-height">Variable row heights</NavLink>

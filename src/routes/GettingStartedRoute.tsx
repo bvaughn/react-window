@@ -33,8 +33,11 @@ export default function GettingStartedRoute() {
       </Callout>
       <div className="text-xl mt-4">Learn more</div>
       <div>
-        This library provides two basic types of components; choose one below to
-        learn more:
+        If you've never used a library like this before, you may want to read
+        the <Link to="/how-does-it-work">how it works</Link> section first.
+      </div>
+      <div>
+        Then when you're ready to render a list or a grid, pick a section below.
       </div>
       <ul className="pl-8">
         <li className="list-disc">

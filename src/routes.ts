@@ -7,6 +7,7 @@ export const routes = {
 
   // Home page
   "/": lazy(() => import("./routes/GettingStartedRoute")),
+  "/how-does-it-work": lazy(() => import("./routes/HowDoesItWorkRoute")),
 
   // List
   "/list/fixed-row-height": lazy(
