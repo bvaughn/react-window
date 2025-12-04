@@ -24,7 +24,7 @@ export function DocsSection({
           <div
             key={index}
             dangerouslySetInnerHTML={{
-              __html: content
+              __html: content.replaceAll("<ul>", '<ul class="list-disc pl-4">')
             }}
           ></div>
         );
