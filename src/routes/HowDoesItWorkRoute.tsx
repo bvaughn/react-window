@@ -13,7 +13,7 @@ import { getIntentClassNames } from "../utils/getIntentClassNames";
 export default function HowDoesItWorkRoute() {
   return (
     <Box direction="column" gap={4}>
-      <Header section="Lists" title="How does it work?" />
+      <Header title="How does it work?" />
       <div>
         Libraries like this help to render a lot of items as efficiently as
         possible by limiting how many items are rendered at once.
