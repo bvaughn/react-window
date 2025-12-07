@@ -1,12 +1,12 @@
 import { type Ref } from "react";
 
-// <begin>
-
 import {
   List,
   type ListImperativeAPI,
   type RowComponentProps
 } from "react-window";
+
+// <begin>
 
 type Item =
   | { type: "state"; state: string }
@@ -38,6 +38,8 @@ function rowHeight(index: number, { items }: RowProps) {
   }
 }
 
+// <end>
+
 function RowComponent({ index, items, style }: RowComponentProps<RowProps>) {
   const item = items[index];
 
@@ -59,8 +61,6 @@ function RowComponent({ index, items, style }: RowComponentProps<RowProps>) {
     </div>
   );
 }
-
-// <end>
 
 function ExampleWithRef({
   items,
