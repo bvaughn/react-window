@@ -244,7 +244,7 @@ function parsedTokensToHtml(tokens: Token[]) {
     }
   }
 
-  return `<div style="min-height: 1rem;">${htmlString}</div>`;
+  return `<div style="min-height: 1rem; white-space: pre;">${htmlString}</div>`;
 }
 
 function escapeHtmlEntities(rawString: string) {
