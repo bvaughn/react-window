@@ -1,5 +1,5 @@
-import { html as usePanelCallbackRefHTML } from "../../../public/generated/code-snippets/useGridCallbackRef.json";
-import { html as usePanelRefHTML } from "../../../public/generated/code-snippets/useGridRef.json";
+import { html as useGridCallbackRefHTML } from "../../../public/generated/code-snippets/useGridCallbackRef.json";
+import { html as useGridRefHTML } from "../../../public/generated/code-snippets/useGridRef.json";
 import json from "../../../public/generated/js-docs/GridImperativeAPI.json";
 import { Box } from "../../components/Box";
 import { Code } from "../../components/code/Code";
@@ -16,21 +16,21 @@ export default function GridImperativeHandleRoute() {
       />
       <div className="text-lg font-bold">Hooks</div>
       <div>
-        The <code>usePanelRef</code> hook returns a{" "}
+        The <code>useGridRef</code> hook returns a{" "}
         <ExternalLink href="https://react.dev/reference/react/useRef">
           mutable ref object
         </ExternalLink>
         .
       </div>
-      <Code html={usePanelRefHTML} />
+      <Code html={useGridRefHTML} />
       <div>
-        And the <code>usePanelCallbackRef</code> hook returns a{" "}
+        And the <code>useGridCallbackRef</code> hook returns a{" "}
         <ExternalLink href="https://react.dev/reference/react-dom/components/common#ref-callback">
           ref callback function
         </ExternalLink>
         . This is better when sharing the ref with another hook or component.
       </div>
-      <Code html={usePanelCallbackRefHTML} />
+      <Code html={useGridCallbackRefHTML} />
     </Box>
   );
 }

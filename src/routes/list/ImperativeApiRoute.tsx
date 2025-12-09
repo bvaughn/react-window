@@ -3,8 +3,8 @@ import { Box } from "../../components/Box";
 import { Code } from "../../components/code/Code";
 import { ImperativeHandle } from "../../components/handles/ImperativeHandle";
 import type { ImperativeHandleMetadata } from "../../types";
-import { html as usePanelRefHTML } from "../../../public/generated/code-snippets/useListRef.json";
-import { html as usePanelCallbackRefHTML } from "../../../public/generated/code-snippets/useListCallbackRef.json";
+import { html as useListRefHTML } from "../../../public/generated/code-snippets/useListRef.json";
+import { html as useListCallbackRefHTML } from "../../../public/generated/code-snippets/useListCallbackRef.json";
 import { ExternalLink } from "../../components/ExternalLink";
 
 export default function ListImperativeApiRoute() {
@@ -16,21 +16,21 @@ export default function ListImperativeApiRoute() {
       />
       <div className="text-lg font-bold">Hooks</div>
       <div>
-        The <code>usePanelRef</code> hook returns a{" "}
+        The <code>useListRef</code> hook returns a{" "}
         <ExternalLink href="https://react.dev/reference/react/useRef">
           mutable ref object
         </ExternalLink>
         .
       </div>
-      <Code html={usePanelRefHTML} />
+      <Code html={useListRefHTML} />
       <div>
-        And the <code>usePanelCallbackRef</code> hook returns a{" "}
+        And the <code>useListCallbackRef</code> hook returns a{" "}
         <ExternalLink href="https://react.dev/reference/react-dom/components/common#ref-callback">
           ref callback function
         </ExternalLink>
         . This is better when sharing the ref with another hook or component.
       </div>
-      <Code html={usePanelCallbackRefHTML} />
+      <Code html={useListCallbackRefHTML} />
     </Box>
   );
 }
