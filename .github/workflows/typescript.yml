@@ -1,7 +1,7 @@
 name: "TypeScript"
 on: [pull_request]
 jobs:
-  tests-e2e:
+  typescript:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

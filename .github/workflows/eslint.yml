@@ -1,7 +1,7 @@
 name: "ESLint"
 on: [pull_request]
 jobs:
-  tests-e2e:
+  eslint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

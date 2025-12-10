@@ -1,7 +1,7 @@
 name: "Prettier"
 on: [pull_request]
 jobs:
-  tests-e2e:
+  prettier:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
