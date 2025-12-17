@@ -104,6 +104,7 @@ export async function compileComponent({
 
   return {
     componentName: component.displayName,
+    description: component.description,
     optionalPropsTable: await propsToTable(optionalProps),
     requiredPropsTable: await propsToTable(requiredProps)
   };

@@ -38,21 +38,35 @@ export async function compileComponents({
         filePath,
         outputDir,
         parser
-      }).then(({ componentName, optionalPropsTable, requiredPropsTable }) => {
-        markdown = insertPropsMarkdown({
-          componentMarkdown: requiredPropsTable,
+      }).then(
+        ({
           componentName,
-          markdown,
-          required: true
-        });
+          description,
+          optionalPropsTable,
+          requiredPropsTable
+        }) => {
+          markdown = insertPropsMarkdown({
+            componentMarkdown: description,
+            componentName,
+            markdown,
+            section: "description"
+          });
 
-        markdown = insertPropsMarkdown({
-          componentMarkdown: optionalPropsTable,
-          componentName,
-          markdown,
-          required: false
-        });
-      })
+          markdown = insertPropsMarkdown({
+            componentMarkdown: requiredPropsTable,
+            componentName,
+            markdown,
+            section: "required-props"
+          });
+
+          markdown = insertPropsMarkdown({
+            componentMarkdown: optionalPropsTable,
+            componentName,
+            markdown,
+            section: "optional-props"
+          });
+        }
+      )
     )
   );
 

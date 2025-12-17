@@ -34,9 +34,15 @@ Documentation for this project is available at [react-window.vercel.app](https:/
 
 ### List
 
+<!-- List:description:begin -->
+
+Renders data with many rows.
+
+<!-- List:description:end -->
+
 #### Required props
 
-<!-- List:required:begin -->
+<!-- List:required-props:begin -->
 
 <table>
   <thead>
@@ -82,11 +88,11 @@ List will automatically re-render rows when values in this object change.</p>
   </tbody>
 </table>
 
-<!-- List:required:end -->
+<!-- List:required-props:end -->
 
 #### Optional props
 
-<!-- List:optional:begin -->
+<!-- List:optional-props:begin -->
 
 <table>
   <thead>
@@ -153,13 +159,19 @@ The default value is &quot;div&quot;, meaning that List renders an HTMLDivElemen
   </tbody>
 </table>
 
-<!-- List:optional:end -->
+<!-- List:optional-props:end -->
 
 ### Grid
 
+<!-- Grid:description:begin -->
+
+Renders data with many rows and columns.
+
+<!-- Grid:description:end -->
+
 #### Required props
 
-<!-- Grid:required:begin -->
+<!-- Grid:required-props:begin -->
 
 <table>
   <thead>
@@ -217,11 +229,11 @@ Grid will automatically re-render cells when values in this object change.</p>
   </tbody>
 </table>
 
-<!-- Grid:required:end -->
+<!-- Grid:required-props:end -->
 
 #### Optional props
 
-<!-- Grid:optional:begin -->
+<!-- Grid:optional-props:begin -->
 
 <table>
   <thead>
@@ -299,4 +311,4 @@ The default value is &quot;div&quot;, meaning that List renders an HTMLDivElemen
   </tbody>
 </table>
 
-<!-- Grid:optional:end -->
+<!-- Grid:optional-props:end -->
