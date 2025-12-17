@@ -20,14 +20,14 @@ export function Header({
   });
 
   return (
-    <Box align="center" direction="row" gap={2}>
+    <Box align="center" direction="row" gap={2} wrap>
       {section && (
         <>
-          <div className="text-xl">{section}</div>
+          <div className="text-xl whitespace-nowrap">{section}</div>
           <ChevronRightIcon className="size-4 text-slate-400" />
         </>
       )}
-      <div className="text-xl">{title}</div>
+      <div className="text-xl whitespace-nowrap">{title}</div>
     </Box>
   );
 }

@@ -28,7 +28,12 @@ export default function App() {
           justify="between"
           gap={4}
         >
-          <Box align="center" direction="row" gap={4}>
+          <Box
+            className="overflow-hidden"
+            align="center"
+            direction="row"
+            gap={4}
+          >
             <Link
               children="react-window"
               className="text-xl text-white! text-shadow-black/20 text-shadow-sm font-bold cursor-pointer"

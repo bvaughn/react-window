@@ -12,7 +12,7 @@ export function Code({
     <div className="relative">
       <code
         className={cn(
-          "text-sm md:text-base block text-left whitespace-pre-wrap text-white! rounded-md p-3 bg-black",
+          "text-sm md:text-base block text-left whitespace-pre-wrap break-normal text-white! rounded-md p-3 bg-black",
           "flex flex-col",
           className
         )}
