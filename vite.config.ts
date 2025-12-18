@@ -54,6 +54,14 @@ const websiteConfig: UserConfig = {
   }
 };
 
+// Allow iPhone to connect to the DEV site using a local IP
+if (process.env.NODE_ENV === "development") {
+  websiteConfig.server = {
+    host: true,
+    port: 3000
+  };
+}
+
 let config: UserConfig = {};
 switch (process.env.TARGET) {
   case "lib": {
