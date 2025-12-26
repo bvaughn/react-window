@@ -28,7 +28,8 @@ async function run() {
           (line) =>
             !line.includes("prettier-ignore") &&
             !line.includes("eslint-disable-next-line") &&
-            !line.includes("@ts-expect-error")
+            !line.includes("@ts-expect-error") &&
+            !line.includes("// hidden")
         )
         .join("\n");
     }

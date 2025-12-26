@@ -37,6 +37,10 @@ export async function parseDescription(rawText: string) {
       }
     }
 
+    // Strip TSDoc comments
+    content = content.replace(/\n@param.+/, "");
+    content = content.replace(/\n@return.+/, "");
+
     sections.push({
       content,
       intent
