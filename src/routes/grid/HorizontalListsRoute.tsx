@@ -1,10 +1,6 @@
-import HorizontalListMarkdown from "../../../public/generated/code-snippets/HorizontalList.json";
-import HorizontalListCellRendererMarkdown from "../../../public/generated/code-snippets/HorizontalListCellRenderer.json";
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Code } from "../../components/code/Code";
-import { Header } from "../../components/Header";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
+import { Block, Box, Code, Header, LoadingSpinner } from "react-lib-tools";
+import HorizontalListMarkdown from "../../../public/generated/examples/HorizontalList.json";
+import HorizontalListCellRendererMarkdown from "../../../public/generated/examples/HorizontalListCellRenderer.json";
 import { HorizontalList } from "./examples/HorizontalList.example";
 import { useEmails } from "./hooks/useEmails";
 

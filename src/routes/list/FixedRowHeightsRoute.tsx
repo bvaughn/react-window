@@ -1,13 +1,15 @@
+import {
+  Block,
+  Box,
+  Callout,
+  Code,
+  ExternalLink,
+  Header
+} from "react-lib-tools";
 import json from "../../../public/data/names.json";
-import FixedHeightListMarkdown from "../../../public/generated/code-snippets/FixedHeightList.json";
-import FixedHeightRowComponentMarkdown from "../../../public/generated/code-snippets/FixedHeightRowComponent.json";
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Callout } from "../../components/Callout";
-import { Code } from "../../components/code/Code";
+import FixedHeightListMarkdown from "../../../public/generated/examples/FixedHeightList.json";
+import FixedHeightRowComponentMarkdown from "../../../public/generated/examples/FixedHeightRowComponent.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { ExternalLink } from "../../components/ExternalLink";
-import { Header } from "../../components/Header";
 import { Example } from "./examples/FixedHeightList.example";
 
 export default function FixedRowHeightsRoute() {

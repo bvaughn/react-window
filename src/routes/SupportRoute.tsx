@@ -1,6 +1,4 @@
-import { Box } from "../components/Box";
-import { ExternalLink } from "../components/ExternalLink";
-import { Header } from "../components/Header";
+import { Box, ExternalLink, Header } from "react-lib-tools";
 
 export default function SupportRoute() {
   return (

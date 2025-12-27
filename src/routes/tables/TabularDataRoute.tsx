@@ -1,12 +1,14 @@
-import FlexboxLayoutMarkdown from "../../../public/generated/code-snippets/FlexboxLayout.json";
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Callout } from "../../components/Callout";
-import { Code } from "../../components/code/Code";
+import {
+  Block,
+  Box,
+  Callout,
+  Code,
+  Header,
+  LoadingSpinner
+} from "react-lib-tools";
+import FlexboxLayoutMarkdown from "../../../public/generated/examples/FlexboxLayout.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { Header } from "../../components/Header";
 import { Link } from "../../components/Link";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Example } from "./examples/FlexboxLayout.example";
 import { useAddresses } from "./hooks/useAddresses";
 

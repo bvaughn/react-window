@@ -1,23 +1,26 @@
 import { useMemo, useState } from "react";
+import {
+  Block,
+  Box,
+  Button,
+  Callout,
+  Code,
+  Header,
+  LoadingSpinner,
+  Select,
+  type Option
+} from "react-lib-tools";
 import { Grid, useGridRef, type Align } from "react-window";
-import gridRefClickEventHandlerMarkdown from "../../../public/generated/code-snippets/gridRefClickEventHandler.json";
-import useGridCallbackRefMarkdown from "../../../public/generated/code-snippets/useGridCallbackRef.json";
-import useGridRefMarkdown from "../../../public/generated/code-snippets/useGridRef.json";
-import useGridRefImportMarkdown from "../../../public/generated/code-snippets/useGridRefImport.json";
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Button } from "../../components/Button";
-import { Callout } from "../../components/Callout";
-import { Code } from "../../components/code/Code";
-import { Header } from "../../components/Header";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
-import { Select, type Option } from "../../components/Select";
+import gridRefClickEventHandlerMarkdown from "../../../public/generated/examples/gridRefClickEventHandler.json";
+import useGridCallbackRefMarkdown from "../../../public/generated/examples/useGridCallbackRef.json";
+import useGridRefMarkdown from "../../../public/generated/examples/useGridRef.json";
+import useGridRefImportMarkdown from "../../../public/generated/examples/useGridRefImport.json";
+import { ContinueLink } from "../../components/ContinueLink";
 import { CellComponent } from "./examples/CellComponent.example";
 import { columnWidth } from "./examples/columnWidth.example";
 import type { Contact } from "./examples/Grid.example";
 import { COLUMN_KEYS } from "./examples/shared";
 import { useContacts } from "./hooks/useContacts";
-import { ContinueLink } from "../../components/ContinueLink";
 
 const EMPTY_OPTION: Option<string> = {
   label: "",

@@ -1,16 +1,6 @@
-import { compileComponents } from "./utils/docs/compileComponents.ts";
-import { compileImperativeHandles } from "./utils/docs/compileImperativeHandles.ts";
+import { compileDocs } from "react-lib-tools/scripts/compile-docs.ts";
 
-async function run() {
-  await compileComponents({
-    componentNames: ["grid/Grid.tsx", "list/List.tsx"],
-    outputDirName: "js-docs"
-  });
-
-  await compileImperativeHandles({
-    names: ["GridImperativeAPI", "ListImperativeAPI"],
-    outputDirName: "js-docs"
-  });
-}
-
-run();
+await compileDocs({
+  componentNames: ["grid/Grid.tsx", "list/List.tsx"],
+  imperativeHandleNames: ["GridImperativeAPI", "ListImperativeAPI"]
+});
