@@ -85,7 +85,7 @@
     "react-docgen-typescript": "^2.4.0",
     "react-dom": "^19.2.3",
     "react-error-boundary": "^6.0.0",
-    "react-lib-tools": "link:../react-lib-tools",
+    "react-lib-tools": "^0.0.1",
     "react-router-dom": "^7.6.3",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-visualizer": "^6.0.3",
