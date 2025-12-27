@@ -4,7 +4,7 @@
 @import "react-lib-tools/styles.css";
 
 :root {
-  --template-gradient-color-1: var(--color-pink-500);
+  --template-gradient-color-1: var(--color-indigo-500);
   --template-gradient-color-2: var(--color-sky-500);
   --template-gradient-color-3: var(--color-emerald-400);
 
