@@ -1,10 +1,12 @@
-import RtlGridMarkdown from "../../../public/generated/code-snippets/RtlGrid.json";
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Code } from "../../components/code/Code";
-import { ExternalLink } from "../../components/ExternalLink";
-import { Header } from "../../components/Header";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
+import {
+  Block,
+  Box,
+  Code,
+  ExternalLink,
+  Header,
+  LoadingSpinner
+} from "react-lib-tools";
+import RtlGridMarkdown from "../../../public/generated/examples/RtlGrid.json";
 import { RtlExample } from "./examples/RtlGrid.example";
 import { useContacts } from "./hooks/useContacts";
 

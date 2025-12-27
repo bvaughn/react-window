@@ -1,10 +1,7 @@
-import { html as useGridCallbackRefHTML } from "../../../public/generated/code-snippets/useGridCallbackRef.json";
-import { html as useGridRefHTML } from "../../../public/generated/code-snippets/useGridRef.json";
-import json from "../../../public/generated/js-docs/GridImperativeAPI.json";
-import { Box } from "../../components/Box";
-import { Code } from "../../components/code/Code";
-import { ExternalLink } from "../../components/ExternalLink";
-import { ImperativeHandle } from "../../components/handles/ImperativeHandle";
+import { Box, Code, ExternalLink, ImperativeHandle } from "react-lib-tools";
+import { html as useGridCallbackRefHTML } from "../../../public/generated/examples/useGridCallbackRef.json";
+import { html as useGridRefHTML } from "../../../public/generated/examples/useGridRef.json";
+import json from "../../../public/generated/docs/GridImperativeAPI.json";
 import type { ImperativeHandleMetadata } from "../../types";
 
 export default function GridImperativeHandleRoute() {

@@ -1,10 +1,12 @@
-import ListWithStickyRowsMarkdown from "../../../public/generated/code-snippets/ListWithStickyRows.json";
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Callout } from "../../components/Callout";
-import { Code } from "../../components/code/Code";
-import { ExternalLink } from "../../components/ExternalLink";
-import { Header } from "../../components/Header";
+import {
+  Block,
+  Box,
+  Callout,
+  Code,
+  ExternalLink,
+  Header
+} from "react-lib-tools";
+import ListWithStickyRowsMarkdown from "../../../public/generated/examples/ListWithStickyRows.json";
 import { Example } from "./examples/ListWithStickyRows.example";
 
 export default function StickyRowsRoute() {

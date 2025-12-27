@@ -1,10 +1,7 @@
-import CellComponentAriaRolesMarkdown from "../../../public/generated/code-snippets/CellComponentAriaRoles.json";
-import GridAriaRolesMarkdown from "../../../public/generated/code-snippets/GridAriaRoles.json";
-import { Box } from "../../components/Box";
-import { Code } from "../../components/code/Code";
+import { Box, Code, ExternalLink, Header } from "react-lib-tools";
+import CellComponentAriaRolesMarkdown from "../../../public/generated/examples/CellComponentAriaRoles.json";
+import GridAriaRolesMarkdown from "../../../public/generated/examples/GridAriaRoles.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { ExternalLink } from "../../components/ExternalLink";
-import { Header } from "../../components/Header";
 
 export default function AriaRolesRoute() {
   return (

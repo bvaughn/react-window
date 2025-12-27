@@ -1,9 +1,6 @@
-import TableAriaAttributesMarkdown from "../../../public/generated/code-snippets/TableAriaAttributes.json";
-import TableAriaOverridePropsMarkdown from "../../../public/generated/code-snippets/TableAriaOverrideProps.json";
-import { Box } from "../../components/Box";
-import { Code } from "../../components/code/Code";
-import { ExternalLink } from "../../components/ExternalLink";
-import { Header } from "../../components/Header";
+import { Box, Code, ExternalLink, Header } from "react-lib-tools";
+import TableAriaAttributesMarkdown from "../../../public/generated/examples/TableAriaAttributes.json";
+import TableAriaOverridePropsMarkdown from "../../../public/generated/examples/TableAriaOverrideProps.json";
 
 export default function AriaRolesRoute() {
   return (

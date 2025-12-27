@@ -1,5 +1,5 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
-import { cn } from "../../../utils/cn";
+import { cn } from "react-lib-tools";
 import type { ListState } from "./ListDynamicRowHeights.example";
 
 // <begin>

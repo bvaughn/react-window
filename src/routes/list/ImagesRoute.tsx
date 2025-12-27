@@ -1,11 +1,8 @@
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Code } from "../../components/code/Code";
-import { Header } from "../../components/Header";
-import { ExampleWithImages } from "./examples/Images.example";
-import ImageRowMarkdown from "../../../public/generated/code-snippets/ImageRow.json";
-import ImagesMarkdown from "../../../public/generated/code-snippets/Images.json";
+import { Block, Box, Code, Header } from "react-lib-tools";
+import ImageRowMarkdown from "../../../public/generated/examples/ImageRow.json";
+import ImagesMarkdown from "../../../public/generated/examples/Images.json";
 import { Link } from "../../components/Link";
+import { ExampleWithImages } from "./examples/Images.example";
 
 export default function ImagesRoute() {
   return (

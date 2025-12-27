@@ -1,11 +1,8 @@
-import json from "../../../public/generated/js-docs/ListImperativeAPI.json";
-import { Box } from "../../components/Box";
-import { Code } from "../../components/code/Code";
-import { ImperativeHandle } from "../../components/handles/ImperativeHandle";
+import { Box, Code, ExternalLink, ImperativeHandle } from "react-lib-tools";
+import { html as useListCallbackRefHTML } from "../../../public/generated/examples/useListCallbackRef.json";
+import { html as useListRefHTML } from "../../../public/generated/examples/useListRef.json";
+import json from "../../../public/generated/docs/ListImperativeAPI.json";
 import type { ImperativeHandleMetadata } from "../../types";
-import { html as useListRefHTML } from "../../../public/generated/code-snippets/useListRef.json";
-import { html as useListCallbackRefHTML } from "../../../public/generated/code-snippets/useListCallbackRef.json";
-import { ExternalLink } from "../../components/ExternalLink";
 
 export default function ListImperativeApiRoute() {
   return (

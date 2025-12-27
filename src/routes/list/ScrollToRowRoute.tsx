@@ -1,21 +1,24 @@
 import { useMemo, useState } from "react";
+import {
+  Block,
+  Box,
+  Button,
+  Callout,
+  Code,
+  Header,
+  LoadingSpinner,
+  Select,
+  type Option
+} from "react-lib-tools";
 import { List, useListRef, type Align } from "react-window";
-import listRefClickEventHandlerMarkdown from "../../../public/generated/code-snippets/listRefClickEventHandler.json";
-import useListCallbackRefMarkdown from "../../../public/generated/code-snippets/useListCallbackRef.json";
-import useListRefMarkdown from "../../../public/generated/code-snippets/useListRef.json";
-import useListRefImportMarkdown from "../../../public/generated/code-snippets/useListRefImport.json";
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Button } from "../../components/Button";
-import { Callout } from "../../components/Callout";
-import { Code } from "../../components/code/Code";
-import { Header } from "../../components/Header";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
-import { Select, type Option } from "../../components/Select";
+import listRefClickEventHandlerMarkdown from "../../../public/generated/examples/listRefClickEventHandler.json";
+import useListCallbackRefMarkdown from "../../../public/generated/examples/useListCallbackRef.json";
+import useListRefMarkdown from "../../../public/generated/examples/useListRef.json";
+import useListRefImportMarkdown from "../../../public/generated/examples/useListRefImport.json";
+import { ContinueLink } from "../../components/ContinueLink";
 import { RowComponent } from "./examples/ListVariableRowHeights.example";
 import { rowHeight } from "./examples/rowHeight.example";
 import { useCitiesByState } from "./hooks/useCitiesByState";
-import { ContinueLink } from "../../components/ContinueLink";
 
 const EMPTY_OPTION: Option<string> = {
   label: "",
