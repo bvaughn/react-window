@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "react";
+import { Link as ExternalLink } from "react-lib-tools";
 import type { Path } from "../routes";
-import { TransitionLink } from "./TransitionLink";
 
 export function Link({
   to,
@@ -8,5 +8,5 @@ export function Link({
 }: HTMLAttributes<HTMLSpanElement> & {
   to: Path;
 }) {
-  return <TransitionLink to={to} {...rest} />;
+  return <ExternalLink to={to} {...rest} />;
 }

@@ -1,14 +1,16 @@
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Callout } from "../../components/Callout";
-import { Code } from "../../components/code/Code";
+import {
+  Block,
+  Box,
+  Callout,
+  Code,
+  Header,
+  LoadingSpinner
+} from "react-lib-tools";
+import ListDynamicRowHeightsMarkdown from "../../../public/generated/examples/ListDynamicRowHeights.json";
+import ListRowDynamicRowHeightsMarkdown from "../../../public/generated/examples/ListRowDynamicRowHeights.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { Header } from "../../components/Header";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Example } from "./examples/ListDynamicRowHeights.example";
 import { useLorem } from "./hooks/useLorem";
-import ListDynamicRowHeightsMarkdown from "../../../public/generated/code-snippets/ListDynamicRowHeights.json";
-import ListRowDynamicRowHeightsMarkdown from "../../../public/generated/code-snippets/ListRowDynamicRowHeights.json";
 
 export default function DynamicRowHeightsRoute() {
   const lorem = useLorem();

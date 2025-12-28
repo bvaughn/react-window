@@ -1,14 +1,16 @@
-import CellComponentMarkdown from "../../../public/generated/code-snippets/CellComponent.json";
-import columnWidthMarkdown from "../../../public/generated/code-snippets/columnWidth.json";
-import GridMarkdown from "../../../public/generated/code-snippets/Grid.json";
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Callout } from "../../components/Callout";
-import { Code } from "../../components/code/Code";
+import {
+  Block,
+  Box,
+  Callout,
+  Code,
+  ExternalLink,
+  Header,
+  LoadingSpinner
+} from "react-lib-tools";
+import CellComponentMarkdown from "../../../public/generated/examples/CellComponent.json";
+import columnWidthMarkdown from "../../../public/generated/examples/columnWidth.json";
+import GridMarkdown from "../../../public/generated/examples/Grid.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { ExternalLink } from "../../components/ExternalLink";
-import { Header } from "../../components/Header";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Example } from "./examples/Grid.example";
 import { useContacts } from "./hooks/useContacts";
 

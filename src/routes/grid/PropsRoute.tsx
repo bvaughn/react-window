@@ -1,6 +1,5 @@
-import json from "../../../public/generated/js-docs/Grid.json";
-import { Box } from "../../components/Box";
-import { ComponentProps } from "../../components/props/ComponentProps";
+import { Box, ComponentProps } from "react-lib-tools";
+import json from "../../../public/generated/docs/Grid.json";
 import type { ComponentMetadata } from "../../types";
 
 export default function GridPropsRoute() {

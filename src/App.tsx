@@ -1,126 +1,54 @@
-import { Bars4Icon, XMarkIcon } from "@heroicons/react/20/solid";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import GitHubIcon from "../public/svgs/github.svg?react";
-import NpmHubIcon from "../public/svgs/npm.svg?react";
-import { Box } from "./components/Box";
-import { ErrorBoundary } from "./components/ErrorBoundary";
-import { ExternalLink } from "./components/ExternalLink";
-import { Link } from "./components/Link";
-import { RouteChangeHandler } from "./components/RouteChangeHandler";
-import { useNavStore } from "./hooks/useNavStore";
-import { Nav } from "./nav/Nav";
+import { AppRoot, NavLink, NavSection } from "react-lib-tools";
 import { routes } from "./routes";
-import { cn } from "./utils/cn";
-import TagsIcon from "../public/svgs/tags.svg?react";
 
 export default function App() {
-  const { toggle, visible } = useNavStore();
-
   return (
-    <BrowserRouter>
-      <RouteChangeHandler />
-
-      <div className="h-full w-full max-w-350 mx-auto flex flex-col">
-        <Box
-          align="center"
-          className="h-12 w-full p-4"
-          direction="row"
-          justify="between"
-          gap={4}
-        >
-          <Box
-            className="overflow-hidden"
-            align="center"
-            direction="row"
-            gap={4}
-          >
-            <Link
-              children="react-window"
-              className="text-xl text-white! text-shadow-black/20 text-shadow-sm font-bold cursor-pointer"
-              to="/"
-            />
-            <div className="hidden md:block text-black text-shadow-white/50 text-shadow-xs">
-              render everything
-            </div>
-          </Box>
-          <Box align="center" direction="row" gap={4}>
-            <Link
-              aria-label="Documentation for other versions"
-              className="text-xs font-bold text-white! drop-shadow-black/20 drop-shadow-sm cursor-pointer"
-              title="Past releases"
-              to="/versions"
-            >
-              <TagsIcon className="w-6 h-6" />
-            </Link>
-            <ExternalLink
-              aria-label="NPM project page"
-              className="text-white! drop-shadow-black/20 drop-shadow-sm"
-              href="https://www.npmjs.com/package/react-window"
-              title="NPM package"
-            >
-              <NpmHubIcon className="w-8 h-8" />
-            </ExternalLink>
-            <ExternalLink
-              aria-label="GitHub project page"
-              className="text-white! drop-shadow-black/20 drop-shadow-sm"
-              href="https://github.com/bvaughn/react-window"
-              title="Source code"
-            >
-              <GitHubIcon className="w-6 h-6" />
-            </ExternalLink>
-            <button
-              aria-label="Site navigation menu"
-              className={cn("block md:hidden cursor-pointer rounded-lg p-1", {
-                "bg-black/40": !visible,
-                "bg-black/50 text-white": visible
-              })}
-              onClick={toggle}
-            >
-              {visible ? (
-                <XMarkIcon className="w-6 h-6 fill-current drop-shadow-black/20 drop-shadow-xs" />
-              ) : (
-                <Bars4Icon className="w-6 h-6 fill-current drop-shadow-black/20 drop-shadow-xs" />
-              )}
-            </button>
-          </Box>
-        </Box>
-        <div className="grow shrink flex flex-row shadow-lg mx-2 rounded-t-3xl overflow-hidden">
-          <section
-            className={cn(
-              "w-full bg-black/90 md:block md:w-80 md:bg-black/80 overflow-auto",
-              {
-                hidden: !visible
-              }
-            )}
-          >
-            <Nav />
-          </section>
-          <main
-            className={cn("w-full bg-black/90 relative overflow-auto", {
-              hidden: visible
-            })}
-          >
-            <div
-              className="h-full p-4 py-4 overflow-auto [mask-image:linear-gradient(to_bottom,transparent,black_1.5rem)]"
-              data-main-scrollable
-            >
-              <Routes>
-                {Object.entries(routes).map(([path, Component]) => (
-                  <Route
-                    element={
-                      <ErrorBoundary key={path}>
-                        <Component />
-                      </ErrorBoundary>
-                    }
-                    key={path}
-                    path={path}
-                  />
-                ))}
-              </Routes>
-            </div>
-          </main>
-        </div>
-      </div>
-    </BrowserRouter>
+    <AppRoot
+      navLinks={
+        <>
+          <div>
+            <NavLink path="/">Getting started</NavLink>
+            <NavLink path="/how-does-it-work">How does it work?</NavLink>
+          </div>
+          <NavSection label="Lists">
+            <NavLink path="/list/fixed-row-height">Fixed row heights</NavLink>
+            <NavLink path="/list/variable-row-height">
+              Variable row heights
+            </NavLink>
+            <NavLink path="/list/dynamic-row-height">
+              Dynamic row heights
+            </NavLink>
+            <NavLink path="/list/scroll-to-row">Scroll to row</NavLink>
+            <NavLink path="/list/aria-roles">ARIA roles</NavLink>
+            <NavLink path="/list/props">List props</NavLink>
+            <NavLink path="/list/imperative-handle">Imperative handle</NavLink>
+          </NavSection>
+          <NavSection label="Tables">
+            <NavLink path="/list/tabular-data">Tabular data</NavLink>
+            <NavLink path="/list/tabular-data-aria-roles">ARIA roles</NavLink>
+          </NavSection>
+          <NavSection label="Grids">
+            <NavLink path="/grid/grid">Rendering a grid</NavLink>
+            <NavLink path="/grid/scroll-to-cell">Scroll to cells</NavLink>
+            <NavLink path="/grid/aria-roles">ARIA roles</NavLink>
+            <NavLink path="/grid/props">Grid props</NavLink>
+            <NavLink path="/grid/imperative-handle">Imperative handle</NavLink>
+          </NavSection>
+          <NavSection label="Other">
+            <NavLink path="/grid/rtl-grids">Right to left content</NavLink>
+            <NavLink path="/grid/horizontal-lists">Horizontal lists</NavLink>
+            <NavLink path="/list/images">Images</NavLink>
+            <NavLink path="/list/sticky-rows">Sticky rows</NavLink>
+          </NavSection>
+          <div>
+            <NavLink path="/platform-requirements">Requirements</NavLink>
+            <NavLink path="/support">Support</NavLink>
+          </div>
+        </>
+      }
+      packageDescription="render everything"
+      packageName="react-window"
+      routes={routes}
+    />
   );
 }

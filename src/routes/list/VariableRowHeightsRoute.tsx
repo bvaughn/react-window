@@ -1,10 +1,6 @@
-import ListVariableRowHeightsMarkdown from "../../../public/generated/code-snippets/ListVariableRowHeights.json";
-import { Block } from "../../components/Block";
-import { Box } from "../../components/Box";
-import { Code } from "../../components/code/Code";
+import { Block, Box, Code, Header, LoadingSpinner } from "react-lib-tools";
+import ListVariableRowHeightsMarkdown from "../../../public/generated/examples/ListVariableRowHeights.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { Header } from "../../components/Header";
-import { LoadingSpinner } from "../../components/LoadingSpinner";
 import { Example } from "./examples/ListVariableRowHeights.example";
 import { useCitiesByState } from "./hooks/useCitiesByState";
 

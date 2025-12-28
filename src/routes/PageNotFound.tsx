@@ -1,7 +1,4 @@
-import { Box } from "../components/Box";
-import { Callout } from "../components/Callout";
-import { ExternalLink } from "../components/ExternalLink";
-import { Header } from "../components/Header";
+import { Box, Callout, ExternalLink, Header } from "react-lib-tools";
 
 export default function PageNotFound() {
   return (

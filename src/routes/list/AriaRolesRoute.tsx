@@ -1,10 +1,7 @@
-import ListAriaRolesMarkdown from "../../../public/generated/code-snippets/ListAriaRoles.json";
-import RowComponentAriaRolesMarkdown from "../../../public/generated/code-snippets/RowComponentAriaRoles.json";
-import { Box } from "../../components/Box";
-import { Code } from "../../components/code/Code";
+import { Box, Code, ExternalLink, Header } from "react-lib-tools";
+import ListAriaRolesMarkdown from "../../../public/generated/examples/ListAriaRoles.json";
+import RowComponentAriaRolesMarkdown from "../../../public/generated/examples/RowComponentAriaRoles.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { ExternalLink } from "../../components/ExternalLink";
-import { Header } from "../../components/Header";
 
 export default function AriaRolesRoute() {
   return (
