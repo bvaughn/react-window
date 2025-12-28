@@ -1,7 +1,7 @@
 import { Block, Box, Code, Header, LoadingSpinner } from "react-lib-tools";
 import HorizontalListMarkdown from "../../../public/generated/examples/HorizontalList.json";
 import HorizontalListCellRendererMarkdown from "../../../public/generated/examples/HorizontalListCellRenderer.json";
-import { HorizontalList } from "./examples/HorizontalList.example";
+import { HorizontalList } from "./examples/HorizontalList";
 import { useEmails } from "./hooks/useEmails";
 
 export default function HorizontalListsRoute() {

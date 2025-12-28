@@ -16,9 +16,9 @@ import useGridCallbackRefMarkdown from "../../../public/generated/examples/useGr
 import useGridRefMarkdown from "../../../public/generated/examples/useGridRef.json";
 import useGridRefImportMarkdown from "../../../public/generated/examples/useGridRefImport.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { CellComponent } from "./examples/CellComponent.example";
-import { columnWidth } from "./examples/columnWidth.example";
-import type { Contact } from "./examples/Grid.example";
+import { CellComponent } from "./examples/CellComponent";
+import { columnWidth } from "./examples/columnWidth";
+import type { Contact } from "./examples/Grid";
 import { COLUMN_KEYS } from "./examples/shared";
 import { useContacts } from "./hooks/useContacts";
 

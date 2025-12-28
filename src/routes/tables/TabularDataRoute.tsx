@@ -9,7 +9,7 @@ import {
 import FlexboxLayoutMarkdown from "../../../public/generated/examples/FlexboxLayout.json";
 import { ContinueLink } from "../../components/ContinueLink";
 import { Link } from "../../components/Link";
-import { Example } from "./examples/FlexboxLayout.example";
+import { Example } from "./examples/FlexboxLayout";
 import { useAddresses } from "./hooks/useAddresses";
 
 export default function TabularDataRoute() {

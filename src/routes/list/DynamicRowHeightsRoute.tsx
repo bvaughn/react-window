@@ -9,7 +9,7 @@ import {
 import ListDynamicRowHeightsMarkdown from "../../../public/generated/examples/ListDynamicRowHeights.json";
 import ListRowDynamicRowHeightsMarkdown from "../../../public/generated/examples/ListRowDynamicRowHeights.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { Example } from "./examples/ListDynamicRowHeights.example";
+import { Example } from "./examples/ListDynamicRowHeights";
 import { useLorem } from "./hooks/useLorem";
 
 export default function DynamicRowHeightsRoute() {

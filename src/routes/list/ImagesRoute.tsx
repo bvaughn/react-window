@@ -2,7 +2,7 @@ import { Block, Box, Code, Header } from "react-lib-tools";
 import ImageRowMarkdown from "../../../public/generated/examples/ImageRow.json";
 import ImagesMarkdown from "../../../public/generated/examples/Images.json";
 import { Link } from "../../components/Link";
-import { ExampleWithImages } from "./examples/Images.example";
+import { ExampleWithImages } from "./examples/Images";
 
 export default function ImagesRoute() {
   return (

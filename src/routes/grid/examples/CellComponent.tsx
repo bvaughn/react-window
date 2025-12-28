@@ -1,4 +1,4 @@
-import type { Contact } from "./Grid.example";
+import type { Contact } from "./Grid";
 import { indexToColumn } from "./shared";
 
 // <begin>

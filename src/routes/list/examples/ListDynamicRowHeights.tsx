@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { List, useDynamicRowHeight } from "react-window";
-import { RowComponent } from "./ListRowDynamicRowHeights.example";
+import { RowComponent } from "./ListRowDynamicRowHeights";
 
 function Example({ lorem }: { lorem: string[] }) {
   const listState = useListState(lorem);

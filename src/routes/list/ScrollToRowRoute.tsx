@@ -16,8 +16,8 @@ import useListCallbackRefMarkdown from "../../../public/generated/examples/useLi
 import useListRefMarkdown from "../../../public/generated/examples/useListRef.json";
 import useListRefImportMarkdown from "../../../public/generated/examples/useListRefImport.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { RowComponent } from "./examples/ListVariableRowHeights.example";
-import { rowHeight } from "./examples/rowHeight.example";
+import { RowComponent } from "./examples/ListVariableRowHeights";
+import { rowHeight } from "./examples/rowHeight";
 import { useCitiesByState } from "./hooks/useCitiesByState";
 
 const EMPTY_OPTION: Option<string> = {

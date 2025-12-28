@@ -1,4 +1,4 @@
-import type { Contact } from "./Grid.example";
+import type { Contact } from "./Grid";
 
 export const COLUMN_KEYS: (keyof Contact)[] = [
   "title",

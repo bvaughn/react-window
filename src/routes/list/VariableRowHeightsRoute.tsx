@@ -1,7 +1,7 @@
 import { Block, Box, Code, Header, LoadingSpinner } from "react-lib-tools";
 import ListVariableRowHeightsMarkdown from "../../../public/generated/examples/ListVariableRowHeights.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { Example } from "./examples/ListVariableRowHeights.example";
+import { Example } from "./examples/ListVariableRowHeights";
 import { useCitiesByState } from "./hooks/useCitiesByState";
 
 export default function VariableRowHeightsRoute() {

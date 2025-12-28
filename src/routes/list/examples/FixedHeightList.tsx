@@ -1,4 +1,4 @@
-import { RowComponent } from "./FixedHeightRowComponent.example";
+import { RowComponent } from "./FixedHeightRowComponent";
 
 // <begin>
 

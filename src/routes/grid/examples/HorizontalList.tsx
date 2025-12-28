@@ -1,4 +1,4 @@
-import { CellComponent } from "./HorizontalListCellRenderer.example";
+import { CellComponent } from "./HorizontalListCellRenderer";
 
 // <begin>
 

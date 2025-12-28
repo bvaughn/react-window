@@ -10,7 +10,7 @@ import json from "../../../public/data/names.json";
 import FixedHeightListMarkdown from "../../../public/generated/examples/FixedHeightList.json";
 import FixedHeightRowComponentMarkdown from "../../../public/generated/examples/FixedHeightRowComponent.json";
 import { ContinueLink } from "../../components/ContinueLink";
-import { Example } from "./examples/FixedHeightList.example";
+import { Example } from "./examples/FixedHeightList";
 
 export default function FixedRowHeightsRoute() {
   return (

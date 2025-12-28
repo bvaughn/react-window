@@ -7,7 +7,7 @@ import {
   LoadingSpinner
 } from "react-lib-tools";
 import RtlGridMarkdown from "../../../public/generated/examples/RtlGrid.json";
-import { RtlExample } from "./examples/RtlGrid.example";
+import { RtlExample } from "./examples/RtlGrid";
 import { useContacts } from "./hooks/useContacts";
 
 export default function RTLGridsRoute() {

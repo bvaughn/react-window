@@ -1,4 +1,4 @@
-import { RowComponent, type RowProps } from "./ImageRow.example";
+import { RowComponent, type RowProps } from "./ImageRow";
 
 type Size = {
   height: number;

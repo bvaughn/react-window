@@ -1,6 +1,6 @@
 import json from "../../../../public/data/contacts.json";
-import { CellComponent } from "./CellComponent.example";
-import { columnWidth } from "./columnWidth.example";
+import { CellComponent } from "./CellComponent";
+import { columnWidth } from "./columnWidth";
 
 type Contact = (typeof json)[0];
 

@@ -1,4 +1,4 @@
-import type { RowProps } from "./ListVariableRowHeights.example";
+import type { RowProps } from "./ListVariableRowHeights";
 
 // <begin>
 

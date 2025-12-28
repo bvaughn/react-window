@@ -1,9 +1,16 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import type { PropsWithChildren } from "react";
-import { Box, Callout, Code, ExternalLink, Header, cn } from "react-lib-tools";
+import {
+  Box,
+  Callout,
+  Code,
+  ExternalLink,
+  Header,
+  cn,
+  getIntentClassNames
+} from "react-lib-tools";
 import BasicRowMarkdown from "../../public/generated/examples/BasicRow.json";
 import { Link } from "../components/Link";
-import { getIntentClassNames } from "../utils/getIntentClassNames";
 
 export default function HowDoesItWorkRoute() {
   return (

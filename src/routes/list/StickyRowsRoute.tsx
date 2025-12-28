@@ -7,7 +7,7 @@ import {
   Header
 } from "react-lib-tools";
 import ListWithStickyRowsMarkdown from "../../../public/generated/examples/ListWithStickyRows.json";
-import { Example } from "./examples/ListWithStickyRows.example";
+import { Example } from "./examples/ListWithStickyRows";
 
 export default function StickyRowsRoute() {
   return (
