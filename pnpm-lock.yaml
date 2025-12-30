@@ -131,8 +131,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0(react@19.2.3)
       react-lib-tools:
-        specifier: ^0.0.16
-        version: 0.0.16(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: ^0.0.18
+        version: 0.0.18(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.8.3)
       react-router-dom:
         specifier: ^7.6.3
         version: 7.6.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -336,6 +336,12 @@ packages:
         integrity: sha512-kr5fwBGiGtmz6l0LSJIbno9QrifNMUusivHbnA1H6Dmqy4HZFte3UAICix1VuKo0lMPKQr2rqB+0BkKi/S3Ejg==
       }
 
+  "@codemirror/lang-html@6.4.11":
+    resolution:
+      {
+        integrity: sha512-9NsXp7Nwp891pQchI7gPdTwBuSuT3K65NGTHWHNJ55HjYcHLllr0rbIZNdOzas9ztc1EUVBlHou85FFZS4BNnw==
+      }
+
   "@codemirror/lang-html@6.4.9":
     resolution:
       {
@@ -354,10 +360,22 @@ packages:
         integrity: sha512-fBm0BO03azXnTAsxhONDYHi/qWSI+uSEIpzKM7h/bkIc9fHnFp9y7KTMXKON0teNT97pFhc1a9DQTtWBYEZ7ug==
       }
 
+  "@codemirror/lang-markdown@6.5.0":
+    resolution:
+      {
+        integrity: sha512-0K40bZ35jpHya6FriukbgaleaqzBLZfOh7HuzqbMxBXkbYMJDxfF39c23xOgxFezR+3G+tR2/Mup+Xk865OMvw==
+      }
+
   "@codemirror/language@6.11.2":
     resolution:
       {
         integrity: sha512-p44TsNArL4IVXDTbapUmEkAlvWs2CFQbcfc0ymDsis1kH2wh0gcY96AS29c/vp2d0y2Tquk1EDSaawpzilUiAw==
+      }
+
+  "@codemirror/language@6.12.1":
+    resolution:
+      {
+        integrity: sha512-Fa6xkSiuGKc8XC8Cn96T+TQHYj4ZZ7RdFmXA3i9xe/3hLHfwPZdM+dqfX0Cp0zQklBKhVD8Yzc8LS45rkqcwpQ==
       }
 
   "@codemirror/lint@6.8.5":
@@ -370,6 +388,12 @@ packages:
     resolution:
       {
         integrity: sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==
+      }
+
+  "@codemirror/state@6.5.3":
+    resolution:
+      {
+        integrity: sha512-MerMzJzlXogk2fxWFU1nKp36bY5orBG59HnPiz0G9nLRebWa0zXuv2siH6PLIHBvv5TH8CkQRqjBs0MlxCZu+A==
       }
 
   "@codemirror/view@6.38.1":
@@ -1165,6 +1189,12 @@ packages:
         integrity: sha512-w7ojc8ejBqr2REPsWxJjrMFsA/ysDCFICn8zEOR9mrqzOu2amhITYuLD8ag6XZf0CFXDrhKqw7+tW8cX66NaDA==
       }
 
+  "@lezer/common@1.5.0":
+    resolution:
+      {
+        integrity: sha512-PNGcolp9hr4PJdXR4ix7XtixDrClScvtSCYW3rQG106oVMOOI+jFb+0+J3mbeL/53g1Zd6s0kJzaw6Ri68GmAA==
+      }
+
   "@lezer/css@1.3.0":
     resolution:
       {
@@ -1177,10 +1207,22 @@ packages:
         integrity: sha512-Z5duk4RN/3zuVO7Jq0pGLJ3qynpxUVsh7IbUbGj88+uV2ApSAn6kWg2au3iJb+0Zi7kKtqffIESgNcRXWZWmSA==
       }
 
+  "@lezer/highlight@1.2.3":
+    resolution:
+      {
+        integrity: sha512-qXdH7UqTvGfdVBINrgKhDsVTJTxactNNxLk7+UMwZhU13lMHaOBlJe9Vqp907ya56Y3+ed2tlqzys7jDkTmW0g==
+      }
+
   "@lezer/html@1.3.10":
     resolution:
       {
         integrity: sha512-dqpT8nISx/p9Do3AchvYGV3qYc4/rKr3IBZxlHmpIKam56P47RSHkSF5f13Vu9hebS1jM0HmtJIwLbWz1VIY6w==
+      }
+
+  "@lezer/html@1.3.13":
+    resolution:
+      {
+        integrity: sha512-oI7n6NJml729m7pjm9lvLvmXbdoMoi2f+1pwSDJkl9d68zGr7a9Btz8NdHTGQZtW2DA25ybeuv/SyDb9D5tseg==
       }
 
   "@lezer/javascript@1.5.1":
@@ -4178,10 +4220,10 @@ packages:
         integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
       }
 
-  react-lib-tools@0.0.16:
+  react-lib-tools@0.0.18:
     resolution:
       {
-        integrity: sha512-q1JioD+4yccHqf+IL6k/o7K0ZVkQaGc5a8ZPDzxaLC+5DBCwk0gARQWyPcv38CgcifFBptvwHSwp7UWh5cz7Xw==
+        integrity: sha512-dnPmIs02JuJf5M7xyvRO3j+TcqRpl7vvzdvDTkOULL1boPiW2nmUwfTN74U/O0yLnRhDXMN8xxM6ybG9XKv+EA==
       }
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
@@ -5296,6 +5338,18 @@ snapshots:
       "@lezer/common": 1.2.3
       "@lezer/css": 1.3.0
 
+  "@codemirror/lang-html@6.4.11":
+    dependencies:
+      "@codemirror/autocomplete": 6.18.6
+      "@codemirror/lang-css": 6.3.1
+      "@codemirror/lang-javascript": 6.2.4
+      "@codemirror/language": 6.12.1
+      "@codemirror/state": 6.5.3
+      "@codemirror/view": 6.38.1
+      "@lezer/common": 1.2.3
+      "@lezer/css": 1.3.0
+      "@lezer/html": 1.3.13
+
   "@codemirror/lang-html@6.4.9":
     dependencies:
       "@codemirror/autocomplete": 6.18.6
@@ -5328,12 +5382,31 @@ snapshots:
       "@lezer/common": 1.2.3
       "@lezer/markdown": 1.4.3
 
+  "@codemirror/lang-markdown@6.5.0":
+    dependencies:
+      "@codemirror/autocomplete": 6.18.6
+      "@codemirror/lang-html": 6.4.11
+      "@codemirror/language": 6.12.1
+      "@codemirror/state": 6.5.3
+      "@codemirror/view": 6.38.1
+      "@lezer/common": 1.2.3
+      "@lezer/markdown": 1.4.3
+
   "@codemirror/language@6.11.2":
     dependencies:
       "@codemirror/state": 6.5.2
       "@codemirror/view": 6.38.1
       "@lezer/common": 1.2.3
       "@lezer/highlight": 1.2.1
+      "@lezer/lr": 1.4.2
+      style-mod: 4.1.2
+
+  "@codemirror/language@6.12.1":
+    dependencies:
+      "@codemirror/state": 6.5.3
+      "@codemirror/view": 6.38.1
+      "@lezer/common": 1.5.0
+      "@lezer/highlight": 1.2.3
       "@lezer/lr": 1.4.2
       style-mod: 4.1.2
 
@@ -5344,6 +5417,10 @@ snapshots:
       crelt: 1.0.6
 
   "@codemirror/state@6.5.2":
+    dependencies:
+      "@marijn/find-cluster-break": 1.0.2
+
+  "@codemirror/state@6.5.3":
     dependencies:
       "@marijn/find-cluster-break": 1.0.2
 
@@ -5698,6 +5775,8 @@ snapshots:
 
   "@lezer/common@1.2.3": {}
 
+  "@lezer/common@1.5.0": {}
+
   "@lezer/css@1.3.0":
     dependencies:
       "@lezer/common": 1.2.3
@@ -5708,10 +5787,20 @@ snapshots:
     dependencies:
       "@lezer/common": 1.2.3
 
+  "@lezer/highlight@1.2.3":
+    dependencies:
+      "@lezer/common": 1.5.0
+
   "@lezer/html@1.3.10":
     dependencies:
       "@lezer/common": 1.2.3
       "@lezer/highlight": 1.2.1
+      "@lezer/lr": 1.4.2
+
+  "@lezer/html@1.3.13":
+    dependencies:
+      "@lezer/common": 1.2.3
+      "@lezer/highlight": 1.2.3
       "@lezer/lr": 1.4.2
 
   "@lezer/javascript@1.5.1":
@@ -7425,10 +7514,20 @@ snapshots:
 
   react-is@17.0.2: {}
 
-  react-lib-tools@0.0.16(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+  react-lib-tools@0.0.18(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.8.3):
     dependencies:
+      "@codemirror/lang-css": 6.3.1
+      "@codemirror/lang-html": 6.4.11
+      "@codemirror/lang-javascript": 6.2.4
+      "@codemirror/lang-markdown": 6.5.0
+      "@codemirror/language": 6.12.1
+      "@codemirror/state": 6.5.3
+      "@lezer/highlight": 1.2.3
+      "@ts-ast-parser/core": 0.8.0(typescript@5.8.3)
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
+    transitivePeerDependencies:
+      - typescript
 
   react-router-dom@7.6.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
