@@ -3,13 +3,7 @@ import { lazy, type ComponentType, type LazyExoticComponent } from "react";
 export type Route = LazyExoticComponent<ComponentType<unknown>>;
 
 export const routes = {
-  "*": lazy(() => import("./routes/PageNotFound")),
-
-  // Home page
-  "/": lazy(() => import("./routes/GettingStartedRoute")),
   "/how-does-it-work": lazy(() => import("./routes/HowDoesItWorkRoute")),
-
-  // List
   "/list/fixed-row-height": lazy(
     () => import("./routes/list/FixedRowHeightsRoute")
   ),
@@ -31,8 +25,6 @@ export const routes = {
   ),
   "/list/sticky-rows": lazy(() => import("./routes/list/StickyRowsRoute")),
   "/list/images": lazy(() => import("./routes/list/ImagesRoute")),
-
-  // SimpleGrid
   "/grid/grid": lazy(() => import("./routes/grid/RenderingGridRoute")),
   "/grid/horizontal-lists": lazy(
     () => import("./routes/grid/HorizontalListsRoute")
@@ -44,13 +36,9 @@ export const routes = {
   ),
   "/grid/scroll-to-cell": lazy(() => import("./routes/grid/ScrollToCellRoute")),
   "/grid/aria-roles": lazy(() => import("./routes/grid/AriaRolesRoute")),
-
-  // Other
   "/platform-requirements": lazy(
     () => import("./routes/PlatformRequirementsRoute")
   ),
-  "/support": lazy(() => import("./routes/SupportRoute")),
-  "/versions": lazy(() => import("./routes/VersionsRoute")),
   "/test": lazy(() => import("./routes/ScratchpadRoute"))
 } satisfies Record<string, Route>;
 

@@ -1,4 +1,6 @@
-import { AppRoot, NavLink, NavSection } from "react-lib-tools";
+import { AppRoot, ExternalLink, NavSection } from "react-lib-tools";
+import { Link } from "./components/Link";
+import { NavLink } from "./components/NavLink";
 import { routes } from "./routes";
 
 export default function App() {
@@ -49,6 +51,50 @@ export default function App() {
       packageDescription="render everything"
       packageName="react-window"
       routes={routes}
+      overview={
+        <>
+          <div>
+            <strong>react-window</strong> is a component library that helps
+            render large lists of data quickly and without the performance
+            problems that often go along with rendering a lot of data. It's used
+            in a lot of places, from{" "}
+            <ExternalLink href="https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en">
+              React DevTools
+            </ExternalLink>{" "}
+            to the{" "}
+            <ExternalLink href="https://github.com/replayio/devtools">
+              Replay browser
+            </ExternalLink>
+            .
+          </div>
+          <div>
+            If you've never used a library like this before, you may want to
+            read the <Link to="/how-does-it-work">how it works</Link> section
+            first.
+          </div>
+        </>
+      }
+      versions={VERSIONS}
     />
   );
 }
+
+const VERSIONS = {
+  "2": {
+    "2.2.3": "https://react-window-9gegorjnr-brian-vaughns-projects.vercel.app",
+    "2.1.2": "https://react-window-8cygyvomv-brian-vaughns-projects.vercel.app",
+    "2.0.2": "https://react-window-btpcws98u-brian-vaughns-projects.vercel.app"
+  },
+  "1": {
+    "1.8.11":
+      "https://web.archive.org/web/20241225003549/https://react-window.vercel.app/",
+    "1.7.2": "",
+    "1.6.2": "",
+    "1.5.2": "",
+    "1.4.0": "",
+    "1.3.1": "",
+    "1.2.4": "",
+    "1.1.2": "",
+    "1.0.3": ""
+  }
+};

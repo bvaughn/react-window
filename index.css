@@ -3,12 +3,12 @@
 @import "tailwindcss";
 @import "react-lib-tools/styles.css";
 
-:root {
-  --template-gradient-color-1: var(--color-indigo-500);
-  --template-gradient-color-2: var(--color-sky-500);
-  --template-gradient-color-3: var(--color-emerald-400);
+@theme {
+  --color-background-gradient-1: var(--color-indigo-500);
+  --color-background-gradient-2: var(--color-sky-500);
+  --color-background-gradient-3: var(--color-emerald-400);
 
-  --template-focus-color-300: var(--color-teal-300);
-  --template-focus-color-400: var(--color-teal-400);
-  --template-focus-color-600: var(--color-teal-600);
+  --color-focus-1: var(--color-teal-300);
+  --color-focus-2: var(--color-teal-400);
+  --color-focus-3: var(--color-teal-500);
 }
