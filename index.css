@@ -4,8 +4,8 @@
 @import "react-lib-tools/styles.css";
 
 @theme {
-  --color-background-gradient-1: var(--color-indigo-500);
-  --color-background-gradient-2: var(--color-sky-500);
+  --color-background-gradient-1: var(--color-emerald-400);
+  --color-background-gradient-2: var(--color-indigo-500);
   --color-background-gradient-3: var(--color-emerald-400);
 
   --color-focus-1: var(--color-teal-300);
