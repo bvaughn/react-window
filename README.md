@@ -28,6 +28,10 @@ npm install react-window
 
 TypeScript definitions are included within the published `dist` folder
 
+## FAQs
+
+Frequently asked questions can be found [here](https://react-window.vercel.app/common-questions).
+
 ## Documentation
 
 Documentation for this project is available at [react-window.vercel.app](https://react-window.vercel.app/); version 1.x documentation can be found at [react-window-v1.vercel.app](https://react-window-v1.vercel.app/).

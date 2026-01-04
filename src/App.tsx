@@ -1,11 +1,20 @@
-import { AppRoot, ExternalLink, NavSection } from "react-lib-tools";
+import {
+  AppRoot,
+  Code,
+  ExternalLink,
+  NavSection,
+  type CommonQuestion
+} from "react-lib-tools";
 import { Link } from "./components/Link";
 import { NavLink } from "./components/NavLink";
+import { html as refCompositionHTML } from "../public/generated/examples/RefComposition.json";
+import { html as scrollingIndicatorHTML } from "../public/generated/examples/ScrollingIndicator.json";
 import { routes } from "./routes";
 
 export default function App() {
   return (
     <AppRoot
+      commonQuestions={commonQuestions}
       navLinks={
         <>
           <div>
@@ -44,6 +53,7 @@ export default function App() {
           </NavSection>
           <div>
             <NavLink path="/platform-requirements">Requirements</NavLink>
+            <NavLink path="/common-questions">Common questions</NavLink>
             <NavLink path="/support">Support</NavLink>
           </div>
         </>
@@ -78,6 +88,39 @@ export default function App() {
     />
   );
 }
+
+const commonQuestions: CommonQuestion[] = [
+  {
+    id: "scrolling-indicator",
+    question: "Can I render a scrolling indicator?",
+    answer: (
+      <>
+        <p>
+          One way to implement a scrolling indicator would be to use a custom
+          hook as shown below:
+        </p>
+        <Code html={scrollingIndicatorHTML} />
+      </>
+    )
+  },
+  {
+    id: "ref-composition",
+    question: (
+      <>
+        Can I attach a ref to the top-level <code>HTMLDivElement</code>?
+      </>
+    ),
+    answer: (
+      <>
+        <p>
+          Although there is no prop exposed to do this directly, you can use a
+          callback ref for this.
+        </p>
+        <Code html={refCompositionHTML} />
+      </>
+    )
+  }
+];
 
 const VERSIONS = {
   "2": {
