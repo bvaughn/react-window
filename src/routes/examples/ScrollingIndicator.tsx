@@ -1,14 +1,7 @@
-import { useEffect, useState, type ReactElement } from "react";
-import { List, type ListProps, type RowComponentProps } from "react-window";
+import { useEffect, useState } from "react";
+import { List, type ListProps } from "react-window";
 
-declare const rest: Omit<
-  ListProps<{ isScrolling: boolean }>,
-  "rowComponent" | "rowProps"
->;
-
-declare function RowComponent(
-  props: RowComponentProps<{ isScrolling: boolean }>
-): ReactElement;
+declare const rest: Omit<ListProps<{ isScrolling: boolean }>, "rowProps">;
 
 // <begin>
 
@@ -28,7 +21,6 @@ useEffect(() => {
   onScroll={() => {
     setIsScrolling(true);
   }}
-  rowComponent={RowComponent}
   rowProps={{ isScrolling }}
   {...rest}
 />;

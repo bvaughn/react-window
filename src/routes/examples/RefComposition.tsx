@@ -15,10 +15,17 @@ const listRef = useCallback(
   (api: ListImperativeAPI) => {
     const element = api?.element ?? null;
 
-    if (typeof ref === "function") {
-      ref(element);
-    } else if (typeof ref === "object" && ref !== null) {
-      ref.current = element;
+    switch (typeof ref) {
+      case "function": {
+        ref(element);
+        break;
+      }
+      case "object": {
+        if (ref !== null) {
+          ref.current = element;
+        }
+        break;
+      }
     }
   },
   [ref]
