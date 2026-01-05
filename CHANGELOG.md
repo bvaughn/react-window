@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.4
+
+- Update README docs
+
 ## 2.2.3
 
 - Update TS Doc comments for `List` and `Grid` imperative methods to specify when a method throws.
