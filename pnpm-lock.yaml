@@ -116,8 +116,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.0(react@19.2.3)
       react-lib-tools:
-        specifier: ^0.0.29
-        version: 0.0.29(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.8.3)
+        specifier: ^0.0.30
+        version: 0.0.30(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.8.3)
       react-router-dom:
         specifier: ^7.6.3
         version: 7.6.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -334,6 +334,12 @@ packages:
     resolution:
       {
         integrity: sha512-0WVmhp1QOqZ4Rt6GlVGwKJN3KW7Xh4H2q8ZZNGZaP6lRdxXJzmjm4FqvmOojVj6khWJHIb9sp7U/72W7xQgqAA==
+      }
+
+  "@codemirror/lang-json@6.0.2":
+    resolution:
+      {
+        integrity: sha512-x2OtO+AvwEHrEwR0FyyPtfDUiloG3rnVTSZV1W8UteaLL8/MajQd8DpvUb2YVzC+/T18aSDv0H9mu+xw0EStoQ==
       }
 
   "@codemirror/lang-markdown@6.5.0":
@@ -1393,6 +1399,12 @@ packages:
     resolution:
       {
         integrity: sha512-vvYx3MhWqeZtGPwDStM2dwgljd5smolYD2lR2UyFcHfxbBQebqx8yjmFmxtJ/E6nN6u1D9srOiVWm3Rb4tmcUA==
+      }
+
+  "@lezer/json@1.0.3":
+    resolution:
+      {
+        integrity: sha512-BP9KzdF9Y35PDpv04r0VeSTKDeox5vVr3efE7eBbx3r4s3oNLfunchejZhjArmeieBH+nVOpgIiBJpEAv8ilqQ==
       }
 
   "@lezer/lr@1.4.5":
@@ -4411,10 +4423,10 @@ packages:
         integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
       }
 
-  react-lib-tools@0.0.29:
+  react-lib-tools@0.0.30:
     resolution:
       {
-        integrity: sha512-BtGOOB1D56PXc2rNZDBqnXiYRp9PTRQNVM0N2SUTnjNf0r71uIAoxY/39j11IUSOC8lX9B0eGuJRwV3On8xY+A==
+        integrity: sha512-LUBHsqmDYJtG18h78WrPy3EZ4/k/IemTvbnVWcpQGmPIhk9iFJok5VoDI0QEo0bDmW1DXA/vDaZAd3FP5240Xg==
       }
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
@@ -5566,6 +5578,11 @@ snapshots:
       "@lezer/common": 1.5.0
       "@lezer/javascript": 1.5.4
 
+  "@codemirror/lang-json@6.0.2":
+    dependencies:
+      "@codemirror/language": 6.12.1
+      "@lezer/json": 1.0.3
+
   "@codemirror/lang-markdown@6.5.0":
     dependencies:
       "@codemirror/autocomplete": 6.20.0
@@ -6064,6 +6081,12 @@ snapshots:
       "@lezer/lr": 1.4.5
 
   "@lezer/javascript@1.5.4":
+    dependencies:
+      "@lezer/common": 1.5.0
+      "@lezer/highlight": 1.2.3
+      "@lezer/lr": 1.4.5
+
+  "@lezer/json@1.0.3":
     dependencies:
       "@lezer/common": 1.5.0
       "@lezer/highlight": 1.2.3
@@ -7784,11 +7807,12 @@ snapshots:
 
   react-is@17.0.2: {}
 
-  react-lib-tools@0.0.29(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.8.3):
+  react-lib-tools@0.0.30(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.8.3):
     dependencies:
       "@codemirror/lang-css": 6.3.1
       "@codemirror/lang-html": 6.4.11
       "@codemirror/lang-javascript": 6.2.4
+      "@codemirror/lang-json": 6.0.2
       "@codemirror/lang-markdown": 6.5.0
       "@codemirror/language": 6.12.1
       "@codemirror/state": 6.5.3
