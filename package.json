@@ -7,7 +7,7 @@
     "Brian Vaughn <brian.david.vaughn@gmail.com> (https://github.com/bvaughn/)"
   ],
   "license": "MIT",
-  "homepage": "http://react-window.now.sh/",
+  "homepage": "https://react-window.vercel.app/",
   "repository": {
     "type": "git",
     "url": "https://github.com/bvaughn/react-window.git"
