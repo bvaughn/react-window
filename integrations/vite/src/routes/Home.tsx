@@ -1,12 +1,18 @@
 import { List, type RowComponentProps } from "react-window";
-import { LayoutShiftDetecter } from "../../../tests";
+import { AnimationFrameRowCounter, LayoutShiftDetecter } from "../../../tests";
 
 export function HomeRoute() {
   return (
     <div className="p-2 flex flex-col gap-2">
+      <AnimationFrameRowCounter />
       <LayoutShiftDetecter />
       <List
-        defaultHeight={400}
+        className="h-[250px]"
+        defaultHeight={250}
+        onRowsRendered={(visibleRows) => {
+          console.log("onRowsRendered:", visibleRows);
+        }}
+        overscanCount={0}
         rowComponent={RowComponent}
         rowCount={100}
         rowHeight={25}

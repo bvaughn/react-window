@@ -4,6 +4,8 @@ import { expect, test } from "@playwright/test";
 test.describe("layout-shift", () => {
   test("should not occur for client components", async ({ page }) => {
     await page.goto("http://localhost:3012/");
+
+    await expect(page.getByText("Row count on mount: 10")).toBeVisible();
     await expect(page.getByText("No layout shift")).toBeVisible();
   });
 
@@ -11,11 +13,15 @@ test.describe("layout-shift", () => {
     page
   }) => {
     await page.goto("http://localhost:3011/");
+
+    await expect(page.getByText("Row count on mount: 10")).toBeVisible();
     await expect(page.getByText("No layout shift")).toBeVisible();
   });
 
   test("should not occur for server components", async ({ page }) => {
     await page.goto("http://localhost:3010/");
+
+    await expect(page.getByText("Row count on mount: 10")).toBeVisible();
     await expect(page.getByText("No layout shift")).toBeVisible();
   });
 });
