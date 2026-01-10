@@ -1,0 +1,25 @@
+{
+  "scripts": {
+    "dev": "vike dev --port 3011",
+    "build": "vike build",
+    "preview": "vike build && vike preview",
+    "tsc": "tsc -b"
+  },
+  "dependencies": {
+    "vike": "^0.4.247",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-window": "workspace:*",
+    "vike-react": "^0.6.13"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^7.2.4",
+    "@vitejs/plugin-react": "^5.1.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "tailwindcss": "^4.1.17",
+    "@tailwindcss/vite": "^4.1.17"
+  },
+  "type": "module"
+}
