@@ -12,6 +12,8 @@ node_modules
 /docs
 *.local
 
+integrations/tests/test-results
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

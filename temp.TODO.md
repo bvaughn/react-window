@@ -1,1 +1,1 @@
-Add "integrations" folder like react-resizable-panels
+Add "integrations" folder like react-window

@@ -1,3 +1,4 @@
+import preserveDirectives from "rollup-preserve-directives";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
 import { dirname, resolve } from "node:path";
@@ -22,7 +23,7 @@ const libraryConfig: UserConfig = {
     },
     sourcemap: true
   },
-  plugins: [react(), dts({ rollupTypes: true })],
+  plugins: [react(), dts({ rollupTypes: true }), preserveDirectives()],
   publicDir: false
 };
 
