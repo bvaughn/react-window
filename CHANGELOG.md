@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.5
+
+- Use `defaultHeight`/`defaultWidth` prop to server render initial set of rows/cells
+- Adjust TypeScript return type for `rowComponent`/`cellComponent` to work around a `ReactNode` vs `ReactElement` mismatch caused by #875
+
 ## 2.2.4
 
 - Update README docs
