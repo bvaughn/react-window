@@ -1,3 +1,5 @@
+"use client";
+
 import {
   createElement,
   memo,
@@ -302,8 +304,6 @@ export function Grid<
       ref: setElement,
       style: {
         position: "relative",
-        width: "100%",
-        height: "100%",
         maxHeight: "100%",
         maxWidth: "100%",
         flexGrow: 1,

@@ -46,32 +46,6 @@ export function useVirtualizer<Props extends object>({
     | undefined;
   overscanCount: number;
 }) {
-  const [indices, setIndices] = useState<{
-    startIndexVisible: number;
-    stopIndexVisible: number;
-    startIndexOverscan: number;
-    stopIndexOverscan: number;
-  }>({
-    startIndexVisible: 0,
-    startIndexOverscan: 0,
-    stopIndexVisible: -1,
-    stopIndexOverscan: -1
-  });
-
-  // Guard against temporarily invalid indices that may occur when item count decreases
-  // Cached bounds object will be re-created and a second render will restore things
-  const {
-    startIndexVisible,
-    startIndexOverscan,
-    stopIndexVisible,
-    stopIndexOverscan
-  } = {
-    startIndexVisible: Math.min(itemCount - 1, indices.startIndexVisible),
-    startIndexOverscan: Math.min(itemCount - 1, indices.startIndexOverscan),
-    stopIndexVisible: Math.min(itemCount - 1, indices.stopIndexVisible),
-    stopIndexOverscan: Math.min(itemCount - 1, indices.stopIndexOverscan)
-  };
-
   const { height = defaultContainerSize, width = defaultContainerSize } =
     useResizeObserver({
       defaultHeight:
@@ -115,6 +89,36 @@ export function useVirtualizer<Props extends object>({
     (index: number) => cachedBounds.get(index),
     [cachedBounds]
   );
+
+  const [indices, setIndices] = useState<{
+    startIndexVisible: number;
+    stopIndexVisible: number;
+    startIndexOverscan: number;
+    stopIndexOverscan: number;
+  }>(() =>
+    getStartStopIndicesUtil({
+      cachedBounds,
+      // TODO Potentially support a defaultScrollOffset prop?
+      containerScrollOffset: 0,
+      containerSize,
+      itemCount,
+      overscanCount
+    })
+  );
+
+  // Guard against temporarily invalid indices that may occur when item count decreases
+  // Cached bounds object will be re-created and a second render will restore things
+  const {
+    startIndexVisible,
+    startIndexOverscan,
+    stopIndexVisible,
+    stopIndexOverscan
+  } = {
+    startIndexVisible: Math.min(itemCount - 1, indices.startIndexVisible),
+    startIndexOverscan: Math.min(itemCount - 1, indices.startIndexOverscan),
+    stopIndexVisible: Math.min(itemCount - 1, indices.stopIndexVisible),
+    stopIndexOverscan: Math.min(itemCount - 1, indices.stopIndexOverscan)
+  };
 
   const getEstimatedSize = useCallback(
     () =>
