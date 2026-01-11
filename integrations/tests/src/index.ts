@@ -1,4 +1,4 @@
 export { Decoder } from "./components/Decoder";
-export { AnimationFrameRowCounter } from "./components/AnimationFrameRowCounter";
+export { AnimationFrameRowCellCounter } from "./components/AnimationFrameRowCellCounter";
 export { LayoutShiftDetecter } from "./components/LayoutShiftDetecter";
 export { EnvironmentMarker } from "./components/EnvironmentMarker";

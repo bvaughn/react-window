@@ -2,16 +2,18 @@
 
 import { useLayoutEffect, useRef } from "react";
 
-export function AnimationFrameRowCounter() {
+export function AnimationFrameRowCellCounter() {
   const ref = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const element = ref.current;
     if (element) {
       const id = requestAnimationFrame(() => {
-        element.textContent =
-          "" +
-          document.body.querySelectorAll("[data-react-window-index]").length;
+        const cellCount =
+          document.body.querySelectorAll('[role="gridcell"]').length;
+        const rowCount =
+          document.body.querySelectorAll('[role="listitem"]').length;
+        element.textContent = `${cellCount + rowCount}`;
       });
 
       return () => {
@@ -22,7 +24,7 @@ export function AnimationFrameRowCounter() {
 
   return (
     <div className="flex flex-row gap-1 text-xs text-green-400">
-      Row count on mount: <div ref={ref} />
+      Rows/cells on mount: <div ref={ref} />
     </div>
   );
 }
