@@ -98,6 +98,7 @@ export function useVirtualizer<Props extends object>({
   }>(() =>
     getStartStopIndicesUtil({
       cachedBounds,
+      // TODO Potentially support a defaultScrollOffset prop?
       containerScrollOffset: 0,
       containerSize,
       itemCount,

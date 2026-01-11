@@ -35,7 +35,7 @@ export type GridProps<
       rowIndex: number;
       style: CSSProperties;
     } & CellProps
-  ) => ReactElement;
+  ) => ReactElement | null;
 
   /**
    * Additional props to be passed to the cell-rendering component.

@@ -111,7 +111,7 @@ export type ListProps<
       index: number;
       style: CSSProperties;
     } & RowProps
-  ) => ReactElement;
+  ) => ReactElement | null;
 
   /**
    * Number of items to be rendered in the list.
