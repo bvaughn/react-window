@@ -65,7 +65,7 @@ export type GridProps<
    * Column width; the following formats are supported:
    * - number of pixels (number)
    * - percentage of the grid's current width (string)
-   * - function that returns the row width (in pixels) given an index and `cellProps`
+   * - function that returns the column width (in pixels) given an index and `cellProps`
    */
   columnWidth:
     | number
