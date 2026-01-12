@@ -119,6 +119,21 @@ const commonQuestions: CommonQuestion[] = [
         <Code html={refCompositionHTML} />
       </>
     )
+  },
+  {
+    id: "grid-cell-auto-size",
+    question: (
+      <>
+        Can <code>Grid</code> cells be auto-sized?
+      </>
+    ),
+    answer: (
+      <p>
+        No. <code>Grid</code> cell sizes must be known ahead of time- either
+        because they are static or because they can be derived (from the data in{" "}
+        <code>CellProps</code>) without needing to be rendered.
+      </p>
+    )
   }
 ];
 

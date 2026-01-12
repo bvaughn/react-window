@@ -2,6 +2,10 @@
   "description": [
     {
       "content": "<p>Renders data with many rows and columns.</p>\n"
+    },
+    {
+      "content": "<p>Unlike <code>List</code> rows, <code>Grid</code> cell sizes must be known ahead of time.\nEither static sizes or something that can be derived (from the data in <code>CellProps</code>) without rendering.</p>\n",
+      "intent": "primary"
     }
   ],
   "filePath": "lib/components/grid/Grid.tsx",

@@ -171,6 +171,9 @@ The default value is &quot;div&quot;, meaning that List renders an HTMLDivElemen
 
 Renders data with many rows and columns.
 
+ℹ️ Unlike `List` rows, `Grid` cell sizes must be known ahead of time.
+Either static sizes or something that can be derived (from the data in `CellProps`) without rendering.
+
 <!-- Grid:description:end -->
 
 #### Required props
