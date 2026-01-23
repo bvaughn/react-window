@@ -45,9 +45,9 @@ export default function HowDoesItWorkRoute() {
         <ChevronRightIcon className="-mt-27 text-slate-500 w-8 h-8" />
         <List className="-mt-20">
           <Row />
-          <Row rendered>Row 1</Row>
           <Row rendered>Row 2</Row>
           <Row rendered>Row 3</Row>
+          <Row rendered>Row 4</Row>
           <Row />
           <Row />
           <Viewport innerClassName="top-4" outerClassName="top-10" />
