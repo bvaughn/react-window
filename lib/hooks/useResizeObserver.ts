@@ -42,7 +42,7 @@ export function useResizeObserver({
     (styleHeight !== undefined && styleWidth !== undefined);
 
   useIsomorphicLayoutEffect(() => {
-    if (element === null || disabled) {
+    if (typeof window === "undefined" || element === null || disabled) {
       return;
     }
 
