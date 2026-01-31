@@ -103,22 +103,29 @@ export function useDynamicRowHeight({
     }
   );
 
-  const [resizeObserver] = useState(
-    () => new ResizeObserver(resizeObserverCallback)
-  );
+  const [resizeObserver] = useState(() => {
+    if (typeof ResizeObserver !== "undefined") {
+      return new ResizeObserver(resizeObserverCallback);
+    }
+  });
 
   useEffect(() => {
-    return () => {
-      resizeObserver.disconnect();
-    };
+    if (resizeObserver) {
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }
   }, [resizeObserver]);
 
   const observeRowElements = useCallback(
     (elements: Element[] | NodeListOf<Element>) => {
-      elements.forEach((element) => resizeObserver.observe(element));
-      return () => {
-        elements.forEach((element) => resizeObserver.unobserve(element));
-      };
+      if (resizeObserver) {
+        elements.forEach((element) => resizeObserver.observe(element));
+        return () => {
+          elements.forEach((element) => resizeObserver.unobserve(element));
+        };
+      }
+      return () => {};
     },
     [resizeObserver]
   );

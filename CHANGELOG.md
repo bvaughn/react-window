@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.6
+
+- `useDynamicRowHeight` should not instantiate `ResizeObserver` when server-rendering
+
 ## 2.2.5
 
 - Use `defaultHeight`/`defaultWidth` prop to server render initial set of rows/cells

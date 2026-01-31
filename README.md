@@ -39,9 +39,7 @@ Documentation for this project is available at [react-window.vercel.app](https:/
 ### List
 
 <!-- List:description:begin -->
-
 Renders data with many rows.
-
 <!-- List:description:end -->
 
 #### Required props
@@ -168,12 +166,10 @@ The default value is &quot;div&quot;, meaning that List renders an HTMLDivElemen
 ### Grid
 
 <!-- Grid:description:begin -->
-
 Renders data with many rows and columns.
 
 ℹ️ Unlike `List` rows, `Grid` cell sizes must be known ahead of time.
 Either static sizes or something that can be derived (from the data in `CellProps`) without rendering.
-
 <!-- Grid:description:end -->
 
 #### Required props
