@@ -1,5 +1,4 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import type { PropsWithChildren } from "react";
 import {
   Box,
   Callout,
@@ -11,6 +10,7 @@ import {
 } from "react-lib-tools";
 import BasicRowMarkdown from "../../public/generated/examples/BasicRow.json";
 import { Link } from "../components/Link";
+import type { PropsWithChildren } from "react";
 
 export default function HowDoesItWorkRoute() {
   return (
@@ -33,35 +33,31 @@ export default function HowDoesItWorkRoute() {
         gap={4}
         justify="center"
       >
-        <List className="">
-          <Row rendered>Row 1</Row>
-          <Row rendered>Row 2</Row>
-          <Row />
-          <Row />
-          <Row />
-          <Row />
-          <Viewport innerClassName="top-1" outerClassName="top-0" />
-        </List>
+        <List
+          children={<Viewport innerClassName="top-1" outerClassName="top-0" />}
+          className=""
+          rowCount={6}
+          visibleStartIndex={0}
+          visibleStopIndex={1}
+        />
         <ChevronRightIcon className="-mt-27 text-slate-500 w-8 h-8" />
-        <List className="-mt-20">
-          <Row />
-          <Row rendered>Row 2</Row>
-          <Row rendered>Row 3</Row>
-          <Row rendered>Row 4</Row>
-          <Row />
-          <Row />
-          <Viewport innerClassName="top-4" outerClassName="top-10" />
-        </List>
+        <List
+          children={<Viewport innerClassName="top-4" outerClassName="top-10" />}
+          className="-mt-20"
+          rowCount={6}
+          visibleStartIndex={1}
+          visibleStopIndex={3}
+        />
         <ChevronRightIcon className="-mt-27 text-slate-500 w-8 h-8" />
-        <List className="-mt-55">
-          <Row />
-          <Row />
-          <Row />
-          <Row />
-          <Row rendered>Row 5</Row>
-          <Row rendered>Row 6</Row>
-          <Viewport innerClassName="top-11" outerClassName="top-28" />
-        </List>
+        <List
+          children={
+            <Viewport innerClassName="top-11" outerClassName="top-28" />
+          }
+          className="-mt-55"
+          rowCount={6}
+          visibleStartIndex={4}
+          visibleStopIndex={5}
+        />
       </Box>
       <div>
         When a user scrolls the list, a different set of rows are rendered- but
@@ -91,12 +87,27 @@ export default function HowDoesItWorkRoute() {
 
 function List({
   children,
-  className
-}: PropsWithChildren<{ className: string }>) {
+  className,
+  rowCount,
+  visibleStartIndex,
+  visibleStopIndex
+}: PropsWithChildren<{
+  className: string;
+  rowCount: number;
+  visibleStartIndex: number;
+  visibleStopIndex: number;
+}>) {
   return (
     <div
       className={cn("relative flex flex-col gap-1 p-2 pr-6 w-30", className)}
     >
+      {new Array(rowCount).fill(true).map((_, index) => (
+        <Row
+          children={`Row ${index + 1}`}
+          key={index}
+          rendered={index >= visibleStartIndex && index <= visibleStopIndex}
+        />
+      ))}
       {children}
     </div>
   );
@@ -115,8 +126,7 @@ function Row({
         "h-6 p-2 flex items-center rounded text-xs whitespace-nowrap",
         rendered
           ? getIntentClassNames("primary", true)
-          : getIntentClassNames("none", true),
-        rendered ? "" : "opacity-50"
+          : "border-1 border-dashed border-white/10 text-white/20"
       )}
     >
       {children}
