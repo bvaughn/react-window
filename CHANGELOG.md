@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.7
+
+- Fixed a problem with project logo not displaying correctly in the README for the Firefox browser.
+
 ## 2.2.6
 
 - `useDynamicRowHeight` should not instantiate `ResizeObserver` when server-rendering

@@ -1,4 +1,4 @@
-<img src="https://react-window.vercel.app/og.svg" alt="react-window logo" width="400" height="210" />
+<img src="https://react-window.vercel.app/og.png" alt="react-window logo" width="400" height="210" />
 
 `react-window` is a component library that helps render large lists of data quickly and without the performance problems that often go along with rendering a lot of data. It's used in a lot of places, from React DevTools to the Replay browser.
 
