@@ -5,10 +5,11 @@ import {
   NavSection,
   type CommonQuestion
 } from "react-lib-tools";
-import { Link } from "./components/Link";
-import { NavLink } from "./components/NavLink";
+import { repository } from "../package.json";
 import { html as refCompositionHTML } from "../public/generated/examples/RefComposition.json";
 import { html as scrollingIndicatorHTML } from "../public/generated/examples/ScrollingIndicator.json";
+import { Link } from "./components/Link";
+import { NavLink } from "./components/NavLink";
 import { routes } from "./routes";
 
 export default function App() {
@@ -60,6 +61,7 @@ export default function App() {
       }
       packageDescription="render everything"
       packageName="react-window"
+      repositoryUrl={repository.url}
       routes={routes}
       overview={
         <>
@@ -138,21 +140,17 @@ const commonQuestions: CommonQuestion[] = [
 ];
 
 const VERSIONS = {
-  "2": {
-    "2.2.3": "https://react-window-9gegorjnr-brian-vaughns-projects.vercel.app",
-    "2.1.2": "https://react-window-8cygyvomv-brian-vaughns-projects.vercel.app",
-    "2.0.2": "https://react-window-btpcws98u-brian-vaughns-projects.vercel.app"
-  },
-  "1": {
-    "1.8.11":
-      "https://web.archive.org/web/20241225003549/https://react-window.vercel.app/",
-    "1.7.2": "",
-    "1.6.2": "",
-    "1.5.2": "",
-    "1.4.0": "",
-    "1.3.1": "",
-    "1.2.4": "",
-    "1.1.2": "",
-    "1.0.3": ""
-  }
+  "2.2.3": "https://react-window-9gegorjnr-brian-vaughns-projects.vercel.app",
+  "2.1.2": "https://react-window-8cygyvomv-brian-vaughns-projects.vercel.app",
+  "2.0.2": "https://react-window-btpcws98u-brian-vaughns-projects.vercel.app",
+  "1.8.11":
+    "https://web.archive.org/web/20241225003549/https://react-window.vercel.app/",
+  "1.7.2": "",
+  "1.6.2": "",
+  "1.5.2": "",
+  "1.4.0": "",
+  "1.3.1": "",
+  "1.2.4": "",
+  "1.1.2": "",
+  "1.0.3": ""
 };
