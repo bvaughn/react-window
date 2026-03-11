@@ -7,6 +7,7 @@ import { Grid } from "react-window";
 function HorizontalList({ emails }: { emails: string[] }) {
   return (
     <Grid
+      className="h-full"
       cellComponent={CellComponent}
       cellProps={{ emails }}
       columnCount={emails.length}
