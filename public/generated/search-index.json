@@ -1,0 +1,417 @@
+{
+  "keys": [
+    {
+      "path": [
+        "title"
+      ],
+      "id": "title",
+      "weight": 1,
+      "src": "title",
+      "getFn": null
+    },
+    {
+      "path": [
+        "section"
+      ],
+      "id": "section",
+      "weight": 1,
+      "src": "section",
+      "getFn": null
+    },
+    {
+      "path": [
+        "text"
+      ],
+      "id": "text",
+      "weight": 1,
+      "src": "text",
+      "getFn": null
+    }
+  ],
+  "records": [
+    {
+      "i": 0,
+      "$": {
+        "0": {
+          "v": "Getting started with react-window",
+          "n": 0.5
+        },
+        "2": {
+          "v": "react-window is a component library that helps render large lists of data quickly and without the performance problems that often go along with rendering a lot of data. It's used in a lot of places, from React DevTools to the Replay browser. If you've never used a library like this before, you may want to read the how it works section first. Installation Begin by installing the library from NPM: npm install react-window TypeScript definitions are included within the published dist folder. Support Here are some ways to support this project: Become a GitHub sponsorBuy me a coffee",
+          "n": 0.101
+        }
+      }
+    },
+    {
+      "i": 1,
+      "$": {
+        "0": {
+          "v": "Previous releases",
+          "n": 0.707
+        },
+        "2": {
+          "v": "Click below to view documentation for past releases. 2.x documentation source code2.x documentation source code2.x documentation source code1.x documentation source code1.x source code1.x source code1.x source code1.x source code1.x source code1.x source code1.x source code1.x source code",
+          "n": 0.164
+        }
+      }
+    },
+    {
+      "i": 2,
+      "$": {
+        "0": {
+          "v": "How does it work?",
+          "n": 0.5
+        },
+        "2": {
+          "v": "Libraries like this help to render a lot of items as efficiently as possible by limiting how many items are rendered at once. Below is an over-simplified illustration of a list with 6 rows. Only 2 or 3 rows are rendered at a time because that is enough to fill the viewport. (The user can't see the other rows, so we don't need to render them). Row 1Row 2Row 3Row 4Row 5Row 6Row 1Row 2Row 3Row 4Row 5Row 6Row 1Row 2Row 3Row 4Row 5Row 6 When a user scrolls the list, a different set of rows are rendered- but always only a few at a time. The illustration above shows unrendered rows as dimmed. In reality, they aren't there at all. The rows that do get rendered are positioned using CSS properties like top to mimic other rows above them. To render one of these rows, all you need to provide is a component like the one below. import { type RowComponentProps } from \"react-window\";\n \n/**\n * Example row.\n *\n * @param index Specifies which row you're rendering\n * @param style CSS properties like \"position\" and \"top\"\n */\nfunction Row({ index, style }: RowComponentProps) {\n  return <div style={style}>Row {index}</div>;\n} Continue to the list examples to learn more.",
+          "n": 0.07
+        }
+      }
+    },
+    {
+      "i": 3,
+      "$": {
+        "0": {
+          "v": "Fixed row heights",
+          "n": 0.577
+        },
+        "1": {
+          "v": "Lists",
+          "n": 1
+        },
+        "2": {
+          "v": "The simplest type of list to render is one with fixed row heights. To render this type of list, you need to specify how many rows it contains (rowCount), which component should render rows (rowComponent), and the height of each row (rowHeight): import { List } from \"react-window\";\n \nfunction Example({ names }: { names: string[] }) {\n  return (\n    <List\n      rowComponent={RowComponent}\n      rowCount={names.length}\n      rowHeight={25}\n      rowProps={{ names }}\n    />\n  );\n} The rowProps object can also be used to share between components. Values passed in rowProps will also be passed as props to the row component: import { type RowComponentProps } from \"react-window\";\n \nfunction RowComponent({\n  index,\n  names,\n  style\n}: RowComponentProps<{\n  names: string[];\n}>) {\n  return (\n    <div className=\"flex items-center justify-between\" style={style}>\n      {names[index]}\n      <div className=\"text-slate-500 text-xs\">{`${index + 1} of ${names.length}`}</div>\n    </div>\n  );\n} Lists require vertical space to render rows. Typically the ResizeObserver API is used to determine how much space there is available within the parent DOM element.If an explicit height is specified (in pixels) using the style prop, ResizeObserver will not be used. Continue to variable row heights…",
+          "n": 0.076
+        }
+      }
+    },
+    {
+      "i": 4,
+      "$": {
+        "0": {
+          "v": "Variable row heights",
+          "n": 0.577
+        },
+        "1": {
+          "v": "Lists",
+          "n": 1
+        },
+        "2": {
+          "v": "Lists with rows of different types may require different heights to render. Here is an example the most populous US postal codes, grouped by state. State rows \"headers\" are taller and are styled differently. This list requires a rowHeight function that tells it what height a row should be based on the type of data it contains. type Item =\n  | { type: \"state\"; state: string }\n  | { type: \"zip\"; city: string; zip: string };\n \ntype RowProps = {\n  items: Item[];\n};\n \nfunction Example({ items }: { items: Item[] }) {\n  return (\n    <List<RowProps>\n      rowComponent={RowComponent}\n      rowCount={items.length}\n      rowHeight={rowHeight}\n      rowProps={{ items }}\n    />\n  );\n}\n \nfunction rowHeight(index: number, { items }: RowProps) {\n  switch (items[index].type) {\n    case \"state\": {\n      return 30;\n    }\n    case \"zip\": {\n      return 25;\n    }\n  }\n} Continue to dynamic row heights…",
+          "n": 0.088
+        }
+      }
+    },
+    {
+      "i": 5,
+      "$": {
+        "0": {
+          "v": "Dynamic row heights",
+          "n": 0.577
+        },
+        "1": {
+          "v": "Lists",
+          "n": 1
+        },
+        "2": {
+          "v": "Sometimes the height of a row isn't known until it's been rendered. Here is an example list of lorem ipsum text of varying sizes. Each row can also be toggled collapsed/expanded by clicking on the \"+\"/\"-\" button. For this kind of list, react-window provides a helper hook called useDynamicRowHeight. import { useMemo, useState } from \"react\";\nimport { List, useDynamicRowHeight } from \"react-window\";\nimport { RowComponent } from \"./ListRowDynamicRowHeights\";\n \nfunction Example({ lorem }: { lorem: string[] }) {\n  const listState = useListState(lorem);\n \n  const rowHeight = useDynamicRowHeight({\n    defaultRowHeight: 50\n  });\n \n  return (\n    <List\n      rowComponent={RowComponent}\n      rowCount={lorem.length}\n      rowHeight={rowHeight}\n      rowProps={{ listState }}\n    />\n  );\n} In this case, rows can just render their content as they normally would and react-window will measure it for you. import { type RowComponentProps } from \"react-window\";\n \nfunction RowComponent({\n  index,\n  listState,\n  style\n}: RowComponentProps<{\n  listState: ListState;\n}>) {\n  const isCollapsed = listState.isRowCollapsed(index);\n  const text = listState.getText(index);\n \n  return (\n    <div\n      className={cn(\"p-2 cursor-pointer\", {\n        \"bg-white/10\": index % 2 === 0,\n        truncate: isCollapsed\n      })}\n      onClick={() => listState.toggleRow(index)}\n      style={style}\n    >\n      <ToggleIcon isCollapsed={isCollapsed} /> {index}: {text}\n    </div>\n  );\n} Dynamic row heights are not as efficient as predetermined sizes. It's recommended to provide your own height values if they can be determined ahead of time. Continue to imperative methods…",
+          "n": 0.071
+        }
+      }
+    },
+    {
+      "i": 6,
+      "$": {
+        "0": {
+          "v": "Imperative methods",
+          "n": 0.707
+        },
+        "1": {
+          "v": "Lists",
+          "n": 1
+        },
+        "2": {
+          "v": "List provides an imperative API for responding to events. The recommended way to access this API is to use the exported ref hook: import { useListRef } from \"react-window\"; Attach the ref during render: function Example(props: Props) {\n  const listRef = useListRef(null);\n \n  return <List listRef={listRef} {...props} />;\n} And call API methods in an event handler: const onClick = () => {\n  const list = listRef.current;\n  list?.scrollToRow({\n    align: \"auto\", // optional\n    behavior: \"auto\", // optional\n    index: 250\n  });\n}; The form below uses the imperative API to scroll the list: AlignScroll behavior StateScroll Note If you are passing the ref to another component or hook, use the ref callback function instead. import { useListCallbackRef } from \"react-window\";\n \nfunction Example(props: Props) {\n  const [list, setList] = useListCallbackRef(null);\n \n  useCustomHook(list);\n \n  return <List listRef={setList} {...props} />;\n} Continue to ARIA roles…",
+          "n": 0.087
+        }
+      }
+    },
+    {
+      "i": 7,
+      "$": {
+        "0": {
+          "v": "ARIA roles",
+          "n": 0.707
+        },
+        "1": {
+          "v": "Lists",
+          "n": 1
+        },
+        "2": {
+          "v": "The ARIA list role can be used to identify a list of items. <div role=\"list\">\n  <div\n    role=\"listitem\"\n    aria-posinset=\"1\"\n    aria-setsize=\"1000\"\n  >\n    Row 1\n  </div>\n \n  <div\n    role=\"listitem\"\n    aria-posinset=\"2\"\n    aria-setsize=\"1000\"\n  >\n    Row 2\n  </div>\n \n  <!-- More rows ... -->\n</div> The List component automatically adds this role to the root HTMLDivElement it renders, but because individual rows are rendered by your code- you must assign ARIA attributes to those elements. To simplify this, the recommended ARIA attributes are passed to the rowComponent in the form of the ariaAttributes prop. The easiest way to use them is just to pass them through like so: import { type RowComponentProps } from \"react-window\";\n \nfunction RowComponent({\n  ariaAttributes,\n  names,\n  index,\n  style\n}: RowComponentProps<{\n  names: string[];\n}>) {\n  return (\n    <div style={style} {...ariaAttributes}>\n      {names[index]}\n    </div>\n  );\n} Continue to props and api…",
+          "n": 0.088
+        }
+      }
+    },
+    {
+      "i": 8,
+      "$": {
+        "0": {
+          "v": "List component",
+          "n": 0.707
+        },
+        "1": {
+          "v": "Lists",
+          "n": 1
+        },
+        "2": {
+          "v": "Renders data with many rows.\n Required propsrowComponent: (props: { ariaAttributes: { \"aria-posinset\": number; \"aria-setsize\": number; role: \"listitem\"; }; index: number; style: CSSProperties; } & RowProps) => ReactNode | nullReact component responsible for rendering a row.\nThis component will receive an index and style prop by default.\nAdditionally it will receive prop values passed to rowProps.\nThe prop types for this component are exported as RowComponentProps\nrowCount: numberNumber of items to be rendered in the list.\nrowHeight: string | number | DynamicRowHeight | ((index: number, cellProps: RowProps) => number)Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the grid's current height (string)\nfunction that returns the row height (in pixels) given an index and cellProps\ndynamic row height cache returned by the useDynamicRowHeight hook\n\nDynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time.\nrowProps: RowPropsAdditional props to be passed to the row-rendering component.\nList will automatically re-render rows when values in this object change.\nThis object must not contain ariaAttributes, index, or style props.\n Optional propschildren?: ReactNodeAdditional content to be rendered within the list (above cells).\nThis property can be used to render things like overlays or tooltips.\nclassName?: stringCSS class name.\ndefaultHeight?: number = 0Default height of list for initial render.\nThis value is important for server rendering.\nlistRef?: Ref<{ readonly element: HTMLDivElement | null; scrollToRow(config: { align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\"; behavior?: \"auto\" | \"instant\" | \"smooth\"; index: number; }): void; }>Ref used to interact with this component's imperative API.\nThis API has imperative methods for scrolling and a getter for the outermost DOM element.\nThe useListRef and useListCallbackRef hooks are exported for convenience use in TypeScript projects.\nonResize?: (size: { height: number; width: number; }, prevSize: { height: number; width: number; }) => voidCallback notified when the List's outermost HTMLElement resizes.\nThis may be used to (re)scroll a row into view.\nonRowsRendered?: (visibleRows: { startIndex: number; stopIndex: number; }, allRows: { startIndex: number; stopIndex: number; }) => voidCallback notified when the range of visible rows changes.\noverscanCount?: number = 3How many additional rows to render outside of the visible area.\nThis can reduce visual flickering near the edges of a list when scrolling.\nstyle?: CSSPropertiesOptional CSS properties.\nThe list of rows will fill the height defined by this style.\ntagName?: keyof IntrinsicElements = \"div\" as TagNameCan be used to override the root HTML element rendered by the List component.\nThe default value is \"div\", meaning that List renders an HTMLDivElement as its root.\nIn most use cases the default ARIA roles are sufficient and this prop is not needed.\n",
+          "n": 0.049
+        }
+      }
+    },
+    {
+      "i": 9,
+      "$": {
+        "0": {
+          "v": "ListImperativeAPI",
+          "n": 1
+        },
+        "1": {
+          "v": "Imperative API",
+          "n": 0.707
+        },
+        "2": {
+          "v": "Imperative List API.\nThe useListRef and useListCallbackRef hooks are exported for convenience use in TypeScript projects.\n scrollToRowScrolls the list so that the specified row is visible.\nscrollToRow: ({\n    align,\n    behavior,\n    index\n  }: {\n    align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n    behavior?: \"auto\" | \"instant\" | \"smooth\";\n    index: number;\n  }) => void;",
+          "n": 0.139
+        }
+      }
+    },
+    {
+      "i": 10,
+      "$": {
+        "0": {
+          "v": "Rendering tabular data",
+          "n": 0.577
+        },
+        "1": {
+          "v": "Tables",
+          "n": 1
+        },
+        "2": {
+          "v": "Many types of tabular data can be rendered using the list component. The example above uses Flexbox layout to position columns and headers. import { getScrollbarSize, List, type RowComponentProps } from \"react-window\";\n \nfunction Example({ addresses }: { addresses: Address[] }) {\n  const [size] = useState(getScrollbarSize);\n \n  return (\n    <div className=\"h-55 flex flex-col\">\n      <div className=\"flex flex-row bg-teal-600 p-1 px-2\">\n        <div className=\"grow flex flex-row items-center gap-2 font-bold\">\n          <div className=\"flex-1\">City</div>\n          <div className=\"flex-1\">State</div>\n          <div className=\"w-10\">Zip</div>\n        </div>\n        <div className=\"shrink\" style={{ width: size }} />\n      </div>\n      <div className=\"overflow-hidden\">\n        <List\n          rowComponent={RowComponent}\n          rowCount={addresses.length}\n          rowHeight={25}\n          rowProps={{ addresses }}\n        />\n      </div>\n    </div>\n  );\n}\n \nfunction RowComponent({\n  index,\n  addresses,\n  style\n}: RowComponentProps<{\n  addresses: Address[];\n}>) {\n  const address = addresses[index];\n \n  return (\n    <div className=\"flex flex-row items-center gap-2 px-2\" style={style}>\n      <div className=\"flex-1\">{address.city}</div>\n      <div className=\"flex-1\">{address.state}</div>\n      <div className=\"w-10 text-xs\">{address.zip}</div>\n    </div>\n  );\n} It may be more efficient to render data with many columns using the Grid component. Continue to ARIA roles…",
+          "n": 0.085
+        }
+      }
+    },
+    {
+      "i": 11,
+      "$": {
+        "0": {
+          "v": "ARIA roles",
+          "n": 0.707
+        },
+        "1": {
+          "v": "Tables",
+          "n": 1
+        },
+        "2": {
+          "v": "The default ARIA role set by the List component is list , but the table role is more appropriate for tabular data. <div role=\"table\" aria-colcount=\"3\" aria-rowcount=\"1000\">\n  <div role=\"row\" aria-rowindex=\"1\">\n    <div role=\"columnheader\" aria-colindex=\"1\">City</div>\n    <div role=\"columnheader\" aria-colindex=\"2\">State</div>\n    <div role=\"columnheader\" aria-colindex=\"3\">Zip</div>\n  </div>\n \n  <div role=\"row\" aria-rowindex=\"2\">\n    <div role=\"cell\" aria-colindex=\"1\" />\n    <div role=\"cell\" aria-colindex=\"2\" />\n    <div role=\"cell\" aria-colindex=\"3\" />\n  </div>\n \n  <!-- More rows ... -->\n</div> The example on the previous page can be modified like so to assign the correct ARIA attributes: import { List, type RowComponentProps } from \"react-window\";\n \nfunction Example() {\n  return (\n    <div role=\"table\" aria-colcount={3} aria-rowcount={1000}>\n      <div role=\"row\" aria-rowindex={1}>\n        <div role=\"columnheader\" aria-colindex={1}>\n          City\n        </div>\n        <div role=\"columnheader\" aria-colindex={1}>\n          State\n        </div>\n        <div role=\"columnheader\" aria-colindex={1}>\n          Zip\n        </div>\n      </div>\n \n      <List role=\"rowgroup\" {...otherListProps} />\n    </div>\n  );\n}\n \nfunction RowComponent({ index, style }: RowComponentProps<object>) {\n  // Add 1 to the row index to account for the header row\n  return (\n    <div aria-rowindex={index + 1} role=\"row\" style={style}>\n      <div role=\"cell\" aria-colindex={1}>\n        ...\n      </div>\n      <div role=\"cell\" aria-colindex={2}>\n        ...\n      </div>\n      <div role=\"cell\" aria-colindex={3}>\n        ...\n      </div>\n    </div>\n  );\n}",
+          "n": 0.079
+        }
+      }
+    },
+    {
+      "i": 12,
+      "$": {
+        "0": {
+          "v": "Rendering a grid",
+          "n": 0.577
+        },
+        "1": {
+          "v": "Grids",
+          "n": 1
+        },
+        "2": {
+          "v": "Use the Grid component to render data with many rows and columns: DrAlgernonRobersarobers1q@pinterest.comMale16 Ludington PlazaSan Luis ObispoDrAntonettaGwiltagwilt1e@sitemeter.comFemale0 Butternut ParkSan Luis ObispoDrBeniaminoWorlidgebworlidge5g@google.plMale7620 Hovde StreetSeattleDrBinkyCurnowbcurnow5@stanford.eduMale2868 Main WayScottsdaleDrBobbyeDobelbdobel6d@twitter.comFemale4 Chinook TerraceBuffaloDrBordyWhalebwhale19@bloglovin.comMale76705 Bowman JunctionWashingtonDrBroddyBilsfordbbilsford7c@toplist.czPolygender0042 Swallow CourtPortlandDrCatleeEsslemontcesslemont18@army.milFemale120 Muir StreetRaleighDrCollinMeralicmerali1h@dedecms.comMale4649 Corscot StreetMilwaukee Grids require you to specify the number of rows and columns as well as the width and height of each: import { Grid } from \"react-window\";\n \nfunction Example({ contacts }: { contacts: Contact[] }) {\n  return (\n    <Grid\n      cellComponent={CellComponent}\n      cellProps={{ contacts }}\n      columnCount={10}\n      columnWidth={columnWidth}\n      rowCount={contacts.length}\n      rowHeight={25}\n    />\n  );\n} Column widths and row heights can be either numbers or functions. In the example above, row height is fixed and column width is function that determines the width of the column based on the column index: function columnWidth(index: number) {\n  switch (indexToColumn(index)) {\n    case \"address\": {\n      return 250;\n    }\n    case \"email\": {\n      return 300;\n    }\n    case \"job_title\": {\n      return 150;\n    }\n    case \"timezone\": {\n      return 200;\n    }\n    case \"zip\": {\n      return 75;\n    }\n    default: {\n      return 100;\n    }\n  }\n} Lastly grids require a component to render cell, given a column and row index. As with lists, this component receives additional props specified as part of cellProps: import { type CellComponentProps } from \"react-window\";\n \nfunction CellComponent({\n  contacts,\n  columnIndex,\n  rowIndex,\n  style\n}: CellComponentProps<{\n  contacts: Contact[];\n}>) {\n  const address = contacts[rowIndex];\n  const content = address[indexToColumn(columnIndex)];\n \n  return (\n    <div className=\"truncate\" style={style}>\n      {content}\n    </div>\n  );\n} Grids require space to render cells. Typically the ResizeObserver API is used to determine how much space there is available within the parent DOM element.If an explicit width and height are specified (in pixels) using the style prop, ResizeObserver will not be used. Continue to imperative methods…",
+          "n": 0.061
+        }
+      }
+    },
+    {
+      "i": 13,
+      "$": {
+        "0": {
+          "v": "Imperative methods",
+          "n": 0.707
+        },
+        "1": {
+          "v": "Grids",
+          "n": 1
+        },
+        "2": {
+          "v": "Grid provides an imperative API for responding to events. The recommended way to access this API is to use the exported ref hook: import { useGridRef } from \"react-window\"; Attach the ref during render: function Example(props: Props) {\n  const gridRef = useGridRef(null);\n \n  return <Grid gridRef={gridRef} {...props} />;\n} And call API methods in an event handler: const onClick = () => {\n  const grid = gridRef.current;\n  grid?.scrollToCell({\n    behavior: \"auto\", // optional\n    columnAlign: \"auto\", // optional\n    columnIndex: 10,\n    rowAlign: \"auto\", // optional\n    rowIndex: 250\n  });\n}; The form below uses the imperative API to scroll the list: AlignScroll behavior Job titleColumnScroll DrAlgernonRobersarobers1q@pinterest.comMale16 Ludington PlazaSan Luis ObispoDrAntonettaGwiltagwilt1e@sitemeter.comFemale0 Butternut ParkSan Luis ObispoDrBeniaminoWorlidgebworlidge5g@google.plMale7620 Hovde StreetSeattleDrBinkyCurnowbcurnow5@stanford.eduMale2868 Main WayScottsdaleDrBobbyeDobelbdobel6d@twitter.comFemale4 Chinook TerraceBuffaloDrBordyWhalebwhale19@bloglovin.comMale76705 Bowman JunctionWashingtonDrBroddyBilsfordbbilsford7c@toplist.czPolygender0042 Swallow CourtPortlandDrCatleeEsslemontcesslemont18@army.milFemale120 Muir StreetRaleighDrCollinMeralicmerali1h@dedecms.comMale4649 Corscot StreetMilwaukee The Grid API also provides scrollToColumn and scrollToRow methods for single-axis scrolling. Note If you are passing the ref to another component or hook, use the ref callback function instead. import { useGridCallbackRef } from \"react-window\";\n \nfunction Example(props: Props) {\n  const [grid, setGrid] = useGridCallbackRef(null);\n \n  useCustomHook(grid);\n \n  return <Grid gridRef={setGrid} {...props} />;\n} Continue to ARIA roles…",
+          "n": 0.076
+        }
+      }
+    },
+    {
+      "i": 14,
+      "$": {
+        "0": {
+          "v": "ARIA roles",
+          "n": 0.707
+        },
+        "1": {
+          "v": "Grids",
+          "n": 1
+        },
+        "2": {
+          "v": "The ARIA grid role can be used to identify an element that contains one or more rows of cells. <div role=\"grid\" aria-colcount=\"100\" aria-rowcount=\"1000\">\n  <div role=\"row\" aria-rowindex=\"0\">\n    <div role=\"gridcell\" aria-colindex=\"0\" />\n    <div role=\"gridcell\" aria-colindex=\"1\" />\n \n    <!-- More columns ... -->\n  </div>\n \n  <!-- More rows ... -->\n</div> The Grid component automatically adds this role to the root HTMLDivElement it renders, but because individual cells are rendered by your code- you must assign ARIA attributes to those elements. To simplify this, the recommended ARIA attributes are passed to the cellComponent in the form of the ariaAttributes prop. The easiest way to use them is just to pass them through like so: import { type CellComponentProps } from \"react-window\";\n \nfunction CellComponent({\n  ariaAttributes,\n  columnIndex,\n  rowIndex,\n  style\n}: CellComponentProps<object>) {\n  return (\n    <div style={style} {...ariaAttributes}>\n      {/* Data */}\n    </div>\n  );\n} Continue to props and api…",
+          "n": 0.085
+        }
+      }
+    },
+    {
+      "i": 15,
+      "$": {
+        "0": {
+          "v": "Grid component",
+          "n": 0.707
+        },
+        "1": {
+          "v": "Grids",
+          "n": 1
+        },
+        "2": {
+          "v": "Renders data with many rows and columns.\nUnlike List rows, Grid cell sizes must be known ahead of time.\nEither static sizes or something that can be derived (from the data in CellProps) without rendering.\n Required propscellComponent: (props: { ariaAttributes: { \"aria-colindex\": number; role: \"gridcell\"; }; columnIndex: number; rowIndex: number; style: CSSProperties; } & CellProps) => ReactNode | nullReact component responsible for rendering a cell.\nThis component will receive an index and style prop by default.\nAdditionally it will receive prop values passed to cellProps.\nThe prop types for this component are exported as CellComponentProps\ncellProps: CellPropsAdditional props to be passed to the cell-rendering component.\nGrid will automatically re-render cells when values in this object change.\nThis object must not contain ariaAttributes, columnIndex, rowIndex, or style props.\ncolumnCount: numberNumber of columns to be rendered in the grid.\ncolumnWidth: string | number | ((index: number, cellProps: CellProps) => number)Column width; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the grid's current width (string)\nfunction that returns the column width (in pixels) given an index and cellProps\n\nrowCount: numberNumber of rows to be rendered in the grid.\nrowHeight: string | number | ((index: number, cellProps: CellProps) => number)Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the grid's current height (string)\nfunction that returns the row height (in pixels) given an index and cellProps\n\n Optional propschildren?: ReactNodeAdditional content to be rendered within the grid (above cells).\nThis property can be used to render things like overlays or tooltips.\nclassName?: stringCSS class name.\ndefaultHeight?: number = 0Default height of grid for initial render.\nThis value is important for server rendering.\ndefaultWidth?: number = 0Default width of grid for initial render.\nThis value is important for server rendering.\ndir?: stringIndicates the directionality of grid cells.\nSee HTML dir global attribute for more information.\ngridRef?: Ref<{ readonly element: HTMLDivElement | null; scrollToCell(config: { behavior?: \"auto\" | \"instant\" | \"smooth\"; columnAlign?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\"; columnIndex: number; rowAlign?: \"auto\" | ... 3 more ... | \"start\"; rowIndex: number; }): void; scrollToColumn(config: { ...; }): void; scrollToR...Imperative Grid API.\nThe useGridRef and useGridCallbackRef hooks are exported for convenience use in TypeScript projects.\nonCellsRendered?: (visibleCells: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }, allCells: { columnStartIndex: number; columnStopIndex: number; rowStartIndex: number; rowStopIndex: number; }) => voidCallback notified when the range of rendered cells changes.\nonResize?: (size: { height: number; width: number; }, prevSize: { height: number; width: number; }) => voidCallback notified when the Grid's outermost HTMLElement resizes.\nThis may be used to (re)scroll a cell into view.\noverscanCount?: number = 3How many additional rows/columns to render outside of the visible area.\nThis can reduce visual flickering near the edges of a grid when scrolling.\nstyle?: CSSPropertiesOptional CSS properties.\nThe grid of cells will fill the height and width defined by this style.\ntagName?: keyof IntrinsicElements = \"div\" as TagNameCan be used to override the root HTML element rendered by the List component.\nThe default value is \"div\", meaning that List renders an HTMLDivElement as its root.\nIn most use cases the default ARIA roles are sufficient and this prop is not needed.\n",
+          "n": 0.045
+        }
+      }
+    },
+    {
+      "i": 16,
+      "$": {
+        "0": {
+          "v": "GridImperativeAPI",
+          "n": 1
+        },
+        "1": {
+          "v": "Imperative API",
+          "n": 0.707
+        },
+        "2": {
+          "v": "Ref used to interact with this component's imperative API.\nThis API has imperative methods for scrolling and a getter for the outermost DOM element.\nThe useGridRef and useGridCallbackRef hooks are exported for convenience use in TypeScript projects.\n scrollToCellScrolls the grid so that the specified row and column are visible.\nscrollToCell: ({\n    behavior,\n    columnAlign,\n    columnIndex,\n    rowAlign,\n    rowIndex\n  }: {\n    behavior?: \"auto\" | \"instant\" | \"smooth\";\n    columnAlign?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n    columnIndex: number;\n    rowAlign?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n    rowIndex: number;\n  }) => void;scrollToColumnScrolls the grid so that the specified column is visible.\nscrollToColumn: ({\n    align,\n    behavior,\n    index\n  }: {\n    align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n    behavior?: \"auto\" | \"instant\" | \"smooth\";\n    index: number;\n  }) => void;scrollToRowScrolls the grid so that the specified row is visible.\nscrollToRow: ({\n    align,\n    behavior,\n    index\n  }: {\n    align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n    behavior?: \"auto\" | \"instant\" | \"smooth\";\n    index: number;\n  }) => void;",
+          "n": 0.079
+        }
+      }
+    },
+    {
+      "i": 17,
+      "$": {
+        "0": {
+          "v": "Right to left content",
+          "n": 0.5
+        },
+        "1": {
+          "v": "Other",
+          "n": 1
+        },
+        "2": {
+          "v": "Grids can also display right to left languages (like Arabic). The grid components check the dir attribute to determine content directionality. Using the same data as from the previous example, here is a grid rendered right to left. Drrow 0, col 0Algernonrow 0, col 1Robersrow 0, col 2arobers1q@pinterest.comrow 0, col 3Malerow 0, col 416 Ludington Plazarow 0, col 5San Luis Obisporow 0, col 6Drrow 1, col 0Antonettarow 1, col 1Gwiltrow 1, col 2agwilt1e@sitemeter.comrow 1, col 3Femalerow 1, col 40 Butternut Parkrow 1, col 5San Luis Obisporow 1, col 6Drrow 2, col 0Beniaminorow 2, col 1Worlidgerow 2, col 2bworlidge5g@google.plrow 2, col 3Malerow 2, col 47620 Hovde Streetrow 2, col 5Seattlerow 2, col 6Drrow 3, col 0Binkyrow 3, col 1Curnowrow 3, col 2bcurnow5@stanford.edurow 3, col 3Malerow 3, col 42868 Main Wayrow 3, col 5Scottsdalerow 3, col 6Drrow 4, col 0Bobbyerow 4, col 1Dobelrow 4, col 2bdobel6d@twitter.comrow 4, col 3Femalerow 4, col 44 Chinook Terracerow 4, col 5Buffalorow 4, col 6Drrow 5, col 0Bordyrow 5, col 1Whalerow 5, col 2bwhale19@bloglovin.comrow 5, col 3Malerow 5, col 476705 Bowman Junctionrow 5, col 5Washingtonrow 5, col 6Drrow 6, col 0Broddyrow 6, col 1Bilsfordrow 6, col 2bbilsford7c@toplist.czrow 6, col 3Polygenderrow 6, col 40042 Swallow Courtrow 6, col 5Portlandrow 6, col 6 import { Grid } from \"react-window\";\n \nfunction RtlExample({ contacts }: { contacts: Contact[] }) {\n  return (\n    <Grid\n      cellComponent={CellComponent}\n      cellProps={{ contacts }}\n      columnCount={10}\n      columnWidth={columnWidth}\n      dir=\"rtl\"\n      rowCount={contacts.length}\n      rowHeight={35}\n    />\n  );\n}",
+          "n": 0.066
+        }
+      }
+    },
+    {
+      "i": 18,
+      "$": {
+        "0": {
+          "v": "Horizontal lists",
+          "n": 0.707
+        },
+        "1": {
+          "v": "Other",
+          "n": 1
+        },
+        "2": {
+          "v": "A horizontal list is just a grid with only one row. Here's an example horizontal list (grid) of emails: abacon52@time.comabiasini11@stanford.eduagarett6e@unblog.fragwilt1e@sitemeter.comajekel58@unblog.franewbigging5f@prnewswire.comapeters7j@amazon.com Here's what the configuration for the grid above looks like: import { Grid } from \"react-window\";\n \nfunction HorizontalList({ emails }: { emails: string[] }) {\n  return (\n    <Grid\n      className=\"h-full\"\n      cellComponent={CellComponent}\n      cellProps={{ emails }}\n      columnCount={emails.length}\n      columnWidth={150}\n      rowCount={1}\n      rowHeight=\"100%\"\n    />\n  );\n} And here's the cell renderer: import { type CellComponentProps } from \"react-window\";\n \nfunction CellComponent({\n  columnIndex,\n  emails,\n  style\n}: CellComponentProps<{ emails: string[] }>) {\n  return (\n    <div\n      className={cn(\"px-2 truncate text-center leading-[2.5]\", {\n        \"bg-white/10 rounded\": columnIndex % 2 === 0\n      })}\n      style={style}\n    >\n      {emails[columnIndex]}\n    </div>\n  );\n}",
+          "n": 0.1
+        }
+      }
+    },
+    {
+      "i": 19,
+      "$": {
+        "0": {
+          "v": "Images",
+          "n": 1
+        },
+        "1": {
+          "v": "Other",
+          "n": 1
+        },
+        "2": {
+          "v": "Images are example of dynamic row heights. As with text, the useDynamicRowHeight hook can be used to measure images. import { List, useDynamicRowHeight } from \"react-window\";\n \nfunction Example({ images }: { images: string[] }) {\n  const rowHeight = useDynamicRowHeight({\n    defaultRowHeight: 250\n  });\n \n  return (\n    <List<RowProps>\n      rowComponent={RowComponent}\n      rowCount={images.length}\n      rowHeight={rowHeight}\n      rowProps={{ images }}\n    />\n  );\n} A loading placeholder might be rendered until the image has been measured for the first time. import { type RowComponentProps } from \"react-window\";\n \ntype RowProps = {\n  images: string[];\n};\n \nfunction RowComponent({ index, images, style }: RowComponentProps<RowProps>) {\n  const url = images[index];\n \n  return (\n    <div style={style}>\n      <LoadingSpinner className=\"absolute z-[-1]\" />\n      <img className=\"w-full\" src={url} />\n    </div>\n  );\n}",
+          "n": 0.098
+        }
+      }
+    },
+    {
+      "i": 20,
+      "$": {
+        "0": {
+          "v": "Sticky rows",
+          "n": 0.707
+        },
+        "1": {
+          "v": "Other",
+          "n": 1
+        },
+        "2": {
+          "v": "If you want to render content on top of your list or grid, the safest method is to use a portal and render them directly into the parent document. This avoids potential clipping issues or z-index conflicts. For the specific case of \"sticky\" rows, you can render within the parent list or grid using the children prop: The example above was created using code like this: import { List, type RowComponentProps } from \"react-window\";\n \nfunction Example() {\n  return (\n    <List\n      rowComponent={RowComponent}\n      rowCount={101}\n      rowHeight={20}\n      rowProps={EMPTY_OBJECT}\n    >\n      <div className=\"w-full h-0 top-0 sticky\">\n        <div className=\"h-[20px] bg-teal-600 px-2 rounded\">Sticky header</div>\n      </div>\n    </List>\n  );\n} Note the height of 0 in the example above prevents the sticky row from affecting the height of the parent list.",
+          "n": 0.092
+        }
+      }
+    },
+    {
+      "i": 21,
+      "$": {
+        "0": {
+          "v": "Requirements",
+          "n": 1
+        },
+        "2": {
+          "v": "This library requires React version 18 or newer. It also uses the ResizeObserver (or a polyfill) to calculate the available space for List and Grid components. ResizeObserver usage can be avoided if explicit pixel dimensions are specified using the style prop. (Percentage or EM/REM based dimensions do not count.)",
+          "n": 0.143
+        }
+      }
+    },
+    {
+      "i": 22,
+      "$": {
+        "0": {
+          "v": "Common questions",
+          "n": 0.707
+        },
+        "2": {
+          "v": "Can I render a scrolling indicator?One way to implement a scrolling indicator would be to use a custom hook as shown below:const [isScrolling, setIsScrolling] = useState(false);\n \nuseEffect(() => {\n  if (isScrolling) {\n    const timeout = setTimeout(() => setIsScrolling(false), 500);\n \n    return () => clearTimeout(timeout);\n  }\n}, [isScrolling]);\n \n<List\n  onScroll={() => {\n    setIsScrolling(true);\n  }}\n  rowProps={{ isScrolling }}\n  {...rest}\n/>;Can I attach a ref to the top-level HTMLDivElement?Although there is no prop exposed to do this directly, you can use a callback ref for this.const [ref] = useResizeObserver<HTMLDivElement>();\n \nconst listRef = useCallback(\n  (api: ListImperativeAPI) => {\n    const element = api?.element ?? null;\n \n    switch (typeof ref) {\n      case \"function\": {\n        ref(element);\n        break;\n      }\n      case \"object\": {\n        if (ref !== null) {\n          ref.current = element;\n        }\n        break;\n      }\n    }\n  },\n  [ref]\n);\n \n<List listRef={listRef} {...rest} />;Can Grid cells be auto-sized?No. Grid cell sizes must be known ahead of time- either because they are static or because they can be derived (from the data in CellProps) without needing to be rendered.",
+          "n": 0.08
+        }
+      }
+    },
+    {
+      "i": 23,
+      "$": {
+        "0": {
+          "v": "Support",
+          "n": 1
+        },
+        "2": {
+          "v": "GitHub is the easiest place to look for help, but it's probably not the fastest. This project is maintained by a single developer so there is limited bandwidth for answering questions. I recommend asking questions on Stack Overflow or Reddit to start with. Both sites have active communities who often respond quickly. If you don't find an answer there you can try opening a GitHub issue- but please take a moment first to see if your question has has already been answered before opening a new one.",
+          "n": 0.107
+        }
+      }
+    }
+  ]
+}
