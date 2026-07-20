@@ -96,6 +96,24 @@
       "name": "columnCount",
       "required": true
     },
+    "columnKey": {
+      "description": [
+        {
+          "content": "<p>Grids use the column index as a <code>key</code> by default.\nThis prop can be used along with the <code>rowKey</code> prop to provide a custom <code>key</code> value.</p>\n"
+        },
+        {
+          "content": "<p>Custom keys can ensure better UX for sortable or filterable grids,\nparticularly if your cell components are stateful.\nRefer to the <a href=\"https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key\">React documentation</a> for more info.</p>\n",
+          "intent": "primary"
+        },
+        {
+          "content": "<p>This prop cannot be auto-memoized because it is called during render.\nIt is important to always <code>useCallback</code> for this prop; do not use an inline function.</p>\n",
+          "intent": "warning"
+        }
+      ],
+      "html": "<div><span class=\"tok-variableName\"><span class=\"tok-propertyName\">columnKey</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">args</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">columnIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">data</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">CellProps</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">rowIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-variableName\">Key</span></div>",
+      "name": "columnKey",
+      "required": false
+    },
     "columnWidth": {
       "description": [
         {
@@ -189,6 +207,24 @@
       "html": "<div><span class=\"tok-labelName\"><span class=\"tok-propertyName\">rowHeight</span></span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">string</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">index</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">,</span><span class=\"\"> </span><span class=\"tok-variableName tok-definition\">cellProps</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">CellProps</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"tok-punctuation\">)</span></div>",
       "name": "rowHeight",
       "required": true
+    },
+    "rowKey": {
+      "description": [
+        {
+          "content": "<p>Grids use the row index as a <code>key</code> by default.\nThis prop can be used along with the <code>columnKey</code> prop to provide a custom <code>key</code> value.</p>\n"
+        },
+        {
+          "content": "<p>Custom keys can ensure better UX for sortable or filterable grids,\nparticularly if your cell components are stateful.\nRefer to the <a href=\"https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key\">React documentation</a> for more info.</p>\n",
+          "intent": "primary"
+        },
+        {
+          "content": "<p>This prop cannot be auto-memoized because it is called during render.\nIt is important to always <code>useCallback</code> for this prop; do not use an inline function.</p>\n",
+          "intent": "warning"
+        }
+      ],
+      "html": "<div><span class=\"tok-variableName\"><span class=\"tok-propertyName\">rowKey</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">args</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">data</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">CellProps</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-propertyName tok-definition\">rowIndex</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"> </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-variableName\">Key</span></div>",
+      "name": "rowKey",
+      "required": false
     },
     "tagName": {
       "description": [

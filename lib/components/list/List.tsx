@@ -37,6 +37,7 @@ export function List<
   rowComponent: RowComponentProp,
   rowCount,
   rowHeight: rowHeightProp,
+  rowKey,
   rowProps: rowPropsUnstable,
   tagName = "div" as TagName,
   style,
@@ -185,7 +186,7 @@ export function List<
               "aria-setsize": rowCount,
               role: "listitem"
             }}
-            key={index}
+            key={rowKey ? rowKey(index, rowProps) : index}
             index={index}
             style={{
               position: "absolute",
@@ -206,6 +207,7 @@ export function List<
     getCellBounds,
     isDynamicRowHeight,
     rowCount,
+    rowKey,
     rowProps,
     startIndexOverscan,
     stopIndexOverscan

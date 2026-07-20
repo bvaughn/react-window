@@ -1,5 +1,5 @@
 import { act, render, screen } from "@testing-library/react";
-import { createRef, useLayoutEffect } from "react";
+import { createRef, useEffect, useLayoutEffect, useRef } from "react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
 import { assert } from "../../utils/assert";
@@ -862,6 +862,117 @@ describe("List", () => {
           style={{ height: 42 }}
         />
       );
+    });
+  });
+
+  describe("rowKey", () => {
+    test("is used for every rendered row", () => {
+      const rowKey = vi.fn((index) => index);
+
+      render(
+        <List
+          rowCount={100}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowKey={rowKey}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      const items = screen.queryAllByRole("listitem");
+      expect(items).toHaveLength(7);
+      expect(rowKey).toHaveBeenCalledWith(0, EMPTY_OBJECT);
+      expect(rowKey).toHaveBeenCalledWith(1, EMPTY_OBJECT);
+      expect(rowKey).toHaveBeenCalledWith(2, EMPTY_OBJECT);
+      expect(rowKey).toHaveBeenCalledWith(3, EMPTY_OBJECT);
+      expect(rowKey).toHaveBeenCalledWith(4, EMPTY_OBJECT);
+      expect(rowKey).toHaveBeenCalledWith(5, EMPTY_OBJECT);
+      expect(rowKey).toHaveBeenCalledWith(6, EMPTY_OBJECT);
+    });
+
+    test("preserves state when list order changes", async () => {
+      let data = new Array(5).fill(true).map((_, index) => index);
+
+      const rowKey = vi.fn((index) => data[index]);
+      const renderLog: string[] = [];
+
+      function LocalRowComponent({
+        data,
+        index,
+        style
+      }: RowComponentProps<{ data: number[] }>) {
+        const id = data[index];
+
+        const idDuringMountRef = useRef(id);
+
+        useEffect(() => {
+          if (idDuringMountRef.current === id) {
+            renderLog.push(`index: ${index}, id: ${id}`);
+            return;
+          }
+
+          throw Error(
+            `Expected id "${idDuringMountRef.current}" but was "${id}"`
+          );
+        });
+
+        return (
+          <div role="listitem" style={style}>
+            Index {index}, id {id}
+          </div>
+        );
+      }
+
+      const { rerender } = render(
+        <List
+          rowCount={data.length}
+          rowComponent={LocalRowComponent}
+          rowHeight={25}
+          rowKey={rowKey}
+          rowProps={{ data }}
+        />
+      );
+
+      const items = screen.queryAllByRole("listitem");
+      expect(items).toHaveLength(5);
+      expect(rowKey).toHaveBeenCalled();
+      expect(renderLog).toMatchInlineSnapshot(`
+        [
+          "index: 0, id: 0",
+          "index: 1, id: 1",
+          "index: 2, id: 2",
+          "index: 3, id: 3",
+          "index: 4, id: 4",
+        ]
+      `);
+
+      renderLog.splice(0);
+      rowKey.mockReset();
+
+      await act(async () => {
+        data = [...data.reverse()];
+
+        rerender(
+          <List
+            rowCount={data.length}
+            rowComponent={LocalRowComponent}
+            rowHeight={25}
+            rowKey={rowKey}
+            rowProps={{ data }}
+          />
+        );
+      });
+
+      expect(rowKey).toHaveBeenCalled();
+      expect(renderLog).toMatchInlineSnapshot(`
+        [
+          "index: 0, id: 4",
+          "index: 1, id: 3",
+          "index: 2, id: 2",
+          "index: 3, id: 1",
+          "index: 4, id: 0",
+        ]
+      `);
     });
   });
 

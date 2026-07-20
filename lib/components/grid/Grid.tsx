@@ -32,6 +32,7 @@ export function Grid<
   children,
   className,
   columnCount,
+  columnKey,
   columnWidth,
   defaultHeight = 0,
   defaultWidth = 0,
@@ -42,6 +43,7 @@ export function Grid<
   overscanCount = 3,
   rowCount,
   rowHeight,
+  rowKey,
   style,
   tagName = "div" as TagName,
   ...rest
@@ -248,7 +250,15 @@ export function Grid<
                 role: "gridcell"
               }}
               columnIndex={columnIndex}
-              key={columnIndex}
+              key={
+                columnKey
+                  ? columnKey({
+                      columnIndex,
+                      data: cellProps,
+                      rowIndex
+                    })
+                  : columnIndex
+              }
               rowIndex={rowIndex}
               style={{
                 position: "absolute",
@@ -263,7 +273,18 @@ export function Grid<
         }
 
         children.push(
-          <div key={rowIndex} role="row" aria-rowindex={rowIndex + 1}>
+          <div
+            key={
+              rowKey
+                ? rowKey({
+                    data: cellProps,
+                    rowIndex
+                  })
+                : rowIndex
+            }
+            role="row"
+            aria-rowindex={rowIndex + 1}
+          >
             {columns}
           </div>
         );
@@ -274,12 +295,14 @@ export function Grid<
     CellComponent,
     cellProps,
     columnCount,
+    columnKey,
     columnStartIndexOverscan,
     columnStopIndexOverscan,
     getColumnBounds,
     getRowBounds,
     isRtl,
     rowCount,
+    rowKey,
     rowStartIndexOverscan,
     rowStopIndexOverscan
   ]);

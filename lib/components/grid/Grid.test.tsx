@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { createRef, useLayoutEffect } from "react";
+import { act, createRef, useEffect, useLayoutEffect, useRef } from "react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
 import {
@@ -74,6 +74,147 @@ describe("Grid", () => {
     // 4 columns (+2) by 2 rows (+2)
     const items = screen.queryAllByRole("gridcell");
     expect(items).toHaveLength(24);
+  });
+
+  describe("custom keys", () => {
+    test("are called for every rendered column and row", () => {
+      const columnKey = vi.fn(({ columnIndex }) => columnIndex);
+      const rowKey = vi.fn(({ rowIndex }) => rowIndex);
+
+      render(
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={EMPTY_OBJECT}
+          columnCount={100}
+          columnKey={columnKey}
+          columnWidth={25}
+          overscanCount={0}
+          rowCount={100}
+          rowHeight={20}
+          rowKey={rowKey}
+        />
+      );
+
+      for (let index = 0; index < 4; index++) {
+        expect(columnKey).toHaveBeenCalledWith({
+          columnIndex: index,
+          data: EMPTY_OBJECT,
+          rowIndex: 0
+        });
+        expect(columnKey).toHaveBeenCalledWith({
+          columnIndex: index,
+          data: EMPTY_OBJECT,
+          rowIndex: 1
+        });
+      }
+      for (let index = 0; index < 2; index++) {
+        expect(rowKey).toHaveBeenCalledWith({
+          data: EMPTY_OBJECT,
+          rowIndex: index
+        });
+      }
+    });
+
+    test("preserves state when list order changes", async () => {
+      let data = [
+        [1, 2, 3],
+        [4, 5, 6]
+      ];
+
+      const columnKey = vi.fn(
+        ({ columnIndex, rowIndex }) => data[rowIndex][columnIndex]
+      );
+      const rowKey = vi.fn(({ rowIndex }) => data[rowIndex][0]);
+      const renderLog: string[] = [];
+
+      function LocalCellComponent({
+        columnIndex,
+        data,
+        rowIndex,
+        style
+      }: CellComponentProps<{ data: number[][] }>) {
+        const id = data[rowIndex][columnIndex];
+
+        const idDuringMountRef = useRef(id);
+
+        useEffect(() => {
+          if (idDuringMountRef.current === id) {
+            renderLog.push(
+              `row: ${rowIndex}, column: ${columnIndex}, id: ${id}`
+            );
+            return;
+          }
+
+          throw Error(
+            `Expected id "${idDuringMountRef.current}" but was "${id}"`
+          );
+        });
+
+        return <div role="listitem" style={style} />;
+      }
+
+      const { rerender } = render(
+        <Grid
+          cellComponent={LocalCellComponent}
+          cellProps={{ data }}
+          columnCount={3}
+          columnKey={columnKey}
+          columnWidth={25}
+          overscanCount={0}
+          rowCount={100}
+          rowHeight={20}
+          rowKey={rowKey}
+        />
+      );
+
+      expect(columnKey).toHaveBeenCalled();
+      expect(rowKey).toHaveBeenCalled();
+      expect(renderLog).toMatchInlineSnapshot(`
+        [
+          "row: 0, column: 0, id: 1",
+          "row: 0, column: 1, id: 2",
+          "row: 0, column: 2, id: 3",
+          "row: 1, column: 0, id: 4",
+          "row: 1, column: 1, id: 5",
+          "row: 1, column: 2, id: 6",
+        ]
+      `);
+
+      renderLog.splice(0);
+      columnKey.mockReset();
+      rowKey.mockReset();
+
+      await act(async () => {
+        data = [...data.reverse()];
+
+        rerender(
+          <Grid
+            cellComponent={LocalCellComponent}
+            cellProps={{ data }}
+            columnCount={3}
+            columnKey={columnKey}
+            columnWidth={25}
+            overscanCount={0}
+            rowCount={100}
+            rowHeight={20}
+            rowKey={rowKey}
+          />
+        );
+      });
+
+      expect(columnKey).toHaveBeenCalled();
+      expect(rowKey).toHaveBeenCalled();
+      expect(renderLog).toMatchInlineSnapshot(`
+        [
+          "row: 0, column: 0, id: 4",
+          "row: 0, column: 1, id: 5",
+          "row: 0, column: 2, id: 6",
+          "row: 1, column: 0, id: 1",
+          "row: 1, column: 1, id: 2",
+          "row: 1, column: 2, id: 3",
+        ]
+      `);
+    });
   });
 
   describe("cell sizes", () => {

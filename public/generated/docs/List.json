@@ -135,6 +135,24 @@
       "name": "rowHeight",
       "required": true
     },
+    "rowKey": {
+      "description": [
+        {
+          "content": "<p>Lists use the row index as a <code>key</code> by default.\nThis prop can provide a custom <code>key</code> value.</p>\n"
+        },
+        {
+          "content": "<p>Custom keys can ensure better UX for sortable or filterable lists,\nparticularly if your row components are stateful.\nRefer to the <a href=\"https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key\">React documentation</a> for more info.</p>\n",
+          "intent": "primary"
+        },
+        {
+          "content": "<p>This prop cannot be auto-memoized because it is called during render.\nIt is important to always <code>useCallback</code> for this prop; do not use an inline function.</p>\n",
+          "intent": "warning"
+        }
+      ],
+      "html": "<div><span class=\"tok-variableName\"><span class=\"tok-propertyName\">rowKey</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-variableName tok-definition\">index</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">,</span><span class=\"\"> </span><span class=\"tok-variableName tok-definition\">data</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">RowProps</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-variableName\">Key</span></div>",
+      "name": "rowKey",
+      "required": false
+    },
     "rowProps": {
       "description": [
         {

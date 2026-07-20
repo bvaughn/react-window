@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.0
+
+- Add optional `rowKey` prop to `List` and add optional `rowKey`/`columnKey` prop to `Grid`.
+
 ## 2.2.7
 
 - Fixed a problem with project logo not displaying correctly in the README for the Firefox browser.

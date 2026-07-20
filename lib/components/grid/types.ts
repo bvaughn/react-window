@@ -62,6 +62,23 @@ export type GridProps<
   columnCount: number;
 
   /**
+   * Grids use the column index as a `key` by default.
+   * This prop can be used along with the `rowKey` prop to provide a custom `key` value.
+   *
+   * ℹ️ Custom keys can ensure better UX for sortable or filterable grids,
+   * particularly if your cell components are stateful.
+   * Refer to the [React documentation](https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key) for more info.
+   *
+   * ⚠️ This prop cannot be auto-memoized because it is called during render.
+   * It is important to always `useCallback` for this prop; do not use an inline function.
+   */
+  columnKey?: (args: {
+    columnIndex: number;
+    data: CellProps;
+    rowIndex: number;
+  }) => React.Key;
+
+  /**
    * Column width; the following formats are supported:
    * - number of pixels (number)
    * - percentage of the grid's current width (string)
@@ -200,6 +217,19 @@ export type GridProps<
     | number
     | string
     | ((index: number, cellProps: CellProps) => number);
+
+  /**
+   * Grids use the row index as a `key` by default.
+   * This prop can be used along with the `columnKey` prop to provide a custom `key` value.
+   *
+   * ℹ️ Custom keys can ensure better UX for sortable or filterable grids,
+   * particularly if your cell components are stateful.
+   * Refer to the [React documentation](https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key) for more info.
+   *
+   * ⚠️ This prop cannot be auto-memoized because it is called during render.
+   * It is important to always `useCallback` for this prop; do not use an inline function.
+   */
+  rowKey?: (args: { data: CellProps; rowIndex: number }) => React.Key;
 
   /**
    * Optional CSS properties.
