@@ -8,10 +8,10 @@ export function useIsRtl(
   const [value, setValue] = useState(dir === "rtl");
 
   useLayoutEffect(() => {
-    if (element) {
-      if (!dir) {
-        setValue(isRtl(element));
-      }
+    if (dir) {
+      setValue(dir === "rtl");
+    } else if (element) {
+      setValue(isRtl(element));
     }
   }, [dir, element]);
 
