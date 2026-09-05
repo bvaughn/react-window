@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.1
+
+- Grid updates direction when `dir` prop changes after mount
+
 ## 2.3.0
 
 - Add optional `rowKey` prop to `List` and add optional `rowKey`/`columnKey` prop to `Grid`.
