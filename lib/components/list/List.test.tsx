@@ -583,6 +583,88 @@ describe("List", () => {
     });
 
     describe("type: DynamicRowHeight", () => {
+      test.each([0, 2, 100])(
+        "does not observe additional children with %s rows",
+        (rowCount) => {
+          const observeRowElements = vi.fn<
+            (elements: Element[] | NodeListOf<Element>) => () => void
+          >(() => () => {});
+          const rowHeight = {
+            getRowHeight: () => 25,
+            getAverageRowHeight: () => 25,
+            setRowHeight: () => {},
+            observeRowElements
+          };
+          render(
+            <List
+              rowCount={rowCount}
+              rowHeight={rowHeight}
+              rowComponent={RowComponent}
+              rowProps={EMPTY_OBJECT}
+            >
+              <div data-testid="overlay">Overlay</div>
+            </List>
+          );
+          expect(screen.getByTestId("overlay")).not.toHaveAttribute(
+            DATA_ATTRIBUTE_LIST_INDEX
+          );
+          expect(observeRowElements).toHaveBeenCalled();
+          for (const [rows] of observeRowElements.mock.calls) {
+            expect(rows.length).toBeLessThanOrEqual(rowCount);
+            for (const row of rows)
+              expect(row).toHaveAttribute("role", "listitem");
+          }
+        }
+      );
+
+      test.each(["unmount", "timeout"])(
+        "stops pending correction on %s",
+        (reason) => {
+          let frame: FrameRequestCallback | undefined;
+          const requestFrame = vi
+            .spyOn(window, "requestAnimationFrame")
+            .mockImplementation((callback) => {
+              frame = callback;
+              return 42;
+            });
+          const cancelFrame = vi
+            .spyOn(window, "cancelAnimationFrame")
+            .mockImplementation(() => {});
+          const now = vi.spyOn(performance, "now").mockReturnValue(0);
+          const listRef = createRef<ListImperativeAPI>();
+          function PendingScrollExample() {
+            const rowHeight = useDynamicRowHeight({ defaultRowHeight: 25 });
+            return (
+              <List
+                listRef={listRef}
+                rowCount={100}
+                rowHeight={rowHeight}
+                rowComponent={RowComponent}
+                rowProps={EMPTY_OBJECT}
+              />
+            );
+          }
+          const { unmount } = render(<PendingScrollExample />);
+          try {
+            act(() => listRef.current?.scrollToRow({ index: 50 }));
+            expect(requestFrame).toHaveBeenCalledTimes(1);
+            if (reason === "unmount") {
+              unmount();
+              expect(cancelFrame).toHaveBeenCalledWith(42);
+            } else {
+              now.mockReturnValue(1001);
+              act(() => frame?.(1001));
+              expect(requestFrame).toHaveBeenCalledTimes(1);
+            }
+          } finally {
+            unmount();
+            requestFrame.mockRestore();
+            cancelFrame.mockRestore();
+            now.mockRestore();
+          }
+        }
+      );
+
       let onRowsRendered: ReturnType<typeof vi.fn>;
 
       function Example() {

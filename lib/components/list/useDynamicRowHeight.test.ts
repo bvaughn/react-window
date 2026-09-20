@@ -7,6 +7,22 @@ import { NOOP_FUNCTION } from "../../../src/constants";
 
 describe("useDynamicRowHeight", () => {
   describe("getAverageRowHeight", () => {
+    test("does not include estimates read by getRowHeight", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({ defaultRowHeight: 100 })
+      );
+      for (let index = 0; index < 250; index++) {
+        expect(result.current.getRowHeight(index)).toBe(100);
+      }
+      act(() => {
+        result.current.setRowHeight(0, 20);
+        result.current.setRowHeight(1, 40);
+      });
+      expect(result.current.getAverageRowHeight()).toBe(30);
+      expect(result.current.getRowHeight(200)).toBe(100);
+      expect(result.current.getAverageRowHeight()).toBe(30);
+    });
+
     test("returns an initial estimate based on the defaultRowHeight", () => {
       const { result } = renderHook(() =>
         useDynamicRowHeight({

@@ -45,6 +45,10 @@ export default function DynamicRowHeightsRoute() {
         recommended to provide your own height values if they can be determined
         ahead of time.
       </Callout>
+      <Callout>
+        Dynamic-height lists scroll to the target row <strong>instantly</strong>
+        , even when smooth scrolling is requested.
+      </Callout>
       <ContinueLink to="/list/imperative-handle" title="imperative methods" />
     </Box>
   );
