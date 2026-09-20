@@ -6,6 +6,7 @@ import {
   useEffect,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState,
   type ReactElement,
   type ReactNode
@@ -13,10 +14,11 @@ import {
 import { useVirtualizer } from "../../core/useVirtualizer";
 import { useIsomorphicLayoutEffect } from "../../hooks/useIsomorphicLayoutEffect";
 import { useMemoizedObject } from "../../hooks/useMemoizedObject";
-import type { Align, TagNames } from "../../types";
+import type { TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import { isDynamicRowHeight as isDynamicRowHeightUtil } from "./isDynamicRowHeight";
 import type { ListProps } from "./types";
+import { useScrollToRow } from "./useScrollToRow";
 
 export const DATA_ATTRIBUTE_LIST_INDEX = "data-react-window-index";
 
@@ -86,37 +88,25 @@ export function List<
     overscanCount
   });
 
+  const rowElements = useRef<Element[]>([]);
+  const scrollToRow = useScrollToRow({
+    element,
+    getCellBounds,
+    isDynamicRowHeight,
+    rowCount,
+    rowElements,
+    scrollToIndex
+  });
+
   useImperativeHandle(
     listRef,
     () => ({
       get element() {
         return element;
       },
-
-      scrollToRow({
-        align = "auto",
-        behavior = "auto",
-        index
-      }: {
-        align?: Align;
-        behavior?: ScrollBehavior;
-        index: number;
-      }) {
-        const top = scrollToIndex({
-          align,
-          containerScrollOffset: element?.scrollTop ?? 0,
-          index
-        });
-
-        if (typeof element?.scrollTo === "function") {
-          element.scrollTo({
-            behavior,
-            top
-          });
-        }
-      }
+      scrollToRow
     }),
-    [element, scrollToIndex]
+    [element, scrollToRow]
   );
 
   useIsomorphicLayoutEffect(() => {
@@ -124,17 +114,25 @@ export function List<
       return;
     }
 
-    const rows = Array.from(element.children).filter((item, index) => {
-      if (item.hasAttribute("aria-hidden")) {
-        // Ignore sizing element
-        return false;
-      }
+    // Additional children (e.g. overlays) are not rows and must not be measured.
+    const rows = Array.from(element.children)
+      .slice(
+        0,
+        startIndexOverscan < 0 ? 0 : stopIndexOverscan - startIndexOverscan + 1
+      )
+      .filter((item, index) => {
+        if (item.hasAttribute("aria-hidden")) {
+          // Ignore sizing element
+          return false;
+        }
 
-      const attribute = `${startIndexOverscan + index}`;
-      item.setAttribute(DATA_ATTRIBUTE_LIST_INDEX, attribute);
+        const attribute = `${startIndexOverscan + index}`;
+        item.setAttribute(DATA_ATTRIBUTE_LIST_INDEX, attribute);
 
-      return true;
-    });
+        return true;
+      });
+
+    rowElements.current = rows;
 
     if (isDynamicRowHeight) {
       return rowHeightProp.observeRowElements(rows);

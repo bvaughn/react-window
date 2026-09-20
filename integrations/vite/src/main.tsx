@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { DecoderRoute } from "./routes/Decoder";
 import { HomeRoute } from "./routes/Home";
 import { GridRoute } from "./routes/Grid";
+import { ListDynamicRoute } from "./routes/ListDynamic";
 import { ListRoute } from "./routes/List";
 
 import "./tailwind.css";
@@ -14,6 +15,7 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/" element={<HomeRoute />} />
         <Route path="/list" element={<ListRoute />} />
+        <Route path="/list-dynamic" element={<ListDynamicRoute />} />
         <Route path="/grid" element={<GridRoute />} />
         <Route path="/decoder/:encoded" element={<DecoderRoute />} />
       </Routes>

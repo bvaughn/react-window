@@ -29,6 +29,54 @@ describe("getOffsetForIndex", () => {
   };
 
   describe("align", () => {
+    test.each(["auto", "smart"] as const)(
+      "%s scrolls to an offscreen row when the initial total is underestimated",
+      (align) => {
+        const itemSize = (index: number) => (index === 0 ? 1 : 100);
+        const cachedBounds = createCachedBounds({
+          itemCount: 100,
+          itemProps: EMPTY_OBJECT,
+          itemSize
+        });
+        expect(
+          getOffsetForIndex({
+            align,
+            cachedBounds,
+            itemSize,
+            itemCount: 100,
+            index: 50,
+            containerSize: 100,
+            containerScrollOffset: 0
+          })
+        ).toBe(4901);
+      }
+    );
+
+    test.each(["auto", "smart"] as const)(
+      "%s preserves the offset inside an oversized row",
+      (align) => {
+        const itemSize = 200;
+        const cachedBounds = createCachedBounds({
+          itemCount: 10,
+          itemProps: EMPTY_OBJECT,
+          itemSize
+        });
+        for (const containerScrollOffset of [400, 450, 500]) {
+          expect(
+            getOffsetForIndex({
+              ...DEFAULT_ARGS,
+              align,
+              cachedBounds,
+              itemSize,
+              index: 2,
+              containerSize: 100,
+              containerScrollOffset
+            })
+          ).toBe(containerScrollOffset);
+        }
+      }
+    );
+
     function createTestHelper(align: Align) {
       return function testHelperAuto(
         index: number,

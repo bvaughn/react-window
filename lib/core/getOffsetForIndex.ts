@@ -25,13 +25,14 @@ export function getOffsetForIndex<Props extends object>({
     });
   }
 
+  // Populate the target bounds before estimating the total from cached sizes.
+  const bounds = cachedBounds.get(index);
   const estimatedTotalSize = getEstimatedSize({
     cachedBounds,
     itemCount,
     itemSize
   });
 
-  const bounds = cachedBounds.get(index);
   const maxOffset = Math.max(
     0,
     Math.min(estimatedTotalSize - containerSize, bounds.scrollOffset)
@@ -41,15 +42,17 @@ export function getOffsetForIndex<Props extends object>({
     bounds.scrollOffset - containerSize + bounds.size
   );
 
+  // Visibility depends on the row itself, not the estimated scroll extent.
+  // For oversized rows, leave the offset alone when the row fills the viewport.
+  const isVisible =
+    bounds.size > containerSize
+      ? containerScrollOffset >= bounds.scrollOffset &&
+        containerScrollOffset <= minOffset
+      : containerScrollOffset >= minOffset &&
+        containerScrollOffset <= bounds.scrollOffset;
+
   if (align === "smart") {
-    if (
-      containerScrollOffset >= minOffset &&
-      containerScrollOffset <= maxOffset
-    ) {
-      align = "auto";
-    } else {
-      align = "center";
-    }
+    align = isVisible ? "auto" : "center";
   }
 
   switch (align) {
@@ -75,10 +78,7 @@ export function getOffsetForIndex<Props extends object>({
     }
     case "auto":
     default: {
-      if (
-        containerScrollOffset >= minOffset &&
-        containerScrollOffset <= maxOffset
-      ) {
+      if (isVisible) {
         return containerScrollOffset;
       } else if (containerScrollOffset < minOffset) {
         return minOffset;

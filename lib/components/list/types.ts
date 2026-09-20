@@ -57,6 +57,12 @@ export type ListProps<
     /**
      * Scrolls the list so that the specified row is visible.
      *
+     * Dynamic row heights are measured after rendering;
+     * Content that resizes later may require another scrollToRow call.
+     *
+     * ⚠️ `behavior` "smooth" is ignored for dynamic height lists;
+     * `scrollToRow` is instant as it requires rows to be lazily measured
+     *
      * @param align Determines the vertical alignment of the element within the list
      * @param behavior Determines whether scrolling is instant or animates smoothly
      * @param index Index of the row to scroll to (0-based)
@@ -199,6 +205,12 @@ export interface ListImperativeAPI {
 
   /**
    * Scrolls the list so that the specified row is visible.
+   *
+   * Dynamic row heights are measured after rendering;
+   * Content that resizes later may require another scrollToRow call.
+   *
+   * ⚠️ `behavior` "smooth" is ignored for dynamic height lists;
+   * `scrollToRow` is instant as it requires rows to be lazily measured
    *
    * @param align Determines the vertical alignment of the element within the list
    * @param behavior Determines whether scrolling is instant or animates smoothly
