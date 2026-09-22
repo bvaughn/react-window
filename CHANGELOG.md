@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.3.2
+
+- Improve `scrollToRow` accuracy for dynamic height rows
+- Bugs fixes
+  - Fix RTL scrolling and alignment
+  - Fix stale row measurements after keyed reordering
+  - Fixed dropped prop updates
+  - Use fractional percentage sizing
+  - Fix center alignment near list boundaries
+- Performance tweaks:
+  - Improve scrolling performance by calculating fixed-size visible ranges directly and searching cached variable-size bounds instead of scanning from the beginning.
+  - Fixed-size jumps also avoid allocating bounds for preceding items.
+
 ## 2.3.1
 
 - Grid updates direction when `dir` prop changes after mount
