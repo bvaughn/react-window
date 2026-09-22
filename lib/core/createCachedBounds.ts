@@ -13,23 +13,24 @@ export function createCachedBounds<Props extends object>({
   const cache = new Map<number, Bounds>();
 
   return {
+    itemSize: typeof itemSize === "number" ? itemSize : undefined,
     get(index: number) {
       assert(index < itemCount, `Invalid index ${index}`);
+
+      if (typeof itemSize === "number") {
+        assert(index >= 0, `Invalid index ${index}`);
+        let bounds = cache.get(index);
+        if (bounds === undefined) {
+          bounds = { size: itemSize, scrollOffset: index * itemSize };
+          cache.set(index, bounds);
+        }
+        return bounds;
+      }
 
       while (cache.size - 1 < index) {
         const currentIndex = cache.size;
 
-        let size: number;
-        switch (typeof itemSize) {
-          case "function": {
-            size = itemSize(currentIndex, itemProps);
-            break;
-          }
-          case "number": {
-            size = itemSize;
-            break;
-          }
-        }
+        const size = itemSize(currentIndex, itemProps);
 
         if (currentIndex === 0) {
           cache.set(currentIndex, {

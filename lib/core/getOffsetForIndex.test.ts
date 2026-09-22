@@ -174,3 +174,75 @@ describe("getOffsetForIndex", () => {
     });
   });
 });
+
+test("variable-size start alignment measures target before estimating total", () => {
+  const itemSize = (index: number) => (index < 10 ? 10 : 100);
+  const cachedBounds = createCachedBounds({
+    itemCount: 100,
+    itemSize,
+    itemProps: {}
+  });
+  cachedBounds.get(9);
+  expect(
+    getOffsetForIndex({
+      align: "start",
+      cachedBounds,
+      itemCount: 100,
+      itemSize,
+      index: 90,
+      containerScrollOffset: 0,
+      containerSize: 100
+    })
+  ).toBe(8100);
+});
+
+test("center alignment uses the item midpoint near the start", () => {
+  const cachedBounds = createCachedBounds({
+    itemCount: 100,
+    itemSize: 100,
+    itemProps: {}
+  });
+  expect(
+    getOffsetForIndex({
+      align: "center",
+      cachedBounds,
+      itemCount: 100,
+      itemSize: 100,
+      index: 2,
+      containerScrollOffset: 0,
+      containerSize: 450
+    })
+  ).toBe(25);
+});
+
+test.each([
+  {
+    itemSize: 1000,
+    itemCount: 10,
+    index: 0,
+    containerSize: 100,
+    expected: 450
+  },
+  { itemSize: 10, itemCount: 2, index: 1, containerSize: 100, expected: 0 },
+  { itemSize: 100, itemCount: 10, index: 9, containerSize: 450, expected: 550 }
+])(
+  "clamps centered items to the scrollable extent: $expected",
+  ({ itemSize, itemCount, index, containerSize, expected }) => {
+    const cachedBounds = createCachedBounds({
+      itemSize,
+      itemCount,
+      itemProps: {}
+    });
+    expect(
+      getOffsetForIndex({
+        align: "center",
+        cachedBounds,
+        itemSize,
+        itemCount,
+        index,
+        containerSize,
+        containerScrollOffset: 0
+      })
+    ).toBe(expected);
+  }
+);

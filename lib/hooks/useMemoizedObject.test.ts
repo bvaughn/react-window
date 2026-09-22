@@ -50,3 +50,35 @@ describe("useMemoizedObject", () => {
     });
   });
 });
+
+test("changing prop names with identical values updates the props", () => {
+  const { result, rerender } = renderHook(
+    (props: object) => useMemoizedObject(props),
+    { initialProps: { a: 1 } as object }
+  );
+  rerender({ b: 1 });
+  expect(result.current).toEqual({ b: 1 });
+});
+
+test("adding an optional prop updates the props", () => {
+  const { result, rerender } = renderHook(
+    (props: object) => useMemoizedObject(props),
+    { initialProps: { a: 1 } as object }
+  );
+  rerender({ a: 1, b: 2 });
+  expect(result.current).toEqual({ a: 1, b: 2 });
+});
+
+test("removes optional props and compares undefined-valued keys", () => {
+  const { result, rerender } = renderHook(
+    (props: object) => useMemoizedObject(props),
+    { initialProps: { a: 1, b: undefined } as object }
+  );
+  rerender({ a: 1, c: undefined });
+  expect(result.current).toEqual({ a: 1, c: undefined });
+  rerender({ a: 1 });
+  expect(result.current).toEqual({ a: 1 });
+  const previous = result.current;
+  rerender({ a: 1 });
+  expect(result.current).toBe(previous);
+});

@@ -20,7 +20,7 @@ export function useItemSize<Props extends object>({
         "Container size must be defined if a percentage item size is specified"
       );
 
-      itemSize = (containerSize * parseInt(itemSizeProp)) / 100;
+      itemSize = (containerSize * parseFloat(itemSizeProp)) / 100;
       break;
     }
     default: {

@@ -67,3 +67,18 @@ describe("createCachedBounds", () => {
     }).toThrow("Invalid index 1");
   });
 });
+
+test("fixed-size jumps do not allocate bounds for preceding items", () => {
+  const cachedBounds = createCachedBounds({
+    itemCount: 1000000,
+    itemProps: {},
+    itemSize: 20
+  });
+  expect(cachedBounds.get(999999)).toEqual({
+    scrollOffset: 19999980,
+    size: 20
+  });
+  expect(cachedBounds.size).toBe(1);
+  expect(cachedBounds.get(0)).toEqual({ scrollOffset: 0, size: 20 });
+  expect(cachedBounds.size).toBe(2);
+});

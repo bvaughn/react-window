@@ -138,9 +138,13 @@ export function List<
       return rowHeightProp.observeRowElements(rows);
     }
   }, [
+    RowComponent,
     element,
     isDynamicRowHeight,
+    rowCount,
     rowHeightProp,
+    rowKey,
+    rowProps,
     startIndexOverscan,
     stopIndexOverscan
   ]);
