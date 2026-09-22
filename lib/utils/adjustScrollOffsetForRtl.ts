@@ -23,8 +23,8 @@ export function adjustScrollOffsetForRtl({
         }
         case "positive-descending": {
           if (containerElement) {
-            const { clientWidth, scrollLeft, scrollWidth } = containerElement;
-            return scrollWidth - clientWidth - scrollLeft;
+            const { clientWidth, scrollWidth } = containerElement;
+            return scrollWidth - clientWidth - scrollOffset;
           }
           break;
         }

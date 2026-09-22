@@ -4,6 +4,10 @@ export type Bounds = {
 };
 
 export type CachedBounds = {
+  /**
+   * Fixed size, when bounds can be calculated without measuring earlier items.
+   */
+  itemSize?: number;
   get(index: number): Bounds;
   set(index: number, bounds: Bounds): void;
   size: number;

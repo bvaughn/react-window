@@ -1,10 +1,16 @@
-import { useMemo } from "react";
+import { useState } from "react";
+import { shallowCompare } from "../utils/shallowCompare";
 
 export function useMemoizedObject<Type extends object>(
   unstableObject: Type
 ): Type {
-  return useMemo(() => {
+  const [memoizedObject, setMemoizedObject] = useState(unstableObject);
+
+  if (!shallowCompare(memoizedObject, unstableObject)) {
+    setMemoizedObject(unstableObject);
+
     return unstableObject;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, Object.values(unstableObject));
+  }
+
+  return memoizedObject;
 }

@@ -209,6 +209,7 @@ export function useVirtualizer<Props extends object>({
     containerElement,
     containerSize,
     direction,
+    isRtl,
     itemCount,
     overscanCount
   ]);
@@ -226,7 +227,12 @@ export function useVirtualizer<Props extends object>({
       let scrollOffset = getOffsetForIndex({
         align,
         cachedBounds,
-        containerScrollOffset,
+        containerScrollOffset: adjustScrollOffsetForRtl({
+          containerElement,
+          direction,
+          isRtl,
+          scrollOffset: containerScrollOffset
+        }),
         containerSize,
         index,
         itemCount,

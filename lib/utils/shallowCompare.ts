@@ -20,7 +20,7 @@ export function shallowCompare<Type extends object>(
   }
 
   for (const key in a) {
-    if (!Object.is(b[key], a[key])) {
+    if (!Object.hasOwn(b, key) || !Object.is(b[key], a[key])) {
       return false;
     }
   }

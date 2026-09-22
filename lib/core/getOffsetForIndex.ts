@@ -63,18 +63,13 @@ export function getOffsetForIndex<Props extends object>({
       return minOffset;
     }
     case "center": {
-      if (bounds.scrollOffset <= containerSize / 2) {
-        // Too near the beginning to center-align
-        return 0;
-      } else if (
-        bounds.scrollOffset + bounds.size / 2 >=
-        estimatedTotalSize - containerSize / 2
-      ) {
-        // Too near the end to center-align
-        return estimatedTotalSize - containerSize;
-      } else {
-        return bounds.scrollOffset + bounds.size / 2 - containerSize / 2;
-      }
+      return Math.max(
+        0,
+        Math.min(
+          estimatedTotalSize - containerSize,
+          bounds.scrollOffset + bounds.size / 2 - containerSize / 2
+        )
+      );
     }
     case "auto":
     default: {
