@@ -291,6 +291,41 @@ test("initial variable-size lookup only measures the viewport", () => {
   expect(measurements).toBe(25);
 });
 
+test.each([0, 25])(
+  "deep variable-size lookup with %i cached rows only measures through the viewport",
+  (cachedRowCount) => {
+    let measurements = 0;
+    const cachedBounds = createCachedBounds({
+      itemCount: 100000,
+      itemProps: {},
+      itemSize: (index) => {
+        measurements++;
+        return index % 2 === 0 ? 10 : 30;
+      }
+    });
+    if (cachedRowCount > 0) {
+      cachedBounds.get(cachedRowCount - 1);
+    }
+    measurements = 0;
+
+    const result = getStartStopIndices({
+      cachedBounds,
+      containerScrollOffset: 50000,
+      containerSize: 80,
+      itemCount: 100000,
+      overscanCount: 3
+    });
+
+    expect(result).toEqual({
+      startIndexVisible: 2500,
+      stopIndexVisible: 2503,
+      startIndexOverscan: 2497,
+      stopIndexOverscan: 2506
+    });
+    expect(measurements).toBe(2504 - cachedRowCount);
+  }
+);
+
 test("matches a linear lookup across boundaries, zero sizes and scroll directions", () => {
   for (const sizes of [
     [],

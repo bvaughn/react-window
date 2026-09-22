@@ -46,18 +46,9 @@ export function getStartStopIndices({
       )
     );
   } else {
-    // Search the measured prefix first. Grow the search exponentially only
-    // when scrolling beyond it, so an initial render doesn't measure the list.
+    // Binary search the measured prefix
     let low = 0;
     let high = Math.min(maxIndex, Math.max(0, cachedBounds.size - 1));
-    let step = 1;
-    while (high < maxIndex) {
-      const bounds = cachedBounds.get(high);
-      if (bounds.scrollOffset + bounds.size > containerScrollOffset) break;
-      low = high + 1;
-      high = Math.min(maxIndex, high + step);
-      step *= 2;
-    }
 
     while (low < high) {
       const middle = Math.floor((low + high) / 2);
@@ -67,6 +58,13 @@ export function getStartStopIndices({
       } else {
         low = middle + 1;
       }
+    }
+
+    // Extend sequentially beyond the measured prefix to avoid evaluating item sizes past the viewport
+    while (low < maxIndex) {
+      const bounds = cachedBounds.get(low);
+      if (bounds.scrollOffset + bounds.size > containerScrollOffset) break;
+      low++;
     }
 
     startIndexVisible = low;
