@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.3
+
+- Fix small perf regression in version 2.3.2 that caused unnecessary size calculations when scrolling beyond cached bounds dynamic sized rows/columns
+
 ## 2.3.2
 
 - Improve `scrollToRow` accuracy for dynamic height rows
