@@ -1,1 +1,13 @@
-<svg viewBox="0 0 1200 630" width="600" height="315" xmlns="http://www.w3.org/2000/svg"><linearGradient id="react-window"><stop offset="0%" stop-color="oklch(76.5% 0.177 163.223)"/><stop offset="100%" stop-color="oklch(58.5% 0.233 277.117)"/></linearGradient><rect fill="url('#react-window')" width="1200" height="630"/><g><circle cx="275" cy="315" r="60" fill="#111"/><ellipse cx="275" cy="315" rx="220" ry="100" stroke="#111" stroke-width="40" fill="none" transform="rotate(45, 275, 315)"/><ellipse cx="275" cy="315" rx="220" ry="100" stroke="#111" stroke-width="40" fill="none" transform="rotate(-45, 275, 315)"/></g><g fill="#fff" font-size="165" font-family="system-ui" font-weight="bold" transform="translate(535, 240)"><text alignment-baseline="middle" dx="0" dy="0">react</text><text alignment-baseline="middle" dx="0" dy="170">window</text></g></svg>
+<svg viewBox="0 0 1200 630" width="600" height="315" xmlns="http://www.w3.org/2000/svg"><linearGradient id="generated-og-image-bg"><stop offset="0%" stop-color="oklch(77.7% 0.152 181.912)"></stop><stop offset="100%" stop-color="oklch(58.8% 0.158 241.966)"></stop></linearGradient><rect fill="url('#generated-og-image-bg')" width="1200" height="630"></rect><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="rw-logo" x="55" y="95" width="440" height="440" preserveAspectRatio="xMidYMid meet" overflow="visible">
+  <style>
+    .rw-logo path, .rw-logo rect {
+      stroke: #1A1A1A;
+    }
+    .rw-logo circle {
+      fill: #1A1A1A;
+    }
+  </style>
+  <rect x="2.25" y="4.75" width="15.5" height="10.5" rx="2.75" fill="none" stroke-width="2.5"></rect>
+  <path d="M6 8.25h8M6 11.75h6" fill="none" stroke-width="2.5" stroke-linecap="round"></path>
+  <path d="M6 1.25h8M6 18.75h5" fill="none" stroke-width="2.5" stroke-linecap="round" opacity="0.45"></path>
+</svg></g><g fill="#fff" font-family="system-ui" font-size="165" font-weight="bold"><text dominant-baseline="middle" x="535" y="230.02499999999998">react</text><text dominant-baseline="middle" x="535" y="399.975">window</text></g></svg>
