@@ -62,7 +62,7 @@ export default function App() {
         </>
       }
       packageDescription="render everything"
-      packageLogo={<Logo className="rrp-logo w-8 h-8" />}
+      packageLogo={<Logo className="rw-logo w-8 h-8" />}
       packageName="react-window"
       repositoryUrl={repository.url}
       routes={routes}
