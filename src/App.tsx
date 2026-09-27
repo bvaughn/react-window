@@ -6,12 +6,12 @@ import {
   type CommonQuestion
 } from "react-lib-tools";
 import { repository } from "../package.json";
+import Logo from "../public/favicon.svg?react";
 import { html as refCompositionHTML } from "../public/generated/examples/RefComposition.json";
 import { html as scrollingIndicatorHTML } from "../public/generated/examples/ScrollingIndicator.json";
 import { Link } from "./components/Link";
 import { NavLink } from "./components/NavLink";
 import { routes } from "./routes";
-import logo from "../public/favicon.svg";
 
 export default function App() {
   return (
@@ -62,7 +62,7 @@ export default function App() {
         </>
       }
       packageDescription="render everything"
-      packageLogo={<img className="w-8 h-8" src={logo} />}
+      packageLogo={<Logo className="rrp-logo w-8 h-8" />}
       packageName="react-window"
       repositoryUrl={repository.url}
       routes={routes}
