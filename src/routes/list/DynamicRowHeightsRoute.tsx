@@ -8,7 +8,6 @@ import {
 } from "react-lib-tools";
 import ListDynamicRowHeightsMarkdown from "../../../public/generated/examples/ListDynamicRowHeights.json";
 import ListRowDynamicRowHeightsMarkdown from "../../../public/generated/examples/ListRowDynamicRowHeights.json";
-import { ContinueLink } from "../../components/ContinueLink";
 import { Example } from "./examples/ListDynamicRowHeights";
 import { useLorem } from "./hooks/useLorem";
 
@@ -49,7 +48,6 @@ export default function DynamicRowHeightsRoute() {
         Dynamic-height lists scroll to the target row <strong>instantly</strong>
         , even when smooth scrolling is requested.
       </Callout>
-      <ContinueLink to="/list/imperative-handle" title="imperative methods" />
     </Box>
   );
 }

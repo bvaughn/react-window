@@ -15,7 +15,6 @@ import gridRefClickEventHandlerMarkdown from "../../../public/generated/examples
 import useGridCallbackRefMarkdown from "../../../public/generated/examples/useGridCallbackRef.json";
 import useGridRefMarkdown from "../../../public/generated/examples/useGridRef.json";
 import useGridRefImportMarkdown from "../../../public/generated/examples/useGridRefImport.json";
-import { ContinueLink } from "../../components/ContinueLink";
 import { CellComponent } from "./examples/CellComponent";
 import { columnWidth } from "./examples/columnWidth";
 import type { Contact } from "./examples/Grid";
@@ -192,7 +191,6 @@ export default function ScrollToCellRoute() {
         ref to another component or hook, use the ref callback function instead.
       </Callout>
       <Code html={useGridCallbackRefMarkdown.html} />
-      <ContinueLink to="/grid/aria-roles" title="ARIA roles" />
     </Box>
   );
 }

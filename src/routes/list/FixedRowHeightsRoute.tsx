@@ -9,7 +9,6 @@ import {
 import json from "../../../public/data/names.json";
 import FixedHeightListMarkdown from "../../../public/generated/examples/FixedHeightList.json";
 import FixedHeightRowComponentMarkdown from "../../../public/generated/examples/FixedHeightRowComponent.json";
-import { ContinueLink } from "../../components/ContinueLink";
 import { Example } from "./examples/FixedHeightList";
 
 export default function FixedRowHeightsRoute() {
@@ -52,10 +51,6 @@ export default function FixedRowHeightsRoute() {
           </div>
         </Box>
       </Callout>
-      <ContinueLink
-        to="/list/variable-row-height"
-        title="variable row heights"
-      />
     </Box>
   );
 }

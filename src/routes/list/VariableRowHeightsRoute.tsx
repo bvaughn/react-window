@@ -1,6 +1,5 @@
 import { Block, Box, Code, Header, LoadingSpinner } from "react-lib-tools";
 import ListVariableRowHeightsMarkdown from "../../../public/generated/examples/ListVariableRowHeights.json";
-import { ContinueLink } from "../../components/ContinueLink";
 import { Example } from "./examples/ListVariableRowHeights";
 import { useCitiesByState } from "./hooks/useCitiesByState";
 
@@ -27,7 +26,6 @@ export default function VariableRowHeightsRoute() {
         height a row should be based on the type of data it contains.
       </div>
       <Code html={ListVariableRowHeightsMarkdown.html} />
-      <ContinueLink to="/list/dynamic-row-height" title="dynamic row heights" />
     </Box>
   );
 }

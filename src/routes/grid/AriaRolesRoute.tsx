@@ -1,7 +1,6 @@
 import { Box, Code, ExternalLink, Header } from "react-lib-tools";
 import CellComponentAriaRolesMarkdown from "../../../public/generated/examples/CellComponentAriaRoles.json";
 import GridAriaRolesMarkdown from "../../../public/generated/examples/GridAriaRoles.json";
-import { ContinueLink } from "../../components/ContinueLink";
 
 export default function AriaRolesRoute() {
   return (
@@ -28,7 +27,6 @@ export default function AriaRolesRoute() {
         pass them through like so:
       </div>
       <Code html={CellComponentAriaRolesMarkdown.html} />
-      <ContinueLink to="/grid/props" title="props and api" />
     </Box>
   );
 }

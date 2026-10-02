@@ -2,65 +2,23 @@ import {
   AppRoot,
   Code,
   ExternalLink,
-  NavSection,
-  type CommonQuestion
+  type CommonQuestion,
+  type DefaultPath,
+  type NavConfig
 } from "react-lib-tools";
 import { repository } from "../package.json";
 import Logo from "../public/favicon.svg?react";
 import { html as refCompositionHTML } from "../public/generated/examples/RefComposition.json";
 import { html as scrollingIndicatorHTML } from "../public/generated/examples/ScrollingIndicator.json";
 import { Link } from "./components/Link";
-import { NavLink } from "./components/NavLink";
-import { routes } from "./routes";
+import { routes, type Path } from "./routes";
 
 export default function App() {
   return (
     <AppRoot
       commonQuestions={commonQuestions}
       enableSiteSearch
-      navLinks={
-        <>
-          <div>
-            <NavLink path="/">Getting started</NavLink>
-            <NavLink path="/how-does-it-work">How does it work?</NavLink>
-          </div>
-          <NavSection label="Lists">
-            <NavLink path="/list/fixed-row-height">Fixed row heights</NavLink>
-            <NavLink path="/list/variable-row-height">
-              Variable row heights
-            </NavLink>
-            <NavLink path="/list/dynamic-row-height">
-              Dynamic row heights
-            </NavLink>
-            <NavLink path="/list/scroll-to-row">Scroll to row</NavLink>
-            <NavLink path="/list/aria-roles">ARIA roles</NavLink>
-            <NavLink path="/list/props">List props</NavLink>
-            <NavLink path="/list/imperative-handle">Imperative handle</NavLink>
-          </NavSection>
-          <NavSection label="Tables">
-            <NavLink path="/list/tabular-data">Tabular data</NavLink>
-            <NavLink path="/list/tabular-data-aria-roles">ARIA roles</NavLink>
-          </NavSection>
-          <NavSection label="Grids">
-            <NavLink path="/grid/grid">Rendering a grid</NavLink>
-            <NavLink path="/grid/scroll-to-cell">Scroll to cells</NavLink>
-            <NavLink path="/grid/aria-roles">ARIA roles</NavLink>
-            <NavLink path="/grid/props">Grid props</NavLink>
-            <NavLink path="/grid/imperative-handle">Imperative handle</NavLink>
-          </NavSection>
-          <NavSection label="Other">
-            <NavLink path="/grid/rtl-grids">Right to left content</NavLink>
-            <NavLink path="/grid/horizontal-lists">Horizontal lists</NavLink>
-            <NavLink path="/list/images">Images</NavLink>
-            <NavLink path="/list/sticky-rows">Sticky rows</NavLink>
-          </NavSection>
-          <div>
-            <NavLink path="/platform-requirements">Requirements</NavLink>
-            <NavLink path="/common-questions">Common questions</NavLink>
-            <NavLink path="/support">Support</NavLink>
-          </div>
-        </>
-      }
+      nav={nav}
       packageDescription="render everything"
       packageLogo={<Logo className="rw-logo w-8 h-8" />}
       packageName="react-window"
@@ -93,6 +51,52 @@ export default function App() {
     />
   );
 }
+
+const nav: NavConfig<Path | DefaultPath> = [
+  { path: "/", title: "Getting started" },
+  { path: "/how-does-it-work", title: "How does it work?" },
+  {
+    title: "Lists",
+    links: [
+      { path: "/list/fixed-row-height", title: "Fixed row heights" },
+      { path: "/list/variable-row-height", title: "Variable row heights" },
+      { path: "/list/dynamic-row-height", title: "Dynamic row heights" },
+      { path: "/list/scroll-to-row", title: "Scroll to row" },
+      { path: "/list/aria-roles", title: "ARIA roles" },
+      { path: "/list/props", title: "List props" },
+      { path: "/list/imperative-handle", title: "Imperative handle" }
+    ]
+  },
+  {
+    title: "Tables",
+    links: [
+      { path: "/list/tabular-data", title: "Tabular data" },
+      { path: "/list/tabular-data-aria-roles", title: "ARIA roles" }
+    ]
+  },
+  {
+    title: "Grids",
+    links: [
+      { path: "/grid/grid", title: "Rendering a grid" },
+      { path: "/grid/scroll-to-cell", title: "Scroll to cells" },
+      { path: "/grid/aria-roles", title: "ARIA roles" },
+      { path: "/grid/props", title: "Grid props" },
+      { path: "/grid/imperative-handle", title: "Imperative handle" }
+    ]
+  },
+  {
+    title: "Other",
+    links: [
+      { path: "/grid/rtl-grids", title: "Right to left content" },
+      { path: "/grid/horizontal-lists", title: "Horizontal lists" },
+      { path: "/list/images", title: "Images" },
+      { path: "/list/sticky-rows", title: "Sticky rows" }
+    ]
+  },
+  { path: "/platform-requirements", title: "Requirements" },
+  { path: "/common-questions", title: "Common questions" },
+  { path: "/support", title: "Support" }
+];
 
 const commonQuestions: CommonQuestion[] = [
   {

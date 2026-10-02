@@ -15,7 +15,6 @@ import listRefClickEventHandlerMarkdown from "../../../public/generated/examples
 import useListCallbackRefMarkdown from "../../../public/generated/examples/useListCallbackRef.json";
 import useListRefMarkdown from "../../../public/generated/examples/useListRef.json";
 import useListRefImportMarkdown from "../../../public/generated/examples/useListRefImport.json";
-import { ContinueLink } from "../../components/ContinueLink";
 import { RowComponent } from "./examples/ListVariableRowHeights";
 import { rowHeight } from "./examples/rowHeight";
 import { useCitiesByState } from "./hooks/useCitiesByState";
@@ -135,7 +134,6 @@ export default function ScrollToRowRoute() {
         ref to another component or hook, use the ref callback function instead.
       </Callout>
       <Code html={useListCallbackRefMarkdown.html} />
-      <ContinueLink to="/list/aria-roles" title="ARIA roles" />
     </Box>
   );
 }

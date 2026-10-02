@@ -9,7 +9,6 @@ import {
   getIntentClassNames
 } from "react-lib-tools";
 import BasicRowMarkdown from "../../public/generated/examples/BasicRow.json";
-import { Link } from "../components/Link";
 import type { PropsWithChildren } from "react";
 
 export default function HowDoesItWorkRoute() {
@@ -77,10 +76,6 @@ export default function HowDoesItWorkRoute() {
         the one below.
       </div>
       <Code html={BasicRowMarkdown.html} />
-      <div>
-        Continue to the <Link to="/list/fixed-row-height">list examples</Link>{" "}
-        to learn more.
-      </div>
     </Box>
   );
 }
@@ -125,7 +120,7 @@ function Row({
       className={cn(
         "h-6 p-2 flex items-center rounded text-xs whitespace-nowrap",
         rendered
-          ? getIntentClassNames("primary", true)
+          ? getIntentClassNames("primary")
           : "border-1 border-dashed border-white/10 text-white/20"
       )}
     >

@@ -1,7 +1,6 @@
 import { Box, Code, ExternalLink, Header } from "react-lib-tools";
 import ListAriaRolesMarkdown from "../../../public/generated/examples/ListAriaRoles.json";
 import RowComponentAriaRolesMarkdown from "../../../public/generated/examples/RowComponentAriaRoles.json";
-import { ContinueLink } from "../../components/ContinueLink";
 
 export default function AriaRolesRoute() {
   return (
@@ -26,7 +25,6 @@ export default function AriaRolesRoute() {
         prop. The easiest way to use them is just to pass them through like so:
       </div>
       <Code html={RowComponentAriaRolesMarkdown.html} />
-      <ContinueLink to="/list/props" title="props and api" />
     </Box>
   );
 }

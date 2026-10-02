@@ -10,7 +10,6 @@ import {
 import CellComponentMarkdown from "../../../public/generated/examples/CellComponent.json";
 import columnWidthMarkdown from "../../../public/generated/examples/columnWidth.json";
 import GridMarkdown from "../../../public/generated/examples/Grid.json";
-import { ContinueLink } from "../../components/ContinueLink";
 import { Example } from "./examples/Grid";
 import { useContacts } from "./hooks/useContacts";
 
@@ -62,7 +61,6 @@ export default function RenderingGridRoute() {
           </div>
         </Box>
       </Callout>
-      <ContinueLink to="/list/imperative-handle" title="imperative methods" />
     </Box>
   );
 }

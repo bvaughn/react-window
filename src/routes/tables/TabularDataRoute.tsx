@@ -7,7 +7,6 @@ import {
   LoadingSpinner
 } from "react-lib-tools";
 import FlexboxLayoutMarkdown from "../../../public/generated/examples/FlexboxLayout.json";
-import { ContinueLink } from "../../components/ContinueLink";
 import { Link } from "../../components/Link";
 import { Example } from "./examples/FlexboxLayout";
 import { useAddresses } from "./hooks/useAddresses";
@@ -38,7 +37,6 @@ export default function TabularDataRoute() {
         It may be more efficient to render data with many columns using the{" "}
         <Link to="/grid/grid">Grid</Link> component.
       </Callout>
-      <ContinueLink to="/list/tabular-data-aria-roles" title="ARIA roles" />
     </Box>
   );
 }

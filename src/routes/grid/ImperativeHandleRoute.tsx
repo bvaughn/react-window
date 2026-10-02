@@ -3,6 +3,7 @@ import {
   Code,
   ExternalLink,
   ImperativeHandle,
+  SectionHeader,
   type ImperativeHandleMetadata
 } from "react-lib-tools";
 import json from "../../../public/generated/docs/GridImperativeAPI.json";
@@ -16,7 +17,7 @@ export default function GridImperativeHandleRoute() {
         json={json as ImperativeHandleMetadata}
         section="Imperative API"
       />
-      <div className="text-lg font-bold">Hooks</div>
+      <SectionHeader>Hooks</SectionHeader>
       <div>
         The <code>useGridRef</code> hook returns a{" "}
         <ExternalLink href="https://react.dev/reference/react/useRef">
