@@ -1,6 +1,6 @@
 import { cn, getIntentClassNames } from "react-lib-tools";
 
-export function AnimatedListRow({
+export function AnimatedListColumn({
   children,
   rendered
 }: {
@@ -10,7 +10,7 @@ export function AnimatedListRow({
   return (
     <div
       className={cn(
-        "h-6 p-1 flex items-center rounded text-xs whitespace-nowrap transition-colors duration-150",
+        "h-12 w-7 sm:w-14 shrink-0 p-1 flex items-center justify-center rounded text-xs whitespace-nowrap transition-colors duration-150",
         rendered
           ? getIntentClassNames("primary")
           : "border-1 border-dashed border-white/10 text-white/20"

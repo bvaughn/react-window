@@ -1,12 +1,12 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import { AnimatedListRow } from "./AnimatedListRow";
+import { AnimatedListColumn } from "./AnimatedListColumn";
 
 // Animation timing (in milliseconds)
 const PAUSE_DURATION = 500;
 const SCROLL_DURATION = 2_000;
 const CYCLE_DURATION = 2 * (PAUSE_DURATION + SCROLL_DURATION);
 
-export function AnimatedList({ rowCount }: { rowCount: number }) {
+export function AnimatedList({ columnCount }: { columnCount: number }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -26,43 +26,44 @@ export function AnimatedList({ rowCount }: { rowCount: number }) {
       return;
     }
 
-    const rows = Array.from(list.children) as HTMLElement[];
+    const columns = Array.from(list.children) as HTMLElement[];
 
-    let maxScrollTop = 0;
+    let maxScrollLeft = 0;
     let lastProgress = 0;
 
     // Sizes are measured (rather than hard-coded) because they depend on the root font size,
     // which can change when the window is resized
     const measure = () => {
-      maxScrollTop = list.offsetHeight - viewport.offsetHeight;
+      maxScrollLeft = list.offsetWidth - viewport.offsetWidth;
 
       // The viewport stays put while the list scrolls beneath it
-      container.style.height = `${list.offsetHeight + maxScrollTop}px`;
-      viewport.style.top = `${maxScrollTop}px`;
+      container.style.height = `${list.offsetHeight}px`;
+      container.style.width = `${list.offsetWidth + maxScrollLeft}px`;
+      viewport.style.left = `${maxScrollLeft}px`;
     };
 
     const update = (progress: number) => {
       lastProgress = progress;
 
-      const scrollTop = progress * maxScrollTop;
+      const scrollLeft = progress * maxScrollLeft;
 
-      list.style.transform = `translateY(${maxScrollTop - scrollTop}px)`;
+      list.style.transform = `translateX(${maxScrollLeft - scrollLeft}px)`;
 
-      const thumbInset = (track.clientWidth - thumb.offsetWidth) / 2;
-      const maxThumbTop =
-        track.clientHeight - thumb.offsetHeight - 2 * thumbInset;
-      thumb.style.top = `${thumbInset + progress * maxThumbTop}px`;
+      const thumbInset = (track.clientHeight - thumb.offsetHeight) / 2;
+      const maxThumbLeft =
+        track.clientWidth - thumb.offsetWidth - 2 * thumbInset;
+      thumb.style.left = `${thumbInset + progress * maxThumbLeft}px`;
 
-      // Rows that are visible within the viewport's border are "rendered"
-      const viewportTop = scrollTop + viewport.clientTop;
-      const viewportBottom = viewportTop + viewport.clientHeight;
+      // Columns that are visible within the viewport's border are "rendered"
+      const viewportLeft = scrollLeft + viewport.clientLeft;
+      const viewportRight = viewportLeft + viewport.clientWidth;
 
       let startIndex = -1;
       let stopIndex = -1;
-      rows.forEach((row, index) => {
-        const rowTop = row.offsetTop;
-        const rowBottom = rowTop + row.offsetHeight;
-        if (rowBottom > viewportTop && rowTop < viewportBottom) {
+      columns.forEach((column, index) => {
+        const columnLeft = column.offsetLeft;
+        const columnRight = columnLeft + column.offsetWidth;
+        if (columnRight > viewportLeft && columnLeft < viewportRight) {
           if (startIndex < 0) {
             startIndex = index;
           }
@@ -126,26 +127,26 @@ export function AnimatedList({ rowCount }: { rowCount: number }) {
   }, []);
 
   return (
-    <div className="relative w-60" ref={containerRef}>
+    <div className="relative" ref={containerRef}>
       <div
-        className="absolute top-0 left-0 w-full flex flex-col gap-1 p-2 pr-6 will-change-transform"
+        className="absolute top-0 left-0 flex flex-row gap-1 p-2 pb-6 will-change-transform"
         ref={listRef}
       >
-        {new Array(rowCount).fill(true).map((_, index) => (
-          <AnimatedListRow
-            children={`row ${index + 1}`}
+        {new Array(columnCount).fill(true).map((_, index) => (
+          <AnimatedListColumn
+            children={`${index + 1}`}
             key={index}
             rendered={index >= visibleStartIndex && index <= visibleStopIndex}
           />
         ))}
       </div>
       <div
-        className="rounded rounded-md border border-2 border-white absolute left-0 h-19 w-full"
+        className="rounded rounded-md border border-2 border-white absolute top-0 h-full w-22 sm:w-42"
         ref={viewportRef}
       >
-        <div className="absolute right-0 h-full w-4 bg-white/5">
+        <div className="absolute bottom-0 w-full h-4 bg-white/5">
           <div
-            className="absolute right-1 top-1 h-3 w-2 rounded bg-white/50"
+            className="absolute bottom-1 left-1 w-3 h-2 rounded bg-white/50"
             ref={thumbRef}
           />
         </div>
