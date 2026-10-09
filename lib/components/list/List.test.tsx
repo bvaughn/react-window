@@ -43,6 +43,77 @@ describe("List", () => {
     mountedRows = new Map();
   });
 
+  test.each([undefined, false, true])(
+    "should measure dynamic rows independently of aria-hidden=%s",
+    (ariaHidden) => {
+      let rowHeight: ReturnType<typeof useDynamicRowHeight>;
+      const listRef = createRef<ListImperativeAPI>();
+      function Row({ index, style }: RowComponentProps) {
+        return (
+          <div
+            aria-hidden={ariaHidden}
+            data-testid={`row-${index}`}
+            style={style}
+          >
+            Row {index}
+          </div>
+        );
+      }
+      function Example() {
+        rowHeight = useDynamicRowHeight({ defaultRowHeight: 25 });
+        return (
+          <List
+            listRef={listRef}
+            overscanCount={0}
+            rowComponent={Row}
+            rowCount={20}
+            rowHeight={rowHeight}
+            rowProps={EMPTY_OBJECT}
+            style={{ height: 100 }}
+          >
+            <div data-testid="overlay">Overlay</div>
+          </List>
+        );
+      }
+      render(<Example />);
+      const firstRow = screen.getByTestId("row-0");
+      expect(firstRow.getAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe("0");
+      expect(rowHeight!.getRowHeight(0)).toBe(100);
+      act(() => {
+        setElementSize({ element: firstRow, height: 60, width: 50 });
+      });
+      expect(rowHeight!.getRowHeight(0)).toBe(60);
+      expect(screen.getByTestId("row-1").style.transform).toBe(
+        "translateY(60px)"
+      );
+      act(() => {
+        listRef.current!.element!.scrollTo({ top: 160 });
+      });
+      const scrolledRow = screen.getByTestId("row-2");
+      expect(scrolledRow.getAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe("2");
+      act(() => {
+        setElementSize({ element: scrolledRow, height: 80, width: 50 });
+        setElementSize({
+          element: screen.getByTestId("overlay"),
+          height: 999,
+          width: 50
+        });
+      });
+      expect(rowHeight!.getRowHeight(2)).toBe(80);
+      expect(screen.getByTestId("overlay")).not.toHaveAttribute(
+        DATA_ATTRIBUTE_LIST_INDEX
+      );
+      expect(listRef.current!.element!.lastElementChild).not.toHaveAttribute(
+        DATA_ATTRIBUTE_LIST_INDEX
+      );
+      expect(
+        ariaHidden === undefined
+          ? firstRow.hasAttribute("aria-hidden")
+          : firstRow.getAttribute("aria-hidden")
+      ).toBe(ariaHidden === undefined ? false : `${ariaHidden}`);
+    }
+  );
+
   test("should render an empty list", () => {
     render(
       <List

@@ -120,16 +120,13 @@ export function List<
         0,
         startIndexOverscan < 0 ? 0 : stopIndexOverscan - startIndexOverscan + 1
       )
-      .filter((item, index) => {
-        if (item.hasAttribute("aria-hidden")) {
-          // Ignore sizing element
-          return false;
-        }
-
+      .map((item, index) => {
+        // The slice excludes overlays and the sizing element. A row's ARIA
+        // visibility does not determine whether it needs layout measurements.
         const attribute = `${startIndexOverscan + index}`;
         item.setAttribute(DATA_ATTRIBUTE_LIST_INDEX, attribute);
 
-        return true;
+        return item;
       });
 
     rowElements.current = rows;
