@@ -21,6 +21,7 @@ import type { ListProps } from "./types";
 import { useScrollToRow } from "./useScrollToRow";
 
 export const DATA_ATTRIBUTE_LIST_INDEX = "data-react-window-index";
+export const DATA_ATTRIBUTE_SIZER = "data-react-window-sizer";
 
 /**
  * Renders data with many rows.
@@ -121,7 +122,7 @@ export function List<
         startIndexOverscan < 0 ? 0 : stopIndexOverscan - startIndexOverscan + 1
       )
       .filter((item, index) => {
-        if (item.hasAttribute("aria-hidden")) {
+        if (item.hasAttribute(DATA_ATTRIBUTE_SIZER)) {
           // Ignore sizing element
           return false;
         }
@@ -218,6 +219,7 @@ export function List<
   const sizingElement = (
     <div
       aria-hidden
+      {...{ [DATA_ATTRIBUTE_SIZER]: "" }}
       style={{
         height: getEstimatedSize(),
         width: "100%",
