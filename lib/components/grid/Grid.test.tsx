@@ -739,7 +739,7 @@ describe("Grid", () => {
   });
 
   describe("edge cases", () => {
-    test("should not cause a cycle of Grid callback ref is passed in cellProps", () => {
+    test("should not cause a cycle if Grid callback ref is passed in cellProps", () => {
       function CellComponentWithCellProps({
         columnIndex,
         rowIndex,
