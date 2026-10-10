@@ -1,63 +1,69 @@
 # Changelog
 
+## 2.3.4
+
+- Fix `useDynamicRowHeight` not measuring rows that set an `aria-hidden` attribute. - [#917](https://github.com/bvaughn/react-window/pull/917)
+- Support rendering into a different window (e.g. an iframe or a pop-up window opened with a portal). `List`, `Grid`, and `useDynamicRowHeight` now use the `ResizeObserver`, `requestAnimationFrame`, and `document` that belong to the window containing the list, rather than the globals of the window that loaded the library. - [#918](https://github.com/bvaughn/react-window/pull/918)
+  - `getScrollbarSize` accepts an optional `ownerDocument` parameter and caches the measured size separately for each document.
+
 ## 2.3.3
 
-- Fix small perf regression in version 2.3.2 that caused unnecessary size calculations when scrolling beyond cached bounds dynamic sized rows/columns
+- Fix a small performance regression in 2.3.2 that caused unnecessary size calculations when scrolling beyond the cached bounds of dynamically sized rows or columns. - [#916](https://github.com/bvaughn/react-window/pull/916)
 
 ## 2.3.2
 
-- Improve `scrollToRow` accuracy for dynamic height rows
-- Bugs fixes
-  - Fix RTL scrolling and alignment
-  - Fix stale row measurements after keyed reordering
-  - Fixed dropped prop updates
-  - Use fractional percentage sizing
-  - Fix center alignment near list boundaries
-- Performance tweaks:
-  - Improve scrolling performance by calculating fixed-size visible ranges directly and searching cached variable-size bounds instead of scanning from the beginning.
-  - Fixed-size jumps also avoid allocating bounds for preceding items.
+- Improve `scrollToRow` accuracy for rows with dynamic heights. - [#914](https://github.com/bvaughn/react-window/pull/914)
+- Bug fixes: - [#915](https://github.com/bvaughn/react-window/pull/915)
+  - Fix RTL scrolling and alignment.
+  - Fix stale row measurements after rows are reordered with `rowKey`.
+  - Fix updates to `rowProps`/`cellProps` being dropped when props are added or removed.
+  - Support fractional percentage sizes (e.g. `"33.3%"`) for row heights and column widths.
+  - Fix `"center"` alignment for items near the start or end of a list.
+- Performance improvements: - [#915](https://github.com/bvaughn/react-window/pull/915)
+  - Calculate the visible range directly for fixed-size items, and search cached bounds for variable-size items, instead of scanning from the first item.
+  - Avoid allocating bounds for preceding items when jumping to a fixed-size item.
 
 ## 2.3.1
 
-- Grid updates direction when `dir` prop changes after mount
+- Fix `Grid` not updating its layout direction when the `dir` prop changes after mount. - [#913](https://github.com/bvaughn/react-window/pull/913)
 
 ## 2.3.0
 
-- Add optional `rowKey` prop to `List` and add optional `rowKey`/`columnKey` prop to `Grid`.
+- Add optional `rowKey` prop to `List` and optional `rowKey`/`columnKey` props to `Grid`. - [#911](https://github.com/bvaughn/react-window/pull/911)
 
 ## 2.2.7
 
-- Fixed a problem with project logo not displaying correctly in the README for the Firefox browser.
+- Fix the project logo not displaying in the README in Firefox.
 
 ## 2.2.6
 
-- `useDynamicRowHeight` should not instantiate `ResizeObserver` when server-rendering
+- Fix `useDynamicRowHeight` creating a `ResizeObserver` during server rendering. - [#902](https://github.com/bvaughn/react-window/pull/902)
 
 ## 2.2.5
 
-- Use `defaultHeight`/`defaultWidth` prop to server render initial set of rows/cells
-- Adjust TypeScript return type for `rowComponent`/`cellComponent` to work around a `ReactNode` vs `ReactElement` mismatch caused by #875
+- Use the `defaultHeight`/`defaultWidth` props to server-render an initial set of rows/cells. - [#896](https://github.com/bvaughn/react-window/pull/896)
+- Adjust the TypeScript return type of `rowComponent`/`cellComponent` to work around the `ReactNode` vs `ReactElement` mismatch introduced in 2.2.2. - [#875](https://github.com/bvaughn/react-window/issues/875)
 
 ## 2.2.4
 
-- Update README docs
+- Update README docs.
 
 ## 2.2.3
 
-- Update TS Doc comments for `List` and `Grid` imperative methods to specify when a method throws.
-- Throw a `RangeError` (instead of a regular `Error`) if an invalid index is passed to one of the imperative scroll-to methods.
+- Update TSDoc comments for the `List` and `Grid` imperative methods to specify when each method throws. - [#880](https://github.com/bvaughn/react-window/pull/880)
+- Throw a `RangeError` (instead of a generic `Error`) when an invalid index is passed to one of the imperative scroll-to methods. - [#880](https://github.com/bvaughn/react-window/pull/880)
 
 ## 2.2.2
 
-The return type of `List` and `Grid` components is explicitly annotated as `ReactElement`. The return type of `rowComponent` and `cellComponent` changed from `ReactNode` to `ReactElement`. This was done to fix TypeScript warnings for React versions 18.0 - 18.2. (See issue #875)
+- Explicitly annotate the return type of `List` and `Grid` as `ReactElement`, and change the return type of `rowComponent`/`cellComponent` from `ReactNode` to `ReactElement`. This fixes TypeScript warnings for React versions 18.0 through 18.2. - [#875](https://github.com/bvaughn/react-window/issues/875), [#876](https://github.com/bvaughn/react-window/pull/876)
 
 ## 2.2.1
 
-- Fix possible scroll-jump scenario with `useDynamicRowHeight`
+- Fix a possible scroll jump when using `useDynamicRowHeight`. - [#868](https://github.com/bvaughn/react-window/pull/868)
 
 ## 2.2.0
 
-- Support for dynamic row heights via new `useDynamicRowHeight` hook.
+- Support dynamic row heights via the new `useDynamicRowHeight` hook. - [#857](https://github.com/bvaughn/react-window/pull/857)
 
 ```tsx
 const rowHeight = useDynamicRowHeight({
@@ -67,29 +73,28 @@ const rowHeight = useDynamicRowHeight({
 return <List rowHeight={rowHeight} {...rest} />;
 ```
 
-- Smaller NPM bundle; (docs are no longer included as part of the bundle due to the added size)
+- Reduce the NPM package size by no longer including the docs. - [#858](https://github.com/bvaughn/react-window/pull/858)
 
 ## 2.1.2
 
-Prevent `ResizeObserver` API from being called at all if an explicit `List` height (or `Grid` width and height) is provided.
+- Don't use the `ResizeObserver` API when an explicit `List` height (or `Grid` width and height) is provided. - [#855](https://github.com/bvaughn/react-window/pull/855)
 
 ## 2.1.1
 
-Grids with only one row no longer incorrectly set cell height to 100%.
+- Fix `Grid` incorrectly setting cell height to 100% when there is only one row.
 
 ## 2.1.0
 
-Improved ARIA support:
-
-- Add better default ARIA attributes for outer `HTMLDivElement`
-- Add optional `ariaAttributes` prop to row and cell renderers to simplify better ARIA attributes for user-rendered cells
-- Remove intermediate `HTMLDivElement` from `List` and `Grid`
-  - This may enable more/better custom CSS styling
-  - This may also enable adding an optional `children` prop to `List` and `Grid` for e.g. overlays/tooltips
-- Add optional `tagName` prop; defaults to `"div"` but can be changed to e.g. `"ul"`
+- Improve ARIA support:
+  - Add better default ARIA attributes to the outer `HTMLDivElement`.
+  - Add an `ariaAttributes` prop to row and cell components, to make it easier to apply the right ARIA attributes to user-rendered rows and cells (see example below).
+- Remove the intermediate `HTMLDivElement` from `List` and `Grid`, which allows more flexible CSS styling.
+- Add optional `tagName` prop; defaults to `"div"` but can be changed to e.g. `"ul"`.
+- Add optional `children` prop to `List` and `Grid` for content such as overlays, tooltips, or sticky rows.
+- Pass a second parameter to the `onRowsRendered` and `onCellsRendered` callbacks, to make it easier to tell _visible_ items apart from items rendered because of overscan. The first parameter describes the _visible_ items and the second describes _all_ rendered items (including overscan; see example below).
 
 ```tsx
-// Example of how to use new `ariaAttributes` prop
+// Example of how to use the new `ariaAttributes` prop
 function RowComponent({
   ariaAttributes,
   index,
@@ -103,10 +108,6 @@ function RowComponent({
   );
 }
 ```
-
-Added optional `children` prop to better support edge cases like sticky rows.
-
-Minor changes to `onRowsRendered` and `onCellsRendered` callbacks to make it easier to differentiate between _visible_ items and items rendered due to overscan settings. These methods will now receive two params– the first for _visible_ rows and the second for _all_ rows (including overscan), e.g.:
 
 ```ts
 function onRowsRendered(
@@ -142,11 +143,11 @@ function onCellsRendered(
 
 ## 2.0.2
 
-Fixed edge-case bug with `Grid` imperative API `scrollToCell` method and "smooth" scrolling behavior.
+- Fix an edge case bug in the `Grid` imperative `scrollToCell` method when using `"smooth"` scrolling.
 
 ## 2.0.1
 
-- Remove ARIA `role` attribute from `List` and `Grid`. This resulted in potentially invalid configurations (e.g. a ARIA _list_ should contain at least one _listitem_ but that was not enforced by this library). Users of this library should specify the `role` attribute that makes the most sense to them [based on mdn guidelines](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/list_role#best_practices). For example:
+- Remove the default ARIA `role` attribute from `List` and `Grid`. It could produce invalid configurations (e.g. an ARIA _list_ should contain at least one _listitem_, but this library did not enforce that). Specify the `role` that makes the most sense for your content, [based on MDN guidelines](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Roles/list_role#best_practices). For example:
 
 ```tsx
 <List
@@ -172,7 +173,7 @@ Version 2 is a major rewrite that offers the following benefits:
 
 - More ergonomic props API
 - Automatic memoization of row/cell renderers and props/context
-- Automatically sizing for `List` and `Grid` (no more need for `AutoSizer`)
+- Automatic sizing for `List` and `Grid` (no more need for `AutoSizer`)
 - Native TypeScript support (no more need for `@types/react-window`)
 - Smaller bundle size
 
@@ -250,7 +251,7 @@ function RowComponent({
 }
 ```
 
-### Migrating `VariableSizedList`
+### Migrating `VariableSizeList`
 
 #### Before
 
@@ -283,8 +284,6 @@ function Example({ items }: { items: Item[] }) {
     </AutoSizer>
   );
 }
-
-function itemSize();
 
 function Row({
   data,
@@ -323,8 +322,8 @@ function Example({ items }: { items: Item[] }) {
 
 // The rowHeight method also receives the extra props,
 // so it can be defined at the module level
-function rowHeight(index: number, { item }: RowProps) {
-  return item.type === "header" ? 40 : 20;
+function rowHeight(index: number, { items }: RowProps) {
+  return items[index].type === "header" ? 40 : 20;
 }
 
 function RowComponent({ index, items, style }: RowComponentProps<RowProps>) {
@@ -368,10 +367,9 @@ function Cell({
   rowIndex,
   style
 }: GridChildComponentProps<{
-  names: string[];
+  data: Data[];
 }>) {
-  const { data } = data;
-  const datum = data[index];
+  const datum = data.data[rowIndex][columnIndex];
   return <div style={style}>...</div>;
 }
 ```
@@ -379,7 +377,7 @@ function Cell({
 #### After
 
 ```tsx
-import { FixedSizeGrid, type GridChildComponentProps } from "react-window";
+import { Grid, type CellComponentProps } from "react-window";
 
 function Example({ data }: { data: Data[] }) {
   // You don't need to useMemo for cellProps;
@@ -458,10 +456,9 @@ function Cell({
   rowIndex,
   style
 }: GridChildComponentProps<{
-  names: string[];
+  data: Data[];
 }>) {
-  const { data } = data;
-  const datum = data[index];
+  const datum = data.data[rowIndex][columnIndex];
   return <div style={style}>...</div>;
 }
 ```
@@ -469,7 +466,7 @@ function Cell({
 #### After
 
 ```tsx
-import { FixedSizeGrid, type GridChildComponentProps } from "react-window";
+import { Grid, type CellComponentProps } from "react-window";
 
 type CellProps = {
   data: Data[];
@@ -517,20 +514,20 @@ function Cell({
 
 The following requirements are new in version 2 and may be reasons to consider _not_ upgrading:
 
-- Peer dependencies now require React version 18 or newer
-- `ResizeObserver` primitive (or polyfill) is required _unless_ explicit pixel dimensions are provided via `style` prop; (see documentation for more)
+- Peer dependencies now require React version 18 or newer.
+- `ResizeObserver` primitive (or a polyfill) is required _unless_ explicit pixel dimensions are provided via the `style` prop (see documentation for more).
 
 ## 1.8.11
 
-- Dependencies updated to include React 19
+- ✨ Updated peer dependencies to include React v19.
 
 ## 1.8.10
 
-- Fix scrollDirection when direction is RTL (#690)
+- 🐛 Fixed `scrollDirection` when direction is RTL. - [#690](https://github.com/bvaughn/react-window/pull/690)
 
 ## 1.8.9
 
-- Readme changes
+- README changes.
 
 ## 1.8.8
 
@@ -597,7 +594,7 @@ The following requirements are new in version 2 and may be reasons to consider _
 
 ## 1.6.0
 
-- 🎉 RTL support added for lists and grids. Special thanks to [davidgarsan](https://github.com/davidgarsan) for his support. - [#156](https://github.com/bvaughn/react-window/pull/156)
+- 🎉 RTL support added for lists and grids. Special thanks to [davidgarsan](https://github.com/davidgarsan) for their support. - [#156](https://github.com/bvaughn/react-window/pull/156)
 - 🐛 Grid `scrollToItem` methods take scrollbar size into account when aligning items - [#153](https://github.com/bvaughn/react-window/issues/153)
 
 ## 1.5.2
@@ -610,7 +607,7 @@ The following requirements are new in version 2 and may be reasons to consider _
 
 ## 1.5.0
 
-- 🎉 Added advanced memoization helpers methods `areEqual` and `shouldComponentUpdate` for item renderers. - [#114](https://github.com/bvaughn/react-window/issues/114)
+- 🎉 Added advanced memoization helper methods `areEqual` and `shouldComponentUpdate` for item renderers. - [#114](https://github.com/bvaughn/react-window/issues/114)
 
 ## 1.4.0
 
@@ -622,7 +619,7 @@ The following requirements are new in version 2 and may be reasons to consider _
 
 ## 1.3.1
 
-- 🎉 Pass `itemData` value to custom `itemKey` callbacks when present - [#90](https://github.com/bvaughn/react-window/issues/90))
+- 🎉 Pass `itemData` value to custom `itemKey` callbacks when present - [#90](https://github.com/bvaughn/react-window/issues/90)
 
 ## 1.3.0
 
@@ -648,8 +645,8 @@ The following requirements are new in version 2 and may be reasons to consider _
 ## 1.2.0
 
 - 🎉 Flow types added to NPM package. ([TrySound](https://github.com/TrySound) - [#40](https://github.com/bvaughn/react-window/pull/40))
-- 🎉 Relaxed grid `scrollTo` method to make `scrollLeft` and `scrollTop` params _optional_ (so you can only update one axis if desired). - [#63](https://github.com/bvaughn/react-window/pull/63))
-- 🐛 Fixed invalid `this` pointer in `VariableSizeGrid` that broke the `resetAfter*` methods - [#58](https://github.com/bvaughn/react-window/pull/58))
+- 🎉 Relaxed grid `scrollTo` method to make `scrollLeft` and `scrollTop` params _optional_ (so you can only update one axis if desired). - [#63](https://github.com/bvaughn/react-window/pull/63)
+- 🐛 Fixed invalid `this` pointer in `VariableSizeGrid` that broke the `resetAfter*` methods - [#58](https://github.com/bvaughn/react-window/pull/58)
 - Upgraded to babel 7 and used shared runtime helpers to reduce package size slightly. ([TrySound](https://github.com/TrySound) - [#48](https://github.com/bvaughn/react-window/pull/48))
 - Remove `overflow:hidden` from inner container ([souporserious](https://github.com/souporserious) - [#56](https://github.com/bvaughn/react-window/pull/56))
 
@@ -664,7 +661,7 @@ The following requirements are new in version 2 and may be reasons to consider _
 ## 1.1.0
 
 - 🎉 Use explicit `constructor` and `super` to generate cleaner component code. ([Andarist](https://github.com/Andarist) - [#26](https://github.com/bvaughn/react-window/pull/26))
-- 🎉 Add optional `shouldForceUpdate` param reset-index methods to specify `forceUpdate` behavior. ([nihgwu](https://github.com/nihgwu) - [#32](https://github.com/bvaughn/react-window/pull/32))
+- 🎉 Add optional `shouldForceUpdate` param to reset-index methods to specify `forceUpdate` behavior. ([nihgwu](https://github.com/nihgwu) - [#32](https://github.com/bvaughn/react-window/pull/32))
 
 ## 1.0.3
 
@@ -678,7 +675,7 @@ The following requirements are new in version 2 and may be reasons to consider _
 
 ## 1.0.1
 
-Updated `README.md` file to remove `@alpha` tag from NPM installation instructions.
+- Updated `README.md` file to remove `@alpha` tag from NPM installation instructions.
 
 # 1.0.0
 
