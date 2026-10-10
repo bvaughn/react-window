@@ -1,5 +1,8 @@
 name: "Pending changes"
-on: [pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
 jobs:
   pending-changes:
     runs-on: ubuntu-latest
