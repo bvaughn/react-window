@@ -17,7 +17,9 @@ export function adjustScrollOffsetForRtl({
   // So we need to determine which browser behavior we're dealing with, and mimic it.
   if (direction === "horizontal") {
     if (isRtl) {
-      switch (getRTLOffsetType()) {
+      switch (
+        getRTLOffsetType(false, containerElement?.ownerDocument ?? document)
+      ) {
         case "negative": {
           return -scrollOffset;
         }

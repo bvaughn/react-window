@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useStableCallback } from "../../hooks/useStableCallback";
 import { assert } from "../../utils/assert";
+import { getOwnerWindow } from "../../utils/getOwnerWindow";
+import { getResizeObserverClass } from "../../utils/getResizeObserverClass";
 import { DATA_ATTRIBUTE_LIST_INDEX } from "./List";
 import type { DynamicRowHeight } from "./types";
 
@@ -100,31 +102,55 @@ export function useDynamicRowHeight({
     }
   );
 
-  const [resizeObserver] = useState(() => {
-    if (typeof ResizeObserver !== "undefined") {
-      return new ResizeObserver(resizeObserverCallback);
-    }
-  });
+  // Rows may be rendered into another window (e.g. a popup rendered into via a portal),
+  // and observers only report on elements in documents they belong to
+  const resizeObserverRef = useRef<{
+    resizeObserver: ResizeObserver;
+    view: Window;
+  } | null>(null);
 
-  useEffect(() => {
-    if (resizeObserver) {
-      return () => {
-        resizeObserver.disconnect();
-      };
-    }
-  }, [resizeObserver]);
+  useEffect(
+    () => () => {
+      resizeObserverRef.current?.resizeObserver.disconnect();
+      resizeObserverRef.current = null;
+    },
+    []
+  );
 
   const observeRowElements = useCallback(
     (elements: Element[] | NodeListOf<Element>) => {
-      if (resizeObserver) {
-        elements.forEach((element) => resizeObserver.observe(element));
-        return () => {
-          elements.forEach((element) => resizeObserver.unobserve(element));
-        };
-      }
-      return () => {};
+      const observed: [Element, ResizeObserver][] = [];
+
+      elements.forEach((element) => {
+        const view = getOwnerWindow(element);
+
+        // Rows from one list share a window, so this only happens if the list moves to another window
+        if (resizeObserverRef.current?.view !== view) {
+          resizeObserverRef.current?.resizeObserver.disconnect();
+
+          const ResizeObserverClass = getResizeObserverClass(element);
+          resizeObserverRef.current = ResizeObserverClass
+            ? {
+                resizeObserver: new ResizeObserverClass(resizeObserverCallback),
+                view
+              }
+            : null;
+        }
+
+        const resizeObserver = resizeObserverRef.current?.resizeObserver;
+        if (resizeObserver) {
+          resizeObserver.observe(element);
+          observed.push([element, resizeObserver]);
+        }
+      });
+
+      return () => {
+        observed.forEach(([element, resizeObserver]) =>
+          resizeObserver.unobserve(element)
+        );
+      };
     },
-    [resizeObserver]
+    [resizeObserverCallback]
   );
 
   return useMemo<DynamicRowHeight>(

@@ -2,6 +2,7 @@ import { useCallback, useRef, type RefObject } from "react";
 import type { Bounds } from "../../core/types";
 import { useIsomorphicLayoutEffect } from "../../hooks/useIsomorphicLayoutEffect";
 import { useStableCallback } from "../../hooks/useStableCallback";
+import { getOwnerWindow } from "../../utils/getOwnerWindow";
 import type { Align } from "../../types";
 import { DATA_ATTRIBUTE_LIST_INDEX } from "./List";
 import type { ListImperativeAPI } from "./types";
@@ -32,14 +33,27 @@ export function useScrollToRow({
     stableFrames: number;
   } | null>(null);
 
-  const scrollFrame = useRef<number | undefined>(undefined);
+  // Track the window that scheduled the frame so it can be cancelled there.
+  const scrollFrame = useRef<{ id: number; view: Window } | undefined>(
+    undefined
+  );
 
   const cancelScroll = useStableCallback(() => {
     pendingScroll.current = null;
     if (scrollFrame.current !== undefined) {
-      cancelAnimationFrame(scrollFrame.current);
+      scrollFrame.current.view.cancelAnimationFrame(scrollFrame.current.id);
       scrollFrame.current = undefined;
     }
+  });
+
+  // Use the list's own window (e.g. a popup rendered into via a portal),
+  // since another window's frames may be throttled while it's in the background.
+  const scheduleCorrectScroll = useStableCallback(() => {
+    const view = getOwnerWindow(element);
+    scrollFrame.current = {
+      id: view.requestAnimationFrame(correctScroll),
+      view
+    };
   });
 
   const correctScroll = useStableCallback(() => {
@@ -99,7 +113,7 @@ export function useScrollToRow({
         }
       }
     }
-    scrollFrame.current = requestAnimationFrame(correctScroll);
+    scheduleCorrectScroll();
   });
 
   useIsomorphicLayoutEffect(() => {
@@ -166,7 +180,7 @@ export function useScrollToRow({
             deadline: performance.now() + 1000,
             stableFrames: 0
           };
-          scrollFrame.current = requestAnimationFrame(correctScroll);
+          scheduleCorrectScroll();
         }
         element.scrollTo({
           behavior: isDynamicRowHeight ? "instant" : behavior,
@@ -174,6 +188,12 @@ export function useScrollToRow({
         });
       }
     },
-    [cancelScroll, correctScroll, element, isDynamicRowHeight, scrollToIndex]
+    [
+      cancelScroll,
+      element,
+      isDynamicRowHeight,
+      scheduleCorrectScroll,
+      scrollToIndex
+    ]
   );
 }

@@ -1,5 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, test } from "vitest";
+import { createElementInOtherWindow } from "../utils/test/createElementInOtherWindow";
 import {
   simulateUnsupportedEnvironmentForTest,
   setDefaultElementSize,
@@ -184,5 +185,44 @@ describe("useResizeObserver", () => {
         width: 15
       });
     });
+  });
+
+  test("should use the ResizeObserver from the element's own window", () => {
+    const { element, observe, unobserve } = createElementInOtherWindow();
+
+    const { unmount } = renderHook(() =>
+      useResizeObserver({
+        element,
+        style: undefined
+      })
+    );
+
+    expect(observe).toHaveBeenCalledWith(element, { box: undefined });
+
+    unmount();
+
+    expect(unobserve).toHaveBeenCalledWith(element);
+  });
+
+  test("should fall back to the global ResizeObserver if the element's window lacks one", () => {
+    const { element, otherWindow } = createElementInOtherWindow();
+    // @ts-expect-error Simulate API being unsupported in the other window
+    otherWindow.ResizeObserver = undefined;
+
+    const { result, unmount } = renderHook(() =>
+      useResizeObserver({
+        element,
+        style: undefined
+      })
+    );
+
+    // Doesn't throw; the (mocked) global ResizeObserver is used instead.
+    // jsdom's mock reports on any element, so this doesn't show a real browser would measure it.
+    expect(result.current).toEqual({
+      height: 100,
+      width: 50
+    });
+
+    unmount();
   });
 });
