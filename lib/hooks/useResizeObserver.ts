@@ -1,4 +1,5 @@
 import { useMemo, useState, type CSSProperties } from "react";
+import { getResizeObserverClass } from "../utils/getResizeObserverClass";
 import { parseNumericStyleValue } from "../utils/parseNumericStyleValue";
 import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect";
 
@@ -46,7 +47,12 @@ export function useResizeObserver({
       return;
     }
 
-    const resizeObserver = new ResizeObserver((entries) => {
+    const ResizeObserverClass = getResizeObserverClass(element);
+    if (!ResizeObserverClass) {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserverClass((entries) => {
       for (const entry of entries) {
         const { contentRect, target } = entry;
         if (element === target) {

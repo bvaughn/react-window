@@ -1,8 +1,9 @@
 import { act, render, screen } from "@testing-library/react";
 import { createRef, useEffect, useLayoutEffect, useRef } from "react";
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, onTestFinished, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../../../src/constants";
 import { assert } from "../../utils/assert";
+import { createElementInOtherWindow } from "../../utils/test/createElementInOtherWindow";
 import {
   disableResizeObserverForCurrentTest,
   setDefaultElementSize,
@@ -664,6 +665,46 @@ describe("List", () => {
           }
         }
       );
+
+      test("schedules pending correction on the list's own window", () => {
+        const { element, otherWindow } = createElementInOtherWindow();
+        const requestFrame = vi
+          .spyOn(otherWindow, "requestAnimationFrame")
+          .mockImplementation(() => 42);
+        const cancelFrame = vi
+          .spyOn(otherWindow, "cancelAnimationFrame")
+          .mockImplementation(() => {});
+        const requestGlobalFrame = vi.spyOn(window, "requestAnimationFrame");
+        onTestFinished(() => requestGlobalFrame.mockRestore());
+        const listRef = createRef<ListImperativeAPI>();
+        function PendingScrollExample() {
+          const rowHeight = useDynamicRowHeight({ defaultRowHeight: 25 });
+          return (
+            <List
+              listRef={listRef}
+              rowCount={100}
+              rowHeight={rowHeight}
+              rowComponent={RowComponent}
+              rowProps={EMPTY_OBJECT}
+            />
+          );
+        }
+        const { unmount } = render(<PendingScrollExample />, {
+          container: element
+        });
+
+        // The other window's Element prototype is not mocked by the test setup
+        const listElement = listRef.current?.element;
+        assert(listElement, "List element not mounted");
+        listElement.scrollTo = vi.fn();
+
+        act(() => listRef.current?.scrollToRow({ index: 50 }));
+        expect(requestFrame).toHaveBeenCalledTimes(1);
+        expect(requestGlobalFrame).not.toHaveBeenCalled();
+
+        unmount();
+        expect(cancelFrame).toHaveBeenCalledWith(42);
+      });
 
       let onRowsRendered: ReturnType<typeof vi.fn>;
 

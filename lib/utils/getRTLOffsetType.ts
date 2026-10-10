@@ -3,7 +3,8 @@ export type RTLOffsetType =
   | "positive-descending"
   | "positive-ascending";
 
-let cachedRTLResult: RTLOffsetType | null = null;
+// Cache per document, since each window is probed separately
+const cache = new WeakMap<Document, RTLOffsetType>();
 
 // TRICKY According to the spec, scrollLeft should be negative for RTL aligned elements.
 // Chrome does not seem to adhere; its scrollLeft values are positive (measured relative to the left).
@@ -11,23 +12,27 @@ let cachedRTLResult: RTLOffsetType | null = null;
 // The safest way to check this is to intentionally set a negative offset,
 // and then verify that the subsequent "scroll" event matches the negative offset.
 // If it does not match, then we can assume a non-standard RTL scroll implementation.
-export function getRTLOffsetType(recalculate: boolean = false): RTLOffsetType {
-  if (cachedRTLResult === null || recalculate) {
-    const outerDiv = document.createElement("div");
+export function getRTLOffsetType(
+  recalculate: boolean = false,
+  ownerDocument: Document = document
+): RTLOffsetType {
+  let cachedRTLResult = cache.get(ownerDocument);
+  if (cachedRTLResult === undefined || recalculate) {
+    const outerDiv = ownerDocument.createElement("div");
     const outerStyle = outerDiv.style;
     outerStyle.width = "50px";
     outerStyle.height = "50px";
     outerStyle.overflow = "scroll";
     outerStyle.direction = "rtl";
 
-    const innerDiv = document.createElement("div");
+    const innerDiv = ownerDocument.createElement("div");
     const innerStyle = innerDiv.style;
     innerStyle.width = "100px";
     innerStyle.height = "100px";
 
     outerDiv.appendChild(innerDiv);
 
-    document.body.appendChild(outerDiv);
+    ownerDocument.body.appendChild(outerDiv);
 
     if (outerDiv.scrollLeft > 0) {
       cachedRTLResult = "positive-descending";
@@ -40,9 +45,9 @@ export function getRTLOffsetType(recalculate: boolean = false): RTLOffsetType {
       }
     }
 
-    document.body.removeChild(outerDiv);
+    ownerDocument.body.removeChild(outerDiv);
 
-    return cachedRTLResult;
+    cache.set(ownerDocument, cachedRTLResult);
   }
 
   return cachedRTLResult;

@@ -1,5 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
+import { createElementInOtherWindow } from "../../utils/test/createElementInOtherWindow";
 import { useDynamicRowHeight } from "./useDynamicRowHeight";
 import { DATA_ATTRIBUTE_LIST_INDEX } from "./List";
 import { setElementSize } from "../../utils/test/mockResizeObserver";
@@ -210,6 +211,77 @@ describe("useDynamicRowHeight", () => {
       });
       expect(result.current.getRowHeight(0)).toBe(10);
     });
+  });
+
+  test("observes rows using the ResizeObserver from their own window", () => {
+    const { disconnect, element, observe, unobserve } =
+      createElementInOtherWindow();
+
+    const { result, unmount } = renderHook(() =>
+      useDynamicRowHeight({ defaultRowHeight: 100 })
+    );
+
+    let unobserveRows: () => void = NOOP_FUNCTION;
+    act(() => {
+      unobserveRows = result.current.observeRowElements([element]);
+    });
+
+    expect(observe).toHaveBeenCalledWith(element);
+
+    unobserveRows();
+
+    expect(unobserve).toHaveBeenCalledWith(element);
+
+    unmount();
+
+    expect(disconnect).toHaveBeenCalled();
+  });
+
+  test("replaces the observer if rows move to another window", () => {
+    const { disconnect, element, observe } = createElementInOtherWindow();
+
+    const mainWindowElement = document.createElement("div");
+    mainWindowElement.setAttribute(DATA_ATTRIBUTE_LIST_INDEX, "0");
+
+    const { result } = renderHook(() =>
+      useDynamicRowHeight({ defaultRowHeight: 100 })
+    );
+
+    act(() => {
+      result.current.observeRowElements([element]);
+    });
+
+    expect(observe).toHaveBeenCalledWith(element);
+    expect(disconnect).not.toHaveBeenCalled();
+
+    act(() => {
+      result.current.observeRowElements([mainWindowElement]);
+    });
+
+    expect(disconnect).toHaveBeenCalledTimes(1);
+  });
+
+  test("falls back to the global ResizeObserver if a row's window lacks one", () => {
+    const { element, otherWindow } = createElementInOtherWindow();
+    // @ts-expect-error Simulate API being unsupported in the other window
+    otherWindow.ResizeObserver = undefined;
+    element.setAttribute(DATA_ATTRIBUTE_LIST_INDEX, "0");
+
+    const { result } = renderHook(() =>
+      useDynamicRowHeight({ defaultRowHeight: 100 })
+    );
+
+    act(() => {
+      result.current.observeRowElements([element]);
+    });
+
+    act(() => {
+      setElementSize({ element, height: 25, width: 50 });
+    });
+
+    // Observed by the (mocked) global ResizeObserver, as useResizeObserver does.
+    // jsdom's mock reports on any element, so this doesn't show a real browser would measure it.
+    expect(result.current.getRowHeight(0)).toBe(25);
   });
 
   // setRowHeight is tested indirectly by "getAverageRowHeight" and "getRowHeight" blocks above
