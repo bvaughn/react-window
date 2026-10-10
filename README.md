@@ -34,7 +34,7 @@ Frequently asked questions can be found [here](https://react-window.vercel.app/c
 
 ## Documentation
 
-Documentation for this project is available at [react-window.vercel.app](https://react-window.vercel.app/); version 1.x documentation can be found at [react-window-v1.vercel.app](https://react-window-v1.vercel.app/).
+Documentation for this project is available at [react-window.vercel.app](https://react-window.vercel.app/).
 
 ### List
 
