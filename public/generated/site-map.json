@@ -127,7 +127,7 @@
       {
         "id": "scrollToRow",
         "title": "scrollToRow",
-        "text": "scrollToRow Scrolls the list so that the specified row is visible.\nDynamic row heights are measured after rendering;\nContent that resizes later may require another scrollToRow call.\n behavior \"smooth\" is ignored for dynamic height lists;\nscrollToRow is instant as it requires rows to be lazily measured\n scrollToRow: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
+        "text": "scrollToRow Scrolls the list so that the specified row is visible.\nDynamic row heights are measured after rendering;\nContent that resizes later may require another scrollToRow call.\n behavior \"smooth\" is ignored for dynamic height lists;\nscrollToRow is instant as it requires rows to be lazily measured\n \n align Determines the vertical alignment of the element within the list\n behavior Determines whether scrolling is instant or animates smoothly\n index Index of the row to scroll to (0-based)\n\n scrollToRow: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
       },
       {
         "id": "hooks",
@@ -278,17 +278,17 @@
       {
         "id": "scrollToCell",
         "title": "scrollToCell",
-        "text": "scrollToCell Scrolls the grid so that the specified row and column are visible.\n scrollToCell: ({\n behavior,\n columnAlign,\n columnIndex,\n rowAlign,\n rowIndex\n }: {\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n columnAlign?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n columnIndex: number;\n rowAlign?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n rowIndex: number;\n }) => void;"
+        "text": "scrollToCell Scrolls the grid so that the specified row and column are visible.\n \n behavior Determines whether scrolling is instant or animates smoothly\n columnAlign Determines the horizontal alignment of the element within the grid\n columnIndex Index of the column to scroll to (0-based)\n rowAlign Determines the vertical alignment of the element within the grid\n rowIndex Index of the row to scroll to (0-based)\n\n scrollToCell: ({\n behavior,\n columnAlign,\n columnIndex,\n rowAlign,\n rowIndex\n }: {\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n columnAlign?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n columnIndex: number;\n rowAlign?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n rowIndex: number;\n }) => void;"
       },
       {
         "id": "scrollToColumn",
         "title": "scrollToColumn",
-        "text": "scrollToColumn Scrolls the grid so that the specified column is visible.\n scrollToColumn: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
+        "text": "scrollToColumn Scrolls the grid so that the specified column is visible.\n \n align Determines the horizontal alignment of the element within the grid\n behavior Determines whether scrolling is instant or animates smoothly\n index Index of the column to scroll to (0-based)\n\n scrollToColumn: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
       },
       {
         "id": "scrollToRow",
         "title": "scrollToRow",
-        "text": "scrollToRow Scrolls the grid so that the specified row is visible.\n scrollToRow: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
+        "text": "scrollToRow Scrolls the grid so that the specified row is visible.\n \n align Determines the vertical alignment of the element within the grid\n behavior Determines whether scrolling is instant or animates smoothly\n index Index of the row to scroll to (0-based)\n\n scrollToRow: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
       },
       {
         "id": "hooks",
