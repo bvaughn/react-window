@@ -21,6 +21,7 @@ import type { ListProps } from "./types";
 import { useScrollToRow } from "./useScrollToRow";
 
 export const DATA_ATTRIBUTE_LIST_INDEX = "data-react-window-index";
+export const DATA_ATTRIBUTE_SIZER = "data-react-window-sizer";
 
 /**
  * Renders data with many rows.
@@ -120,13 +121,16 @@ export function List<
         0,
         startIndexOverscan < 0 ? 0 : stopIndexOverscan - startIndexOverscan + 1
       )
-      .map((item, index) => {
-        // The slice excludes overlays and the sizing element. A row's ARIA
-        // visibility does not determine whether it needs layout measurements.
+      .filter((item, index) => {
+        if (item.hasAttribute(DATA_ATTRIBUTE_SIZER)) {
+          // Ignore sizing element
+          return false;
+        }
+
         const attribute = `${startIndexOverscan + index}`;
         item.setAttribute(DATA_ATTRIBUTE_LIST_INDEX, attribute);
 
-        return item;
+        return true;
       });
 
     rowElements.current = rows;
@@ -215,6 +219,7 @@ export function List<
   const sizingElement = (
     <div
       aria-hidden
+      {...{ [DATA_ATTRIBUTE_SIZER]: "" }}
       style={{
         height: getEstimatedSize(),
         width: "100%",
