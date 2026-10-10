@@ -72,8 +72,8 @@ Additionally it will receive prop values passed to <code>rowProps</code>.</p>
       <td><p>Row height; the following formats are supported:</p>
 <ul>
 <li>number of pixels (number)</li>
-<li>percentage of the grid&#39;s current height (string)</li>
-<li>function that returns the row height (in pixels) given an index and <code>cellProps</code></li>
+<li>percentage of the list&#39;s current height (string)</li>
+<li>function that returns the row height (in pixels) given an index and <code>rowProps</code></li>
 <li>dynamic row height cache returned by the <code>useDynamicRowHeight</code> hook</li>
 </ul>
 <p>⚠️ Dynamic row heights are not as efficient as predetermined sizes.
@@ -117,7 +117,7 @@ The list of rows will fill the height defined by this style.</p>
     </tr>
     <tr>
       <td>children</td>
-      <td><p>Additional content to be rendered within the list (above cells).
+      <td><p>Additional content to be rendered within the list (above rows).
 This property can be used to render things like overlays or tooltips.</p>
 </td>
     </tr>
@@ -131,7 +131,7 @@ This value is important for server rendering.</p>
       <td>listRef</td>
       <td><p>Ref used to interact with this component&#39;s imperative API.</p>
 <p>This API has imperative methods for scrolling and a getter for the outermost DOM element.</p>
-<p>ℹ️ The <code>useListRef</code> and <code>useListCallbackRef</code> hooks are exported for convenience use in TypeScript projects.</p>
+<p>ℹ️ The <code>useListRef</code> and <code>useListCallbackRef</code> hooks are exported for convenience in TypeScript projects.</p>
 </td>
     </tr>
     <tr>
@@ -198,7 +198,7 @@ Either static sizes or something that can be derived (from the data in `CellProp
     <tr>
       <td>cellComponent</td>
       <td><p>React component responsible for rendering a cell.</p>
-<p>This component will receive an <code>index</code> and <code>style</code> prop by default.
+<p>This component will receive <code>columnIndex</code>, <code>rowIndex</code>, and <code>style</code> props by default.
 Additionally it will receive prop values passed to <code>cellProps</code>.</p>
 <p>ℹ️ The prop types for this component are exported as <code>CellComponentProps</code></p>
 </td>
@@ -306,7 +306,7 @@ This value is important for server rendering.</p>
     <tr>
       <td>gridRef</td>
       <td><p>Imperative Grid API.</p>
-<p>ℹ️ The <code>useGridRef</code> and <code>useGridCallbackRef</code> hooks are exported for convenience use in TypeScript projects.</p>
+<p>ℹ️ The <code>useGridRef</code> and <code>useGridCallbackRef</code> hooks are exported for convenience in TypeScript projects.</p>
 </td>
     </tr>
     <tr>
@@ -339,8 +339,8 @@ It is important to always <code>useCallback</code> for this prop; do not use an 
     </tr>
     <tr>
       <td>tagName</td>
-      <td><p>Can be used to override the root HTML element rendered by the List component.
-The default value is &quot;div&quot;, meaning that List renders an HTMLDivElement as its root.</p>
+      <td><p>Can be used to override the root HTML element rendered by the Grid component.
+The default value is &quot;div&quot;, meaning that Grid renders an HTMLDivElement as its root.</p>
 <p>⚠️ In most use cases the default ARIA roles are sufficient and this prop is not needed.</p>
 </td>
     </tr>

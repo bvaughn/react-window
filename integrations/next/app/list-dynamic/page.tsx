@@ -1,7 +1,7 @@
 import {
   AnimationFrameRowCellCounter,
   EnvironmentMarker,
-  LayoutShiftDetecter
+  LayoutShiftDetector
 } from "../../../tests";
 import { List } from "./components/List";
 
@@ -10,7 +10,7 @@ export default async function Home() {
     <div className="p-2 flex flex-col gap-2">
       <EnvironmentMarker>NextJS (server components)</EnvironmentMarker>
       <AnimationFrameRowCellCounter />
-      <LayoutShiftDetecter />
+      <LayoutShiftDetector />
       <List />
     </div>
   );

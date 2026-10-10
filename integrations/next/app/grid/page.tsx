@@ -2,7 +2,7 @@ import { Grid } from "react-window";
 import {
   AnimationFrameRowCellCounter,
   EnvironmentMarker,
-  LayoutShiftDetecter
+  LayoutShiftDetector
 } from "../../../tests";
 import { CellComponent } from "./components/CellComponent";
 
@@ -11,7 +11,7 @@ export default async function Home() {
     <div className="p-2 flex flex-col gap-2">
       <EnvironmentMarker>NextJS (server components)</EnvironmentMarker>
       <AnimationFrameRowCellCounter />
-      <LayoutShiftDetecter />
+      <LayoutShiftDetector />
       <Grid
         cellComponent={CellComponent}
         cellProps={{}}

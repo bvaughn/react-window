@@ -20,7 +20,7 @@ export type GridProps<
   /**
    * React component responsible for rendering a cell.
    *
-   * This component will receive an `index` and `style` prop by default.
+   * This component will receive `columnIndex`, `rowIndex`, and `style` props by default.
    * Additionally it will receive prop values passed to `cellProps`.
    *
    * ℹ️ The prop types for this component are exported as `CellComponentProps`
@@ -111,11 +111,11 @@ export type GridProps<
   /**
    * Imperative Grid API.
    *
-   * ℹ️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience use in TypeScript projects.
+   * ℹ️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience in TypeScript projects.
    */
   gridRef?: Ref<{
     /**
-     * Outermost HTML element for the grid if mounted and null (if not mounted.
+     * Outermost HTML element for the grid if mounted and null if not mounted.
      */
     get element(): HTMLDivElement | null;
 
@@ -123,9 +123,9 @@ export type GridProps<
      * Scrolls the grid so that the specified row and column are visible.
      *
      * @param behavior Determines whether scrolling is instant or animates smoothly
-     * @param columnAlign Determines the horizontal alignment of the element within the list
+     * @param columnAlign Determines the horizontal alignment of the element within the grid
      * @param columnIndex Index of the column to scroll to (0-based)
-     * @param rowAlign Determines the vertical alignment of the element within the list
+     * @param rowAlign Determines the vertical alignment of the element within the grid
      * @param rowIndex Index of the row to scroll to (0-based)
      *
      * @throws RangeError if an invalid row or column index is provided
@@ -141,7 +141,7 @@ export type GridProps<
     /**
      * Scrolls the grid so that the specified column is visible.
      *
-     * @param align Determines the horizontal alignment of the element within the list
+     * @param align Determines the horizontal alignment of the element within the grid
      * @param behavior Determines whether scrolling is instant or animates smoothly
      * @param index Index of the column to scroll to (0-based)
      *
@@ -156,7 +156,7 @@ export type GridProps<
     /**
      * Scrolls the grid so that the specified row is visible.
      *
-     * @param align Determines the vertical alignment of the element within the list
+     * @param align Determines the vertical alignment of the element within the grid
      * @param behavior Determines whether scrolling is instant or animates smoothly
      * @param index Index of the row to scroll to (0-based)
      *
@@ -238,8 +238,8 @@ export type GridProps<
   style?: CSSProperties;
 
   /**
-   * Can be used to override the root HTML element rendered by the List component.
-   * The default value is "div", meaning that List renders an HTMLDivElement as its root.
+   * Can be used to override the root HTML element rendered by the Grid component.
+   * The default value is "div", meaning that Grid renders an HTMLDivElement as its root.
    *
    * ⚠️ In most use cases the default ARIA roles are sufficient and this prop is not needed.
    */
@@ -271,11 +271,11 @@ export type CachedBounds = Map<
  *
  * This API has imperative methods for scrolling and a getter for the outermost DOM element.
  *
- * ℹ️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience use in TypeScript projects.
+ * ℹ️ The `useGridRef` and `useGridCallbackRef` hooks are exported for convenience in TypeScript projects.
  */
 export interface GridImperativeAPI {
   /**
-   * Outermost HTML element for the grid if mounted and null (if not mounted.
+   * Outermost HTML element for the grid if mounted and null if not mounted.
    */
   get element(): HTMLDivElement | null;
 
@@ -283,9 +283,9 @@ export interface GridImperativeAPI {
    * Scrolls the grid so that the specified row and column are visible.
    *
    * @param behavior Determines whether scrolling is instant or animates smoothly
-   * @param columnAlign Determines the horizontal alignment of the element within the list
+   * @param columnAlign Determines the horizontal alignment of the element within the grid
    * @param columnIndex Index of the column to scroll to (0-based)
-   * @param rowAlign Determines the vertical alignment of the element within the list
+   * @param rowAlign Determines the vertical alignment of the element within the grid
    * @param rowIndex Index of the row to scroll to (0-based)
    *
    * @throws RangeError if an invalid row or column index is provided
@@ -307,7 +307,7 @@ export interface GridImperativeAPI {
   /**
    * Scrolls the grid so that the specified column is visible.
    *
-   * @param align Determines the horizontal alignment of the element within the list
+   * @param align Determines the horizontal alignment of the element within the grid
    * @param behavior Determines whether scrolling is instant or animates smoothly
    * @param index Index of the column to scroll to (0-based)
    *
@@ -326,7 +326,7 @@ export interface GridImperativeAPI {
   /**
    * Scrolls the grid so that the specified row is visible.
    *
-   * @param align Determines the vertical alignment of the element within the list
+   * @param align Determines the vertical alignment of the element within the grid
    * @param behavior Determines whether scrolling is instant or animates smoothly
    * @param index Index of the row to scroll to (0-based)
    *

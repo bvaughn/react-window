@@ -8,7 +8,7 @@ type PerformanceEntry = {
   value: number;
 };
 
-export function LayoutShiftDetecter() {
+export function LayoutShiftDetector() {
   const [state, setState] = useState<number | null>(null);
 
   useInsertionEffect(() => {

@@ -4,7 +4,7 @@
       "content": "<p>Ref used to interact with this component's imperative API.\nThis API has imperative methods for scrolling and a getter for the outermost DOM element.</p>\n"
     },
     {
-      "content": "<p>The <code>useGridRef</code> and <code>useGridCallbackRef</code> hooks are exported for convenience use in TypeScript projects.</p>\n",
+      "content": "<p>The <code>useGridRef</code> and <code>useGridCallbackRef</code> hooks are exported for convenience in TypeScript projects.</p>\n",
       "intent": "primary"
     }
   ],

@@ -9,7 +9,7 @@ export default function ImagesRoute() {
     <Box direction="column" gap={4}>
       <Header section="Other" title="Images" />
       <div>
-        Images are example of{" "}
+        Images are an example of{" "}
         <Link to="/list/dynamic-row-height">dynamic row heights</Link>.
       </div>
       <Block className="h-150 max-h-[50vh]" data-focus-within="bold">
