@@ -33,7 +33,7 @@ pnpm test
 
 ### Updating assets
 
-Before subtmitting, also make sure to update generated docs/examples:
+Before submitting, also make sure to update generated docs/examples:
 
 ```
 pnpm compile

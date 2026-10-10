@@ -11,7 +11,7 @@ describe("parseNumericStyleValue", () => {
     expect(parseNumericStyleValue(10.5)).toBe(10.5);
   });
 
-  test("should parse string pixels styles", () => {
+  test("should parse string pixel styles", () => {
     expect(parseNumericStyleValue("20px")).toBe(20);
     expect(parseNumericStyleValue("10.5px")).toBe(10.5);
   });

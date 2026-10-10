@@ -14,8 +14,8 @@ export default function VariableRowHeightsRoute() {
         render.
       </div>
       <div>
-        Here is an example the most populous US postal codes, grouped by state.
-        State rows "headers" are taller and are styled differently.
+        Here is an example of the most populous US postal codes, grouped by
+        state. State "header" rows are taller and are styled differently.
       </div>
       <Block className="h-50" data-focus-within="bold">
         {!citiesByState.length && <LoadingSpinner />}

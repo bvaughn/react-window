@@ -4,7 +4,7 @@
       "content": "<p>Imperative List API.</p>\n"
     },
     {
-      "content": "<p>The <code>useListRef</code> and <code>useListCallbackRef</code> hooks are exported for convenience use in TypeScript projects.</p>\n",
+      "content": "<p>The <code>useListRef</code> and <code>useListCallbackRef</code> hooks are exported for convenience in TypeScript projects.</p>\n",
       "intent": "primary"
     }
   ],

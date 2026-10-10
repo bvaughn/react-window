@@ -130,7 +130,7 @@ export default function ScrollToCellRoute() {
       <Code html={useGridRefMarkdown.html} />
       <div>And call API methods in an event handler:</div>
       <Code html={gridRefClickEventHandlerMarkdown.html} />
-      <div>The form below uses the imperative API to scroll the list:</div>
+      <div>The form below uses the imperative API to scroll the grid:</div>
       <Box direction="row" gap={4}>
         <Select
           className="flex-1"

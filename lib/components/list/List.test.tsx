@@ -1020,7 +1020,7 @@ describe("List", () => {
       expect(container.textContent).toEqual("AB");
     });
 
-    test("should not cause a cycle of List callback ref is passed in rowProps", () => {
+    test("should not cause a cycle if List callback ref is passed in rowProps", () => {
       function RowComponentWithRowProps({
         index,
         style

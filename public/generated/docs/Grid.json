@@ -61,7 +61,7 @@
           "content": "<p>React component responsible for rendering a cell.</p>\n"
         },
         {
-          "content": "<p>This component will receive an <code>index</code> and <code>style</code> prop by default.\nAdditionally it will receive prop values passed to <code>cellProps</code>.</p>\n"
+          "content": "<p>This component will receive <code>columnIndex</code>, <code>rowIndex</code>, and <code>style</code> props by default.\nAdditionally it will receive prop values passed to <code>cellProps</code>.</p>\n"
         },
         {
           "content": "<p>The prop types for this component are exported as <code>CellComponentProps</code></p>\n",
@@ -150,7 +150,7 @@
           "content": "<p>Imperative Grid API.</p>\n"
         },
         {
-          "content": "<p>The <code>useGridRef</code> and <code>useGridCallbackRef</code> hooks are exported for convenience use in TypeScript projects.</p>\n",
+          "content": "<p>The <code>useGridRef</code> and <code>useGridCallbackRef</code> hooks are exported for convenience in TypeScript projects.</p>\n",
           "intent": "primary"
         }
       ],
@@ -229,7 +229,7 @@
     "tagName": {
       "description": [
         {
-          "content": "<p>Can be used to override the root HTML element rendered by the List component.\nThe default value is &quot;div&quot;, meaning that List renders an HTMLDivElement as its root.</p>\n"
+          "content": "<p>Can be used to override the root HTML element rendered by the Grid component.\nThe default value is &quot;div&quot;, meaning that Grid renders an HTMLDivElement as its root.</p>\n"
         },
         {
           "content": "<p>In most use cases the default ARIA roles are sufficient and this prop is not needed.</p>\n",

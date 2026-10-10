@@ -29,7 +29,7 @@ export default function FixedRowHeightsRoute() {
       </div>
       <Code html={FixedHeightListMarkdown.html} />
       <div>
-        The <code>rowProps</code> object can also be used to share between
+        The <code>rowProps</code> object can also be used to share data between
         components. Values passed in <code>rowProps</code> will also be passed
         as props to the row component:
       </div>

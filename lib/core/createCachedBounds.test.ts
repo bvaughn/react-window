@@ -28,7 +28,7 @@ describe("createCachedBounds", () => {
     expect(cachedBounds.size).toBe(4);
   });
 
-  test("should cached measured sizes", () => {
+  test("should cache measured sizes", () => {
     const itemSize = vi.fn(() => 10);
 
     const cachedBounds = createCachedBounds({

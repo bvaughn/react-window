@@ -33,8 +33,8 @@ export default function HowDoesItWorkRoute() {
         to mimic other columns before them.
       </Callout>
       <div>
-        To render one of these rows, all you need to provide is a component like
-        the one below.
+        To render one of these items, all you need to provide is a component
+        like the one below.
       </div>
       <Code html={BasicRowMarkdown.html} />
     </Box>

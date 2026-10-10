@@ -2,7 +2,7 @@ import { List, useDynamicRowHeight } from "react-window";
 import {
   AnimationFrameRowCellCounter,
   EnvironmentMarker,
-  LayoutShiftDetecter
+  LayoutShiftDetector
 } from "../../../tests";
 import { RowComponent } from "./RowComponent";
 
@@ -15,7 +15,7 @@ export default function Page() {
     <div className="p-2 flex flex-col gap-2">
       <EnvironmentMarker>Vike (server rendering)</EnvironmentMarker>
       <AnimationFrameRowCellCounter />
-      <LayoutShiftDetecter />
+      <LayoutShiftDetector />
       <List
         className="h-[250px]"
         defaultHeight={250}

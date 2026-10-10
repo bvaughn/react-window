@@ -30,7 +30,7 @@
     "children": {
       "description": [
         {
-          "content": "<p>Additional content to be rendered within the list (above cells).\nThis property can be used to render things like overlays or tooltips.</p>\n"
+          "content": "<p>Additional content to be rendered within the list (above rows).\nThis property can be used to render things like overlays or tooltips.</p>\n"
         }
       ],
       "html": "<div><span class=\"tok-variableName\"><span class=\"tok-propertyName\">children</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">ReactNode</span></div>",
@@ -56,7 +56,7 @@
           "content": "<p>This API has imperative methods for scrolling and a getter for the outermost DOM element.</p>\n"
         },
         {
-          "content": "<p>The <code>useListRef</code> and <code>useListCallbackRef</code> hooks are exported for convenience use in TypeScript projects.</p>\n",
+          "content": "<p>The <code>useListRef</code> and <code>useListCallbackRef</code> hooks are exported for convenience in TypeScript projects.</p>\n",
           "intent": "primary"
         }
       ],
@@ -124,7 +124,7 @@
     "rowHeight": {
       "description": [
         {
-          "content": "<p>Row height; the following formats are supported:</p>\n<ul>\n<li>number of pixels (number)</li>\n<li>percentage of the grid's current height (string)</li>\n<li>function that returns the row height (in pixels) given an index and <code>cellProps</code></li>\n<li>dynamic row height cache returned by the <code>useDynamicRowHeight</code> hook</li>\n</ul>\n"
+          "content": "<p>Row height; the following formats are supported:</p>\n<ul>\n<li>number of pixels (number)</li>\n<li>percentage of the list's current height (string)</li>\n<li>function that returns the row height (in pixels) given an index and <code>rowProps</code></li>\n<li>dynamic row height cache returned by the <code>useDynamicRowHeight</code> hook</li>\n</ul>\n"
         },
         {
           "content": "<p>Dynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time.</p>\n",

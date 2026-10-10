@@ -2,7 +2,7 @@ import { List, type RowComponentProps } from "react-window";
 import {
   AnimationFrameRowCellCounter,
   EnvironmentMarker,
-  LayoutShiftDetecter
+  LayoutShiftDetector
 } from "../../../tests";
 
 export function ListRoute() {
@@ -10,7 +10,7 @@ export function ListRoute() {
     <div className="p-2 flex flex-col gap-2">
       <EnvironmentMarker>Vite (client rendering)</EnvironmentMarker>
       <AnimationFrameRowCellCounter />
-      <LayoutShiftDetecter />
+      <LayoutShiftDetector />
       <List
         className="h-[250px]"
         defaultHeight={250}

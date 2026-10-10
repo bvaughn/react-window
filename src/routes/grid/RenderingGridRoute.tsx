@@ -34,14 +34,14 @@ export default function RenderingGridRoute() {
       <Code html={GridMarkdown.html} />
       <div>
         Column widths and row heights can be either numbers or functions. In the
-        example above, row height is fixed and column width is function that
+        example above, row height is fixed and column width is a function that
         determines the width of the column based on the column index:
       </div>
       <Code html={columnWidthMarkdown.html} />
       <div>
-        Lastly grids require a component to render cell, given a column and row
-        index. As with lists, this component receives additional props specified
-        as part of <code>cellProps</code>:
+        Lastly grids require a component to render a cell, given a column and
+        row index. As with lists, this component receives additional props
+        specified as part of <code>cellProps</code>:
       </div>
       <Code html={CellComponentMarkdown.html} />
       <Callout intent="warning">

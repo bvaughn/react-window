@@ -25,7 +25,7 @@ export type ListProps<
   TagName extends TagNames = "div"
 > = Omit<HTMLAttributes<HTMLDivElement>, "onResize"> & {
   /**
-   * Additional content to be rendered within the list (above cells).
+   * Additional content to be rendered within the list (above rows).
    * This property can be used to render things like overlays or tooltips.
    */
   children?: ReactNode;
@@ -46,11 +46,11 @@ export type ListProps<
    *
    * This API has imperative methods for scrolling and a getter for the outermost DOM element.
    *
-   * ℹ️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience use in TypeScript projects.
+   * ℹ️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience in TypeScript projects.
    */
   listRef?: Ref<{
     /**
-     * Outermost HTML element for the list if mounted and null (if not mounted.
+     * Outermost HTML element for the list if mounted and null if not mounted.
      */
     get element(): HTMLDivElement | null;
 
@@ -127,8 +127,8 @@ export type ListProps<
   /**
    * Row height; the following formats are supported:
    * - number of pixels (number)
-   * - percentage of the grid's current height (string)
-   * - function that returns the row height (in pixels) given an index and `cellProps`
+   * - percentage of the list's current height (string)
+   * - function that returns the row height (in pixels) given an index and `rowProps`
    * - dynamic row height cache returned by the `useDynamicRowHeight` hook
    *
    * ⚠️ Dynamic row heights are not as efficient as predetermined sizes.
@@ -195,11 +195,11 @@ export type CachedBounds = Map<
 /**
  * Imperative List API.
  *
- * ℹ️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience use in TypeScript projects.
+ * ℹ️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience in TypeScript projects.
  */
 export interface ListImperativeAPI {
   /**
-   * Outermost HTML element for the list if mounted and null (if not mounted.
+   * Outermost HTML element for the list if mounted and null if not mounted.
    */
   get element(): HTMLDivElement | null;
 

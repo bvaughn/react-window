@@ -2,7 +2,7 @@ import { Grid, type CellComponentProps } from "react-window";
 import {
   AnimationFrameRowCellCounter,
   EnvironmentMarker,
-  LayoutShiftDetecter
+  LayoutShiftDetector
 } from "../../../tests";
 
 export function GridRoute() {
@@ -10,7 +10,7 @@ export function GridRoute() {
     <div className="p-2 flex flex-col gap-2">
       <EnvironmentMarker>Vite (client rendering)</EnvironmentMarker>
       <AnimationFrameRowCellCounter />
-      <LayoutShiftDetecter />
+      <LayoutShiftDetector />
       <Grid
         cellComponent={CellComponent}
         cellProps={{}}
