@@ -1,4 +1,5 @@
-import { useLayoutEffect, useState, type HTMLAttributes } from "react";
+import { useState, type HTMLAttributes } from "react";
+import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { isRtl } from "../utils/isRtl";
 
 export function useIsRtl(
@@ -7,7 +8,7 @@ export function useIsRtl(
 ) {
   const [value, setValue] = useState(dir === "rtl");
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (dir) {
       setValue(dir === "rtl");
     } else if (element) {

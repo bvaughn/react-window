@@ -90,7 +90,25 @@ const nav: NavConfig<Path | DefaultPath> = [
       { path: "/grid/rtl-grids", title: "Right to left content" },
       { path: "/grid/horizontal-lists", title: "Horizontal lists" },
       { path: "/list/images", title: "Images" },
-      { path: "/list/sticky-rows", title: "Sticky rows" }
+      { path: "/list/sticky-rows", title: "Sticky rows" },
+      {
+        path: "/server-rendering",
+        title: "Server rendering",
+        children: [
+          {
+            path: "/server-rendering/server-components",
+            title: "Server components"
+          },
+          {
+            path: "/server-rendering/dynamic-row-heights",
+            title: "Dynamic row heights"
+          },
+          {
+            path: "/server-rendering/initial-scroll-position",
+            title: "Initial scroll position"
+          }
+        ]
+      }
     ]
   },
   { path: "/platform-requirements", title: "Requirements" },

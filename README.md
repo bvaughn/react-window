@@ -76,6 +76,7 @@ Additionally it will receive prop values passed to <code>rowProps</code>.</p>
 <li>function that returns the row height (in pixels) given an index and <code>rowProps</code></li>
 <li>dynamic row height cache returned by the <code>useDynamicRowHeight</code> hook</li>
 </ul>
+<p>ℹ️ Percentage heights can&#39;t be resolved during server rendering unless a <code>defaultHeight</code> (or a pixel height via the <code>style</code> prop) is specified.</p>
 <p>⚠️ Dynamic row heights are not as efficient as predetermined sizes.
 It&#39;s recommended to provide your own height values if they can be determined ahead of time.</p>
 </td>
@@ -123,8 +124,20 @@ This property can be used to render things like overlays or tooltips.</p>
     </tr>
     <tr>
       <td>defaultHeight</td>
-      <td><p>Default height of list for initial render.
-This value is important for server rendering.</p>
+      <td><p>Default height of list (in pixels) for initial render, before its actual height has been measured.</p>
+<p>ℹ️ Lists can&#39;t be measured during server rendering, so this value determines how many rows are server rendered.
+It&#39;s recommended to set this to the expected height of the list (or to specify a pixel height via the <code>style</code> prop).</p>
+</td>
+    </tr>
+    <tr>
+      <td>defaultScrollOffset</td>
+      <td><p>Initial scroll offset (in pixels) of the list.
+This value is only applied once, when the list first mounts with at least one row.</p>
+<p>ℹ️ Server-rendered HTML can&#39;t be pre-scrolled, so server rendering always starts at the first row;
+the default scroll offset is applied once the list hydrates.</p>
+<p>⚠️ If the list can&#39;t be scrolled that far when the offset is applied (e.g. it is hidden with <code>display: none</code>,
+or uses percentage row heights before its height has been measured), the offset is clamped or ignored and not retried.
+Specify a <code>defaultHeight</code> (or a pixel height via the <code>style</code> prop) when using percentage row heights.</p>
 </td>
     </tr>
     <tr>
@@ -223,6 +236,7 @@ Grid will automatically re-render cells when values in this object change.</p>
 <li>percentage of the grid&#39;s current width (string)</li>
 <li>function that returns the column width (in pixels) given an index and <code>cellProps</code></li>
 </ul>
+<p>ℹ️ Percentage widths can&#39;t be resolved during server rendering unless a <code>defaultWidth</code> (or a pixel width via the <code>style</code> prop) is specified.</p>
 </td>
     </tr>
     <tr>
@@ -238,6 +252,7 @@ Grid will automatically re-render cells when values in this object change.</p>
 <li>percentage of the grid&#39;s current height (string)</li>
 <li>function that returns the row height (in pixels) given an index and <code>cellProps</code></li>
 </ul>
+<p>ℹ️ Percentage heights can&#39;t be resolved during server rendering unless a <code>defaultHeight</code> (or a pixel height via the <code>style</code> prop) is specified.</p>
 </td>
     </tr>
   </tbody>
@@ -265,6 +280,8 @@ Grid will automatically re-render cells when values in this object change.</p>
     <tr>
       <td>dir</td>
       <td><p>Indicates the directionality of grid cells.</p>
+<p>ℹ️ The directionality of an ancestor element can&#39;t be detected during server rendering;
+specify this prop explicitly for server-rendered right-to-left grids.</p>
 <p>ℹ️ See HTML <code>dir</code> <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir">global attribute</a> for more information.</p>
 </td>
     </tr>
@@ -293,14 +310,38 @@ It is important to always <code>useCallback</code> for this prop; do not use an 
     </tr>
     <tr>
       <td>defaultHeight</td>
-      <td><p>Default height of grid for initial render.
-This value is important for server rendering.</p>
+      <td><p>Default height of grid (in pixels) for initial render, before its actual height has been measured.</p>
+<p>ℹ️ Grids can&#39;t be measured during server rendering, so this value determines how many rows are server rendered.
+It&#39;s recommended to set this to the expected height of the grid (or to specify a pixel height via the <code>style</code> prop).</p>
+</td>
+    </tr>
+    <tr>
+      <td>defaultScrollLeft</td>
+      <td><p>Initial horizontal scroll offset (in pixels) of the grid.
+This value is only applied once, when the grid first mounts with at least one column.</p>
+<p>ℹ️ Server-rendered HTML can&#39;t be pre-scrolled, so server rendering always starts at the first column;
+the default scroll offset is applied once the grid hydrates.</p>
+<p>⚠️ If the grid can&#39;t be scrolled that far when the offset is applied (e.g. it is hidden with <code>display: none</code>,
+or uses percentage column widths before its width has been measured), the offset is clamped or ignored and not retried.
+Specify a <code>defaultWidth</code> (or a pixel width via the <code>style</code> prop) when using percentage column widths.</p>
+</td>
+    </tr>
+    <tr>
+      <td>defaultScrollTop</td>
+      <td><p>Initial vertical scroll offset (in pixels) of the grid.
+This value is only applied once, when the grid first mounts with at least one row.</p>
+<p>ℹ️ Server-rendered HTML can&#39;t be pre-scrolled, so server rendering always starts at the first row;
+the default scroll offset is applied once the grid hydrates.</p>
+<p>⚠️ If the grid can&#39;t be scrolled that far when the offset is applied (e.g. it is hidden with <code>display: none</code>,
+or uses percentage row heights before its height has been measured), the offset is clamped or ignored and not retried.
+Specify a <code>defaultHeight</code> (or a pixel height via the <code>style</code> prop) when using percentage row heights.</p>
 </td>
     </tr>
     <tr>
       <td>defaultWidth</td>
-      <td><p>Default width of grid for initial render.
-This value is important for server rendering.</p>
+      <td><p>Default width of grid (in pixels) for initial render, before its actual width has been measured.</p>
+<p>ℹ️ Grids can&#39;t be measured during server rendering, so this value determines how many columns are server rendered.
+It&#39;s recommended to set this to the expected width of the grid (or to specify a pixel width via the <code>style</code> prop).</p>
 </td>
     </tr>
     <tr>

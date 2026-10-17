@@ -1,15 +1,11 @@
-import {
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type CSSProperties
-} from "react";
+import { useCallback, useRef, useState, type CSSProperties } from "react";
+import { useIsHydrating } from "../hooks/useIsHydrating";
 import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { useResizeObserver } from "../hooks/useResizeObserver";
 import { useStableCallback } from "../hooks/useStableCallback";
 import type { Align } from "../types";
 import { adjustScrollOffsetForRtl } from "../utils/adjustScrollOffsetForRtl";
+import { isRtl as isRtlUtil } from "../utils/isRtl";
 import { shallowCompare } from "../utils/shallowCompare";
 import { getEstimatedSize as getEstimatedSizeUtil } from "./getEstimatedSize";
 import { getOffsetForIndex } from "./getOffsetForIndex";
@@ -22,6 +18,7 @@ export function useVirtualizer<Props extends object>({
   containerElement,
   containerStyle,
   defaultContainerSize = 0,
+  defaultScrollOffset = 0,
   direction,
   isRtl = false,
   itemCount,
@@ -33,6 +30,7 @@ export function useVirtualizer<Props extends object>({
   containerElement: HTMLElement | null;
   containerStyle?: CSSProperties;
   defaultContainerSize?: number;
+  defaultScrollOffset?: number;
   direction: Direction;
   isRtl?: boolean;
   itemCount: number;
@@ -66,7 +64,7 @@ export function useVirtualizer<Props extends object>({
 
   const itemSize = useItemSize({ containerSize, itemSize: itemSizeProp });
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (typeof onResize === "function") {
       const prevSize = prevSizeRef.current;
 
@@ -85,6 +83,13 @@ export function useVirtualizer<Props extends object>({
     itemSize
   });
 
+  // Server-rendered HTML can't be scrolled, so the server (and hydration) render always starts at offset 0;
+  // the default scroll offset is applied after mount (see below)
+  const isHydrating = useIsHydrating();
+  const [initialScrollOffset] = useState(() =>
+    isHydrating ? 0 : defaultScrollOffset
+  );
+
   const getCellBounds = useCallback(
     (index: number) => cachedBounds.get(index),
     [cachedBounds]
@@ -98,8 +103,7 @@ export function useVirtualizer<Props extends object>({
   }>(() =>
     getStartStopIndicesUtil({
       cachedBounds,
-      // TODO Potentially support a defaultScrollOffset prop?
-      containerScrollOffset: 0,
+      containerScrollOffset: initialScrollOffset,
       containerSize,
       itemCount,
       overscanCount
@@ -158,14 +162,90 @@ export function useVirtualizer<Props extends object>({
     ]
   );
 
+  // Apply the default scroll offset once, when the container first mounts with items to scroll to
+  // (content can't be scrolled before then, e.g. while data is loading).
+  // This effect must run before the one below that syncs indices with the current scroll offset.
+  const hasAppliedDefaultScrollOffsetRef = useRef(false);
   useIsomorphicLayoutEffect(() => {
-    const scrollOffset =
-      (direction === "vertical"
-        ? containerElement?.scrollTop
-        : containerElement?.scrollLeft) ?? 0;
+    if (
+      !containerElement ||
+      itemCount === 0 ||
+      hasAppliedDefaultScrollOffsetRef.current
+    ) {
+      return;
+    }
 
-    setIndices(getStartStopIndices(scrollOffset));
-  }, [containerElement, direction, getStartStopIndices]);
+    hasAppliedDefaultScrollOffsetRef.current = true;
+
+    if (defaultScrollOffset <= 0) {
+      return;
+    }
+
+    // The isRtl prop may not have been updated yet if the direction is inherited from an ancestor
+    const isRtlContainer =
+      direction === "horizontal" && isRtlUtil(containerElement);
+
+    const currentScrollOffset = adjustScrollOffsetForRtl({
+      containerElement,
+      direction,
+      isRtl: isRtlContainer,
+      scrollOffset:
+        direction === "vertical"
+          ? containerElement.scrollTop
+          : containerElement.scrollLeft
+    });
+    if (currentScrollOffset !== 0) {
+      // Don't override a scroll position restored by the browser (or by the user before hydration)
+      return;
+    }
+
+    const scrollOffset = adjustScrollOffsetForRtl({
+      containerElement,
+      direction,
+      isRtl: isRtlContainer,
+      scrollOffset: defaultScrollOffset
+    });
+
+    if (typeof containerElement.scrollTo === "function") {
+      containerElement.scrollTo({
+        behavior: "instant",
+        [direction === "vertical" ? "top" : "left"]: scrollOffset
+      });
+    } else if (direction === "vertical") {
+      containerElement.scrollTop = scrollOffset;
+    } else {
+      containerElement.scrollLeft = scrollOffset;
+    }
+    // Intentionally only run when the container element mounts or items first become available
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [containerElement, itemCount]);
+
+  useIsomorphicLayoutEffect(() => {
+    const next = containerElement
+      ? getStartStopIndices(
+          direction === "vertical"
+            ? containerElement.scrollTop
+            : containerElement.scrollLeft
+        )
+      : getStartStopIndicesUtil({
+          cachedBounds,
+          containerScrollOffset: initialScrollOffset,
+          containerSize,
+          itemCount,
+          overscanCount
+        });
+
+    setIndices((prev) => (shallowCompare(next, prev) ? prev : next));
+  }, [
+    cachedBounds,
+    containerElement,
+    containerSize,
+    direction,
+    getStartStopIndices,
+    initialScrollOffset,
+    itemCount,
+    overscanCount
+  ]);
 
   useIsomorphicLayoutEffect(() => {
     if (!containerElement) {

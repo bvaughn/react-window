@@ -36,6 +36,18 @@ export const routes = {
   ),
   "/grid/scroll-to-cell": lazy(() => import("./routes/grid/ScrollToCellRoute")),
   "/grid/aria-roles": lazy(() => import("./routes/grid/AriaRolesRoute")),
+  "/server-rendering": lazy(
+    () => import("./routes/server-rendering/ServerRenderingRoute")
+  ),
+  "/server-rendering/server-components": lazy(
+    () => import("./routes/server-rendering/ServerComponentsRoute")
+  ),
+  "/server-rendering/dynamic-row-heights": lazy(
+    () => import("./routes/server-rendering/DynamicRowHeightsRoute")
+  ),
+  "/server-rendering/initial-scroll-position": lazy(
+    () => import("./routes/server-rendering/InitialScrollPositionRoute")
+  ),
   "/platform-requirements": lazy(
     () => import("./routes/PlatformRequirementsRoute")
   ),

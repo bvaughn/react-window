@@ -40,11 +40,33 @@
     "defaultHeight": {
       "description": [
         {
-          "content": "<p>Default height of list for initial render.\nThis value is important for server rendering.</p>\n"
+          "content": "<p>Default height of list (in pixels) for initial render, before its actual height has been measured.</p>\n"
+        },
+        {
+          "content": "<p>Lists can't be measured during server rendering, so this value determines how many rows are server rendered.\nIt's recommended to set this to the expected height of the list (or to specify a pixel height via the <code>style</code> prop).</p>\n",
+          "intent": "primary"
         }
       ],
       "html": "<div><span class=\"tok-variableName\"><span class=\"tok-propertyName\">defaultHeight</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"\"> </span><span class=\"tok-operator\">=</span><span class=\"\"> </span><span class=\"tok-number\">0</span></div>",
       "name": "defaultHeight",
+      "required": false
+    },
+    "defaultScrollOffset": {
+      "description": [
+        {
+          "content": "<p>Initial scroll offset (in pixels) of the list.\nThis value is only applied once, when the list first mounts with at least one row.</p>\n"
+        },
+        {
+          "content": "<p>Server-rendered HTML can't be pre-scrolled, so server rendering always starts at the first row;\nthe default scroll offset is applied once the list hydrates.</p>\n",
+          "intent": "primary"
+        },
+        {
+          "content": "<p>If the list can't be scrolled that far when the offset is applied (e.g. it is hidden with <code>display: none</code>,\nor uses percentage row heights before its height has been measured), the offset is clamped or ignored and not retried.\nSpecify a <code>defaultHeight</code> (or a pixel height via the <code>style</code> prop) when using percentage row heights.</p>\n",
+          "intent": "warning"
+        }
+      ],
+      "html": "<div><span class=\"tok-variableName\"><span class=\"tok-propertyName\">defaultScrollOffset</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">number</span><span class=\"\"> </span><span class=\"tok-operator\">=</span><span class=\"\"> </span><span class=\"tok-number\">0</span></div>",
+      "name": "defaultScrollOffset",
       "required": false
     },
     "listRef": {
@@ -125,6 +147,10 @@
       "description": [
         {
           "content": "<p>Row height; the following formats are supported:</p>\n<ul>\n<li>number of pixels (number)</li>\n<li>percentage of the list's current height (string)</li>\n<li>function that returns the row height (in pixels) given an index and <code>rowProps</code></li>\n<li>dynamic row height cache returned by the <code>useDynamicRowHeight</code> hook</li>\n</ul>\n"
+        },
+        {
+          "content": "<p>Percentage heights can't be resolved during server rendering unless a <code>defaultHeight</code> (or a pixel height via the <code>style</code> prop) is specified.</p>\n",
+          "intent": "primary"
         },
         {
           "content": "<p>Dynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time.</p>\n",
