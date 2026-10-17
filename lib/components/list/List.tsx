@@ -12,6 +12,8 @@ import {
   type ReactNode
 } from "react";
 import { useVirtualizer } from "../../core/useVirtualizer";
+import { useAfterResizeObserverNotifications } from "../../hooks/useAfterResizeObserverNotifications";
+import { useIsHydrating } from "../../hooks/useIsHydrating";
 import { useIsomorphicLayoutEffect } from "../../hooks/useIsomorphicLayoutEffect";
 import { useMemoizedObject } from "../../hooks/useMemoizedObject";
 import type { TagNames } from "../../types";
@@ -33,6 +35,7 @@ export function List<
   children,
   className,
   defaultHeight = 0,
+  defaultScrollOffset = 0,
   listRef,
   onResize,
   onRowsRendered,
@@ -69,6 +72,27 @@ export function List<
     return rowHeightProp;
   }, [isDynamicRowHeight, rowHeightProp]);
 
+  // Server-rendered rows with dynamic heights haven't been measured yet, so absolutely positioning them
+  // (based on estimated heights) would cause them to overlap or leave gaps until after hydration.
+  // Instead, render them in normal document flow until the first measurements are available.
+  const isHydrating = useIsHydrating();
+  const [isFlowLayout, setIsFlowLayout] = useState(
+    () => isHydrating && isDynamicRowHeight
+  );
+  const flowLayoutRowHeightRef = useRef(rowHeightProp);
+  useIsomorphicLayoutEffect(() => {
+    if (isFlowLayout && flowLayoutRowHeightRef.current !== rowHeightProp) {
+      setIsFlowLayout(false);
+    }
+  }, [isFlowLayout, rowHeightProp]);
+  // Measurements may never arrive (e.g. if ResizeObserver is unsupported or rows have no height yet),
+  // or may exactly match initialRowHeights (in which case rowHeightProp's identity doesn't change)
+  useAfterResizeObserverNotifications({
+    callback: () => setIsFlowLayout(false),
+    element,
+    enabled: isFlowLayout
+  });
+
   const {
     getCellBounds,
     getEstimatedSize,
@@ -81,6 +105,7 @@ export function List<
     containerElement: element,
     containerStyle: style,
     defaultContainerSize: defaultHeight,
+    defaultScrollOffset,
     direction: "vertical",
     itemCount: rowCount,
     itemProps: rowProps,
@@ -171,6 +196,10 @@ export function List<
     stopIndexVisible
   ]);
 
+  // Flow layout only matches the absolute layout if rendering starts at the first row
+  const isFlowLayoutActive =
+    isFlowLayout && isDynamicRowHeight && startIndexOverscan === 0;
+
   const rows = useMemo(() => {
     const children: ReactNode[] = [];
     if (rowCount > 0) {
@@ -191,15 +220,19 @@ export function List<
             }}
             key={rowKey ? rowKey(index, rowProps) : index}
             index={index}
-            style={{
-              position: "absolute",
-              left: 0,
-              transform: `translateY(${bounds.scrollOffset}px)`,
-              // In case of dynamic row heights, don't specify a height style
-              // otherwise a default/estimated height would mask the actual height
-              height: isDynamicRowHeight ? undefined : bounds.size,
-              width: "100%"
-            }}
+            style={
+              isFlowLayoutActive
+                ? { width: "100%" }
+                : {
+                    position: "absolute",
+                    left: 0,
+                    transform: `translateY(${bounds.scrollOffset}px)`,
+                    // In case of dynamic row heights, don't specify a height style
+                    // otherwise a default/estimated height would mask the actual height
+                    height: isDynamicRowHeight ? undefined : bounds.size,
+                    width: "100%"
+                  }
+            }
           />
         );
       }
@@ -213,7 +246,8 @@ export function List<
     rowKey,
     rowProps,
     startIndexOverscan,
-    stopIndexOverscan
+    stopIndexOverscan,
+    isFlowLayoutActive
   ]);
 
   const sizingElement = (
@@ -221,6 +255,9 @@ export function List<
       aria-hidden
       {...{ [DATA_ATTRIBUTE_SIZER]: "" }}
       style={{
+        // Rows rendered in flow layout already take up space
+        position: isFlowLayoutActive ? "absolute" : undefined,
+        top: isFlowLayoutActive ? 0 : undefined,
         height: getEstimatedSize(),
         width: "100%",
         zIndex: -1

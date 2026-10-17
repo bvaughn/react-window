@@ -36,10 +36,25 @@ export type ListProps<
   className?: string;
 
   /**
-   * Default height of list for initial render.
-   * This value is important for server rendering.
+   * Default height of list (in pixels) for initial render, before its actual height has been measured.
+   *
+   * ℹ️ Lists can't be measured during server rendering, so this value determines how many rows are server rendered.
+   * It's recommended to set this to the expected height of the list (or to specify a pixel height via the `style` prop).
    */
   defaultHeight?: number;
+
+  /**
+   * Initial scroll offset (in pixels) of the list.
+   * This value is only applied once, when the list first mounts with at least one row.
+   *
+   * ℹ️ Server-rendered HTML can't be pre-scrolled, so server rendering always starts at the first row;
+   * the default scroll offset is applied once the list hydrates.
+   *
+   * ⚠️ If the list can't be scrolled that far when the offset is applied (e.g. it is hidden with `display: none`,
+   * or uses percentage row heights before its height has been measured), the offset is clamped or ignored and not retried.
+   * Specify a `defaultHeight` (or a pixel height via the `style` prop) when using percentage row heights.
+   */
+  defaultScrollOffset?: number;
 
   /**
    * Ref used to interact with this component's imperative API.
@@ -130,6 +145,8 @@ export type ListProps<
    * - percentage of the list's current height (string)
    * - function that returns the row height (in pixels) given an index and `rowProps`
    * - dynamic row height cache returned by the `useDynamicRowHeight` hook
+   *
+   * ℹ️ Percentage heights can't be resolved during server rendering unless a `defaultHeight` (or a pixel height via the `style` prop) is specified.
    *
    * ⚠️ Dynamic row heights are not as efficient as predetermined sizes.
    * It's recommended to provide your own height values if they can be determined ahead of time.

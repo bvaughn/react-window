@@ -416,6 +416,38 @@ describe("Grid", () => {
     expect(items).toHaveLength(8);
   });
 
+  test("should render cells at the default scroll offsets on mount", () => {
+    const gridRef = createRef<GridImperativeAPI>();
+
+    render(
+      <Grid
+        cellComponent={CellComponent}
+        cellProps={EMPTY_OBJECT}
+        columnCount={100}
+        columnWidth={25}
+        defaultScrollLeft={250}
+        defaultScrollTop={200}
+        gridRef={gridRef}
+        overscanCount={0}
+        rowCount={100}
+        rowHeight={20}
+      />
+    );
+
+    expect(gridRef.current?.element?.scrollLeft).toBe(250);
+    expect(gridRef.current?.element?.scrollTop).toBe(200);
+
+    // Cells at the top/left of the grid should never be rendered
+    CellComponent.mock.calls.forEach(([props]) => {
+      expect(props.columnIndex).toBeGreaterThanOrEqual(10);
+      expect(props.rowIndex).toBeGreaterThanOrEqual(10);
+    });
+
+    const items = screen.queryAllByRole("gridcell");
+    expect(items).toHaveLength(8);
+    expect(items[0]).toHaveTextContent("Cell 10,10");
+  });
+
   test("should call onCellsRendered", () => {
     const onCellsRendered = vi.fn();
 

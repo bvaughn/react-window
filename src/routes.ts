@@ -36,6 +36,7 @@ export const routes = {
   ),
   "/grid/scroll-to-cell": lazy(() => import("./routes/grid/ScrollToCellRoute")),
   "/grid/aria-roles": lazy(() => import("./routes/grid/AriaRolesRoute")),
+  "/server-rendering": lazy(() => import("./routes/ServerRenderingRoute")),
   "/platform-requirements": lazy(
     () => import("./routes/PlatformRequirementsRoute")
   ),

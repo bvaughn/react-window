@@ -6,25 +6,60 @@ import { getResizeObserverClass } from "../../utils/getResizeObserverClass";
 import { DATA_ATTRIBUTE_LIST_INDEX } from "./List";
 import type { DynamicRowHeight } from "./types";
 
+function createInitialMap(
+  initialRowHeights: ReadonlyMap<number, number> | readonly number[] | undefined
+): Map<number, number> {
+  const map = new Map<number, number>();
+  if (initialRowHeights !== undefined) {
+    // Invalid heights would corrupt cached row positions; treat them as unmeasured
+    initialRowHeights.forEach((height: number, index: number) => {
+      if (Number.isFinite(height) && height > 0) {
+        map.set(index, height);
+      }
+    });
+  }
+  return map;
+}
+
 export function useDynamicRowHeight({
   defaultRowHeight,
+  initialRowHeights,
   key
 }: {
+  /**
+   * Estimated height (in pixels) of rows that have not yet been measured.
+   */
   defaultRowHeight: number;
+
+  /**
+   * Row heights (in pixels) that are known ahead of time, e.g. heights measured during a previous visit.
+   * This can be either an array (where each item is the height of the row at that index) or a Map of row index to height.
+   *
+   * These values are used in place of `defaultRowHeight` until rows are rendered and measured,
+   * so providing them can make server-rendered lists and initial scroll positions more accurate.
+   *
+   * ℹ️ This value is only read when the hook first mounts and when the `key` changes.
+   */
+  initialRowHeights?: ReadonlyMap<number, number> | readonly number[];
+
+  /**
+   * Changing this value clears all measured row heights,
+   * e.g. when the list renders a different set of data.
+   */
   key?: string | number;
 }) {
   const [state, setState] = useState<{
     key: string | number | undefined;
     map: Map<number, number>;
-  }>({
+  }>(() => ({
     key,
-    map: new Map()
-  });
+    map: createInitialMap(initialRowHeights)
+  }));
 
   if (state.key !== key) {
     setState({
       key,
-      map: new Map()
+      map: createInitialMap(initialRowHeights)
     });
   }
 

@@ -275,6 +275,160 @@ describe("List", () => {
     expect(items).toHaveLength(3);
   });
 
+  describe("defaultScrollOffset", () => {
+    test("should render rows at the default scroll offset on mount", () => {
+      const listRef = createRef<ListImperativeAPI>();
+
+      render(
+        <List
+          defaultScrollOffset={500}
+          listRef={listRef}
+          overscanCount={0}
+          rowCount={100}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      expect(listRef.current?.element?.scrollTop).toBe(500);
+
+      // Rows at the top of the list should never be rendered
+      const renderedIndices = new Set(
+        RowComponent.mock.calls.map(([props]) => props.index)
+      );
+      expect(renderedIndices.has(0)).toBe(false);
+
+      const items = screen.queryAllByRole("listitem");
+      expect(items).toHaveLength(4);
+      expect(items[0]).toHaveTextContent("Row 20");
+    });
+
+    test("should be applied once the list has rows", () => {
+      const listRef = createRef<ListImperativeAPI>();
+
+      const { rerender } = render(
+        <List
+          defaultScrollOffset={500}
+          listRef={listRef}
+          overscanCount={0}
+          rowCount={0}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      // There is nothing to scroll to yet (e.g. data is still loading)
+      expect(listRef.current?.element?.scrollTop).toBe(0);
+
+      rerender(
+        <List
+          defaultScrollOffset={500}
+          listRef={listRef}
+          overscanCount={0}
+          rowCount={100}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      expect(listRef.current?.element?.scrollTop).toBe(500);
+
+      const items = screen.queryAllByRole("listitem");
+      expect(items[0]).toHaveTextContent("Row 20");
+    });
+
+    test("should only be applied on mount", () => {
+      const listRef = createRef<ListImperativeAPI>();
+
+      const { rerender } = render(
+        <List
+          defaultScrollOffset={500}
+          listRef={listRef}
+          overscanCount={0}
+          rowCount={100}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      act(() => {
+        listRef.current?.scrollToRow({ align: "start", index: 50 });
+      });
+      expect(listRef.current?.element?.scrollTop).toBe(1250);
+
+      rerender(
+        <List
+          defaultScrollOffset={250}
+          listRef={listRef}
+          overscanCount={0}
+          rowCount={100}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+      expect(listRef.current?.element?.scrollTop).toBe(1250);
+    });
+
+    test("should not override a parent that scrolls the list once it mounts", () => {
+      function Parent() {
+        const [listRef, setListRef] = useListCallbackRef(null);
+
+        // The imperative API (and its element) is available after the default scroll offset has been applied,
+        // so this scroll should win
+        useEffect(() => {
+          if (listRef?.element) {
+            listRef.scrollToRow({ align: "start", index: 50 });
+          }
+        }, [listRef]);
+
+        return (
+          <List
+            defaultScrollOffset={500}
+            listRef={setListRef}
+            overscanCount={0}
+            rowCount={100}
+            rowComponent={RowComponent}
+            rowHeight={25}
+            rowProps={EMPTY_OBJECT}
+          />
+        );
+      }
+
+      render(<Parent />);
+
+      expect(screen.getByRole("list").scrollTop).toBe(1250);
+      expect(screen.getAllByRole("listitem")[0]).toHaveTextContent("Row 50");
+    });
+  });
+
+  test("should not render dynamic height rows in flow layout for client-only renders", () => {
+    function DynamicList() {
+      const rowHeight = useDynamicRowHeight({ defaultRowHeight: 25 });
+
+      return (
+        <List
+          overscanCount={0}
+          rowCount={100}
+          rowComponent={RowComponent}
+          rowHeight={rowHeight}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+    }
+
+    render(<DynamicList />);
+
+    expect(RowComponent).toHaveBeenCalled();
+    RowComponent.mock.calls.forEach(([props]) => {
+      expect(props.style.position).toBe("absolute");
+    });
+  });
+
   test("should call onRowsRendered", () => {
     const onRowsRendered = vi.fn();
 
@@ -889,12 +1043,9 @@ describe("List", () => {
         // Only the row that has been nudged down should be re-rendered;
         // the other two should be memoized
         expect(RowComponent).toHaveBeenCalledTimes(1);
-        expect(RowComponent).toHaveBeenLastCalledWith(
-          expect.objectContaining({
-            index: 2
-          }),
-          undefined
-        );
+        expect(RowComponent.mock.lastCall?.[0]).toMatchObject({
+          index: 2
+        });
       });
     });
   });
@@ -947,12 +1098,9 @@ describe("List", () => {
         }
       );
 
-      expect(RowComponent).toHaveBeenLastCalledWith(
-        expect.objectContaining({
-          foo: 1
-        }),
-        undefined
-      );
+      expect(RowComponent.mock.lastCall?.[0]).toMatchObject({
+        foo: 1
+      });
 
       onRowsRendered.mockReset();
       RowComponent.mockReset();
@@ -976,12 +1124,9 @@ describe("List", () => {
 
       // But rows should have been re-rendered
       expect(RowComponent).toHaveBeenCalledTimes(4);
-      expect(RowComponent).toHaveBeenLastCalledWith(
-        expect.objectContaining({
-          foo: 2
-        }),
-        undefined
-      );
+      expect(RowComponent.mock.lastCall?.[0]).toMatchObject({
+        foo: 2
+      });
     });
 
     test("should handle temporarily invalid indices if rowCount decreases", () => {

@@ -59,7 +59,7 @@
       {
         "id": "rowHeight",
         "title": "rowHeight",
-        "text": "rowHeight: string | number | DynamicRowHeight | ((index: number, cellProps: RowProps) => number) Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the list's current height (string)\nfunction that returns the row height (in pixels) given an index and rowProps \ndynamic row height cache returned by the useDynamicRowHeight hook\n\n Dynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time."
+        "text": "rowHeight: string | number | DynamicRowHeight | ((index: number, cellProps: RowProps) => number) Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the list's current height (string)\nfunction that returns the row height (in pixels) given an index and rowProps \ndynamic row height cache returned by the useDynamicRowHeight hook\n\n Percentage heights can't be resolved during server rendering unless a defaultHeight (or a pixel height via the style prop) is specified.\n Dynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time."
       },
       {
         "id": "rowProps",
@@ -79,7 +79,12 @@
       {
         "id": "defaultHeight",
         "title": "defaultHeight",
-        "text": "defaultHeight?: number = 0 Default height of list for initial render.\nThis value is important for server rendering."
+        "text": "defaultHeight?: number = 0 Default height of list (in pixels) for initial render, before its actual height has been measured.\n Lists can't be measured during server rendering, so this value determines how many rows are server rendered.\nIt's recommended to set this to the expected height of the list (or to specify a pixel height via the style prop)."
+      },
+      {
+        "id": "defaultScrollOffset",
+        "title": "defaultScrollOffset",
+        "text": "defaultScrollOffset?: number = 0 Initial scroll offset (in pixels) of the list.\nThis value is only applied once, when the list first mounts with at least one row.\n Server-rendered HTML can't be pre-scrolled, so server rendering always starts at the first row;\nthe default scroll offset is applied once the list hydrates."
       },
       {
         "id": "listRef",
@@ -190,7 +195,7 @@
       {
         "id": "columnWidth",
         "title": "columnWidth",
-        "text": "columnWidth: string | number | ((index: number, cellProps: CellProps) => number) Column width; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the grid's current width (string)\nfunction that returns the column width (in pixels) given an index and cellProps"
+        "text": "columnWidth: string | number | ((index: number, cellProps: CellProps) => number) Column width; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the grid's current width (string)\nfunction that returns the column width (in pixels) given an index and cellProps \n\n Percentage widths can't be resolved during server rendering unless a defaultWidth (or a pixel width via the style prop) is specified."
       },
       {
         "id": "rowCount",
@@ -200,7 +205,7 @@
       {
         "id": "rowHeight",
         "title": "rowHeight",
-        "text": "rowHeight: string | number | ((index: number, cellProps: CellProps) => number) Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the grid's current height (string)\nfunction that returns the row height (in pixels) given an index and cellProps"
+        "text": "rowHeight: string | number | ((index: number, cellProps: CellProps) => number) Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the grid's current height (string)\nfunction that returns the row height (in pixels) given an index and cellProps \n\n Percentage heights can't be resolved during server rendering unless a defaultHeight (or a pixel height via the style prop) is specified."
       },
       {
         "id": "children",
@@ -220,17 +225,27 @@
       {
         "id": "defaultHeight",
         "title": "defaultHeight",
-        "text": "defaultHeight?: number = 0 Default height of grid for initial render.\nThis value is important for server rendering."
+        "text": "defaultHeight?: number = 0 Default height of grid (in pixels) for initial render, before its actual height has been measured.\n Grids can't be measured during server rendering, so this value determines how many rows are server rendered.\nIt's recommended to set this to the expected height of the grid (or to specify a pixel height via the style prop)."
+      },
+      {
+        "id": "defaultScrollLeft",
+        "title": "defaultScrollLeft",
+        "text": "defaultScrollLeft?: number = 0 Initial horizontal scroll offset (in pixels) of the grid.\nThis value is only applied once, when the grid first mounts with at least one column.\n Server-rendered HTML can't be pre-scrolled, so server rendering always starts at the first column;\nthe default scroll offset is applied once the grid hydrates."
+      },
+      {
+        "id": "defaultScrollTop",
+        "title": "defaultScrollTop",
+        "text": "defaultScrollTop?: number = 0 Initial vertical scroll offset (in pixels) of the grid.\nThis value is only applied once, when the grid first mounts with at least one row.\n Server-rendered HTML can't be pre-scrolled, so server rendering always starts at the first row;\nthe default scroll offset is applied once the grid hydrates."
       },
       {
         "id": "defaultWidth",
         "title": "defaultWidth",
-        "text": "defaultWidth?: number = 0 Default width of grid for initial render.\nThis value is important for server rendering."
+        "text": "defaultWidth?: number = 0 Default width of grid (in pixels) for initial render, before its actual width has been measured.\n Grids can't be measured during server rendering, so this value determines how many columns are server rendered.\nIt's recommended to set this to the expected width of the grid (or to specify a pixel width via the style prop)."
       },
       {
         "id": "dir",
         "title": "dir",
-        "text": "dir?: string Indicates the directionality of grid cells.\n See HTML dir global attribute for more information."
+        "text": "dir?: string Indicates the directionality of grid cells.\n The directionality of an ancestor element can't be detected during server rendering;\nspecify this prop explicitly for server-rendered right-to-left grids.\n See HTML dir global attribute for more information."
       },
       {
         "id": "gridRef",
@@ -324,6 +339,44 @@
     "section": "Other",
     "text": "If you want to render content on top of your list or grid, the safest method is to use a portal and render them directly into the parent document. This avoids potential clipping issues or z-index conflicts. For the specific case of \"sticky\" rows, you can render within the parent list or grid using the children prop: The example above was created using code like this: import { List, type RowComponentProps } from \"react-window\";\n \nfunction Example() {\n return (\n <List\n rowComponent={RowComponent}\n rowCount={101}\n rowHeight={20}\n rowProps={EMPTY_OBJECT}\n >\n <div className=\"w-full h-0 top-0 sticky\">\n <div className=\"h-[20px] bg-teal-600 px-2 rounded\">Sticky header</div>\n </div>\n </List>\n );\n} Note the height of 0 in the example above prevents the sticky row from affecting the height of the parent list.",
     "title": "Sticky rows"
+  },
+  {
+    "headings": [
+      {
+        "id": "sizing",
+        "title": "Sizing",
+        "text": "Sizing Lists and grids normally measure their available space using a ResizeObserver, but there is nothing to measure on the server. Instead, use the defaultHeight prop (and defaultWidth prop for grids) to tell react-window how much space to fill. This determines how many rows (and columns) are server rendered. import { List } from \"react-window\";\n \nfunction Example({ names }: { names: string[] }) {\n return (\n <List\n className=\"h-100\"\n defaultHeight={400}\n rowComponent={RowComponent}\n rowCount={names.length}\n rowHeight={25}\n rowProps={{ names }}\n />\n );\n} Alternatively, specify an explicit pixel size using the style prop (e.g. style={{ height: 400 }}). This size is used on both the server and the client, so no measurement is needed at all. Without a default size, only the first row (and any overscan rows) will be server rendered. Once the page hydrates, the list will measure itself and render the remaining rows. Percentage-based sizes (e.g. rowHeight=\"25%\") can't be resolved without a size. Unless a default size (or a pixel size via the style prop) is specified, they are server rendered with a size of 0 and rows will overlap until the page hydrates. The default size only determines how many rows are rendered before the list has been measured; the list's actual size is still determined by CSS. To server render more rows than are visible (e.g. for crawlers that don't run JavaScript), set defaultHeight to a value larger than the list's height. The extra rows will be removed once the page hydrates, but keep in mind that hydration cost grows with the number of rows rendered."
+      },
+      {
+        "id": "react-server-components",
+        "title": "React Server Components",
+        "text": "React Server Components List and Grid are client components, but they can be rendered directly by a Server Component as long as all of their props can be sent from the server to the client: // app/names/page.tsx (a Server Component)\nimport { List } from \"react-window\";\nimport { RowComponent } from \"./RowComponent\";\n \nexport default async function Page() {\n const names = await loadNames();\n \n return (\n <List\n className=\"h-100\"\n defaultHeight={400}\n rowComponent={RowComponent}\n rowCount={names.length}\n rowHeight={25}\n rowProps={{ names }}\n />\n );\n} The rowComponent (or cellComponent) must be a client component, marked with the \"use client\" directive. Values in rowProps (or cellProps) must be serializable. // app/names/RowComponent.tsx\n\"use client\";\n \nimport { type RowComponentProps } from \"react-window\";\n \nexport function RowComponent({\n index,\n names,\n style\n}: RowComponentProps<{ names: string[] }>) {\n return <div style={style}>{names[index]}</div>;\n} Functions can't be passed from the server to the client, so props like rowHeight functions, rowKey, onRowsRendered, onResize, and listRef (as well as hooks like useDynamicRowHeight) need to be used within a client component: // app/names/NamesList.tsx\n\"use client\";\n \nimport { useCallback } from \"react\";\nimport { List, useDynamicRowHeight } from \"react-window\";\nimport { RowComponent } from \"./RowComponent\";\n \nexport function NamesList({ names }: { names: string[] }) {\n const rowHeight = useDynamicRowHeight({\n defaultRowHeight: 25\n });\n \n const rowKey = useCallback((index: number) => names[index], [names]);\n \n return (\n <List\n className=\"h-100\"\n defaultHeight={400}\n rowComponent={RowComponent}\n rowCount={names.length}\n rowHeight={rowHeight}\n rowKey={rowKey}\n rowProps={{ names }}\n />\n );\n}"
+      },
+      {
+        "id": "dynamic-row-heights",
+        "title": "Dynamic row heights",
+        "text": "Dynamic row heights Rows with dynamic heights can't be measured until they are rendered in a browser. Until then, server-rendered rows are displayed in normal document flow (rather than being positioned using estimated heights) so that they don't overlap or leave gaps. Once the page hydrates and rows have been measured, they are positioned as usual. If row heights are known ahead of time (e.g. measured during a previous visit) they can be provided to useDynamicRowHeight using the initialRowHeights option. These heights are used in place of the default height until rows are measured. import { useDynamicRowHeight } from \"react-window\";\n \nfunction useRowHeight(cachedRowHeights: number[] | undefined) {\n return useDynamicRowHeight({\n defaultRowHeight: 50,\n initialRowHeights: cachedRowHeights\n });\n}"
+      },
+      {
+        "id": "initial-scroll-position",
+        "title": "Initial scroll position",
+        "text": "Initial scroll position Use the defaultScrollOffset prop (or the defaultScrollLeft and defaultScrollTop props for grids) to set the initial scroll position. import { List } from \"react-window\";\n \nconst ROW_HEIGHT = 25;\n \nfunction Example({\n initialIndex,\n names\n}: {\n initialIndex: number;\n names: string[];\n}) {\n return (\n <List\n className=\"h-100\"\n defaultHeight={400}\n defaultScrollOffset={initialIndex * ROW_HEIGHT}\n rowComponent={RowComponent}\n rowCount={names.length}\n rowHeight={ROW_HEIGHT}\n rowProps={{ names }}\n />\n );\n} HTML can't be pre-scrolled, so the server always renders the first rows of the list. The default scroll offset is applied once the page hydrates (or, for lists that are initially empty, once they have rows), unless the list has already been scrolled (e.g. by the browser restoring a previous scroll position)."
+      },
+      {
+        "id": "right-to-left-content",
+        "title": "Right to left content",
+        "text": "Right to left content Grids inherit their direction from ancestor elements, but this can't be detected on the server. Specify the dir prop explicitly for server-rendered right-to-left grids."
+      },
+      {
+        "id": "scrollbar-size",
+        "title": "Scrollbar size",
+        "text": "Scrollbar size getScrollbarSize returns 0 on the server. To avoid hydration mismatches, read it after the component has mounted (e.g. within an effect) instead of during render."
+      }
+    ],
+    "path": "/server-rendering",
+    "section": "Other",
+    "text": "List and Grid can be rendered on the server (including static site generation and React Server Components). Server-rendered rows are visible before JavaScript has loaded, and they hydrate without mismatches.",
+    "title": "Server rendering"
   },
   {
     "path": "/platform-requirements",
