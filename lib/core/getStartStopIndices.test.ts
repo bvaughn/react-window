@@ -368,3 +368,35 @@ test("matches a linear lookup across boundaries, zero sizes and scroll direction
     }
   }
 });
+
+test.each([
+  { offset: -10, size: 0, start: 0, stop: 0 },
+  { offset: -10, size: 10, start: 0, stop: 0 },
+  { offset: -10, size: 20, start: 0, stop: 9999 },
+  { offset: 0, size: 0, start: 9999, stop: 9999 },
+  { offset: 10, size: 100, start: 9999, stop: 9999 }
+])(
+  "fixed zero sizes do not populate bounds at offset $offset and viewport $size",
+  ({ offset, size, start, stop }) => {
+    const cachedBounds = createCachedBounds({
+      itemCount: 10000,
+      itemProps: {},
+      itemSize: 0
+    });
+    expect(
+      getStartStopIndices({
+        cachedBounds,
+        containerScrollOffset: offset,
+        containerSize: size,
+        itemCount: 10000,
+        overscanCount: 2
+      })
+    ).toEqual({
+      startIndexVisible: start,
+      stopIndexVisible: stop,
+      startIndexOverscan: Math.max(0, start - 2),
+      stopIndexOverscan: Math.min(9999, stop + 2)
+    });
+    expect(cachedBounds.size).toBe(0);
+  }
+);

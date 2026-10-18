@@ -45,6 +45,10 @@ export function getStartStopIndices({
         Math.ceil((containerScrollOffset + containerSize) / itemSize) - 1
       )
     );
+  } else if (itemSize === 0) {
+    startIndexVisible = containerScrollOffset < 0 ? 0 : maxIndex;
+    stopIndexVisible =
+      containerScrollOffset + containerSize > 0 ? maxIndex : startIndexVisible;
   } else {
     // Binary search the measured prefix
     let low = 0;
