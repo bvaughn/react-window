@@ -5,7 +5,12 @@ on:
   pull_request:
 jobs:
   unit-tests:
+    name: unit-tests (React ${{ matrix.react }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        react: [18, 19]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -14,7 +19,12 @@ jobs:
           version: 10
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --recursive
+      - name: Install React ${{ matrix.react }}
+        if: matrix.react != 19
+        run: pnpm add --workspace-root --save-dev react@^${{ matrix.react }} react-dom@^${{ matrix.react }}
       - name: Build NPM packages
+        # Only the library source is tested against older React versions
+        if: matrix.react == 19
         run: pnpm run build
       - name: Run tests
         run: pnpm run test:ci

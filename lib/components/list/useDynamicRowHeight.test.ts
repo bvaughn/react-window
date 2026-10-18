@@ -79,6 +79,115 @@ describe("useDynamicRowHeight", () => {
     });
   });
 
+  describe("initialRowHeights", () => {
+    test("supports an array of heights", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({
+          defaultRowHeight: 100,
+          initialRowHeights: [10, 20]
+        })
+      );
+
+      expect(result.current.getRowHeight(0)).toBe(10);
+      expect(result.current.getRowHeight(1)).toBe(20);
+      expect(result.current.getRowHeight(2)).toBe(100);
+      expect(result.current.getAverageRowHeight()).toBe(15);
+    });
+
+    test("supports a Map of heights", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({
+          defaultRowHeight: 100,
+          initialRowHeights: new Map([
+            [5, 10],
+            [10, 30]
+          ])
+        })
+      );
+
+      expect(result.current.getRowHeight(0)).toBe(100);
+      expect(result.current.getRowHeight(5)).toBe(10);
+      expect(result.current.getRowHeight(10)).toBe(30);
+      expect(result.current.getAverageRowHeight()).toBe(20);
+    });
+
+    test("ignores invalid heights", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({
+          defaultRowHeight: 100,
+          initialRowHeights: new Map([
+            [0, 10],
+            [1, 0],
+            [2, -10],
+            [3, NaN],
+            [4, Infinity]
+          ])
+        })
+      );
+
+      expect(result.current.getRowHeight(0)).toBe(10);
+      expect(result.current.getRowHeight(1)).toBe(100);
+      expect(result.current.getRowHeight(2)).toBe(100);
+      expect(result.current.getRowHeight(3)).toBe(100);
+      expect(result.current.getRowHeight(4)).toBe(100);
+      expect(result.current.getAverageRowHeight()).toBe(10);
+
+      const { result: arrayResult } = renderHook(() =>
+        useDynamicRowHeight({
+          defaultRowHeight: 100,
+          initialRowHeights: [NaN, 20]
+        })
+      );
+
+      expect(arrayResult.current.getRowHeight(0)).toBe(100);
+      expect(arrayResult.current.getRowHeight(1)).toBe(20);
+    });
+
+    test("are replaced by measured heights", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({
+          defaultRowHeight: 100,
+          initialRowHeights: [10, 20]
+        })
+      );
+
+      act(() => {
+        result.current.setRowHeight(0, 50);
+      });
+
+      expect(result.current.getRowHeight(0)).toBe(50);
+      expect(result.current.getRowHeight(1)).toBe(20);
+    });
+
+    test("are re-applied when key changes", () => {
+      const { rerender, result } = renderHook(
+        ({ initialRowHeights, key }) =>
+          useDynamicRowHeight({
+            defaultRowHeight: 100,
+            initialRowHeights,
+            key
+          }),
+        {
+          initialProps: {
+            initialRowHeights: [10],
+            key: "a"
+          }
+        }
+      );
+
+      act(() => {
+        result.current.setRowHeight(1, 50);
+      });
+
+      rerender({ initialRowHeights: [10], key: "a" });
+      expect(result.current.getRowHeight(1)).toBe(50);
+
+      rerender({ initialRowHeights: [30], key: "b" });
+      expect(result.current.getRowHeight(0)).toBe(30);
+      expect(result.current.getRowHeight(1)).toBe(100);
+    });
+  });
+
   describe("getRowHeight", () => {
     test("returns estimated height for a row that has not yet been measured", () => {
       const { result } = renderHook(() =>

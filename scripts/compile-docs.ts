@@ -1,6 +1,6 @@
 import { compileDocs } from "react-lib-tools/scripts/compile-docs.ts";
 
 await compileDocs({
-  componentNames: ["grid/Grid", "list/List"],
+  componentNames: ["Grid", "List"],
   imperativeHandleNames: ["GridImperativeAPI", "ListImperativeAPI"]
 });

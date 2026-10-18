@@ -62,9 +62,17 @@ describe("createCachedBounds", () => {
 
     expect(cachedBounds.size).toBe(0);
 
+    // Failed assertions are also logged
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
     expect(() => {
       cachedBounds.get(1);
     }).toThrow("Invalid index 1");
+    expect(consoleError).toHaveBeenCalledWith("Invalid index 1");
+
+    consoleError.mockRestore();
   });
 });
 

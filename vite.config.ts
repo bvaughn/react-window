@@ -1,12 +1,13 @@
-import preserveDirectives from "rollup-preserve-directives";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react-swc";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { getDevServerConfig } from "react-lib-tools/scripts/dev-server.js";
+import { visualizer } from "rollup-plugin-visualizer";
+import preserveDirectives from "rollup-preserve-directives";
 import { defineConfig, type UserConfig } from "vite";
 import dts from "vite-plugin-dts";
 import svgr from "vite-plugin-svgr";
-import { visualizer } from "rollup-plugin-visualizer";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -58,8 +59,8 @@ const websiteConfig: UserConfig = {
 // Allow iPhone to connect to the DEV site using a local IP
 if (process.env.NODE_ENV === "development") {
   websiteConfig.server = {
-    host: true,
-    port: 3000
+    ...getDevServerConfig({ rootDir: __dirname }),
+    host: true
   };
 }
 
