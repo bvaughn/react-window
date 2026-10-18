@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.1
+
+- Fix performance issues for fixed-size rows or columns with a size of 0 (e.g. a percentage size before the container has been measured). Rendering no longer computes and caches bounds for every item, and only the first item is rendered (previously the last items were rendered, or every item if the scroll offset was negative). Invalid sizes (e.g. `"abc%"` or negative values) are treated as 0. - [#923](https://github.com/bvaughn/react-window/pull/923)
+
 ## 2.4.0
 
 Server rendering improvements:
