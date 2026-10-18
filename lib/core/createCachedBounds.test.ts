@@ -76,7 +76,7 @@ describe("createCachedBounds", () => {
   });
 });
 
-test("fixed-size jumps do not allocate bounds for preceding items", () => {
+test("fixed-size lookups do not allocate bounds", () => {
   const cachedBounds = createCachedBounds({
     itemCount: 1000000,
     itemProps: {},
@@ -86,7 +86,7 @@ test("fixed-size jumps do not allocate bounds for preceding items", () => {
     scrollOffset: 19999980,
     size: 20
   });
-  expect(cachedBounds.size).toBe(1);
+  expect(cachedBounds.size).toBe(0);
   expect(cachedBounds.get(0)).toEqual({ scrollOffset: 0, size: 20 });
-  expect(cachedBounds.size).toBe(2);
+  expect(cachedBounds.size).toBe(0);
 });

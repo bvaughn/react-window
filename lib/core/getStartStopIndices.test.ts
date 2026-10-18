@@ -368,3 +368,59 @@ test("matches a linear lookup across boundaries, zero sizes and scroll direction
     }
   }
 });
+
+test.each([0, -5, NaN])(
+  "invalid fixed size %s renders only the first item without populating bounds",
+  (itemSize) => {
+    for (const itemCount of [1, 10000]) {
+      const cachedBounds = createCachedBounds({
+        itemCount,
+        itemProps: {},
+        itemSize
+      });
+      for (const offset of [-10, 0, 10, 1e9]) {
+        for (const containerSize of [0, 20]) {
+          expect(
+            getStartStopIndices({
+              cachedBounds,
+              containerScrollOffset: offset,
+              containerSize,
+              itemCount,
+              overscanCount: 2
+            })
+          ).toEqual({
+            startIndexVisible: 0,
+            stopIndexVisible: 0,
+            startIndexOverscan: 0,
+            stopIndexOverscan: Math.min(itemCount - 1, 2)
+          });
+        }
+      }
+      expect(cachedBounds.size).toBe(0);
+    }
+  }
+);
+
+test("fixed sizes do not populate bounds", () => {
+  const cachedBounds = createCachedBounds({
+    itemCount: 10000,
+    itemProps: {},
+    itemSize: 25
+  });
+  expect(cachedBounds.get(9999)).toEqual({ size: 25, scrollOffset: 249975 });
+  expect(
+    getStartStopIndices({
+      cachedBounds,
+      containerScrollOffset: 1e9,
+      containerSize: 100,
+      itemCount: 10000,
+      overscanCount: 2
+    })
+  ).toEqual({
+    startIndexVisible: 9999,
+    stopIndexVisible: 9999,
+    startIndexOverscan: 9997,
+    stopIndexOverscan: 9999
+  });
+  expect(cachedBounds.size).toBe(0);
+});
