@@ -59,7 +59,7 @@
       {
         "id": "rowHeight",
         "title": "rowHeight",
-        "text": "rowHeight: string | number | DynamicRowHeight | ((index: number, cellProps: RowProps) => number) Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the list's current height (string)\nfunction that returns the row height (in pixels) given an index and rowProps \ndynamic row height cache returned by the useDynamicRowHeight hook\n\n Dynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time."
+        "text": "rowHeight: string | number | DynamicRowHeight | ((index: number, cellProps: RowProps) => number) Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the list's current height (string)\nfunction that returns the row height (in pixels) given an index and rowProps \ndynamic row height cache returned by the useDynamicRowHeight hook\n\n Percentage heights can't be resolved during server rendering unless a defaultHeight (or a pixel height via the style prop) is specified.\n Dynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time."
       },
       {
         "id": "rowProps",
@@ -79,7 +79,12 @@
       {
         "id": "defaultHeight",
         "title": "defaultHeight",
-        "text": "defaultHeight?: number = 0 Default height of list for initial render.\nThis value is important for server rendering."
+        "text": "defaultHeight?: number = 0 Default height of list (in pixels) for initial render, before its actual height has been measured.\n Lists can't be measured during server rendering, so this value determines how many rows are server rendered.\nIt's recommended to set this to the expected height of the list (or to specify a pixel height via the style prop)."
+      },
+      {
+        "id": "defaultScrollOffset",
+        "title": "defaultScrollOffset",
+        "text": "defaultScrollOffset?: number = 0 Initial scroll offset (in pixels) of the list.\nThis value is only applied once, when the list first mounts with at least one row.\n Server-rendered HTML can't be pre-scrolled, so server rendering always starts at the first row;\nthe default scroll offset is applied once the list hydrates.\n If the list can't be scrolled that far when the offset is applied (e.g. it is hidden with display: none,\nor uses percentage row heights before its height has been measured), the offset is clamped or ignored and not retried.\nSpecify a defaultHeight (or a pixel height via the style prop) when using percentage row heights."
       },
       {
         "id": "listRef",
@@ -155,13 +160,13 @@
   {
     "path": "/grid/grid",
     "section": "Grids",
-    "text": "Use the Grid component to render data with many rows and columns: Dr Algernon Robers arobers1q@pinterest.com Male 16 Ludington Plaza San Luis Obispo Dr Antonetta Gwilt agwilt1e@sitemeter.com Female 0 Butternut Park San Luis Obispo Dr Beniamino Worlidge bworlidge5g@google.pl Male 7620 Hovde Street Seattle Dr Binky Curnow bcurnow5@stanford.edu Male 2868 Main Way Scottsdale Dr Bobbye Dobel bdobel6d@twitter.com Female 4 Chinook Terrace Buffalo Dr Bordy Whale bwhale19@bloglovin.com Male 76705 Bowman Junction Washington Dr Broddy Bilsford bbilsford7c@toplist.cz Polygender 0042 Swallow Court Portland Dr Catlee Esslemont cesslemont18@army.mil Female 120 Muir Street Raleigh Dr Collin Merali cmerali1h@dedecms.com Male 4649 Corscot Street Milwaukee Dr Cordy Jeffrey cjeffrey36@dagondesign.com Male 2459 Menomonie Circle Hampton Grids require you to specify the number of rows and columns as well as the width and height of each: import { Grid } from \"react-window\";\n \nfunction Example({ contacts }: { contacts: Contact[] }) {\n return (\n <Grid\n cellComponent={CellComponent}\n cellProps={{ contacts }}\n columnCount={10}\n columnWidth={columnWidth}\n rowCount={contacts.length}\n rowHeight={25}\n />\n );\n} Column widths and row heights can be either numbers or functions. In the example above, row height is fixed and column width is a function that determines the width of the column based on the column index: function columnWidth(index: number) {\n switch (indexToColumn(index)) {\n case \"address\": {\n return 250;\n }\n case \"email\": {\n return 300;\n }\n case \"job_title\": {\n return 150;\n }\n case \"timezone\": {\n return 200;\n }\n case \"zip\": {\n return 75;\n }\n default: {\n return 100;\n }\n }\n} Lastly grids require a component to render a cell, given a column and row index. As with lists, this component receives additional props specified as part of cellProps: import { type CellComponentProps } from \"react-window\";\n \nfunction CellComponent({\n contacts,\n columnIndex,\n rowIndex,\n style\n}: CellComponentProps<{\n contacts: Contact[];\n}>) {\n const address = contacts[rowIndex];\n const content = address[indexToColumn(columnIndex)];\n \n return (\n <div className=\"truncate\" style={style}>\n {content}\n </div>\n );\n} Grids require space to render cells. Typically the ResizeObserver API is used to determine how much space there is available within the parent DOM element. If an explicit width and height are specified (in pixels) using the style prop, ResizeObserver will not be used.",
+    "text": "Use the Grid component to render data with many rows and columns: Grids require you to specify the number of rows and columns as well as the width and height of each: import { Grid } from \"react-window\";\n \nfunction Example({ contacts }: { contacts: Contact[] }) {\n return (\n <Grid\n cellComponent={CellComponent}\n cellProps={{ contacts }}\n columnCount={10}\n columnWidth={columnWidth}\n rowCount={contacts.length}\n rowHeight={25}\n />\n );\n} Column widths and row heights can be either numbers or functions. In the example above, row height is fixed and column width is a function that determines the width of the column based on the column index: function columnWidth(index: number) {\n switch (indexToColumn(index)) {\n case \"address\": {\n return 250;\n }\n case \"email\": {\n return 300;\n }\n case \"job_title\": {\n return 150;\n }\n case \"timezone\": {\n return 200;\n }\n case \"zip\": {\n return 75;\n }\n default: {\n return 100;\n }\n }\n} Lastly grids require a component to render a cell, given a column and row index. As with lists, this component receives additional props specified as part of cellProps: import { type CellComponentProps } from \"react-window\";\n \nfunction CellComponent({\n contacts,\n columnIndex,\n rowIndex,\n style\n}: CellComponentProps<{\n contacts: Contact[];\n}>) {\n const address = contacts[rowIndex];\n const content = address[indexToColumn(columnIndex)];\n \n return (\n <div className=\"truncate\" style={style}>\n {content}\n </div>\n );\n} Grids require space to render cells. Typically the ResizeObserver API is used to determine how much space there is available within the parent DOM element. If an explicit width and height are specified (in pixels) using the style prop, ResizeObserver will not be used.",
     "title": "Rendering a grid"
   },
   {
     "path": "/grid/scroll-to-cell",
     "section": "Grids",
-    "text": "Grid provides an imperative API for responding to events. The recommended way to access this API is to use the exported ref hook: import { useGridRef } from \"react-window\"; Attach the ref during render: function Example(props: Props) {\n const gridRef = useGridRef(null);\n \n return <Grid gridRef={gridRef} {...props} />;\n} And call API methods in an event handler: const onClick = () => {\n const grid = gridRef.current;\n grid?.scrollToCell({\n behavior: \"auto\", // optional\n columnAlign: \"auto\", // optional\n columnIndex: 10,\n rowAlign: \"auto\", // optional\n rowIndex: 250\n });\n}; The form below uses the imperative API to scroll the grid: Align Scroll behavior Job title Column Scroll Dr Algernon Robers arobers1q@pinterest.com Male 16 Ludington Plaza San Luis Obispo Dr Antonetta Gwilt agwilt1e@sitemeter.com Female 0 Butternut Park San Luis Obispo Dr Beniamino Worlidge bworlidge5g@google.pl Male 7620 Hovde Street Seattle Dr Binky Curnow bcurnow5@stanford.edu Male 2868 Main Way Scottsdale Dr Bobbye Dobel bdobel6d@twitter.com Female 4 Chinook Terrace Buffalo Dr Bordy Whale bwhale19@bloglovin.com Male 76705 Bowman Junction Washington Dr Broddy Bilsford bbilsford7c@toplist.cz Polygender 0042 Swallow Court Portland Dr Catlee Esslemont cesslemont18@army.mil Female 120 Muir Street Raleigh Dr Collin Merali cmerali1h@dedecms.com Male 4649 Corscot Street Milwaukee Dr Cordy Jeffrey cjeffrey36@dagondesign.com Male 2459 Menomonie Circle Hampton The Grid API also provides scrollToColumn and scrollToRow methods for single-axis scrolling. Note If you are passing the ref to another component or hook, use the ref callback function instead. import { useGridCallbackRef } from \"react-window\";\n \nfunction Example(props: Props) {\n const [grid, setGrid] = useGridCallbackRef(null);\n \n useCustomHook(grid);\n \n return <Grid gridRef={setGrid} {...props} />;\n}",
+    "text": "Grid provides an imperative API for responding to events. The recommended way to access this API is to use the exported ref hook: import { useGridRef } from \"react-window\"; Attach the ref during render: function Example(props: Props) {\n const gridRef = useGridRef(null);\n \n return <Grid gridRef={gridRef} {...props} />;\n} And call API methods in an event handler: const onClick = () => {\n const grid = gridRef.current;\n grid?.scrollToCell({\n behavior: \"auto\", // optional\n columnAlign: \"auto\", // optional\n columnIndex: 10,\n rowAlign: \"auto\", // optional\n rowIndex: 250\n });\n}; The form below uses the imperative API to scroll the grid: Align Scroll behavior Job title Column Scroll The Grid API also provides scrollToColumn and scrollToRow methods for single-axis scrolling. Note If you are passing the ref to another component or hook, use the ref callback function instead. import { useGridCallbackRef } from \"react-window\";\n \nfunction Example(props: Props) {\n const [grid, setGrid] = useGridCallbackRef(null);\n \n useCustomHook(grid);\n \n return <Grid gridRef={setGrid} {...props} />;\n}",
     "title": "Imperative methods"
   },
   {
@@ -190,7 +195,7 @@
       {
         "id": "columnWidth",
         "title": "columnWidth",
-        "text": "columnWidth: string | number | ((index: number, cellProps: CellProps) => number) Column width; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the grid's current width (string)\nfunction that returns the column width (in pixels) given an index and cellProps"
+        "text": "columnWidth: string | number | ((index: number, cellProps: CellProps) => number) Column width; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the grid's current width (string)\nfunction that returns the column width (in pixels) given an index and cellProps \n\n Percentage widths can't be resolved during server rendering unless a defaultWidth (or a pixel width via the style prop) is specified."
       },
       {
         "id": "rowCount",
@@ -200,7 +205,7 @@
       {
         "id": "rowHeight",
         "title": "rowHeight",
-        "text": "rowHeight: string | number | ((index: number, cellProps: CellProps) => number) Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the grid's current height (string)\nfunction that returns the row height (in pixels) given an index and cellProps"
+        "text": "rowHeight: string | number | ((index: number, cellProps: CellProps) => number) Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the grid's current height (string)\nfunction that returns the row height (in pixels) given an index and cellProps \n\n Percentage heights can't be resolved during server rendering unless a defaultHeight (or a pixel height via the style prop) is specified."
       },
       {
         "id": "children",
@@ -220,17 +225,27 @@
       {
         "id": "defaultHeight",
         "title": "defaultHeight",
-        "text": "defaultHeight?: number = 0 Default height of grid for initial render.\nThis value is important for server rendering."
+        "text": "defaultHeight?: number = 0 Default height of grid (in pixels) for initial render, before its actual height has been measured.\n Grids can't be measured during server rendering, so this value determines how many rows are server rendered.\nIt's recommended to set this to the expected height of the grid (or to specify a pixel height via the style prop)."
+      },
+      {
+        "id": "defaultScrollLeft",
+        "title": "defaultScrollLeft",
+        "text": "defaultScrollLeft?: number = 0 Initial horizontal scroll offset (in pixels) of the grid.\nThis value is only applied once, when the grid first mounts with at least one column.\n Server-rendered HTML can't be pre-scrolled, so server rendering always starts at the first column;\nthe default scroll offset is applied once the grid hydrates.\n If the grid can't be scrolled that far when the offset is applied (e.g. it is hidden with display: none,\nor uses percentage column widths before its width has been measured), the offset is clamped or ignored and not retried.\nSpecify a defaultWidth (or a pixel width via the style prop) when using percentage column widths."
+      },
+      {
+        "id": "defaultScrollTop",
+        "title": "defaultScrollTop",
+        "text": "defaultScrollTop?: number = 0 Initial vertical scroll offset (in pixels) of the grid.\nThis value is only applied once, when the grid first mounts with at least one row.\n Server-rendered HTML can't be pre-scrolled, so server rendering always starts at the first row;\nthe default scroll offset is applied once the grid hydrates.\n If the grid can't be scrolled that far when the offset is applied (e.g. it is hidden with display: none,\nor uses percentage row heights before its height has been measured), the offset is clamped or ignored and not retried.\nSpecify a defaultHeight (or a pixel height via the style prop) when using percentage row heights."
       },
       {
         "id": "defaultWidth",
         "title": "defaultWidth",
-        "text": "defaultWidth?: number = 0 Default width of grid for initial render.\nThis value is important for server rendering."
+        "text": "defaultWidth?: number = 0 Default width of grid (in pixels) for initial render, before its actual width has been measured.\n Grids can't be measured during server rendering, so this value determines how many columns are server rendered.\nIt's recommended to set this to the expected width of the grid (or to specify a pixel width via the style prop)."
       },
       {
         "id": "dir",
         "title": "dir",
-        "text": "dir?: string Indicates the directionality of grid cells.\n See HTML dir global attribute for more information."
+        "text": "dir?: string Indicates the directionality of grid cells.\n The directionality of an ancestor element can't be detected during server rendering;\nspecify this prop explicitly for server-rendered right-to-left grids.\n See HTML dir global attribute for more information."
       },
       {
         "id": "gridRef",
@@ -304,13 +319,13 @@
   {
     "path": "/grid/rtl-grids",
     "section": "Other",
-    "text": "Grids can also display right to left languages (like Arabic). The grid components check the dir attribute to determine content directionality. Using the same data as from the previous example, here is a grid rendered right to left. Dr row 0, col 0 Algernon row 0, col 1 Robers row 0, col 2 arobers1q@pinterest.com row 0, col 3 Male row 0, col 4 16 Ludington Plaza row 0, col 5 San Luis Obispo row 0, col 6 Dr row 1, col 0 Antonetta row 1, col 1 Gwilt row 1, col 2 agwilt1e@sitemeter.com row 1, col 3 Female row 1, col 4 0 Butternut Park row 1, col 5 San Luis Obispo row 1, col 6 Dr row 2, col 0 Beniamino row 2, col 1 Worlidge row 2, col 2 bworlidge5g@google.pl row 2, col 3 Male row 2, col 4 7620 Hovde Street row 2, col 5 Seattle row 2, col 6 Dr row 3, col 0 Binky row 3, col 1 Curnow row 3, col 2 bcurnow5@stanford.edu row 3, col 3 Male row 3, col 4 2868 Main Way row 3, col 5 Scottsdale row 3, col 6 Dr row 4, col 0 Bobbye row 4, col 1 Dobel row 4, col 2 bdobel6d@twitter.com row 4, col 3 Female row 4, col 4 4 Chinook Terrace row 4, col 5 Buffalo row 4, col 6 Dr row 5, col 0 Bordy row 5, col 1 Whale row 5, col 2 bwhale19@bloglovin.com row 5, col 3 Male row 5, col 4 76705 Bowman Junction row 5, col 5 Washington row 5, col 6 Dr row 6, col 0 Broddy row 6, col 1 Bilsford row 6, col 2 bbilsford7c@toplist.cz row 6, col 3 Polygender row 6, col 4 0042 Swallow Court row 6, col 5 Portland row 6, col 6 Dr row 7, col 0 Catlee row 7, col 1 Esslemont row 7, col 2 cesslemont18@army.mil row 7, col 3 Female row 7, col 4 120 Muir Street row 7, col 5 Raleigh row 7, col 6 import { Grid } from \"react-window\";\n \nfunction RtlExample({ contacts }: { contacts: Contact[] }) {\n return (\n <Grid\n cellComponent={CellComponent}\n cellProps={{ contacts }}\n columnCount={10}\n columnWidth={columnWidth}\n dir=\"rtl\"\n rowCount={contacts.length}\n rowHeight={35}\n />\n );\n}",
+    "text": "Grids can also display right to left languages (like Arabic). The grid components check the dir attribute to determine content directionality. Using the same data as from the previous example, here is a grid rendered right to left. import { Grid } from \"react-window\";\n \nfunction RtlExample({ contacts }: { contacts: Contact[] }) {\n return (\n <Grid\n cellComponent={CellComponent}\n cellProps={{ contacts }}\n columnCount={10}\n columnWidth={columnWidth}\n dir=\"rtl\"\n rowCount={contacts.length}\n rowHeight={35}\n />\n );\n}",
     "title": "Right to left content"
   },
   {
     "path": "/grid/horizontal-lists",
     "section": "Other",
-    "text": "A horizontal list is just a grid with only one row. Here's an example horizontal list (grid) of emails: abacon52@time.com abiasini11@stanford.edu agarett6e@unblog.fr agwilt1e@sitemeter.com ajekel58@unblog.fr anewbigging5f@prnewswire.com apeters7j@amazon.com Here's what the configuration for the grid above looks like: import { Grid } from \"react-window\";\n \nfunction HorizontalList({ emails }: { emails: string[] }) {\n return (\n <Grid\n className=\"h-full\"\n cellComponent={CellComponent}\n cellProps={{ emails }}\n columnCount={emails.length}\n columnWidth={150}\n rowCount={1}\n rowHeight=\"100%\"\n />\n );\n} And here's the cell renderer: import { type CellComponentProps } from \"react-window\";\n \nfunction CellComponent({\n columnIndex,\n emails,\n style\n}: CellComponentProps<{ emails: string[] }>) {\n return (\n <div\n className={cn(\"px-2 truncate text-center leading-[2.5]\", {\n \"bg-white/10 rounded\": columnIndex % 2 === 0\n })}\n style={style}\n >\n {emails[columnIndex]}\n </div>\n );\n}",
+    "text": "A horizontal list is just a grid with only one row. Here's an example horizontal list (grid) of emails: Here's what the configuration for the grid above looks like: import { Grid } from \"react-window\";\n \nfunction HorizontalList({ emails }: { emails: string[] }) {\n return (\n <Grid\n className=\"h-full\"\n cellComponent={CellComponent}\n cellProps={{ emails }}\n columnCount={emails.length}\n columnWidth={150}\n rowCount={1}\n rowHeight=\"100%\"\n />\n );\n} And here's the cell renderer: import { type CellComponentProps } from \"react-window\";\n \nfunction CellComponent({\n columnIndex,\n emails,\n style\n}: CellComponentProps<{ emails: string[] }>) {\n return (\n <div\n className={cn(\"px-2 truncate text-center leading-[2.5]\", {\n \"bg-white/10 rounded\": columnIndex % 2 === 0\n })}\n style={style}\n >\n {emails[columnIndex]}\n </div>\n );\n}",
     "title": "Horizontal lists"
   },
   {
@@ -324,6 +339,47 @@
     "section": "Other",
     "text": "If you want to render content on top of your list or grid, the safest method is to use a portal and render them directly into the parent document. This avoids potential clipping issues or z-index conflicts. For the specific case of \"sticky\" rows, you can render within the parent list or grid using the children prop: The example above was created using code like this: import { List, type RowComponentProps } from \"react-window\";\n \nfunction Example() {\n return (\n <List\n rowComponent={RowComponent}\n rowCount={101}\n rowHeight={20}\n rowProps={EMPTY_OBJECT}\n >\n <div className=\"w-full h-0 top-0 sticky\">\n <div className=\"h-[20px] bg-teal-600 px-2 rounded\">Sticky header</div>\n </div>\n </List>\n );\n} Note the height of 0 in the example above prevents the sticky row from affecting the height of the parent list.",
     "title": "Sticky rows"
+  },
+  {
+    "headings": [
+      {
+        "id": "sizing",
+        "title": "Sizing",
+        "text": "Sizing Lists and grids normally measure their available space using a ResizeObserver, but there is nothing to measure on the server. Instead, use the defaultHeight prop (and defaultWidth prop for grids) to tell react-window how much space to fill. This determines how many rows (and columns) are server rendered. import { List } from \"react-window\";\n \nfunction Example({ names }: { names: string[] }) {\n return (\n <List\n className=\"h-100\"\n defaultHeight={400}\n rowComponent={RowComponent}\n rowCount={names.length}\n rowHeight={25}\n rowProps={{ names }}\n />\n );\n} Alternatively, specify an explicit pixel size using the style prop (e.g. style={{ height: 400 }}). This size is used on both the server and the client, so no measurement is needed at all. Without a default size, only the first row (and any overscan rows) will be server rendered. Once the page hydrates, the list will measure itself and render the remaining rows. Percentage-based sizes (e.g. rowHeight=\"25%\") can't be resolved without a size. Unless a default size (or a pixel size via the style prop) is specified, they are server rendered with a size of 0 and rows will overlap until the page hydrates. The default size only determines how many rows are rendered before the list has been measured; the list's actual size is still determined by CSS. To server render more rows than are visible (e.g. for crawlers that don't run JavaScript), set defaultHeight to a value larger than the list's height. The extra rows will be removed once the page hydrates, but keep in mind that hydration cost grows with the number of rows rendered."
+      },
+      {
+        "id": "right-to-left-content",
+        "title": "Right to left content",
+        "text": "Right to left content Grids inherit their direction from ancestor elements, but this can't be detected on the server. Specify the dir prop explicitly for server-rendered right-to-left grids."
+      },
+      {
+        "id": "scrollbar-size",
+        "title": "Scrollbar size",
+        "text": "Scrollbar size getScrollbarSize returns 0 on the server. To avoid hydration mismatches, read it after the component has mounted (e.g. within an effect) instead of during render. Click below for more guidance about server rendering. Server rendering with React Server Components Server rendering with dynamic row heights Server rendering with an initial scroll position"
+      }
+    ],
+    "path": "/server-rendering",
+    "section": "Other",
+    "text": "List and Grid can be rendered on the server (including static site generation and React Server Components). Server-rendered rows are visible before JavaScript has loaded, and they hydrate without mismatches.",
+    "title": "Server rendering"
+  },
+  {
+    "path": "/server-rendering/server-components",
+    "section": "Other",
+    "text": "List and Grid are client components, but they can be rendered directly by a Server Component as long as all of their props can be sent from the server to the client: // app/names/page.tsx (a Server Component)\nimport { List } from \"react-window\";\nimport { RowComponent } from \"./RowComponent\";\n \nexport default async function Page() {\n const names = await loadNames();\n \n return (\n <List\n className=\"h-100\"\n defaultHeight={400}\n rowComponent={RowComponent}\n rowCount={names.length}\n rowHeight={25}\n rowProps={{ names }}\n />\n );\n} The rowComponent (or cellComponent) must be a client component, marked with the \"use client\" directive. Values in rowProps (or cellProps) must be serializable. // app/names/RowComponent.tsx\n\"use client\";\n \nimport { type RowComponentProps } from \"react-window\";\n \nexport function RowComponent({\n index,\n names,\n style\n}: RowComponentProps<{ names: string[] }>) {\n return <div style={style}>{names[index]}</div>;\n} Functions can't be passed from the server to the client, so props like rowHeight functions, rowKey, onRowsRendered, onResize, and listRef (as well as hooks like useDynamicRowHeight) need to be used within a client component: // app/names/NamesList.tsx\n\"use client\";\n \nimport { useCallback } from \"react\";\nimport { List, useDynamicRowHeight } from \"react-window\";\nimport { RowComponent } from \"./RowComponent\";\n \nexport function NamesList({ names }: { names: string[] }) {\n const rowHeight = useDynamicRowHeight({\n defaultRowHeight: 25\n });\n \n const rowKey = useCallback((index: number) => names[index], [names]);\n \n return (\n <List\n className=\"h-100\"\n defaultHeight={400}\n rowComponent={RowComponent}\n rowCount={names.length}\n rowHeight={rowHeight}\n rowKey={rowKey}\n rowProps={{ names }}\n />\n );\n}",
+    "title": "Server rendering with React Server Components"
+  },
+  {
+    "path": "/server-rendering/dynamic-row-heights",
+    "section": "Other",
+    "text": "Rows with dynamic heights can't be measured until they are rendered in a browser. Until then, server-rendered rows are displayed in normal document flow (rather than being positioned using estimated heights) so that they don't overlap or leave gaps. Once the page hydrates and rows have been measured, they are positioned as usual. To reduce layout shift once rows have been measured, per-row heights can be provided to useDynamicRowHeight using the initialRowHeights option. These heights are used in place of the default height until rows are measured. For example, they might be estimated from each row's content: import { useState } from \"react\";\nimport { useDynamicRowHeight } from \"react-window\";\n \nconst LINE_HEIGHT = 20;\nconst PADDING = 10;\n \nfunction useRowHeight(messages: string[]) {\n // Only read when the hook first mounts, so there's no need to recompute it\n const [initialRowHeights] = useState(() =>\n messages.map(\n (message) => message.split(\"\\n\").length * LINE_HEIGHT + PADDING\n )\n );\n \n return useDynamicRowHeight({\n defaultRowHeight: 50,\n initialRowHeights\n });\n} Heights can also be measured ahead of time, e.g. by rendering the list in a headless browser while generating a static site. When rendering from a Server Component, compute the heights on the server and pass them as a prop to the client component that calls useDynamicRowHeight. If row heights can be determined exactly ahead of time, use a rowHeight function instead; it's more efficient than measuring rows. Initial heights are matched to rows by index, and dynamic heights often depend on the list's width (e.g. text that wraps). Heights that were computed for different data or a different width will cause layout shift once rows are measured. Changing the hook's key option re-reads initialRowHeights.",
+    "title": "Server rendering with dynamic row heights"
+  },
+  {
+    "path": "/server-rendering/initial-scroll-position",
+    "section": "Other",
+    "text": "Use the defaultScrollOffset prop (or the defaultScrollLeft and defaultScrollTop props for grids) to set the initial scroll position. import { List } from \"react-window\";\n \nconst ROW_HEIGHT = 25;\n \nfunction Example({\n initialIndex,\n names\n}: {\n initialIndex: number;\n names: string[];\n}) {\n return (\n <List\n className=\"h-100\"\n defaultHeight={400}\n defaultScrollOffset={initialIndex * ROW_HEIGHT}\n rowComponent={RowComponent}\n rowCount={names.length}\n rowHeight={ROW_HEIGHT}\n rowProps={{ names }}\n />\n );\n} HTML can't be pre-scrolled, so the server always renders the first rows of the list. The default scroll offset is applied once the page hydrates (or, for lists that are initially empty, once they have rows), unless the list has already been scrolled (e.g. by the browser restoring a previous scroll position).",
+    "title": "Server rendering with an initial scroll position"
   },
   {
     "path": "/platform-requirements",

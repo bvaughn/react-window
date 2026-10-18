@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.4.0
+
+Server rendering improvements:
+
+### Features
+
+- Add `defaultScrollOffset` prop to `List` and `defaultScrollLeft`/`defaultScrollTop` props to `Grid` for setting the initial scroll position. Server-rendered HTML can't be pre-scrolled, so server rendering starts at the first row and the default scroll offset is applied when the component hydrates (unless the browser has already restored a scroll position). For lists and grids that are initially empty (e.g. while data is loading), the offset is applied once they have rows.
+- Add `initialRowHeights` option to `useDynamicRowHeight` for providing row heights that are known or can be estimated ahead of time (e.g. during server rendering).
+- Add a [server rendering](https://react-window.vercel.app/server-rendering) page to the docs site.
+
+### Bug fixes
+
+- Server-rendered rows with dynamic heights are now displayed in normal document flow until they have been measured, rather than being positioned using estimated heights (which caused rows to overlap or leave gaps until after hydration).
+- Fix `List` and `Grid` logging `useLayoutEffect` warnings when server rendered with React 18.
+- Fix `getScrollbarSize` throwing when called during server rendering; it now returns 0.
+
 ## 2.3.4
 
 - Fix `useDynamicRowHeight` not measuring rows that set an `aria-hidden` attribute. - [#917](https://github.com/bvaughn/react-window/pull/917)

@@ -83,6 +83,8 @@ export type GridProps<
    * - number of pixels (number)
    * - percentage of the grid's current width (string)
    * - function that returns the column width (in pixels) given an index and `cellProps`
+   *
+   * ℹ️ Percentage widths can't be resolved during server rendering unless a `defaultWidth` (or a pixel width via the `style` prop) is specified.
    */
   columnWidth:
     | number
@@ -90,19 +92,52 @@ export type GridProps<
     | ((index: number, cellProps: CellProps) => number);
 
   /**
-   * Default height of grid for initial render.
-   * This value is important for server rendering.
+   * Default height of grid (in pixels) for initial render, before its actual height has been measured.
+   *
+   * ℹ️ Grids can't be measured during server rendering, so this value determines how many rows are server rendered.
+   * It's recommended to set this to the expected height of the grid (or to specify a pixel height via the `style` prop).
    */
   defaultHeight?: number;
 
   /**
-   * Default width of grid for initial render.
-   * This value is important for server rendering.
+   * Initial horizontal scroll offset (in pixels) of the grid.
+   * This value is only applied once, when the grid first mounts with at least one column.
+   *
+   * ℹ️ Server-rendered HTML can't be pre-scrolled, so server rendering always starts at the first column;
+   * the default scroll offset is applied once the grid hydrates.
+   *
+   * ⚠️ If the grid can't be scrolled that far when the offset is applied (e.g. it is hidden with `display: none`,
+   * or uses percentage column widths before its width has been measured), the offset is clamped or ignored and not retried.
+   * Specify a `defaultWidth` (or a pixel width via the `style` prop) when using percentage column widths.
+   */
+  defaultScrollLeft?: number;
+
+  /**
+   * Initial vertical scroll offset (in pixels) of the grid.
+   * This value is only applied once, when the grid first mounts with at least one row.
+   *
+   * ℹ️ Server-rendered HTML can't be pre-scrolled, so server rendering always starts at the first row;
+   * the default scroll offset is applied once the grid hydrates.
+   *
+   * ⚠️ If the grid can't be scrolled that far when the offset is applied (e.g. it is hidden with `display: none`,
+   * or uses percentage row heights before its height has been measured), the offset is clamped or ignored and not retried.
+   * Specify a `defaultHeight` (or a pixel height via the `style` prop) when using percentage row heights.
+   */
+  defaultScrollTop?: number;
+
+  /**
+   * Default width of grid (in pixels) for initial render, before its actual width has been measured.
+   *
+   * ℹ️ Grids can't be measured during server rendering, so this value determines how many columns are server rendered.
+   * It's recommended to set this to the expected width of the grid (or to specify a pixel width via the `style` prop).
    */
   defaultWidth?: number;
 
   /**
    * Indicates the directionality of grid cells.
+   *
+   * ℹ️ The directionality of an ancestor element can't be detected during server rendering;
+   * specify this prop explicitly for server-rendered right-to-left grids.
    *
    * ℹ️ See HTML `dir` [global attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/dir) for more information.
    */
@@ -212,6 +247,8 @@ export type GridProps<
    * - number of pixels (number)
    * - percentage of the grid's current height (string)
    * - function that returns the row height (in pixels) given an index and `cellProps`
+   *
+   * ℹ️ Percentage heights can't be resolved during server rendering unless a `defaultHeight` (or a pixel height via the `style` prop) is specified.
    */
   rowHeight:
     | number

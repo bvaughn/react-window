@@ -3,8 +3,15 @@ const cache = new WeakMap<Document, number>();
 
 export function getScrollbarSize(
   recalculate: boolean = false,
-  ownerDocument: Document = document
+  ownerDocument: Document | undefined = typeof document !== "undefined"
+    ? document
+    : undefined
 ): number {
+  if (ownerDocument === undefined) {
+    // Scrollbar size can't be measured during server rendering
+    return 0;
+  }
+
   let size = cache.get(ownerDocument);
   if (size === undefined || recalculate) {
     const div = ownerDocument.createElement("div");
