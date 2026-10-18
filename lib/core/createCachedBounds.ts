@@ -19,12 +19,7 @@ export function createCachedBounds<Props extends object>({
 
       if (typeof itemSize === "number") {
         assert(index >= 0, `Invalid index ${index}`);
-        let bounds = cache.get(index);
-        if (bounds === undefined) {
-          bounds = { size: itemSize, scrollOffset: index * itemSize };
-          cache.set(index, bounds);
-        }
-        return bounds;
+        return { size: itemSize, scrollOffset: index * itemSize };
       }
 
       while (cache.size - 1 < index) {

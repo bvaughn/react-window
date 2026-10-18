@@ -33,22 +33,24 @@ export function getStartStopIndices({
   let stopIndexVisible: number;
   const { itemSize } = cachedBounds;
 
-  if (itemSize !== undefined && itemSize > 0) {
-    startIndexVisible = Math.max(
-      0,
-      Math.min(maxIndex, Math.floor(containerScrollOffset / itemSize))
-    );
-    stopIndexVisible = Math.max(
-      startIndexVisible,
-      Math.min(
-        maxIndex,
-        Math.ceil((containerScrollOffset + containerSize) / itemSize) - 1
-      )
-    );
-  } else if (itemSize === 0) {
-    startIndexVisible = containerScrollOffset < 0 ? 0 : maxIndex;
-    stopIndexVisible =
-      containerScrollOffset + containerSize > 0 ? maxIndex : startIndexVisible;
+  if (itemSize !== undefined) {
+    if (itemSize > 0) {
+      startIndexVisible = Math.max(
+        0,
+        Math.min(maxIndex, Math.floor(containerScrollOffset / itemSize))
+      );
+      stopIndexVisible = Math.max(
+        startIndexVisible,
+        Math.min(
+          maxIndex,
+          Math.ceil((containerScrollOffset + containerSize) / itemSize) - 1
+        )
+      );
+    } else {
+      // Size is zero, negative or NaN (e.g. a percentage size before the container is measured)
+      startIndexVisible = 0;
+      stopIndexVisible = 0;
+    }
   } else {
     // Binary search the measured prefix
     let low = 0;

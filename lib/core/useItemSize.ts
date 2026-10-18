@@ -29,5 +29,13 @@ export function useItemSize<Props extends object>({
     }
   }
 
+  // Normalize invalid sizes (e.g. NaN from a malformed percentage) so they don't produce NaN offsets
+  if (
+    typeof itemSize === "number" &&
+    !(Number.isFinite(itemSize) && itemSize > 0)
+  ) {
+    itemSize = 0;
+  }
+
   return itemSize;
 }
