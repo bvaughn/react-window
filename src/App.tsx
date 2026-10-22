@@ -9,7 +9,6 @@ import {
 import { repository } from "../package.json";
 import Logo from "../public/favicon.svg?react";
 import { html as refCompositionHTML } from "../public/generated/examples/RefComposition.json";
-import { html as scrollingIndicatorHTML } from "../public/generated/examples/ScrollingIndicator.json";
 import { Link } from "./components/Link";
 import { routes, type Path } from "./routes";
 
@@ -85,12 +84,21 @@ const nav: NavConfig<Path | DefaultPath> = [
     ]
   },
   {
+    title: "Hooks",
+    links: [
+      { path: "/hooks/use-is-scrolling", title: "useIsScrolling" },
+      { path: "/hooks/use-virtualizer", title: "useVirtualizer" }
+    ]
+  },
+  {
     title: "Other",
     links: [
       { path: "/grid/rtl-grids", title: "Right to left content" },
       { path: "/grid/horizontal-lists", title: "Horizontal lists" },
       { path: "/list/images", title: "Images" },
       { path: "/list/sticky-rows", title: "Sticky rows" },
+      { path: "/list/scroll-element", title: "Scrolling with the page" },
+      { path: "/infinite-loading", title: "Infinite loading" },
       {
         path: "/server-rendering",
         title: "Server rendering",
@@ -117,19 +125,6 @@ const nav: NavConfig<Path | DefaultPath> = [
 ];
 
 const commonQuestions: CommonQuestion[] = [
-  {
-    id: "scrolling-indicator",
-    question: "Can I render a scrolling indicator?",
-    answer: (
-      <>
-        <p>
-          One way to implement a scrolling indicator would be to use a custom
-          hook as shown below:
-        </p>
-        <Code html={scrollingIndicatorHTML} />
-      </>
-    )
-  },
   {
     id: "ref-composition",
     question: (

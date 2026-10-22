@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- Add `scrollElement` prop to `List` and `Grid` for lists and grids that scroll along with other content. Pass `"window"` to scroll with the page, or an ancestor element that scrolls. The list or grid renders at its full height and only renders the rows visible within the scroll element's viewport; its position within the scroll element is measured whenever it renders, scrolls, or resizes, and whenever content before it is resized, inserted, or removed (e.g. an image loading above it). Imperative scroll methods scroll the scroll element. Grid columns scroll with the scroll element too if the grid is as wide as its content (e.g. `style={{ width: "max-content" }}`); otherwise they scroll within the grid. Add a [scrolling with the page](https://react-window.vercel.app/list/scroll-element) page to the docs site.
+- Add `useVirtualizer` hook for rendering custom (headless) virtualized content, e.g. a semantic `<table>`. It returns the items to render (with their offsets and sizes), the total size, the visible range, and a `scrollToIndex` method; options mirror the props of `List` (including `scrollElement` and dynamic sizes from `useDynamicRowHeight`). Add a [useVirtualizer](https://react-window.vercel.app/hooks/use-virtualizer) page to the docs site.
+- Add `useIsScrolling` hook for tracking whether a list, grid, or scroll element is scrolling (e.g. to render simplified rows while scrolling). It uses the "scrollend" event where supported. Add a [useIsScrolling](https://react-window.vercel.app/hooks/use-is-scrolling) page to the docs site (replacing the common question about scrolling indicators).
+- Scrolling to a row, column, or cell (`scrollToRow`, `scrollToColumn`, `scrollToCell`, and `useVirtualizer`'s `scrollToIndex`) respects the CSS `scroll-padding` of the element being scrolled, like the browser's `scrollIntoView`. For example, `scroll-padding-top` can keep rows from being aligned underneath a sticky header.
+- Add an [infinite loading](https://react-window.vercel.app/infinite-loading) page to the docs site.
+
 ## 2.4.1
 
 - Fix performance issues for fixed-size rows or columns with a size of 0 (e.g. a percentage size before the container has been measured). Rendering no longer computes and caches bounds for every item, and only the first item is rendered (previously the last items were rendered, or every item if the scroll offset was negative). Invalid sizes (e.g. `"abc%"` or negative values) are treated as 0. - [#923](https://github.com/bvaughn/react-window/pull/923)

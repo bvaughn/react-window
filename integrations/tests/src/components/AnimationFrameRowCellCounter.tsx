@@ -8,16 +8,25 @@ export function AnimationFrameRowCellCounter() {
   useLayoutEffect(() => {
     const element = ref.current;
     if (element) {
-      const id = requestAnimationFrame(() => {
+      const count = () => {
+        cancelAnimationFrame(animationFrameId);
+        clearTimeout(timeoutId);
+
         const cellCount =
           document.body.querySelectorAll('[role="gridcell"]').length;
         const rowCount =
           document.body.querySelectorAll('[role="listitem"]').length;
         element.textContent = `${cellCount + rowCount}`;
-      });
+      };
+
+      // WebKit on Linux (in CI) sometimes stops running animation frames,
+      // so also count after a short timeout (whichever happens first)
+      const animationFrameId = requestAnimationFrame(count);
+      const timeoutId = setTimeout(count, 100);
 
       return () => {
-        cancelAnimationFrame(id);
+        cancelAnimationFrame(animationFrameId);
+        clearTimeout(timeoutId);
       };
     }
   }, []);

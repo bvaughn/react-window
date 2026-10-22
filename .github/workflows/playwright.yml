@@ -5,7 +5,13 @@ on:
   pull_request:
 jobs:
   e2e-tests:
+    name: e2e-tests (${{ matrix.browser }})
     runs-on: ubuntu-latest
+    strategy:
+      # Let other browsers finish if one fails
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -24,19 +30,24 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright # Default Linux path
-          key: ${{ runner.os }}-playwright-chromium-${{ steps.playwright-version.outputs.version }}
+          key: ${{ runner.os }}-playwright-${{ matrix.browser }}-${{ steps.playwright-version.outputs.version }}
 
       - name: Install Playwright browsers and dependencies (on cache miss)
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm e2e:install
+        run: pnpm -C integrations/tests exec playwright install --with-deps ${{ matrix.browser }}
+
+      # The browser binaries are cached, but their system dependencies are not
+      - name: Install Playwright system dependencies (on cache hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm -C integrations/tests exec playwright install-deps ${{ matrix.browser }}
 
       - name: Build library
         run: pnpm prerelease
       - name: Run Playwright tests
-        run: pnpm dev:integrations & pnpm e2e:test
+        run: pnpm dev:integrations & pnpm e2e:test --project=${{ matrix.browser }}
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.browser }}
           path: integrations/tests/test-results/
           retention-days: 14

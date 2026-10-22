@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useStableCallback } from "../../hooks/useStableCallback";
-import { assert } from "../../utils/assert";
 import { getOwnerWindow } from "../../utils/getOwnerWindow";
 import { getResizeObserverClass } from "../../utils/getResizeObserverClass";
-import { DATA_ATTRIBUTE_LIST_INDEX } from "./List";
+import { getItemIndex } from "../../core/itemIndex";
 import type { DynamicRowHeight } from "./types";
 
 function createInitialMap(
@@ -118,13 +117,12 @@ export function useDynamicRowHeight({
       entries.forEach((entry) => {
         const { borderBoxSize, target } = entry;
 
-        const attribute = target.getAttribute(DATA_ATTRIBUTE_LIST_INDEX);
-        assert(
-          attribute !== null,
-          `Invalid ${DATA_ATTRIBUTE_LIST_INDEX} attribute value`
-        );
-
-        const index = parseInt(attribute);
+        // Elements without a valid index can't be associated with a row
+        // (useVirtualizer warns about these when they're registered)
+        const index = getItemIndex(target);
+        if (index === undefined) {
+          return;
+        }
 
         const { blockSize: height } = borderBoxSize[0];
         if (!height) {

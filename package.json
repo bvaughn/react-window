@@ -35,7 +35,7 @@
     "compile:examples": "tsx ./scripts/compile-examples",
     "compile:search-index": "tsx ./scripts/compile-search-index",
     "compress:og-image": "tsx ./scripts/compress-og-image",
-    "e2e:install": "pnpm -C integrations/tests exec playwright install --with-deps chromium",
+    "e2e:install": "pnpm -C integrations/tests exec playwright install --with-deps chromium firefox webkit",
     "e2e:test": "pnpm -C integrations/tests run test",
     "lint": "eslint .",
     "prerelease": "rm -rf dist && pnpm run build:lib",
@@ -48,7 +48,7 @@
     "tsc": "tsc -b"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*": "pnpm exec prettier --write --ignore-unknown"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

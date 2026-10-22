@@ -2,7 +2,7 @@ import { act, renderHook } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { createElementInOtherWindow } from "../../utils/test/createElementInOtherWindow";
 import { useDynamicRowHeight } from "./useDynamicRowHeight";
-import { DATA_ATTRIBUTE_LIST_INDEX } from "./List";
+import { DATA_ATTRIBUTE_LIST_INDEX } from "../../core/itemIndex";
 import { setElementSize } from "../../utils/test/mockResizeObserver";
 import { NOOP_FUNCTION } from "../../../src/constants";
 
@@ -22,6 +22,25 @@ describe("useDynamicRowHeight", () => {
       expect(result.current.getAverageRowHeight()).toBe(30);
       expect(result.current.getRowHeight(200)).toBe(100);
       expect(result.current.getAverageRowHeight()).toBe(30);
+    });
+
+    test("ignores elements without a valid index", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({ defaultRowHeight: 100 })
+      );
+
+      // e.g. a data-index attribute used for something else
+      const element = document.createElement("div");
+      element.setAttribute("data-index", "row-5");
+      document.body.appendChild(element);
+
+      act(() => {
+        result.current.observeRowElements([element]);
+        setElementSize({ element, height: 20, width: 100 });
+      });
+
+      expect(result.current.getAverageRowHeight()).toBe(100);
+      element.remove();
     });
 
     test("returns an initial estimate based on the defaultRowHeight", () => {

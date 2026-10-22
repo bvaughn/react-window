@@ -5,7 +5,12 @@ import { DecoderRoute } from "./routes/Decoder";
 import { HomeRoute } from "./routes/Home";
 import { GridRoute } from "./routes/Grid";
 import { ListDynamicRoute } from "./routes/ListDynamic";
+import { HeadlessTableRoute } from "./routes/HeadlessTable";
 import { ListRoute } from "./routes/List";
+import {
+  GridScrollElementRoute,
+  ListScrollElementRoute
+} from "./routes/ScrollElement";
 
 import "./tailwind.css";
 
@@ -17,6 +22,15 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/list" element={<ListRoute />} />
         <Route path="/list-dynamic" element={<ListDynamicRoute />} />
         <Route path="/grid" element={<GridRoute />} />
+        <Route
+          path="/list-scroll-element"
+          element={<ListScrollElementRoute />}
+        />
+        <Route
+          path="/grid-scroll-element"
+          element={<GridScrollElementRoute />}
+        />
+        <Route path="/headless-table" element={<HeadlessTableRoute />} />
         <Route path="/decoder/:encoded" element={<DecoderRoute />} />
       </Routes>
     </BrowserRouter>

@@ -25,6 +25,18 @@ export const routes = {
   ),
   "/list/sticky-rows": lazy(() => import("./routes/list/StickyRowsRoute")),
   "/list/images": lazy(() => import("./routes/list/ImagesRoute")),
+  "/list/scroll-element": lazy(
+    () => import("./routes/list/ScrollElementRoute")
+  ),
+  "/infinite-loading": lazy(
+    () => import("./routes/infinite-loading/InfiniteLoadingRoute")
+  ),
+  "/hooks/use-is-scrolling": lazy(
+    () => import("./routes/hooks/UseIsScrollingRoute")
+  ),
+  "/hooks/use-virtualizer": lazy(
+    () => import("./routes/hooks/UseVirtualizerRoute")
+  ),
   "/grid/grid": lazy(() => import("./routes/grid/RenderingGridRoute")),
   "/grid/horizontal-lists": lazy(
     () => import("./routes/grid/HorizontalListsRoute")

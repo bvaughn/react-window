@@ -16,5 +16,12 @@ export {
 export { useDynamicRowHeight } from "./components/list/useDynamicRowHeight";
 export { useListCallbackRef } from "./components/list/useListCallbackRef";
 export { useListRef } from "./components/list/useListRef";
+export {
+  type VirtualItem,
+  type Virtualizer,
+  type VirtualizerOptions
+} from "./components/virtualizer/types";
+export { useVirtualizer } from "./components/virtualizer/useVirtualizer";
+export { useIsScrolling } from "./hooks/useIsScrolling";
 export { type Align } from "./types";
 export { getScrollbarSize } from "./utils/getScrollbarSize";

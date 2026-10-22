@@ -11,7 +11,8 @@ import {
   setElementSizeFunction,
   simulateUnsupportedEnvironmentForTest
 } from "../../utils/test/mockResizeObserver";
-import { DATA_ATTRIBUTE_LIST_INDEX, DATA_ATTRIBUTE_SIZER, List } from "./List";
+import { DATA_ATTRIBUTE_LIST_INDEX } from "../../core/itemIndex";
+import { DATA_ATTRIBUTE_SIZER, List } from "./List";
 import { type ListImperativeAPI, type RowComponentProps } from "./types";
 import { useDynamicRowHeight } from "./useDynamicRowHeight";
 import { useListCallbackRef } from "./useListCallbackRef";

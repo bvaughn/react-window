@@ -156,6 +156,8 @@ export type GridProps<
 
     /**
      * Scrolls the grid so that the specified row and column are visible.
+     * Like the browser's `scrollIntoView`, items are aligned within the CSS `scroll-padding` of the element being scrolled
+     * (e.g. `scroll-padding-top` can leave room for a sticky header).
      *
      * @param behavior Determines whether scrolling is instant or animates smoothly
      * @param columnAlign Determines the horizontal alignment of the element within the grid
@@ -175,6 +177,8 @@ export type GridProps<
 
     /**
      * Scrolls the grid so that the specified column is visible.
+     * Like the browser's `scrollIntoView`, items are aligned within the CSS `scroll-padding` of the element being scrolled
+     * (e.g. `scroll-padding-top` can leave room for a sticky header).
      *
      * @param align Determines the horizontal alignment of the element within the grid
      * @param behavior Determines whether scrolling is instant or animates smoothly
@@ -190,6 +194,8 @@ export type GridProps<
 
     /**
      * Scrolls the grid so that the specified row is visible.
+     * Like the browser's `scrollIntoView`, items are aligned within the CSS `scroll-padding` of the element being scrolled
+     * (e.g. `scroll-padding-top` can leave room for a sticky header).
      *
      * @param align Determines the vertical alignment of the element within the grid
      * @param behavior Determines whether scrolling is instant or animates smoothly
@@ -269,6 +275,28 @@ export type GridProps<
   rowKey?: (args: { data: CellProps; rowIndex: number }) => React.Key;
 
   /**
+   * Element that scrolls the grid, for grids that scroll along with other content (e.g. the page):
+   * - "window" to scroll with the page
+   * - an ancestor element that scrolls (e.g. stored with a `useState` ref callback); `null` until it has mounted
+   *
+   * The grid renders at its full height and only renders the rows (and columns) visible within the scroll element's viewport.
+   * Its position within the scroll element is measured whenever it renders, scrolls, or resizes,
+   * and whenever content before it is resized, inserted, or removed (e.g. an image loading above the grid).
+   * - columns scroll with the scroll element too if the grid is as wide as its content (e.g. `style={{ width: "max-content" }}`);
+   *   otherwise the grid fills the width of its parent and its columns scroll within it
+   * - `scrollToCell`, `scrollToColumn` and `scrollToRow` scroll whichever element scrolls each axis
+   * - `defaultHeight` and `defaultWidth` are used as the viewport size until the scroll element has been measured (e.g. during server rendering)
+   * - percentage row heights and column widths are relative to the scroll element's viewport
+   * - `defaultScrollLeft` and `defaultScrollTop` are ignored
+   *
+   * ℹ️ While the scroll element is `null`, the grid renders the first rows (as it does during server rendering).
+   *
+   * ⚠️ The grid's `onScroll` handler is only called when the grid scrolls its own columns;
+   * listen to the scroll element's "scroll" events instead (or use the `useIsScrolling` hook).
+   */
+  scrollElement?: "window" | HTMLElement | null;
+
+  /**
    * Optional CSS properties.
    * The grid of cells will fill the height and width defined by this style.
    */
@@ -318,6 +346,8 @@ export interface GridImperativeAPI {
 
   /**
    * Scrolls the grid so that the specified row and column are visible.
+   * Like the browser's `scrollIntoView`, items are aligned within the CSS `scroll-padding` of the element being scrolled
+   * (e.g. `scroll-padding-top` can leave room for a sticky header).
    *
    * @param behavior Determines whether scrolling is instant or animates smoothly
    * @param columnAlign Determines the horizontal alignment of the element within the grid
@@ -343,6 +373,8 @@ export interface GridImperativeAPI {
 
   /**
    * Scrolls the grid so that the specified column is visible.
+   * Like the browser's `scrollIntoView`, items are aligned within the CSS `scroll-padding` of the element being scrolled
+   * (e.g. `scroll-padding-top` can leave room for a sticky header).
    *
    * @param align Determines the horizontal alignment of the element within the grid
    * @param behavior Determines whether scrolling is instant or animates smoothly
@@ -362,6 +394,8 @@ export interface GridImperativeAPI {
 
   /**
    * Scrolls the grid so that the specified row is visible.
+   * Like the browser's `scrollIntoView`, items are aligned within the CSS `scroll-padding` of the element being scrolled
+   * (e.g. `scroll-padding-top` can leave room for a sticky header).
    *
    * @param align Determines the vertical alignment of the element within the grid
    * @param behavior Determines whether scrolling is instant or animates smoothly
