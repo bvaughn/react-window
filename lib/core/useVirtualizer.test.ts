@@ -127,7 +127,7 @@ describe("useVirtualizer", () => {
     });
   });
 
-  // scrollToIndex is mostly covered by getOffsetForIndex tests
+  // getScrollPositionForIndex is mostly covered by getOffsetForIndex tests
 
   describe("startIndex/stopIndex", () => {
     test("itemSize type: number", () => {
@@ -185,7 +185,7 @@ describe("useVirtualizer", () => {
 
       const { result } = renderHook(() => useVirtualizer(DEFAULT_ARGS));
 
-      result.current.scrollToIndex({ containerScrollOffset: 0, index: 5 });
+      result.current.getScrollPositionForIndex({ index: 5 });
     });
   });
 });

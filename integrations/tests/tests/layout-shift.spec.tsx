@@ -3,10 +3,13 @@ import { expect, test, type Page } from "@playwright/test";
 // High level tests; more nuanced scenarios are covered by unit tests
 test.describe("layout-shift", () => {
   async function assertRenderedBy(page: Page, type: "client" | "server") {
-    const innerHTML = await page.evaluate(() => document.body.innerHTML);
-    expect(innerHTML).toContain(
-      type === "client" ? "<!-- CLIENT MARKER -->" : "<!-- SERVER MARKER -->"
-    );
+    // Client-rendered apps may not have rendered yet when the page loads
+    // (React renders after the "load" event that page.goto waits for)
+    await expect
+      .poll(() => page.evaluate(() => document.body.innerHTML))
+      .toContain(
+        type === "client" ? "<!-- CLIENT MARKER -->" : "<!-- SERVER MARKER -->"
+      );
   }
 
   test.describe("client-rendered apps", () => {

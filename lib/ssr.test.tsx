@@ -76,6 +76,24 @@ describe("server rendering", () => {
       expect(consoleWarn).not.toHaveBeenCalled();
     });
 
+    test("should render rows to fill the defaultHeight when scrolling with the window", () => {
+      const html = renderToString(
+        <List
+          defaultHeight={100}
+          overscanCount={0}
+          rowComponent={RowComponent}
+          rowCount={100}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+          scrollElement="window"
+        />
+      );
+
+      expect(countRows(html)).toBe(4);
+      expect(html).not.toContain("overflow-y");
+      expect(consoleError).not.toHaveBeenCalled();
+    });
+
     test("should render rows to fill a pixel height specified by style", () => {
       const html = renderToString(
         <List
@@ -214,6 +232,26 @@ describe("server rendering", () => {
       expect(countCells(html)).toBe(16);
       expect(consoleError).not.toHaveBeenCalled();
       expect(consoleWarn).not.toHaveBeenCalled();
+    });
+
+    test("should render cells to fill the defaultHeight and defaultWidth when scrolling with the window", () => {
+      const html = renderToString(
+        <Grid
+          cellComponent={CellComponent}
+          cellProps={EMPTY_OBJECT}
+          columnCount={100}
+          columnWidth={50}
+          defaultHeight={100}
+          defaultWidth={200}
+          overscanCount={0}
+          rowCount={100}
+          rowHeight={25}
+          scrollElement="window"
+        />
+      );
+
+      expect(countCells(html)).toBe(16);
+      expect(consoleError).not.toHaveBeenCalled();
     });
 
     test("should render cells to fill a pixel size specified by style", () => {

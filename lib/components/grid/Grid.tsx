@@ -15,6 +15,7 @@ import { useVirtualizer } from "../../core/useVirtualizer";
 import { useMemoizedObject } from "../../hooks/useMemoizedObject";
 import type { Align, TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
+import { scrollTargetTo } from "../../utils/scrollElement";
 import type { GridProps } from "./types";
 
 /**
@@ -46,6 +47,7 @@ export function Grid<
   rowCount,
   rowHeight,
   rowKey,
+  scrollElement,
   style,
   tagName = "div" as TagName,
   ...rest
@@ -60,12 +62,15 @@ export function Grid<
 
   const isRtl = useIsRtl(element, dir);
 
+  // TODO With a scrollElement, each virtualizer (one per axis) separately adds scroll/resize listeners,
+  // observes preceding content, and measures the grid and scroll element after every render and scroll event.
+  // Measure once (e.g. in Grid) and share the result with both axes.
   const {
     getCellBounds: getColumnBounds,
     getEstimatedSize: getEstimatedWidth,
     startIndexOverscan: columnStartIndexOverscan,
     startIndexVisible: columnStartIndexVisible,
-    scrollToIndex: scrollToColumnIndex,
+    getScrollPositionForIndex: getColumnScrollPosition,
     stopIndexOverscan: columnStopIndexOverscan,
     stopIndexVisible: columnStopIndexVisible
   } = useVirtualizer({
@@ -79,7 +84,8 @@ export function Grid<
     itemProps: cellProps,
     itemSize: columnWidth,
     onResize,
-    overscanCount
+    overscanCount,
+    scrollElement
   });
 
   const {
@@ -87,7 +93,7 @@ export function Grid<
     getEstimatedSize: getEstimatedHeight,
     startIndexOverscan: rowStartIndexOverscan,
     startIndexVisible: rowStartIndexVisible,
-    scrollToIndex: scrollToRowIndex,
+    getScrollPositionForIndex: getRowScrollPosition,
     stopIndexOverscan: rowStopIndexOverscan,
     stopIndexVisible: rowStopIndexVisible
   } = useVirtualizer({
@@ -100,7 +106,8 @@ export function Grid<
     itemProps: cellProps,
     itemSize: rowHeight,
     onResize,
-    overscanCount
+    overscanCount,
+    scrollElement
   });
 
   useImperativeHandle(
@@ -123,23 +130,35 @@ export function Grid<
         rowAlign?: Align;
         rowIndex: number;
       }) {
-        const left = scrollToColumnIndex({
+        const column = getColumnScrollPosition({
           align: columnAlign,
-          containerScrollOffset: element?.scrollLeft ?? 0,
           index: columnIndex
         });
-        const top = scrollToRowIndex({
+        const row = getRowScrollPosition({
           align: rowAlign,
-          containerScrollOffset: element?.scrollTop ?? 0,
           index: rowIndex
         });
 
-        if (typeof element?.scrollTo === "function") {
-          element.scrollTo({
+        // Columns and rows may scroll different elements (e.g. columns scroll within the grid and rows scroll with the page)
+        if (column && row && column.scrollTarget === row.scrollTarget) {
+          scrollTargetTo(row.scrollTarget, {
             behavior,
-            left,
-            top
+            left: column.scrollOffset,
+            top: row.scrollOffset
           });
+        } else {
+          if (column) {
+            scrollTargetTo(column.scrollTarget, {
+              behavior,
+              left: column.scrollOffset
+            });
+          }
+          if (row) {
+            scrollTargetTo(row.scrollTarget, {
+              behavior,
+              top: row.scrollOffset
+            });
+          }
         }
       },
 
@@ -152,16 +171,11 @@ export function Grid<
         behavior?: ScrollBehavior;
         index: number;
       }) {
-        const left = scrollToColumnIndex({
-          align,
-          containerScrollOffset: element?.scrollLeft ?? 0,
-          index
-        });
-
-        if (typeof element?.scrollTo === "function") {
-          element.scrollTo({
+        const column = getColumnScrollPosition({ align, index });
+        if (column) {
+          scrollTargetTo(column.scrollTarget, {
             behavior,
-            left
+            left: column.scrollOffset
           });
         }
       },
@@ -175,21 +189,16 @@ export function Grid<
         behavior?: ScrollBehavior;
         index: number;
       }) {
-        const top = scrollToRowIndex({
-          align,
-          containerScrollOffset: element?.scrollTop ?? 0,
-          index
-        });
-
-        if (typeof element?.scrollTo === "function") {
-          element.scrollTo({
+        const row = getRowScrollPosition({ align, index });
+        if (row) {
+          scrollTargetTo(row.scrollTarget, {
             behavior,
-            top
+            top: row.scrollOffset
           });
         }
       }
     }),
-    [element, scrollToColumnIndex, scrollToRowIndex]
+    [element, getColumnScrollPosition, getRowScrollPosition]
   );
 
   useEffect(() => {
@@ -334,8 +343,12 @@ export function Grid<
       ref: setElement,
       style: {
         position: "relative",
-        maxHeight: "100%",
-        maxWidth: "100%",
+        // Grids that scroll with an outer element render at their full height,
+        // and at their full width unless constrained by their parent (in which case columns scroll within the grid)
+        ...(scrollElement === undefined && {
+          maxHeight: "100%",
+          maxWidth: "100%"
+        }),
         flexGrow: 1,
         overflow: "auto",
         ...style

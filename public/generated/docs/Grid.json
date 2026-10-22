@@ -282,6 +282,27 @@
       "name": "rowKey",
       "required": false
     },
+    "scrollElement": {
+      "description": [
+        {
+          "content": "<p>Element that scrolls the grid, for grids that scroll along with other content (e.g. the page):</p>\n<ul>\n<li>&quot;window&quot; to scroll with the page</li>\n<li>an ancestor element that scrolls (e.g. stored with a <code>useState</code> ref callback); <code>null</code> until it has mounted</li>\n</ul>\n"
+        },
+        {
+          "content": "<p>The grid renders at its full height and only renders the rows (and columns) visible within the scroll element's viewport.\nIts position within the scroll element is measured whenever it renders, scrolls, or resizes,\nand whenever content before it is resized, inserted, or removed (e.g. an image loading above the grid).</p>\n<ul>\n<li>columns scroll with the scroll element too if the grid is as wide as its content (e.g. <code>style={{ width: &quot;max-content&quot; }}</code>);\notherwise the grid fills the width of its parent and its columns scroll within it</li>\n<li><code>scrollToCell</code>, <code>scrollToColumn</code> and <code>scrollToRow</code> scroll whichever element scrolls each axis</li>\n<li><code>defaultHeight</code> and <code>defaultWidth</code> are used as the viewport size until the scroll element has been measured (e.g. during server rendering)</li>\n<li>percentage row heights and column widths are relative to the scroll element's viewport</li>\n<li><code>defaultScrollLeft</code> and <code>defaultScrollTop</code> are ignored</li>\n</ul>\n"
+        },
+        {
+          "content": "<p>While the scroll element is <code>null</code>, the grid renders the first rows (as it does during server rendering).</p>\n",
+          "intent": "primary"
+        },
+        {
+          "content": "<p>The grid's <code>onScroll</code> handler is only called when the grid scrolls its own columns;\nlisten to the scroll element's &quot;scroll&quot; events instead (or use the <code>useIsScrolling</code> hook).</p>\n",
+          "intent": "warning"
+        }
+      ],
+      "html": "<div><span class=\"tok-variableName\"><span class=\"tok-propertyName\">scrollElement</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">HTMLElement</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-string\">\"window\"</span><span class=\"\"> </span><span class=\"tok-operator\">|</span><span class=\"\"> </span><span class=\"tok-keyword\">null</span></div>",
+      "name": "scrollElement",
+      "required": false
+    },
     "tagName": {
       "description": [
         {

@@ -12,6 +12,8 @@ import {
   type ReactElement,
   type ReactNode
 } from "react";
+import { DATA_ATTRIBUTE_LIST_INDEX } from "../../core/itemIndex";
+import { useScrollToIndex } from "../../core/useScrollToIndex";
 import { useVirtualizer } from "../../core/useVirtualizer";
 import { useAfterResizeObserverNotifications } from "../../hooks/useAfterResizeObserverNotifications";
 import { useIsHydrating } from "../../hooks/useIsHydrating";
@@ -21,9 +23,7 @@ import type { TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
 import { isDynamicRowHeight as isDynamicRowHeightUtil } from "./isDynamicRowHeight";
 import type { ListProps } from "./types";
-import { useScrollToRow } from "./useScrollToRow";
 
-export const DATA_ATTRIBUTE_LIST_INDEX = "data-react-window-index";
 export const DATA_ATTRIBUTE_SIZER = "data-react-window-sizer";
 
 /**
@@ -46,6 +46,7 @@ export function List<
   rowHeight: rowHeightProp,
   rowKey,
   rowProps: rowPropsUnstable,
+  scrollElement,
   tagName = "div" as TagName,
   style,
   ...rest
@@ -97,7 +98,8 @@ export function List<
   const {
     getCellBounds,
     getEstimatedSize,
-    scrollToIndex,
+    scrollTarget,
+    getScrollPositionForIndex,
     startIndexOverscan,
     startIndexVisible,
     stopIndexOverscan,
@@ -112,17 +114,20 @@ export function List<
     itemProps: rowProps,
     itemSize: rowHeight,
     onResize,
-    overscanCount
+    overscanCount,
+    scrollElement
   });
 
   const rowElements = useRef<Element[]>([]);
-  const scrollToRow = useScrollToRow({
+  const scrollToRow = useScrollToIndex({
+    direction: "vertical",
     element,
     getCellBounds,
-    isDynamicRowHeight,
-    rowCount,
-    rowElements,
-    scrollToIndex
+    isDynamicSize: isDynamicRowHeight,
+    itemCount: rowCount,
+    itemElements: rowElements,
+    scrollTarget,
+    getScrollPositionForIndex
   });
 
   useImperativeHandle(
@@ -279,9 +284,12 @@ export function List<
       ref: setElement,
       style: {
         position: "relative",
-        maxHeight: "100%",
         flexGrow: 1,
-        overflowY: "auto",
+        // Lists that scroll with an outer element render at their full height (and must not clip sticky rows)
+        ...(scrollElement === undefined && {
+          maxHeight: "100%",
+          overflowY: "auto"
+        }),
         ...style
       }
     },

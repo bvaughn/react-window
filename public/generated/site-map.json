@@ -7,11 +7,6 @@
   {
     "headings": [
       {
-        "id": "scrolling-indicator",
-        "title": "Can I render a scrolling indicator?",
-        "text": "Can I render a scrolling indicator? One way to implement a scrolling indicator would be to use a custom hook as shown below: const [isScrolling, setIsScrolling] = useState(false);\n \nuseEffect(() => {\n if (isScrolling) {\n const timeout = setTimeout(() => setIsScrolling(false), 500);\n \n return () => clearTimeout(timeout);\n }\n}, [isScrolling]);\n \n<List\n onScroll={() => {\n setIsScrolling(true);\n }}\n rowProps={{ isScrolling }}\n {...rest}\n/>;"
-      },
-      {
         "id": "ref-composition",
         "title": "Can I attach a ref to the top-level HTMLDivElement?",
         "text": "Can I attach a ref to the top-level HTMLDivElement? Although there is no prop exposed to do this directly, you can use a callback ref for this. const [ref] = useResizeObserver<HTMLDivElement>();\n \nconst listRef = useCallback(\n (api: ListImperativeAPI) => {\n const element = api?.element ?? null;\n \n switch (typeof ref) {\n case \"function\": {\n ref(element);\n break;\n }\n case \"object\": {\n if (ref !== null) {\n ref.current = element;\n }\n break;\n }\n }\n },\n [ref]\n);\n \n<List listRef={listRef} {...rest} />;"
@@ -49,17 +44,17 @@
       {
         "id": "scrollToCell",
         "title": "scrollToCell",
-        "text": "scrollToCell Scrolls the grid so that the specified row and column are visible.\n \n behavior Determines whether scrolling is instant or animates smoothly\n columnAlign Determines the horizontal alignment of the element within the grid\n columnIndex Index of the column to scroll to (0-based)\n rowAlign Determines the vertical alignment of the element within the grid\n rowIndex Index of the row to scroll to (0-based)\n\n scrollToCell: ({\n behavior,\n columnAlign,\n columnIndex,\n rowAlign,\n rowIndex\n }: {\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n columnAlign?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n columnIndex: number;\n rowAlign?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n rowIndex: number;\n }) => void;"
+        "text": "scrollToCell Scrolls the grid so that the specified row and column are visible.\nLike the browser's scrollIntoView, items are aligned within the CSS scroll-padding of the element being scrolled\n(e.g. scroll-padding-top can leave room for a sticky header).\n \n behavior Determines whether scrolling is instant or animates smoothly\n columnAlign Determines the horizontal alignment of the element within the grid\n columnIndex Index of the column to scroll to (0-based)\n rowAlign Determines the vertical alignment of the element within the grid\n rowIndex Index of the row to scroll to (0-based)\n\n scrollToCell: ({\n behavior,\n columnAlign,\n columnIndex,\n rowAlign,\n rowIndex\n }: {\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n columnAlign?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n columnIndex: number;\n rowAlign?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n rowIndex: number;\n }) => void;"
       },
       {
         "id": "scrollToColumn",
         "title": "scrollToColumn",
-        "text": "scrollToColumn Scrolls the grid so that the specified column is visible.\n \n align Determines the horizontal alignment of the element within the grid\n behavior Determines whether scrolling is instant or animates smoothly\n index Index of the column to scroll to (0-based)\n\n scrollToColumn: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
+        "text": "scrollToColumn Scrolls the grid so that the specified column is visible.\nLike the browser's scrollIntoView, items are aligned within the CSS scroll-padding of the element being scrolled\n(e.g. scroll-padding-top can leave room for a sticky header).\n \n align Determines the horizontal alignment of the element within the grid\n behavior Determines whether scrolling is instant or animates smoothly\n index Index of the column to scroll to (0-based)\n\n scrollToColumn: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
       },
       {
         "id": "scrollToRow",
         "title": "scrollToRow",
-        "text": "scrollToRow Scrolls the grid so that the specified row is visible.\n \n align Determines the vertical alignment of the element within the grid\n behavior Determines whether scrolling is instant or animates smoothly\n index Index of the row to scroll to (0-based)\n\n scrollToRow: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
+        "text": "scrollToRow Scrolls the grid so that the specified row is visible.\nLike the browser's scrollIntoView, items are aligned within the CSS scroll-padding of the element being scrolled\n(e.g. scroll-padding-top can leave room for a sticky header).\n \n align Determines the vertical alignment of the element within the grid\n behavior Determines whether scrolling is instant or animates smoothly\n index Index of the row to scroll to (0-based)\n\n scrollToRow: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
       },
       {
         "id": "hooks",
@@ -170,6 +165,11 @@
         "text": "rowKey?: (args: { data: CellProps; rowIndex: number; }) => Key Grids use the row index as a key by default.\nThis prop can be used along with the columnKey prop to provide a custom key value.\n Custom keys can ensure better UX for sortable or filterable grids,\nparticularly if your cell components are stateful.\nRefer to the React documentation for more info.\n This prop cannot be auto-memoized because it is called during render.\nIt is important to always useCallback for this prop; do not use an inline function."
       },
       {
+        "id": "scrollElement",
+        "title": "scrollElement",
+        "text": "scrollElement?: HTMLElement | \"window\" | null Element that scrolls the grid, for grids that scroll along with other content (e.g. the page):\n\n\"window\" to scroll with the page\nan ancestor element that scrolls (e.g. stored with a useState ref callback); null until it has mounted\n\n The grid renders at its full height and only renders the rows (and columns) visible within the scroll element's viewport.\nIts position within the scroll element is measured whenever it renders, scrolls, or resizes,\nand whenever content before it is resized, inserted, or removed (e.g. an image loading above the grid).\n\ncolumns scroll with the scroll element too if the grid is as wide as its content (e.g. style={{ width: \"max-content\" }});\notherwise the grid fills the width of its parent and its columns scroll within it\n scrollToCell, scrollToColumn and scrollToRow scroll whichever element scrolls each axis\n defaultHeight and defaultWidth are used as the viewport size until the scroll element has been measured (e.g. during server rendering)\npercentage row heights and column widths are relative to the scroll element's viewport\n defaultScrollLeft and defaultScrollTop are ignored\n\n While the scroll element is null, the grid renders the first rows (as it does during server rendering).\n The grid's onScroll handler is only called when the grid scrolls its own columns;\nlisten to the scroll element's \"scroll\" events instead (or use the useIsScrolling hook)."
+      },
+      {
         "id": "style",
         "title": "style",
         "text": "style?: CSSProperties Optional CSS properties.\nThe grid of cells will fill the height and width defined by this style."
@@ -198,9 +198,51 @@
     "title": "Imperative methods"
   },
   {
+    "headings": [
+      {
+        "id": "common-case",
+        "title": "Common case",
+        "text": "Common case In most cases, the useIsScrolling hook should be passed a reference to the list HTMLElement: import {\n List,\n useIsScrolling,\n useListCallbackRef,\n type RowComponentProps\n} from \"react-window\";\n \nfunction Example({ names }: { names: string[] }) {\n const [list, setList] = useListCallbackRef(null);\n const isScrolling = useIsScrolling(list?.element);\n \n return (\n <div className=\"h-full flex flex-col gap-2\">\n <div className=\"text-xs text-slate-400\">\n {isScrolling ? \"Scrolling…\" : \"Not scrolling\"}\n </div>\n <List\n listRef={setList}\n rowComponent={RowComponent}\n rowCount={names.length}\n rowHeight={25}\n rowProps={{ isScrolling, names }}\n />\n </div>\n );\n}\n \nfunction RowComponent({\n index,\n isScrolling,\n names,\n style\n}: RowComponentProps<{ isScrolling: boolean; names: string[] }>) {\n return (\n <div className=\"flex items-center\" style={style}>\n {isScrolling ? (\n <div className=\"h-3 w-24 rounded bg-white/10\" />\n ) : (\n names[index]\n )}\n </div>\n );\n}"
+      },
+      {
+        "id": "scrolling-with-the-window",
+        "title": "Scrolling with the window",
+        "text": "Scrolling with the window For lists that scroll with the page , pass the string \"window\" instead: import { List, useIsScrolling } from \"react-window\";\n \nfunction Example() {\n // The list itself doesn't scroll, so track the window instead\n const isScrolling = useIsScrolling(\"window\");\n \n return (\n <List\n rowComponent={RowComponent}\n rowCount={1000}\n rowHeight={25}\n rowProps={{ isScrolling }}\n scrollElement=\"window\"\n />\n );\n}"
+      }
+    ],
+    "path": "/hooks/use-is-scrolling",
+    "section": "Hooks",
+    "text": "The useIsScrolling hook tracks whether a list is scrolling. Rows can use this value to render simplified content while scrolling, as shown below. Scrolling ends when the browser fires a scrollend event. Browsers that don't support that event wait until no scroll events have been received for a short delay (150ms by default; configurable with the delay option).",
+    "title": "useIsScrolling"
+  },
+  {
+    "headings": [
+      {
+        "id": "tables",
+        "title": "Tables",
+        "text": "Tables Rows in a <table> can't be absolutely positioned. Instead, rows can be rendered in normal document flow, with spacer rows taking the place of rows that aren't rendered. Using the <tbody> as the element (and the scrolling container as the scrollElement) positions rows relative to the body, so the sticky header doesn't offset them: import { useState } from \"react\";\nimport { useVirtualizer } from \"react-window\";\n \nfunction Example({ addresses }: { addresses: Address[] }) {\n const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>(\n null\n );\n const [tbody, setTbody] = useState<HTMLTableSectionElement | null>(null);\n \n // Rows are positioned relative to the <tbody>, so the header doesn't offset them\n const { items, totalSize } = useVirtualizer({\n count: addresses.length,\n element: tbody,\n itemSize: 25,\n scrollElement\n });\n \n // Spacer rows take the place of rows that aren't rendered\n const first = items[0];\n const last = items[items.length - 1];\n const spaceBefore = first ? first.offset : 0;\n const spaceAfter = last ? totalSize - last.offset - last.size : 0;\n \n return (\n <div\n className=\"h-55 overflow-auto\"\n ref={setScrollElement}\n // Rows scrolled to (e.g. with scrollToIndex) are aligned below the sticky header\n style={{ scrollPaddingTop: 25 }}\n >\n {/* Fixed layout keeps column widths from changing as different rows are rendered */}\n <table\n aria-rowcount={addresses.length + 1}\n className=\"w-full table-fixed\"\n >\n <colgroup>\n <col className=\"w-1/2\" />\n <col className=\"w-1/3\" />\n <col />\n </colgroup>\n <thead className=\"sticky top-0 bg-teal-600\">\n <tr aria-rowindex={1} className=\"h-[25px]\">\n <th className=\"px-2 text-left\">City</th>\n <th className=\"px-2 text-left\">State</th>\n <th className=\"px-2 text-left\">Zip</th>\n </tr>\n </thead>\n <tbody ref={setTbody}>\n {spaceBefore > 0 && (\n <tr aria-hidden style={{ height: spaceBefore }} />\n )}\n {items.map(({ index, size }) => {\n const address = addresses[index];\n \n // Add 2 to the index to account for the header row\n return (\n <tr\n aria-rowindex={index + 2}\n key={index}\n style={{ height: size }}\n >\n <td className=\"px-2 truncate\">{address.city}</td>\n <td className=\"px-2 truncate\">{address.state}</td>\n <td className=\"px-2 text-xs\">{address.zip}</td>\n </tr>\n );\n })}\n {spaceAfter > 0 && <tr aria-hidden style={{ height: spaceAfter }} />}\n </tbody>\n </table>\n </div>\n );\n} Like the browser's scrollIntoView, scrollToIndex aligns items within the scroll-padding of the element being scrolled. Setting scroll-padding-top to the height of the sticky header keeps rows from being aligned underneath it. The aria-rowcount and aria-rowindex attributes tell assistive technologies how many rows the table has, even though only some of them are rendered."
+      },
+      {
+        "id": "dynamic-sizes",
+        "title": "Dynamic sizes",
+        "text": "Dynamic sizes Items with dynamic row heights must be passed to the measureElement ref callback and specify a data-index attribute: import { useState } from \"react\";\nimport { useDynamicRowHeight, useVirtualizer } from \"react-window\";\n \nfunction Example({ lorem }: { lorem: string[] }) {\n const [element, setElement] = useState<HTMLDivElement | null>(null);\n const itemSize = useDynamicRowHeight({ defaultRowHeight: 50 });\n \n const { items, measureElement, totalSize } = useVirtualizer({\n count: lorem.length,\n element,\n itemSize\n });\n \n return (\n <div className=\"h-full overflow-auto\" ref={setElement}>\n <div className=\"relative\" style={{ height: totalSize }}>\n {items.map(({ index, offset }) => (\n <div\n className={cn(\"absolute w-full p-2\", {\n \"bg-white/10\": index % 2 === 0\n })}\n // Rows are measured after rendering, so they need their index\n data-index={index}\n key={index}\n ref={measureElement}\n style={{ transform: `translateY(${offset}px)` }}\n >\n {index}: {lorem[index]}\n </div>\n ))}\n </div>\n </div>\n );\n}"
+      }
+    ],
+    "path": "/hooks/use-virtualizer",
+    "section": "Hooks",
+    "text": "The List and Grid components render their own markup. To render custom markup instead (e.g. a <table>), use the useVirtualizer hook. It calculates which items to render and where; how they are rendered is up to you. import { useState } from \"react\";\nimport { useVirtualizer } from \"react-window\";\n \nfunction Example({ names }: { names: string[] }) {\n const [element, setElement] = useState<HTMLDivElement | null>(null);\n \n const { items, totalSize } = useVirtualizer({\n count: names.length,\n element,\n itemSize: 25\n });\n \n return (\n <div className=\"h-full overflow-auto\" ref={setElement}>\n <div className=\"relative\" style={{ height: totalSize }}>\n {items.map(({ index, offset, size }) => (\n <div\n className=\"absolute w-full\"\n key={index}\n style={{ height: size, transform: `translateY(${offset}px)` }}\n >\n {names[index]}\n </div>\n ))}\n </div>\n </div>\n );\n} The hook returns the items to render (each with an index, offset, and size), the totalSize of all items, the visibleRange, and a scrollToIndex method. Its options mirror the props of List: count, itemSize, overscanCount, direction, scrollElement, and onItemsRendered.",
+    "title": "useVirtualizer"
+  },
+  {
     "path": "/how-does-it-work",
     "text": "Libraries like this help to render a lot of items as efficiently as possible by limiting how many items are rendered at once. Here is an over-simplified illustration of a list with 6 columns. Only 3 or 4 columns are rendered at a time because that is enough to fill the viewport. (The user can't see the other columns, so we don't need to render them). 1 2 3 4 5 6 When a user scrolls the list, a different set of columns are rendered- but always only a few at a time. The illustration above shows unrendered columns as dimmed. In reality, they aren't there at all. The columns that do get rendered are positioned using CSS properties like left to mimic other columns before them. To render one of these items, all you need to provide is a component like the one below. import { type RowComponentProps } from \"react-window\";\n \n/**\n * Example row.\n *\n * @param index Specifies which row you're rendering\n * @param style CSS properties like \"position\" and \"top\"\n */\nfunction Row({ index, style }: RowComponentProps) {\n return <div style={style}>Row {index}</div>;\n}",
     "title": "How does it work?"
+  },
+  {
+    "path": "/infinite-loading",
+    "section": "Other",
+    "text": "Lists that load their data as the user scrolls can use the onRowsRendered callback to decide when to load more. For example, a feed can load the next page when the user scrolls near the end: import { useState } from \"react\";\nimport { List, type RowComponentProps } from \"react-window\";\n \nconst PAGE_SIZE = 50;\nconst TOTAL_PAGES = 10;\n \n// Start loading the next page when the user scrolls within this many rows of the end\nconst THRESHOLD = 10;\n \nfunction Example() {\n const [items, setItems] = useState<string[]>([]);\n const [isLoading, setIsLoading] = useState(false);\n \n const hasMore = items.length < PAGE_SIZE * TOTAL_PAGES;\n \n // fetchPage loads a page of items (e.g. from a server)\n const loadNextPage = async () => {\n setIsLoading(true);\n try {\n const page = await fetchPage(items.length / PAGE_SIZE, PAGE_SIZE);\n setItems((prev) => [...prev, ...page]);\n } finally {\n // Reset even if loading fails, so the page can be requested again\n setIsLoading(false);\n }\n };\n \n return (\n <List\n onRowsRendered={({ stopIndex }) => {\n // Only load one page at a time\n if (hasMore && !isLoading && stopIndex >= items.length - THRESHOLD) {\n loadNextPage();\n }\n }}\n rowComponent={RowComponent}\n // Render an extra row to show that more items are loading\n rowCount={hasMore ? items.length + 1 : items.length}\n rowHeight={25}\n rowProps={{ items }}\n />\n );\n}\n \nfunction RowComponent({\n index,\n items,\n style\n}: RowComponentProps<{ items: string[] }>) {\n return (\n <div className=\"flex items-center px-2\" style={style}>\n {index < items.length ? (\n items[index]\n ) : (\n <span className=\"text-slate-500\">Loading…</span>\n )}\n </div>\n );\n} Loading state prevents the same page from being requested more than once while the user scrolls.",
+    "title": "Infinite loading"
   },
   {
     "path": "/list/aria-roles",
@@ -231,7 +273,7 @@
       {
         "id": "scrollToRow",
         "title": "scrollToRow",
-        "text": "scrollToRow Scrolls the list so that the specified row is visible.\nDynamic row heights are measured after rendering;\nContent that resizes later may require another scrollToRow call.\n behavior \"smooth\" is ignored for dynamic height lists;\nscrollToRow is instant as it requires rows to be lazily measured\n \n align Determines the vertical alignment of the element within the list\n behavior Determines whether scrolling is instant or animates smoothly\n index Index of the row to scroll to (0-based)\n\n scrollToRow: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
+        "text": "scrollToRow Scrolls the list so that the specified row is visible.\nLike the browser's scrollIntoView, items are aligned within the CSS scroll-padding of the element being scrolled\n(e.g. scroll-padding-top can leave room for a sticky header).\nDynamic row heights are measured after rendering;\nContent that resizes later may require another scrollToRow call.\n behavior \"smooth\" is ignored for dynamic height lists;\nscrollToRow is instant as it requires rows to be lazily measured\n \n align Determines the vertical alignment of the element within the list\n behavior Determines whether scrolling is instant or animates smoothly\n index Index of the row to scroll to (0-based)\n\n scrollToRow: ({\n align,\n behavior,\n index\n }: {\n align?: \"auto\" | \"center\" | \"end\" | \"smart\" | \"start\";\n behavior?: \"auto\" | \"instant\" | \"smooth\";\n index: number;\n }) => void;"
       },
       {
         "id": "hooks",
@@ -312,6 +354,11 @@
         "text": "rowKey?: (index: number, data: RowProps) => Key Lists use the row index as a key by default.\nThis prop can provide a custom key value.\n Custom keys can ensure better UX for sortable or filterable lists,\nparticularly if your row components are stateful.\nRefer to the React documentation for more info.\n This prop cannot be auto-memoized because it is called during render.\nIt is important to always useCallback for this prop; do not use an inline function."
       },
       {
+        "id": "scrollElement",
+        "title": "scrollElement",
+        "text": "scrollElement?: HTMLElement | \"window\" | null Element that scrolls the list, for lists that scroll along with other content (e.g. the page):\n\n\"window\" to scroll with the page\nan ancestor element that scrolls (e.g. stored with a useState ref callback); null until it has mounted\n\n The list renders at its full height and only renders the rows visible within the scroll element's viewport.\nIts position within the scroll element is measured whenever it renders, scrolls, or resizes,\nand whenever content before it is resized, inserted, or removed (e.g. an image loading above the list).\n\n scrollToRow scrolls the scroll element\n defaultHeight is used as the viewport height until the scroll element has been measured (e.g. during server rendering)\npercentage row heights are relative to the scroll element's viewport height\n defaultScrollOffset is ignored\n\n While the scroll element is null, the list renders the first rows (as it does during server rendering).\n The list itself doesn't scroll, so its onScroll handler isn't called;\nlisten to the scroll element's \"scroll\" events instead (or use the useIsScrolling hook)."
+      },
+      {
         "id": "style",
         "title": "style",
         "text": "style?: CSSProperties Optional CSS properties.\nThe list of rows will fill the height defined by this style."
@@ -326,6 +373,12 @@
     "section": "Lists",
     "text": "Renders data with many rows.",
     "title": "List component props"
+  },
+  {
+    "path": "/list/scroll-element",
+    "section": "Other",
+    "text": "By default, lists and grids scroll their own content. To scroll a list along with the rest of the page instead (e.g. a feed), pass \"window\" as the scrollElement prop: import { List } from \"react-window\";\n \nfunction Example({ names }: { names: string[] }) {\n return (\n <List\n rowComponent={RowComponent}\n rowCount={names.length}\n rowHeight={25}\n rowProps={{ names }}\n scrollElement=\"window\"\n />\n );\n} The list renders at its full height and only renders the rows that are visible within the viewport. Its position on the page is measured whenever it renders, scrolls, or resizes, and whenever content before it is resized, inserted, or removed (e.g. an image loading above it). A list can also scroll along with other content inside of a scrollable element. Pass the element as the scrollElement prop (it will be null until it has mounted): import { useState } from \"react\";\nimport { List } from \"react-window\";\n \nfunction Example({ names }: { names: string[] }) {\n const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>(\n null\n );\n \n return (\n <div className=\"h-full overflow-auto\" ref={setScrollElement}>\n <div className=\"p-2 mb-2 rounded bg-slate-700\">\n Content above the list\n </div>\n <List\n rowComponent={RowComponent}\n rowCount={names.length}\n rowHeight={25}\n rowProps={{ names }}\n scrollElement={scrollElement}\n />\n <div className=\"p-2 mt-2 rounded bg-slate-700\">\n Content below the list\n </div>\n </div>\n );\n} The imperative API scrolls the scroll element, and sticky rows stick to the top of the scroll element. Grids support this prop too. Rows scroll with the scroll element; columns also scroll with it if the grid is as wide as its content. Otherwise the grid fills the width of its parent and its columns scroll within it. import { Grid } from \"react-window\";\n \nfunction Example({ contacts }: { contacts: Contact[] }) {\n return (\n <Grid\n cellComponent={CellComponent}\n cellProps={{ contacts }}\n columnCount={10}\n columnWidth={columnWidth}\n rowCount={contacts.length}\n rowHeight={25}\n scrollElement=\"window\"\n // Columns scroll within the grid unless it is as wide as its content\n style={{ width: \"max-content\" }}\n />\n );\n} When a scroll element is provided: defaultHeight (and defaultWidth for grids) are used as the viewport size until the scroll element has been measured (e.g. during server rendering) Percentage row heights (and column widths) are relative to the scroll element's viewport Default scroll offsets are ignored; the list doesn't control the scroll element's position",
+    "title": "Scrolling with the page"
   },
   {
     "path": "/list/scroll-to-row",

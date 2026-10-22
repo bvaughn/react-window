@@ -5,6 +5,7 @@ import type { CachedBounds, SizeFunction } from "./types";
 export function getOffsetForIndex<Props extends object>({
   align,
   cachedBounds,
+  clamp = true,
   index,
   itemCount,
   itemSize,
@@ -13,6 +14,12 @@ export function getOffsetForIndex<Props extends object>({
 }: {
   align: Align;
   cachedBounds: CachedBounds;
+  /**
+   * Clamp the offset to the list's own scrollable range.
+   * Lists that scroll with an outer element can scroll beyond their own bounds (e.g. to show content above the list);
+   * the outer element's scrollable range is enforced by the browser instead.
+   */
+  clamp?: boolean;
   index: number;
   itemCount: number;
   itemSize: number | SizeFunction<Props>;
@@ -33,14 +40,15 @@ export function getOffsetForIndex<Props extends object>({
     itemSize
   });
 
-  const maxOffset = Math.max(
-    0,
-    Math.min(estimatedTotalSize - containerSize, bounds.scrollOffset)
-  );
-  const minOffset = Math.max(
-    0,
-    bounds.scrollOffset - containerSize + bounds.size
-  );
+  const clampOffset = (offset: number) =>
+    clamp
+      ? Math.max(0, Math.min(estimatedTotalSize - containerSize, offset))
+      : offset;
+
+  const maxOffset = clampOffset(bounds.scrollOffset);
+  const minOffset = clamp
+    ? Math.max(0, bounds.scrollOffset - containerSize + bounds.size)
+    : bounds.scrollOffset - containerSize + bounds.size;
 
   // Visibility depends on the row itself, not the estimated scroll extent.
   // For oversized rows, leave the offset alone when the row fills the viewport.
@@ -63,12 +71,8 @@ export function getOffsetForIndex<Props extends object>({
       return minOffset;
     }
     case "center": {
-      return Math.max(
-        0,
-        Math.min(
-          estimatedTotalSize - containerSize,
-          bounds.scrollOffset + bounds.size / 2 - containerSize / 2
-        )
+      return clampOffset(
+        bounds.scrollOffset + bounds.size / 2 - containerSize / 2
       );
     }
     case "auto":

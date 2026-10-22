@@ -6,7 +6,8 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { EMPTY_OBJECT } from "../src/constants";
 import { Grid } from "./components/grid/Grid";
 import type { CellComponentProps } from "./components/grid/types";
-import { DATA_ATTRIBUTE_LIST_INDEX, List } from "./components/list/List";
+import { List } from "./components/list/List";
+import { DATA_ATTRIBUTE_LIST_INDEX } from "./core/itemIndex";
 import type { RowComponentProps } from "./components/list/types";
 import { useDynamicRowHeight } from "./components/list/useDynamicRowHeight";
 import {

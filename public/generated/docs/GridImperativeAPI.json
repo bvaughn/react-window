@@ -13,7 +13,7 @@
     {
       "description": [
         {
-          "content": "<p>Scrolls the grid so that the specified row and column are visible.</p>\n"
+          "content": "<p>Scrolls the grid so that the specified row and column are visible.\nLike the browser's <code>scrollIntoView</code>, items are aligned within the CSS <code>scroll-padding</code> of the element being scrolled\n(e.g. <code>scroll-padding-top</code> can leave room for a sticky header).</p>\n"
         },
         {
           "content": "<ul>\n<li><code>behavior</code> Determines whether scrolling is instant or animates smoothly</li>\n<li><code>columnAlign</code> Determines the horizontal alignment of the element within the grid</li>\n<li><code>columnIndex</code> Index of the column to scroll to (0-based)</li>\n<li><code>rowAlign</code> Determines the vertical alignment of the element within the grid</li>\n<li><code>rowIndex</code> Index of the row to scroll to (0-based)</li>\n</ul>\n"
@@ -25,7 +25,7 @@
     {
       "description": [
         {
-          "content": "<p>Scrolls the grid so that the specified column is visible.</p>\n"
+          "content": "<p>Scrolls the grid so that the specified column is visible.\nLike the browser's <code>scrollIntoView</code>, items are aligned within the CSS <code>scroll-padding</code> of the element being scrolled\n(e.g. <code>scroll-padding-top</code> can leave room for a sticky header).</p>\n"
         },
         {
           "content": "<ul>\n<li><code>align</code> Determines the horizontal alignment of the element within the grid</li>\n<li><code>behavior</code> Determines whether scrolling is instant or animates smoothly</li>\n<li><code>index</code> Index of the column to scroll to (0-based)</li>\n</ul>\n"
@@ -37,7 +37,7 @@
     {
       "description": [
         {
-          "content": "<p>Scrolls the grid so that the specified row is visible.</p>\n"
+          "content": "<p>Scrolls the grid so that the specified row is visible.\nLike the browser's <code>scrollIntoView</code>, items are aligned within the CSS <code>scroll-padding</code> of the element being scrolled\n(e.g. <code>scroll-padding-top</code> can leave room for a sticky header).</p>\n"
         },
         {
           "content": "<ul>\n<li><code>align</code> Determines the vertical alignment of the element within the grid</li>\n<li><code>behavior</code> Determines whether scrolling is instant or animates smoothly</li>\n<li><code>index</code> Index of the row to scroll to (0-based)</li>\n</ul>\n"

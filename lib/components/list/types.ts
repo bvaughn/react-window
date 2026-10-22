@@ -71,6 +71,8 @@ export type ListProps<
 
     /**
      * Scrolls the list so that the specified row is visible.
+     * Like the browser's `scrollIntoView`, items are aligned within the CSS `scroll-padding` of the element being scrolled
+     * (e.g. `scroll-padding-top` can leave room for a sticky header).
      *
      * Dynamic row heights are measured after rendering;
      * Content that resizes later may require another scrollToRow call.
@@ -179,6 +181,26 @@ export type ListProps<
   rowProps: ExcludeForbiddenKeys<RowProps>;
 
   /**
+   * Element that scrolls the list, for lists that scroll along with other content (e.g. the page):
+   * - "window" to scroll with the page
+   * - an ancestor element that scrolls (e.g. stored with a `useState` ref callback); `null` until it has mounted
+   *
+   * The list renders at its full height and only renders the rows visible within the scroll element's viewport.
+   * Its position within the scroll element is measured whenever it renders, scrolls, or resizes,
+   * and whenever content before it is resized, inserted, or removed (e.g. an image loading above the list).
+   * - `scrollToRow` scrolls the scroll element
+   * - `defaultHeight` is used as the viewport height until the scroll element has been measured (e.g. during server rendering)
+   * - percentage row heights are relative to the scroll element's viewport height
+   * - `defaultScrollOffset` is ignored
+   *
+   * ℹ️ While the scroll element is `null`, the list renders the first rows (as it does during server rendering).
+   *
+   * ⚠️ The list itself doesn't scroll, so its `onScroll` handler isn't called;
+   * listen to the scroll element's "scroll" events instead (or use the `useIsScrolling` hook).
+   */
+  scrollElement?: "window" | HTMLElement | null;
+
+  /**
    * Optional CSS properties.
    * The list of rows will fill the height defined by this style.
    */
@@ -222,6 +244,8 @@ export interface ListImperativeAPI {
 
   /**
    * Scrolls the list so that the specified row is visible.
+   * Like the browser's `scrollIntoView`, items are aligned within the CSS `scroll-padding` of the element being scrolled
+   * (e.g. `scroll-padding-top` can leave room for a sticky header).
    *
    * Dynamic row heights are measured after rendering;
    * Content that resizes later may require another scrollToRow call.

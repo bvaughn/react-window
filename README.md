@@ -176,6 +176,27 @@ It is important to always <code>useCallback</code> for this prop; do not use an 
 </td>
     </tr>
     <tr>
+      <td>scrollElement</td>
+      <td><p>Element that scrolls the list, for lists that scroll along with other content (e.g. the page):</p>
+<ul>
+<li>&quot;window&quot; to scroll with the page</li>
+<li>an ancestor element that scrolls (e.g. stored with a <code>useState</code> ref callback); <code>null</code> until it has mounted</li>
+</ul>
+<p>The list renders at its full height and only renders the rows visible within the scroll element&#39;s viewport.
+Its position within the scroll element is measured whenever it renders, scrolls, or resizes,
+and whenever content before it is resized, inserted, or removed (e.g. an image loading above the list).</p>
+<ul>
+<li><code>scrollToRow</code> scrolls the scroll element</li>
+<li><code>defaultHeight</code> is used as the viewport height until the scroll element has been measured (e.g. during server rendering)</li>
+<li>percentage row heights are relative to the scroll element&#39;s viewport height</li>
+<li><code>defaultScrollOffset</code> is ignored</li>
+</ul>
+<p>ℹ️ While the scroll element is <code>null</code>, the list renders the first rows (as it does during server rendering).</p>
+<p>⚠️ The list itself doesn&#39;t scroll, so its <code>onScroll</code> handler isn&#39;t called;
+listen to the scroll element&#39;s &quot;scroll&quot; events instead (or use the <code>useIsScrolling</code> hook).</p>
+</td>
+    </tr>
+    <tr>
       <td>tagName</td>
       <td><p>Can be used to override the root HTML element rendered by the List component.
 The default value is &quot;div&quot;, meaning that List renders an HTMLDivElement as its root.</p>
@@ -376,6 +397,29 @@ particularly if your cell components are stateful.
 Refer to the <a href="https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key">React documentation</a> for more info.</p>
 <p>⚠️ This prop cannot be auto-memoized because it is called during render.
 It is important to always <code>useCallback</code> for this prop; do not use an inline function.</p>
+</td>
+    </tr>
+    <tr>
+      <td>scrollElement</td>
+      <td><p>Element that scrolls the grid, for grids that scroll along with other content (e.g. the page):</p>
+<ul>
+<li>&quot;window&quot; to scroll with the page</li>
+<li>an ancestor element that scrolls (e.g. stored with a <code>useState</code> ref callback); <code>null</code> until it has mounted</li>
+</ul>
+<p>The grid renders at its full height and only renders the rows (and columns) visible within the scroll element&#39;s viewport.
+Its position within the scroll element is measured whenever it renders, scrolls, or resizes,
+and whenever content before it is resized, inserted, or removed (e.g. an image loading above the grid).</p>
+<ul>
+<li>columns scroll with the scroll element too if the grid is as wide as its content (e.g. <code>style={{ width: &quot;max-content&quot; }}</code>);
+otherwise the grid fills the width of its parent and its columns scroll within it</li>
+<li><code>scrollToCell</code>, <code>scrollToColumn</code> and <code>scrollToRow</code> scroll whichever element scrolls each axis</li>
+<li><code>defaultHeight</code> and <code>defaultWidth</code> are used as the viewport size until the scroll element has been measured (e.g. during server rendering)</li>
+<li>percentage row heights and column widths are relative to the scroll element&#39;s viewport</li>
+<li><code>defaultScrollLeft</code> and <code>defaultScrollTop</code> are ignored</li>
+</ul>
+<p>ℹ️ While the scroll element is <code>null</code>, the grid renders the first rows (as it does during server rendering).</p>
+<p>⚠️ The grid&#39;s <code>onScroll</code> handler is only called when the grid scrolls its own columns;
+listen to the scroll element&#39;s &quot;scroll&quot; events instead (or use the <code>useIsScrolling</code> hook).</p>
 </td>
     </tr>
     <tr>
