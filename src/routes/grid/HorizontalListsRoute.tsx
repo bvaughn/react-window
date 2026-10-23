@@ -14,7 +14,7 @@ export default function HorizontalListsRoute() {
       <div>
         Here's an example horizontal list (grid) of people you may know:
       </div>
-      <Block className="h-45" data-focus-within="bold">
+      <Block className="h-52" data-focus-within="bold">
         <HorizontalList contacts={contacts} />
       </Block>
       <div>Here's what the configuration for the grid above looks like:</div>

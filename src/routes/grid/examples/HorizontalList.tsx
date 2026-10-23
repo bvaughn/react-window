@@ -12,7 +12,7 @@ function HorizontalList({ contacts }: { contacts: Contact[] }) {
       cellComponent={CellComponent}
       cellProps={{ contacts }}
       columnCount={contacts.length}
-      columnWidth={150}
+      columnWidth={160}
       rowCount={1}
       rowHeight="100%"
     />
