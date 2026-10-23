@@ -1,16 +1,17 @@
+import type { Contact } from "./Grid";
 import { CellComponent } from "./HorizontalListCellRenderer";
 
 // <begin>
 
 import { Grid } from "react-window";
 
-function HorizontalList({ emails }: { emails: string[] }) {
+function HorizontalList({ contacts }: { contacts: Contact[] }) {
   return (
     <Grid
       className="h-full"
       cellComponent={CellComponent}
-      cellProps={{ emails }}
-      columnCount={emails.length}
+      cellProps={{ contacts }}
+      columnCount={contacts.length}
       columnWidth={150}
       rowCount={1}
       rowHeight="100%"

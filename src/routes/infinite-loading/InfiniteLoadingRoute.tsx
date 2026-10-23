@@ -10,9 +10,9 @@ export default function InfiniteLoadingRoute() {
         Lists that load their data as the user scrolls can use the{" "}
         <code>onRowsRendered</code> callback to decide when to load more. For
         example, a feed can load the next page when the user scrolls near the
-        end:
+        end. Scroll the activity feed below to load more updates:
       </div>
-      <Block className="h-50" data-focus-within="bold">
+      <Block className="h-75" data-focus-within="bold">
         <Example />
       </Block>
       <Code html={InfiniteFeedMarkdown.html} />

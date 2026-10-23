@@ -1,16 +1,17 @@
-import { RowComponent } from "./FixedHeightRowComponent";
+import type { Contact } from "../../grid/examples/Grid";
+import { RowComponent } from "./FeedRowComponent";
 
 // <begin>
 
 import { List } from "react-window";
 
-function Example({ names }: { names: string[] }) {
+function Example({ contacts }: { contacts: Contact[] }) {
   return (
     <List
       rowComponent={RowComponent}
-      rowCount={names.length}
-      rowHeight={25}
-      rowProps={{ names }}
+      rowCount={contacts.length}
+      rowHeight={50}
+      rowProps={{ contacts }}
       scrollElement="window"
     />
   );

@@ -1,29 +1,31 @@
-import { RowComponent } from "./FixedHeightRowComponent";
+import type { Contact } from "../../grid/examples/Grid";
+import { RowComponent } from "./FeedRowComponent";
 
 // <begin>
 
 import { useState } from "react";
 import { List } from "react-window";
 
-function Example({ names }: { names: string[] }) {
+function Example({ contacts }: { contacts: Contact[] }) {
   const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>(
     null
   );
 
   return (
     <div className="h-full overflow-auto" ref={setScrollElement}>
-      <div className="p-2 mb-2 rounded bg-slate-700">
-        Content above the list
+      {/* Other page content that scrolls along with the list */}
+      <div className="h-24 mb-2 flex items-center justify-center rounded border-2 border-dashed border-slate-600 text-slate-400">
+        Arbitrary page content (not part of the list)
       </div>
       <List
         rowComponent={RowComponent}
-        rowCount={names.length}
-        rowHeight={25}
-        rowProps={{ names }}
+        rowCount={contacts.length}
+        rowHeight={50}
+        rowProps={{ contacts }}
         scrollElement={scrollElement}
       />
-      <div className="p-2 mt-2 rounded bg-slate-700">
-        Content below the list
+      <div className="h-24 mt-2 flex items-center justify-center rounded border-2 border-dashed border-slate-600 text-slate-400">
+        Arbitrary page content (not part of the list)
       </div>
     </div>
   );

@@ -8,8 +8,11 @@ import {
 } from "react-lib-tools";
 import ListWithStickyRowsMarkdown from "../../../public/generated/examples/ListWithStickyRows.json";
 import { Example } from "./examples/ListWithStickyRows";
+import { CURRENT_PLAYER_INDEX, usePlayers } from "./hooks/usePlayers";
 
 export default function StickyRowsRoute() {
+  const players = usePlayers();
+
   return (
     <Box direction="column" gap={4}>
       <Header section="Other" title="Sticky rows" />
@@ -24,10 +27,12 @@ export default function StickyRowsRoute() {
       </div>
       <div>
         For the specific case of "sticky" rows, you can render within the parent
-        list or grid using the <code>children</code> prop:
+        list or grid using the <code>children</code> prop. For example, the
+        leaderboard below keeps your own ranking pinned to the top while the
+        list scrolls:
       </div>
       <Block className="h-50" data-focus-within="bold">
-        <Example />
+        <Example currentPlayerIndex={CURRENT_PLAYER_INDEX} players={players} />
       </Block>
       <div>The example above was created using code like this:</div>
       <Code html={ListWithStickyRowsMarkdown.html} />

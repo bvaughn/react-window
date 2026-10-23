@@ -1,12 +1,14 @@
 import { Block, Box, Callout, Code, Header } from "react-lib-tools";
-import json from "../../../public/data/names.json";
 import GridWithWindowScrollMarkdown from "../../../public/generated/examples/GridWithWindowScroll.json";
 import ListWithScrollElementMarkdown from "../../../public/generated/examples/ListWithScrollElement.json";
 import ListWithWindowScrollMarkdown from "../../../public/generated/examples/ListWithWindowScroll.json";
 import { Link } from "../../components/Link";
+import { useContacts } from "../grid/hooks/useContacts";
 import { Example } from "./examples/ListWithScrollElement";
 
 export default function ScrollElementRoute() {
+  const contacts = useContacts();
+
   return (
     <Box direction="column" gap={4}>
       <Header section="Other" title="Scrolling with the page" />
@@ -25,10 +27,11 @@ export default function ScrollElementRoute() {
       <div>
         A list can also scroll along with other content inside of a scrollable
         element. Pass the element as the <code>scrollElement</code> prop (it
-        will be <code>null</code> until it has mounted):
+        will be <code>null</code> until it has mounted). For example, the
+        activity feed below scrolls along with the content above and below it:
       </div>
       <Block className="h-75" data-focus-within="bold">
-        <Example names={json} />
+        <Example contacts={contacts} />
       </Block>
       <Code html={ListWithScrollElementMarkdown.html} />
       <div>

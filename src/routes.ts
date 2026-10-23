@@ -34,8 +34,23 @@ export const routes = {
   "/hooks/use-is-scrolling": lazy(
     () => import("./routes/hooks/UseIsScrollingRoute")
   ),
+  "/hooks/use-is-scrolling/scrolling-a-list": lazy(
+    () => import("./routes/hooks/UseIsScrollingListRoute")
+  ),
+  "/hooks/use-is-scrolling/scrolling-with-the-window": lazy(
+    () => import("./routes/hooks/UseIsScrollingWindowRoute")
+  ),
   "/hooks/use-virtualizer": lazy(
     () => import("./routes/hooks/UseVirtualizerRoute")
+  ),
+  "/hooks/use-virtualizer/lists": lazy(
+    () => import("./routes/hooks/UseVirtualizerListsRoute")
+  ),
+  "/hooks/use-virtualizer/tables": lazy(
+    () => import("./routes/hooks/UseVirtualizerTablesRoute")
+  ),
+  "/hooks/use-virtualizer/dynamic-heights": lazy(
+    () => import("./routes/hooks/UseVirtualizerDynamicHeightsRoute")
   ),
   "/grid/grid": lazy(() => import("./routes/grid/RenderingGridRoute")),
   "/grid/horizontal-lists": lazy(

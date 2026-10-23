@@ -1,33 +1,21 @@
-import {
-  Block,
-  Box,
-  Callout,
-  Code,
-  Header,
-  LoadingSpinner
-} from "react-lib-tools";
+import { Block, Box, Callout, Code, Header } from "react-lib-tools";
 import ListDynamicRowHeightsMarkdown from "../../../public/generated/examples/ListDynamicRowHeights.json";
 import ListRowDynamicRowHeightsMarkdown from "../../../public/generated/examples/ListRowDynamicRowHeights.json";
 import { Example } from "./examples/ListDynamicRowHeights";
-import { useLorem } from "./hooks/useLorem";
+import { useChatMessages } from "./hooks/useChatMessages";
 
 export default function DynamicRowHeightsRoute() {
-  const lorem = useLorem();
+  const messages = useChatMessages();
 
   return (
     <Box direction="column" gap={4}>
       <Header section="Lists" title="Dynamic row heights" />
       <div>
-        Sometimes the height of a row isn't known until it's been rendered.
+        Sometimes the height of a row isn't known until it's been rendered. For
+        example, a chat log with messages of varying length.
       </div>
-      <div>
-        Here is an example list of lorem ipsum text of varying sizes. Each row
-        can also be toggled collapsed/expanded by clicking on the "+"/"-"
-        button.
-      </div>
-      <Block className="h-50" data-focus-within="bold">
-        {!lorem.length && <LoadingSpinner />}
-        <Example lorem={lorem} />
+      <Block className="h-100" data-focus-within="bold">
+        <Example messages={messages} />
       </Block>
       <div>
         For this kind of list, react-window provides a helper hook called{" "}

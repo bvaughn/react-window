@@ -86,8 +86,32 @@ const nav: NavConfig<Path | DefaultPath> = [
   {
     title: "Hooks",
     links: [
-      { path: "/hooks/use-is-scrolling", title: "useIsScrolling" },
-      { path: "/hooks/use-virtualizer", title: "useVirtualizer" }
+      {
+        path: "/hooks/use-is-scrolling",
+        title: "useIsScrolling",
+        children: [
+          {
+            path: "/hooks/use-is-scrolling/scrolling-a-list",
+            title: "Scrolling a list"
+          },
+          {
+            path: "/hooks/use-is-scrolling/scrolling-with-the-window",
+            title: "Scrolling with the window"
+          }
+        ]
+      },
+      {
+        path: "/hooks/use-virtualizer",
+        title: "useVirtualizer",
+        children: [
+          { path: "/hooks/use-virtualizer/lists", title: "Lists" },
+          { path: "/hooks/use-virtualizer/tables", title: "Tables" },
+          {
+            path: "/hooks/use-virtualizer/dynamic-heights",
+            title: "Dynamic heights"
+          }
+        ]
+      }
     ]
   },
   {

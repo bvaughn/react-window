@@ -1,30 +1,15 @@
-import {
-  Block,
-  Box,
-  Callout,
-  Code,
-  Header,
-  LoadingSpinner,
-  SectionHeader
-} from "react-lib-tools";
-import json from "../../../public/data/names.json";
-import HeadlessDynamicSizesMarkdown from "../../../public/generated/examples/HeadlessDynamicSizes.json";
-import HeadlessListMarkdown from "../../../public/generated/examples/HeadlessList.json";
-import HeadlessTableMarkdown from "../../../public/generated/examples/HeadlessTable.json";
+import { Box, Header, SectionHeader } from "react-lib-tools";
 import { Link } from "../../components/Link";
-import { useLorem } from "../list/hooks/useLorem";
-import { useAddresses } from "../tables/hooks/useAddresses";
-import { Example as HeadlessDynamicSizesExample } from "./examples/HeadlessDynamicSizes";
-import { Example as HeadlessListExample } from "./examples/HeadlessList";
-import { Example as HeadlessTableExample } from "./examples/HeadlessTable";
+import { Param } from "../../components/Param";
 
 export default function UseVirtualizerRoute() {
-  const addresses = useAddresses();
-  const lorem = useLorem();
-
   return (
     <Box direction="column" gap={4}>
-      <Header section="Hooks" title="useVirtualizer" />
+      <Header
+        section="Hooks"
+        sourceCodePath="lib/components/virtualizer/useVirtualizer.ts"
+        title="useVirtualizer"
+      />
       <div>
         The <code>List</code> and <code>Grid</code> components render their own
         markup. To render custom markup instead (e.g. a{" "}
@@ -32,62 +17,139 @@ export default function UseVirtualizerRoute() {
         ), use the <code>useVirtualizer</code> hook. It calculates which items
         to render and where; how they are rendered is up to you.
       </div>
-      <Block className="h-50" data-focus-within="bold">
-        <HeadlessListExample names={json} />
-      </Block>
-      <Code html={HeadlessListMarkdown.html} />
-      <div>
-        The hook returns the items to render (each with an <code>index</code>,{" "}
-        <code>offset</code>, and <code>size</code>), the <code>totalSize</code>{" "}
-        of all items, the <code>visibleRange</code>, and a{" "}
-        <code>scrollToIndex</code> method. Its options mirror the props of{" "}
-        <code>List</code>: <code>count</code>, <code>itemSize</code>,{" "}
-        <code>overscanCount</code>, <code>direction</code>,{" "}
-        <code>scrollElement</code>, and <code>onItemsRendered</code>.
-      </div>
-      <SectionHeader>Tables</SectionHeader>
-      <div>
-        Rows in a <code>&lt;table&gt;</code> can't be absolutely positioned.
-        Instead, rows can be rendered in normal document flow, with spacer rows
-        taking the place of rows that aren't rendered. Using the{" "}
-        <code>&lt;tbody&gt;</code> as the element (and the scrolling container
-        as the <code>scrollElement</code>) positions rows relative to the body,
-        so the sticky header doesn't offset them:
-      </div>
-      <Block className="p-0!" data-focus-within="bold">
-        {!addresses.length ? (
-          <div className="p-2">
-            <LoadingSpinner />
-          </div>
-        ) : (
-          <HeadlessTableExample addresses={addresses} />
-        )}
-      </Block>
-      <Code html={HeadlessTableMarkdown.html} />
-      <div>
-        Like the browser's <code>scrollIntoView</code>,{" "}
-        <code>scrollToIndex</code> aligns items within the{" "}
-        <code>scroll-padding</code> of the element being scrolled. Setting{" "}
-        <code>scroll-padding-top</code> to the height of the sticky header keeps
-        rows from being aligned underneath it.
-      </div>
-      <Callout intent="primary">
-        The <code>aria-rowcount</code> and <code>aria-rowindex</code> attributes
-        tell assistive technologies how many rows the table has, even though
-        only some of them are rendered.
-      </Callout>
-      <SectionHeader>Dynamic sizes</SectionHeader>
-      <div>
-        Items with{" "}
-        <Link to="/list/dynamic-row-height">dynamic row heights</Link> must be
-        passed to the <code>measureElement</code> ref callback and specify a{" "}
-        <code>data-index</code> attribute:
-      </div>
-      <Block className="h-50" data-focus-within="bold">
-        {!lorem.length && <LoadingSpinner />}
-        <HeadlessDynamicSizesExample lorem={lorem} />
-      </Block>
-      <Code html={HeadlessDynamicSizesMarkdown.html} />
+      <div>Click below for examples of how to use the hook.</div>
+      <ul className="pl-8">
+        <li className="list-disc">
+          <Link to="/hooks/use-virtualizer/lists">Rendering a list</Link>
+        </li>
+        <li className="list-disc">
+          <Link to="/hooks/use-virtualizer/tables">Rendering a table</Link>
+        </li>
+        <li className="list-disc">
+          <Link to="/hooks/use-virtualizer/dynamic-heights">
+            Rendering items with dynamic heights
+          </Link>
+        </li>
+      </ul>
+      <SectionHeader>Parameters</SectionHeader>
+      <dl className="flex flex-col gap-2">
+        <Param name="count" type="number">
+          Number of items.
+        </Param>
+        <Param
+          defaultValue="0"
+          name="defaultScrollOffset"
+          optional
+          type="number"
+        >
+          Initial scroll offset (in pixels), applied once when the element first
+          mounts with at least one item. Ignored when a{" "}
+          <code>scrollElement</code> is specified.
+        </Param>
+        <Param defaultValue="0" name="defaultSize" optional type="number">
+          Size (in pixels) of the viewport before it has been measured (e.g.
+          during server rendering); this determines how many items are initially
+          rendered.
+        </Param>
+        <Param name="dir" optional type='"ltr" | "rtl"'>
+          Direction of horizontal content; detected from the element (or its
+          ancestors) by default.
+        </Param>
+        <Param
+          defaultValue='"vertical"'
+          name="direction"
+          optional
+          type='"horizontal" | "vertical"'
+        >
+          Direction that items are laid out in.
+        </Param>
+        <Param name="element" type="HTMLElement | null">
+          Element that scrolls the items or, if a <code>scrollElement</code> is
+          specified, the element that contains the items. Item offsets are
+          relative to the start of this element's content.
+        </Param>
+        <Param
+          name="itemSize"
+          type="number | string | ((index: number) => number) | DynamicRowHeight"
+        >
+          <p>Item size; the following formats are supported:</p>
+          <ul className="pl-8">
+            <li className="list-disc">number of pixels (number)</li>
+            <li className="list-disc">
+              percentage of the viewport's size (string)
+            </li>
+            <li className="list-disc">
+              function that returns the item size (in pixels) given an index
+            </li>
+            <li className="list-disc">
+              dynamic row height cache returned by the{" "}
+              <code>useDynamicRowHeight</code> hook (vertical only); rendered
+              items must be passed to <code>measureElement</code> and specify a{" "}
+              <code>data-index</code> attribute
+            </li>
+          </ul>
+          <p>
+            Sizes are cached until the value of this option changes; memoize
+            functions (e.g. with <code>useCallback</code>) and only change them
+            when sizes change.
+          </p>
+        </Param>
+        <Param
+          name="onItemsRendered"
+          optional
+          type="(visibleItems: { startIndex: number; stopIndex: number }, allItems: { startIndex: number; stopIndex: number }) => void"
+        >
+          Callback notified when the range of visible (or rendered) items
+          changes.
+        </Param>
+        <Param defaultValue="3" name="overscanCount" optional type="number">
+          How many additional items to render outside of the visible area.
+        </Param>
+        <Param
+          name="scrollElement"
+          optional
+          type='"window" | HTMLElement | null'
+        >
+          Element that scrolls the items, for items that scroll along with other
+          content (e.g. the page): <code>"window"</code> to scroll with the
+          page, or an ancestor element that scrolls (<code>null</code> until it
+          has mounted). See the{" "}
+          <Link to="/list/scroll-element">scrolling with the page</Link> page
+          for more information.
+        </Param>
+      </dl>
+      <SectionHeader>Return value</SectionHeader>
+      <dl className="flex flex-col gap-2">
+        <Param
+          name="items"
+          type="{ index: number; offset: number; size: number }[]"
+        >
+          Items to render (including overscan). Offsets are relative to the
+          start of the element's content; sizes are estimates for dynamic sizes
+          that have not yet been measured.
+        </Param>
+        <Param name="measureElement" type="(element: Element | null) => void">
+          Ref callback for rendered items, required for items with dynamic sizes
+          (see <code>itemSize</code>).
+        </Param>
+        <Param name="scrollToIndex" type="({ align, behavior, index }) => void">
+          Scrolls the element (or scroll element) so that the specified item is
+          visible. Like the browser's <code>scrollIntoView</code>, items are
+          aligned within the CSS <code>scroll-padding</code> of the element
+          being scrolled (e.g. <code>scroll-padding-top</code> can leave room
+          for a sticky header).
+        </Param>
+        <Param name="totalSize" type="number">
+          Total size (in pixels) of all items; an estimate for dynamic sizes
+          that have not yet been measured.
+        </Param>
+        <Param
+          name="visibleRange"
+          type="{ startIndex: number; stopIndex: number }"
+        >
+          Range of items within the visible area (excluding overscan).
+        </Param>
+      </dl>
     </Box>
   );
 }

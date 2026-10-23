@@ -1,6 +1,4 @@
-import { MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
 import { cn } from "react-lib-tools";
-import type { ListState } from "./ListDynamicRowHeights";
 
 // <begin>
 
@@ -8,24 +6,33 @@ import { type RowComponentProps } from "react-window";
 
 function RowComponent({
   index,
-  listState,
+  messages,
   style
 }: RowComponentProps<{
-  listState: ListState;
+  messages: string[];
 }>) {
-  const isCollapsed = listState.isRowCollapsed(index);
-  const text = listState.getText(index);
+  // Alternate messages between two participants
+  const isOutgoing = index % 2 === 1;
 
   return (
     <div
-      className={cn("p-2 cursor-pointer", {
-        "bg-white/10": index % 2 === 0,
-        truncate: isCollapsed
+      className={cn("flex flex-col px-2 py-1", {
+        "items-end": isOutgoing,
+        "items-start": !isOutgoing
       })}
-      onClick={() => listState.toggleRow(index)}
       style={style}
     >
-      <ToggleIcon isCollapsed={isCollapsed} /> {index}: {text}
+      <div className="text-xs opacity-50 px-1 pb-0.5">
+        {isOutgoing ? "You" : "Friend"}
+      </div>
+      <div
+        className={cn("max-w-3/4 px-3 py-2 rounded-2xl", {
+          "bg-sky-700 text-white rounded-br-sm": isOutgoing,
+          "bg-white/10 rounded-bl-sm": !isOutgoing
+        })}
+      >
+        {messages[index]}
+      </div>
     </div>
   );
 }
@@ -33,8 +40,3 @@ function RowComponent({
 // <end>
 
 export { RowComponent };
-
-function ToggleIcon({ isCollapsed }: { isCollapsed: boolean }) {
-  const Icon = isCollapsed ? PlusIcon : MinusIcon;
-  return <Icon className="size-4 inline-block" />;
-}
