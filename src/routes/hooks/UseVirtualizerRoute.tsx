@@ -1,6 +1,11 @@
-import { Box, Header, SectionHeader } from "react-lib-tools";
+import {
+  Box,
+  Header,
+  HookSignature,
+  HookSignatureItem,
+  SectionHeader
+} from "react-lib-tools";
 import { Link } from "../../components/Link";
-import { Param } from "../../components/Param";
 
 export default function UseVirtualizerRoute() {
   return (
@@ -32,11 +37,11 @@ export default function UseVirtualizerRoute() {
         </li>
       </ul>
       <SectionHeader>Parameters</SectionHeader>
-      <dl className="flex flex-col gap-2">
-        <Param name="count" type="number">
+      <HookSignature>
+        <HookSignatureItem name="count" type="number">
           Number of items.
-        </Param>
-        <Param
+        </HookSignatureItem>
+        <HookSignatureItem
           defaultValue="0"
           name="defaultScrollOffset"
           optional
@@ -45,30 +50,35 @@ export default function UseVirtualizerRoute() {
           Initial scroll offset (in pixels), applied once when the element first
           mounts with at least one item. Ignored when a{" "}
           <code>scrollElement</code> is specified.
-        </Param>
-        <Param defaultValue="0" name="defaultSize" optional type="number">
+        </HookSignatureItem>
+        <HookSignatureItem
+          defaultValue="0"
+          name="defaultSize"
+          optional
+          type="number"
+        >
           Size (in pixels) of the viewport before it has been measured (e.g.
           during server rendering); this determines how many items are initially
           rendered.
-        </Param>
-        <Param name="dir" optional type='"ltr" | "rtl"'>
+        </HookSignatureItem>
+        <HookSignatureItem name="dir" optional type='"ltr" | "rtl"'>
           Direction of horizontal content; detected from the element (or its
           ancestors) by default.
-        </Param>
-        <Param
+        </HookSignatureItem>
+        <HookSignatureItem
           defaultValue='"vertical"'
           name="direction"
           optional
           type='"horizontal" | "vertical"'
         >
           Direction that items are laid out in.
-        </Param>
-        <Param name="element" type="HTMLElement | null">
+        </HookSignatureItem>
+        <HookSignatureItem name="element" type="HTMLElement | null">
           Element that scrolls the items or, if a <code>scrollElement</code> is
           specified, the element that contains the items. Item offsets are
           relative to the start of this element's content.
-        </Param>
-        <Param
+        </HookSignatureItem>
+        <HookSignatureItem
           name="itemSize"
           type="number | string | ((index: number) => number) | DynamicRowHeight"
         >
@@ -93,19 +103,24 @@ export default function UseVirtualizerRoute() {
             functions (e.g. with <code>useCallback</code>) and only change them
             when sizes change.
           </p>
-        </Param>
-        <Param
+        </HookSignatureItem>
+        <HookSignatureItem
           name="onItemsRendered"
           optional
           type="(visibleItems: { startIndex: number; stopIndex: number }, allItems: { startIndex: number; stopIndex: number }) => void"
         >
           Callback notified when the range of visible (or rendered) items
           changes.
-        </Param>
-        <Param defaultValue="3" name="overscanCount" optional type="number">
+        </HookSignatureItem>
+        <HookSignatureItem
+          defaultValue="3"
+          name="overscanCount"
+          optional
+          type="number"
+        >
           How many additional items to render outside of the visible area.
-        </Param>
-        <Param
+        </HookSignatureItem>
+        <HookSignatureItem
           name="scrollElement"
           optional
           type='"window" | HTMLElement | null'
@@ -116,40 +131,46 @@ export default function UseVirtualizerRoute() {
           has mounted). See the{" "}
           <Link to="/list/scroll-element">scrolling with the page</Link> page
           for more information.
-        </Param>
-      </dl>
+        </HookSignatureItem>
+      </HookSignature>
       <SectionHeader>Return value</SectionHeader>
-      <dl className="flex flex-col gap-2">
-        <Param
+      <HookSignature>
+        <HookSignatureItem
           name="items"
           type="{ index: number; offset: number; size: number }[]"
         >
           Items to render (including overscan). Offsets are relative to the
           start of the element's content; sizes are estimates for dynamic sizes
           that have not yet been measured.
-        </Param>
-        <Param name="measureElement" type="(element: Element | null) => void">
+        </HookSignatureItem>
+        <HookSignatureItem
+          name="measureElement"
+          type="(element: Element | null) => void"
+        >
           Ref callback for rendered items, required for items with dynamic sizes
           (see <code>itemSize</code>).
-        </Param>
-        <Param name="scrollToIndex" type="({ align, behavior, index }) => void">
+        </HookSignatureItem>
+        <HookSignatureItem
+          name="scrollToIndex"
+          type="({ align, behavior, index }) => void"
+        >
           Scrolls the element (or scroll element) so that the specified item is
           visible. Like the browser's <code>scrollIntoView</code>, items are
           aligned within the CSS <code>scroll-padding</code> of the element
           being scrolled (e.g. <code>scroll-padding-top</code> can leave room
           for a sticky header).
-        </Param>
-        <Param name="totalSize" type="number">
+        </HookSignatureItem>
+        <HookSignatureItem name="totalSize" type="number">
           Total size (in pixels) of all items; an estimate for dynamic sizes
           that have not yet been measured.
-        </Param>
-        <Param
+        </HookSignatureItem>
+        <HookSignatureItem
           name="visibleRange"
           type="{ startIndex: number; stopIndex: number }"
         >
           Range of items within the visible area (excluding overscan).
-        </Param>
-      </dl>
+        </HookSignatureItem>
+      </HookSignature>
     </Box>
   );
 }

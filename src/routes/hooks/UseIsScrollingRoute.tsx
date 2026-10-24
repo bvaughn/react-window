@@ -1,6 +1,12 @@
-import { Box, Callout, Header, SectionHeader } from "react-lib-tools";
+import {
+  Box,
+  Callout,
+  Header,
+  HookSignature,
+  HookSignatureItem,
+  SectionHeader
+} from "react-lib-tools";
 import { Link } from "../../components/Link";
-import { Param } from "../../components/Param";
 
 export default function UseIsScrollingRoute() {
   return (
@@ -29,8 +35,11 @@ export default function UseIsScrollingRoute() {
         </li>
       </ul>
       <SectionHeader>Parameters</SectionHeader>
-      <dl className="flex flex-col gap-2">
-        <Param name="target" type='"window" | HTMLElement | null | undefined'>
+      <HookSignature>
+        <HookSignatureItem
+          name="target"
+          type='"window" | HTMLElement | null | undefined'
+        >
           <p>The element that scrolls:</p>
           <ul className="pl-8">
             <li className="list-disc">
@@ -42,8 +51,8 @@ export default function UseIsScrollingRoute() {
               that use the <code>scrollElement</code> prop
             </li>
           </ul>
-        </Param>
-        <Param
+        </HookSignatureItem>
+        <HookSignatureItem
           defaultValue="{}"
           name="options"
           optional
@@ -58,14 +67,14 @@ export default function UseIsScrollingRoute() {
             event. The <code>delay</code> is only used by browsers that don't
             support that event.
           </Callout>
-        </Param>
-      </dl>
+        </HookSignatureItem>
+      </HookSignature>
       <SectionHeader>Return value</SectionHeader>
-      <dl className="flex flex-col gap-2">
-        <Param name="isScrolling" type="boolean">
+      <HookSignature>
+        <HookSignatureItem name="isScrolling" type="boolean">
           Whether the target is currently scrolling.
-        </Param>
-      </dl>
+        </HookSignatureItem>
+      </HookSignature>
       <Callout intent="primary">
         Scrolling that starts and ends before React renders (e.g. an instant
         scroll) may not change this value.
