@@ -121,6 +121,7 @@ const nav: NavConfig<Path | DefaultPath> = [
       { path: "/grid/horizontal-lists", title: "Horizontal lists" },
       { path: "/list/images", title: "Images" },
       { path: "/list/sticky-rows", title: "Sticky rows" },
+      { path: "/list/pinned-to-bottom", title: "Pinned to bottom" },
       { path: "/list/scroll-element", title: "Scrolling with the page" },
       { path: "/infinite-loading", title: "Infinite loading" },
       {

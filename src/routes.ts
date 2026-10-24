@@ -25,6 +25,9 @@ export const routes = {
   ),
   "/list/sticky-rows": lazy(() => import("./routes/list/StickyRowsRoute")),
   "/list/images": lazy(() => import("./routes/list/ImagesRoute")),
+  "/list/pinned-to-bottom": lazy(
+    () => import("./routes/list/PinnedToBottomRoute")
+  ),
   "/list/scroll-element": lazy(
     () => import("./routes/list/ScrollElementRoute")
   ),
