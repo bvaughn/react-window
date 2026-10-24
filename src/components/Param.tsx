@@ -18,7 +18,7 @@ export function Param({
 }) {
   return (
     <>
-      <dd className="text-lg font-mono">
+      <dt className="text-lg font-mono">
         <span className="tok-propertyName">{name}</span>
         <span className="tok-punctuation">{optional ? "?:" : ":"}</span> {type}
         {defaultValue !== undefined && (
@@ -27,8 +27,8 @@ export function Param({
             <span className="tok-punctuation">=</span> {defaultValue}
           </>
         )}
-      </dd>
-      <dt className="mb-2 space-y-4">{children}</dt>
+      </dt>
+      <dd className="mb-2 space-y-4">{children}</dd>
     </>
   );
 }
