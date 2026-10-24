@@ -1,11 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
+import { settle as settleUntilStable } from "./settle";
 
 const HOST = "http://localhost:3012";
 
 async function settle(page: Page) {
-  await page.evaluate(async () => {
-    for (let i = 0; i < 75; i++) await new Promise(requestAnimationFrame);
-  });
+  await settleUntilStable(page, { maxFrames: 75, minFrames: 20 });
 }
 
 async function bounds(page: Page, index: number) {
@@ -42,8 +41,18 @@ for (const scale of [0.5, 1, 2]) {
       try {
         document.querySelector<HTMLButtonElement>("button")!.click();
         // Use the original function so the test's own frames are not counted.
+        // WebKit on Linux (in CI) sometimes stops running animation frames;
+        // don't wait for more than a frame's worth of time (at a low frame rate)
         for (let index = 0; index < 40; index++) {
-          await new Promise(requestFrame);
+          await new Promise<void>((resolve) => {
+            const done = () => {
+              cancelAnimationFrame(animationFrameId);
+              clearTimeout(timeoutId);
+              resolve();
+            };
+            const animationFrameId = requestFrame(done);
+            const timeoutId = setTimeout(done, 50);
+          });
         }
         return corrections;
       } finally {

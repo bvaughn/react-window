@@ -4,6 +4,7 @@ const viewport = { width: 1000, height: 600 };
 
 export default defineConfig({
   fullyParallel: true,
+  globalSetup: "./global-setup.ts",
   workers: process.env.CI ? "100%" : undefined,
   projects: [
     {

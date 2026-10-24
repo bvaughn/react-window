@@ -1,4 +1,5 @@
 import { expect, test, type Browser } from "@playwright/test";
+import { settle } from "./settle";
 
 // Rows are positioned using CSS transforms, which are not reported as layout shifts;
 // so compare server-rendered row positions (before hydration) to the hydrated positions directly
@@ -14,9 +15,7 @@ async function getRowBounds(
 
   if (javaScriptEnabled) {
     // Wait for rows to be measured and re-positioned
-    await page.evaluate(async () => {
-      for (let i = 0; i < 10; i++) await new Promise(requestAnimationFrame);
-    });
+    await settle(page, { minFrames: 10 });
   }
 
   const bounds = await page.evaluate(() => {
