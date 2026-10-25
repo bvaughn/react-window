@@ -1,102 +1,402 @@
 [
-  "Hey! Are you still up for the camping trip next weekend?",
-  "Yes, absolutely. I've been looking forward to it all month. Honestly it's the only thing getting me through this week — work has been a nonstop stream of meetings and I haven't been outside in what feels like days. I need trees and a lake and zero notifications.",
-  "Ha, same. Okay so I was thinking we could leave Friday right after work, maybe around 4? That would get us there before dark if traffic isn't terrible, and we'd still have time to set up the tent and get a fire going before dinner.",
-  "4 works, but traffic out of the city on a Friday is going to be brutal. What if we left a little earlier, like 2:30? I can probably sneak out of my last meeting. It's one of those recurring ones that could have been an email anyway, and nobody will notice if I'm gone.",
-  "I'll ask my manager.",
-  "Cool",
-  "Which campsite did you end up reserving? Last time I looked, almost everything was booked, and the only sites left were the ones right next to the parking lot where people's headlights shine into your tent all night.",
-  "I got lucky and grabbed site 14, the one up by the lake! Someone must have cancelled because it wasn't available when I checked on Monday. It's a little further from the bathrooms, which is annoying at 2am, but it's right on the water and there's a ton of shade in the afternoon. There's also a little path down to a rocky beach that basically nobody else uses.",
-  "Oh nice, that's the one with the big flat rock you can jump off of, right?",
-  "That's the one!",
-  "Perfect. Who else is coming?",
-  "Sam and Priya both confirmed this morning. Jordan said \"maybe,\" but you know how that goes. Last time they said maybe they texted us at 11pm on Friday asking if there was still room, and then didn't actually show up until Saturday afternoon, after we'd already eaten all the food.",
-  "Ha, yeah. Jordan's \"maybe\" is a \"no\" 90% of the time. I'll put them down as a no and be pleasantly surprised if they show up.",
-  "Smart",
-  "So that's four of us? Do you still have that big tent? Mine only fits two people if they really like each other, and even then someone ends up with their face pressed against the wall by morning.",
-  "I do, but one of the poles snapped last summer and I never replaced it. I think I can tape it up well enough to survive a weekend though. It's mostly cosmetic. Mostly.",
-  "Please don't make us sleep in a duct tape tent 😂",
-  "It's held together so far!",
-  "\"So far\" is doing a lot of work in that sentence. Do you remember the trip two years ago where the rain fly blew off in the middle of the night and we all woke up soaking wet? I had to sleep in the car with the heater running and I'm pretty sure I still haven't fully recovered from that.",
-  "Fine, I'll order a replacement pole tonight. They're like $15.",
-  "Thank you",
-  "That rain fly thing was ONE time, by the way. And it was an unusually windy night. The ranger even said it was the worst storm they'd had all season. I don't think it's fair to hold that against the tent.",
-  "Speaking of rain, have you checked the forecast?",
-  "Not yet, one sec",
-  "Okay, looks like it'll be sunny on Friday and Saturday, with a chance of showers on Sunday morning. Highs in the low 70s and lows around 50 at night. Wind should be pretty calm too, which is good news for the kayaks. Honestly it's about as good as we could have hoped for this time of year.",
-  "That's not bad at all. I'll bring an extra layer for the nights. It always gets colder by the lake than you expect, especially once the sun goes down and the breeze comes off the water.",
-  "Agreed",
-  "What are we thinking for food?",
-  "I was going to suggest we each take a meal so nobody gets stuck doing all the cooking. I can do Friday dinner — maybe foil packet fajitas? You chop everything up at home, throw it in foil with some seasoning, and then just toss the packets on the coals for twenty minutes. Super easy, minimal cleanup, and everyone can customize their own.",
-  "Love that. I'll do Saturday breakfast. Pancakes and bacon?",
-  "Yes please",
-  "Does anyone have a griddle that works over a fire, or should I just bring the cast iron pan? It's heavy, but it holds heat really well and I've made pancakes on it over a fire before without any issues.",
-  "Cast iron is fine. It's not like we're backpacking in. We're parking like 50 feet from the site.",
-  "Glamping, basically.",
-  "I texted Sam and Priya. Sam says they'll cover Saturday lunch — sandwiches and chips, nothing fancy — and Priya wants to make her famous chili for Saturday dinner. She says she's going to make it at home on Thursday so it has a full day to sit in the fridge, because apparently chili is always better the second day.",
-  "Her chili is incredible. Last time I had three bowls.",
-  "I remember. You were very quiet in the tent that night.",
-  "Let's not talk about it.",
-  "Haha okay",
-  "Don't forget s'mores stuff! And maybe get the big marshmallows this time, not the mini ones. Last time someone (I won't say who) bought the mini ones and they kept falling through the gaps in the roasting sticks into the fire.",
-  "Obviously. I'm not a monster. I'll also grab the good chocolate instead of the cheap stuff.",
-  "Also coffee. Lots of coffee.",
-  "I have a pour-over setup I can bring. I'll grind the beans the night before so we're not doing it at the campsite. I'll also bring a little thermos so we can take some with us on the paddle Saturday morning.",
-  "You're the best",
-  "What about activities? Are we bringing the kayaks?",
-  "I only have the one. Can we rent a second one there?",
-  "Let me look it up",
-  "Yep, the ranger station rents them. It's $25 for a half day or $40 for the full day, and they include paddles and life jackets. They also have paddleboards for about the same price, and you can reserve online ahead of time so we don't have to worry about them running out on a busy Saturday. I'd guess they get pretty booked up on nice weekends.",
-  "Ooh, I've always wanted to try paddleboarding. I've watched people do it and it looks either really relaxing or really embarrassing, depending on how good your balance is. Let's reserve one of each and take turns.",
-  "Deal. Saturday morning after breakfast, when the water is calm. The wind usually picks up in the afternoon.",
-  "Sounds perfect",
-  "There's also that trail that goes up to the overlook. It's about 4 miles round trip with a pretty steep section in the middle where you're basically climbing over roots and rocks for half a mile. But the view at the top is supposed to be amazing, especially at sunset — you can see the whole lake and the mountains behind it, and on a clear day apparently you can see all the way to the next valley.",
-  "Sunset hike on Saturday? We could bring headlamps for the walk back down.",
-  "I'm in as long as we eat chili first.",
-  "Chili, then hike. Got it.",
-  "Do we need to bring firewood, or can we buy it there?",
-  "You're not supposed to bring firewood from outside the area because of invasive bugs that hitch a ride in the bark. There's a beetle that's been wiping out a lot of the ash trees in the region, and they're really strict about it now. They sell bundles at the camp store, though, and it's usually pretty dry and burns well.",
-  "Oh good to know. I almost loaded up the trunk with the stuff from my backyard.",
-  "Glad I mentioned it!",
-  "How many bundles do you think? 2?",
-  "Probably 3 or 4 for two nights. They go faster than you think, especially if we're sitting around the fire late. I'd rather have extra than run out at 10pm and have to go hunting for sticks in the dark.",
-  "I'll grab 4 to be safe.",
-  "Do you have a camp stove, just in case it's too wet for a fire on Sunday morning?",
-  "I have the little two-burner one. I'll need to pick up fuel, though. I think I used the last canister on that fishing trip in the spring.",
-  "Add it to the list. We should probably make an actual list at this point.",
-  "Already started one in the shared notes doc 😄",
-  "Of course you did",
-  "Someone has to be the organized one! I split it into sections — shelter, kitchen, clothing, and \"fun stuff\" — and put everyone's name next to what they're bringing so we don't end up with three can openers and no lighter, like last time.",
-  "Okay, I just looked at it. This is very thorough. You even put \"extra socks\" on there. Twice.",
-  "Wet socks ruin trips. I stand by it.",
-  "Fair enough",
-  "Oh, one thing — can I bring Biscuit?",
-  "Is the campground dog friendly?",
-  "Looks like it, as long as dogs are on a leash and you clean up after them. There's also a rule about not leaving them unattended at the site, but that's fine since he'll be glued to me the whole time anyway.",
-  "Then yes! Biscuit is always welcome.",
-  "He's going to lose his mind when he sees the lake. The last time we went to the beach he ran in circles for about ten minutes straight and then fell asleep in the car before we even got out of the parking lot.",
-  "Is he a swimmer?",
-  "He thinks he is. In reality, he mostly just splashes around in the shallow part, barks at the waves, and then runs back and shakes off right next to whoever is sitting closest. It's his favorite game. I've tried to train him out of it but he's very committed.",
-  "So, me.",
-  "Definitely you.",
-  "I'll bring an extra towel then.",
-  "Good call. I think we're mostly set. Leaving Friday around 2:30. I'll drive?",
-  "Sure. I'll chip in for gas.",
-  "Thanks. I'll pick you up first, and then we can grab Sam on the way, since they're right off the highway. Priya is driving separately because she has to leave early on Sunday for her cousin's birthday thing. She said she'll try to meet us at the site by 6 so she's there for dinner.",
-  "Makes sense",
-  "Should I bring a speaker for music around the fire?",
-  "Yes, but low volume this time. The people at the next site complained last time, and honestly I don't blame them. It was 1am and we were doing karaoke to early 2000s pop songs. Badly.",
-  "Okay, yes, that was on us. I'll make a mellow playlist. Mostly acoustic stuff, nothing anyone could reasonably sing along to.",
-  "No karaoke after 10 this time. I promise.",
-  "Hmm, we'll see.",
-  "Alright, I need to go make dinner. Talk tomorrow?",
-  "Sounds good. I'll order the tent pole tonight!",
-  "Don't forget!",
-  "Setting a reminder right now.",
-  "Also, random thought: should we bring a deck of cards or a board game for the evenings? Last time we ran out of things to talk about around 11 and just stared at the fire in silence for an hour, which was actually kind of nice, but a game might be fun too.",
-  "I have a travel version of that word game we played at Sam's birthday. It packs down small.",
-  "Perfect. Bring it.",
-  "Packed already.",
-  "🏕️",
-  "🔥🌲"
+  {
+    "sender": "Friend",
+    "text": "Hey! Are you still up for the camping trip next weekend?"
+  },
+  {
+    "sender": "You",
+    "text": "Yes, absolutely. I've been looking forward to it all month. Honestly it's the only thing getting me through this week — work has been a nonstop stream of meetings and I haven't been outside in what feels like days. I need trees and a lake and zero notifications."
+  },
+  {
+    "sender": "Friend",
+    "text": "Ha, same. Okay so I was thinking we could leave Friday right after work, maybe around 4? That would get us there before dark if traffic isn't terrible, and we'd still have time to set up the tent and get a fire going before dinner."
+  },
+  {
+    "sender": "You",
+    "text": "4 works, but traffic out of the city on a Friday is going to be brutal. What if we left a little earlier, like 2:30? I can probably sneak out of my last meeting. It's one of those recurring ones that could have been an email anyway, and nobody will notice if I'm gone."
+  },
+  {
+    "sender": "Friend",
+    "text": "I'll ask my manager."
+  },
+  {
+    "sender": "You",
+    "text": "Cool"
+  },
+  {
+    "sender": "Friend",
+    "text": "Which campsite did you end up reserving? Last time I looked, almost everything was booked, and the only sites left were the ones right next to the parking lot where people's headlights shine into your tent all night."
+  },
+  {
+    "sender": "You",
+    "text": "I got lucky and grabbed site 14, the one up by the lake! Someone must have cancelled because it wasn't available when I checked on Monday. It's a little further from the bathrooms, which is annoying at 2am, but it's right on the water and there's a ton of shade in the afternoon. There's also a little path down to a rocky beach that basically nobody else uses."
+  },
+  {
+    "sender": "Friend",
+    "text": "Oh nice, that's the one with the big flat rock you can jump off of, right?"
+  },
+  {
+    "sender": "You",
+    "text": "That's the one!"
+  },
+  {
+    "sender": "Friend",
+    "text": "Perfect. Who else is coming?"
+  },
+  {
+    "sender": "You",
+    "text": "Sam and Priya both confirmed this morning. Jordan said \"maybe,\" but you know how that goes. Last time they said maybe they texted us at 11pm on Friday asking if there was still room, and then didn't actually show up until Saturday afternoon, after we'd already eaten all the food."
+  },
+  {
+    "sender": "Friend",
+    "text": "Ha, yeah. Jordan's \"maybe\" is a \"no\" 90% of the time. I'll put them down as a no and be pleasantly surprised if they show up."
+  },
+  {
+    "sender": "You",
+    "text": "Smart"
+  },
+  {
+    "sender": "Friend",
+    "text": "So that's four of us? Do you still have that big tent? Mine only fits two people if they really like each other, and even then someone ends up with their face pressed against the wall by morning."
+  },
+  {
+    "sender": "You",
+    "text": "I do, but one of the poles snapped last summer and I never replaced it. I think I can tape it up well enough to survive a weekend though. It's mostly cosmetic. Mostly."
+  },
+  {
+    "sender": "Friend",
+    "text": "Please don't make us sleep in a duct tape tent 😂"
+  },
+  {
+    "sender": "You",
+    "text": "It's held together so far!"
+  },
+  {
+    "sender": "Friend",
+    "text": "\"So far\" is doing a lot of work in that sentence. Do you remember the trip two years ago where the rain fly blew off in the middle of the night and we all woke up soaking wet? I had to sleep in the car with the heater running and I'm pretty sure I still haven't fully recovered from that."
+  },
+  {
+    "sender": "You",
+    "text": "Fine, I'll order a replacement pole tonight. They're like $15."
+  },
+  {
+    "sender": "Friend",
+    "text": "Thank you"
+  },
+  {
+    "sender": "You",
+    "text": "That rain fly thing was ONE time, by the way. And it was an unusually windy night. The ranger even said it was the worst storm they'd had all season. I don't think it's fair to hold that against the tent."
+  },
+  {
+    "sender": "Friend",
+    "text": "Speaking of rain, have you checked the forecast?"
+  },
+  {
+    "sender": "You",
+    "text": "Not yet, one sec"
+  },
+  {
+    "sender": "Friend",
+    "text": "Okay, looks like it'll be sunny on Friday and Saturday, with a chance of showers on Sunday morning. Highs in the low 70s and lows around 50 at night. Wind should be pretty calm too, which is good news for the kayaks. Honestly it's about as good as we could have hoped for this time of year."
+  },
+  {
+    "sender": "You",
+    "text": "That's not bad at all. I'll bring an extra layer for the nights. It always gets colder by the lake than you expect, especially once the sun goes down and the breeze comes off the water."
+  },
+  {
+    "sender": "Friend",
+    "text": "Agreed"
+  },
+  {
+    "sender": "You",
+    "text": "What are we thinking for food?"
+  },
+  {
+    "sender": "Friend",
+    "text": "I was going to suggest we each take a meal so nobody gets stuck doing all the cooking. I can do Friday dinner — maybe foil packet fajitas? You chop everything up at home, throw it in foil with some seasoning, and then just toss the packets on the coals for twenty minutes. Super easy, minimal cleanup, and everyone can customize their own."
+  },
+  {
+    "sender": "You",
+    "text": "Love that. I'll do Saturday breakfast. Pancakes and bacon?"
+  },
+  {
+    "sender": "Friend",
+    "text": "Yes please"
+  },
+  {
+    "sender": "You",
+    "text": "Does anyone have a griddle that works over a fire, or should I just bring the cast iron pan? It's heavy, but it holds heat really well and I've made pancakes on it over a fire before without any issues."
+  },
+  {
+    "sender": "Friend",
+    "text": "Cast iron is fine. It's not like we're backpacking in. We're parking like 50 feet from the site."
+  },
+  {
+    "sender": "You",
+    "text": "Glamping, basically."
+  },
+  {
+    "sender": "Friend",
+    "text": "I texted Sam and Priya. Sam says they'll cover Saturday lunch — sandwiches and chips, nothing fancy — and Priya wants to make her famous chili for Saturday dinner. She says she's going to make it at home on Thursday so it has a full day to sit in the fridge, because apparently chili is always better the second day."
+  },
+  {
+    "sender": "You",
+    "text": "Her chili is incredible. Last time I had three bowls."
+  },
+  {
+    "sender": "Friend",
+    "text": "I remember. You were very quiet in the tent that night."
+  },
+  {
+    "sender": "You",
+    "text": "Let's not talk about it."
+  },
+  {
+    "sender": "Friend",
+    "text": "Haha okay"
+  },
+  {
+    "sender": "You",
+    "text": "Don't forget s'mores stuff! And maybe get the big marshmallows this time, not the mini ones. Last time someone (I won't say who) bought the mini ones and they kept falling through the gaps in the roasting sticks into the fire."
+  },
+  {
+    "sender": "Friend",
+    "text": "Obviously. I'm not a monster. I'll also grab the good chocolate instead of the cheap stuff."
+  },
+  {
+    "sender": "You",
+    "text": "Also coffee. Lots of coffee."
+  },
+  {
+    "sender": "Friend",
+    "text": "I have a pour-over setup I can bring. I'll grind the beans the night before so we're not doing it at the campsite. I'll also bring a little thermos so we can take some with us on the paddle Saturday morning."
+  },
+  {
+    "sender": "You",
+    "text": "You're the best"
+  },
+  {
+    "sender": "Friend",
+    "text": "What about activities? Are we bringing the kayaks?"
+  },
+  {
+    "sender": "You",
+    "text": "I only have the one. Can we rent a second one there?"
+  },
+  {
+    "sender": "Friend",
+    "text": "Let me look it up"
+  },
+  {
+    "sender": "You",
+    "text": "Yep, the ranger station rents them. It's $25 for a half day or $40 for the full day, and they include paddles and life jackets. They also have paddleboards for about the same price, and you can reserve online ahead of time so we don't have to worry about them running out on a busy Saturday. I'd guess they get pretty booked up on nice weekends."
+  },
+  {
+    "sender": "Friend",
+    "text": "Ooh, I've always wanted to try paddleboarding. I've watched people do it and it looks either really relaxing or really embarrassing, depending on how good your balance is. Let's reserve one of each and take turns."
+  },
+  {
+    "sender": "You",
+    "text": "Deal. Saturday morning after breakfast, when the water is calm. The wind usually picks up in the afternoon."
+  },
+  {
+    "sender": "Friend",
+    "text": "Sounds perfect"
+  },
+  {
+    "sender": "You",
+    "text": "There's also that trail that goes up to the overlook. It's about 4 miles round trip with a pretty steep section in the middle where you're basically climbing over roots and rocks for half a mile. But the view at the top is supposed to be amazing, especially at sunset — you can see the whole lake and the mountains behind it, and on a clear day apparently you can see all the way to the next valley."
+  },
+  {
+    "sender": "Friend",
+    "text": "Sunset hike on Saturday? We could bring headlamps for the walk back down."
+  },
+  {
+    "sender": "You",
+    "text": "I'm in as long as we eat chili first."
+  },
+  {
+    "sender": "Friend",
+    "text": "Chili, then hike. Got it."
+  },
+  {
+    "sender": "You",
+    "text": "Do we need to bring firewood, or can we buy it there?"
+  },
+  {
+    "sender": "Friend",
+    "text": "You're not supposed to bring firewood from outside the area because of invasive bugs that hitch a ride in the bark. There's a beetle that's been wiping out a lot of the ash trees in the region, and they're really strict about it now. They sell bundles at the camp store, though, and it's usually pretty dry and burns well."
+  },
+  {
+    "sender": "You",
+    "text": "Oh good to know. I almost loaded up the trunk with the stuff from my backyard."
+  },
+  {
+    "sender": "Friend",
+    "text": "Glad I mentioned it!"
+  },
+  {
+    "sender": "You",
+    "text": "How many bundles do you think? 2?"
+  },
+  {
+    "sender": "Friend",
+    "text": "Probably 3 or 4 for two nights. They go faster than you think, especially if we're sitting around the fire late. I'd rather have extra than run out at 10pm and have to go hunting for sticks in the dark."
+  },
+  {
+    "sender": "You",
+    "text": "I'll grab 4 to be safe."
+  },
+  {
+    "sender": "Friend",
+    "text": "Do you have a camp stove, just in case it's too wet for a fire on Sunday morning?"
+  },
+  {
+    "sender": "You",
+    "text": "I have the little two-burner one. I'll need to pick up fuel, though. I think I used the last canister on that fishing trip in the spring."
+  },
+  {
+    "sender": "Friend",
+    "text": "Add it to the list. We should probably make an actual list at this point."
+  },
+  {
+    "sender": "You",
+    "text": "Already started one in the shared notes doc 😄"
+  },
+  {
+    "sender": "Friend",
+    "text": "Of course you did"
+  },
+  {
+    "sender": "You",
+    "text": "Someone has to be the organized one! I split it into sections — shelter, kitchen, clothing, and \"fun stuff\" — and put everyone's name next to what they're bringing so we don't end up with three can openers and no lighter, like last time."
+  },
+  {
+    "sender": "Friend",
+    "text": "Okay, I just looked at it. This is very thorough. You even put \"extra socks\" on there. Twice."
+  },
+  {
+    "sender": "You",
+    "text": "Wet socks ruin trips. I stand by it."
+  },
+  {
+    "sender": "Friend",
+    "text": "Fair enough"
+  },
+  {
+    "sender": "You",
+    "text": "Oh, one thing — can I bring Biscuit?"
+  },
+  {
+    "sender": "Friend",
+    "text": "Is the campground dog friendly?"
+  },
+  {
+    "sender": "You",
+    "text": "Looks like it, as long as dogs are on a leash and you clean up after them. There's also a rule about not leaving them unattended at the site, but that's fine since he'll be glued to me the whole time anyway."
+  },
+  {
+    "sender": "Friend",
+    "text": "Then yes! Biscuit is always welcome."
+  },
+  {
+    "sender": "You",
+    "text": "He's going to lose his mind when he sees the lake. The last time we went to the beach he ran in circles for about ten minutes straight and then fell asleep in the car before we even got out of the parking lot."
+  },
+  {
+    "sender": "Friend",
+    "text": "Is he a swimmer?"
+  },
+  {
+    "sender": "You",
+    "text": "He thinks he is. In reality, he mostly just splashes around in the shallow part, barks at the waves, and then runs back and shakes off right next to whoever is sitting closest. It's his favorite game. I've tried to train him out of it but he's very committed."
+  },
+  {
+    "sender": "Friend",
+    "text": "So, me."
+  },
+  {
+    "sender": "You",
+    "text": "Definitely you."
+  },
+  {
+    "sender": "Friend",
+    "text": "I'll bring an extra towel then."
+  },
+  {
+    "sender": "You",
+    "text": "Good call. I think we're mostly set. Leaving Friday around 2:30. I'll drive?"
+  },
+  {
+    "sender": "Friend",
+    "text": "Sure. I'll chip in for gas."
+  },
+  {
+    "sender": "You",
+    "text": "Thanks. I'll pick you up first, and then we can grab Sam on the way, since they're right off the highway. Priya is driving separately because she has to leave early on Sunday for her cousin's birthday thing. She said she'll try to meet us at the site by 6 so she's there for dinner."
+  },
+  {
+    "sender": "Friend",
+    "text": "Makes sense"
+  },
+  {
+    "sender": "You",
+    "text": "Should I bring a speaker for music around the fire?"
+  },
+  {
+    "sender": "Friend",
+    "text": "Yes, but low volume this time. The people at the next site complained last time, and honestly I don't blame them. It was 1am and we were doing karaoke to early 2000s pop songs. Badly."
+  },
+  {
+    "sender": "You",
+    "text": "Okay, yes, that was on us. I'll make a mellow playlist. Mostly acoustic stuff, nothing anyone could reasonably sing along to."
+  },
+  {
+    "sender": "Friend",
+    "text": "No karaoke after 10 this time. I promise."
+  },
+  {
+    "sender": "You",
+    "text": "Hmm, we'll see."
+  },
+  {
+    "sender": "Friend",
+    "text": "Alright, I need to go make dinner. Talk tomorrow?"
+  },
+  {
+    "sender": "You",
+    "text": "Sounds good. I'll order the tent pole tonight!"
+  },
+  {
+    "sender": "Friend",
+    "text": "Don't forget!"
+  },
+  {
+    "sender": "You",
+    "text": "Setting a reminder right now."
+  },
+  {
+    "sender": "Friend",
+    "text": "Also, random thought: should we bring a deck of cards or a board game for the evenings? Last time we ran out of things to talk about around 11 and just stared at the fire in silence for an hour, which was actually kind of nice, but a game might be fun too."
+  },
+  {
+    "sender": "You",
+    "text": "I have a travel version of that word game we played at Sam's birthday. It packs down small."
+  },
+  {
+    "sender": "Friend",
+    "text": "Perfect. Bring it."
+  },
+  {
+    "sender": "You",
+    "text": "Packed already."
+  },
+  {
+    "sender": "Friend",
+    "text": "🏕️"
+  },
+  {
+    "sender": "You",
+    "text": "🔥🌲"
+  }
 ]

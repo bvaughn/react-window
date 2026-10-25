@@ -1,9 +1,9 @@
 // <begin>
 
 import { List, useDynamicRowHeight } from "react-window";
-import { RowComponent } from "./ListRowDynamicRowHeights";
+import { RowComponent, type ChatMessage } from "./ListRowDynamicRowHeights";
 
-function Example({ messages }: { messages: string[] }) {
+function Example({ messages }: { messages: ChatMessage[] }) {
   const rowHeight = useDynamicRowHeight({
     defaultRowHeight: 50
   });

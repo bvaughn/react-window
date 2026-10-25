@@ -4,15 +4,20 @@ import { cn } from "react-lib-tools";
 
 import { type RowComponentProps } from "react-window";
 
+type ChatMessage = {
+  sender: string;
+  text: string;
+};
+
 function RowComponent({
   index,
   messages,
   style
 }: RowComponentProps<{
-  messages: string[];
+  messages: ChatMessage[];
 }>) {
-  // Alternate messages between two participants
-  const isOutgoing = index % 2 === 1;
+  const { sender, text } = messages[index];
+  const isOutgoing = sender === "You";
 
   return (
     <div
@@ -22,16 +27,14 @@ function RowComponent({
       })}
       style={style}
     >
-      <div className="text-xs opacity-50 px-1 pb-0.5">
-        {isOutgoing ? "You" : "Friend"}
-      </div>
+      <div className="text-xs opacity-50 px-1 pb-0.5">{sender}</div>
       <div
         className={cn("max-w-3/4 px-3 py-2 rounded-2xl", {
           "bg-sky-700 text-white rounded-br-sm": isOutgoing,
           "bg-white/10 rounded-bl-sm": !isOutgoing
         })}
       >
-        {messages[index]}
+        {text}
       </div>
     </div>
   );
@@ -40,3 +43,4 @@ function RowComponent({
 // <end>
 
 export { RowComponent };
+export type { ChatMessage };
