@@ -21,8 +21,12 @@ export default function ImagesRoute() {
       </div>
       <Code html={ImagesMarkdown.html} />
       <div>
-        A loading placeholder might be rendered until the image has been
-        measured for the first time.
+        If the dimensions of each image are known ahead of time, pass them to
+        the <code>&lt;img&gt;</code> as <code>width</code> and{" "}
+        <code>height</code> attributes. The browser will reserve space for the
+        image before it loads, so rows are measured at the correct size right
+        away (rather than resizing once the image arrives). A placeholder can be
+        rendered behind the image while it loads.
       </div>
       <Code html={ImageRowMarkdown.html} />
     </Box>
