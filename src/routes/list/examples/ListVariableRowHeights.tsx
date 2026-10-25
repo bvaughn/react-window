@@ -45,7 +45,7 @@ function RowComponent({ index, items, style }: RowComponentProps<RowProps>) {
 
   let className = "flex items-center justify-between gap-2";
   if (item.type === "state") {
-    className += " text-3xl text-sky-300";
+    className += " text-3xl text-sky-700 dark:text-sky-300";
   }
 
   return (

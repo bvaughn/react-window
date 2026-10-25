@@ -56,10 +56,10 @@ function RowComponent({
   if (index >= items.length) {
     return (
       <div className="flex items-center gap-2 px-2" style={style}>
-        <div className="shrink-0 size-8 rounded-full bg-white/10 animate-pulse" />
+        <div className="shrink-0 size-8 rounded-full bg-ink/10 animate-pulse" />
         <div className="flex flex-col gap-2">
-          <div className="h-3 w-32 rounded bg-white/10 animate-pulse" />
-          <div className="h-2 w-48 rounded bg-white/10 animate-pulse" />
+          <div className="h-3 w-32 rounded bg-ink/10 animate-pulse" />
+          <div className="h-2 w-48 rounded bg-ink/10 animate-pulse" />
         </div>
       </div>
     );
@@ -77,7 +77,7 @@ function RowComponent({
           </strong>{" "}
           started a new role as {contact.job_title} at {contact.company}
         </div>
-        <div className="truncate text-xs text-slate-400">
+        <div className="truncate text-xs text-ink/60">
           {contact.city}, {contact.state}
         </div>
       </div>

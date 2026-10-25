@@ -187,8 +187,9 @@ export default function ScrollToCellRoute() {
         <code>scrollToRow</code> methods for single-axis scrolling.
       </div>
       <Callout intent="primary">
-        <strong className="text-sky-300">Note</strong> If you are passing the
-        ref to another component or hook, use the ref callback function instead.
+        <strong className="text-sky-700 dark:text-sky-300">Note</strong> If you
+        are passing the ref to another component or hook, use the ref callback
+        function instead.
       </Callout>
       <Code html={useGridCallbackRefMarkdown.html} />
     </Box>

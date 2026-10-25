@@ -50,7 +50,8 @@ function RowComponent({
     <div style={style}>
       <Standing
         className={cn("h-full", {
-          "font-bold text-sky-400": index - 1 === currentPlayerIndex
+          "font-bold text-sky-600 dark:text-sky-400":
+            index - 1 === currentPlayerIndex
         })}
         player={players[index - 1]}
         rank={index}

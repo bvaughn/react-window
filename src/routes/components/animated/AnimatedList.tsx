@@ -141,12 +141,12 @@ export function AnimatedList({ columnCount }: { columnCount: number }) {
         ))}
       </div>
       <div
-        className="rounded rounded-md border border-2 border-white absolute top-0 h-full w-22 sm:w-42"
+        className="rounded rounded-md border border-2 border-ink absolute top-0 h-full w-22 sm:w-42"
         ref={viewportRef}
       >
-        <div className="absolute bottom-0 w-full h-4 bg-white/5">
+        <div className="absolute bottom-0 w-full h-4 bg-ink/5">
           <div
-            className="absolute bottom-1 left-1 w-3 h-2 rounded bg-white/50"
+            className="absolute bottom-1 left-1 w-3 h-2 rounded bg-ink/50"
             ref={thumbRef}
           />
         </div>

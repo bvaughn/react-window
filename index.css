@@ -17,3 +17,15 @@
   --color-focus-2: var(--color-teal-400);
   --color-focus-3: var(--color-teal-500);
 }
+
+/* The colors above are chosen for the dark theme */
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-header-section: var(--color-emerald-700);
+    --color-nav-active: var(--color-emerald-700);
+    --color-nav-hover: var(--color-emerald-600);
+    --color-search-match: var(--color-emerald-700);
+    --color-search-result-active: var(--color-emerald-100);
+    --color-common-question-header: var(--color-indigo-700);
+  }
+}

@@ -21,7 +21,7 @@ function CellComponent({
 
   return (
     <div className="p-1" style={style}>
-      <div className="h-full flex flex-col items-center overflow-hidden rounded-lg bg-white/10 text-center">
+      <div className="h-full flex flex-col items-center overflow-hidden rounded-lg bg-ink/10 text-center">
         <div
           className={`h-10 w-full shrink-0 bg-linear-to-br ${BANNERS[columnIndex % BANNERS.length]}`}
         />
@@ -35,11 +35,9 @@ function CellComponent({
             {contact.first_name} {contact.last_name}
           </div>
           <div className="truncate text-xs">{contact.job_title}</div>
-          <div className="truncate text-xs text-slate-400">
-            {contact.company}
-          </div>
+          <div className="truncate text-xs text-ink/60">{contact.company}</div>
         </div>
-        <button className="mt-auto mb-2 px-3 py-0.5 rounded-full border border-sky-500 text-xs text-sky-400 hover:bg-sky-500 hover:text-white">
+        <button className="mt-auto mb-2 px-3 py-0.5 rounded-full border border-sky-500 text-xs text-sky-600 dark:text-sky-400 hover:bg-sky-500 dark:hover:text-white hover:text-white">
           + Connect
         </button>
       </div>

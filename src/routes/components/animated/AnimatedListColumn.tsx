@@ -13,7 +13,7 @@ export function AnimatedListColumn({
         "h-12 w-7 sm:w-14 shrink-0 p-1 flex items-center justify-center rounded text-xs whitespace-nowrap transition-colors duration-150",
         rendered
           ? getIntentClassNames("primary")
-          : "border-1 border-dashed border-white/10 text-white/20"
+          : "border-1 border-dashed border-ink/10 text-ink/20"
       )}
     >
       {children}

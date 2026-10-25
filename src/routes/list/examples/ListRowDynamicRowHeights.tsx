@@ -31,7 +31,7 @@ function RowComponent({
       <div
         className={cn("max-w-3/4 px-3 py-2 rounded-2xl", {
           "bg-sky-700 text-white rounded-br-sm": isOutgoing,
-          "bg-white/10 rounded-bl-sm": !isOutgoing
+          "bg-ink/10 rounded-bl-sm": !isOutgoing
         })}
       >
         {text}

@@ -21,7 +21,7 @@ function RowComponent({
           </strong>{" "}
           started a new role as {contact.job_title} at {contact.company}
         </div>
-        <div className="truncate text-xs text-slate-400">
+        <div className="truncate text-xs text-ink/60">
           {contact.city}, {contact.state}
         </div>
       </div>

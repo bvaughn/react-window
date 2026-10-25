@@ -44,7 +44,7 @@ function Example({ addresses }: { addresses: Address[] }) {
           <col className="w-1/3" />
           <col />
         </colgroup>
-        <thead className="sticky top-0 bg-teal-600">
+        <thead className="sticky top-0 bg-teal-600 text-white">
           <tr aria-rowindex={1} className="h-[25px]">
             <th className="px-2 text-left">City</th>
             <th className="px-2 text-left">State</th>

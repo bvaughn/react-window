@@ -14,7 +14,7 @@ function Example({ contacts }: { contacts: Contact[] }) {
   return (
     <div className="h-full overflow-auto" ref={setScrollElement}>
       {/* Other page content that scrolls along with the list */}
-      <div className="h-24 mb-2 flex items-center justify-center rounded border-2 border-dashed border-slate-600 text-slate-400">
+      <div className="h-24 mb-2 flex items-center justify-center rounded border-2 border-dashed border-ink/30 text-ink/60">
         Arbitrary page content (not part of the list)
       </div>
       <List
@@ -24,7 +24,7 @@ function Example({ contacts }: { contacts: Contact[] }) {
         rowProps={{ contacts }}
         scrollElement={scrollElement}
       />
-      <div className="h-24 mt-2 flex items-center justify-center rounded border-2 border-dashed border-slate-600 text-slate-400">
+      <div className="h-24 mt-2 flex items-center justify-center rounded border-2 border-dashed border-ink/30 text-ink/60">
         Arbitrary page content (not part of the list)
       </div>
     </div>

@@ -40,7 +40,7 @@ function CellComponent({
   return (
     <div className="truncate leading-none" style={style}>
       <div>{content}</div>
-      <small className="text-slate-400">
+      <small className="text-ink/60">
         row {rowIndex}, col {columnIndex}
       </small>
     </div>

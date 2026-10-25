@@ -36,10 +36,10 @@ function RowComponent({
   if (isScrolling) {
     return (
       <div className="flex items-center gap-2" style={style}>
-        <div className="shrink-0 size-8 rounded-full bg-white/10" />
+        <div className="shrink-0 size-8 rounded-full bg-ink/10" />
         <div className="flex flex-col gap-2">
-          <div className="h-3 w-32 rounded bg-white/10" />
-          <div className="h-2 w-48 rounded bg-white/10" />
+          <div className="h-3 w-32 rounded bg-ink/10" />
+          <div className="h-2 w-48 rounded bg-ink/10" />
         </div>
       </div>
     );
@@ -54,7 +54,7 @@ function RowComponent({
         <div className="truncate">
           {contact.first_name} {contact.last_name}
         </div>
-        <div className="truncate text-xs text-slate-400">
+        <div className="truncate text-xs text-ink/60">
           {contact.job_title} at {contact.company}
         </div>
       </div>
