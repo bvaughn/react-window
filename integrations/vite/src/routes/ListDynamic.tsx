@@ -25,7 +25,10 @@ export function ListDynamicRoute() {
               | "center"
               | "end"
               | "smart",
-            behavior: "smooth"
+            behavior: (params.get("behavior") ?? "instant") as
+              | "auto"
+              | "instant"
+              | "smooth"
           })
         }
       >

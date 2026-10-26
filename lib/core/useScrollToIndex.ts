@@ -11,12 +11,21 @@ import {
 import { getItemIndex } from "./itemIndex";
 import type { Bounds, Direction } from "./types";
 
+const CORRECTION_DURATION = 1000;
+const SMOOTH_SCROLL_DURATION = 500;
+
+// Starting at full speed keeps back-to-back scrolls (e.g. as new rows are appended) from stalling
+function easeOutCubic(t: number) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
 /**
  * Scrolls an item into view.
  *
  * Items with dynamic sizes are positioned using estimated sizes until they have been measured,
  * so scrolling to one is corrected over several frames as items around it are rendered and measured.
  * Corrections stop once the item's position is stable, after a deadline, or when the user scrolls.
+ * Smooth scrolling is animated frame by frame (rather than by the browser) so that the destination can move as items are measured.
  *
  * ℹ️ Dynamic sizes are only supported for vertical lists.
  */
@@ -50,8 +59,14 @@ export function useScrollToIndex({
   const pendingScroll = useRef<{
     align: Align;
     index: number;
-    deadline: number;
+    smooth: boolean;
     stableFrames: number;
+    // Set on the first frame, since frames are paused while the page is hidden
+    animation?: {
+      deadline: number;
+      startOffset: number;
+      startTime: number;
+    };
   } | null>(null);
 
   // Track the window that scheduled the frame so it can be cancelled there.
@@ -82,11 +97,12 @@ export function useScrollToIndex({
     const request = pendingScroll.current;
     if (!request) return;
 
+    const now = performance.now();
     if (
       !element ||
       !isDynamicSize ||
       request.index >= itemCount ||
-      performance.now() >= request.deadline
+      (request.animation !== undefined && now >= request.animation.deadline)
     ) {
       cancelScroll();
       return;
@@ -103,7 +119,31 @@ export function useScrollToIndex({
         0,
         Math.min(scrollOffset, getMaxScrollPosition(scrollTarget, direction))
       );
-      if (Math.abs(offset - getScrollPosition(scrollTarget, direction)) > 1) {
+
+      if (request.animation === undefined) {
+        const duration = request.smooth ? SMOOTH_SCROLL_DURATION : 0;
+        request.animation = {
+          deadline: now + duration + CORRECTION_DURATION,
+          startOffset: getScrollPosition(scrollTarget, direction),
+          startTime: now
+        };
+      }
+
+      // Ease towards the latest estimate of the destination, which moves as items are measured
+      const progress = request.smooth
+        ? (now - request.animation.startTime) / SMOOTH_SCROLL_DURATION
+        : 1;
+      if (progress < 1) {
+        const { startOffset } = request.animation;
+        request.stableFrames = 0;
+        scrollTarget.scrollTo({
+          behavior: "instant",
+          [isVertical ? "top" : "left"]:
+            startOffset + (offset - startOffset) * easeOutCubic(progress)
+        });
+      } else if (
+        Math.abs(offset - getScrollPosition(scrollTarget, direction)) > 1
+      ) {
         request.stableFrames = 0;
         scrollTarget.scrollTo({
           behavior: "instant",
@@ -207,13 +247,23 @@ export function useScrollToIndex({
       if (result && typeof result.scrollTarget.scrollTo === "function") {
         const { scrollOffset, scrollTarget } = result;
         if (isDynamicSize) {
+          // There's no point in animating a scroll that can't be seen
+          const smooth =
+            behavior === "smooth" &&
+            element?.ownerDocument.visibilityState !== "hidden";
+
           pendingScroll.current = {
             align,
             index,
-            deadline: performance.now() + 1000,
+            smooth,
             stableFrames: 0
           };
           scheduleCorrectScroll();
+
+          // Smooth scrolling starts on the next frame
+          if (smooth) {
+            return;
+          }
         }
         scrollTarget.scrollTo({
           behavior: isDynamicSize ? "instant" : behavior,
@@ -224,6 +274,7 @@ export function useScrollToIndex({
     [
       cancelScroll,
       direction,
+      element,
       isDynamicSize,
       isVertical,
       scheduleCorrectScroll,

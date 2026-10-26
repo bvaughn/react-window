@@ -35,15 +35,18 @@ function Example({
     prevScrollTopRef.current = scrollTop;
   };
 
-  useEffect(() => {
-    const element = listRef.current?.element;
-    if (element && isPinnedRef.current) {
-      element.scrollTo({ behavior: "smooth", top: element.scrollHeight });
-    }
-  }, [listRef, messages, rowHeight, typing]);
-
   // Render an extra row for each person who is currently typing
   const rowCount = messages.length + typing.length;
+
+  useEffect(() => {
+    if (isPinnedRef.current && rowCount > 0) {
+      listRef.current?.scrollToRow({
+        align: "end",
+        behavior: "smooth",
+        index: rowCount - 1
+      });
+    }
+  }, [listRef, messages, rowCount, typing]);
 
   return (
     <List

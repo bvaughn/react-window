@@ -16,8 +16,8 @@
           "content": "<p>Scrolls the list so that the specified row is visible.\nLike the browser's <code>scrollIntoView</code>, items are aligned within the CSS <code>scroll-padding</code> of the element being scrolled\n(e.g. <code>scroll-padding-top</code> can leave room for a sticky header).\nDynamic row heights are measured after rendering;\nContent that resizes later may require another scrollToRow call.</p>\n"
         },
         {
-          "content": "<p><code>behavior</code> &quot;smooth&quot; is ignored for dynamic height lists;\n<code>scrollToRow</code> is instant as it requires rows to be lazily measured</p>\n",
-          "intent": "warning"
+          "content": "<p>For dynamic height lists, &quot;smooth&quot; scrolling is animated by the list (rather than the browser)\nso that the destination can be corrected as rows are measured along the way.</p>\n",
+          "intent": "primary"
         },
         {
           "content": "<ul>\n<li><code>align</code> Determines the vertical alignment of the element within the list</li>\n<li><code>behavior</code> Determines whether scrolling is instant or animates smoothly</li>\n<li><code>index</code> Index of the row to scroll to (0-based)</li>\n</ul>\n"

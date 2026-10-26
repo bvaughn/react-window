@@ -880,9 +880,13 @@ describe("List", () => {
               unmount();
               expect(cancelFrame).toHaveBeenCalledWith(42);
             } else {
-              now.mockReturnValue(1001);
-              act(() => frame?.(1001));
-              expect(requestFrame).toHaveBeenCalledTimes(1);
+              // The deadline starts on the first frame (frames are paused while the page is hidden)
+              now.mockReturnValue(5000);
+              act(() => frame?.(5000));
+              expect(requestFrame).toHaveBeenCalledTimes(2);
+              now.mockReturnValue(6001);
+              act(() => frame?.(6001));
+              expect(requestFrame).toHaveBeenCalledTimes(2);
             }
           } finally {
             unmount();
@@ -892,6 +896,103 @@ describe("List", () => {
           }
         }
       );
+
+      test("animates smooth scrolling towards the corrected destination", () => {
+        let frame: FrameRequestCallback | undefined;
+        const requestFrame = vi
+          .spyOn(window, "requestAnimationFrame")
+          .mockImplementation((callback) => {
+            frame = callback;
+            return 42;
+          });
+        const now = vi.spyOn(performance, "now").mockReturnValue(0);
+        onTestFinished(() => {
+          requestFrame.mockRestore();
+          now.mockRestore();
+        });
+        const listRef = createRef<ListImperativeAPI>();
+        function SmoothScrollExample() {
+          const rowHeight = useDynamicRowHeight({ defaultRowHeight: 25 });
+          return (
+            <List
+              defaultHeight={100}
+              listRef={listRef}
+              rowCount={100}
+              rowHeight={rowHeight}
+              rowComponent={RowComponent}
+              rowProps={EMPTY_OBJECT}
+            />
+          );
+        }
+        const { unmount } = render(<SmoothScrollExample />);
+        onTestFinished(unmount);
+
+        const listElement = listRef.current?.element;
+        assert(listElement, "List element not mounted");
+        Object.defineProperty(listElement, "scrollHeight", { value: 2500 });
+        Object.defineProperty(listElement, "clientHeight", { value: 100 });
+        const scrollTo = vi.mocked(HTMLElement.prototype.scrollTo);
+        scrollTo.mockClear();
+
+        act(() =>
+          listRef.current?.scrollToRow({ behavior: "smooth", index: 50 })
+        );
+        // Animation starts on the next frame
+        expect(scrollTo).not.toHaveBeenCalled();
+
+        act(() => frame?.(0));
+        expect(listElement.scrollTop).toBe(0);
+
+        now.mockReturnValue(250);
+        act(() => frame?.(250));
+        const midway = listElement.scrollTop;
+        expect(midway).toBeGreaterThan(0);
+
+        now.mockReturnValue(500);
+        act(() => frame?.(500));
+        expect(listElement.scrollTop).toBeGreaterThan(midway);
+        for (const [options] of scrollTo.mock.calls) {
+          expect(options).toMatchObject({ behavior: "instant" });
+        }
+      });
+
+      test("does not animate smooth scrolling while the page is hidden", () => {
+        const requestFrame = vi
+          .spyOn(window, "requestAnimationFrame")
+          .mockImplementation(() => 42);
+        const visibilityState = vi
+          .spyOn(document, "visibilityState", "get")
+          .mockReturnValue("hidden");
+        onTestFinished(() => {
+          requestFrame.mockRestore();
+          visibilityState.mockRestore();
+        });
+        const listRef = createRef<ListImperativeAPI>();
+        function SmoothScrollExample() {
+          const rowHeight = useDynamicRowHeight({ defaultRowHeight: 25 });
+          return (
+            <List
+              listRef={listRef}
+              rowCount={100}
+              rowHeight={rowHeight}
+              rowComponent={RowComponent}
+              rowProps={EMPTY_OBJECT}
+            />
+          );
+        }
+        const { unmount } = render(<SmoothScrollExample />);
+        onTestFinished(unmount);
+        const scrollTo = vi.mocked(HTMLElement.prototype.scrollTo);
+        scrollTo.mockClear();
+
+        act(() =>
+          listRef.current?.scrollToRow({ behavior: "smooth", index: 50 })
+        );
+        expect(scrollTo).toHaveBeenCalledTimes(1);
+        expect(scrollTo).toHaveBeenLastCalledWith(
+          expect.objectContaining({ behavior: "instant" })
+        );
+      });
 
       test("schedules pending correction on the list's own window", () => {
         const { element, otherWindow } = createElementInOtherWindow();
