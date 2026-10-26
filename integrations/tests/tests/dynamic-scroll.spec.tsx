@@ -102,6 +102,19 @@ test("reaches the last row", async ({ page }) => {
   expect(Math.abs(rect!.bottom - 200)).toBeLessThanOrEqual(1);
 });
 
+test("smooth scrolling animates to the corrected position", async ({
+  page
+}) => {
+  await page.goto(
+    `${HOST}/list-dynamic?estimate=10&align=start&behavior=smooth`
+  );
+  await page.getByText("Jump", { exact: true }).click();
+  await settle(page);
+  const rect = await bounds(page, 250);
+  expect(rect).not.toBeNull();
+  expect(Math.abs(rect!.top)).toBeLessThanOrEqual(1);
+});
+
 test("scrolls to the last row without measuring additional children", async ({
   page
 }) => {
