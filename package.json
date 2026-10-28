@@ -51,8 +51,14 @@
     "**/*": "pnpm exec prettier --write --ignore-unknown"
   },
   "peerDependencies": {
+    "@types/react": "^18.2.6 || ^19.0.0",
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@csstools/postcss-oklab-function": "^4.0.11",
