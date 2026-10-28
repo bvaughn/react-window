@@ -3,8 +3,8 @@ import json from "../../../../public/data/group-chat.json";
 
 export type ChatMessage = (typeof json)[number];
 
-const CHARACTERS_PER_SECOND = 6;
-const MIN_GAP = 400;
+const CHARACTERS_PER_SECOND = 9;
+const MIN_GAP = 300;
 
 type ScheduledMessage = {
   message: ChatMessage;
@@ -22,8 +22,8 @@ function createSchedule(messages: ChatMessage[]): ScheduledMessage[] {
 
   messages.forEach((message, index) => {
     const variance = ((index * 37) % 7) / 6;
-    const thinkingDuration = 400 + variance * 800;
-    const desiredGap = 700 + variance * 1500;
+    const thinkingDuration = 300 + variance * 500;
+    const desiredGap = 500 + variance * 1000;
     const typingDuration = (message.text.length * 1000) / CHARACTERS_PER_SECOND;
 
     const prevSentAt = schedule[index - 1]?.sentAt ?? 0;

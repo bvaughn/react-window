@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.6.0 (unreleased)
+
+- Lists with dynamic row heights keep the rows on screen in place when rows above them change height, e.g. as rows are measured while scrolling up (such as through a chat log), or when a row's content resizes. The scroll position is adjusted in the same frame, so rows never visibly jump. It isn't adjusted while the list is scrolled to the end or while `scrollToRow` is scrolling. While the user is touch scrolling, the rows are shifted instead (iOS ignores changes to the scroll position during touch scrolling), and the scroll position is adjusted once scrolling stops.
+- Add `anchorRow` method to the `List` imperative API (and `anchorItem` to `useVirtualizer`) for keeping a specific row where it is on screen while its height changes, e.g. when the user expands or collapses it. Call it before making the change; the row is kept in place for the specified `duration` (1 second by default). (By default, the list keeps the first visible row that didn't change height in place, so a row at the top of the viewport that grows would extend upward.)
+
 ## 2.5.2
 
 - Add `displayName` to `List` and `Grid` (e.g. for React DevTools and error messages in minified builds). The names are set in a way that does not prevent bundlers from tree shaking unused components.

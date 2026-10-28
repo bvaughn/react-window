@@ -1,4 +1,10 @@
-import { useCallback, useRef, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useRef,
+  useState,
+  type CSSProperties,
+  type RefObject
+} from "react";
 import { useIsHydrating } from "../hooks/useIsHydrating";
 import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { useResizeObserver } from "../hooks/useResizeObserver";
@@ -25,7 +31,9 @@ import { getOffsetForIndex } from "./getOffsetForIndex";
 import { getStartStopIndices as getStartStopIndicesUtil } from "./getStartStopIndices";
 import type { Direction, SizeFunction } from "./types";
 import { useCachedBounds } from "./useCachedBounds";
+import { useMaintainScrollPosition } from "./useMaintainScrollPosition";
 import { useItemSize } from "./useItemSize";
+import type { PendingScroll } from "./useScrollToIndex";
 
 export function useVirtualizer<Props extends object>({
   containerElement,
@@ -37,8 +45,10 @@ export function useVirtualizer<Props extends object>({
   itemCount,
   itemProps,
   itemSize: itemSizeProp,
+  maintainScrollPosition = false,
   onResize,
   overscanCount,
+  pendingScroll,
   scrollElement
 }: {
   containerElement: HTMLElement | null;
@@ -50,6 +60,7 @@ export function useVirtualizer<Props extends object>({
   itemCount: number;
   itemProps: Props;
   itemSize: number | string | SizeFunction<Props>;
+  maintainScrollPosition?: boolean;
   onResize:
     | ((
         size: { height: number; width: number },
@@ -57,6 +68,7 @@ export function useVirtualizer<Props extends object>({
       ) => void)
     | undefined;
   overscanCount: number;
+  pendingScroll?: RefObject<PendingScroll | null>;
   scrollElement?: ScrollElement | undefined;
 }) {
   // Lists that scroll with an outer element (e.g. the page) render at their full size;
@@ -106,10 +118,23 @@ export function useVirtualizer<Props extends object>({
     }
   }, [height, onResize, width]);
 
-  const cachedBounds = useCachedBounds({
+  const rawCachedBounds = useCachedBounds({
     itemCount,
     itemProps,
     itemSize
+  });
+
+  const { anchorItem, cachedBounds, deviation } = useMaintainScrollPosition({
+    containerElement,
+    direction,
+    enabled: maintainScrollPosition,
+    isRtl,
+    isScrollElementMode,
+    itemCount,
+    itemSize,
+    pendingScroll,
+    rawCachedBounds,
+    scrollTarget
   });
 
   // Server-rendered HTML can't be scrolled, so the server (and hydration) render always starts at offset 0;
@@ -156,12 +181,16 @@ export function useVirtualizer<Props extends object>({
 
   const getEstimatedSize = useCallback(
     () =>
-      getEstimatedSizeUtil({
-        cachedBounds,
-        itemCount,
-        itemSize
-      }),
-    [cachedBounds, itemCount, itemSize]
+      // The content may shrink below the shift while items are shifted (e.g. if it's replaced during a touch)
+      Math.max(
+        0,
+        getEstimatedSizeUtil({
+          cachedBounds: rawCachedBounds,
+          itemCount,
+          itemSize
+        }) - deviation
+      ),
+    [deviation, itemCount, itemSize, rawCachedBounds]
   );
 
   const getStartStopIndices = useCallback(
@@ -571,6 +600,7 @@ export function useVirtualizer<Props extends object>({
     getCellBounds,
     getEstimatedSize,
     getScrollPositionForIndex,
+    anchorItem,
     scrollTarget,
     startIndexOverscan,
     startIndexVisible,

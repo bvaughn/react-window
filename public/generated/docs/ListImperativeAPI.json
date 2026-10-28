@@ -13,6 +13,22 @@
     {
       "description": [
         {
+          "content": "<p>Keeps the specified row where it is on screen through changes in row heights, e.g. when the user expands or collapses it.\nCall this before making the change.\nBy default, the list keeps the first visible row that didn't change height in place,\nso a row at the top of the list that grows would push the rows above it out of view.</p>\n"
+        },
+        {
+          "content": "<p>Ignored if the row isn't visible when row heights change; only applies to dynamic row heights.</p>\n",
+          "intent": "primary"
+        },
+        {
+          "content": "<ul>\n<li><code>duration</code> How long (in milliseconds) to keep the row in place; defaults to 1000</li>\n<li><code>index</code> Index of the row to keep in place (0-based)</li>\n</ul>\n"
+        }
+      ],
+      "html": "<div><span class=\"tok-labelName\">anchorRow</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">(</span><span class=\"tok-punctuation\">{</span><span class=\"\"></span></div>\n<div><span class=\"\">    </span><span class=\"tok-propertyName\">duration</span><span class=\"tok-punctuation\">,</span><span class=\"\"></span></div>\n<div><span class=\"\">    </span><span class=\"tok-propertyName\">index</span><span class=\"\"></span></div>\n<div><span class=\"\">  </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-punctuation\">{</span><span class=\"\"></span></div>\n<div><span class=\"\">    </span><span class=\"tok-propertyName tok-definition\">duration</span><span class=\"\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"></span></div>\n<div><span class=\"\">    </span><span class=\"tok-propertyName tok-definition\">index</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-typeName\">number</span><span class=\"tok-punctuation\">;</span><span class=\"\"></span></div>\n<div><span class=\"\">  </span><span class=\"tok-punctuation\">}</span><span class=\"tok-punctuation\">)</span><span class=\"\"> </span><span class=\"tok-punctuation\">=&#62;</span><span class=\"\"> </span><span class=\"tok-keyword\">void</span><span class=\"tok-punctuation\">;</span></div>",
+      "name": "anchorRow"
+    },
+    {
+      "description": [
+        {
           "content": "<p>Scrolls the list so that the specified row is visible.\nLike the browser's <code>scrollIntoView</code>, items are aligned within the CSS <code>scroll-padding</code> of the element being scrolled\n(e.g. <code>scroll-padding-top</code> can leave room for a sticky header).\nDynamic row heights are measured after rendering;\nContent that resizes later may require another scrollToRow call.</p>\n"
         },
         {

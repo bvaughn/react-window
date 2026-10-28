@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { getItemIndex } from "../../core/itemIndex";
 import { useIsRtl } from "../../core/useIsRtl";
-import { useScrollToIndex } from "../../core/useScrollToIndex";
+import {
+  useScrollToIndex,
+  type PendingScroll
+} from "../../core/useScrollToIndex";
 import { useVirtualizer as useVirtualizerCore } from "../../core/useVirtualizer";
 import { useIsomorphicLayoutEffect } from "../../hooks/useIsomorphicLayoutEffect";
 import { assert } from "../../utils/assert";
@@ -49,7 +52,9 @@ export function useVirtualizer({
 
   const isRtl = useIsRtl(element, dir);
 
+  const pendingScroll = useRef<PendingScroll | null>(null);
   const {
+    anchorItem,
     getCellBounds,
     getEstimatedSize,
     scrollTarget,
@@ -67,8 +72,10 @@ export function useVirtualizer({
     itemCount: count,
     itemProps: ITEM_PROPS,
     itemSize,
+    maintainScrollPosition: isDynamicSize,
     onResize: undefined,
     overscanCount,
+    pendingScroll,
     scrollElement
   });
 
@@ -156,6 +163,7 @@ export function useVirtualizer({
     isDynamicSize,
     itemCount: count,
     itemElements: itemElementsRef,
+    pendingScroll,
     scrollTarget,
     getScrollPositionForIndex
   });
@@ -194,6 +202,7 @@ export function useVirtualizer({
 
   return useMemo(
     () => ({
+      anchorItem,
       items,
       measureElement,
       scrollToIndex,
@@ -204,6 +213,7 @@ export function useVirtualizer({
       }
     }),
     [
+      anchorItem,
       items,
       measureElement,
       scrollToIndex,

@@ -81,6 +81,10 @@ export type VirtualItem = {
 
   /**
    * Offset (in pixels) of the item from the start of the element's content.
+   *
+   * ℹ️ With dynamic item sizes, offsets may be shifted while the user is touch scrolling
+   * (to keep the items on screen in place when items before them change size),
+   * so items near the start of the content may briefly have negative offsets.
    */
   offset: number;
 
@@ -91,6 +95,18 @@ export type VirtualItem = {
 };
 
 export type Virtualizer = {
+  /**
+   * Keeps the specified item where it is on screen through changes in item sizes, e.g. when the user expands or collapses it;
+   * call this before making the change.
+   * See the `anchorRow` method of `List` for more information.
+   *
+   * @param duration How long (in milliseconds) to keep the item in place; defaults to 1000
+   * @param index Index of the item to keep in place (0-based)
+   *
+   * @throws RangeError if an invalid index is provided
+   */
+  anchorItem: (options: { duration?: number; index: number }) => void;
+
   /**
    * Items to render (including overscan).
    */

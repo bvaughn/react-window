@@ -11,13 +11,26 @@ import {
 import { getItemIndex } from "./itemIndex";
 import type { Bounds, Direction } from "./types";
 
-const CORRECTION_DURATION = 1000;
-const SMOOTH_SCROLL_DURATION = 500;
+export const CORRECTION_DURATION = 1000;
+export const SMOOTH_SCROLL_DURATION = 500;
 
 // Starting at full speed keeps back-to-back scrolls (e.g. as new rows are appended) from stalling
 function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
 }
+
+export type PendingScroll = {
+  align: Align;
+  index: number;
+  smooth: boolean;
+  stableFrames: number;
+  // Set on the first frame, since frames are paused while the page is hidden
+  animation?: {
+    deadline: number;
+    startOffset: number;
+    startTime: number;
+  };
+};
 
 /**
  * Scrolls an item into view.
@@ -36,6 +49,7 @@ export function useScrollToIndex({
   isDynamicSize,
   itemCount,
   itemElements,
+  pendingScroll,
   scrollTarget,
   getScrollPositionForIndex
 }: {
@@ -45,6 +59,8 @@ export function useScrollToIndex({
   isDynamicSize: boolean;
   itemCount: number;
   itemElements: RefObject<Element[]>;
+  // Owned by the caller so that other code (e.g. scroll anchoring) can tell when a scroll is pending
+  pendingScroll: RefObject<PendingScroll | null>;
   scrollTarget: ScrollTarget | null;
   getScrollPositionForIndex: (options: {
     align?: Align;
@@ -56,19 +72,6 @@ export function useScrollToIndex({
   index: number;
 }) => void {
   const isVertical = direction === "vertical";
-  const pendingScroll = useRef<{
-    align: Align;
-    index: number;
-    smooth: boolean;
-    stableFrames: number;
-    // Set on the first frame, since frames are paused while the page is hidden
-    animation?: {
-      deadline: number;
-      startOffset: number;
-      startTime: number;
-    };
-  } | null>(null);
-
   // Track the window that scheduled the frame so it can be cancelled there.
   const scrollFrame = useRef<{ id: number; view: Window } | undefined>(
     undefined
@@ -277,6 +280,7 @@ export function useScrollToIndex({
       element,
       isDynamicSize,
       isVertical,
+      pendingScroll,
       scheduleCorrectScroll,
       getScrollPositionForIndex
     ]

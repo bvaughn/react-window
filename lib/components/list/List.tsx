@@ -13,7 +13,10 @@ import {
   type ReactNode
 } from "react";
 import { DATA_ATTRIBUTE_LIST_INDEX } from "../../core/itemIndex";
-import { useScrollToIndex } from "../../core/useScrollToIndex";
+import {
+  useScrollToIndex,
+  type PendingScroll
+} from "../../core/useScrollToIndex";
 import { useVirtualizer } from "../../core/useVirtualizer";
 import { useAfterResizeObserverNotifications } from "../../hooks/useAfterResizeObserverNotifications";
 import { useIsHydrating } from "../../hooks/useIsHydrating";
@@ -92,7 +95,9 @@ function ListComponent<
     enabled: isFlowLayout
   });
 
+  const pendingScroll = useRef<PendingScroll | null>(null);
   const {
+    anchorItem,
     getCellBounds,
     getEstimatedSize,
     scrollTarget,
@@ -110,8 +115,10 @@ function ListComponent<
     itemCount: rowCount,
     itemProps: rowProps,
     itemSize: rowHeight,
+    maintainScrollPosition: isDynamicRowHeight,
     onResize,
     overscanCount,
+    pendingScroll,
     scrollElement
   });
 
@@ -123,6 +130,7 @@ function ListComponent<
     isDynamicSize: isDynamicRowHeight,
     itemCount: rowCount,
     itemElements: rowElements,
+    pendingScroll,
     scrollTarget,
     getScrollPositionForIndex
   });
@@ -130,12 +138,13 @@ function ListComponent<
   useImperativeHandle(
     listRef,
     () => ({
+      anchorRow: anchorItem,
       get element() {
         return element;
       },
       scrollToRow
     }),
-    [element, scrollToRow]
+    [anchorItem, element, scrollToRow]
   );
 
   useIsomorphicLayoutEffect(() => {

@@ -77,6 +77,13 @@ Additionally it will receive prop values passed to <code>rowProps</code>.</p>
 <li>dynamic row height cache returned by the <code>useDynamicRowHeight</code> hook</li>
 </ul>
 <p>ℹ️ Percentage heights can&#39;t be resolved during server rendering unless a <code>defaultHeight</code> (or a pixel height via the <code>style</code> prop) is specified.</p>
+<p>ℹ️ With dynamic row heights, the list keeps the rows on screen in place when rows above them change height
+(e.g. as they are measured while scrolling up, or when their content resizes) by adjusting the scroll position.
+The rows kept in place are those after the first visible row that didn&#39;t change height,
+so rows revealed by scrolling up move out of the way as they&#39;re measured.
+To keep a specific row in place instead (e.g. one the user is expanding), call <code>anchorRow</code> before changing it.
+The scroll position is not adjusted while the list is scrolled to the end (e.g. a chat pinned to the bottom)
+or while <code>scrollToRow</code> is scrolling to a row.</p>
 <p>⚠️ Dynamic row heights are not as efficient as predetermined sizes.
 It&#39;s recommended to provide your own height values if they can be determined ahead of time.</p>
 </td>

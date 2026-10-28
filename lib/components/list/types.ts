@@ -69,6 +69,22 @@ export type ListProps<
    */
   listRef?: Ref<{
     /**
+     * Keeps the specified row where it is on screen through changes in row heights, e.g. when the user expands or collapses it.
+     * Call this before making the change.
+     *
+     * By default, the list keeps the first visible row that didn't change height in place,
+     * so a row at the top of the list that grows would push the rows above it out of view.
+     *
+     * ℹ️ Ignored if the row isn't visible when row heights change; only applies to dynamic row heights.
+     *
+     * @param duration How long (in milliseconds) to keep the row in place; defaults to 1000
+     * @param index Index of the row to keep in place (0-based)
+     *
+     * @throws RangeError if an invalid row index is provided
+     */
+    anchorRow(config: { duration?: number; index: number }): void;
+
+    /**
      * Outermost HTML element for the list if mounted and null if not mounted.
      */
     get element(): HTMLDivElement | null;
@@ -155,6 +171,14 @@ export type ListProps<
    * - dynamic row height cache returned by the `useDynamicRowHeight` hook
    *
    * ℹ️ Percentage heights can't be resolved during server rendering unless a `defaultHeight` (or a pixel height via the `style` prop) is specified.
+   *
+   * ℹ️ With dynamic row heights, the list keeps the rows on screen in place when rows above them change height
+   * (e.g. as they are measured while scrolling up, or when their content resizes) by adjusting the scroll position.
+   * The rows kept in place are those after the first visible row that didn't change height,
+   * so rows revealed by scrolling up move out of the way as they're measured.
+   * To keep a specific row in place instead (e.g. one the user is expanding), call `anchorRow` before changing it.
+   * The scroll position is not adjusted while the list is scrolled to the end (e.g. a chat pinned to the bottom)
+   * or while `scrollToRow` is scrolling to a row.
    *
    * ⚠️ Dynamic row heights are not as efficient as predetermined sizes.
    * It's recommended to provide your own height values if they can be determined ahead of time.
@@ -245,6 +269,28 @@ export type CachedBounds = Map<
  * ℹ️ The `useListRef` and `useListCallbackRef` hooks are exported for convenience in TypeScript projects.
  */
 export interface ListImperativeAPI {
+  /**
+   * Keeps the specified row where it is on screen through changes in row heights, e.g. when the user expands or collapses it.
+   * Call this before making the change.
+   *
+   * By default, the list keeps the first visible row that didn't change height in place,
+   * so a row at the top of the list that grows would push the rows above it out of view.
+   *
+   * ℹ️ Ignored if the row isn't visible when row heights change; only applies to dynamic row heights.
+   *
+   * @param duration How long (in milliseconds) to keep the row in place; defaults to 1000
+   * @param index Index of the row to keep in place (0-based)
+   *
+   * @throws RangeError if an invalid row index is provided
+   */
+  anchorRow: ({
+    duration,
+    index
+  }: {
+    duration?: number;
+    index: number;
+  }) => void;
+
   /**
    * Outermost HTML element for the list if mounted and null if not mounted.
    */
