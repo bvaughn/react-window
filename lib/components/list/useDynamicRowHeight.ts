@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type Key
+} from "react";
 import { useStableCallback } from "../../hooks/useStableCallback";
 import { getOwnerWindow } from "../../utils/getOwnerWindow";
 import { getResizeObserverClass } from "../../utils/getResizeObserverClass";
@@ -49,20 +56,25 @@ export function useDynamicRowHeight({
 }) {
   const [state, setState] = useState<{
     key: string | number | undefined;
+    // Heights of rows measured with a key (so that they follow their rows when rows are inserted or removed)
+    keyMap: Map<Key, number>;
+    // Initial heights, and heights of rows measured without a key
     map: Map<number, number>;
   }>(() => ({
     key,
+    keyMap: new Map(),
     map: createInitialMap(initialRowHeights)
   }));
 
   if (state.key !== key) {
     setState({
       key,
+      keyMap: new Map(),
       map: createInitialMap(initialRowHeights)
     });
   }
 
-  const { map } = state;
+  const { keyMap, map } = state;
 
   const getAverageRowHeight = useCallback(() => {
     let totalHeight = 0;
@@ -70,17 +82,21 @@ export function useDynamicRowHeight({
     map.forEach((height) => {
       totalHeight += height;
     });
+    keyMap.forEach((height) => {
+      totalHeight += height;
+    });
 
     if (totalHeight === 0) {
       return defaultRowHeight;
     }
 
-    return totalHeight / map.size;
-  }, [defaultRowHeight, map]);
+    return totalHeight / (map.size + keyMap.size);
+  }, [defaultRowHeight, keyMap, map]);
 
   const getRowHeight = useCallback(
-    (index: number) => {
-      const measuredHeight = map.get(index);
+    (index: number, key?: Key) => {
+      const measuredHeight =
+        (key !== undefined ? keyMap.get(key) : undefined) ?? map.get(index);
       if (measuredHeight !== undefined) {
         return measuredHeight;
       }
@@ -89,11 +105,25 @@ export function useDynamicRowHeight({
       // store them as measurements or include them in the measured average.
       return defaultRowHeight;
     },
-    [defaultRowHeight, map]
+    [defaultRowHeight, keyMap, map]
   );
 
-  const setRowHeight = useCallback((index: number, size: number) => {
+  const setRowHeight = useCallback((index: number, size: number, key?: Key) => {
     setState((prevState) => {
+      if (key !== undefined) {
+        if (prevState.keyMap.get(key) === size) {
+          return prevState;
+        }
+
+        const clonedMap = new Map(prevState.keyMap);
+        clonedMap.set(key, size);
+
+        return {
+          ...prevState,
+          keyMap: clonedMap
+        };
+      }
+
       if (prevState.map.get(index) === size) {
         return prevState;
       }
@@ -107,6 +137,11 @@ export function useDynamicRowHeight({
       };
     });
   }, []);
+
+  // Provided by the list each time it observes rows; returns the key of the row at an index
+  const getRowKeyRef = useRef<((index: number) => Key | undefined) | undefined>(
+    undefined
+  );
 
   const resizeObserverCallback = useStableCallback(
     (entries: ResizeObserverEntry[]) => {
@@ -130,7 +165,7 @@ export function useDynamicRowHeight({
           return;
         }
 
-        setRowHeight(index, height);
+        setRowHeight(index, height, getRowKeyRef.current?.(index));
       });
     }
   );
@@ -151,7 +186,12 @@ export function useDynamicRowHeight({
   );
 
   const observeRowElements = useCallback(
-    (elements: Element[] | NodeListOf<Element>) => {
+    (
+      elements: Element[] | NodeListOf<Element>,
+      getRowKey?: (index: number) => Key | undefined
+    ) => {
+      getRowKeyRef.current = getRowKey;
+
       const observed: [Element, ResizeObserver][] = [];
 
       elements.forEach((element) => {

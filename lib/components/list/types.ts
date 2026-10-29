@@ -2,17 +2,32 @@ import type {
   ComponentProps,
   CSSProperties,
   HTMLAttributes,
+  Key,
   ReactElement,
   ReactNode,
   Ref
 } from "react";
 import type { TagNames } from "../../types";
 
+/**
+ * Cache of measured row heights (see `useDynamicRowHeight`).
+ *
+ * Heights are stored by row key when one is provided (e.g. by the `rowKey` prop of `List`),
+ * so that they follow their rows when rows are inserted or removed; otherwise they're stored by index.
+ */
 export type DynamicRowHeight = {
   getAverageRowHeight(): number;
-  getRowHeight(index: number): number | undefined;
-  setRowHeight(index: number, size: number): void;
-  observeRowElements: (elements: Element[] | NodeListOf<Element>) => () => void;
+  getRowHeight(index: number, key?: Key): number | undefined;
+  setRowHeight(index: number, size: number, key?: Key): void;
+  /**
+   * Measures the specified elements (each must specify its index with a data attribute) whenever they resize.
+   *
+   * @param getRowKey Returns the key of the row at an index (at the time it's measured)
+   */
+  observeRowElements: (
+    elements: Element[] | NodeListOf<Element>,
+    getRowKey?: (index: number) => Key | undefined
+  ) => () => void;
 };
 
 type ForbiddenKeys = "ariaAttributes" | "index" | "style";
@@ -196,6 +211,16 @@ export type ListProps<
    * ℹ️ Custom keys can ensure better UX for sortable or filterable lists,
    * particularly if your row components are stateful.
    * Refer to the [React documentation](https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key) for more info.
+   *
+   * With dynamic row heights (see `useDynamicRowHeight`), measured heights are stored by key,
+   * and the rows on screen are kept in place when rows are inserted or removed above them
+   * (e.g. when older messages are loaded at the top of a chat),
+   * so don't adjust the scroll position yourself after inserting rows.
+   *
+   * ⚠️ This function is called for many rows (e.g. to calculate row positions), so it should be cheap,
+   * like reading an id: `(index, { items }) => items[index].id`.
+   * Keys must be stable: a row's key must not change when other rows are inserted or removed,
+   * so don't use the index or a random value.
    *
    * ⚠️ This prop cannot be auto-memoized because it is called during render.
    * It is important to always `useCallback` for this prop; do not use an inline function.

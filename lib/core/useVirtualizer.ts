@@ -3,6 +3,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type Key,
   type RefObject
 } from "react";
 import { useIsHydrating } from "../hooks/useIsHydrating";
@@ -41,6 +42,7 @@ export function useVirtualizer<Props extends object>({
   defaultContainerSize = 0,
   defaultScrollOffset = 0,
   direction,
+  getItemKey,
   isRtl = false,
   itemCount,
   itemProps,
@@ -56,6 +58,7 @@ export function useVirtualizer<Props extends object>({
   defaultContainerSize?: number;
   defaultScrollOffset?: number;
   direction: Direction;
+  getItemKey?: ((index: number) => Key) | undefined;
   isRtl?: boolean;
   itemCount: number;
   itemProps: Props;
@@ -124,10 +127,17 @@ export function useVirtualizer<Props extends object>({
     itemSize
   });
 
-  const { anchorItem, cachedBounds, deviation } = useMaintainScrollPosition({
+  const {
+    anchorItem,
+    cachedBounds,
+    correctionRenderCount,
+    deviation,
+    recordRenderedKeys
+  } = useMaintainScrollPosition({
     containerElement,
     direction,
     enabled: maintainScrollPosition,
+    getItemKey,
     isRtl,
     isScrollElementMode,
     itemCount,
@@ -178,6 +188,12 @@ export function useVirtualizer<Props extends object>({
     stopIndexVisible: Math.min(itemCount - 1, indices.stopIndexVisible),
     stopIndexOverscan: Math.min(itemCount - 1, indices.stopIndexOverscan)
   };
+
+  // Keys of the rendered items, so that items can be found again after items are inserted or removed.
+  // This effect must run after the ones (in useMaintainScrollPosition) that keep items in place.
+  useIsomorphicLayoutEffect(() => {
+    recordRenderedKeys(startIndexOverscan, stopIndexOverscan);
+  });
 
   const getEstimatedSize = useCallback(
     () =>
@@ -306,6 +322,8 @@ export function useVirtualizer<Props extends object>({
     cachedBounds,
     containerElement,
     containerSize,
+    // The scroll position may have been corrected after re-rendering (see useMaintainScrollPosition)
+    correctionRenderCount,
     direction,
     getStartStopIndices,
     initialScrollOffset,

@@ -178,6 +178,14 @@ This prop can provide a custom <code>key</code> value.</p>
 <p>ℹ️ Custom keys can ensure better UX for sortable or filterable lists,
 particularly if your row components are stateful.
 Refer to the <a href="https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key">React documentation</a> for more info.</p>
+<p>With dynamic row heights (see <code>useDynamicRowHeight</code>), measured heights are stored by key,
+and the rows on screen are kept in place when rows are inserted or removed above them
+(e.g. when older messages are loaded at the top of a chat),
+so don&#39;t adjust the scroll position yourself after inserting rows.</p>
+<p>⚠️ This function is called for many rows (e.g. to calculate row positions), so it should be cheap,
+like reading an id: <code>(index, { items }) =&gt; items[index].id</code>.
+Keys must be stable: a row&#39;s key must not change when other rows are inserted or removed,
+so don&#39;t use the index or a random value.</p>
 <p>⚠️ This prop cannot be auto-memoized because it is called during render.
 It is important to always <code>useCallback</code> for this prop; do not use an inline function.</p>
 </td>

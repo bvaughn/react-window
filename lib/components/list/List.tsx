@@ -63,16 +63,22 @@ function ListComponent<
 
   const rowHeight = useMemo(() => {
     if (isDynamicRowHeight) {
-      return (index: number) => {
+      // Measured heights are stored by key (if provided) so that they follow their rows
+      return (index: number, rowProps: RowProps) => {
         return (
-          rowHeightProp.getRowHeight(index) ??
+          rowHeightProp.getRowHeight(index, rowKey?.(index, rowProps)) ??
           rowHeightProp.getAverageRowHeight()
         );
       };
     }
 
     return rowHeightProp;
-  }, [isDynamicRowHeight, rowHeightProp]);
+  }, [isDynamicRowHeight, rowHeightProp, rowKey]);
+
+  const getRowKey = useMemo(
+    () => (rowKey ? (index: number) => rowKey(index, rowProps) : undefined),
+    [rowKey, rowProps]
+  );
 
   // Server-rendered rows with dynamic heights haven't been measured yet, so absolutely positioning them
   // (based on estimated heights) would cause them to overlap or leave gaps until after hydration.
@@ -112,6 +118,7 @@ function ListComponent<
     defaultContainerSize: defaultHeight,
     defaultScrollOffset,
     direction: "vertical",
+    getItemKey: getRowKey,
     itemCount: rowCount,
     itemProps: rowProps,
     itemSize: rowHeight,
@@ -173,11 +180,12 @@ function ListComponent<
     rowElements.current = rows;
 
     if (isDynamicRowHeight) {
-      return rowHeightProp.observeRowElements(rows);
+      return rowHeightProp.observeRowElements(rows, getRowKey);
     }
   }, [
     RowComponent,
     element,
+    getRowKey,
     isDynamicRowHeight,
     rowCount,
     rowHeightProp,

@@ -262,6 +262,94 @@ describe("useDynamicRowHeight", () => {
     });
   });
 
+  describe("keys", () => {
+    test("stores heights by key when one is provided", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({ defaultRowHeight: 100 })
+      );
+
+      act(() => {
+        result.current.setRowHeight(0, 15, "a");
+        result.current.setRowHeight(1, 20, "b");
+      });
+
+      // Rows keep their heights when they move to another index
+      expect(result.current.getRowHeight(5, "a")).toBe(15);
+      expect(result.current.getRowHeight(0, "b")).toBe(20);
+      expect(result.current.getRowHeight(0, "c")).toBe(100);
+      // Heights stored by key aren't stored by index
+      expect(result.current.getRowHeight(0)).toBe(100);
+    });
+
+    test("includes heights stored by key in the average", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({ defaultRowHeight: 100 })
+      );
+
+      act(() => {
+        result.current.setRowHeight(0, 20, "a");
+        result.current.setRowHeight(1, 40);
+      });
+      expect(result.current.getAverageRowHeight()).toBe(30);
+    });
+
+    test("falls back to initial heights (by index) for rows that haven't been measured", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({
+          defaultRowHeight: 100,
+          initialRowHeights: [10, 20]
+        })
+      );
+
+      expect(result.current.getRowHeight(1, "b")).toBe(20);
+      act(() => {
+        result.current.setRowHeight(1, 25, "b");
+      });
+      expect(result.current.getRowHeight(1, "b")).toBe(25);
+    });
+
+    test("resets when key changes", () => {
+      const { result, rerender } = renderHook((key: string = "a") =>
+        useDynamicRowHeight({ defaultRowHeight: 100, key })
+      );
+
+      act(() => {
+        result.current.setRowHeight(0, 10, "row");
+      });
+      expect(result.current.getRowHeight(0, "row")).toBe(10);
+
+      rerender("b");
+      expect(result.current.getRowHeight(0, "row")).toBe(100);
+    });
+
+    test("stores measured heights by the key of the row at the time it's measured", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({ defaultRowHeight: 100 })
+      );
+
+      const element = document.createElement("div");
+      element.setAttribute(DATA_ATTRIBUTE_LIST_INDEX, "0");
+      let keys = ["a", "b"];
+
+      act(() => {
+        result.current.observeRowElements([element], (index) => keys[index]);
+      });
+      act(() => {
+        setElementSize({ element, width: 100, height: 20 });
+      });
+      expect(result.current.getRowHeight(0, "a")).toBe(20);
+
+      // A row was inserted before the observed one
+      keys = ["c", "a"];
+      element.setAttribute(DATA_ATTRIBUTE_LIST_INDEX, "1");
+      act(() => {
+        setElementSize({ element, width: 100, height: 30 });
+      });
+      expect(result.current.getRowHeight(1, "a")).toBe(30);
+      expect(result.current.getRowHeight(0, "c")).toBe(100);
+    });
+  });
+
   describe("observeRowElements", () => {
     function createRowElement(index: number) {
       const element = document.createElement("div");

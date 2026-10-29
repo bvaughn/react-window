@@ -29,6 +29,7 @@ export function useVirtualizer({
   dir,
   direction = "vertical",
   element,
+  getItemKey,
   itemSize: itemSizeOption,
   onItemsRendered,
   overscanCount = 3,
@@ -42,13 +43,25 @@ export function useVirtualizer({
 
   const itemSize = useMemo(() => {
     if (isDynamicRowHeight(itemSizeOption)) {
+      // Measured sizes are stored by key (if provided) so that they follow their items.
+      // (A new getItemKey must also create new sizes, so that items are kept in place when the items change.)
       return (index: number) =>
-        itemSizeOption.getRowHeight(index) ??
+        itemSizeOption.getRowHeight(index, getItemKey?.(index)) ??
         itemSizeOption.getAverageRowHeight();
     }
 
     return itemSizeOption;
-  }, [itemSizeOption]);
+  }, [getItemKey, itemSizeOption]);
+
+  // Items are observed once (when they mount), so measurements read the latest keys
+  const getItemKeyRef = useRef(getItemKey);
+  useIsomorphicLayoutEffect(() => {
+    getItemKeyRef.current = getItemKey;
+  }, [getItemKey]);
+  const getObservedItemKey = useCallback(
+    (index: number) => getItemKeyRef.current?.(index),
+    []
+  );
 
   const isRtl = useIsRtl(element, dir);
 
@@ -68,6 +81,7 @@ export function useVirtualizer({
     defaultContainerSize: defaultSize,
     defaultScrollOffset,
     direction,
+    getItemKey,
     isRtl: direction === "horizontal" && isRtl,
     itemCount: count,
     itemProps: ITEM_PROPS,
@@ -139,7 +153,7 @@ export function useVirtualizer({
 
         observed.unobserve.set(
           element,
-          dynamicRowHeight.observeRowElements([element])
+          dynamicRowHeight.observeRowElements([element], getObservedItemKey)
         );
       }
     });

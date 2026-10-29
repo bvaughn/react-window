@@ -1,4 +1,11 @@
-import { useMemo, useRef, useState, type RefObject } from "react";
+import {
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+  type Key,
+  type RefObject
+} from "react";
 import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { useStableCallback } from "../hooks/useStableCallback";
 import {
@@ -20,6 +27,12 @@ const TOUCH_SCROLL_IDLE_DURATION = 150;
 
 // In case the end of a touch is never reported (e.g. touches that are interrupted by the browser)
 const TOUCH_SCROLL_MAX_IDLE_DURATION = 5000;
+
+// How far beyond the change in item count to search for an item that may have moved (see findIndexByKey)
+const MAX_KEY_SEARCH_DISTANCE = 1000;
+
+// How many times to re-render to finish a correction the content wasn't large enough for (see scrollBy)
+const MAX_CORRECTION_RENDERS = 2;
 
 /**
  * Bounds with every item's offset shifted by the specified amount.
@@ -53,25 +66,173 @@ export function shiftCachedBounds(
 }
 
 /**
- * First item in the range that didn't change size (or the first item, if they all did).
+ * Current index of the item with the specified key, or undefined if it was removed.
+ *
+ * Items inserted or removed before an item move it by (up to) the change in item count,
+ * so the search starts at its previous index and works outward (in the direction it likely moved first);
+ * items may also have been inserted and removed at once (e.g. older items loaded and newer ones dropped),
+ * so the search continues a bit beyond that.
+ * (This is a fast path; see findAnchor for items that moved farther.)
  */
-function findUnchangedItem({
-  cachedBounds,
-  prevCachedBounds,
-  startIndex,
-  stopIndex
+export function findIndexByKey({
+  getItemKey,
+  itemCount,
+  key,
+  prevIndex,
+  prevItemCount
 }: {
-  cachedBounds: CachedBounds;
-  prevCachedBounds: CachedBounds;
-  startIndex: number;
-  stopIndex: number;
-}) {
-  for (let index = startIndex; index <= stopIndex; index++) {
-    if (cachedBounds.get(index).size === prevCachedBounds.get(index).size) {
+  getItemKey: (index: number) => Key;
+  itemCount: number;
+  key: Key;
+  prevIndex: number;
+  prevItemCount: number;
+}): number | undefined {
+  const countDelta = itemCount - prevItemCount;
+  const step = countDelta < 0 ? -1 : 1;
+  const maxDistance = Math.abs(countDelta) + MAX_KEY_SEARCH_DISTANCE;
+
+  for (let distance = 0; distance <= maxDistance; distance++) {
+    const index = prevIndex + distance * step;
+    if (index >= 0 && index < itemCount && getItemKey(index) === key) {
       return index;
     }
+
+    const oppositeIndex = prevIndex - distance * step;
+    if (
+      distance > 0 &&
+      oppositeIndex >= 0 &&
+      oppositeIndex < itemCount &&
+      getItemKey(oppositeIndex) === key
+    ) {
+      return oppositeIndex;
+    }
   }
-  return startIndex;
+
+  return undefined;
+}
+
+type Anchor = { index: number; isRequested: boolean; prevIndex: number };
+
+/**
+ * The item to keep in place when item sizes (or items) change, and where it was before the change;
+ * or undefined if none of the visible items can be found again.
+ *
+ * This is the requested item (if it's visible), otherwise the first visible item that didn't change size,
+ * otherwise the first visible item that still exists.
+ * With item keys, items are found again (by key) after items are inserted or removed before them.
+ *
+ * Also returns the requested item's current index if it was visible (undefined if it was removed),
+ * so that the request can follow it (or be cancelled).
+ */
+export function findAnchor({
+  cachedBounds,
+  getItemKey,
+  itemCount,
+  prevCachedBounds,
+  prevItemCount,
+  renderedKeys,
+  requestedIndex,
+  startIndexVisible,
+  stopIndexVisible
+}: {
+  cachedBounds: CachedBounds;
+  getItemKey: ((index: number) => Key) | undefined;
+  itemCount: number;
+  prevCachedBounds: CachedBounds;
+  prevItemCount: number;
+  // Keys of the items rendered before the change (by their previous index)
+  renderedKeys: ReadonlyMap<number, Key>;
+  requestedIndex: number | undefined;
+  startIndexVisible: number;
+  stopIndexVisible: number;
+}): {
+  anchor: Anchor | undefined;
+  requested: { index: number | undefined } | undefined;
+} {
+  // Built (once) for items that aren't found near their previous index, e.g. if they moved a long way
+  let indicesByKey: Map<Key, number> | undefined = undefined;
+  const getIndexFromMap = (getItemKey: (index: number) => Key, key: Key) => {
+    if (indicesByKey === undefined) {
+      indicesByKey = new Map();
+      for (let index = 0; index < itemCount; index++) {
+        const itemKey = getItemKey(index);
+        if (!indicesByKey.has(itemKey)) {
+          indicesByKey.set(itemKey, index);
+        }
+      }
+    }
+    return indicesByKey.get(key);
+  };
+
+  const getIndex = (prevIndex: number, canSearchAllItems: boolean) => {
+    if (getItemKey === undefined) {
+      return prevIndex < itemCount ? prevIndex : undefined;
+    }
+
+    // Items that weren't rendered can't be found again (and may have moved)
+    const key = renderedKeys.get(prevIndex);
+    if (key === undefined) {
+      return undefined;
+    }
+
+    const index = findIndexByKey({
+      getItemKey,
+      itemCount,
+      key,
+      prevIndex,
+      prevItemCount
+    });
+    return index === undefined && canSearchAllItems
+      ? getIndexFromMap(getItemKey, key)
+      : index;
+  };
+
+  let requested: { index: number | undefined } | undefined = undefined;
+  if (
+    requestedIndex !== undefined &&
+    requestedIndex >= startIndexVisible &&
+    requestedIndex <= stopIndexVisible
+  ) {
+    // The caller asked for this item specifically, so it's worth searching every item for
+    const index = getIndex(requestedIndex, true);
+    requested = { index };
+    if (index !== undefined) {
+      return {
+        anchor: { index, isRequested: true, prevIndex: requestedIndex },
+        requested
+      };
+    }
+  }
+
+  const findVisibleAnchor = (canSearchAllItems: boolean) => {
+    let anchor: Anchor | undefined = undefined;
+    for (
+      let prevIndex = startIndexVisible;
+      prevIndex <= stopIndexVisible;
+      prevIndex++
+    ) {
+      const index = getIndex(prevIndex, canSearchAllItems);
+      if (index === undefined) {
+        continue;
+      }
+
+      anchor ??= { index, isRequested: false, prevIndex };
+      if (
+        cachedBounds.get(index).size === prevCachedBounds.get(prevIndex).size
+      ) {
+        return { index, isRequested: false, prevIndex };
+      }
+    }
+    return anchor;
+  };
+
+  // Searching every item is only needed if none of the visible items are found nearby
+  // (e.g. a large batch was inserted and as many removed); keeping any visible item in place looks the same
+  const anchor =
+    findVisibleAnchor(false) ??
+    (getItemKey !== undefined ? findVisibleAnchor(true) : undefined);
+
+  return { anchor, requested };
 }
 
 /**
@@ -81,6 +242,9 @@ function findUnchangedItem({
  * The anchor is the first visible item that didn't change size, so that items revealed by scrolling
  * (which are measured once they're visible) move out of the way of the content that was already in view.
  * Corrections are made in the same commit that moves the items, so no frame shows them out of place.
+ *
+ * With item keys, the anchor is found again (by its key) after items are inserted or removed before it,
+ * and the view is kept in place even at the start or end of the content (e.g. when older messages are loaded).
  *
  * While the user is touch scrolling, iOS ignores (or fights) changes to the scroll position,
  * so corrections are applied by shifting the items instead (the returned bounds are shifted by the deviation);
@@ -94,6 +258,7 @@ export function useMaintainScrollPosition<Props extends object>({
   containerElement,
   direction,
   enabled,
+  getItemKey,
   isRtl,
   isScrollElementMode,
   itemCount,
@@ -105,6 +270,7 @@ export function useMaintainScrollPosition<Props extends object>({
   containerElement: HTMLElement | null;
   direction: Direction;
   enabled: boolean;
+  getItemKey: ((index: number) => Key) | undefined;
   isRtl: boolean;
   isScrollElementMode: boolean;
   itemCount: number;
@@ -137,6 +303,51 @@ export function useMaintainScrollPosition<Props extends object>({
   const requestedAnchorRef = useRef<{ deadline: number; index: number } | null>(
     null
   );
+  // Keys of the items rendered by the previous commit (see recordRenderedKeys)
+  const renderedKeysRef = useRef<Map<number, Key>>(new Map());
+
+  // Part of a correction that the content wasn't large enough for (see scrollBy)
+  const remainingCorrectionRef = useRef<{
+    delta: number;
+    renders: number;
+  } | null>(null);
+  // Incremented to re-render (so that the indices of the items to render are synced with the corrected scroll position)
+  const hasWarnedRef = useRef(false);
+  const [correctionRenderCount, forceRender] = useReducer(
+    (count: number) => count + 1,
+    0
+  );
+
+  /**
+   * Adjusts the scroll position by the specified amount.
+   *
+   * The content's size is estimated from the items measured so far, so after items are inserted before the ones
+   * in view (but before the newly visible items have been rendered) it may be too small to scroll far enough;
+   * the rest of the correction is made after re-rendering (before the browser paints).
+   */
+  const scrollBy = (target: ScrollTarget, delta: number, renders = 0) => {
+    const top = getScrollPosition(target, direction) + delta;
+    scrollTargetTo(target, { behavior: "instant", top });
+
+    // Re-rendering can make the content larger (but the scroll position can't go below 0)
+    const remainingDelta = top - getScrollPosition(target, direction);
+    if (remainingDelta >= 1 && renders < MAX_CORRECTION_RENDERS) {
+      remainingCorrectionRef.current = {
+        delta: remainingDelta,
+        renders: renders + 1
+      };
+      forceRender();
+    } else {
+      if (remainingDelta >= 1 && !hasWarnedRef.current) {
+        // Corrections usually fall short again until more items are measured, so only warn once
+        hasWarnedRef.current = true;
+        console.warn(
+          `react-window: Items could not be kept in place; the content was ${Math.round(remainingDelta)}px too small`
+        );
+      }
+      remainingCorrectionRef.current = null;
+    }
+  };
 
   useIsomorphicLayoutEffect(() => {
     const prevState = prevStateRef.current;
@@ -203,54 +414,77 @@ export function useMaintainScrollPosition<Props extends object>({
       overscanCount: 0
     });
 
-    let anchorIndex: number;
-    if (
-      requestedAnchorIndex !== undefined &&
-      requestedAnchorIndex >= startIndexVisible &&
-      requestedAnchorIndex <= stopIndexVisible &&
-      requestedAnchorIndex < itemCount
-    ) {
-      anchorIndex = requestedAnchorIndex;
-    } else {
+    const { anchor, requested } = findAnchor({
+      cachedBounds: rawCachedBounds,
+      getItemKey,
+      itemCount,
+      prevCachedBounds: prevState.cachedBounds,
+      prevItemCount: prevState.itemCount,
+      renderedKeys: renderedKeysRef.current,
+      requestedIndex: requestedAnchorIndex,
+      startIndexVisible,
+      stopIndexVisible
+    });
+    if (requested !== undefined && requestedAnchorRef.current !== null) {
+      if (requested.index === undefined) {
+        // The requested item was removed
+        requestedAnchorRef.current = null;
+      } else {
+        // The requested item may have moved (if items were inserted or removed before it)
+        requestedAnchorRef.current.index = requested.index;
+      }
+    }
+
+    if (anchor === undefined) {
+      return;
+    }
+
+    if (!anchor.isRequested && anchor.index === anchor.prevIndex) {
       // Lists scrolled to the end (e.g. pinned to the bottom) are left for the caller to manage
       const prevSize = getEstimatedSizeUtil({
         cachedBounds: prevState.cachedBounds,
         itemCount: prevState.itemCount,
         itemSize
       });
-      if (
-        scrollOffset <= 0 ||
-        viewportEnd >= prevSize - 1 ||
-        startIndexVisible >= itemCount
-      ) {
+      if (scrollOffset <= 0 || viewportEnd >= prevSize - 1) {
         return;
       }
+    }
 
-      anchorIndex = findUnchangedItem({
-        cachedBounds: rawCachedBounds,
-        prevCachedBounds: prevState.cachedBounds,
-        startIndex: startIndexVisible,
-        stopIndex: Math.min(stopIndexVisible, itemCount - 1)
-      });
+    if (anchor.index !== anchor.prevIndex && prevState.cachedBounds.size > 0) {
+      // Items were inserted or removed before the anchor; the content's size is estimated from the items measured
+      // so far, so measure as many as before (so that the content is large enough to stay in place, see scrollBy)
+      rawCachedBounds.get(
+        Math.min(
+          itemCount - 1,
+          prevState.cachedBounds.size - 1 + anchor.index - anchor.prevIndex
+        )
+      );
     }
 
     const delta =
-      rawCachedBounds.get(anchorIndex).scrollOffset -
-      prevState.cachedBounds.get(anchorIndex).scrollOffset;
+      rawCachedBounds.get(anchor.index).scrollOffset -
+      prevState.cachedBounds.get(anchor.prevIndex).scrollOffset;
     if (delta !== 0) {
       if (touchScrollRef.current.isTouchScrolling) {
         deviationRef.current += delta;
         setDeviation(deviationRef.current);
       } else {
-        scrollTargetTo(target, {
-          behavior: "instant",
-          top: getScrollPosition(target, direction) + delta
-        });
+        scrollBy(target, delta);
       }
     }
     // Intentionally only run when item sizes (or count) change; other values are read from the latest render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rawCachedBounds]);
+
+  // Finish a correction once the content has been re-rendered (see scrollBy)
+  useIsomorphicLayoutEffect(() => {
+    const remainingCorrection = remainingCorrectionRef.current;
+    const target = isScrollElementMode ? scrollTarget : containerElement;
+    if (remainingCorrection !== null && target) {
+      scrollBy(target, remainingCorrection.delta, remainingCorrection.renders);
+    }
+  });
 
   // Replace the shift with a change in scroll position, in the same commit that removes it.
   // (A shift that's negative can't always be replaced near the top of the list, since the browser
@@ -261,10 +495,7 @@ export function useMaintainScrollPosition<Props extends object>({
 
     const target = isScrollElementMode ? scrollTarget : containerElement;
     if (pendingDeviation !== 0 && target) {
-      scrollTargetTo(target, {
-        behavior: "instant",
-        top: getScrollPosition(target, direction) + pendingDeviation
-      });
+      scrollBy(target, pendingDeviation);
     }
     // Intentionally only run when the shift changes; other values are read from the latest render
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -425,5 +656,27 @@ export function useMaintainScrollPosition<Props extends object>({
     }
   );
 
-  return { anchorItem, cachedBounds, deviation };
+  /**
+   * Records the keys of the rendered items, so that they can be found again (in the next commit)
+   * if items are inserted or removed before them.
+   *
+   * ⚠️ Must be called (in a layout effect) after this hook's effects, every commit.
+   */
+  const recordRenderedKeys = (startIndex: number, stopIndex: number) => {
+    const keys = new Map<number, Key>();
+    if (enabled && getItemKey !== undefined && startIndex >= 0) {
+      for (let index = startIndex; index <= stopIndex; index++) {
+        keys.set(index, getItemKey(index));
+      }
+    }
+    renderedKeysRef.current = keys;
+  };
+
+  return {
+    anchorItem,
+    cachedBounds,
+    correctionRenderCount,
+    deviation,
+    recordRenderedKeys
+  };
 }

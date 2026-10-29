@@ -1,3 +1,4 @@
+import type { Key } from "react";
 import type { Align } from "../../types";
 import type { DynamicRowHeight } from "../list/types";
 
@@ -36,6 +37,25 @@ export type VirtualizerOptions = {
    * ℹ️ Item offsets are relative to the start of this element's content.
    */
   element: HTMLElement | null;
+
+  /**
+   * Returns a key that identifies the item at an index (e.g. its id).
+   *
+   * With dynamic item sizes (see `useDynamicRowHeight`), measured sizes are stored by key,
+   * and the items on screen are kept in place when items are inserted or removed before them
+   * (e.g. when older messages are loaded at the top of a chat),
+   * so don't adjust the scroll position yourself after inserting items.
+   * See the `rowKey` prop of `List` for more information.
+   *
+   * ⚠️ This function is called for many items (e.g. to calculate item positions), so it should be cheap,
+   * like reading an id: `(index) => items[index].id`.
+   * Keys must be stable: an item's key must not change when other items are inserted or removed,
+   * so don't use the index or a random value.
+   *
+   * ℹ️ Item positions are recalculated when the value of this option changes;
+   * memoize it (e.g. with `useCallback`) and only change it when the items change.
+   */
+  getItemKey?: (index: number) => Key;
 
   /**
    * Item size; the following formats are supported:

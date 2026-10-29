@@ -337,8 +337,9 @@ async function prepend(page: Page, count: number, correct = false) {
   );
 }
 
-// Heights are cached by index (and the scroll position isn't adjusted for inserts) so rows inserted above the viewport
-// still move the rows in view, as they did before; these tests make sure that maintaining the scroll position doesn't make it worse
+// Without rowKey, heights are cached by index (and inserted rows can't be told apart from rows that moved),
+// so rows inserted above the viewport still move the rows in view; these tests make sure that maintaining the
+// scroll position doesn't make it worse (see the rowKey tests below for lists that can be kept in place)
 test("prepending rows doesn't change the scroll position", async ({ page }) => {
   await load(page);
   await scrollBy(page, -1000);
@@ -364,39 +365,264 @@ test("prepending rows doesn't interfere with an app that adjusts the scroll posi
   expect(scrollTopAfter).toBe(scrollTopBefore + scrollHeightDelta);
 });
 
-// Requires heights to be cached by row key (and the scroll position to be adjusted for inserts)
-test.fixme(
-  "prepending rows doesn't move the rows in view",
-  async ({ page }) => {
-    await load(page);
-    await scrollBy(page, -1000);
-    await settle(page);
+/** Visible rows (by id, in order) and their positions relative to the top of the viewport */
+async function getVisibleRows(page: Page) {
+  return page.evaluate((isWindow) => {
+    const list = document.querySelector('[role="list"]')!;
+    const viewportTop = isWindow ? 0 : list.getBoundingClientRect().top;
+    const viewportBottom = isWindow
+      ? window.innerHeight
+      : list.getBoundingClientRect().bottom;
+    return Array.from(list.querySelectorAll<HTMLElement>("[data-id]"))
+      .sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index))
+      .filter((row) => {
+        const rect = row.getBoundingClientRect();
+        return rect.bottom > viewportTop + 1 && rect.top < viewportBottom - 1;
+      })
+      .map((row) => ({
+        id: row.dataset.id!,
+        top: row.getBoundingClientRect().top - viewportTop
+      }));
+  }, isWindowMode(page));
+}
 
-    const anchor = await page.evaluate(() => {
+/** Dispatches an event that changes the rows, and returns the position of a row (by id) in each of the following frames */
+async function changeRowsAndTrack(
+  page: Page,
+  type: "insert" | "prepend" | "remove",
+  detail: object,
+  id: string
+) {
+  return page.evaluate(
+    async ({ detail, id, isWindow, type }) => {
       const list = document.querySelector('[role="list"]')!;
-      const listTop = list.getBoundingClientRect().top;
-      const row = Array.from(list.querySelectorAll<HTMLElement>("[data-id]"))
-        .sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index))
-        .find((row) => row.getBoundingClientRect().bottom > listTop + 1)!;
-      return {
-        id: row.dataset.id,
-        top: row.getBoundingClientRect().top - listTop
+      const getTop = () => {
+        const row = list.querySelector(`[data-id="${id}"]`);
+        return row
+          ? row.getBoundingClientRect().top -
+              (isWindow ? 0 : list.getBoundingClientRect().top)
+          : null;
       };
-    });
-    await prepend(page, 20);
-    await settle(page);
 
-    const top = await page.evaluate((id) => {
-      const list = document.querySelector('[role="list"]')!;
-      const row = list.querySelector(`[data-id="${id}"]`);
-      return row
-        ? row.getBoundingClientRect().top - list.getBoundingClientRect().top
-        : null;
-    }, anchor.id);
-    expect(top).not.toBeNull();
-    expect(Math.abs(top! - anchor.top)).toBeLessThanOrEqual(1);
+      window.dispatchEvent(new CustomEvent(type, { detail }));
+      const tops: (number | null)[] = [];
+      for (let frame = 0; frame < 10; frame++) {
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+        tops.push(getTop());
+      }
+      return tops;
+    },
+    { detail, id, isWindow: isWindowMode(page), type }
+  );
+}
+
+function expectInPlace(tops: (number | null)[], top: number) {
+  for (const value of tops) {
+    expect(value).not.toBeNull();
+    expect(Math.abs(value! - top)).toBeLessThanOrEqual(1);
   }
-);
+}
+
+for (const search of ["?keys", "?keys&window"]) {
+  test.describe(`with rowKey (${search})`, () => {
+    test.beforeEach(async ({ page }) => {
+      await load(page, search);
+      await scrollBy(page, -1000);
+      await settle(page);
+    });
+
+    test("prepending rows doesn't move the rows in view", async ({ page }) => {
+      const [anchor] = await getVisibleRows(page);
+      expectInPlace(
+        await changeRowsAndTrack(page, "prepend", { count: 20 }, anchor.id),
+        anchor.top
+      );
+    });
+
+    test("prepending rows and removing as many from the end doesn't move the rows in view", async ({
+      page
+    }) => {
+      // Far enough from the end that the removed rows aren't in view
+      await scrollBy(page, -2000);
+      await settle(page);
+
+      const [anchor] = await getVisibleRows(page);
+      expectInPlace(
+        await changeRowsAndTrack(
+          page,
+          "prepend",
+          { count: 20, trim: 20 },
+          anchor.id
+        ),
+        anchor.top
+      );
+    });
+
+    test("inserting rows above the viewport doesn't move the rows in view", async ({
+      page
+    }) => {
+      const [anchor] = await getVisibleRows(page);
+      const index = await getAnchor(page).then(({ index }) => index);
+      expectInPlace(
+        await changeRowsAndTrack(
+          page,
+          "insert",
+          { count: 5, index: index - 10 },
+          anchor.id
+        ),
+        anchor.top
+      );
+    });
+
+    test("removing rows above the viewport doesn't move the rows in view", async ({
+      page
+    }) => {
+      const [anchor] = await getVisibleRows(page);
+      const index = await getAnchor(page).then(({ index }) => index);
+      expectInPlace(
+        await changeRowsAndTrack(
+          page,
+          "remove",
+          { count: 5, index: index - 10 },
+          anchor.id
+        ),
+        anchor.top
+      );
+    });
+
+    test("removing the first visible row doesn't move the rows after it", async ({
+      page
+    }) => {
+      const [, next] = await getVisibleRows(page);
+      const index = await getAnchor(page).then(({ index }) => index);
+      expectInPlace(
+        await changeRowsAndTrack(page, "remove", { count: 1, index }, next.id),
+        next.top
+      );
+    });
+  });
+}
+
+for (const search of ["?keys", "?keys&window"]) {
+  test.describe(`with rowKey at the start or end of the list (${search})`, () => {
+    test("prepending rows at the top of the list doesn't move the rows in view", async ({
+      page
+    }) => {
+      await load(page, search);
+      await scrollBy(page, -100_000);
+      await settle(page);
+      expect(await getScrollTop(page)).toBe(0);
+
+      const [anchor] = await getVisibleRows(page);
+      expectInPlace(
+        await changeRowsAndTrack(page, "prepend", { count: 20 }, anchor.id),
+        anchor.top
+      );
+    });
+
+    test("prepending rows while scrolled to the end doesn't move the rows in view", async ({
+      page
+    }) => {
+      // The content's estimated size is too small for the correction until the rows around the anchor are rendered
+      await load(page, search);
+
+      const [anchor] = await getVisibleRows(page);
+      expectInPlace(
+        await changeRowsAndTrack(page, "prepend", { count: 20 }, anchor.id),
+        anchor.top
+      );
+    });
+
+    test("appending rows while scrolled to the end doesn't change the scroll position", async ({
+      page
+    }) => {
+      await load(page, search);
+
+      const scrollTop = await getScrollTop(page);
+      await page.evaluate(() =>
+        window.dispatchEvent(
+          new CustomEvent("insert", { detail: { count: 5, index: 200 } })
+        )
+      );
+      await settle(page);
+      expect(await getScrollTop(page)).toBe(scrollTop);
+    });
+
+    test("anchorRow keeps a row in place while it grows and rows are inserted before it", async ({
+      page
+    }) => {
+      await load(page, search);
+      await scrollBy(page, -1000);
+      await settle(page);
+
+      const [anchor, next] = await getVisibleRows(page);
+      const index = await getAnchor(page).then(({ index }) => index);
+      const tops = await page.evaluate(
+        async ({ id, index, isWindow, nextId }) => {
+          const list = document.querySelector('[role="list"]')!;
+          const getTop = (id: string) =>
+            list.querySelector(`[data-id="${id}"]`)!.getBoundingClientRect()
+              .top - (isWindow ? 0 : list.getBoundingClientRect().top);
+
+          // In the same update: the row grows (100px) and rows are inserted before it
+          window.dispatchEvent(
+            new CustomEvent("expand", { detail: { anchor: { index }, index } })
+          );
+          window.dispatchEvent(
+            new CustomEvent("prepend", { detail: { count: 20 } })
+          );
+
+          const tops: { next: number; row: number }[] = [];
+          for (let frame = 0; frame < 10; frame++) {
+            await new Promise((resolve) => requestAnimationFrame(resolve));
+            tops.push({ next: getTop(nextId), row: getTop(id) });
+          }
+          return tops;
+        },
+        {
+          id: anchor.id,
+          index,
+          isWindow: isWindowMode(page),
+          nextId: next.id
+        }
+      );
+
+      for (const top of tops) {
+        expect(Math.abs(top.row - anchor.top)).toBeLessThanOrEqual(1);
+      }
+      // Once it's measured, the row grows downward (moving the rows after it)
+      expect(
+        Math.abs(tops[tops.length - 1].next - (next.top + 100))
+      ).toBeLessThanOrEqual(1);
+    });
+  });
+}
+
+test("prepending rows while touch scrolling shifts the rows (and adjusts the scroll position once scrolling stops)", async ({
+  page
+}) => {
+  await load(page, "?keys");
+  await scrollBy(page, -1000);
+  await settle(page);
+
+  const [anchor] = await getVisibleRows(page);
+  const scrollTop = await getScrollTop(page);
+  await dispatchTouchEvent(page, "touchstart");
+  expectInPlace(
+    await changeRowsAndTrack(page, "prepend", { count: 20 }, anchor.id),
+    anchor.top
+  );
+  // The scroll position isn't changed while touching
+  expect(await getScrollTop(page)).toBe(scrollTop);
+
+  await dispatchTouchEvent(page, "touchend");
+  await page.waitForTimeout(400);
+  await settle(page);
+  expect(await getScrollTop(page)).toBeGreaterThan(scrollTop);
+  const row = (await getVisibleRows(page)).find(({ id }) => id === anchor.id);
+  expect(row).toBeDefined();
+  expect(Math.abs(row!.top - anchor.top)).toBeLessThanOrEqual(1);
+});
 
 async function dispatchTouchEvent(page: Page, type: "touchend" | "touchstart") {
   await page.evaluate(

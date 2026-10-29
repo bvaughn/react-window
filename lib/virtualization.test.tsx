@@ -221,6 +221,10 @@ test("updates the correct height cache entry after keyed rows reorder", () => {
   act(() => {
     setElementSize({ element: firstRow, height: 80, width: 100 });
   });
-  expect(rowHeight!.getRowHeight(0)).toBe(80);
-  expect(rowHeight!.getRowHeight(1)).toBe(50);
+  // Heights are stored by key, so they follow their rows
+  expect(rowHeight!.getRowHeight(0, "b")).toBe(80);
+  expect(rowHeight!.getRowHeight(1, "a")).toBe(50);
+
+  rerender(<Example data={["a", "b"]} />);
+  expect(rowHeight!.getRowHeight(1, "b")).toBe(80);
 });

@@ -1167,6 +1167,72 @@ describe("List", () => {
         );
       });
 
+      test("warns (once) if rows can't be kept in place because the content is too small", () => {
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+        onTestFinished(() => warn.mockRestore());
+
+        const listRef = createRef<ListImperativeAPI>();
+        function Row({ index, style }: RowComponentProps) {
+          return (
+            <div data-testid={`row-${index}`} style={style}>
+              Row {index}
+            </div>
+          );
+        }
+        function ClampedExample() {
+          const rowHeight = useDynamicRowHeight({ defaultRowHeight: 25 });
+          return (
+            <List
+              listRef={listRef}
+              rowCount={100}
+              rowHeight={rowHeight}
+              rowComponent={Row}
+              rowProps={EMPTY_OBJECT}
+              style={{ height: 100 }}
+            />
+          );
+        }
+
+        const rowHeights = new Map<number, number>();
+        const setMockRowHeights = () =>
+          setElementSizeFunction((element) => {
+            const attribute = element.getAttribute(DATA_ATTRIBUTE_LIST_INDEX);
+            if (attribute !== null) {
+              const height = rowHeights.get(parseInt(attribute)) ?? 25;
+              return new DOMRect(0, 0, 100, height);
+            }
+          });
+        setMockRowHeights();
+
+        render(<ClampedExample />);
+        const listElement = listRef.current?.element;
+        assert(listElement, "List element not mounted");
+        Object.defineProperty(listElement, "clientHeight", { value: 100 });
+        act(() => listElement.scrollTo({ top: 1000 }));
+
+        // The browser can't scroll any further (e.g. the content is too small)
+        const scrollTo = vi
+          .spyOn(HTMLElement.prototype, "scrollTo")
+          .mockImplementation(() => {});
+        onTestFinished(() => scrollTo.mockRestore());
+
+        act(() => {
+          rowHeights.set(38, 75);
+          setMockRowHeights();
+        });
+        expect(warn).toHaveBeenCalledTimes(1);
+        expect(warn.mock.calls[0][0]).toContain(
+          "Items could not be kept in place"
+        );
+
+        // Another row above the viewport grows
+        act(() => {
+          rowHeights.set(37, 75);
+          setMockRowHeights();
+        });
+        expect(warn).toHaveBeenCalledTimes(1);
+      });
+
       test("does not animate smooth scrolling while the page is hidden", () => {
         const requestFrame = vi
           .spyOn(window, "requestAnimationFrame")

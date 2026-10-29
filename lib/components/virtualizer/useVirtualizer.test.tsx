@@ -1,5 +1,11 @@
 import { act, render, screen } from "@testing-library/react";
-import { createRef, useImperativeHandle, useState, type Ref } from "react";
+import {
+  createRef,
+  useCallback,
+  useImperativeHandle,
+  useState,
+  type Ref
+} from "react";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { mockLayout, mockWindowScroll } from "../../utils/test/mockLayout";
 import {
@@ -277,6 +283,97 @@ describe("useVirtualizer", () => {
         { index: 1, offset: 70, size: 25 }
       ]);
       expect(getRenderedItems()).toEqual([0, 1, 2]);
+    });
+
+    describe("with keys", () => {
+      let changeIds: (change: (ids: number[]) => number[]) => void = () => {};
+
+      // Items are identified by a data-id attribute (and measure 25px, except item 2, which measures 70px)
+      function KeyedExample() {
+        const [ids, setIds] = useState(() =>
+          Array.from({ length: 100 }, (_, index) => index)
+        );
+        changeIds = setIds;
+
+        const [element, setElement] = useState<HTMLDivElement | null>(null);
+        const itemSize = useDynamicRowHeight({ defaultRowHeight: 25 });
+        const getItemKey = useCallback((index: number) => ids[index], [ids]);
+        const { items, measureElement, totalSize } = useVirtualizer({
+          count: ids.length,
+          element,
+          getItemKey,
+          itemSize,
+          overscanCount: 0
+        });
+
+        return (
+          <div data-testid="element" ref={setElement}>
+            <div style={{ height: totalSize }}>
+              {items.map(({ index, offset, size }) => (
+                <div
+                  data-id={ids[index]}
+                  data-index={index}
+                  data-testid="item"
+                  key={ids[index]}
+                  ref={measureElement}
+                  style={{ height: size, transform: `translateY(${offset}px)` }}
+                />
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      function getTop(id: number) {
+        return screen
+          .getAllByTestId("item")
+          .find((item) => item.getAttribute("data-id") === `${id}`)!.style
+          .transform;
+      }
+
+      beforeEach(() => {
+        setElementSizeFunction((element) => {
+          if (element.getAttribute("data-testid") === "item") {
+            const id = Number(element.getAttribute("data-id"));
+            return new DOMRect(0, 0, 100, id === 2 ? 70 : 25);
+          }
+        });
+      });
+
+      function renderScrolled() {
+        render(<KeyedExample />);
+        const element = screen.getByTestId("element");
+        Object.defineProperty(element, "clientHeight", { value: 100 });
+
+        // Item 2 was measured (70px); item 38 is at the top (2 * 25 + 70 + 35 * 25 = 995)
+        act(() => element.scrollTo({ top: 1000 }));
+        expect(getTop(38)).toBe("translateY(995px)");
+
+        return element;
+      }
+
+      test("should keep items in view in place when items are inserted before them", () => {
+        const element = renderScrolled();
+
+        // Inserted items are estimated at 25px each, and item 2 keeps its measured size
+        act(() =>
+          changeIds((ids) => [
+            ...Array.from({ length: 10 }, (_, index) => ids[0] - 10 + index),
+            ...ids
+          ])
+        );
+        expect(element.scrollTop).toBe(1250);
+        expect(getTop(38)).toBe("translateY(1245px)");
+      });
+
+      test("should keep items in view in place when items are reordered (without changing the count or sizes)", () => {
+        const element = renderScrolled();
+
+        // The last 10 items move to the start; only getItemKey changes
+        act(() => changeIds((ids) => [...ids.slice(90), ...ids.slice(0, 90)]));
+        expect(element.scrollTop).toBe(1250);
+        expect(getTop(38)).toBe("translateY(1245px)");
+      });
     });
 
     test("should stop observing items that unmount", () => {

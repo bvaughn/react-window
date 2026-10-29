@@ -175,6 +175,13 @@
           "intent": "primary"
         },
         {
+          "content": "<p>With dynamic row heights (see <code>useDynamicRowHeight</code>), measured heights are stored by key,\nand the rows on screen are kept in place when rows are inserted or removed above them\n(e.g. when older messages are loaded at the top of a chat),\nso don't adjust the scroll position yourself after inserting rows.</p>\n"
+        },
+        {
+          "content": "<p>This function is called for many rows (e.g. to calculate row positions), so it should be cheap,\nlike reading an id: <code>(index, { items }) =&gt; items[index].id</code>.\nKeys must be stable: a row's key must not change when other rows are inserted or removed,\nso don't use the index or a random value.</p>\n",
+          "intent": "warning"
+        },
+        {
           "content": "<p>This prop cannot be auto-memoized because it is called during render.\nIt is important to always <code>useCallback</code> for this prop; do not use an inline function.</p>\n",
           "intent": "warning"
         }
