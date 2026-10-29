@@ -79,6 +79,10 @@ function ListComponent<
     () => (rowKey ? (index: number) => rowKey(index, rowProps) : undefined),
     [rowKey, rowProps]
   );
+  const rowKeys = useMemo(
+    () => (getRowKey ? { count: rowCount, getKey: getRowKey } : undefined),
+    [getRowKey, rowCount]
+  );
 
   // Server-rendered rows with dynamic heights haven't been measured yet, so absolutely positioning them
   // (based on estimated heights) would cause them to overlap or leave gaps until after hydration.
@@ -180,15 +184,15 @@ function ListComponent<
     rowElements.current = rows;
 
     if (isDynamicRowHeight) {
-      return rowHeightProp.observeRowElements(rows, getRowKey);
+      return rowHeightProp.observeRowElements(rows, rowKeys);
     }
   }, [
     RowComponent,
     element,
-    getRowKey,
     isDynamicRowHeight,
     rowCount,
     rowHeightProp,
+    rowKeys,
     rowKey,
     rowProps,
     startIndexOverscan,

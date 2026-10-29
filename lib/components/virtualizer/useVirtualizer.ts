@@ -9,7 +9,7 @@ import { useVirtualizer as useVirtualizerCore } from "../../core/useVirtualizer"
 import { useIsomorphicLayoutEffect } from "../../hooks/useIsomorphicLayoutEffect";
 import { assert } from "../../utils/assert";
 import { isDynamicRowHeight } from "../list/isDynamicRowHeight";
-import type { DynamicRowHeight } from "../list/types";
+import type { DynamicRowHeight, RowKeys } from "../list/types";
 import type { VirtualItem, Virtualizer, VirtualizerOptions } from "./types";
 
 // Sizes are cached based on the identity of the itemSize option
@@ -53,13 +53,19 @@ export function useVirtualizer({
     return itemSizeOption;
   }, [getItemKey, itemSizeOption]);
 
-  // Items are observed once (when they mount), so measurements read the latest keys
-  const getItemKeyRef = useRef(getItemKey);
+  // Items are observed once (when they mount), so measurements read the latest keys (and count)
+  const itemKeysRef = useRef({ count, getItemKey });
   useIsomorphicLayoutEffect(() => {
-    getItemKeyRef.current = getItemKey;
-  }, [getItemKey]);
-  const getObservedItemKey = useCallback(
-    (index: number) => getItemKeyRef.current?.(index),
+    itemKeysRef.current = { count, getItemKey };
+  }, [count, getItemKey]);
+  const observedItemKeys = useMemo<RowKeys>(
+    () => ({
+      get count() {
+        // Without keys, heights are stored by index (so there's nothing to remove)
+        return itemKeysRef.current.getItemKey ? itemKeysRef.current.count : 0;
+      },
+      getKey: (index: number) => itemKeysRef.current.getItemKey?.(index)
+    }),
     []
   );
 
@@ -153,7 +159,7 @@ export function useVirtualizer({
 
         observed.unobserve.set(
           element,
-          dynamicRowHeight.observeRowElements([element], getObservedItemKey)
+          dynamicRowHeight.observeRowElements([element], observedItemKeys)
         );
       }
     });

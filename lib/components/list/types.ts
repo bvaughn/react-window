@@ -22,12 +22,21 @@ export type DynamicRowHeight = {
   /**
    * Measures the specified elements (each must specify its index with a data attribute) whenever they resize.
    *
-   * @param getRowKey Returns the key of the row at an index (at the time it's measured)
+   * @param rowKeys The number of rows, and the key of the row at an index (read at the time rows are measured);
+   * heights are stored by key if provided, and heights of rows that are no longer in the list are eventually removed
    */
   observeRowElements: (
     elements: Element[] | NodeListOf<Element>,
-    getRowKey?: (index: number) => Key | undefined
+    rowKeys?: RowKeys
   ) => () => void;
+};
+
+/**
+ * The rows in a list, by key (see `DynamicRowHeight`).
+ */
+export type RowKeys = {
+  count: number;
+  getKey: (index: number) => Key | undefined;
 };
 
 type ForbiddenKeys = "ariaAttributes" | "index" | "style";

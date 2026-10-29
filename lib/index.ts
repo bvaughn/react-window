@@ -11,7 +11,8 @@ export {
   type DynamicRowHeight,
   type ListImperativeAPI,
   type ListProps,
-  type RowComponentProps
+  type RowComponentProps,
+  type RowKeys
 } from "./components/list/types";
 export { useDynamicRowHeight } from "./components/list/useDynamicRowHeight";
 export { useListCallbackRef } from "./components/list/useListCallbackRef";

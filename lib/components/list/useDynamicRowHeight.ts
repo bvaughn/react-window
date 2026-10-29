@@ -6,11 +6,88 @@ import {
   useState,
   type Key
 } from "react";
+import { useIsomorphicLayoutEffect } from "../../hooks/useIsomorphicLayoutEffect";
 import { useStableCallback } from "../../hooks/useStableCallback";
 import { getOwnerWindow } from "../../utils/getOwnerWindow";
 import { getResizeObserverClass } from "../../utils/getResizeObserverClass";
 import { getItemIndex } from "../../core/itemIndex";
-import type { DynamicRowHeight } from "./types";
+import type { DynamicRowHeight, RowKeys } from "./types";
+
+export type State = {
+  key: string | number | undefined;
+  // Heights of rows measured with a key (so that they follow their rows when rows are inserted or removed)
+  keyMap: Map<Key, number>;
+  // Initial heights, and heights of rows measured without a key
+  map: Map<number, number>;
+};
+
+type Measurement = { index: number; key: Key | undefined; size: number };
+
+// Heights of rows that were removed from the list stay in the cache until it holds this many times as many rows
+// as the list has had at most (so that removing rows is cheap, the cache doesn't grow without bound as rows come and go,
+// and rows hidden for a while, e.g. by a filter, keep their heights)
+const PRUNE_RATIO = 2;
+// Small caches aren't pruned
+const MIN_PRUNE_SIZE = 1000;
+
+/**
+ * Applies the specified measurements (copying each map at most once),
+ * or returns the previous state if nothing changed.
+ *
+ * @internal Exported for testing
+ */
+export function applyMeasurements(
+  prevState: State,
+  measurements: readonly Measurement[],
+  rowKeys: RowKeys | undefined,
+  maxRowCount: number = rowKeys?.count ?? 0
+): State {
+  let keyMap: Map<Key, number> | undefined = undefined;
+  let map: Map<number, number> | undefined = undefined;
+
+  for (const { index, key, size } of measurements) {
+    if (key !== undefined) {
+      if ((keyMap ?? prevState.keyMap).get(key) !== size) {
+        keyMap ??= new Map(prevState.keyMap);
+        keyMap.set(key, size);
+      }
+    } else if ((map ?? prevState.map).get(index) !== size) {
+      map ??= new Map(prevState.map);
+      map.set(index, size);
+    }
+  }
+
+  if (keyMap === undefined && map === undefined) {
+    return prevState;
+  }
+
+  if (
+    keyMap !== undefined &&
+    rowKeys !== undefined &&
+    keyMap.size >
+      Math.max(
+        MIN_PRUNE_SIZE,
+        Math.max(maxRowCount, rowKeys.count) * PRUNE_RATIO
+      )
+  ) {
+    // Remove the heights of rows that are no longer in the list
+    const keys = new Set<Key | undefined>();
+    for (let index = 0; index < rowKeys.count; index++) {
+      keys.add(rowKeys.getKey(index));
+    }
+    for (const key of Array.from(keyMap.keys())) {
+      if (!keys.has(key)) {
+        keyMap.delete(key);
+      }
+    }
+  }
+
+  return {
+    ...prevState,
+    keyMap: keyMap ?? prevState.keyMap,
+    map: map ?? prevState.map
+  };
+}
 
 function createInitialMap(
   initialRowHeights: ReadonlyMap<number, number> | readonly number[] | undefined
@@ -54,13 +131,7 @@ export function useDynamicRowHeight({
    */
   key?: string | number;
 }) {
-  const [state, setState] = useState<{
-    key: string | number | undefined;
-    // Heights of rows measured with a key (so that they follow their rows when rows are inserted or removed)
-    keyMap: Map<Key, number>;
-    // Initial heights, and heights of rows measured without a key
-    map: Map<number, number>;
-  }>(() => ({
+  const [state, setState] = useState<State>(() => ({
     key,
     keyMap: new Map(),
     map: createInitialMap(initialRowHeights)
@@ -108,39 +179,30 @@ export function useDynamicRowHeight({
     [defaultRowHeight, keyMap, map]
   );
 
-  const setRowHeight = useCallback((index: number, size: number, key?: Key) => {
-    setState((prevState) => {
-      if (key !== undefined) {
-        if (prevState.keyMap.get(key) === size) {
-          return prevState;
-        }
+  // Provided by the list each time it observes rows (see observeRowElements)
+  const rowKeysRef = useRef<RowKeys | undefined>(undefined);
+  // The most rows the list has had (for the current key)
+  const maxRowCountRef = useRef(0);
+  useIsomorphicLayoutEffect(() => {
+    maxRowCountRef.current = rowKeysRef.current?.count ?? 0;
+  }, [key]);
 
-        const clonedMap = new Map(prevState.keyMap);
-        clonedMap.set(key, size);
-
-        return {
-          ...prevState,
-          keyMap: clonedMap
-        };
-      }
-
-      if (prevState.map.get(index) === size) {
-        return prevState;
-      }
-
-      const clonedMap = new Map(prevState.map);
-      clonedMap.set(index, size);
-
-      return {
-        ...prevState,
-        map: clonedMap
-      };
-    });
+  const setRowHeights = useCallback((measurements: readonly Measurement[]) => {
+    setState((prevState) =>
+      // Deterministic for a given state (React may call this twice in development)
+      applyMeasurements(
+        prevState,
+        measurements,
+        rowKeysRef.current,
+        maxRowCountRef.current
+      )
+    );
   }, []);
 
-  // Provided by the list each time it observes rows; returns the key of the row at an index
-  const getRowKeyRef = useRef<((index: number) => Key | undefined) | undefined>(
-    undefined
+  const setRowHeight = useCallback(
+    (index: number, size: number, key?: Key) =>
+      setRowHeights([{ index, key, size }]),
+    [setRowHeights]
   );
 
   const resizeObserverCallback = useStableCallback(
@@ -149,6 +211,8 @@ export function useDynamicRowHeight({
         return;
       }
 
+      // Applied at once, so that the cache is only copied once (rather than for each row)
+      const measurements: Measurement[] = [];
       entries.forEach((entry) => {
         const { borderBoxSize, target } = entry;
 
@@ -165,8 +229,16 @@ export function useDynamicRowHeight({
           return;
         }
 
-        setRowHeight(index, height, getRowKeyRef.current?.(index));
+        measurements.push({
+          index,
+          key: rowKeysRef.current?.getKey(index),
+          size: height
+        });
       });
+
+      if (measurements.length > 0) {
+        setRowHeights(measurements);
+      }
     }
   );
 
@@ -186,11 +258,14 @@ export function useDynamicRowHeight({
   );
 
   const observeRowElements = useCallback(
-    (
-      elements: Element[] | NodeListOf<Element>,
-      getRowKey?: (index: number) => Key | undefined
-    ) => {
-      getRowKeyRef.current = getRowKey;
+    (elements: Element[] | NodeListOf<Element>, rowKeys?: RowKeys) => {
+      rowKeysRef.current = rowKeys;
+      if (rowKeys !== undefined) {
+        maxRowCountRef.current = Math.max(
+          maxRowCountRef.current,
+          rowKeys.count
+        );
+      }
 
       const observed: [Element, ResizeObserver][] = [];
 

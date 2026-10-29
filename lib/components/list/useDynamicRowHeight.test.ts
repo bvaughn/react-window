@@ -1,7 +1,11 @@
 import { act, renderHook } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { createElementInOtherWindow } from "../../utils/test/createElementInOtherWindow";
-import { useDynamicRowHeight } from "./useDynamicRowHeight";
+import {
+  applyMeasurements,
+  useDynamicRowHeight,
+  type State
+} from "./useDynamicRowHeight";
 import { DATA_ATTRIBUTE_LIST_INDEX } from "../../core/itemIndex";
 import { setElementSize } from "../../utils/test/mockResizeObserver";
 import { NOOP_FUNCTION } from "../../../src/constants";
@@ -332,7 +336,10 @@ describe("useDynamicRowHeight", () => {
       let keys = ["a", "b"];
 
       act(() => {
-        result.current.observeRowElements([element], (index) => keys[index]);
+        result.current.observeRowElements([element], {
+          count: 2,
+          getKey: (index) => keys[index]
+        });
       });
       act(() => {
         setElementSize({ element, width: 100, height: 20 });
@@ -501,4 +508,155 @@ describe("useDynamicRowHeight", () => {
   });
 
   // setRowHeight is tested indirectly by "getAverageRowHeight" and "getRowHeight" blocks above
+
+  describe("applyMeasurements", () => {
+    function createState(): State {
+      return {
+        key: undefined,
+        keyMap: new Map([["a", 10]]),
+        map: new Map([[0, 10]])
+      };
+    }
+
+    test("returns the previous state if nothing changed", () => {
+      const state = createState();
+      expect(
+        applyMeasurements(
+          state,
+          [
+            { index: 0, key: "a", size: 10 },
+            { index: 0, key: undefined, size: 10 }
+          ],
+          undefined
+        )
+      ).toBe(state);
+    });
+
+    test("copies each map once for many measurements", () => {
+      const state = createState();
+      const keyMapIterator = vi.spyOn(state.keyMap, Symbol.iterator);
+
+      const next = applyMeasurements(
+        state,
+        Array.from({ length: 20 }, (_, index) => ({
+          index,
+          key: `row-${index}`,
+          size: 20
+        })),
+        undefined
+      );
+      expect(keyMapIterator).toHaveBeenCalledTimes(1);
+      expect(next.keyMap.size).toBe(21);
+      expect(next.map).toBe(state.map);
+      // The previous state isn't changed
+      expect(state.keyMap.size).toBe(1);
+    });
+  });
+
+  describe("removing heights of rows that are no longer in the list", () => {
+    test("removes them once the cache is much larger than the list", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({ defaultRowHeight: 100 })
+      );
+      act(() => {
+        result.current.observeRowElements([], {
+          count: 10,
+          getKey: (index) => `row-${index}`
+        });
+      });
+
+      act(() => {
+        result.current.setRowHeight(3, 30, "row-3");
+        // 1,000 heights in all (the most that isn't pruned)
+        for (let index = 0; index < 999; index++) {
+          result.current.setRowHeight(index, 20, `removed-${index}`);
+        }
+      });
+      // Not yet (the cache is small)
+      expect(result.current.getRowHeight(0, "removed-0")).toBe(20);
+
+      act(() => {
+        result.current.setRowHeight(4, 40, "row-4");
+      });
+      expect(result.current.getRowHeight(0, "removed-0")).toBe(100);
+      expect(result.current.getRowHeight(998, "removed-998")).toBe(100);
+      // Rows in the list keep their heights
+      expect(result.current.getRowHeight(3, "row-3")).toBe(30);
+      expect(result.current.getRowHeight(4, "row-4")).toBe(40);
+    });
+
+    test("keeps heights of rows that are hidden for a while (e.g. by a filter)", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({ defaultRowHeight: 100 })
+      );
+      act(() => {
+        result.current.observeRowElements([], {
+          count: 2000,
+          getKey: (index) => `row-${index}`
+        });
+      });
+      act(() => {
+        for (let index = 0; index < 2000; index++) {
+          result.current.setRowHeight(index, 20, `row-${index}`);
+        }
+      });
+
+      // Only 10 rows match the filter
+      act(() => {
+        result.current.observeRowElements([], {
+          count: 10,
+          getKey: (index) => `row-${index}`
+        });
+      });
+      act(() => {
+        result.current.setRowHeight(0, 30, "row-0");
+      });
+      expect(result.current.getRowHeight(1999, "row-1999")).toBe(20);
+    });
+
+    test("removes heights once the cache is much larger than the most rows the list has had", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({ defaultRowHeight: 100 })
+      );
+      act(() => {
+        result.current.observeRowElements([], {
+          count: 600,
+          getKey: (index) => `row-${index}`
+        });
+      });
+      act(() => {
+        result.current.observeRowElements([], {
+          count: 10,
+          getKey: (index) => `row-${index}`
+        });
+      });
+
+      // 1,200 heights in all (twice the most rows the list has had) isn't pruned
+      act(() => {
+        for (let index = 0; index < 1200; index++) {
+          result.current.setRowHeight(index, 20, `removed-${index}`);
+        }
+      });
+      expect(result.current.getRowHeight(0, "removed-0")).toBe(20);
+
+      act(() => {
+        result.current.setRowHeight(0, 30, "row-0");
+      });
+      expect(result.current.getRowHeight(0, "removed-0")).toBe(100);
+      expect(result.current.getRowHeight(0, "row-0")).toBe(30);
+    });
+
+    test("doesn't remove heights without the list's keys", () => {
+      const { result } = renderHook(() =>
+        useDynamicRowHeight({ defaultRowHeight: 100 })
+      );
+
+      act(() => {
+        for (let index = 0; index <= 1000; index++) {
+          result.current.setRowHeight(index, 20, `row-${index}`);
+        }
+      });
+      expect(result.current.getRowHeight(0, "row-0")).toBe(20);
+    });
+  });
 });
