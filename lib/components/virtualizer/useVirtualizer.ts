@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { getItemIndex } from "../../core/itemIndex";
 import { useIsRtl } from "../../core/useIsRtl";
-import { useScrollToIndex } from "../../core/useScrollToIndex";
+import {
+  useScrollToIndex,
+  type PendingScroll
+} from "../../core/useScrollToIndex";
 import { useVirtualizer as useVirtualizerCore } from "../../core/useVirtualizer";
 import { useIsomorphicLayoutEffect } from "../../hooks/useIsomorphicLayoutEffect";
 import { assert } from "../../utils/assert";
 import { isDynamicRowHeight } from "../list/isDynamicRowHeight";
-import type { DynamicRowHeight } from "../list/types";
+import type { DynamicRowHeight, RowKeys } from "../list/types";
 import type { VirtualItem, Virtualizer, VirtualizerOptions } from "./types";
 
 // Sizes are cached based on the identity of the itemSize option
@@ -26,6 +29,7 @@ export function useVirtualizer({
   dir,
   direction = "vertical",
   element,
+  getItemKey,
   itemSize: itemSizeOption,
   onItemsRendered,
   overscanCount = 3,
@@ -39,17 +43,37 @@ export function useVirtualizer({
 
   const itemSize = useMemo(() => {
     if (isDynamicRowHeight(itemSizeOption)) {
+      // Measured sizes are stored by key (if provided) so that they follow their items.
+      // (A new getItemKey must also create new sizes, so that items are kept in place when the items change.)
       return (index: number) =>
-        itemSizeOption.getRowHeight(index) ??
+        itemSizeOption.getRowHeight(index, getItemKey?.(index)) ??
         itemSizeOption.getAverageRowHeight();
     }
 
     return itemSizeOption;
-  }, [itemSizeOption]);
+  }, [getItemKey, itemSizeOption]);
+
+  // Items are observed once (when they mount), so measurements read the latest keys (and count)
+  const itemKeysRef = useRef({ count, getItemKey });
+  useIsomorphicLayoutEffect(() => {
+    itemKeysRef.current = { count, getItemKey };
+  }, [count, getItemKey]);
+  const observedItemKeys = useMemo<RowKeys>(
+    () => ({
+      get count() {
+        // Without keys, heights are stored by index (so there's nothing to remove)
+        return itemKeysRef.current.getItemKey ? itemKeysRef.current.count : 0;
+      },
+      getKey: (index: number) => itemKeysRef.current.getItemKey?.(index)
+    }),
+    []
+  );
 
   const isRtl = useIsRtl(element, dir);
 
+  const pendingScroll = useRef<PendingScroll | null>(null);
   const {
+    anchorItem,
     getCellBounds,
     getEstimatedSize,
     scrollTarget,
@@ -63,12 +87,15 @@ export function useVirtualizer({
     defaultContainerSize: defaultSize,
     defaultScrollOffset,
     direction,
+    getItemKey,
     isRtl: direction === "horizontal" && isRtl,
     itemCount: count,
     itemProps: ITEM_PROPS,
     itemSize,
+    maintainScrollPosition: isDynamicSize,
     onResize: undefined,
     overscanCount,
+    pendingScroll,
     scrollElement
   });
 
@@ -132,7 +159,7 @@ export function useVirtualizer({
 
         observed.unobserve.set(
           element,
-          dynamicRowHeight.observeRowElements([element])
+          dynamicRowHeight.observeRowElements([element], observedItemKeys)
         );
       }
     });
@@ -156,6 +183,7 @@ export function useVirtualizer({
     isDynamicSize,
     itemCount: count,
     itemElements: itemElementsRef,
+    pendingScroll,
     scrollTarget,
     getScrollPositionForIndex
   });
@@ -194,6 +222,7 @@ export function useVirtualizer({
 
   return useMemo(
     () => ({
+      anchorItem,
       items,
       measureElement,
       scrollToIndex,
@@ -204,6 +233,7 @@ export function useVirtualizer({
       }
     }),
     [
+      anchorItem,
       items,
       measureElement,
       scrollToIndex,

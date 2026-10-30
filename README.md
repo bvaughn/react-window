@@ -77,6 +77,13 @@ Additionally it will receive prop values passed to <code>rowProps</code>.</p>
 <li>dynamic row height cache returned by the <code>useDynamicRowHeight</code> hook</li>
 </ul>
 <p>ℹ️ Percentage heights can&#39;t be resolved during server rendering unless a <code>defaultHeight</code> (or a pixel height via the <code>style</code> prop) is specified.</p>
+<p>ℹ️ With dynamic row heights, the list keeps the rows on screen in place when rows above them change height
+(e.g. as they are measured while scrolling up, or when their content resizes) by adjusting the scroll position.
+The rows kept in place are those after the first visible row that didn&#39;t change height,
+so rows revealed by scrolling up move out of the way as they&#39;re measured.
+To keep a specific row in place instead (e.g. one the user is expanding), call <code>anchorRow</code> before changing it.
+The scroll position is not adjusted while the list is scrolled to the end (e.g. a chat pinned to the bottom)
+or while <code>scrollToRow</code> is scrolling to a row.</p>
 <p>⚠️ Dynamic row heights are not as efficient as predetermined sizes.
 It&#39;s recommended to provide your own height values if they can be determined ahead of time.</p>
 </td>
@@ -171,6 +178,14 @@ This prop can provide a custom <code>key</code> value.</p>
 <p>ℹ️ Custom keys can ensure better UX for sortable or filterable lists,
 particularly if your row components are stateful.
 Refer to the <a href="https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key">React documentation</a> for more info.</p>
+<p>With dynamic row heights (see <code>useDynamicRowHeight</code>), measured heights are stored by key,
+and the rows on screen are kept in place when rows are inserted or removed above them
+(e.g. when older messages are loaded at the top of a chat),
+so don&#39;t adjust the scroll position yourself after inserting rows.</p>
+<p>⚠️ This function is called for many rows (e.g. to calculate row positions), so it should be cheap,
+like reading an id: <code>(index, { items }) =&gt; items[index].id</code>.
+Keys must be stable: a row&#39;s key must not change when other rows are inserted or removed,
+so don&#39;t use the index or a random value.</p>
 <p>⚠️ This prop cannot be auto-memoized because it is called during render.
 It is important to always <code>useCallback</code> for this prop; do not use an inline function.</p>
 </td>

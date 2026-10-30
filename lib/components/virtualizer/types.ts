@@ -1,3 +1,4 @@
+import type { Key } from "react";
 import type { Align } from "../../types";
 import type { DynamicRowHeight } from "../list/types";
 
@@ -36,6 +37,25 @@ export type VirtualizerOptions = {
    * ℹ️ Item offsets are relative to the start of this element's content.
    */
   element: HTMLElement | null;
+
+  /**
+   * Returns a key that identifies the item at an index (e.g. its id).
+   *
+   * With dynamic item sizes (see `useDynamicRowHeight`), measured sizes are stored by key,
+   * and the items on screen are kept in place when items are inserted or removed before them
+   * (e.g. when older messages are loaded at the top of a chat),
+   * so don't adjust the scroll position yourself after inserting items.
+   * See the `rowKey` prop of `List` for more information.
+   *
+   * ⚠️ This function is called for many items (e.g. to calculate item positions), so it should be cheap,
+   * like reading an id: `(index) => items[index].id`.
+   * Keys must be stable: an item's key must not change when other items are inserted or removed,
+   * so don't use the index or a random value.
+   *
+   * ℹ️ Item positions are recalculated when the value of this option changes;
+   * memoize it (e.g. with `useCallback`) and only change it when the items change.
+   */
+  getItemKey?: (index: number) => Key;
 
   /**
    * Item size; the following formats are supported:
@@ -81,6 +101,10 @@ export type VirtualItem = {
 
   /**
    * Offset (in pixels) of the item from the start of the element's content.
+   *
+   * ℹ️ With dynamic item sizes, offsets may be shifted while the user is touch scrolling
+   * (to keep the items on screen in place when items before them change size),
+   * so items near the start of the content may briefly have negative offsets.
    */
   offset: number;
 
@@ -91,6 +115,18 @@ export type VirtualItem = {
 };
 
 export type Virtualizer = {
+  /**
+   * Keeps the specified item where it is on screen through changes in item sizes, e.g. when the user expands or collapses it;
+   * call this before making the change.
+   * See the `anchorRow` method of `List` for more information.
+   *
+   * @param duration How long (in milliseconds) to keep the item in place; defaults to 1000
+   * @param index Index of the item to keep in place (0-based)
+   *
+   * @throws RangeError if an invalid index is provided
+   */
+  anchorItem: (options: { duration?: number; index: number }) => void;
+
   /**
    * Items to render (including overscan).
    */

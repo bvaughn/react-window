@@ -12,6 +12,10 @@ import {
   simulateUnsupportedEnvironmentForTest
 } from "../../utils/test/mockResizeObserver";
 import { DATA_ATTRIBUTE_LIST_INDEX } from "../../core/itemIndex";
+import {
+  CORRECTION_DURATION,
+  SMOOTH_SCROLL_DURATION
+} from "../../core/useScrollToIndex";
 import { DATA_ATTRIBUTE_SIZER, List } from "./List";
 import { type ListImperativeAPI, type RowComponentProps } from "./types";
 import { useDynamicRowHeight } from "./useDynamicRowHeight";
@@ -617,6 +621,105 @@ describe("List", () => {
       });
     });
 
+    test("should throw a meaningful error if an invalid index is passed to anchorRow", () => {
+      const listRef = createRef<ListImperativeAPI>();
+
+      render(
+        <List
+          rowCount={25}
+          listRef={listRef}
+          rowComponent={RowComponent}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        />
+      );
+
+      expect(() => {
+        listRef.current?.anchorRow({ index: -1 });
+      }).toThrowError("Invalid index specified: -1");
+
+      expect(() => {
+        listRef.current?.anchorRow({ index: 25 });
+      }).toThrowError("Invalid index specified: 25");
+    });
+
+    test("should ignore anchorRow for row heights that aren't dynamic", () => {
+      const listRef = createRef<ListImperativeAPI>();
+      const rowHeight = (index: number, { tall }: { tall: boolean }) =>
+        index === 38 && tall ? 75 : 25;
+
+      const { rerender } = render(
+        <List
+          listRef={listRef}
+          rowComponent={RowComponent}
+          rowCount={100}
+          rowHeight={rowHeight}
+          rowProps={{ tall: false }}
+          style={{ height: 100 }}
+        />
+      );
+      const listElement = listRef.current?.element;
+      assert(listElement, "List element not mounted");
+      Object.defineProperty(listElement, "clientHeight", { value: 100 });
+      act(() => listElement.scrollTo({ top: 1000 }));
+
+      const scrollTo = vi.mocked(HTMLElement.prototype.scrollTo);
+      scrollTo.mockClear();
+      listRef.current?.anchorRow({ index: 40 });
+      rerender(
+        <List
+          listRef={listRef}
+          rowComponent={RowComponent}
+          rowCount={100}
+          rowHeight={rowHeight}
+          rowProps={{ tall: true }}
+          style={{ height: 100 }}
+        />
+      );
+
+      expect(scrollTo).not.toHaveBeenCalled();
+      expect(listElement.scrollTop).toBe(1000);
+    });
+
+    test("should stop tracking a touch when unmounted during it", () => {
+      vi.useFakeTimers({ toFake: ["clearTimeout", "setTimeout"] });
+      onTestFinished(() => {
+        vi.useRealTimers();
+      });
+
+      function Row({ index, style }: RowComponentProps) {
+        return (
+          <div data-testid={`row-${index}`} style={style}>
+            Row {index}
+          </div>
+        );
+      }
+      function TouchExample() {
+        const rowHeight = useDynamicRowHeight({ defaultRowHeight: 25 });
+        return (
+          <List
+            rowComponent={Row}
+            rowCount={100}
+            rowHeight={rowHeight}
+            rowProps={EMPTY_OBJECT}
+            style={{ height: 100 }}
+          />
+        );
+      }
+      const { unmount } = render(<TouchExample />);
+
+      const row = screen.getByTestId("row-0");
+      act(() => {
+        row.dispatchEvent(new Event("touchstart", { bubbles: true }));
+      });
+      unmount();
+      expect(vi.getTimerCount()).toBe(0);
+
+      // The touched row's listeners were removed too
+      row.dispatchEvent(new Event("touchend"));
+      expect(vi.getTimerCount()).toBe(0);
+    });
+
     test("should throw a meaningful error if an invalid index is passed to scrollToRow", () => {
       const listRef = createRef<ListImperativeAPI>();
 
@@ -954,6 +1057,180 @@ describe("List", () => {
         for (const [options] of scrollTo.mock.calls) {
           expect(options).toMatchObject({ behavior: "instant" });
         }
+      });
+
+      test("waits for smooth scrolling to finish before replacing a touch scroll shift", () => {
+        vi.useFakeTimers({ toFake: ["clearTimeout", "setTimeout"] });
+        let frame: FrameRequestCallback | undefined;
+        const requestFrame = vi
+          .spyOn(window, "requestAnimationFrame")
+          .mockImplementation((callback) => {
+            frame = callback;
+            return 42;
+          });
+        const now = vi.spyOn(performance, "now").mockReturnValue(0);
+        onTestFinished(() => {
+          vi.useRealTimers();
+          requestFrame.mockRestore();
+          now.mockRestore();
+        });
+        const listRef = createRef<ListImperativeAPI>();
+        function Row({ index, style }: RowComponentProps) {
+          return (
+            <div data-testid={`row-${index}`} style={style}>
+              Row {index}
+            </div>
+          );
+        }
+        function TouchScrollExample() {
+          const rowHeight = useDynamicRowHeight({ defaultRowHeight: 25 });
+          return (
+            <List
+              listRef={listRef}
+              rowCount={100}
+              rowHeight={rowHeight}
+              rowComponent={Row}
+              rowProps={EMPTY_OBJECT}
+              style={{ height: 100 }}
+            />
+          );
+        }
+        const rowHeights = new Map<number, number>();
+        const setMockRowHeights = () =>
+          setElementSizeFunction((element) => {
+            const attribute = element.getAttribute(DATA_ATTRIBUTE_LIST_INDEX);
+            if (attribute !== null) {
+              const height = rowHeights.get(parseInt(attribute)) ?? 25;
+              return new DOMRect(0, 0, 100, height);
+            }
+          });
+        setMockRowHeights();
+
+        const { unmount } = render(<TouchScrollExample />);
+        onTestFinished(unmount);
+
+        const listElement = listRef.current?.element;
+        assert(listElement, "List element not mounted");
+        Object.defineProperty(listElement, "clientHeight", { value: 100 });
+        Object.defineProperty(listElement, "scrollHeight", { value: 2550 });
+
+        // Rows 40-43 are visible
+        act(() => listElement.scrollTo({ top: 1000 }));
+        act(() => {
+          listElement.dispatchEvent(new Event("touchstart"));
+        });
+
+        // A row above the viewport grows; the rows are shifted (rather than scrolled) to keep row 40 in place
+        expect(screen.getByTestId("row-38")).toBeTruthy();
+        act(() => {
+          rowHeights.set(38, 75);
+          setMockRowHeights();
+        });
+        expect(listElement.scrollTop).toBe(1000);
+        expect(screen.getByTestId("row-40").style.transform).toBe(
+          "translateY(1000px)"
+        );
+
+        act(() =>
+          listRef.current?.scrollToRow({
+            align: "start",
+            behavior: "smooth",
+            index: 30
+          })
+        );
+        act(() => frame?.(0));
+        act(() => {
+          listElement.dispatchEvent(new Event("touchend"));
+        });
+
+        // Scrolling has stopped, but the animation is based on the shifted positions
+        act(() => vi.advanceTimersByTime(200));
+        expect(listElement.scrollTop).toBe(1000);
+
+        // (jsdom doesn't lay out rows, so corrections continue until the deadline)
+        for (
+          let time = SMOOTH_SCROLL_DURATION;
+          time <= SMOOTH_SCROLL_DURATION + CORRECTION_DURATION + 100;
+          time += 100
+        ) {
+          now.mockReturnValue(time);
+          act(() => frame?.(time));
+        }
+        // Row 30 is at the top (with the rows shifted by 50px)
+        expect(listElement.scrollTop).toBe(700);
+
+        // Once the animation has finished, the shift is replaced by a change in scroll position
+        act(() => vi.advanceTimersByTime(200));
+        expect(listElement.scrollTop).toBe(750);
+        expect(screen.getByTestId("row-30").style.transform).toBe(
+          "translateY(750px)"
+        );
+      });
+
+      test("warns (once) if rows can't be kept in place because the content is too small", () => {
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+        onTestFinished(() => warn.mockRestore());
+
+        const listRef = createRef<ListImperativeAPI>();
+        function Row({ index, style }: RowComponentProps) {
+          return (
+            <div data-testid={`row-${index}`} style={style}>
+              Row {index}
+            </div>
+          );
+        }
+        function ClampedExample() {
+          const rowHeight = useDynamicRowHeight({ defaultRowHeight: 25 });
+          return (
+            <List
+              listRef={listRef}
+              rowCount={100}
+              rowHeight={rowHeight}
+              rowComponent={Row}
+              rowProps={EMPTY_OBJECT}
+              style={{ height: 100 }}
+            />
+          );
+        }
+
+        const rowHeights = new Map<number, number>();
+        const setMockRowHeights = () =>
+          setElementSizeFunction((element) => {
+            const attribute = element.getAttribute(DATA_ATTRIBUTE_LIST_INDEX);
+            if (attribute !== null) {
+              const height = rowHeights.get(parseInt(attribute)) ?? 25;
+              return new DOMRect(0, 0, 100, height);
+            }
+          });
+        setMockRowHeights();
+
+        render(<ClampedExample />);
+        const listElement = listRef.current?.element;
+        assert(listElement, "List element not mounted");
+        Object.defineProperty(listElement, "clientHeight", { value: 100 });
+        act(() => listElement.scrollTo({ top: 1000 }));
+
+        // The browser can't scroll any further (e.g. the content is too small)
+        const scrollTo = vi
+          .spyOn(HTMLElement.prototype, "scrollTo")
+          .mockImplementation(() => {});
+        onTestFinished(() => scrollTo.mockRestore());
+
+        act(() => {
+          rowHeights.set(38, 75);
+          setMockRowHeights();
+        });
+        expect(warn).toHaveBeenCalledTimes(1);
+        expect(warn.mock.calls[0][0]).toContain(
+          "Items could not be kept in place"
+        );
+
+        // Another row above the viewport grows
+        act(() => {
+          rowHeights.set(37, 75);
+          setMockRowHeights();
+        });
+        expect(warn).toHaveBeenCalledTimes(1);
       });
 
       test("does not animate smooth scrolling while the page is hidden", () => {
