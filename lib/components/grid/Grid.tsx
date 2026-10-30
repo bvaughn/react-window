@@ -18,13 +18,7 @@ import { arePropsEqual } from "../../utils/arePropsEqual";
 import { scrollTargetTo } from "../../utils/scrollElement";
 import type { GridProps } from "./types";
 
-/**
- * Renders data with many rows and columns.
- *
- * ℹ️ Unlike `List` rows, `Grid` cell sizes must be known ahead of time.
- * Either static sizes or something that can be derived (from the data in `CellProps`) without rendering.
- */
-export function Grid<
+function GridComponent<
   CellProps extends object,
   TagName extends TagNames = "div"
 >({
@@ -359,3 +353,13 @@ export function Grid<
     sizingElement
   );
 }
+
+/**
+ * Renders data with many rows and columns.
+ *
+ * ℹ️ Unlike `List` rows, `Grid` cell sizes must be known ahead of time.
+ * Either static sizes or something that can be derived (from the data in `CellProps`) without rendering.
+ */
+export const Grid = /* @__PURE__ */ Object.assign(GridComponent, {
+  displayName: "Grid"
+});

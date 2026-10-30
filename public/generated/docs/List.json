@@ -224,7 +224,7 @@
           "intent": "warning"
         }
       ],
-      "html": "<div><span class=\"tok-variableName\"><span class=\"tok-propertyName\">tagName</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">keyof </span><span class=\"\">IntrinsicElements </span><span class=\"tok-operator\">=</span><span class=\"\"> </span><span class=\"tok-string\">\"div\"</span><span class=\"\"> </span><span class=\"tok-keyword\">as</span><span class=\"\"> </span><span class=\"tok-typeName\">TagName</span></div>",
+      "html": "<div><span class=\"tok-variableName\"><span class=\"tok-propertyName\">tagName</span></span><span class=\"tok-operator\">?</span><span class=\"tok-punctuation\">:</span><span class=\"\"> </span><span class=\"tok-variableName\">keyof </span><span class=\"\">IntrinsicElements </span><span class=\"tok-operator\">=</span><span class=\"\"> </span><span class=\"tok-string\">\"div\"</span></div>",
       "name": "tagName",
       "required": false
     }

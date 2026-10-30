@@ -26,10 +26,7 @@ import type { ListProps } from "./types";
 
 export const DATA_ATTRIBUTE_SIZER = "data-react-window-sizer";
 
-/**
- * Renders data with many rows.
- */
-export function List<
+function ListComponent<
   RowProps extends object,
   TagName extends TagNames = "div"
 >({
@@ -301,3 +298,10 @@ export function List<
     sizingElement
   );
 }
+
+/**
+ * Renders data with many rows.
+ */
+export const List = /* @__PURE__ */ Object.assign(ListComponent, {
+  displayName: "List"
+});

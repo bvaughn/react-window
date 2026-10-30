@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.5.2
+
+- Add `displayName` to `List` and `Grid` (e.g. for React DevTools and error messages in minified builds). The names are set in a way that does not prevent bundlers from tree shaking unused components.
+
 ## 2.5.1
 
 - `scrollToRow` (and `useVirtualizer`'s `scrollToIndex`) supports `behavior: "smooth"` for dynamic row heights. The scroll is animated by the list so that its destination can be corrected as rows are measured along the way. Corrections for a scroll requested while the page is hidden no longer time out before the page is visible again.
