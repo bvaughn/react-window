@@ -96,6 +96,8 @@ export type GridProps<
    *
    * ℹ️ Grids can't be measured during server rendering, so this value determines how many rows are server rendered.
    * It's recommended to set this to the expected height of the grid (or to specify a pixel height via the `style` prop).
+   *
+   * @default 0
    */
   defaultHeight?: number;
 
@@ -109,6 +111,8 @@ export type GridProps<
    * ⚠️ If the grid can't be scrolled that far when the offset is applied (e.g. it is hidden with `display: none`,
    * or uses percentage column widths before its width has been measured), the offset is clamped or ignored and not retried.
    * Specify a `defaultWidth` (or a pixel width via the `style` prop) when using percentage column widths.
+   *
+   * @default 0
    */
   defaultScrollLeft?: number;
 
@@ -122,6 +126,8 @@ export type GridProps<
    * ⚠️ If the grid can't be scrolled that far when the offset is applied (e.g. it is hidden with `display: none`,
    * or uses percentage row heights before its height has been measured), the offset is clamped or ignored and not retried.
    * Specify a `defaultHeight` (or a pixel height via the `style` prop) when using percentage row heights.
+   *
+   * @default 0
    */
   defaultScrollTop?: number;
 
@@ -130,6 +136,8 @@ export type GridProps<
    *
    * ℹ️ Grids can't be measured during server rendering, so this value determines how many columns are server rendered.
    * It's recommended to set this to the expected width of the grid (or to specify a pixel width via the `style` prop).
+   *
+   * @default 0
    */
   defaultWidth?: number;
 
@@ -240,6 +248,8 @@ export type GridProps<
   /**
    * How many additional rows/columns to render outside of the visible area.
    * This can reduce visual flickering near the edges of a grid when scrolling.
+   *
+   * @default 3
    */
   overscanCount?: number;
 
@@ -307,6 +317,8 @@ export type GridProps<
    * The default value is "div", meaning that Grid renders an HTMLDivElement as its root.
    *
    * ⚠️ In most use cases the default ARIA roles are sufficient and this prop is not needed.
+   *
+   * @default "div"
    */
   tagName?: TagName;
 };
