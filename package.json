@@ -15,6 +15,7 @@
   "main": "dist/react-window.cjs",
   "module": "dist/react-window.js",
   "types": "dist/react-window.d.ts",
+  "sideEffects": false,
   "files": [
     "dist"
   ],
