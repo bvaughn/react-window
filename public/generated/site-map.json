@@ -177,7 +177,7 @@
       {
         "id": "tagName",
         "title": "tagName",
-        "text": "tagName?: keyof IntrinsicElements = \"div\" as TagName Can be used to override the root HTML element rendered by the Grid component.\nThe default value is \"div\", meaning that Grid renders an HTMLDivElement as its root.\n In most use cases the default ARIA roles are sufficient and this prop is not needed."
+        "text": "tagName?: keyof IntrinsicElements = \"div\" Can be used to override the root HTML element rendered by the Grid component.\nThe default value is \"div\", meaning that Grid renders an HTMLDivElement as its root.\n In most use cases the default ARIA roles are sufficient and this prop is not needed."
       }
     ],
     "path": "/grid/props",
@@ -387,7 +387,7 @@
       {
         "id": "rowKey",
         "title": "rowKey",
-        "text": "rowKey?: (index: number, data: RowProps) => Key Lists use the row index as a key by default.\nThis prop can provide a custom key value.\n Custom keys can ensure better UX for sortable or filterable lists,\nparticularly if your row components are stateful.\nRefer to the React documentation for more info.\n This prop cannot be auto-memoized because it is called during render.\nIt is important to always useCallback for this prop; do not use an inline function."
+        "text": "rowKey?: (index: number, data: RowProps) => Key Lists use the row index as a key by default.\nThis prop can provide a custom key value.\n Custom keys can ensure better UX for sortable or filterable lists,\nparticularly if your row components are stateful.\nRefer to the React documentation for more info.\n With dynamic row heights (see useDynamicRowHeight), measured heights are stored by key,\nand the rows on screen are kept in place when rows are inserted or removed above them\n(e.g. when older messages are loaded at the top of a chat),\nso don't adjust the scroll position yourself after inserting rows.\n This function is called for many rows (e.g. to calculate row positions), so it should be cheap,\nlike reading an id: (index, { items }) => items[index].id.\nKeys must be stable: a row's key must not change when other rows are inserted or removed,\nso don't use the index or a random value.\n This prop cannot be auto-memoized because it is called during render.\nIt is important to always useCallback for this prop; do not use an inline function."
       },
       {
         "id": "scrollElement",
@@ -402,7 +402,7 @@
       {
         "id": "tagName",
         "title": "tagName",
-        "text": "tagName?: keyof IntrinsicElements = \"div\" as TagName Can be used to override the root HTML element rendered by the List component.\nThe default value is \"div\", meaning that List renders an HTMLDivElement as its root.\n In most use cases the default ARIA roles are sufficient and this prop is not needed."
+        "text": "tagName?: keyof IntrinsicElements = \"div\" Can be used to override the root HTML element rendered by the List component.\nThe default value is \"div\", meaning that List renders an HTMLDivElement as its root.\n In most use cases the default ARIA roles are sufficient and this prop is not needed."
       }
     ],
     "path": "/list/props",
