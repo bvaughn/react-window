@@ -59,6 +59,7 @@ Renders data with many rows.
       <td><p>React component responsible for rendering a row.</p>
 <p>This component will receive an <code>index</code> and <code>style</code> prop by default.
 Additionally it will receive prop values passed to <code>rowProps</code>.</p>
+<p>ℹ️ Spread <code>ariaAttributes</code> onto the row element; they identify it as a row (e.g. so that dynamic row heights are measured reliably)</p>
 <p>ℹ️ The prop types for this component are exported as <code>RowComponentProps</code></p>
 </td>
     </tr>

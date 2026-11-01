@@ -36,6 +36,7 @@ function Example({
 }
 
 function RowComponent({
+  ariaAttributes,
   currentPlayerIndex,
   index,
   players,
@@ -43,11 +44,11 @@ function RowComponent({
 }: RowComponentProps<{ currentPlayerIndex: number; players: Player[] }>) {
   // The first row is hidden behind the sticky row
   if (index === 0) {
-    return <div style={style} />;
+    return <div {...ariaAttributes} style={style} />;
   }
 
   return (
-    <div style={style}>
+    <div {...ariaAttributes} style={style}>
       <Standing
         className={cn("h-full", {
           "font-bold text-sky-600 dark:text-sky-400":

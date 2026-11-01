@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- `List` identifies rows by the `ariaAttributes` they spread (`aria-posinset`), so that additional children (e.g. sticky rows or overlays) are never measured as rows, and rows that render nothing don't shift the indices of the rows after them. Rows that don't spread `ariaAttributes`, or that override `aria-posinset` or `aria-setsize`, are still matched by their position. If only some rows spread `ariaAttributes` (e.g. loaded rows but not loading placeholders), the rows that don't are not measured; spread `ariaAttributes` onto every row (or none).
+
 ## 2.5.2
 
 - Add `displayName` to `List` and `Grid` (e.g. for React DevTools and error messages in minified builds). The names are set in a way that does not prevent bundlers from tree shaking unused components.

@@ -48,14 +48,22 @@ function Example() {
 }
 
 function RowComponent({
+  ariaAttributes,
   index,
   items,
   style
 }: RowComponentProps<{ items: Contact[] }>) {
   // The extra row at the end renders a placeholder while the next page loads
+  // (like other rows, it spreads ariaAttributes so that it's identified as a row)
   if (index >= items.length) {
     return (
-      <div className="flex items-center gap-2 px-2" style={style}>
+      <div
+        {...ariaAttributes}
+        aria-busy
+        aria-label="Loading more contacts"
+        className="flex items-center gap-2 px-2"
+        style={style}
+      >
         <div className="shrink-0 size-8 rounded-full bg-ink/10 animate-pulse" />
         <div className="flex flex-col gap-2">
           <div className="h-3 w-32 rounded bg-ink/10 animate-pulse" />
@@ -68,7 +76,11 @@ function RowComponent({
   const contact = items[index];
 
   return (
-    <div className="flex items-center gap-2 px-2" style={style}>
+    <div
+      {...ariaAttributes}
+      className="flex items-center gap-2 px-2"
+      style={style}
+    >
       <Avatar firstName={contact.first_name} lastName={contact.last_name} />
       <div className="flex flex-col min-w-0">
         <div className="truncate">

@@ -3,6 +3,7 @@ import { Avatar } from "../../examples/Avatar";
 import type { Contact } from "../../grid/examples/Grid";
 
 function RowComponent({
+  ariaAttributes,
   contacts,
   index,
   style
@@ -12,7 +13,7 @@ function RowComponent({
   const contact = contacts[index];
 
   return (
-    <div className="flex items-center gap-2" style={style}>
+    <div {...ariaAttributes} className="flex items-center gap-2" style={style}>
       <Avatar firstName={contact.first_name} lastName={contact.last_name} />
       <div className="flex flex-col min-w-0">
         <div className="truncate">

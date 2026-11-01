@@ -128,6 +128,8 @@ export type ListProps<
    * This component will receive an `index` and `style` prop by default.
    * Additionally it will receive prop values passed to `rowProps`.
    *
+   * ℹ️ Spread `ariaAttributes` onto the row element; they identify it as a row (e.g. so that dynamic row heights are measured reliably)
+   *
    * ℹ️ The prop types for this component are exported as `RowComponentProps`
    */
   rowComponent: (

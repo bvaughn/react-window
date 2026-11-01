@@ -1,6 +1,7 @@
 import { type RowComponentProps } from "react-window";
 
 function RowComponent({
+  ariaAttributes,
   index,
   names,
   style
@@ -8,7 +9,11 @@ function RowComponent({
   names: string[];
 }>) {
   return (
-    <div className="flex items-center justify-between" style={style}>
+    <div
+      {...ariaAttributes}
+      className="flex items-center justify-between"
+      style={style}
+    >
       {names[index]}
       <div className="text-slate-500 text-xs">{`${index + 1} of ${names.length}`}</div>
     </div>

@@ -816,6 +816,223 @@ describe("List", () => {
         }
       );
 
+      test("does not observe children when rows that spread ariaAttributes render nothing or multiple elements", () => {
+        const observeRowElements = vi.fn<
+          (elements: Element[] | NodeListOf<Element>) => () => void
+        >(() => () => {});
+        const rowHeight = {
+          getRowHeight: () => 25,
+          getAverageRowHeight: () => 25,
+          setRowHeight: () => {},
+          observeRowElements
+        };
+        function Row({ ariaAttributes, index, style }: RowComponentProps) {
+          switch (index) {
+            case 1:
+              return null;
+            case 2:
+              return (
+                <>
+                  <div {...ariaAttributes} style={style}>
+                    Row {index}
+                  </div>
+                  <div data-testid="row-2-extra" />
+                </>
+              );
+            default:
+              return (
+                <div {...ariaAttributes} style={style}>
+                  Row {index}
+                </div>
+              );
+          }
+        }
+        render(
+          <List
+            rowCount={4}
+            rowHeight={rowHeight}
+            rowComponent={Row}
+            rowProps={EMPTY_OBJECT}
+          >
+            <div data-testid="overlay">Overlay</div>
+          </List>
+        );
+
+        expect(screen.getByTestId("overlay")).not.toHaveAttribute(
+          DATA_ATTRIBUTE_LIST_INDEX
+        );
+        expect(screen.getByTestId("row-2-extra")).not.toHaveAttribute(
+          DATA_ATTRIBUTE_LIST_INDEX
+        );
+
+        const rows = Array.from(observeRowElements.mock.lastCall![0]);
+        expect(
+          rows.map((row) => row.getAttribute(DATA_ATTRIBUTE_LIST_INDEX))
+        ).toEqual(["0", "2", "3"]);
+      });
+
+      test("clears the index of children that were matched as rows by position in an earlier render", () => {
+        const observeRowElements = vi.fn<
+          (elements: Element[] | NodeListOf<Element>) => () => void
+        >(() => () => {});
+        const rowHeight = {
+          getRowHeight: () => 25,
+          getAverageRowHeight: () => 25,
+          setRowHeight: () => {},
+          observeRowElements
+        };
+        // Rows that don't spread ariaAttributes can only be matched by position,
+        // so a row that renders nothing shifts the overlay into the range of rows
+        function Row({
+          emptyIndex,
+          index,
+          style
+        }: RowComponentProps<{ emptyIndex: number }>) {
+          return index === emptyIndex ? null : (
+            <div role="listitem" style={style}>
+              Row {index}
+            </div>
+          );
+        }
+        const { rerender } = render(
+          <List
+            rowCount={3}
+            rowHeight={rowHeight}
+            rowComponent={Row}
+            rowProps={{ emptyIndex: 1 }}
+          >
+            <div data-testid="overlay">Overlay</div>
+          </List>
+        );
+
+        rerender(
+          <List
+            rowCount={3}
+            rowHeight={rowHeight}
+            rowComponent={Row}
+            rowProps={{ emptyIndex: -1 }}
+          >
+            <div data-testid="overlay">Overlay</div>
+          </List>
+        );
+
+        expect(screen.getByTestId("overlay")).not.toHaveAttribute(
+          DATA_ATTRIBUTE_LIST_INDEX
+        );
+        const rows = Array.from(observeRowElements.mock.lastCall![0]);
+        expect(rows).not.toContain(screen.getByTestId("overlay"));
+        expect(
+          rows.map((row) => row.getAttribute(DATA_ATTRIBUTE_LIST_INDEX))
+        ).toEqual(["0", "1", "2"]);
+      });
+
+      test("measures placeholder rows that are replaced by rows that spread ariaAttributes", () => {
+        const observeRowElements = vi.fn<
+          (elements: Element[] | NodeListOf<Element>) => () => void
+        >(() => () => {});
+        const rowHeight = {
+          getRowHeight: () => 25,
+          getAverageRowHeight: () => 25,
+          setRowHeight: () => {},
+          observeRowElements
+        };
+        function Row({
+          ariaAttributes,
+          index,
+          loadedCount,
+          style
+        }: RowComponentProps<{ loadedCount: number }>) {
+          return index < loadedCount ? (
+            <div {...ariaAttributes} data-testid={`row-${index}`} style={style}>
+              Row {index}
+            </div>
+          ) : (
+            <div data-testid={`row-${index}`} style={style}>
+              Loading…
+            </div>
+          );
+        }
+        const { rerender } = render(
+          <List
+            rowCount={3}
+            rowHeight={rowHeight}
+            rowComponent={Row}
+            rowProps={{ loadedCount: 0 }}
+          />
+        );
+
+        rerender(
+          <List
+            rowCount={3}
+            rowHeight={rowHeight}
+            rowComponent={Row}
+            rowProps={{ loadedCount: 3 }}
+          />
+        );
+        rerender(
+          <List
+            rowCount={4}
+            rowHeight={rowHeight}
+            rowComponent={Row}
+            rowProps={{ loadedCount: 4 }}
+          />
+        );
+
+        const rows = Array.from(observeRowElements.mock.lastCall![0]);
+        expect(rows.map((row) => row.getAttribute("data-testid"))).toEqual([
+          "row-0",
+          "row-1",
+          "row-2",
+          "row-3"
+        ]);
+        rows.forEach((row, index) => {
+          expect(row).toHaveAttribute(DATA_ATTRIBUTE_LIST_INDEX, `${index}`);
+        });
+      });
+
+      test("matches rows by position if they override aria-posinset", () => {
+        const observeRowElements = vi.fn<
+          (elements: Element[] | NodeListOf<Element>) => () => void
+        >(() => () => {});
+        const rowHeight = {
+          getRowHeight: () => 25,
+          getAverageRowHeight: () => 25,
+          setRowHeight: () => {},
+          observeRowElements
+        };
+        // e.g. rows numbered within groups of two
+        function Row({ ariaAttributes, index, style }: RowComponentProps) {
+          return (
+            <div
+              {...ariaAttributes}
+              aria-posinset={(index % 2) + 1}
+              aria-setsize={2}
+              style={style}
+            >
+              Row {index}
+            </div>
+          );
+        }
+        render(
+          <List
+            rowCount={4}
+            rowHeight={rowHeight}
+            rowComponent={Row}
+            rowProps={EMPTY_OBJECT}
+          >
+            <div data-testid="overlay" />
+          </List>
+        );
+
+        expect(screen.getByTestId("overlay")).not.toHaveAttribute(
+          DATA_ATTRIBUTE_LIST_INDEX
+        );
+        const rows = Array.from(observeRowElements.mock.lastCall![0]);
+        expect(
+          rows.map((row) => row.getAttribute(DATA_ATTRIBUTE_LIST_INDEX))
+        ).toEqual(["0", "1", "2", "3"]);
+      });
+
       test("does not observe the sizing element", () => {
         const observeRowElements = vi.fn<
           (elements: Element[] | NodeListOf<Element>) => () => void
@@ -1440,6 +1657,31 @@ describe("List", () => {
       expect(rows[1].getAttribute("aria-setsize")).toBe("3");
       expect(rows[2].getAttribute("aria-posinset")).toBe("3");
       expect(rows[2].getAttribute("aria-setsize")).toBe("3");
+    });
+
+    test("should identify rows that override the role", () => {
+      const { container } = render(
+        <List
+          rowCount={3}
+          rowComponent={({ ariaAttributes, index, style }) => (
+            <div {...ariaAttributes} role="row" style={style}>
+              Row {index}
+            </div>
+          )}
+          rowHeight={25}
+          rowProps={EMPTY_OBJECT}
+        >
+          <div data-testid="overlay" />
+        </List>
+      );
+
+      expect(screen.getByTestId("overlay")).not.toHaveAttribute(
+        DATA_ATTRIBUTE_LIST_INDEX
+      );
+      const rows = container.querySelectorAll('[role="row"]');
+      rows.forEach((row, index) => {
+        expect(row).toHaveAttribute(DATA_ATTRIBUTE_LIST_INDEX, `${index}`);
+      });
     });
 
     test("should support overrides for use cases like tabular data", () => {

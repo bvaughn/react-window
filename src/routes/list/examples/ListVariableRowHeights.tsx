@@ -40,7 +40,12 @@ function rowHeight(index: number, { items }: RowProps) {
 
 // <end>
 
-function RowComponent({ index, items, style }: RowComponentProps<RowProps>) {
+function RowComponent({
+  ariaAttributes,
+  index,
+  items,
+  style
+}: RowComponentProps<RowProps>) {
   const item = items[index];
 
   let className = "flex items-center justify-between gap-2";
@@ -49,7 +54,7 @@ function RowComponent({ index, items, style }: RowComponentProps<RowProps>) {
   }
 
   return (
-    <div className={className} style={style}>
+    <div {...ariaAttributes} className={className} style={style}>
       {item.type === "state" ? (
         <span>{item.state}</span>
       ) : (
