@@ -228,6 +228,31 @@ describe("hydration", () => {
       expect(onMount).toHaveBeenCalledTimes(1);
     });
 
+    test("should not measure children as rows while dynamic height rows are in flow layout", () => {
+      setElementSizeFunction((element) => {
+        if (element.getAttribute("data-testid") === "sticky-row") {
+          return new DOMRect(0, 0, 200, 300);
+        }
+        if (element.hasAttribute(DATA_ATTRIBUTE_LIST_INDEX)) {
+          return new DOMRect(0, 0, 200, 40);
+        }
+      });
+
+      const { container } = serverRenderAndHydrate(
+        <DynamicList>
+          <div data-testid="sticky-row" />
+        </DynamicList>
+      );
+
+      // Rows follow children in flow layout, so the first elements are not rows
+      const stickyRow = container.querySelector('[data-testid="sticky-row"]')!;
+      expect(stickyRow.hasAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe(false);
+
+      const rows = container.querySelectorAll<HTMLElement>('[role="listitem"]');
+      expect(rows[0].getAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe("0");
+      expect(rows[1].style.transform).toBe("translateY(40px)");
+    });
+
     test("should switch dynamic height rows to absolute layout if measurements never arrive", async () => {
       // Simulate rows that have no height yet (e.g. images that haven't loaded); these measurements are ignored
       setElementSizeFunction((element) => {
