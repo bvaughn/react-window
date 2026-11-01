@@ -138,28 +138,33 @@ function ListComponent<
     [element, scrollToRow]
   );
 
+  // Flow layout only matches the absolute layout if rendering starts at the first row
+  const isFlowLayoutActive =
+    isFlowLayout && isDynamicRowHeight && startIndexOverscan === 0;
+
   useIsomorphicLayoutEffect(() => {
     if (!element) {
       return;
     }
 
     // Additional children (e.g. overlays) are not rows and must not be measured.
-    const rows = Array.from(element.children)
-      .slice(
-        0,
-        startIndexOverscan < 0 ? 0 : stopIndexOverscan - startIndexOverscan + 1
-      )
-      .filter((item, index) => {
-        if (item.hasAttribute(DATA_ATTRIBUTE_SIZER)) {
-          // Ignore sizing element
-          return false;
-        }
+    // Rows are rendered before them, except in flow layout (see below).
+    const renderedRowCount =
+      startIndexOverscan < 0 ? 0 : stopIndexOverscan - startIndexOverscan + 1;
+    const elements = Array.from(element.children).filter(
+      // Ignore sizing element
+      (item) => !item.hasAttribute(DATA_ATTRIBUTE_SIZER)
+    );
+    const rows = isFlowLayoutActive
+      ? elements.slice(elements.length - renderedRowCount)
+      : elements.slice(0, renderedRowCount);
 
-        const attribute = `${startIndexOverscan + index}`;
-        item.setAttribute(DATA_ATTRIBUTE_LIST_INDEX, attribute);
-
-        return true;
-      });
+    rows.forEach((item, index) => {
+      item.setAttribute(
+        DATA_ATTRIBUTE_LIST_INDEX,
+        `${startIndexOverscan + index}`
+      );
+    });
 
     rowElements.current = rows;
 
@@ -170,6 +175,7 @@ function ListComponent<
     RowComponent,
     element,
     isDynamicRowHeight,
+    isFlowLayoutActive,
     rowCount,
     rowHeightProp,
     rowKey,
@@ -198,10 +204,6 @@ function ListComponent<
     stopIndexOverscan,
     stopIndexVisible
   ]);
-
-  // Flow layout only matches the absolute layout if rendering starts at the first row
-  const isFlowLayoutActive =
-    isFlowLayout && isDynamicRowHeight && startIndexOverscan === 0;
 
   const rows = useMemo(() => {
     const children: ReactNode[] = [];
