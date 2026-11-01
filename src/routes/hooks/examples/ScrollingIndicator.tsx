@@ -28,6 +28,7 @@ function Example({ contacts }: { contacts: Contact[] }) {
 }
 
 function RowComponent({
+  ariaAttributes,
   contacts,
   index,
   isScrolling,
@@ -35,7 +36,11 @@ function RowComponent({
 }: RowComponentProps<{ contacts: Contact[]; isScrolling: boolean }>) {
   if (isScrolling) {
     return (
-      <div className="flex items-center gap-2" style={style}>
+      <div
+        {...ariaAttributes}
+        className="flex items-center gap-2"
+        style={style}
+      >
         <div className="shrink-0 size-8 rounded-full bg-ink/10" />
         <div className="flex flex-col gap-2">
           <div className="h-3 w-32 rounded bg-ink/10" />
@@ -48,7 +53,7 @@ function RowComponent({
   const contact = contacts[index];
 
   return (
-    <div className="flex items-center gap-2" style={style}>
+    <div {...ariaAttributes} className="flex items-center gap-2" style={style}>
       <Avatar firstName={contact.first_name} lastName={contact.last_name} />
       <div className="flex flex-col min-w-0">
         <div className="truncate">

@@ -33,6 +33,7 @@ function Example({ addresses }: { addresses: Address[] }) {
 }
 
 function RowComponent({
+  ariaAttributes,
   index,
   addresses,
   style
@@ -42,7 +43,11 @@ function RowComponent({
   const address = addresses[index];
 
   return (
-    <div className="flex flex-row items-center gap-2 px-2" style={style}>
+    <div
+      {...ariaAttributes}
+      className="flex flex-row items-center gap-2 px-2"
+      style={style}
+    >
       <div className="flex-1">{address.city}</div>
       <div className="flex-1">{address.state}</div>
       <div className="w-10 text-xs">{address.zip}</div>

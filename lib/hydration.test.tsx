@@ -36,12 +36,26 @@ function CellComponent({
   );
 }
 
+// Rows aren't required to spread ariaAttributes (which identify them as rows)
+function RowComponentWithoutAriaAttributes({
+  index,
+  style
+}: RowComponentProps) {
+  return (
+    <div role="listitem" style={style}>
+      Row {index}
+    </div>
+  );
+}
+
 function DynamicList({
   children,
-  initialRowHeights
+  initialRowHeights,
+  rowComponent = RowComponent
 }: {
   children?: ReactNode;
   initialRowHeights?: number[];
+  rowComponent?: (props: RowComponentProps) => ReactElement | null;
 }) {
   const rowHeight = useDynamicRowHeight({
     defaultRowHeight: 25,
@@ -52,7 +66,7 @@ function DynamicList({
     <List
       defaultHeight={100}
       overscanCount={0}
-      rowComponent={RowComponent}
+      rowComponent={rowComponent}
       rowCount={100}
       rowHeight={rowHeight}
       rowProps={EMPTY_OBJECT}
@@ -251,6 +265,83 @@ describe("hydration", () => {
       const rows = container.querySelectorAll<HTMLElement>('[role="listitem"]');
       expect(rows[0].getAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe("0");
       expect(rows[1].style.transform).toBe("translateY(40px)");
+    });
+
+    describe.each([
+      ["spread", RowComponent],
+      ["don't spread", RowComponentWithoutAriaAttributes]
+    ])("rows that %s ariaAttributes", (_, rowComponent) => {
+      test("should not measure children as rows in flow layout or after switching to absolute layout", async () => {
+        // Rows have no height yet, so they remain in flow layout until the next animation frame
+        setElementSizeFunction((element) => {
+          if (element.getAttribute("data-testid") === "sticky-row") {
+            return new DOMRect(0, 0, 200, 300);
+          }
+          if (element.hasAttribute(DATA_ATTRIBUTE_LIST_INDEX)) {
+            return new DOMRect(0, 0, 0, 0);
+          }
+        });
+
+        const { container } = serverRenderAndHydrate(
+          <DynamicList rowComponent={rowComponent}>
+            <div data-testid="sticky-row" />
+          </DynamicList>
+        );
+
+        const stickyRow = container.querySelector(
+          '[data-testid="sticky-row"]'
+        )!;
+        const getRows = () =>
+          container.querySelectorAll<HTMLElement>('[role="listitem"]');
+
+        expect(getRows()[0].style.position).toBe("");
+        expect(stickyRow.hasAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe(false);
+        getRows().forEach((row, index) => {
+          expect(row.getAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe(`${index}`);
+        });
+
+        await waitForAnimationFrames();
+
+        // Rows now render before children
+        const rows = getRows();
+        expect(rows[0].style.position).toBe("absolute");
+        expect(stickyRow.hasAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe(false);
+        rows.forEach((row, index) => {
+          expect(row.getAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe(`${index}`);
+        });
+
+        // The sticky row's height would offset rows if it had been measured as row 0
+        expect(rows[1].style.transform).toBe("translateY(25px)");
+      });
+    });
+
+    test("should not measure children as rows when rows that spread ariaAttributes render nothing", () => {
+      setElementSizeFunction((element) => {
+        if (element.getAttribute("data-testid") === "sticky-row") {
+          return new DOMRect(0, 0, 200, 300);
+        }
+        if (element.hasAttribute(DATA_ATTRIBUTE_LIST_INDEX)) {
+          return new DOMRect(0, 0, 200, 40);
+        }
+      });
+
+      function SometimesEmptyRow(props: RowComponentProps) {
+        return props.index === 1 ? null : <RowComponent {...props} />;
+      }
+
+      const { container } = serverRenderAndHydrate(
+        <DynamicList rowComponent={SometimesEmptyRow}>
+          <div data-testid="sticky-row" />
+        </DynamicList>
+      );
+
+      const stickyRow = container.querySelector('[data-testid="sticky-row"]')!;
+      expect(stickyRow.hasAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe(false);
+
+      const rows = container.querySelectorAll<HTMLElement>('[role="listitem"]');
+      expect(rows[0].getAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe("0");
+      expect(rows[1].getAttribute(DATA_ATTRIBUTE_LIST_INDEX)).toBe("2");
+      expect(rows[1].style.transform).toBe("translateY(65px)");
     });
 
     test("should switch dynamic height rows to absolute layout if measurements never arrive", async () => {

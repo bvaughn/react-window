@@ -6,11 +6,16 @@
 import { type RowComponentProps } from "react-window";
 
 export function RowComponent({
+  ariaAttributes,
   index,
   names,
   style
 }: RowComponentProps<{ names: string[] }>) {
-  return <div style={style}>{names[index]}</div>;
+  return (
+    <div {...ariaAttributes} style={style}>
+      {names[index]}
+    </div>
+  );
 }
 
 // <end>

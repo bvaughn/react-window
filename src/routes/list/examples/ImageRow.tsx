@@ -13,11 +13,16 @@ type RowProps = {
   images: Image[];
 };
 
-function RowComponent({ index, images, style }: RowComponentProps<RowProps>) {
+function RowComponent({
+  ariaAttributes,
+  index,
+  images,
+  style
+}: RowComponentProps<RowProps>) {
   const { alt, height, src, width } = images[index];
 
   return (
-    <div className="p-2" style={style}>
+    <div {...ariaAttributes} className="p-2" style={style}>
       <div className="relative mx-auto max-w-lg overflow-hidden rounded-lg">
         <div className="absolute inset-0 animate-pulse bg-ink/10" />
         <img

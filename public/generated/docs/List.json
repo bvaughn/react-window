@@ -125,6 +125,10 @@
           "content": "<p>This component will receive an <code>index</code> and <code>style</code> prop by default.\nAdditionally it will receive prop values passed to <code>rowProps</code>.</p>\n"
         },
         {
+          "content": "<p>Spread <code>ariaAttributes</code> onto the row element; they identify it as a row (e.g. so that dynamic row heights are measured reliably)</p>\n",
+          "intent": "primary"
+        },
+        {
           "content": "<p>The prop types for this component are exported as <code>RowComponentProps</code></p>\n",
           "intent": "primary"
         }

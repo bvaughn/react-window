@@ -10,6 +10,7 @@ type ChatMessage = {
 };
 
 function RowComponent({
+  ariaAttributes,
   index,
   messages,
   style
@@ -21,6 +22,7 @@ function RowComponent({
 
   return (
     <div
+      {...ariaAttributes}
       className={cn("flex flex-col px-2 py-1", {
         "items-end": isOutgoing,
         "items-start": !isOutgoing

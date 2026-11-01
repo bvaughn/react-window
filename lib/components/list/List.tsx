@@ -21,6 +21,7 @@ import { useIsomorphicLayoutEffect } from "../../hooks/useIsomorphicLayoutEffect
 import { useMemoizedObject } from "../../hooks/useMemoizedObject";
 import type { TagNames } from "../../types";
 import { arePropsEqual } from "../../utils/arePropsEqual";
+import { getRowElements } from "./getRowElements";
 import { isDynamicRowHeight as isDynamicRowHeightUtil } from "./isDynamicRowHeight";
 import type { ListProps } from "./types";
 
@@ -148,22 +149,28 @@ function ListComponent<
     }
 
     // Additional children (e.g. overlays) are not rows and must not be measured.
-    // Rows are rendered before them, except in flow layout (see below).
-    const renderedRowCount =
-      startIndexOverscan < 0 ? 0 : stopIndexOverscan - startIndexOverscan + 1;
     const elements = Array.from(element.children).filter(
       // Ignore sizing element
       (item) => !item.hasAttribute(DATA_ATTRIBUTE_SIZER)
     );
-    const rows = isFlowLayoutActive
-      ? elements.slice(elements.length - renderedRowCount)
-      : elements.slice(0, renderedRowCount);
+    const matches = getRowElements({
+      elements,
+      isFlowLayout: isFlowLayoutActive,
+      rowCount,
+      startIndex: startIndexOverscan,
+      stopIndex: stopIndexOverscan
+    });
+    const rows = matches.map(({ element }) => element);
 
-    rows.forEach((item, index) => {
-      item.setAttribute(
-        DATA_ATTRIBUTE_LIST_INDEX,
-        `${startIndexOverscan + index}`
-      );
+    // Elements that are no longer rows (e.g. children, once rows switch to absolute layout)
+    // must not keep an index from an earlier render
+    elements.forEach((item) => {
+      if (!rows.includes(item)) {
+        item.removeAttribute(DATA_ATTRIBUTE_LIST_INDEX);
+      }
+    });
+    matches.forEach(({ element, index }) => {
+      element.setAttribute(DATA_ATTRIBUTE_LIST_INDEX, `${index}`);
     });
 
     rowElements.current = rows;
