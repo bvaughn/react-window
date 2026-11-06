@@ -301,6 +301,11 @@
   {
     "headings": [
       {
+        "id": "anchorRow",
+        "title": "anchorRow",
+        "text": "anchorRow Keeps the specified row where it is on screen through changes in row heights, e.g. when the user expands or collapses it.\nCall this before making the change.\nBy default, the list keeps the first visible row that didn't change height in place,\nso a row at the top of the viewport that grows would extend upward (its top edge would move out of view).\n Ignored if the row isn't visible when row heights change; only applies to dynamic row heights.\n \n duration How long (in milliseconds) to keep the row in place; defaults to 1000\n index Index of the row to keep in place (0-based)"
+      },
+      {
         "id": "scrollToRow",
         "title": "scrollToRow",
         "text": "scrollToRow Scrolls the list so that the specified row is visible.\nLike the browser's scrollIntoView, items are aligned within the CSS scroll-padding of the element being scrolled\n(e.g. scroll-padding-top can leave room for a sticky header).\nDynamic row heights are measured after rendering;\nContent that resizes later may require another scrollToRow call.\n For dynamic height lists, \"smooth\" scrolling is animated by the list (rather than the browser)\nso that the destination can be corrected as rows are measured along the way.\n \n align Determines the vertical alignment of the element within the list\n behavior Determines whether scrolling is instant or animates smoothly\n index Index of the row to scroll to (0-based)"
@@ -337,7 +342,7 @@
       {
         "id": "rowHeight",
         "title": "rowHeight",
-        "text": "Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the list's current height (string)\nfunction that returns the row height (in pixels) given an index and rowProps \ndynamic row height cache returned by the useDynamicRowHeight hook\n\n Percentage heights can't be resolved during server rendering unless a defaultHeight (or a pixel height via the style prop) is specified.\n Dynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time."
+        "text": "Row height; the following formats are supported:\n\nnumber of pixels (number)\npercentage of the list's current height (string)\nfunction that returns the row height (in pixels) given an index and rowProps \ndynamic row height cache returned by the useDynamicRowHeight hook\n\n Percentage heights can't be resolved during server rendering unless a defaultHeight (or a pixel height via the style prop) is specified.\n With dynamic row heights, the list keeps the rows on screen in place when rows above them change height\n(e.g. as they are measured while scrolling up, or when their content resizes) by adjusting the scroll position.\nThe rows kept in place are those after the first visible row that didn't change height,\nso rows revealed by scrolling up move out of the way as they're measured.\nTo keep a specific row in place instead (e.g. one the user is expanding), call anchorRow before changing it.\nThe scroll position is not adjusted while the list is scrolled to the end (e.g. a chat pinned to the bottom)\nor while scrollToRow is scrolling to a row.\n Dynamic row heights are not as efficient as predetermined sizes.\nIt's recommended to provide your own height values if they can be determined ahead of time."
       },
       {
         "id": "rowProps",
@@ -387,7 +392,7 @@
       {
         "id": "rowKey",
         "title": "rowKey",
-        "text": "Lists use the row index as a key by default.\nThis prop can provide a custom key value.\n Custom keys can ensure better UX for sortable or filterable lists,\nparticularly if your row components are stateful.\nRefer to the React documentation for more info.\n This prop cannot be auto-memoized because it is called during render.\nIt is important to always useCallback for this prop; do not use an inline function."
+        "text": "Lists use the row index as a key by default.\nThis prop can provide a custom key value.\n Custom keys can ensure better UX for sortable or filterable lists,\nparticularly if your row components are stateful.\nRefer to the React documentation for more info.\n With dynamic row heights (see useDynamicRowHeight), measured heights are stored by key,\nand the rows on screen are kept in place when rows are inserted or removed above them\n(e.g. when older messages are loaded at the top of a chat),\nso don't adjust the scroll position yourself after inserting rows.\n This function is called for many rows (e.g. to calculate row positions), so it should be cheap,\nlike reading an id: (index, { items }) => items[index].id.\nKeys must be stable: a row's key must not change when other rows are inserted or removed,\nso don't use the index or a random value.\n This prop cannot be auto-memoized because it is called during render.\nIt is important to always useCallback for this prop; do not use an inline function."
       },
       {
         "id": "scrollElement",
