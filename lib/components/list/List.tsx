@@ -13,7 +13,11 @@ import {
   type ReactNode
 } from "react";
 import { DATA_ATTRIBUTE_LIST_INDEX } from "../../core/itemIndex";
-import { useScrollToIndex } from "../../core/useScrollToIndex";
+import { useMaintainScrollPosition } from "../../core/useMaintainScrollPosition";
+import {
+  useScrollToIndex,
+  type PendingScroll
+} from "../../core/useScrollToIndex";
 import { useVirtualizer } from "../../core/useVirtualizer";
 import { useAfterResizeObserverNotifications } from "../../hooks/useAfterResizeObserverNotifications";
 import { useIsHydrating } from "../../hooks/useIsHydrating";
@@ -61,16 +65,26 @@ function ListComponent<
 
   const rowHeight = useMemo(() => {
     if (isDynamicRowHeight) {
-      return (index: number) => {
+      // Measured heights are stored by key (if provided) so that they follow their rows
+      return (index: number, rowProps: RowProps) => {
         return (
-          rowHeightProp.getRowHeight(index) ??
+          rowHeightProp.getRowHeight(index, rowKey?.(index, rowProps)) ??
           rowHeightProp.getAverageRowHeight()
         );
       };
     }
 
     return rowHeightProp;
-  }, [isDynamicRowHeight, rowHeightProp]);
+  }, [isDynamicRowHeight, rowHeightProp, rowKey]);
+
+  const getRowKey = useMemo(
+    () => (rowKey ? (index: number) => rowKey(index, rowProps) : undefined),
+    [rowKey, rowProps]
+  );
+  const rowKeys = useMemo(
+    () => (getRowKey ? { count: rowCount, getKey: getRowKey } : undefined),
+    [getRowKey, rowCount]
+  );
 
   // Server-rendered rows with dynamic heights haven't been measured yet, so absolutely positioning them
   // (based on estimated heights) would cause them to overlap or leave gaps until after hydration.
@@ -93,7 +107,9 @@ function ListComponent<
     enabled: isFlowLayout
   });
 
+  const pendingScroll = useRef<PendingScroll | null>(null);
   const {
+    anchorItem,
     getCellBounds,
     getEstimatedSize,
     scrollTarget,
@@ -108,12 +124,16 @@ function ListComponent<
     defaultContainerSize: defaultHeight,
     defaultScrollOffset,
     direction: "vertical",
+    getItemKey: getRowKey,
     itemCount: rowCount,
     itemProps: rowProps,
     itemSize: rowHeight,
+    maintainScrollPosition: isDynamicRowHeight,
     onResize,
     overscanCount,
-    scrollElement
+    pendingScroll,
+    scrollElement,
+    useMaintainScrollPosition
   });
 
   const rowElements = useRef<Element[]>([]);
@@ -124,6 +144,7 @@ function ListComponent<
     isDynamicSize: isDynamicRowHeight,
     itemCount: rowCount,
     itemElements: rowElements,
+    pendingScroll,
     scrollTarget,
     getScrollPositionForIndex
   });
@@ -131,12 +152,13 @@ function ListComponent<
   useImperativeHandle(
     listRef,
     () => ({
+      anchorRow: anchorItem,
       get element() {
         return element;
       },
       scrollToRow
     }),
-    [element, scrollToRow]
+    [anchorItem, element, scrollToRow]
   );
 
   // Flow layout only matches the absolute layout if rendering starts at the first row
@@ -176,7 +198,7 @@ function ListComponent<
     rowElements.current = rows;
 
     if (isDynamicRowHeight) {
-      return rowHeightProp.observeRowElements(rows);
+      return rowHeightProp.observeRowElements(rows, rowKeys);
     }
   }, [
     RowComponent,
@@ -185,6 +207,7 @@ function ListComponent<
     isFlowLayoutActive,
     rowCount,
     rowHeightProp,
+    rowKeys,
     rowKey,
     rowProps,
     startIndexOverscan,

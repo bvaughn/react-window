@@ -11,6 +11,7 @@ import {
   type ReactNode
 } from "react";
 import { useIsRtl } from "../../core/useIsRtl";
+import { noMaintainScrollPosition } from "../../core/noMaintainScrollPosition";
 import { useVirtualizer } from "../../core/useVirtualizer";
 import { useMemoizedObject } from "../../hooks/useMemoizedObject";
 import type { Align, TagNames } from "../../types";
@@ -79,7 +80,9 @@ function GridComponent<
     itemSize: columnWidth,
     onResize,
     overscanCount,
-    scrollElement
+    scrollElement,
+    // Grids don't keep items in place when item sizes change
+    useMaintainScrollPosition: noMaintainScrollPosition
   });
 
   const {
@@ -101,7 +104,9 @@ function GridComponent<
     itemSize: rowHeight,
     onResize,
     overscanCount,
-    scrollElement
+    scrollElement,
+    // Grids don't keep items in place when item sizes change
+    useMaintainScrollPosition: noMaintainScrollPosition
   });
 
   useImperativeHandle(
