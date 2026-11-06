@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { getItemIndex } from "../../core/itemIndex";
 import { useIsRtl } from "../../core/useIsRtl";
+import { useMaintainScrollPosition } from "../../core/useMaintainScrollPosition";
 import {
   useScrollToIndex,
   type PendingScroll
@@ -96,7 +97,8 @@ export function useVirtualizer({
     onResize: undefined,
     overscanCount,
     pendingScroll,
-    scrollElement
+    scrollElement,
+    useMaintainScrollPosition
   });
 
   // Elements passed to measureElement; React 18 doesn't say which element unmounted (it passes null),

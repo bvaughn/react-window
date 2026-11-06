@@ -32,7 +32,7 @@ import { getOffsetForIndex } from "./getOffsetForIndex";
 import { getStartStopIndices as getStartStopIndicesUtil } from "./getStartStopIndices";
 import type { Direction, SizeFunction } from "./types";
 import { useCachedBounds } from "./useCachedBounds";
-import { useMaintainScrollPosition } from "./useMaintainScrollPosition";
+import type { MaintainScrollPositionHook } from "./noMaintainScrollPosition";
 import { useItemSize } from "./useItemSize";
 import type { PendingScroll } from "./useScrollToIndex";
 
@@ -51,7 +51,8 @@ export function useVirtualizer<Props extends object>({
   onResize,
   overscanCount,
   pendingScroll,
-  scrollElement
+  scrollElement,
+  useMaintainScrollPosition
 }: {
   containerElement: HTMLElement | null;
   containerStyle?: CSSProperties;
@@ -73,6 +74,9 @@ export function useVirtualizer<Props extends object>({
   overscanCount: number;
   pendingScroll?: RefObject<PendingScroll | null>;
   scrollElement?: ScrollElement | undefined;
+  // Only included by callers that keep items in place (see maintainScrollPosition), to keep it out of other bundles;
+  // must not change while mounted
+  useMaintainScrollPosition: MaintainScrollPositionHook;
 }) {
   // Lists that scroll with an outer element (e.g. the page) render at their full size;
   // the visible region is measured relative to the outer element's viewport.

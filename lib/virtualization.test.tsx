@@ -12,6 +12,7 @@ import type {
   RowComponentProps
 } from "./components/list/types";
 import { useDynamicRowHeight } from "./components/list/useDynamicRowHeight";
+import { noMaintainScrollPosition } from "./core/noMaintainScrollPosition";
 import { useVirtualizer } from "./core/useVirtualizer";
 import { getRTLOffsetType } from "./utils/getRTLOffsetType";
 import { setElementSize } from "./utils/test/mockResizeObserver";
@@ -63,7 +64,8 @@ test("switching RTL updates the scroll listener", () => {
         itemProps,
         itemSize: 50,
         overscanCount: 0,
-        onResize: undefined
+        onResize: undefined,
+        useMaintainScrollPosition: noMaintainScrollPosition
       }),
     { initialProps: false }
   );

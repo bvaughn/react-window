@@ -13,6 +13,7 @@ import {
   type ReactNode
 } from "react";
 import { DATA_ATTRIBUTE_LIST_INDEX } from "../../core/itemIndex";
+import { useMaintainScrollPosition } from "../../core/useMaintainScrollPosition";
 import {
   useScrollToIndex,
   type PendingScroll
@@ -131,7 +132,8 @@ function ListComponent<
     onResize,
     overscanCount,
     pendingScroll,
-    scrollElement
+    scrollElement,
+    useMaintainScrollPosition
   });
 
   const rowElements = useRef<Element[]>([]);

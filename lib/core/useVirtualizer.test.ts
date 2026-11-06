@@ -2,6 +2,7 @@ import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, test } from "vitest";
 import { EMPTY_OBJECT, NOOP_FUNCTION } from "../../src/constants";
 import { setDefaultElementSize } from "../utils/test/mockResizeObserver";
+import { noMaintainScrollPosition } from "./noMaintainScrollPosition";
 import { useVirtualizer } from "./useVirtualizer";
 
 describe("useVirtualizer", () => {
@@ -13,7 +14,8 @@ describe("useVirtualizer", () => {
     itemProps: EMPTY_OBJECT,
     itemSize: 25,
     onResize: NOOP_FUNCTION,
-    overscanCount: 0
+    overscanCount: 0,
+    useMaintainScrollPosition: noMaintainScrollPosition
   };
 
   beforeEach(() => {
