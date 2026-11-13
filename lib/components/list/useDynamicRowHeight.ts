@@ -20,6 +20,15 @@ function createInitialMap(
   return map;
 }
 
+/**
+ * Creates a cache of measured row heights for lists whose rows can't be sized ahead of time.
+ * Pass the returned value as the `rowHeight` prop of `List` (or the `itemSize` option of `useVirtualizer`);
+ * rendered rows are then measured with a `ResizeObserver` and the list updates as their sizes change.
+ *
+ * Rows that have not yet been measured use the `defaultRowHeight` (or `initialRowHeights`, if provided).
+ *
+ * ℹ️ Dynamic row heights are more expensive than fixed sizes; prefer a number or function when row heights are known.
+ */
 export function useDynamicRowHeight({
   defaultRowHeight,
   initialRowHeights,

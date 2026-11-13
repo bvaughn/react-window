@@ -87,6 +87,10 @@ const nav: NavConfig<Path | DefaultPath> = [
     title: "Hooks",
     links: [
       {
+        path: "/hooks/use-dynamic-row-height",
+        title: "useDynamicRowHeight"
+      },
+      {
         path: "/hooks/use-is-scrolling",
         title: "useIsScrolling",
         children: [

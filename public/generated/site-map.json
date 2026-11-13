@@ -202,6 +202,24 @@
       {
         "id": "parameters",
         "title": "Parameters",
+        "text": "Parameters defaultRowHeight : number Estimated height (in pixels) of rows that have not yet been measured. initialRowHeights ?: ReadonlyMap<number, number> | readonly number[] Row heights (in pixels) that are known or can be estimated ahead of time; either an array (indexed by row) or a Map of row index to height. These are used in place of defaultRowHeight until rows are measured, which can make server-rendered lists and initial scroll positions more accurate. This value is only read when the hook first mounts and when the key changes. key ?: string | number Changing this value clears all measured row heights, e.g. when the list renders a different set of data."
+      },
+      {
+        "id": "return-value",
+        "title": "Return value",
+        "text": "Return value rowHeight : DynamicRowHeight Row height cache to pass to List or useVirtualizer. Most apps don't need to call its methods directly: getAverageRowHeight(): average height of measured rows (or defaultRowHeight if none have been measured) getRowHeight(index): measured height of a row (or its estimated height if it hasn't been measured) setRowHeight(index, height): records a row's height observeRowElements(elements): measures elements (each with a data-index attribute) as they resize; returns a function that stops observing them Dynamic row heights are not as efficient as predetermined sizes. It's recommended to provide your own height values if they can be determined ahead of time."
+      }
+    ],
+    "path": "/hooks/use-dynamic-row-height",
+    "section": "Hooks",
+    "text": "The useDynamicRowHeight hook creates a cache of measured row heights, for lists whose rows can't be sized until they've been rendered (e.g. a chat log with messages of varying length). Pass the returned value as the rowHeight prop of List (or the itemSize option of useVirtualizer) and rendered rows will be measured automatically. Click below for examples of how to use the hook. With a list With useVirtualizer With server rendering",
+    "title": "useDynamicRowHeight"
+  },
+  {
+    "headings": [
+      {
+        "id": "parameters",
+        "title": "Parameters",
         "text": "Parameters target : \"window\" | HTMLElement | null | undefined The element that scrolls: a list or grid's own element (e.g. from useListCallbackRef) \"window\" or the scroll element, for lists and grids that use the scrollElement prop options ?: { delay?: number } = {} delay: milliseconds without scroll events after which scrolling is considered to have ended; defaults to 150. Scrolling ends when the browser fires a scrollend event. The delay is only used by browsers that don't support that event."
       },
       {

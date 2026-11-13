@@ -34,6 +34,9 @@ export const routes = {
   "/infinite-loading": lazy(
     () => import("./routes/infinite-loading/InfiniteLoadingRoute")
   ),
+  "/hooks/use-dynamic-row-height": lazy(
+    () => import("./routes/hooks/UseDynamicRowHeightRoute")
+  ),
   "/hooks/use-is-scrolling": lazy(
     () => import("./routes/hooks/UseIsScrollingRoute")
   ),
