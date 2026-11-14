@@ -6,7 +6,7 @@ on:
 jobs:
   e2e-tests:
     name: e2e-tests (${{ matrix.browser }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       # Let other browsers finish if one fails
       fail-fast: false
