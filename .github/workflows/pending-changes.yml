@@ -7,27 +7,23 @@ jobs:
   pending-changes:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - uses: pnpm/action-setup@v2
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+      - uses: pnpm/action-setup@v6
         with:
           version: 10
+          cache: true
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --recursive
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
 
-      - name: Setup Google Chrome
-        uses: browser-actions/setup-chrome@v2
-        id: setup-chrome
-        with:
-          install-dependencies: true
-
       - name: Testing
         run: pnpm dev & pnpm run compile:search-index
         env:
-          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+          # Google Chrome is preinstalled on GitHub's Ubuntu runners
+          CHROME_PATH: /usr/bin/google-chrome
 
       - name: Diff
-        run: git diff
+        run: git diff --exit-code
