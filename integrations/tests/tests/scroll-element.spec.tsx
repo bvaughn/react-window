@@ -177,8 +177,15 @@ test.describe("List with window scrollElement", () => {
 
   test("sticky children stick to the top of the page", async ({ page }) => {
     await page.goto(`${HOST}/list-scroll-element?sticky`);
+    // Scrolling before the list has rendered (and made the page tall enough) would be clamped to 0
+    await page.waitForFunction(
+      () =>
+        document.querySelector('[data-testid="sticky"]') !== null &&
+        document.documentElement.scrollHeight >= 2000 + window.innerHeight
+    );
     await page.evaluate(() => window.scrollTo(0, 2000));
     await settle(page);
+    expect(await page.evaluate(() => window.scrollY)).toBe(2000);
     const top = await page.evaluate(
       () =>
         document
