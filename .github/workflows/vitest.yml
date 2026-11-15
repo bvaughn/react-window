@@ -12,19 +12,17 @@ jobs:
       matrix:
         react: [18, 19]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - uses: pnpm/action-setup@v2
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+      - uses: pnpm/action-setup@v6
         with:
           version: 10
+          cache: true
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --recursive
       - name: Install React ${{ matrix.react }}
         if: matrix.react != 19
         run: pnpm add --workspace-root --save-dev react@^${{ matrix.react }} react-dom@^${{ matrix.react }}
-      - name: Build NPM packages
-        # Only the library source is tested against older React versions
-        if: matrix.react == 19
-        run: pnpm run build
+      # Tests import the library source (not dist), and the TypeScript workflow verifies the build
       - name: Run tests
         run: pnpm run test:ci

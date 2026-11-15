@@ -24,7 +24,12 @@ const libraryConfig: UserConfig = {
     },
     sourcemap: true
   },
-  plugins: [react(), dts({ rollupTypes: true }), preserveDirectives()],
+  plugins: [
+    react(),
+    // CI jobs that only need the runtime code (e.g. integration tests) can skip the slow declaration build
+    ...(process.env.SKIP_DTS ? [] : [dts({ rollupTypes: true })]),
+    preserveDirectives()
+  ],
   publicDir: false
 };
 
