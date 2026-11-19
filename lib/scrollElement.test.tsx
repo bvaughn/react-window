@@ -741,3 +741,61 @@ describe("scrollElement", () => {
     expect(list.style.maxHeight).toBe("100%");
   });
 });
+
+describe("preceding sibling removal regression", () => {
+  test.each(["element", "text"])(
+    "updates a window-scrolling List after adjacent %s content is removed",
+    async (kind) => {
+      setDefaultElementSize({ height: 0, width: 0 });
+      const windowScroll = mockWindowScroll({ height: 100, width: 50 });
+      let headerPresent = true;
+      mockLayout((element) => {
+        if (element === document.documentElement) {
+          return {
+            height: 100,
+            width: 50,
+            left: 0,
+            top: 0,
+            scrollHeight: 2700
+          };
+        }
+        if (element.getAttribute("role") === "list") {
+          return {
+            height: 2500,
+            width: 50,
+            left: 0,
+            top: (headerPresent ? 200 : 0) - windowScroll.position.y
+          };
+        }
+      });
+      const { container } = render(
+        <>
+          {kind === "text" ? "Header text" : <div data-testid="header" />}
+          <List
+            overscanCount={0}
+            rowComponent={Row}
+            rowCount={100}
+            rowHeight={25}
+            rowProps={EMPTY_OBJECT}
+            scrollElement="window"
+          />
+        </>
+      );
+      act(() => {
+        window.scrollTo({ top: 250 });
+      });
+      expect(getRenderedRows()).toEqual([2, 3, 4, 5]);
+      const header = container.firstChild!;
+      expect(header.nextSibling).toBe(screen.getByRole("list"));
+      await act(async () => {
+        headerPresent = false;
+        header.parentNode!.removeChild(header);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+      const rowsAfterRemoval = getRenderedRows();
+      // Restore React-owned content before the test renderer unmounts it.
+      container.prepend(header);
+      expect(rowsAfterRemoval).toEqual([10, 11, 12, 13]);
+    }
+  );
+});
