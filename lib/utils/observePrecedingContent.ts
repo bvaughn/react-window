@@ -54,7 +54,8 @@ export function observePrecedingContent({
             // Removed nodes preceded the element if the node after them still does (or contains the element)
             (record.removedNodes.length > 0 &&
               record.nextSibling !== null &&
-              precedesElement(record.nextSibling))
+              (record.nextSibling === element ||
+                precedesElement(record.nextSibling)))
         );
         if (affectsElement) {
           // Inserted or removed elements change which siblings precede the element

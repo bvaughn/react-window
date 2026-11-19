@@ -126,6 +126,27 @@ describe("observePrecedingContent", () => {
     expect(onChange).toHaveBeenCalled();
   });
 
+  test.each(["element", "text", "comment"] as const)(
+    "should notify when an adjacent preceding %s node is removed without whitespace",
+    async (kind) => {
+      const element = get("element");
+      const before =
+        kind === "element"
+          ? document.createElement("div")
+          : kind === "text"
+            ? document.createTextNode("preceding content")
+            : document.createComment("preceding content");
+      element.parentElement!.replaceChildren(before, element);
+      const { onChange } = setup();
+
+      expect(before.nextSibling).toBe(element);
+      before.parentNode!.removeChild(before);
+      await flushMutations();
+
+      expect(onChange).toHaveBeenCalled();
+    }
+  );
+
   test("should stop observing", async () => {
     const { onChange, stop } = setup();
 
