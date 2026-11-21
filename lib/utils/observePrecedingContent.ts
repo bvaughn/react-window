@@ -36,9 +36,10 @@ export function observePrecedingContent({
     ? new ResizeObserverClass(onChange)
     : undefined;
 
-  // Whether a node comes before the element (or contains it);
-  // nodes that are no longer connected can't be compared, so assume that they did
+  // Whether a node comes before the element, contains the element, or is the same element
+  // A disconnected node can't be compared with the element, so we treat it the same
   const precedesElement = (node: Node) =>
+    node === element ||
     !node.isConnected ||
     (node.compareDocumentPosition(element) &
       Node.DOCUMENT_POSITION_FOLLOWING) !==
@@ -54,8 +55,7 @@ export function observePrecedingContent({
             // Removed nodes preceded the element if the node after them still does (or contains the element)
             (record.removedNodes.length > 0 &&
               record.nextSibling !== null &&
-              (record.nextSibling === element ||
-                precedesElement(record.nextSibling)))
+              precedesElement(record.nextSibling))
         );
         if (affectsElement) {
           // Inserted or removed elements change which siblings precede the element

@@ -147,6 +147,21 @@ describe("observePrecedingContent", () => {
     }
   );
 
+  test("should notify and re-observe when the element is moved before preceding content", async () => {
+    const { onChange } = setup();
+
+    // e.g. a keyed reorder that moves the element ahead of its siblings
+    const element = get("element");
+    element.parentElement!.insertBefore(element, get("before-element"));
+    await flushMutations();
+    expect(onChange).toHaveBeenCalled();
+
+    // Content that no longer precedes the element should no longer be observed
+    onChange.mockClear();
+    resize("before-element");
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   test("should stop observing", async () => {
     const { onChange, stop } = setup();
 
