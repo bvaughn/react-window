@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.5.4
+
+- Fix lists and grids with a `scrollElement` not updating their position when content directly before them is removed, or when they are moved ahead of preceding content (e.g. a keyed reorder). - [#935](https://github.com/bvaughn/react-window/pull/935)
+
 ## 2.5.3
 
 - `List` identifies rows by `ariaAttributes` (specifically `aria-posinset`) so that additional children (e.g. sticky rows or overlays) aren't measured as rows, and rows that render nothing don't shift the indices of the rows after them. Rows that don't spread `ariaAttributes`, or that override `aria-posinset` or `aria-setsize`, are still matched by their position. If only some rows spread `ariaAttributes` (e.g. loaded rows but not loading placeholders), the rows that don't are not measured; spread `ariaAttributes` onto every row (or none). - [#930](https://github.com/bvaughn/react-window/pull/930), [#931](https://github.com/bvaughn/react-window/pull/931)
